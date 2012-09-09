@@ -1,0 +1,22 @@
+excludeInBrowser      = "{$excludeInBrowser,log,tmp,node_modules,public,webpack,coverage,Data-*,venv,dist}"
+excludeInFileChooser  = "{$excludeInFileChooser,log,tmp,node_modules,public,webpack,coverage,Data-*,venv,dist}"
+excludeInFolderSearch = "{$excludeInFolderSearch,log,tmp,node_modules,public,webpack,coverage,Data-*,venv,dist}"
+
+fontSize              = 16
+invisiblesMap         = "~ "
+saveOnBlur            = true
+showInvisibles        = true
+showWrapColumn        = true
+spellChecking         = true
+
+[ source ]
+softTabs              = true
+softWrap              = false
+tabSize               = 2
+wrapColumn            = 80
+
+[ source.python ]
+tabSize               = 4
+
+[ text.plain ]
+softWrap              = false
