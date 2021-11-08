@@ -1,0 +1,9 @@
+# Available colors are: white, yellow, green, blue, cyan, red, magenta, black
+#
+# (?) Set banner=no to suppress authorship info at top of colordiff output
+
+diffstuff=white
+oldtext=magenta
+plain=black
+newtext=green
+cvsstuff=blue
