@@ -1,0 +1,31 @@
+excludeInBrowser      =      "{$excludeInBrowser,log,tmp,node_modules,public,webpack,coverage,Data-*,venv,dist,target,*.jar,*.class}"
+excludeInFileChooser  =  "{$excludeInFileChooser,log,tmp,node_modules,public,webpack,coverage,Data-*,venv,dist,target,*.jar,*.class}"
+excludeInFolderSearch = "{$excludeInFolderSearch,log,tmp,node_modules,public,webpack,coverage,Data-*,venv,dist,target,*.jar,*.class}"
+
+fontSize       = 16
+invisiblesMap  = "~ "
+saveOnBlur     = true
+showInvisibles = true
+showWrapColumn = true
+softTabs       = true
+softWrap       = false
+spellChecking  = true
+tabSize        = 2
+wrapColumn     = 80
+
+[ source.java ]
+tabSize = 4
+
+[ source.python ]
+tabSize = 4
+
+[ source.shell ]
+tabSize = 4
+
+# File extension chosen for .zshrc unit tests
+[ *.zsh ]
+# To accommodate `<<-` stripping only tabs, but not spaces
+softTabs = false
+
+# [ source ]
+# [ text.plain ]
