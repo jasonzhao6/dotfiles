@@ -1,0 +1,18 @@
+# Work
+-: https://golinks.io/%s Go Links
+c: https://marqeta.atlassian.net/wiki/search?text=%s Confluence
+d: https://drive.google.com/drive/search?q=%s Google Drive
+g: https://github.marqeta.com/search?q=%s&type=code Github
+i: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aprod%2Cservice%3A%s-ccapi Datadog Infrastructure
+j: https://marqeta.atlassian.net/issues/?jql=text%20~%20%22%s%22 Jira
+l: https://app.datadoghq.com/logs?query=%s Datadog Logs
+p: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=prod Datadog APM Prod
+q: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=qa Datadog APM QA
+s: https://app.datadoghq.com/apm/services/%s-mysql/operations/mysql.query/resources?env=prod Datadog MySQL APM Prod
+
+# Personal
+a: https://www.amazon.com/s/?field-keywords=%s Amazon
+m: https://www.google.com/maps?q=%s Google Maps
+u: https://www.youtube.com/results?search_query=%s Youtube
+w: https://www.wikipedia.org/w/index.php?title=Special:Search&search=%s Wikipedia
+y: https://www.yelp.com/search?find_desc=%s Yelp
