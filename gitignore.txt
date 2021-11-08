@@ -1,0 +1,15 @@
+# Mac
+.DS_Store
+
+# IntelliJ
+*.iml
+.idea/
+
+# Java
+.java-version
+out/
+
+# Terraform
+.terraform.lock.hcl
+.terraform/
+tfplan
