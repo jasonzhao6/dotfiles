@@ -1,0 +1,50 @@
+### Vimium keymap
+# ['] [,]  .  [p] [y] | [f] [g] [c] [r] [l]      <--  '|,    y:p  f:g
+# [a]  o   e   u  [i] | [d] [h] [t] [n] [s] [-]  <--  a|;|d  h|t  n|s  -|b
+# [;]  q   j   k   x  | [b] [m] [w] [v] [z]      <--         m|w  v|z
+
+# Clean slate
+unmapAll
+
+# Vimari mirror
+map i enterInsertMode
+
+map a LinkHints.activateMode
+map ; LinkHints.activateModeToOpenInNewTab
+
+map c removeTab
+map r reload
+
+map d focusInput
+map h scrollPageUp
+map t scrollPageDown
+map n previousTab
+map s nextTab
+map - Vomnibar.activateInNewTab
+
+map b Vomnibar.activateBookmarksInNewTab
+map m scrollToTop
+map w scrollToBottom
+map v goBack
+map z goForward
+
+map ' scrollLeft
+map , scrollRight
+
+map <up> scrollUp
+map <down> scrollDown
+
+# Vimium extras
+map p openCopiedUrlInNewTab
+map y copyCurrentUrl
+
+map f enterFindMode
+map g performFind
+map G performBackwardsFind
+map C closeTabsOnRight
+map l duplicateTab
+
+map H goPrevious
+map T goNext
+map N moveTabLeft
+map S moveTabRight
