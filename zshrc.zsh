@@ -102,11 +102,11 @@ function s- { [[ -t 0 ]] && { eval $(prev-command) | save-args $@ } || save-args
 # config
 ARGS_HISTORY_MAX=5
 ARGS_HISTORY=()
-ARGS_CURSOR=1
-ARGS_HEAD=1
-ARGS_TAIL=1
+ARGS_CURSOR=0
+ARGS_HEAD=0
+ARGS_TAIL=0
 # helpers (args)
-function args-push { ARGS_CURSOR=$(args-increment $ARGS_CURSOR); ARGS_HISTORY[$ARGS_CURSOR]=$1; ARGS_HEAD=$ARGS_CURSOR; [[ $ARGS_CURSOR -eq $ARGS_TAIL ]] && ARGS_TAIL=$(args-increment $ARGS_TAIL); debug }
+function args-push { ARGS_CURSOR=$(args-increment $ARGS_CURSOR); ARGS_HISTORY[$ARGS_CURSOR]=$1; ARGS_HEAD=$ARGS_CURSOR; [[ $ARGS_CURSOR -eq $ARGS_TAIL ]] && ARGS_TAIL=$(args-increment $ARGS_TAIL); [[ $ARGS_TAIL -eq 0 ]] && ARGS_TAIL=1; debug }
 function args-undo { ARGS_PREV=$(args-decrement $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_TAIL ]] && ARGS_CURSOR=$ARGS_PREV || echo '> hit tail'; debug }
 function args-redo { ARGS_NEXT=$(args-increment $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_HEAD ]] && ARGS_CURSOR=$ARGS_NEXT || echo '> hit head'; debug }
 function args-replace { ARGS_HISTORY[$ARGS_CURSOR]=$1 }
