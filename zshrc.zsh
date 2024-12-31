@@ -364,7 +364,7 @@ function tf-pre {
 function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args }
 function f { echo } # TODO find tf files and gh repos
 function i { which $@ | save-args }
-function l { ls -l | awk '{print $9}' | save-args }
+function l { ls -l $SHOW_HIDDEN_FILES | awk '{print $9}' | save-args } # Not taking input b/c folder matches break column alignment
 # doubles
 function bb { pmset sleepnow }
 function cc { eval $(prev-command) | no-color | ruby -e 'puts STDIN.read.strip' | pbcopy }
@@ -374,7 +374,7 @@ function eee { for i in $(seq $1 $2); do echo; echo-eval ${${@:3}//~~/$i}; done 
 function ff { caffeinate }
 function hh { diff --side-by-side --suppress-common-lines $1 $2 }
 function ii { open -na 'IntelliJ IDEA CE.app' --args ${@:-.} }
-function ll { ls -la | awk '{print $9}' | save-args } # TODO dry
+function ll { SHOW_HIDDEN_FILES='-A' l }
 function mm { mate ${@:-.} }
 function oo { open ${@:-.} }
 function pp { ruby ~/gh/jasonzhao6/sql_formatter.rb/run.rb $@ }
