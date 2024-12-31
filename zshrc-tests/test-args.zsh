@@ -713,8 +713,9 @@ function test--rr--when-undo-beyond-tail {
 }; run-with-filter test--rr--when-undo-beyond-tail
 
 function test--rr--when-push-beyond-head-then-undo-beyond-tail {
-  args-init
-  ARGS_HISTORY_MAX=3
+	local args_history_max=$ARGS_HISTORY_MAX
+	args-init
+	ARGS_HISTORY_MAX=3
 
 	assert "$(
 		seq 1 2 | save-args > /dev/null
@@ -731,6 +732,8 @@ function test--rr--when-push-beyond-head-then-undo-beyond-tail {
 		$(red-bg 'Reached the end of undo history')
 		eof
 	)"
+
+	ARGS_HISTORY_MAX=$args_history_max
 }; run-with-filter test--rr--when-push-beyond-head-then-undo-beyond-tail
 
 function test--rr--when-undo-redo-with-color {
@@ -766,6 +769,60 @@ function test--rr--when-undo-redo-undo-with-color {
 		eof
 	)"
 }; run-with-filter test--rr--when-undo-redo-undo-with-color
+
+function test--redo--when-redo-x2 {
+	assert "$(
+		seq 1 2 | save-args > /dev/null
+		seq 2 3 | save-args > /dev/null
+		seq 3 4 | save-args > /dev/null
+		rr > /dev/null
+		rr > /dev/null
+		redo > /dev/null
+		redo
+	)" "$(
+		cat <<-eof
+		     1	3
+		     2	4
+		eof
+	)"
+}; run-with-filter test--redo--when-redo-x2
+
+function test--redo--when-redo-beyond-head {
+	assert "$(
+		seq 1 2 | save-args > /dev/null
+		seq 2 3 | save-args > /dev/null
+		seq 3 4 | save-args > /dev/null
+		rr > /dev/null
+		rr > /dev/null
+		redo > /dev/null
+		redo > /dev/null
+		redo
+	)" "$(
+		cat <<-eof
+		     1	3
+		     2	4
+		$(red-bg 'Reached the end of redo history')
+		eof
+	)"
+}; run-with-filter test--redo--when-redo-beyond-head
+
+function test--redo--when-redo-beyond-new-head {
+	assert "$(
+		seq 1 2 | save-args > /dev/null
+		seq 2 3 | save-args > /dev/null
+		seq 3 4 | save-args > /dev/null
+		rr > /dev/null
+		rr > /dev/null
+		seq 4 5 | save-args > /dev/null
+		redo
+	)" "$(
+		cat <<-eof
+		     1	4
+		     2	5
+		$(red-bg 'Reached the end of redo history')
+		eof
+	)"
+}; run-with-filter test--redo--when-redo-beyond-new-head
 
 function test--c {
 	assert "$(

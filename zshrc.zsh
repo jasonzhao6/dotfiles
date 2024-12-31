@@ -66,7 +66,7 @@ function nnn { NNN=1 nn $@ }
 function a { [[ -z $NN || $NN -eq 1 ]] && nn a || nnn a }
 # [r]evert row / column selection
 function rr { ARGS_COLS_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARGS_COLS_CURR=$(args-columns | strip); [[ ${#ARGS_COLS_PREV} -lt ${#ARGS_COLS_CURR} ]] && args-columns-bar }
-function redo { args-redo; args-list }
+function redo { args-redo; args-list; args-redo-bar }
 # [c]opy / paste via clipboard
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
 function vv { pbpaste | s }
@@ -106,16 +106,16 @@ function s- { [[ -t 0 ]] && { eval $(prev-command) | save-args $@ } || save-args
 # to undo, only cursor moves, up to tail
 # to redo, only cursor moves, up to head
 function args-init { ARGS_HISTORY_MAX=100; ARGS_HISTORY=(); ARGS_CURSOR=0; ARGS_HEAD=0; ARGS_TAIL=0 }; args-init;
-function args-push { ARGS_CURSOR=$(args-increment $ARGS_CURSOR); ARGS_HISTORY[$ARGS_CURSOR]=$1; ARGS_HEAD=$ARGS_CURSOR; [[ $ARGS_CURSOR -eq $ARGS_TAIL ]] && ARGS_TAIL=$(args-increment $ARGS_TAIL); [[ $ARGS_TAIL -eq 0 ]] && ARGS_TAIL=1; debug }
-function args-undo { ARGS_PREV=$(args-decrement $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_TAIL ]] && ARGS_CURSOR=$ARGS_PREV || ARGS_UNDO_EXCEEDED=1; debug }
-function args-redo { ARGS_NEXT=$(args-increment $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_HEAD ]] && ARGS_CURSOR=$ARGS_NEXT || ARGS_REDO_EXCEEDED=1; debug }
+function args-push { ARGS_CURSOR=$(args-increment $ARGS_CURSOR); ARGS_HISTORY[$ARGS_CURSOR]=$1; ARGS_HEAD=$ARGS_CURSOR; [[ $ARGS_CURSOR -eq $ARGS_TAIL ]] && ARGS_TAIL=$(args-increment $ARGS_TAIL); [[ $ARGS_TAIL -eq 0 ]] && ARGS_TAIL=1 }
+function args-undo { ARGS_PREV=$(args-decrement $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_TAIL ]] && ARGS_CURSOR=$ARGS_PREV || ARGS_UNDO_EXCEEDED=1 }
+function args-redo { ARGS_NEXT=$(args-increment $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_HEAD ]] && ARGS_CURSOR=$ARGS_NEXT || ARGS_REDO_EXCEEDED=1 }
 function args-undo-bar { [[ $ARGS_UNDO_EXCEEDED -eq 1 ]] && { ARGS_UNDO_EXCEEDED=0; red-bg 'Reached the end of undo history' } }
+function args-redo-bar { [[ $ARGS_REDO_EXCEEDED -eq 1 ]] && { ARGS_REDO_EXCEEDED=0; red-bg 'Reached the end of redo history' } }
 function args-replace { ARGS_HISTORY[$ARGS_CURSOR]=$1 }
 function args-increment { echo $(($1 % ARGS_HISTORY_MAX + 1)) }
 function args-decrement { ARGS_DECREMENT=$(($ARGS_CURSOR - 1)); [[ $ARGS_DECREMENT -eq 0 ]] && ARGS_DECREMENT=$ARGS_HISTORY_MAX; echo $ARGS_DECREMENT }
-# TODO
-#function debug { echo $ARGS_HISTORY; echo -n $ARGS_CURSOR; echo -n $ARGS_HEAD; echo $ARGS_TAIL }
-function debug { }
+# debug
+function args-history { echo $ARGS_HISTORY; echo -n $ARGS_CURSOR; echo -n $ARGS_HEAD; echo $ARGS_TAIL }
 
 ### AWS
 # regions
