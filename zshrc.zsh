@@ -69,7 +69,7 @@ function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }
 # [c]opy / paste via clipboard
-function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
+function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | strip | pbcopy }
 function v { pbpaste | save-args }
 # [y]ank / [p]ut across tabs
 function y { args > ~/.zshrc.args }

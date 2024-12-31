@@ -872,6 +872,10 @@ function test--c--with-two-args {
 	assert "$(c '123 321'; pbpaste)" '123 321'
 }; run-with-filter test--c--with-two-args
 
+function test--c--with-spaces {
+	assert "$(c '     123 321     '; pbpaste)" '123 321'
+}; run-with-filter test--c--with-spaces
+
 function test--v {
 	assert "$(
 		echo $input | pbcopy
