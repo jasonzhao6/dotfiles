@@ -1,12 +1,5 @@
 class VerifyTestInvocations
-  HOME = `echo $HOME`.chomp
-  TESTS_FILES = %W[
-    #{HOME}/gh/dotfiles/zshrc-tests/test-args.zsh
-    #{HOME}/gh/dotfiles/zshrc-tests/test-change-dir.zsh
-    #{HOME}/gh/dotfiles/zshrc-tests/test-github-helpers.zsh
-    #{HOME}/gh/dotfiles/zshrc-tests/test-util.zsh
-    #{HOME}/gh/dotfiles/zshrc-tests/test-zsh.zsh
-  ]
+  TESTS_FILES = `find ~/gh/dotfiles/zshrc-tests -name '*.zsh'`.split
 
   def initialize
     # Verification result

@@ -29,10 +29,13 @@ function assert {
 
 	[[ $output == $expected ]] && pass || fail "'$funcstack[2]'"
 }
+function find-tests {
+	find ~/gh/dotfiles/zshrc-tests -name '*.zsh'
+}
 function run-with-filter {
 	[[ -z $filter || $(index-of $@ $filter) -ne 0 ]] && $@
 }
-function verify-order {
+function verify-test-ordering {
 	local source=$(grep '^function' $1 | sed 's/ {.*/ {/')
 	local target=$(grep '^function' $2 | sed -e 's/test--//' -e 's/--[^-].*/ {/' | uniq)
 
@@ -51,11 +54,7 @@ source ~/gh/dotfiles/zshrc.zsh
 # Run test cases
 init
 local clipboard=$(pbpaste) # Save clipboard value since some tests overwrite it
-source ~/gh/dotfiles/zshrc-tests/test-args.zsh
-source ~/gh/dotfiles/zshrc-tests/test-change-dir.zsh
-source ~/gh/dotfiles/zshrc-tests/test-github-helpers.zsh
-source ~/gh/dotfiles/zshrc-tests/test-util.zsh
-source ~/gh/dotfiles/zshrc-tests/test-zsh.zsh
+for test in $(find-tests); do source $test; done
 echo $clipboard | pbcopy # Restore clipboard value
 
 # Print results
@@ -69,11 +68,7 @@ echo "\n($passes/$total tests passed)"
 if [[ -z $filter ]]; then
 	echo
 	init
-	verify-order ~/gh/dotfiles/zshrc.zsh ~/gh/dotfiles/zshrc-tests/test-args.zsh
-	verify-order ~/gh/dotfiles/zshrc.zsh ~/gh/dotfiles/zshrc-tests/test-change-dir.zsh
-	verify-order ~/gh/dotfiles/zshrc.zsh ~/gh/dotfiles/zshrc-tests/test-github-helpers.zsh
-	verify-order ~/gh/dotfiles/zshrc.zsh ~/gh/dotfiles/zshrc-tests/test-util.zsh
-	verify-order ~/gh/dotfiles/zshrc.zsh ~/gh/dotfiles/zshrc-tests/test-zsh.zsh
+	for test in $(find-tests); do verify-test-ordering ~/gh/dotfiles/zshrc.zsh $test; done
 
 	# Print results
 	echo "\n($passes/$total functions match the test order)"
