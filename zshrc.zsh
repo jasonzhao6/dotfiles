@@ -55,25 +55,26 @@ function each { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE
 function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@ &; done; wait }
 function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | save-args }
 # select colum[n] via bottom row
-function nn { [[ $NNN -eq 1 ]] && NN=0 || NN=1; [[ -z $1 ]] && { args-list; args-columns-bar $NN } || { args-mark-references! $1 $NN; args-select-column!; [[ $ARGS_DIFF -eq 0 && $(index-of "$(args-columns $NN)" b) -ne 0 ]] && args-columns-bar $NN }; return 0 }
+function nn { [[ $NNN -eq 1 ]] && NN=0 || NN=1; [[ -z $1 ]] && { args-list; args-columns-bar $NN } || { args-mark-references! $1 $NN; args-select-column!; [[ $ARGS_PUSHED -eq 0 && $(index-of "$(args-columns $NN)" b) -ne 0 ]] && args-columns-bar $NN }; return 0 }
 # select colum[n] via headers row
 function nnn { NNN=1 nn $@ }
 # select first column
 function a { [[ -z $NN || $NN -eq 1 ]] && nn a || nnn a }
 # [r]evert row / column selection
-function rr { ARGS_COLS_PREV=$(args-columns | strip); echo $ARGS_PREV | save-args; ARGS_COLS_CURR=$(args-columns | strip); [[ ${#ARGS_COLS_PREV} -lt ${#ARGS_COLS_CURR} ]] && args-columns-bar }
+function rr { ARGS_COLS_PREV=$(args-columns | strip); args-undo; args-list; ARGS_COLS_CURR=$(args-columns | strip); [[ ${#ARGS_COLS_PREV} -lt ${#ARGS_COLS_CURR} ]] && args-columns-bar }
+function redo { args-redo; args-list }
 # [c]opy / paste via clipboard
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
 function vv { pbpaste | s }
 # [y]ank / [p]ut across tabs
-function yy { args-original > ~/.zshrc.args }
+function yy { args > ~/.zshrc.args }
 function pp { echo "$(<~/.zshrc.args)" | save-args }
 # helpers
-function args-original { echo $ARGS }
-function args-plain { echo $ARGS | no-color | expand }
-function args-list { echo $ARGS | nl }
-function args-list-plain { echo $ARGS | nl | no-color | expand }
-function args-list-size { echo $ARGS | wc -l | awk '{print $1}' }
+function args { echo $ARGS_HISTORY[$ARGS_CURSOR] }
+function args-plain { args | no-color | expand }
+function args-list { args | nl }
+function args-list-plain { args | nl | no-color | expand }
+function args-list-size { args | wc -l | awk '{print $1}' }
 function args-columns { ARGS_COLUMNS=''; ARGS_COL_CURR=a; ARGS_SKIP_NL=1; [[ ${1:-$ARGS_BOTTOM_ROW} -eq 1 ]] && ARG=$(args-list-plain | tail -1) || ARG=$(args-list-plain | head -1); for i in $(seq 1 ${#ARG}); do args-label-column! $i; done; echo $ARGS_COLUMNS }
 function args-columns-bar { echo "\e[42m$(args-columns $1)\e[0m" }
 # helpers (`!` means it sets env vars to be used by its caller function)
@@ -82,9 +83,9 @@ function args-label-column! { [[ ${ARG[$1-1]} == ' ' && ${ARG[$1]} != ' ' ]] && 
 function args-mark-references! { ARGS_COLUMNS=$(args-columns $2); ARGS_COL_FIRST=$(index-of $ARGS_COLUMNS a); ARGS_COL_TARGET=$(index-of $ARGS_COLUMNS $1); ARGS_COL_NEXT=$(index-of $ARGS_COLUMNS $(next-ascii $1)); ARGS_BOTTOM_ROW=$2 }
 function args-select-column! { args-list-plain | cut -c $([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)-$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1))) | strip | save-args }
 function args-get-new! { ARGS_NEW=$(cat - | head -1000 | no-empty | strip); [[ -n $1 ]] && ARGS_NEW=$(echo $ARGS_NEW | insert-hash); ARGS_NEW_PLAIN=$(echo $ARGS_NEW | no-color | expand) }
-function args-diff! { [[ $ARGS_NEW_PLAIN != $(args-plain) ]] && { ARGS_PREV=$ARGS; ARGS_DIFF=1 } || ARGS_DIFF=0 }
+function args-push-if-different! { [[ $ARGS_NEW_PLAIN != $(args-plain) ]] && { args-push $ARGS; ARGS_PUSHED=1 } || ARGS_PUSHED=0 }
 # |
-function save-args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-diff!; ARGS=$ARGS_NEW; args-list } }
+function save-args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-push-if-different!; args-replace $ARGS_NEW; args-list } } # always replace in case grep highlighting has updated
 function s { s- 'insert `#` after the first column to soft-select it' }
 function s- { [[ -t 0 ]] && { eval $(prev-command) | save-args $@ } || save-args $@ }
 
@@ -113,7 +114,8 @@ function args-replace { ARGS_HISTORY[$ARGS_CURSOR]=$1 }
 function args-increment { echo $(($1 % ARGS_HISTORY_MAX + 1)) }
 function args-decrement { ARGS_DECREMENT=$(($ARGS_CURSOR - 1)); [[ $ARGS_DECREMENT -eq 0 ]] && ARGS_DECREMENT=$ARGS_HISTORY_MAX; echo $ARGS_DECREMENT }
 # TODO
-function debug { echo $ARGS_HISTORY; echo -n $ARGS_CURSOR; echo -n $ARGS_HEAD; echo $ARGS_TAIL }
+#function debug { echo $ARGS_HISTORY; echo -n $ARGS_CURSOR; echo -n $ARGS_HEAD; echo $ARGS_TAIL }
+function debug { }
 
 ### AWS
 # regions

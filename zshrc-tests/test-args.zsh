@@ -612,7 +612,7 @@ function test--rr--when-reverting-x2-with-color {
 		echo $input | save-args > /dev/null
 		aa program > /dev/null
 		rr > /dev/null
-		rr
+		redo
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-$(green-fg program)-A
@@ -628,7 +628,7 @@ function test--rr--when-reverting-x3-with-color {
 		rr > /dev/null
 		aa terraform > /dev/null
 		aa application > /dev/null
-		rr > /dev/null
+		redo > /dev/null
 		rr
 	)" "$(
 		cat <<-eof
