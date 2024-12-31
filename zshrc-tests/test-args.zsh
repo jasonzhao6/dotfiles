@@ -89,7 +89,7 @@ function test--aa--adds-color {
 function test--aa--replaces-color {
 	assert "$(
 		echo $input | save-args > /dev/null
-		aa shared
+		aa shared > /dev/null
 		aa region
 	)" "$(
 		cat <<-eof
@@ -98,7 +98,7 @@ function test--aa--replaces-color {
 		     3	terraform-application-$(green-fg region)-shared-3
 		eof
 	)"
-}; run-with-filter test--aa--adds-color
+}; run-with-filter test--aa--replaces-color
 
 function test--aa--with-two-args-out-of-order {
 	assert "$(
