@@ -16,10 +16,11 @@ function color {
     alias grep='grep --color=always'
     alias ls='ls --color=always'
 }; color # set color aliases ahead of function definitions, so they can expand
-# helpers
-function green-fg { echo "\e[1;32m\e[K$@\e[m\e[K" }
+# helpers (background)
 function red-bg { echo "\e[41m$@\e[0m" }
 function green-bg { echo "\e[42m$@\e[0m" }
+# helpers (foreground)
+function grep-highlighting { echo "\e[1;32m\e[K$@\e[m\e[K" }
 
 ### [Args]
 # [s]ave args
