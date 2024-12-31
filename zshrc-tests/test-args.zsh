@@ -60,7 +60,7 @@ function test--ss- {
 
 function test--aa {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		aa
 	)" "$(
 		cat <<-eof
@@ -75,7 +75,7 @@ function test--aa {
 
 function test--aa--adds-color {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		aa shared
 	)" "$(
 		cat <<-eof
@@ -88,7 +88,7 @@ function test--aa--adds-color {
 
 function test--aa--replaces-color {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		aa shared
 		aa region
 	)" "$(
@@ -102,7 +102,7 @@ function test--aa--replaces-color {
 
 function test--aa--with-two-args-out-of-order {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		aa 2 shared
 	)" "$(
 		cat <<-eof
@@ -113,7 +113,7 @@ function test--aa--with-two-args-out-of-order {
 
 function test--aa--with-two-args-including-negation {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		aa -2 shared
 	)" "$(
 		cat <<-eof
@@ -125,7 +125,7 @@ function test--aa--with-two-args-including-negation {
 
 function test--arg {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		arg 3 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -137,7 +137,7 @@ function test--arg {
 
 function test--arg--with-substitution {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		arg 3 echo http://~~:8080 2>&1
 	)" "$(
 		cat <<-eof
@@ -149,7 +149,7 @@ function test--arg--with-substitution {
 
 function test--arg--with-multiple-substitutions {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		arg 3 echo http://~~:80 and https://~~:443 2>&1
 	)" "$(
 		cat <<-eof
@@ -161,7 +161,7 @@ function test--arg--with-multiple-substitutions {
 
 function test--arg--with-multiple-substitutions-in-quotes {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		arg 3 'echo http://~~:80 and https://~~:443' 2>&1
 	)" "$(
 		cat <<-eof
@@ -173,7 +173,7 @@ function test--arg--with-multiple-substitutions-in-quotes {
 
 function test--1 {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		1 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -185,7 +185,7 @@ function test--1 {
 
 function test--5 {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		5 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -197,14 +197,14 @@ function test--5 {
 
 function test--6 {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		6 echo 2>&1
 	)" 'echo '
 }; run-with-filter test--6
 
 function test--0 {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		0 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -216,7 +216,7 @@ function test--0 {
 
 function test--r {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		eee 1 $(($(args-list-size) * 10)) r echo 2>&1 | sort | uniq
 	)" "$(
 		cat <<-eof
@@ -238,7 +238,7 @@ function test--r {
 
 function test--e {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		e 3 4 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -254,7 +254,7 @@ function test--e {
 
 function test--e--with-multiple-substitutions {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		e 3 4 echo ~~ and ~~ again 2>&1
 	)" "$(
 		cat <<-eof
@@ -270,7 +270,7 @@ function test--e--with-multiple-substitutions {
 
 function test--each {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		each echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -295,7 +295,7 @@ function test--each {
 
 function test--each--with-comments {
 	assert "$(
-		echo $input_with_comments | args > /dev/null
+		echo $input_with_comments | save-args > /dev/null
 		each echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -316,7 +316,7 @@ function test--all {
 	function test--all--sleep-and-echo { sleep $@; echo $@ }
 
 	assert "$(
-		echo '0.01\n0.03\n0.05' | args > /dev/null
+		echo '0.01\n0.03\n0.05' | save-args > /dev/null
 		all test--all--sleep-and-echo 2>/dev/null
 	)" "$(
 		cat <<-eof
@@ -332,7 +332,7 @@ function test--all {
 
 function test--map {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		map 'echo -n pre-; echo' 2>&1
 	)" "$(
 		cat <<-eof
@@ -363,7 +363,7 @@ function test--map {
 
 function test--nn {
 	assert "$(
-		echo $input_with_tabs | args > /dev/null
+		echo $input_with_tabs | save-args > /dev/null
 		nn
 	)" "$(
 		cat <<-eof
@@ -377,7 +377,7 @@ function test--nn {
 
 function test--nn--when-selecting-first {
 	assert "$(
-		echo $input_with_tabs | args > /dev/null
+		echo $input_with_tabs | save-args > /dev/null
 		nn a
 	)" "$(
 		cat <<-eof
@@ -390,7 +390,7 @@ function test--nn--when-selecting-first {
 
 function test--nn--when-selecting-third {
 	assert "$(
-		echo $input_with_tabs | args > /dev/null
+		echo $input_with_tabs | save-args > /dev/null
 		nn c
 	)" "$(
 		cat <<-eof
@@ -403,7 +403,7 @@ function test--nn--when-selecting-third {
 
 function test--nn--when-selecting-last {
 	assert "$(
-		echo $input_with_tabs | args > /dev/null
+		echo $input_with_tabs | save-args > /dev/null
 		nn d
 	)" "$(
 		cat <<-eof
@@ -416,7 +416,7 @@ function test--nn--when-selecting-last {
 
 function test--nn--when-selecting-with-color {
 	assert "$(
-		echo $input_with_tabs | grep 00 | args > /dev/null
+		echo $input_with_tabs | grep 00 | save-args > /dev/null
 		nn d
 	)" "$(
 		cat <<-eof
@@ -429,7 +429,7 @@ function test--nn--when-selecting-with-color {
 
 function test--nn--when-selecting-out-of-bound {
 	assert "$(
-		echo $input_with_tabs | args > /dev/null
+		echo $input_with_tabs | save-args > /dev/null
 		nn z
 	)" "$(
 		cat <<-eof
@@ -452,7 +452,7 @@ function test--nn--with-kubectl-get-pods-output {
 	)
 
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		nn e
 	)" "$(
 		cat <<-eof
@@ -466,7 +466,7 @@ function test--nn--with-kubectl-get-pods-output {
 
 function test--nn--with-one-column {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		nn a
 	)" "$(
 		cat <<-eof
@@ -481,7 +481,7 @@ function test--nn--with-one-column {
 
 function test--nn--with-headers {
 	assert "$(
-		echo $input_with_headers | args > /dev/null
+		echo $input_with_headers | save-args > /dev/null
 		nn
 	)" "$(
 		cat <<-eof
@@ -498,7 +498,7 @@ function test--nn--with-headers {
 
 function test--nnn {
 	assert "$(
-		echo $input_with_headers | args > /dev/null
+		echo $input_with_headers | save-args > /dev/null
 		nnn
 	)" "$(
 		cat <<-eof
@@ -515,7 +515,7 @@ function test--nnn {
 
 function test--nnn--with-one-column {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		nnn a
 	)" "$(
 		cat <<-eof
@@ -530,7 +530,7 @@ function test--nnn--with-one-column {
 
 function test--a {
 	assert "$(
-		echo $input_with_tabs | args > /dev/null
+		echo $input_with_tabs | save-args > /dev/null
 		a
 	)" "$(
 		cat <<-eof
@@ -543,7 +543,7 @@ function test--a {
 
 function test--a--when-there-was-no-preceding-request {
 	assert "$(
-		echo $input_with_headers_top_heavy | args > /dev/null
+		echo $input_with_headers_top_heavy | save-args > /dev/null
 		a
 	)" "$(
 		cat <<-eof
@@ -559,7 +559,7 @@ function test--a--when-there-was-no-preceding-request {
 
 function test--a--when-the-preceding-request-was-nn {
 	assert "$(
-		echo $input_with_headers_top_heavy | args > /dev/null
+		echo $input_with_headers_top_heavy | save-args > /dev/null
 		nn > /dev/null
 		a
 	)" "$(
@@ -576,7 +576,7 @@ function test--a--when-the-preceding-request-was-nn {
 
 function test--a--when-the-preceding-request-was-nnn {
 	assert "$(
-		echo $input_with_headers_top_heavy | args > /dev/null
+		echo $input_with_headers_top_heavy | save-args > /dev/null
 		nnn > /dev/null
 		a
 	)" "$(
@@ -593,7 +593,7 @@ function test--a--when-the-preceding-request-was-nnn {
 
 function test--rr {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		aa program > /dev/null
 		rr
 	)" "$(
@@ -609,7 +609,7 @@ function test--rr {
 
 function test--rr--when-reverting-x2-with-color {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		aa program > /dev/null
 		rr > /dev/null
 		rr
@@ -623,7 +623,7 @@ function test--rr--when-reverting-x2-with-color {
 
 function test--rr--when-reverting-x3-with-color {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		aa program > /dev/null
 		rr > /dev/null
 		aa terraform > /dev/null
@@ -643,7 +643,7 @@ function test--rr--when-reverting-x3-with-color {
 
 function test--rr--when-reverting-nn-with-headers {
 	assert "$(
-		echo $input_with_headers | args > /dev/null
+		echo $input_with_headers | save-args > /dev/null
 		nn a > /dev/null
 		rr
 	)" "$(
@@ -661,7 +661,7 @@ function test--rr--when-reverting-nn-with-headers {
 
 function test--rr--when-reverting-nnn {
 	assert "$(
-		echo $input_with_headers | args > /dev/null
+		echo $input_with_headers | save-args > /dev/null
 		nnn a > /dev/null
 		rr
 	)" "$(
@@ -679,7 +679,7 @@ function test--rr--when-reverting-nnn {
 
 function test--rr--when-reverting-nnn-then-requesting-nn {
 	assert "$(
-		echo $input_with_headers | args > /dev/null
+		echo $input_with_headers | save-args > /dev/null
 		nnn a > /dev/null
 		rr > /dev/null
 		nn
@@ -698,7 +698,7 @@ function test--rr--when-reverting-nnn-then-requesting-nn {
 
 function test--rr--when-reverting-nnn-with-headers-top-heavy {
 	assert "$(
-		echo $input_with_headers_top_heavy | args > /dev/null
+		echo $input_with_headers_top_heavy | save-args > /dev/null
 		nnn a > /dev/null
 		rr
 	)" "$(
@@ -716,7 +716,7 @@ function test--rr--when-reverting-nnn-with-headers-top-heavy {
 
 function test--c {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		c
 		pbpaste
 	)" "$(
@@ -755,7 +755,7 @@ function test--vv {
 
 function test--yy {
 	assert "$(
-		echo $input | args > /dev/null
+		echo $input | save-args > /dev/null
 		rm ~/.zshrc.args
 		yy
 		cat ~/.zshrc.args
@@ -775,8 +775,8 @@ function test--pp {
 	)"
 }; run-with-filter test--pp
 
-function test--args {
-	assert "$(echo $input | args)" "$(
+function test--save-args {
+	assert "$(echo $input | save-args)" "$(
 		cat <<-eof
 		     1	terraform-application-region-shared-1
 		     2	terraform-application-region-shared-2
@@ -785,10 +785,10 @@ function test--args {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--args
+}; run-with-filter test--save-args
 
-function test--args--with-leading-whitespace {
-	assert "$(echo $input_with_whitespace | args)" "$(
+function test--save-args--with-leading-whitespace {
+	assert "$(echo $input_with_whitespace | save-args)" "$(
 		cat <<-eof
 		     1	terraform-application-region-shared-1
 		     2	terraform-application-region-shared-2
@@ -797,9 +797,9 @@ function test--args--with-leading-whitespace {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--args--with-leading-whitespace
+}; run-with-filter test--save-args--with-leading-whitespace
 
-function test--args--with-hash-inserted {
+function test--save-args--with-hash-inserted {
 	assert "$(echo $input_with_headers | s)" "$(
 		cat <<-eof
 		     1	MANIFEST                                # COMMENT
@@ -810,7 +810,7 @@ function test--args--with-hash-inserted {
 		     6	terraform-application-region-program-B  # select via headers for this one
 		eof
 	)"
-}; run-with-filter test--args--with-hash-inserted
+}; run-with-filter test--save-args--with-hash-inserted
 
 function test--s {
 	# Not interesting to test b/c it's an alias

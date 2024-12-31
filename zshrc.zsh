@@ -22,7 +22,7 @@ function color {
 function ss { eval $(prev-command) | s } # insert `#` to help select the first column
 function ss- { eval $(prev-command) | s- } # do not insert `#` after the first column
 # filter [a]rgs
-function aa { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | args } }
+function aa { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | save-args } }
 # select [arg] by number
 function arg { [[ -n $1 && -n $2 ]] && { ARG=$(args-plain | sed -n "$1p"); [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
 function 1 { arg $0 $@ }
@@ -53,7 +53,7 @@ function e { for i in $(seq $1 $2); do echo; arg $i ${${@:3}}; done }
 # select with iterator
 function each { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@; done }
 function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@ &; done; wait }
-function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | args }
+function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | save-args }
 # select colum[n] via bottom row
 function nn { [[ $NNN -eq 1 ]] && NN=0 || NN=1; [[ -z $1 ]] && { args-list; args-columns-bar $NN } || { args-mark-references! $1 $NN; args-select-column!; [[ $ARGS_DIFF -eq 0 && $(index-of "$(args-columns $NN)" b) -ne 0 ]] && args-columns-bar $NN }; return 0 }
 # select colum[n] via headers row
@@ -61,13 +61,13 @@ function nnn { NNN=1 nn $@ }
 # select first column
 function a { [[ -z $NN || $NN -eq 1 ]] && nn a || nnn a }
 # [r]evert row / column selection
-function rr { ARGS_COLS_PREV=$(args-columns | strip); echo $ARGS_PREV | args; ARGS_COLS_CURR=$(args-columns | strip); [[ ${#ARGS_COLS_PREV} -lt ${#ARGS_COLS_CURR} ]] && args-columns-bar }
+function rr { ARGS_COLS_PREV=$(args-columns | strip); echo $ARGS_PREV | save-args; ARGS_COLS_CURR=$(args-columns | strip); [[ ${#ARGS_COLS_PREV} -lt ${#ARGS_COLS_CURR} ]] && args-columns-bar }
 # [c]opy / paste via clipboard
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
 function vv { pbpaste | s }
 # [y]ank / [p]ut across tabs
 function yy { args-original > ~/.zshrc.args }
-function pp { echo "$(<~/.zshrc.args)" | args }
+function pp { echo "$(<~/.zshrc.args)" | save-args }
 # helpers
 function args-original { echo $ARGS }
 function args-plain { echo $ARGS | no-color | expand }
@@ -80,13 +80,13 @@ function args-columns-bar { echo "\e[42m$(args-columns $1)\e[0m" }
 function args-build-greps! { ARGS_FILTER="grep ${*// / | grep }"; ARGS_FILTER=${ARGS_FILTER// -/ --invert-match }; ARGS_FILTER=${ARGS_FILTER//grep/grep --color=never --ignore-case}; ARGS_HIGHLIGHT="egrep --color=always --ignore-case '${${@:#-*}// /|}'" }
 function args-label-column! { [[ ${ARG[$1-1]} == ' ' && ${ARG[$1]} != ' ' ]] && { [[ $ARGS_SKIP_NL -eq 1 ]] && { ARGS_SKIP_NL=0; ARGS_COLUMNS+=' ' } || { ARGS_COLUMNS+=$ARGS_COL_CURR; ARGS_COL_CURR=$(next-ascii $ARGS_COL_CURR) } } || ARGS_COLUMNS+=' ' }
 function args-mark-references! { ARGS_COLUMNS=$(args-columns $2); ARGS_COL_FIRST=$(index-of $ARGS_COLUMNS a); ARGS_COL_TARGET=$(index-of $ARGS_COLUMNS $1); ARGS_COL_NEXT=$(index-of $ARGS_COLUMNS $(next-ascii $1)); ARGS_BOTTOM_ROW=$2 }
-function args-select-column! { args-list-plain | cut -c $([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)-$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1))) | strip | args }
+function args-select-column! { args-list-plain | cut -c $([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)-$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1))) | strip | save-args }
 function args-get-new! { ARGS_NEW=$(cat - | head -1000 | no-empty | strip); [[ -n $1 ]] && ARGS_NEW=$(echo $ARGS_NEW | insert-hash); ARGS_NEW_PLAIN=$(echo $ARGS_NEW | no-color | expand) }
 function args-diff! { [[ $ARGS_NEW_PLAIN != $(args-plain) ]] && { ARGS_PREV=$ARGS; ARGS_DIFF=1 } || ARGS_DIFF=0 }
 # |
-function args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-diff!; ARGS=$ARGS_NEW; args-list } }
+function save-args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-diff!; ARGS=$ARGS_NEW; args-list } }
 function s { s- 'insert `#` after the first column to soft-select it' }
-function s- { [[ -t 0 ]] && { eval $(prev-command) | args $@ } || args $@ }
+function s- { [[ -t 0 ]] && { eval $(prev-command) | save-args $@ } || save-args $@ }
 
 ### Args history
 #            123456789
@@ -210,7 +210,7 @@ function gu { git reset --soft HEAD~$@ }
 function gz { git add --all; git reset --hard; gi }
 function guz { gu $@; gz }
 # [b]ranch
-function gb { GB=$(gb-merged); [[ $GB ]] && GB="\n----------------\n$GB"; echo "$(git branch)$GB" | args }
+function gb { GB=$(gb-merged); [[ $GB ]] && GB="\n----------------\n$GB"; echo "$(git branch)$GB" | save-args }
 function gbb { gb-merged | xargs git branch --delete; git remote prune origin; echo; gb }
 function gbd { git branch --delete --force $@; git push origin --delete $@; gb }
 # [g]it checkout
@@ -463,7 +463,7 @@ function hc { rm ~/.zsh_history }
 # edit
 function hm { mate ~/.zsh_history }
 # g[r]ep
-function hr { egrep --ignore-case "$*" ~/.zsh_history | trim 15 | sort --unique | args }
+function hr { egrep --ignore-case "$*" ~/.zsh_history | trim 15 | sort --unique | save-args }
 # session persistence
 function h0 { unset -f zshaddhistory }              #  disk &&  memory
 function h1 { function zshaddhistory { return 1 } } # !disk && !memory
