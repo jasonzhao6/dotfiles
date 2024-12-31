@@ -413,7 +413,7 @@ function trim-list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$
 function zm { mate ~/gh/dotfiles/zshrc.zsh }
 function zs { mate ~/.zshrc.secrets }
 # [t]est
-function zt { zsh ~/gh/dotfiles/zshrc-tests.zsh }
+function zt { zsh ~/gh/dotfiles/zshrc-tests.zsh $@ }
 # save
 function zz {
     cp ~/.colordiffrc ~/gh/dotfiles/colordiffrc.txt

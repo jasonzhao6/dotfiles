@@ -1,5 +1,5 @@
 # Test config
-filter= # <empty> or <partial name match>
+local filter=$([[ -n $1 ]] && echo "test--$1")
 
 # Test helpers
 function init {
@@ -48,32 +48,43 @@ function verify-test-ordering {
 	done
 }
 
-# Load test subject
-source ~/gh/dotfiles/zshrc.zsh
+#
+# Section 1: Run test cases
+#
 
-# Run test cases
 init
-local clipboard=$(pbpaste) # Save clipboard value since some tests overwrite it
+local clipboard=$(pbpaste) # Save clipboard value since some tests will overwrite it
+
+source ~/gh/dotfiles/zshrc.zsh
 for test in $(find-tests); do source $test; done
+
 echo $clipboard | pbcopy # Restore clipboard value
 
-# Print results
 echo "\n($passes/$total tests passed)"
 [[ $passes -ne $total ]] && echo $failed $debug
 
-# Verify tests were invoked immediately after defined
+#
+# Section 2: Verify all tests defined are getting invoked
+#
+
 [[ -z $filter ]] && { echo; ruby ~/gh/dotfiles/zshrc-tests/verify_test_invocations.rb }
 
-# Verify test order matches .zshrc
+#
+# Section 3: Verify tests are defined in the same order as their definitions in .zshrc
+#
+
 if [[ -z $filter ]]; then
-	echo
 	init
+	echo
+
 	for test in $(find-tests); do verify-test-ordering ~/gh/dotfiles/zshrc.zsh $test; done
 
-	# Print results
 	echo "\n($passes/$total functions match the test order)"
 	[[ $passes -ne $total ]] && echo $failed
 fi
 
-# Verify keymaps in .zshrc point to the correct files and print results
+#
+# Section 4: Verify keymaps at the bottom of .zshrc are up-to-date
+#
+
 [[ -z $filter ]] && { echo; ruby ~/gh/dotfiles/zshrc-tests/verify_keymaps.rb }
