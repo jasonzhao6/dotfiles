@@ -29,7 +29,7 @@ function ss { [[ -t 0 ]] && { eval $(prev-command) | save-args $@ } || save-args
 # show / filter [a]rgs
 function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | save-args } }
 # select [arg] by number
-function arg { [[ -n $1 && -n $2 ]] && { ARG=$(args-plain | sed -n "$1p"); [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
+function arg { [[ -n $1 && -n $2 ]] && { ARG="'$(args-plain | sed -n "$1p" | sed 's/ *#.*//')'"; [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
 function 1 { arg $0 $@ }
 function 2 { arg $0 $@ }
 function 3 { arg $0 $@ }
@@ -69,7 +69,6 @@ function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }
 # [c]opy / paste via clipboard
-# TODO which l; ss; 3 c is broken, need to escape string
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
 function v { pbpaste | save-args }
 # [y]ank / [p]ut across tabs
@@ -362,6 +361,7 @@ function tf-pre {
 # singles (uses `args`)
 function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args }
 function f { echo } # TODO find tf files and gh repos
+function i { which $@ | save-args } # TODO special case: do not trim
 function l { ls -l | awk '{print $9}' | save-args }
 # doubles
 function bb { pmset sleepnow }
@@ -543,7 +543,7 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # TODO redo annotations x2
 # (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)    <--    ((#|r|each\all\map) * ~~?)
 #             (p) (y) | [f] [g] (c) (r) [l]    <--    (f ""? *?):cc  (#? c):%+v  l:(# c)
-# (a) {o} (e) (u)  i  | [d] [h]  t  (n) (s)    <--    a:aa|rr  (e # # * ~~?)  s|s-:aa|nn
+# (a) {o} (e) (u) [i] | [d] [h]  t  (n) (s)    <--    a:aa|rr  (e # # * ~~?)  s|s-:aa|nn
 #     {q} {j} [k]  x  |  b   m  {w} (v)  z     <--    x:%+v
 
 ### Doubles keymap
