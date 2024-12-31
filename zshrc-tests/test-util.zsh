@@ -13,31 +13,31 @@ ls_dash_l=$(
 )
 
 function test--f {
-	# Not interesting b/c it has its own specs
+	# Skip: Not interesting b/c it has its own specs
 }
 
 function test--l {
-	# Not interesting to test b/c it's an alias
+	# Skip: Not interesting to test b/c it's an alias
 }
 
 function test--n {
-	# Not interesting to test
+	# Skip: Not interesting to test
 }
 
 function test--x {
-	# Cannot test b/c `fc -l` throws 'no such event' error
+	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
 }
 
 function test--bb {
-	# Not interesting to test
+	# Skip: Not interesting to test
 }
 
 function test--cc {
-	# Cannot test b/c `fc -l` throws 'no such event' error
+	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
 }
 
 function test--dd {
-	# Not testing b/c requires network call
+	# Skip: Not testing b/c requires network call
 }
 
 function test--ee {
@@ -148,7 +148,7 @@ function test--eee--with-math {
 }; run-with-filter test--eee--with-math
 
 function test--ff {
-	# Not interesting to test
+	# Skip: Not interesting to test
 }
 
 function test--hh {
@@ -182,7 +182,7 @@ function test--hh {
 }; run-with-filter test--hh
 
 function test--ii {
-	# Not interesting to test
+	# Skip: Not interesting to test
 }
 
 function test--ll {
@@ -208,15 +208,15 @@ function test--ll {
 }; run-with-filter test--ll
 
 function test--mm {
-	# Not interesting to test
+	# Skip: Not interesting to test
 }
 
 function test--oo {
-	# Not interesting to test
+	# Skip: Not interesting to test
 }
 
 function test--tt {
-	# Not interesting to test
+	# Skip: Not interesting to test
 }
 
 function test--uu {
@@ -268,15 +268,15 @@ function test--xx {
 }; run-with-filter test--xx
 
 function test--bif {
-	# Not testing b/c requires network call
+	# Skip: Not testing b/c requires network call
 }
 
 function test--flush {
-	# Not testing b/c requires network call
+	# Skip: Not testing b/c requires network call
 }
 
 function test--jcurl {
-	# Not interesting to test
+	# Skip: Not interesting to test
 }
 
 function test--ren {
@@ -356,7 +356,7 @@ function test--paste-if-empty--with-two-args {
 }; run-with-filter test--paste-if-empty--with-two-args
 
 function test--prev-command {
-	# Cannot test b/c `fc -l` throws 'no such event' error
+	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
 }
 
 function test--hex {

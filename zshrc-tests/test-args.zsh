@@ -51,11 +51,11 @@ input_with_tabs=$(
 input_with_comments=$input_with_tabs
 
 function test--ss {
-	# Cannot test b/c `fc -l` throws 'no such event' error
+	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
 }
 
 function test--ss- {
-	# Cannot test b/c `fc -l` throws 'no such event' error
+	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
 }
 
 function test--aa {
@@ -813,9 +813,9 @@ function test--save-args--with-hash-inserted {
 }; run-with-filter test--save-args--with-hash-inserted
 
 function test--s {
-	# Not interesting to test b/c it's an alias
+	# Skip: Not interesting to test b/c it's an alias
 }
 
 function test--s- {
-	# Not interesting to test b/c it's an alias
+	# Skip: Not interesting to test b/c it's an alias
 }

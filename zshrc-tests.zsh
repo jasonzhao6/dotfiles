@@ -67,6 +67,9 @@ echo $clipboard | pbcopy # Restore clipboard value
 echo "\n($passes/$total tests passed)"
 [[ $passes -ne $total ]] && echo $failed $debug
 
+# Verify tests were invoked immediately after defined
+[[ -z $filter ]] && { echo; ruby ~/gh/dotfiles/zshrc-tests/verify_test_invocations.rb }
+
 # Verify test order matches .zshrc
 if [[ -z $filter ]]; then
 	echo

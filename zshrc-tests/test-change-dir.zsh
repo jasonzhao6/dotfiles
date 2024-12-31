@@ -141,7 +141,7 @@ function test--cdd {
 }; run-with-filter test--cdd
 
 function test--cde {
-	# Not testing b/c function has other side effects
+	# Skip: Not testing b/c function has other side effects
 }
 
 function test--cdg {

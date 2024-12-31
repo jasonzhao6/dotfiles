@@ -1,8 +1,8 @@
 class VerifyKeymaps
   # Run-command files
-  PATH = `echo $HOME`.chomp
-  ZSHRC = "#{PATH}/gh/dotfiles/zshrc.zsh"
-  ZSHRC_SECRETS = "#{PATH}/.zshrc.secrets"
+  HOME = `echo $HOME`.chomp
+  ZSHRC = "#{HOME}/gh/dotfiles/zshrc.zsh"
+  ZSHRC_SECRETS = "#{HOME}/.zshrc.secrets"
 
   # Keymap namespaces
   GIT = 'Git'
