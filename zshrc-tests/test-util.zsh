@@ -185,14 +185,14 @@ function test--ii {
 	# Skip: Not interesting to test
 }
 
-function test--ll {
+function test--l {
 	assert "$(
-		rm -rf /tmp/test--ll
-		mkdir /tmp/test--ll
-		cd /tmp/test--ll
+		rm -rf /tmp/test--l
+		mkdir /tmp/test--l
+		cd /tmp/test--l
 		mkdir 1 2 3
 		touch 1.log 2.log 3.txt
-		ll | no-color
+		l | no-color
 	)" "$(
 		cat <<-eof
 		     1	1
@@ -204,8 +204,8 @@ function test--ll {
 		eof
 	)"
 
-	rm -rf /tmp/test--ll
-}; run-with-filter test--ll
+	rm -rf /tmp/test--l
+}; run-with-filter test--l
 
 function test--mm {
 	# Skip: Not interesting to test
@@ -434,7 +434,7 @@ function test--length-of--variable-width-column {
 	assert "$(echo $ls_dash_l | length-of 5)" '5'
 }; run-with-filter test--length-of--variable-width-column
 
-function test--list-keys {
+function test--keys {
 	local input=$(
 		cat <<-eof
 			{
@@ -445,14 +445,14 @@ function test--list-keys {
 		eof
 	)
 
-	assert "$(echo $input | list-keys)" "$(
+	assert "$(echo $input | keys)" "$(
 		cat <<-eof
 		     1	key1
 		     2	key2
 		     3	key3
 		eof
 	)"
-}; run-with-filter test--list-keys
+}; run-with-filter test--keys
 
 function test--trim-list {
 	local input=$(
