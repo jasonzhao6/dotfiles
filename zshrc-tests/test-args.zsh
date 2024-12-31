@@ -607,40 +607,6 @@ function test--rr {
 	)"
 }; run-with-filter test--rr
 
-function test--rr--when-reverting-x2-with-color {
-	assert "$(
-		echo $input | save-args > /dev/null
-		aa program > /dev/null
-		rr > /dev/null
-		redo
-	)" "$(
-		cat <<-eof
-		     1	terraform-application-region-$(green-fg program)-A
-		     2	terraform-application-region-$(green-fg program)-B
-		eof
-	)"
-}; run-with-filter test--rr--when-reverting-x2-with-color
-
-function test--rr--when-reverting-x3-with-color {
-	assert "$(
-		echo $input | save-args > /dev/null
-		aa program > /dev/null
-		rr > /dev/null
-		aa terraform > /dev/null
-		aa application > /dev/null
-		redo > /dev/null
-		rr
-	)" "$(
-		cat <<-eof
-		     1	terraform-$(green-fg application)-region-shared-1
-		     2	terraform-$(green-fg application)-region-shared-2
-		     3	terraform-$(green-fg application)-region-shared-3
-		     4	terraform-$(green-fg application)-region-program-A
-		     5	terraform-$(green-fg application)-region-program-B
-		eof
-	)"
-}; run-with-filter test--rr--when-reverting-x3-with-color
-
 function test--rr--when-reverting-nn-with-headers {
 	assert "$(
 		echo $input_with_headers | save-args > /dev/null
@@ -659,7 +625,7 @@ function test--rr--when-reverting-nn-with-headers {
 	)"
 }; run-with-filter test--rr--when-reverting-nn-with-headers
 
-function test--rr--when-reverting-nnn {
+function test--rr--when-reverting-nnn-with-headers {
 	assert "$(
 		echo $input_with_headers | save-args > /dev/null
 		nnn a > /dev/null
@@ -675,7 +641,7 @@ function test--rr--when-reverting-nnn {
 			$(green-bg '        a                                       b      ')
 		eof
 	)"
-}; run-with-filter test--rr--when-reverting-nnn
+}; run-with-filter test--rr--when-reverting-nnn-with-headers
 
 function test--rr--when-reverting-nnn-then-requesting-nn {
 	assert "$(
@@ -713,6 +679,93 @@ function test--rr--when-reverting-nnn-with-headers-top-heavy {
 		eof
 	)"
 }; run-with-filter test--rr--when-reverting-nnn-with-headers-top-heavy
+
+function test--rr--when-undo-x2 {
+	assert "$(
+		seq 1 2 | save-args > /dev/null
+		seq 2 3 | save-args > /dev/null
+		seq 3 4 | save-args > /dev/null
+		rr > /dev/null
+		rr
+	)" "$(
+		cat <<-eof
+		     1	1
+		     2	2
+		eof
+	)"
+}; run-with-filter test--rr--when-undo-x2
+
+function test--rr--when-undo-beyond-tail {
+	assert "$(
+		seq 1 2 | save-args > /dev/null
+		seq 2 3 | save-args > /dev/null
+		seq 3 4 | save-args > /dev/null
+		rr > /dev/null
+		rr > /dev/null
+		rr
+	)" "$(
+		cat <<-eof
+		     1	1
+		     2	2
+		$(red-bg 'Reached the end of undo history')
+		eof
+	)"
+}; run-with-filter test--rr--when-undo-beyond-tail
+
+function test--rr--when-push-beyond-head-then-undo-beyond-tail {
+  args-init
+  ARGS_HISTORY_MAX=3
+
+	assert "$(
+		seq 1 2 | save-args > /dev/null
+		seq 2 3 | save-args > /dev/null
+		seq 3 4 | save-args > /dev/null
+		seq 4 5 | save-args > /dev/null
+		rr > /dev/null
+		rr > /dev/null
+		rr
+	)" "$(
+		cat <<-eof
+		     1	2
+		     2	3
+		$(red-bg 'Reached the end of undo history')
+		eof
+	)"
+}; run-with-filter test--rr--when-push-beyond-head-then-undo-beyond-tail
+
+function test--rr--when-undo-redo-with-color {
+	assert "$(
+		echo $input | save-args > /dev/null
+		aa program > /dev/null
+		rr > /dev/null
+		redo
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-$(green-fg program)-A
+		     2	terraform-application-region-$(green-fg program)-B
+		eof
+	)"
+}; run-with-filter test--rr--when-undo-redo-with-color
+
+function test--rr--when-undo-redo-undo-with-color {
+	assert "$(
+		echo $input | save-args > /dev/null
+		aa program > /dev/null
+		rr > /dev/null
+		aa terraform > /dev/null
+		aa application > /dev/null
+		redo > /dev/null
+		rr
+	)" "$(
+		cat <<-eof
+		     1	terraform-$(green-fg application)-region-shared-1
+		     2	terraform-$(green-fg application)-region-shared-2
+		     3	terraform-$(green-fg application)-region-shared-3
+		     4	terraform-$(green-fg application)-region-program-A
+		     5	terraform-$(green-fg application)-region-program-B
+		eof
+	)"
+}; run-with-filter test--rr--when-undo-redo-undo-with-color
 
 function test--c {
 	assert "$(

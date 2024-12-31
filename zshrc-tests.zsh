@@ -32,12 +32,6 @@ function assert {
 function run-with-filter {
 	[[ -z $filter || $(index-of $@ $filter) -ne 0 ]] && $@
 }
-function green-fg {
-	echo "[1;32m[K$@[m[K"
-}
-function green-bg {
-	echo "\e[42m$@\e[0m"
-}
 function verify-order {
 	local source=$(grep '^function' $1 | sed 's/ {.*/ {/')
 	local target=$(grep '^function' $2 | sed -e 's/test--//' -e 's/--[^-].*/ {/' | uniq)

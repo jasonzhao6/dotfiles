@@ -16,6 +16,10 @@ function color {
     alias grep='grep --color=always'
     alias ls='ls --color=always'
 }; color # set color aliases ahead of function definitions, so they can expand
+# helpers
+function green-fg { echo "\e[1;32m\e[K$@\e[m\e[K" }
+function red-bg { echo "\e[41m$@\e[0m" }
+function green-bg { echo "\e[42m$@\e[0m" }
 
 ### [Args]
 # [s]ave args
@@ -61,7 +65,7 @@ function nnn { NNN=1 nn $@ }
 # select first column
 function a { [[ -z $NN || $NN -eq 1 ]] && nn a || nnn a }
 # [r]evert row / column selection
-function rr { ARGS_COLS_PREV=$(args-columns | strip); args-undo; args-list; ARGS_COLS_CURR=$(args-columns | strip); [[ ${#ARGS_COLS_PREV} -lt ${#ARGS_COLS_CURR} ]] && args-columns-bar }
+function rr { ARGS_COLS_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARGS_COLS_CURR=$(args-columns | strip); [[ ${#ARGS_COLS_PREV} -lt ${#ARGS_COLS_CURR} ]] && args-columns-bar }
 function redo { args-redo; args-list }
 # [c]opy / paste via clipboard
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
@@ -76,7 +80,7 @@ function args-list { args | nl }
 function args-list-plain { args | nl | no-color | expand }
 function args-list-size { args | wc -l | awk '{print $1}' }
 function args-columns { ARGS_COLUMNS=''; ARGS_COL_CURR=a; ARGS_SKIP_NL=1; [[ ${1:-$ARGS_BOTTOM_ROW} -eq 1 ]] && ARG=$(args-list-plain | tail -1) || ARG=$(args-list-plain | head -1); for i in $(seq 1 ${#ARG}); do args-label-column! $i; done; echo $ARGS_COLUMNS }
-function args-columns-bar { echo "\e[42m$(args-columns $1)\e[0m" }
+function args-columns-bar { green-bg "$(args-columns $1)" }
 # helpers (`!` means it sets env vars to be used by its caller function)
 function args-build-greps! { ARGS_FILTER="grep ${*// / | grep }"; ARGS_FILTER=${ARGS_FILTER// -/ --invert-match }; ARGS_FILTER=${ARGS_FILTER//grep/grep --color=never --ignore-case}; ARGS_HIGHLIGHT="egrep --color=always --ignore-case '${${@:#-*}// /|}'" }
 function args-label-column! { [[ ${ARG[$1-1]} == ' ' && ${ARG[$1]} != ' ' ]] && { [[ $ARGS_SKIP_NL -eq 1 ]] && { ARGS_SKIP_NL=0; ARGS_COLUMNS+=' ' } || { ARGS_COLUMNS+=$ARGS_COL_CURR; ARGS_COL_CURR=$(next-ascii $ARGS_COL_CURR) } } || ARGS_COLUMNS+=' ' }
@@ -89,27 +93,23 @@ function save-args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-push-if-diff
 function s { s- 'insert `#` after the first column to soft-select it' }
 function s- { [[ -t 0 ]] && { eval $(prev-command) | save-args $@ } || save-args $@ }
 
-### Args history
-#            123456789
-# cursor     ^
-# head       ^
-# tail       ^
+### Args history helpers
+#
+#             123456789
+#  cursor     ^
+#  head       ^
+#  tail       ^
 #
 # array size is fixed, wrap at the end
 # advance cursor and head together
 # if next is tail, push tail forward
 # to undo, only cursor moves, up to tail
 # to redo, only cursor moves, up to head
-# config
-ARGS_HISTORY_MAX=5
-ARGS_HISTORY=()
-ARGS_CURSOR=0
-ARGS_HEAD=0
-ARGS_TAIL=0
-# helpers (args)
+function args-init { ARGS_HISTORY_MAX=100; ARGS_HISTORY=(); ARGS_CURSOR=0; ARGS_HEAD=0; ARGS_TAIL=0 }; args-init;
 function args-push { ARGS_CURSOR=$(args-increment $ARGS_CURSOR); ARGS_HISTORY[$ARGS_CURSOR]=$1; ARGS_HEAD=$ARGS_CURSOR; [[ $ARGS_CURSOR -eq $ARGS_TAIL ]] && ARGS_TAIL=$(args-increment $ARGS_TAIL); [[ $ARGS_TAIL -eq 0 ]] && ARGS_TAIL=1; debug }
-function args-undo { ARGS_PREV=$(args-decrement $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_TAIL ]] && ARGS_CURSOR=$ARGS_PREV || echo '> hit tail'; debug }
-function args-redo { ARGS_NEXT=$(args-increment $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_HEAD ]] && ARGS_CURSOR=$ARGS_NEXT || echo '> hit head'; debug }
+function args-undo { ARGS_PREV=$(args-decrement $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_TAIL ]] && ARGS_CURSOR=$ARGS_PREV || ARGS_UNDO_EXCEEDED=1; debug }
+function args-redo { ARGS_NEXT=$(args-increment $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_HEAD ]] && ARGS_CURSOR=$ARGS_NEXT || ARGS_REDO_EXCEEDED=1; debug }
+function args-undo-bar { [[ $ARGS_UNDO_EXCEEDED -eq 1 ]] && { ARGS_UNDO_EXCEEDED=0; red-bg 'Reached the end of undo history' } }
 function args-replace { ARGS_HISTORY[$ARGS_CURSOR]=$1 }
 function args-increment { echo $(($1 % ARGS_HISTORY_MAX + 1)) }
 function args-decrement { ARGS_DECREMENT=$(($ARGS_CURSOR - 1)); [[ $ARGS_DECREMENT -eq 0 ]] && ARGS_DECREMENT=$ARGS_HISTORY_MAX; echo $ARGS_DECREMENT }
