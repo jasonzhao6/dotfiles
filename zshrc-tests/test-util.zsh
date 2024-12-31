@@ -12,6 +12,38 @@ ls_dash_l=$(
 	eof
 )
 
+function test--d {
+	assert "$(d localhost)" "$(
+		cat <<-eof
+		     1	127.0.0.1
+		eof
+	)"
+}; run-with-filter test--d
+
+function test--d--without-input {
+	assert "$(d)" "$(
+		cat <<-eof
+
+		eof
+	)"
+}; run-with-filter test--d--without-input
+
+function test--d--with-protocol {
+	assert "$(d http://localhost)" "$(
+		cat <<-eof
+		     1	127.0.0.1
+		eof
+	)"
+}; run-with-filter test--d--with-protocol
+
+function test--d--with-protocol-and-path {
+	assert "$(d http://localhost/path/to/file)" "$(
+		cat <<-eof
+		     1	127.0.0.1
+		eof
+	)"
+}; run-with-filter test--d--with-protocol-and-path
+
 function test--f {
 	# Skip: Not interesting b/c it has its own specs
 }

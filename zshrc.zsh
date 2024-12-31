@@ -361,7 +361,7 @@ function tf-pre {
 
 ### Util
 # singles (uses `args`)
-function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args } # TODO
+function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args }
 function f { echo } # TODO find tf files and gh repos
 function i { which $@ | save-args }
 function l { ls -l | awk '{print $9}' | save-args }
