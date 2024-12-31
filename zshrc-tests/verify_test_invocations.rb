@@ -5,6 +5,7 @@ class VerifyTestInvocations
     #{HOME}/gh/dotfiles/zshrc-tests/test-change-dir.zsh
     #{HOME}/gh/dotfiles/zshrc-tests/test-github-helpers.zsh
     #{HOME}/gh/dotfiles/zshrc-tests/test-util.zsh
+    #{HOME}/gh/dotfiles/zshrc-tests/test-zsh.zsh
   ]
 
   def initialize

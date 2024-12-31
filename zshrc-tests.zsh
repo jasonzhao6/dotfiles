@@ -55,6 +55,7 @@ source ~/gh/dotfiles/zshrc-tests/test-args.zsh
 source ~/gh/dotfiles/zshrc-tests/test-change-dir.zsh
 source ~/gh/dotfiles/zshrc-tests/test-github-helpers.zsh
 source ~/gh/dotfiles/zshrc-tests/test-util.zsh
+source ~/gh/dotfiles/zshrc-tests/test-zsh.zsh
 echo $clipboard | pbcopy # Restore clipboard value
 
 # Print results
@@ -72,6 +73,7 @@ if [[ -z $filter ]]; then
 	verify-order ~/gh/dotfiles/zshrc.zsh ~/gh/dotfiles/zshrc-tests/test-change-dir.zsh
 	verify-order ~/gh/dotfiles/zshrc.zsh ~/gh/dotfiles/zshrc-tests/test-github-helpers.zsh
 	verify-order ~/gh/dotfiles/zshrc.zsh ~/gh/dotfiles/zshrc-tests/test-util.zsh
+	verify-order ~/gh/dotfiles/zshrc.zsh ~/gh/dotfiles/zshrc-tests/test-zsh.zsh
 
 	# Print results
 	echo "\n($passes/$total functions match the test order)"
