@@ -17,16 +17,26 @@ function test--f {
 }
 
 function test--l {
-	# Skip: Not interesting to test b/c it's an alias
-}
+	assert "$(
+		rm -rf /tmp/test--l
+		mkdir /tmp/test--l
+		cd /tmp/test--l
+		mkdir 1 2 3
+		touch 1.log 2.log 3.txt
+		l | no-color
+	)" "$(
+		cat <<-eof
+		     1	1
+		     2	1.log
+		     3	2
+		     4	2.log
+		     5	3
+		     6	3.txt
+		eof
+	)"
 
-function test--n {
-	# Skip: Not interesting to test
-}
-
-function test--x {
-	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
-}
+	rm -rf /tmp/test--l
+}; run-with-filter test--l
 
 function test--bb {
 	# Skip: Not interesting to test
@@ -184,28 +194,6 @@ function test--hh {
 function test--ii {
 	# Skip: Not interesting to test
 }
-
-function test--l {
-	assert "$(
-		rm -rf /tmp/test--l
-		mkdir /tmp/test--l
-		cd /tmp/test--l
-		mkdir 1 2 3
-		touch 1.log 2.log 3.txt
-		l | no-color
-	)" "$(
-		cat <<-eof
-		     1	1
-		     2	1.log
-		     3	2
-		     4	2.log
-		     5	3
-		     6	3.txt
-		eof
-	)"
-
-	rm -rf /tmp/test--l
-}; run-with-filter test--l
 
 function test--mm {
 	# Skip: Not interesting to test

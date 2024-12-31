@@ -361,8 +361,8 @@ function tf-pre {
 ### Util
 # singles (uses `args`)
 function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args }
-function l { ls -l | awk '{print $9}' | save-args }
 function f { echo } # TODO find tf files and gh repos
+function l { ls -l | awk '{print $9}' | save-args }
 # doubles
 function bb { pmset sleepnow }
 function cc { eval $(prev-command) | no-color | ruby -e 'puts STDIN.read.strip' | pbcopy }
