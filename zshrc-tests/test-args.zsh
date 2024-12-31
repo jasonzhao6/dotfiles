@@ -872,10 +872,10 @@ function test--c--with-two-args {
 	assert "$(c '123 321'; pbpaste)" '123 321'
 }; run-with-filter test--c--with-two-args
 
-function test--vv {
+function test--v {
 	assert "$(
 		echo $input | pbcopy
-		vv
+		v
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-shared-1
@@ -885,21 +885,21 @@ function test--vv {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--vv
+}; run-with-filter test--v
 
-function test--yy {
+function test--y {
 	assert "$(
 		echo $input | save-args > /dev/null
-		rm ~/.zshrc.args
-		yy
+		rm -f ~/.zshrc.args
+		y
 		cat ~/.zshrc.args
 	)" "$input"
-}; run-with-filter test--yy
+}; run-with-filter test--y
 
-function test--pp {
+function test--p {
 	assert "$(
 		seq 3 > ~/.zshrc.args
-		pp
+		p
 	)" "$(
 		cat <<-eof
 		     1	1
@@ -907,7 +907,7 @@ function test--pp {
 		     3	3
 		eof
 	)"
-}; run-with-filter test--pp
+}; run-with-filter test--p
 
 function test--save-args {
 	assert "$(echo $input | save-args)" "$(
