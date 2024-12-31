@@ -16,6 +16,16 @@ function test--f {
 	# Skip: Not interesting b/c it has its own specs
 }
 
+function test--i {
+	assert "$(i i)" "$(
+		cat <<-eof
+		     1	i () {
+		     2		which \$@ | save-args
+		     3	}
+		eof
+	)"
+}; run-with-filter test--i
+
 function test--l {
 	assert "$(
 		rm -rf /tmp/test--l

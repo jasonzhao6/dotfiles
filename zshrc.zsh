@@ -74,6 +74,8 @@ function v { pbpaste | save-args }
 # [y]ank / [p]ut across tabs
 function y { args > ~/.zshrc.args }
 function p { echo "$(<~/.zshrc.args)" | save-args }
+# strip leading / trailing spaces
+function z { args | strip | save-args }
 # helpers
 function args { echo $ARGS_HISTORY[$ARGS_CURSOR] }
 function args-plain { args | no-color | expand }
@@ -87,7 +89,7 @@ function args-build-greps! { ARGS_FILTER="grep ${*// / | grep }"; ARGS_FILTER=${
 function args-label-column! { [[ ${ARG[$1-1]} == ' ' && ${ARG[$1]} != ' ' ]] && { [[ $ARGS_SKIP_NL -eq 1 ]] && { ARGS_SKIP_NL=0; ARGS_COLUMNS+=' ' } || { ARGS_COLUMNS+=$ARGS_COL_CURR; ARGS_COL_CURR=$(next-ascii $ARGS_COL_CURR) } } || ARGS_COLUMNS+=' ' }
 function args-mark-references! { ARGS_COLUMNS=$(args-columns $2); ARGS_COL_FIRST=$(index-of $ARGS_COLUMNS a); ARGS_COL_TARGET=$(index-of $ARGS_COLUMNS $1); ARGS_COL_NEXT=$(index-of $ARGS_COLUMNS $(next-ascii $1)); ARGS_BOTTOM_ROW=$2 }
 function args-select-column! { args-list-plain | cut -c $([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)-$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1))) | strip | save-args }
-function args-get-new! { ARGS_NEW=$(cat - | head -1000 | no-empty | strip); [[ -n $1 ]] && ARGS_NEW=$(echo $ARGS_NEW | insert-hash); ARGS_NEW_PLAIN=$(echo $ARGS_NEW | no-color | expand) }
+function args-get-new! { ARGS_NEW=$(cat - | head -1000 | no-empty); [[ -n $1 ]] && ARGS_NEW=$(echo $ARGS_NEW | insert-hash); ARGS_NEW_PLAIN=$(echo $ARGS_NEW | no-color | expand) }
 function args-push-if-different! { [[ $ARGS_NEW_PLAIN != $(args-plain) ]] && { args-push $ARGS; ARGS_PUSHED=1 } || ARGS_PUSHED=0 }
 # |
 function save-args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-push-if-different!; args-replace $ARGS_NEW; args-list } } # always replace in case grep highlighting has updated
@@ -359,9 +361,9 @@ function tf-pre {
 
 ### Util
 # singles (uses `args`)
-function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args }
+function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args } # TODO
 function f { echo } # TODO find tf files and gh repos
-function i { which $@ | save-args } # TODO special case: do not trim
+function i { which $@ | save-args }
 function l { ls -l | awk '{print $9}' | save-args }
 # doubles
 function bb { pmset sleepnow }
@@ -544,7 +546,7 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)    <--    ((#|r|each\all\map) * ~~?)
 #             (p) (y) | [f] [g] (c) (r) [l]    <--    (f ""? *?):cc  (#? c):%+v  l:(# c)
 # (a) {o} (e) (u) [i] | [d] [h]  t  (n) (s)    <--    a:aa|rr  (e # # * ~~?)  s|s-:aa|nn
-#     {q} {j} [k]  x  |  b   m  {w} (v)  z     <--    x:%+v
+#     {q} {j} [k]  x  |  b   m  {w} (v) [z]    <--    x:%+v
 
 ### Doubles keymap
 # () means defined for args

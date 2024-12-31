@@ -909,6 +909,21 @@ function test--p {
 	)"
 }; run-with-filter test--p
 
+function test--z {
+	assert "$(
+		echo $input_with_whitespace | save-args > /dev/null
+		z
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-shared-1
+		     2	terraform-application-region-shared-2
+		     3	terraform-application-region-shared-3
+		     4	terraform-application-region-program-A
+		     5	terraform-application-region-program-B
+		eof
+	)"
+}; run-with-filter test--z
+
 function test--save-args {
 	assert "$(echo $input | save-args)" "$(
 		cat <<-eof
@@ -924,11 +939,11 @@ function test--save-args {
 function test--save-args--with-leading-whitespace {
 	assert "$(echo $input_with_whitespace | save-args)" "$(
 		cat <<-eof
-		     1	terraform-application-region-shared-1
+		     1	  terraform-application-region-shared-1
 		     2	terraform-application-region-shared-2
-		     3	terraform-application-region-shared-3
+		     3	  terraform-application-region-shared-3
 		     4	terraform-application-region-program-A
-		     5	terraform-application-region-program-B
+		     5	  terraform-application-region-program-B
 		eof
 	)"
 }; run-with-filter test--save-args--with-leading-whitespace
