@@ -410,17 +410,17 @@ function test--insert-hash {
 )"
 }; run-with-filter test--insert-hash
 
-function test--length-of {
-	assert "$(echo $ls_dash_l | length-of)" '11'
-}; run-with-filter test--length-of
+function test--size-of {
+	assert "$(echo $ls_dash_l | size-of)" '11'
+}; run-with-filter test--size-of
 
-function test--length-of--third-column {
-	assert "$(echo $ls_dash_l | length-of 3)" '5'
-}; run-with-filter test--length-of--third-column
+function test--size-of--third-column {
+	assert "$(echo $ls_dash_l | size-of 3)" '5'
+}; run-with-filter test--size-of--third-column
 
-function test--length-of--variable-width-column {
-	assert "$(echo $ls_dash_l | length-of 5)" '5'
-}; run-with-filter test--length-of--variable-width-column
+function test--size-of--variable-width-column {
+	assert "$(echo $ls_dash_l | size-of 5)" '5'
+}; run-with-filter test--size-of--variable-width-column
 
 function test--keys {
 	local input=$(
