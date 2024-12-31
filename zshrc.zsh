@@ -26,7 +26,7 @@ function grep-highlighting { echo "\e[1;32m\e[K$@\e[m\e[K" }
 # [s]ave args
 function s { ss 'insert `#` after the first column to soft-select it' }
 function ss { [[ -t 0 ]] && { eval $(prev-command) | save-args $@ } || save-args $@ }
-# filter [a]rgs
+# show / filter [a]rgs
 function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | save-args } }
 # select [arg] by number
 function arg { [[ -n $1 && -n $2 ]] && { ARG=$(args-plain | sed -n "$1p"); [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
@@ -60,11 +60,11 @@ function each { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE
 function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@ &; done; wait }
 function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | save-args }
 # select colum[n] via bottom row
-function n { [[ $NNN -eq 1 ]] && NN=0 || NN=1; [[ -z $1 ]] && { args-list; args-columns-bar $NN } || { args-mark-references! $1 $NN; args-select-column!; [[ $ARGS_PUSHED -eq 0 && $(index-of "$(args-columns $NN)" b) -ne 0 ]] && args-columns-bar $NN }; return 0 }
+function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-columns-bar $N } || { args-mark-references! $1 $N; args-select-column!; [[ $ARGS_PUSHED -eq 0 && $(index-of "$(args-columns $N)" b) -ne 0 ]] && args-columns-bar $N }; return 0 }
 # select colum[n] via headers row
-function nn { NNN=1 nn $@ }
+function nn { NN=1 n $@ }
 # select first column
-function aa { [[ -z $NN || $NN -eq 1 ]] && nn a || nnn a }
+function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
 # [r]evert row / column selection
 function u { ARGS_COLS_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARGS_COLS_CURR=$(args-columns | strip); [[ ${#ARGS_COLS_PREV} -lt ${#ARGS_COLS_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }

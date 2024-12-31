@@ -50,18 +50,42 @@ input_with_tabs=$(
 
 input_with_comments=$input_with_tabs
 
+function test--s {
+	# Testing only the `<command> | ss` use case
+	# Cannot test the `<command>; ss` use case b/c `fc -l` throws 'no such event' error
+
+	assert "$(echo $input_with_headers | s)" "$(
+		cat <<-eof
+		     1	MANIFEST                                # COMMENT
+		     2	terraform-application-region-shared-1   # hello world
+		     3	terraform-application-region-shared-2   # foo bar
+		     4	terraform-application-region-shared-3   # sup
+		     5	terraform-application-region-program-A  # how are you
+		     6	terraform-application-region-program-B  # select via headers for this one
+		eof
+	)"
+}; run-with-filter test--s
+
 function test--ss {
-	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
-}
+	# Testing only the `<command> | ss` use case
+	# Cannot test the `<command>; ss` use case b/c `fc -l` throws 'no such event' error
 
-function test--ss- {
-	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
-}
+	assert "$(echo $input_with_headers | ss)" "$(
+		cat <<-eof
+		     1	MANIFEST                                COMMENT
+		     2	terraform-application-region-shared-1   hello world
+		     3	terraform-application-region-shared-2   foo bar
+		     4	terraform-application-region-shared-3   sup
+		     5	terraform-application-region-program-A  how are you
+		     6	terraform-application-region-program-B  select via headers for this one
+		eof
+	)"
+}; run-with-filter test--ss
 
-function test--aa {
+function test--a {
 	assert "$(
 		echo $input | save-args > /dev/null
-		aa
+		a
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-shared-1
@@ -71,12 +95,12 @@ function test--aa {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--aa
+}; run-with-filter test--a
 
-function test--aa--adds-color {
+function test--a--adds-color {
 	assert "$(
 		echo $input | save-args > /dev/null
-		aa shared
+		a shared
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-$(grep-highlighting shared)-1
@@ -84,13 +108,13 @@ function test--aa--adds-color {
 		     3	terraform-application-region-$(grep-highlighting shared)-3
 		eof
 	)"
-}; run-with-filter test--aa--adds-color
+}; run-with-filter test--a--adds-color
 
-function test--aa--replaces-color {
+function test--a--replaces-color {
 	assert "$(
 		echo $input | save-args > /dev/null
-		aa shared > /dev/null
-		aa region
+		a shared > /dev/null
+		a region
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-$(grep-highlighting region)-shared-1
@@ -98,30 +122,30 @@ function test--aa--replaces-color {
 		     3	terraform-application-$(grep-highlighting region)-shared-3
 		eof
 	)"
-}; run-with-filter test--aa--replaces-color
+}; run-with-filter test--a--replaces-color
 
-function test--aa--with-two-args-out-of-order {
+function test--a--with-two-args-out-of-order {
 	assert "$(
 		echo $input | save-args > /dev/null
-		aa 2 shared
+		a 2 shared
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-$(grep-highlighting shared)-$(grep-highlighting 2)
 		eof
 	)"
-}; run-with-filter test--aa--with-two-args-out-of-order
+}; run-with-filter test--a--with-two-args-out-of-order
 
-function test--aa--with-two-args-including-negation {
+function test--a--with-two-args-including-negation {
 	assert "$(
 		echo $input | save-args > /dev/null
-		aa -2 shared
+		a -2 shared
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-$(grep-highlighting shared)-1
 		     2	terraform-application-region-$(grep-highlighting shared)-3
 		eof
 	)"
-}; run-with-filter test--aa--with-two-args-including-negation
+}; run-with-filter test--a--with-two-args-including-negation
 
 function test--arg {
 	assert "$(
@@ -361,10 +385,10 @@ function test--map {
 	)"
 }; run-with-filter test--map
 
-function test--nn {
+function test--n {
 	assert "$(
 		echo $input_with_tabs | save-args > /dev/null
-		nn
+		n
 	)" "$(
 		cat <<-eof
 		     1	10.0.0.1	# 2023-06-21T20:25:00+00:00	webhook-asg
@@ -373,12 +397,12 @@ function test--nn {
 			$(green-bg '        a               b c                             d          ')
 		eof
 	)"
-}; run-with-filter test--nn
+}; run-with-filter test--n
 
-function test--nn--when-selecting-first {
+function test--n--when-selecting-first {
 	assert "$(
 		echo $input_with_tabs | save-args > /dev/null
-		nn a
+		n a
 	)" "$(
 		cat <<-eof
 		     1	10.0.0.1
@@ -386,12 +410,12 @@ function test--nn--when-selecting-first {
 		     3	10.0.0.3
 		eof
 	)"
-}; run-with-filter test--nn--when-selecting-first
+}; run-with-filter test--n--when-selecting-first
 
-function test--nn--when-selecting-third {
+function test--n--when-selecting-third {
 	assert "$(
 		echo $input_with_tabs | save-args > /dev/null
-		nn c
+		n c
 	)" "$(
 		cat <<-eof
 		     1	2023-06-21T20:25:00+00:00
@@ -399,12 +423,12 @@ function test--nn--when-selecting-third {
 		     3	2023-06-21T20:24:59+00:00
 		eof
 	)"
-}; run-with-filter test--nn--when-selecting-third
+}; run-with-filter test--n--when-selecting-third
 
-function test--nn--when-selecting-last {
+function test--n--when-selecting-last {
 	assert "$(
 		echo $input_with_tabs | save-args > /dev/null
-		nn d
+		n d
 	)" "$(
 		cat <<-eof
 		     1	webhook-asg
@@ -412,12 +436,12 @@ function test--nn--when-selecting-last {
 		     3	webhook-asg
 		eof
 	)"
-}; run-with-filter test--nn--when-selecting-last
+}; run-with-filter test--n--when-selecting-last
 
-function test--nn--when-selecting-with-color {
+function test--n--when-selecting-with-color {
 	assert "$(
 		echo $input_with_tabs | grep 00 | save-args > /dev/null
-		nn d
+		n d
 	)" "$(
 		cat <<-eof
 		     1	webhook-asg
@@ -425,12 +449,12 @@ function test--nn--when-selecting-with-color {
 		     3	webhook-asg
 		eof
 	)"
-}; run-with-filter test--nn--when-selecting-with-color
+}; run-with-filter test--n--when-selecting-with-color
 
-function test--nn--when-selecting-out-of-bound {
+function test--n--when-selecting-out-of-bound {
 	assert "$(
 		echo $input_with_tabs | save-args > /dev/null
-		nn z
+		n z
 	)" "$(
 		cat <<-eof
 		     1	10.0.0.1        # 2023-06-21T20:25:00+00:00     webhook-asg
@@ -439,9 +463,9 @@ function test--nn--when-selecting-out-of-bound {
 			$(green-bg '        a               b c                             d          ')
 		eof
 	)"
-}; run-with-filter test--nn--when-selecting-out-of-bound
+}; run-with-filter test--n--when-selecting-out-of-bound
 
-function test--nn--with-kubectl-get-pods-output {
+function test--n--with-kubectl-get-pods-output {
 	local input=$(
 		cat <<-eof
 			pod-1           1/1     Running     1 (15h ago)        15h
@@ -453,7 +477,7 @@ function test--nn--with-kubectl-get-pods-output {
 
 	assert "$(
 		echo $input | save-args > /dev/null
-		nn e
+		n e
 	)" "$(
 		cat <<-eof
 		     1	15h
@@ -462,7 +486,56 @@ function test--nn--with-kubectl-get-pods-output {
 		     4	14h
 		eof
 	)"
-}; run-with-filter test--nn--with-kubectl-get-pods-output
+}; run-with-filter test--n--with-kubectl-get-pods-output
+
+function test--n--with-one-column {
+	assert "$(
+		echo $input | save-args > /dev/null
+		n a
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-shared-1
+		     2	terraform-application-region-shared-2
+		     3	terraform-application-region-shared-3
+		     4	terraform-application-region-program-A
+		     5	terraform-application-region-program-B
+		eof
+	)"
+}; run-with-filter test--n--with-one-column
+
+function test--n--with-headers {
+	assert "$(
+		echo $input_with_headers | save-args > /dev/null
+		n
+	)" "$(
+		cat <<-eof
+		     1	MANIFEST                                COMMENT
+		     2	terraform-application-region-shared-1   hello world
+		     3	terraform-application-region-shared-2   foo bar
+		     4	terraform-application-region-shared-3   sup
+		     5	terraform-application-region-program-A  how are you
+		     6	terraform-application-region-program-B  select via headers for this one
+			$(green-bg '        a                                       b      c   d       e   f    g  ')
+		eof
+	)"
+}; run-with-filter test--n--with-headers
+
+function test--nn {
+	assert "$(
+		echo $input_with_headers | save-args > /dev/null
+		nn
+	)" "$(
+		cat <<-eof
+		     1	MANIFEST                                COMMENT
+		     2	terraform-application-region-shared-1   hello world
+		     3	terraform-application-region-shared-2   foo bar
+		     4	terraform-application-region-shared-3   sup
+		     5	terraform-application-region-program-A  how are you
+		     6	terraform-application-region-program-B  select via headers for this one
+			$(green-bg '        a                                       b      ')
+		eof
+	)"
+}; run-with-filter test--nn
 
 function test--nn--with-one-column {
 	assert "$(
@@ -479,59 +552,10 @@ function test--nn--with-one-column {
 	)"
 }; run-with-filter test--nn--with-one-column
 
-function test--nn--with-headers {
-	assert "$(
-		echo $input_with_headers | save-args > /dev/null
-		nn
-	)" "$(
-		cat <<-eof
-		     1	MANIFEST                                COMMENT
-		     2	terraform-application-region-shared-1   hello world
-		     3	terraform-application-region-shared-2   foo bar
-		     4	terraform-application-region-shared-3   sup
-		     5	terraform-application-region-program-A  how are you
-		     6	terraform-application-region-program-B  select via headers for this one
-			$(green-bg '        a                                       b      c   d       e   f    g  ')
-		eof
-	)"
-}; run-with-filter test--nn--with-headers
-
-function test--nnn {
-	assert "$(
-		echo $input_with_headers | save-args > /dev/null
-		nnn
-	)" "$(
-		cat <<-eof
-		     1	MANIFEST                                COMMENT
-		     2	terraform-application-region-shared-1   hello world
-		     3	terraform-application-region-shared-2   foo bar
-		     4	terraform-application-region-shared-3   sup
-		     5	terraform-application-region-program-A  how are you
-		     6	terraform-application-region-program-B  select via headers for this one
-			$(green-bg '        a                                       b      ')
-		eof
-	)"
-}; run-with-filter test--nnn
-
-function test--nnn--with-one-column {
-	assert "$(
-		echo $input | save-args > /dev/null
-		nnn a
-	)" "$(
-		cat <<-eof
-		     1	terraform-application-region-shared-1
-		     2	terraform-application-region-shared-2
-		     3	terraform-application-region-shared-3
-		     4	terraform-application-region-program-A
-		     5	terraform-application-region-program-B
-		eof
-	)"
-}; run-with-filter test--nnn--with-one-column
-
-function test--a {
+function test--aa {
 	assert "$(
 		echo $input_with_tabs | save-args > /dev/null
-		a
+		aa
 	)" "$(
 		cat <<-eof
 		     1	10.0.0.1
@@ -539,12 +563,12 @@ function test--a {
 		     3	10.0.0.3
 		eof
 	)"
-}; run-with-filter test--a
+}; run-with-filter test--aa
 
-function test--a--when-there-was-no-preceding-request {
+function test--aa--when-there-was-no-preceding-request {
 	assert "$(
 		echo $input_with_headers_top_heavy | save-args > /dev/null
-		a
+		aa
 	)" "$(
 		cat <<-eof
 		     1	MANIFEST                                COMMENT
@@ -555,30 +579,30 @@ function test--a--when-there-was-no-preceding-request {
 		     6	terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--a--when-there-was-no-preceding-request
+}; run-with-filter test--aa--when-there-was-no-preceding-request
 
-function test--a--when-the-preceding-request-was-nn {
+function test--aa--when-the-preceding-request-was-n {
+	assert "$(
+		echo $input_with_headers_top_heavy | save-args > /dev/null
+		n > /dev/null
+		aa
+	)" "$(
+		cat <<-eof
+		     1	MANIFEST                                COMMENT
+		     2	terraform-application-region-shared-1   hello world
+		     3	terraform-application-region-shared-2
+		     4	terraform-application-region-shared-3
+		     5	terraform-application-region-program-A
+		     6	terraform-application-region-program-B
+		eof
+	)"
+}; run-with-filter test--aa--when-the-preceding-request-was-n
+
+function test--aa--when-the-preceding-request-was-nn {
 	assert "$(
 		echo $input_with_headers_top_heavy | save-args > /dev/null
 		nn > /dev/null
-		a
-	)" "$(
-		cat <<-eof
-		     1	MANIFEST                                COMMENT
-		     2	terraform-application-region-shared-1   hello world
-		     3	terraform-application-region-shared-2
-		     4	terraform-application-region-shared-3
-		     5	terraform-application-region-program-A
-		     6	terraform-application-region-program-B
-		eof
-	)"
-}; run-with-filter test--a--when-the-preceding-request-was-nn
-
-function test--a--when-the-preceding-request-was-nnn {
-	assert "$(
-		echo $input_with_headers_top_heavy | save-args > /dev/null
-		nnn > /dev/null
-		a
+		aa
 	)" "$(
 		cat <<-eof
 		     1	MANIFEST
@@ -589,12 +613,12 @@ function test--a--when-the-preceding-request-was-nnn {
 		     6	terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--a--when-the-preceding-request-was-nnn
+}; run-with-filter test--aa--when-the-preceding-request-was-nn
 
 function test--rr {
 	assert "$(
 		echo $input | save-args > /dev/null
-		aa program > /dev/null
+		a program > /dev/null
 		rr
 	)" "$(
 		cat <<-eof
@@ -606,6 +630,24 @@ function test--rr {
 		eof
 	)"
 }; run-with-filter test--rr
+
+function test--rr--when-reverting-n-with-headers {
+	assert "$(
+		echo $input_with_headers | save-args > /dev/null
+		n a > /dev/null
+		rr
+	)" "$(
+		cat <<-eof
+		     1	MANIFEST                                COMMENT
+		     2	terraform-application-region-shared-1   hello world
+		     3	terraform-application-region-shared-2   foo bar
+		     4	terraform-application-region-shared-3   sup
+		     5	terraform-application-region-program-A  how are you
+		     6	terraform-application-region-program-B  select via headers for this one
+			$(green-bg '        a                                       b      c   d       e   f    g  ')
+		eof
+	)"
+}; run-with-filter test--rr--when-reverting-n-with-headers
 
 function test--rr--when-reverting-nn-with-headers {
 	assert "$(
@@ -620,35 +662,17 @@ function test--rr--when-reverting-nn-with-headers {
 		     4	terraform-application-region-shared-3   sup
 		     5	terraform-application-region-program-A  how are you
 		     6	terraform-application-region-program-B  select via headers for this one
-			$(green-bg '        a                                       b      c   d       e   f    g  ')
+			$(green-bg '        a                                       b      ')
 		eof
 	)"
 }; run-with-filter test--rr--when-reverting-nn-with-headers
 
-function test--rr--when-reverting-nnn-with-headers {
+function test--rr--when-reverting-nn-then-requesting-n {
 	assert "$(
 		echo $input_with_headers | save-args > /dev/null
-		nnn a > /dev/null
-		rr
-	)" "$(
-		cat <<-eof
-		     1	MANIFEST                                COMMENT
-		     2	terraform-application-region-shared-1   hello world
-		     3	terraform-application-region-shared-2   foo bar
-		     4	terraform-application-region-shared-3   sup
-		     5	terraform-application-region-program-A  how are you
-		     6	terraform-application-region-program-B  select via headers for this one
-			$(green-bg '        a                                       b      ')
-		eof
-	)"
-}; run-with-filter test--rr--when-reverting-nnn-with-headers
-
-function test--rr--when-reverting-nnn-then-requesting-nn {
-	assert "$(
-		echo $input_with_headers | save-args > /dev/null
-		nnn a > /dev/null
+		nn a > /dev/null
 		rr > /dev/null
-		nn
+		n
 	)" "$(
 		cat <<-eof
 		     1	MANIFEST                                COMMENT
@@ -660,12 +684,12 @@ function test--rr--when-reverting-nnn-then-requesting-nn {
 			$(green-bg '        a                                       b      c   d       e   f    g  ')
 		eof
 	)"
-}; run-with-filter test--rr--when-reverting-nnn-then-requesting-nn
+}; run-with-filter test--rr--when-reverting-nn-then-requesting-n
 
-function test--rr--when-reverting-nnn-with-headers-top-heavy {
+function test--rr--when-reverting-nn-with-headers-top-heavy {
 	assert "$(
 		echo $input_with_headers_top_heavy | save-args > /dev/null
-		nnn a > /dev/null
+		nn a > /dev/null
 		rr
 	)" "$(
 		cat <<-eof
@@ -678,7 +702,7 @@ function test--rr--when-reverting-nnn-with-headers-top-heavy {
 			$(green-bg '        a                                       b      ')
 		eof
 	)"
-}; run-with-filter test--rr--when-reverting-nnn-with-headers-top-heavy
+}; run-with-filter test--rr--when-reverting-nn-with-headers-top-heavy
 
 function test--rr--when-undo-x2 {
 	assert "$(
@@ -739,7 +763,7 @@ function test--rr--when-push-beyond-head-then-undo-beyond-tail {
 function test--rr--when-undo-redo-with-color {
 	assert "$(
 		echo $input | save-args > /dev/null
-		aa program > /dev/null
+		a program > /dev/null
 		rr > /dev/null
 		redo
 	)" "$(
@@ -753,10 +777,10 @@ function test--rr--when-undo-redo-with-color {
 function test--rr--when-undo-redo-undo-with-color {
 	assert "$(
 		echo $input | save-args > /dev/null
-		aa program > /dev/null
+		a program > /dev/null
 		rr > /dev/null
-		aa terraform > /dev/null
-		aa application > /dev/null
+		a terraform > /dev/null
+		a application > /dev/null
 		redo > /dev/null
 		rr
 	)" "$(
@@ -910,7 +934,7 @@ function test--save-args--with-leading-whitespace {
 }; run-with-filter test--save-args--with-leading-whitespace
 
 function test--save-args--with-hash-inserted {
-	assert "$(echo $input_with_headers | s)" "$(
+	assert "$(echo $input_with_headers | save-args 'insert `#`')" "$(
 		cat <<-eof
 		     1	MANIFEST                                # COMMENT
 		     2	terraform-application-region-shared-1   # hello world
@@ -921,11 +945,3 @@ function test--save-args--with-hash-inserted {
 		eof
 	)"
 }; run-with-filter test--save-args--with-hash-inserted
-
-function test--s {
-	# Skip: Not interesting to test b/c it's an alias
-}
-
-function test--s- {
-	# Skip: Not interesting to test b/c it's an alias
-}
