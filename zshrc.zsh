@@ -65,8 +65,8 @@ function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-col
 function nn { NN=1 n $@ }
 # select first column
 function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
-# [r]evert row / column selection
-function u { ARGS_COLS_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARGS_COLS_CURR=$(args-columns | strip); [[ ${#ARGS_COLS_PREV} -lt ${#ARGS_COLS_CURR} ]] && args-columns-bar }
+# [u]ndo \ [r]edo row / column selections
+function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }
 # [c]opy / paste via clipboard
 # TODO which l; ss; 3 c is broken, need to escape string

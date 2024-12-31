@@ -238,10 +238,10 @@ function test--0 {
 	)"
 }; run-with-filter test--0
 
-function test--r {
+function test--rr {
 	assert "$(
 		echo $input | save-args > /dev/null
-		eee 1 $(($(args-list-size) * 10)) r echo 2>&1 | sort | uniq
+		eee 1 $(($(args-list-size) * 10)) rr echo 2>&1 | sort | uniq
 	)" "$(
 		cat <<-eof
 
@@ -250,7 +250,7 @@ function test--r {
 			echo terraform-application-region-shared-1
 			echo terraform-application-region-shared-2
 			echo terraform-application-region-shared-3
-			r echo
+			rr echo
 			terraform-application-region-program-A
 			terraform-application-region-program-B
 			terraform-application-region-shared-1
@@ -258,7 +258,7 @@ function test--r {
 			terraform-application-region-shared-3
 		eof
 	)"
-}; run-with-filter test--r
+}; run-with-filter test--rr
 
 function test--e {
 	assert "$(
@@ -615,11 +615,11 @@ function test--aa--when-the-preceding-request-was-nn {
 	)"
 }; run-with-filter test--aa--when-the-preceding-request-was-nn
 
-function test--rr {
+function test--u {
 	assert "$(
 		echo $input | save-args > /dev/null
 		a program > /dev/null
-		rr
+		u
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-shared-1
@@ -629,13 +629,13 @@ function test--rr {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--rr
+}; run-with-filter test--u
 
-function test--rr--when-reverting-n-with-headers {
+function test--u--when-undoing-n-with-headers {
 	assert "$(
 		echo $input_with_headers | save-args > /dev/null
 		n a > /dev/null
-		rr
+		u
 	)" "$(
 		cat <<-eof
 		     1	MANIFEST                                COMMENT
@@ -647,13 +647,13 @@ function test--rr--when-reverting-n-with-headers {
 			$(green-bg '        a                                       b      c   d       e   f    g  ')
 		eof
 	)"
-}; run-with-filter test--rr--when-reverting-n-with-headers
+}; run-with-filter test--u--when-undoing-n-with-headers
 
-function test--rr--when-reverting-nn-with-headers {
+function test--u--when-undoing-nn-with-headers {
 	assert "$(
 		echo $input_with_headers | save-args > /dev/null
 		nn a > /dev/null
-		rr
+		u
 	)" "$(
 		cat <<-eof
 		     1	MANIFEST                                COMMENT
@@ -665,13 +665,13 @@ function test--rr--when-reverting-nn-with-headers {
 			$(green-bg '        a                                       b      ')
 		eof
 	)"
-}; run-with-filter test--rr--when-reverting-nn-with-headers
+}; run-with-filter test--u--when-undoing-nn-with-headers
 
-function test--rr--when-reverting-nn-then-requesting-n {
+function test--u--when-undoing-nn-then-requesting-n {
 	assert "$(
 		echo $input_with_headers | save-args > /dev/null
 		nn a > /dev/null
-		rr > /dev/null
+		u > /dev/null
 		n
 	)" "$(
 		cat <<-eof
@@ -684,13 +684,13 @@ function test--rr--when-reverting-nn-then-requesting-n {
 			$(green-bg '        a                                       b      c   d       e   f    g  ')
 		eof
 	)"
-}; run-with-filter test--rr--when-reverting-nn-then-requesting-n
+}; run-with-filter test--u--when-undoing-nn-then-requesting-n
 
-function test--rr--when-reverting-nn-with-headers-top-heavy {
+function test--u--when-undoing-nn-with-headers-top-heavy {
 	assert "$(
 		echo $input_with_headers_top_heavy | save-args > /dev/null
 		nn a > /dev/null
-		rr
+		u
 	)" "$(
 		cat <<-eof
 		     1	MANIFEST                                COMMENT
@@ -702,31 +702,31 @@ function test--rr--when-reverting-nn-with-headers-top-heavy {
 			$(green-bg '        a                                       b      ')
 		eof
 	)"
-}; run-with-filter test--rr--when-reverting-nn-with-headers-top-heavy
+}; run-with-filter test--u--when-undoing-nn-with-headers-top-heavy
 
-function test--rr--when-undo-x2 {
+function test--u--when-undoing-x2 {
 	assert "$(
 		seq 1 2 | save-args > /dev/null
 		seq 2 3 | save-args > /dev/null
 		seq 3 4 | save-args > /dev/null
-		rr > /dev/null
-		rr
+		u > /dev/null
+		u
 	)" "$(
 		cat <<-eof
 		     1	1
 		     2	2
 		eof
 	)"
-}; run-with-filter test--rr--when-undo-x2
+}; run-with-filter test--u--when-undoing-x2
 
-function test--rr--when-undo-beyond-tail {
+function test--u--when-undoing-beyond-tail {
 	assert "$(
 		seq 1 2 | save-args > /dev/null
 		seq 2 3 | save-args > /dev/null
 		seq 3 4 | save-args > /dev/null
-		rr > /dev/null
-		rr > /dev/null
-		rr
+		u > /dev/null
+		u > /dev/null
+		u
 	)" "$(
 		cat <<-eof
 		     1	1
@@ -734,9 +734,9 @@ function test--rr--when-undo-beyond-tail {
 		$(red-bg 'Reached the end of undo history')
 		eof
 	)"
-}; run-with-filter test--rr--when-undo-beyond-tail
+}; run-with-filter test--u--when-undoing-beyond-tail
 
-function test--rr--when-push-beyond-head-then-undo-beyond-tail {
+function test--u--when-pushing-beyond-head-then-undoing-beyond-tail {
 	local args_history_max=$ARGS_HISTORY_MAX
 	args-init
 	ARGS_HISTORY_MAX=3
@@ -746,9 +746,9 @@ function test--rr--when-push-beyond-head-then-undo-beyond-tail {
 		seq 2 3 | save-args > /dev/null
 		seq 3 4 | save-args > /dev/null
 		seq 4 5 | save-args > /dev/null
-		rr > /dev/null
-		rr > /dev/null
-		rr
+		u > /dev/null
+		u > /dev/null
+		u
 	)" "$(
 		cat <<-eof
 		     1	2
@@ -758,31 +758,31 @@ function test--rr--when-push-beyond-head-then-undo-beyond-tail {
 	)"
 
 	ARGS_HISTORY_MAX=$args_history_max
-}; run-with-filter test--rr--when-push-beyond-head-then-undo-beyond-tail
+}; run-with-filter test--u--when-pushing-beyond-head-then-undoing-beyond-tail
 
-function test--rr--when-undo-redo-with-color {
+function test--u--when-undoing-then-redoing-with-color {
 	assert "$(
 		echo $input | save-args > /dev/null
 		a program > /dev/null
-		rr > /dev/null
-		redo
+		u > /dev/null
+		r
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-$(grep-highlighting program)-A
 		     2	terraform-application-region-$(grep-highlighting program)-B
 		eof
 	)"
-}; run-with-filter test--rr--when-undo-redo-with-color
+}; run-with-filter test--u--when-undoing-then-redoing-with-color
 
-function test--rr--when-undo-redo-undo-with-color {
+function test--u--when-undoing-then-redoing-then-undoing-again-with-color {
 	assert "$(
 		echo $input | save-args > /dev/null
 		a program > /dev/null
-		rr > /dev/null
+		u > /dev/null
 		a terraform > /dev/null
 		a application > /dev/null
-		redo > /dev/null
-		rr
+		r > /dev/null
+		u
 	)" "$(
 		cat <<-eof
 		     1	terraform-$(grep-highlighting application)-region-shared-1
@@ -792,35 +792,35 @@ function test--rr--when-undo-redo-undo-with-color {
 		     5	terraform-$(grep-highlighting application)-region-program-B
 		eof
 	)"
-}; run-with-filter test--rr--when-undo-redo-undo-with-color
+}; run-with-filter test--u--when-undoing-then-redoing-then-undoing-again-with-color
 
-function test--redo--when-redo-x2 {
+function test--r--when-redoing-x2 {
 	assert "$(
 		seq 1 2 | save-args > /dev/null
 		seq 2 3 | save-args > /dev/null
 		seq 3 4 | save-args > /dev/null
-		rr > /dev/null
-		rr > /dev/null
-		redo > /dev/null
-		redo
+		u > /dev/null
+		u > /dev/null
+		r > /dev/null
+		r
 	)" "$(
 		cat <<-eof
 		     1	3
 		     2	4
 		eof
 	)"
-}; run-with-filter test--redo--when-redo-x2
+}; run-with-filter test--r--when-redoing-x2
 
-function test--redo--when-redo-beyond-head {
+function test--r--when-redoing-beyond-head {
 	assert "$(
 		seq 1 2 | save-args > /dev/null
 		seq 2 3 | save-args > /dev/null
 		seq 3 4 | save-args > /dev/null
-		rr > /dev/null
-		rr > /dev/null
-		redo > /dev/null
-		redo > /dev/null
-		redo
+		u > /dev/null
+		u > /dev/null
+		r > /dev/null
+		r > /dev/null
+		r
 	)" "$(
 		cat <<-eof
 		     1	3
@@ -828,17 +828,17 @@ function test--redo--when-redo-beyond-head {
 		$(red-bg 'Reached the end of redo history')
 		eof
 	)"
-}; run-with-filter test--redo--when-redo-beyond-head
+}; run-with-filter test--r--when-redoing-beyond-head
 
-function test--redo--when-redo-beyond-new-head {
+function test--r--when-redoing-beyond-new-head {
 	assert "$(
 		seq 1 2 | save-args > /dev/null
 		seq 2 3 | save-args > /dev/null
 		seq 3 4 | save-args > /dev/null
-		rr > /dev/null
-		rr > /dev/null
+		u > /dev/null
+		u > /dev/null
 		seq 4 5 | save-args > /dev/null
-		redo
+		r
 	)" "$(
 		cat <<-eof
 		     1	4
@@ -846,7 +846,7 @@ function test--redo--when-redo-beyond-new-head {
 		$(red-bg 'Reached the end of redo history')
 		eof
 	)"
-}; run-with-filter test--redo--when-redo-beyond-new-head
+}; run-with-filter test--r--when-redoing-beyond-new-head
 
 function test--c {
 	assert "$(
