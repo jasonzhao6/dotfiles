@@ -370,7 +370,7 @@ function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.
 function bb { pmset sleepnow }
 function cc { eval $(prev-command) | no-color | ruby -e 'puts STDIN.read.strip' | pbcopy }
 # TODO test x3
-function dd { [[ $(pbpaste | no-empty | strip | sed -n '$p') == \$* ]] && { mkdir -p ~/$TERMINAL_DUMP_DIR; DD="$TERMINAL_DUMP_DIR/$(date +'%Y-%m-%d_%H.%M.%S').txt"; $(pbpaste > ~/$DD); $(echo "$(pbpaste)\n\n(Dumped to '~/$DD')" | pbcopy); clear } || clear }
+function dd { [[ $(pbpaste | no-empty | strip | sed -n '$p') == \$* ]] && { mkdir -p ~/$TERMINAL_DUMP_DIR; DD="$TERMINAL_DUMP_DIR/$(date +'%Y-%m-%d_%H.%M.%S').txt"; $(pbpaste > ~/${DD}); $(echo "$(pbpaste)\n\n(Dumped to '~/$DD')" | pbcopy); clear } || clear }
 function ddd { mkdir -p ~/$TERMINAL_DUMP_DIR; cd ~/$TERMINAL_DUMP_DIR }
 function ddc { rm -rf ~/$TERMINAL_DUMP_DIR }
 function ee { for i in $(seq $1 $2); do echo ${${@:3}//~~/$i}; done }
