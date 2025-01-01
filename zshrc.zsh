@@ -1,9 +1,14 @@
-### Colors
+### Colors # TODO test
 # config
 export GREP_COLOR='1;32'
 export LSCOLORS='gxcxbxexfxegedabagaced'
 export JQ_COLORS='1;35:1;35:1;35:1;35:1;32:1;33:1;33:1;36' # v1.7+
-# modes
+# helpers (foreground)
+function grep-highlighting { echo "\e[1;32m\e[K$@\e[m\e[K" }
+# helpers (background)
+function red-bg { echo "\e[41m$@\e[0m" }
+function green-bg { echo "\e[42m$@\e[0m" }
+# helpers (commands)
 function bw { # black & white
     unalias diff
     unalias egrep
@@ -16,11 +21,6 @@ function color {
     alias grep='grep --color=always'
     alias ls='ls --color=always'
 }; color # set color aliases ahead of function definitions, so they can expand
-# helpers (background)
-function red-bg { echo "\e[41m$@\e[0m" }
-function green-bg { echo "\e[42m$@\e[0m" }
-# helpers (foreground)
-function grep-highlighting { echo "\e[1;32m\e[K$@\e[m\e[K" }
 
 ### [Args]
 # [s]ave args
@@ -65,7 +65,7 @@ function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-col
 function nn { NN=1 n $@ }
 # select first column
 function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
-# [u]ndo \ [r]edo row / column selections
+# [u]ndo / [r]edo: row / column selections
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }
 # [c]opy / paste via clipboard
@@ -101,11 +101,11 @@ function save-args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-push-if-diff
 #  head       ^
 #  tail       ^
 #
-# array size is fixed, wrap at the end
-# advance cursor and head together
-# if next is tail, push tail forward
-# to undo, only cursor moves, up to tail
-# to redo, only cursor moves, up to head
+# array size is fixed, wrap around the end
+# advance `cursor` and `head` together
+# if next is `tail`, push `tail` forward
+# to undo, only `cursor` moves, up to `tail`
+# to redo, only `cursor` moves, up to `head`
 function args-init { ARGS_HISTORY_MAX=100; ARGS_HISTORY=(); ARGS_CURSOR=0; ARGS_HEAD=0; ARGS_TAIL=0 }; [[ -z $ARGS_HISTORY_MAX ]] && args-init;
 function args-push { ARGS_CURSOR=$(args-increment $ARGS_CURSOR); ARGS_HISTORY[$ARGS_CURSOR]=$1; ARGS_HEAD=$ARGS_CURSOR; [[ $ARGS_CURSOR -eq $ARGS_TAIL ]] && ARGS_TAIL=$(args-increment $ARGS_TAIL); [[ $ARGS_TAIL -eq 0 ]] && ARGS_TAIL=1 }
 function args-undo { ARGS_PREV=$(args-decrement $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_TAIL ]] && ARGS_CURSOR=$ARGS_PREV || ARGS_UNDO_EXCEEDED=1 }
@@ -198,20 +198,6 @@ function gt { git remote $@ }
 function gta { git remote add $1 $2 }
 function gtr { git remote remove $@ }
 function gtv { git remote --verbose }
-# g[i]t status
-function gi { git status }
-# [d]iff
-function gd { git diff }
-# [s]tash
-function gs { git add --all; git stash save $@ }
-# post stash
-function ga { git stash apply "stash@{${@:-0}}" }
-function gc { git stash clear }
-function gl { git stash list --pretty=format:'%C(yellow)%gd %C(magenta)%as %C(green)%s' }
-# [u]ndo and discard
-function gu { git reset --soft HEAD~$@ }
-function gz { git add --all; git reset --hard; gi }
-function guz { gu $@; gz }
 # [b]ranch
 function gb { GB=$(gb-merged); [[ $GB ]] && GB="\n----------------\n$GB"; echo "$(git branch)$GB" | save-args }
 function gbb { gb-merged | xargs git branch --delete; git remote prune origin; echo; gb }
@@ -220,25 +206,37 @@ function gbd { git branch --delete --force $@; git push origin --delete $@; gb }
 function g { git checkout $@ }
 function gg { git checkout main || git checkout master; git pull; git status }
 function gn { gg; git checkout -b $@ }
+# g[i]t status / [d]iff
+function gi { git status }
+function gd { git diff }
 # commit
 function ge { git commit --allow-empty -m 're-run: Empty commit to trigger build' }
 function gm { git add --all; git commit --amend --no-edit }
 function gw { git add --all; git commit --amend }
 function gv { git add --all; git commit }
 function gy { git cherry-pick $@ }
-# g[r]ep
-function gr { GR_GREPS="--grep='${*// /' --grep='}'"; eval "git log ${1:+--all} $GR_FIRST_PARENT $GR_GREPS --all-match --extended-regexp --regexp-ignore-case --pretty=format:\"%C(yellow)%h %C(magenta)%as %C(green)'%s' %C(cyan)%an\"" }
-function grr { GR_FIRST_PARENT=--first-parent gr $@ }
+# [p]ush / [P]ull
+function gf { git push --force }
+function gp { git push }
+function gP { git pull $@ }
+# [s]tash
+function gs { git add --all; git stash save $@ }
+function ga { git stash apply "stash@{${@:-0}}" }
+function gl { git stash list --pretty=format:'%C(yellow)%gd %C(magenta)%as %C(green)%s' }
+function gc { git stash clear }
 # rebase
 function gx { git add --all; git commit --fixup $@ }
 function gxx { gxx-pre! $@; [[ -n $GXX_HEAD_NUM ]] && gxx-head-num || gxx-main-branch }
 # rebase conflict
 function gxa { git rebase --abort }
 function gxc { git add --all; git rebase --continue }
-# [p]ush / [P]ull
-function gf { git push --force }
-function gp { git push }
-function gP { git pull $@ }
+# [u]ndo and discard
+function gu { git reset --soft HEAD~$@ }
+function gz { git add --all; git reset --hard; gi }
+function guz { gu $@; gz }
+# g[r]ep
+function gr { GR_GREPS="--grep='${*// /' --grep='}'"; eval "git log ${1:+--all} $GR_FIRST_PARENT $GR_GREPS --all-match --extended-regexp --regexp-ignore-case --pretty=format:\"%C(yellow)%h %C(magenta)%as %C(green)'%s' %C(cyan)%an\"" }
+function grr { GR_FIRST_PARENT=--first-parent gr $@ }
 # helpers (gb)
 function gb-merged { git branch --merged | grep --invert-match 'main$' | grep --invert-match 'master$' | grep --invert-match '^\*' }
 # helpers (gxx)
@@ -293,9 +291,10 @@ function kd { kubectl describe $@ }
 function ke { kubectl exec $@ }
 function kg { kubectl get $@ }
 function kk { kubectl get $@ | save-args }
+# pod shortcuts
 function kl { kubectl logs $@ }
 function kp { kubectl port-forward $@ }
-# exec shortcuts
+# pod exec shortcuts
 function kb { kubectl exec -it $@ -- bash }
 function kc { kubectl exec $@[-1] -- $@[1,-2] }
 # get as [j]son / [y]aml
@@ -310,15 +309,8 @@ function kq { jq ${@:-.} ~/Documents/k8.json }
 # config
 function tf0 { echo-eval 'export TF_LOG=' }
 function tf1 { echo-eval 'export TF_LOG=DEBUG' }
-# [c]lean
-function tfc { rm -rf tfplan .terraform ~/.terraform.d }
-function tfcc { rm -rf tfplan .terraform ~/.terraform.d ~/.terraform.cache }
-# debug
-function tf { pushd ~/gh/scratch/tf-debug > /dev/null; [[ -z $1 ]] && terraform console || echo "local.$@" | terraform console; popd > /dev/null }
-# find
+# find manifests
 function tfw { find ~+ -name main.tf | grep --invert-match '\.terraform' | sed "s|$HOME|~|g" | sort | trim 0 8 | save-args }
-# [f]ormat
-function tff { terraform fmt -recursive $@ }
 # [i]nit
 function tfi { mkdir -p ~/.terraform.cache; terraform init $@ }
 function tfim { terraform init -migrate-state }
@@ -333,15 +325,22 @@ function tfo { tf-pre $@ && terraform output }
 function tfp { tf-pre $@ && terraform plan -out=tfplan }
 function tfv { tf-pre $@ && terraform validate }
 function tfx { tf-pre $@ && terraform apply -refresh-only }
+# post plan
+function tfg { terraform show -no-color tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web }
+function tfz { terraform force-unlock $@ }
 # post list
 function tfm { terraform state mv $1 $2 }
 function tfr { terraform state rm $@ }
 function tfs { terraform state show $@ }
 function tft { terraform taint $@ }
 function tfu { terraform untaint $@ }
-# post plan
-function tfg { terraform show -no-color tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web }
-function tfz { terraform force-unlock $@ }
+# [f]ormat
+function tff { terraform fmt -recursive $@ }
+# [c]lean
+function tfc { rm -rf tfplan .terraform ~/.terraform.d }
+function tfcc { rm -rf tfplan .terraform ~/.terraform.d ~/.terraform.cache }
+# debug
+function tf { pushd ~/gh/scratch/tf-debug > /dev/null; [[ -z $1 ]] && terraform console || echo "local.$@" | terraform console; popd > /dev/null }
 # non-prod
 function tfaa { tf-pre $@ && terraform apply -auto-approve }
 # helpers
@@ -360,13 +359,15 @@ function tf-pre {
 }
 
 ### Util
-# singles (uses `args`)
+# config
+TERMINAL_DUMP_DIR='.zshrc.terminal-dump.d'
+# singles (they all `save-args`)
 function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args }
 function f { echo } # TODO find tf files and gh repos
 function i { which $@ | save-args }
 function l { ls -l | awk '{print $9}' | save-args } # Not taking input b/c any folder matches break column alignment
 function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.' | save-args } # Show only hidden files
-# doubles
+# doubles (they do not `save-args`)
 function bb { pmset sleepnow }
 function cc { eval $(prev-command) | no-color | ruby -e 'puts STDIN.read.strip' | pbcopy }
 # TODO test x3
@@ -383,7 +384,6 @@ function oo { open ${@:-.} }
 function pp { ruby ~/gh/jasonzhao6/sql_formatter.rb/run.rb $@ }
 function tt { ~/gh/tt/tt.rb $@ }
 function uu { diff --unified $1 $2 }
-function vv { echo } # TODO view dumped files
 function xx { echo "bind '\"\\\e[A\": history-search-backward'\nbind '\"\\\e[B\": history-search-forward'" | pbcopy }
 function yy { YY=$(prev-command); echo -n $YY | pbcopy }
 # misc
@@ -465,7 +465,7 @@ HISTSIZE=10000
 SAVEHIST=10000
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
-# grep
+# grep # TODO test
 function h { egrep --ignore-case "$*" ~/.zsh_history | trim 15 | sort --unique | save-args }
 # [c]lean
 function hc { rm ~/.zsh_history }
@@ -556,4 +556,4 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # (1)  2   3   4   5  |  6   7   8   9   0        /   yy:pp  ff|bb  cc:%+v  rr:aa|nn|rr  ll:aa
 #             [p] [y] | [f] [g] [c] (r) [l]    <--    (aa #?):aa|nn|rr  ((nn|nnn) .?)|a:aa|rr  ss|vv:aa|nn
 # (a) [o] [e] [u] [i] | [d] [h] [t] (n) (s)    <--    oo|ii|mm  (ee # # * ~~):eee  uu|hh  dd:aa
-#     {q} {j} [k] [x] | [b] [m] {w} [v] [z]    <--    qq|q2:q  jj:j|aa  kk:aa|nn  xx:%+v  ww:w|aa  zz|zt
+#     {q} {j} [k] [x] | [b] [m] {w}  v  [z]    <--    qq|q2:q  jj:j|aa  kk:aa|nn  xx:%+v  ww:w|aa  zz|zt

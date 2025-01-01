@@ -44,10 +44,6 @@ function test--d--with-protocol-and-path {
 	)"
 }; run-with-filter test--d--with-protocol-and-path
 
-function test--f {
-	# Skip: Not interesting b/c it has its own specs
-}
-
 function test--i {
 	assert "$(i i)" "$(
 		cat <<-eof
@@ -307,6 +303,10 @@ function test--mm {
 
 function test--oo {
 	# Skip: Not interesting to test
+}
+
+function test--pp {
+	# Skip: Not interesting b/c it has its own specs
 }
 
 function test--tt {
