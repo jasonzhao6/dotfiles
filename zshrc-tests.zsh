@@ -1,18 +1,27 @@
+#
 # Test config
+#
+
+# Filter tests by partial name match
 local filter=$([[ -n $1 ]] && echo $1)
 
-# Test helpers
+#
+# Test harness
+#
+
 function init {
 	passes=0
 	total=0
 	failed=''
 	debug=''
 }
+
 function pass {
 	((passes++))
 	((total++))
 	echo -n .
 }
+
 function fail {
 	local name=$1
 
@@ -23,18 +32,33 @@ function fail {
 	debug+="\n\ndebug: $name\n"
 	debug+=$(diff -u <(echo $expected) <(echo $output) | sed '/--- /d; /+++ /d; /@@ /d')
 }
+
 function assert {
 	local output=$1
 	local expected=$2
 
 	[[ $output == $expected ]] && pass || fail "'$funcstack[2]'"
 }
-function find-tests {
-	find ~/gh/dotfiles/zshrc-tests -name '*.zsh'
-}
+
 function run-with-filter {
 	[[ -z $filter || $(index-of $@ $filter) -ne 0 ]] && $@
 }
+
+function print-summary {
+	local message=$1
+
+	echo "\n($passes/$total $message)"
+	[[ $passes -ne $total ]] && echo $failed $debug
+}
+
+#
+# Test helpers
+#
+
+function find-tests {
+	find ~/gh/dotfiles/zshrc-tests -name '*.zsh'
+}
+
 function verify-test-ordering {
 	local source=$(grep '^function' $1 | sed 's/ {.*/ {/')
 	local target=$(grep '^function' $2 | sed -e 's/test--//' -e 's/--[^-].*/ {/' | uniq)
@@ -52,17 +76,15 @@ function verify-test-ordering {
 # Section 1: Run test cases
 #
 
-init
 local pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
 
+init
 source ~/gh/dotfiles/zshrc.zsh
 for test in $(find-tests); do source $test; done
+print-summary 'tests passed'
 
-args-init # Reset args history since some tests overwrote it
 echo $pasteboard | pbcopy # Restore saved pasteboard value
-
-echo "\n($passes/$total tests passed)"
-[[ $passes -ne $total ]] && echo $failed $debug
+args-init # Reset args history since some tests overwrote it
 
 #
 # Section 2: Verify all tests defined are getting invoked
@@ -75,13 +97,10 @@ echo "\n($passes/$total tests passed)"
 #
 
 if [[ -z $filter ]]; then
-	init
 	echo
-
+	init
 	for test in $(find-tests); do verify-test-ordering ~/gh/dotfiles/zshrc.zsh $test; done
-
-	echo "\n($passes/$total functions matched the testing order)"
-	[[ $passes -ne $total ]] && echo $failed
+	print-summary 'tests matched the testing order'
 fi
 
 #
@@ -95,9 +114,8 @@ fi
 #
 
 if [[ -z $filter ]]; then
-	init
 	echo
-
+	init
 	local expected=
 
 	expected=100
@@ -115,6 +133,5 @@ if [[ -z $filter ]]; then
 	expected='/Users/yzhao'
 	[[ $HOME == $expected ]] && pass || fail "HOME: expected '$expected', got '$HOME'"
 
-	echo "\n($passes/$total env vars were restored)"
-	[[ $passes -ne $total ]] && echo $failed
+	print-summary 'env vars restored'
 fi
