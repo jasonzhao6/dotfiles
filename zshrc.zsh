@@ -3,12 +3,12 @@
 export GREP_COLOR='1;32'
 export LSCOLORS='gxcxbxexfxegedabagaced'
 export JQ_COLORS='1;35:1;35:1;35:1;35:1;32:1;33:1;33:1;36' # v1.7+
-# foreground setter
+# set foreground
 function grep-highlighting { echo "\e[1;32m\e[K$@\e[m\e[K" }
-# background setters
+# set background
 function red-bg { echo "\e[41m$@\e[0m" }
 function green-bg { echo "\e[42m$@\e[0m" }
-# black-&-white vs color modes
+# switch [b]lack-[w]hite vs [color] modes
 function bw {
     unalias diff
     unalias egrep
@@ -20,18 +20,22 @@ function color {
     alias egrep='egrep --color=always'
     alias grep='grep --color=always'
     alias ls='ls --color=always'
-}; color # enable these ahead of function definitions, so that they can expand
+}; color # enable aliases ahead of more function definitions, so that aliases can expand
 
 ### [Args]
-# [s]ave into args: 1) `<command>; s`, 2) `<command> | s`
+# [s]ave into args
+# e.g: `<command>; s` and `<command> | s` both work
 function s { ss 'insert `#` after the first column to soft-select it' }
 function ss { [[ -t 0 ]] && eval $(prev-command) | save-args $@ || save-args $@ }
 # paste into args
+# e.g: copy list to pasteboard, then `v`
 function v { pbpaste | s }
 function vv { pbpaste | ss }
-# show / filter [a]rgs
+# list / filter [a]rgs
+# e.g: `a` to list all, `a foo and bar -not -baz` to filter
 function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | save-args } }
-# select [arg] by number
+# use an [arg] by number
+# e.g: `arg <number> echo`, or more explicitly `arg <number> echo ~~`
 function arg { [[ -n $1 && -n $2 ]] && { ARG="'$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)'"; [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
 function 1 { arg $0 $@ }
 function 2 { arg $0 $@ }
@@ -54,28 +58,33 @@ function 18 { arg $0 $@ }
 function 19 { arg $0 $@ }
 function 20 { arg $0 $@ }
 function 0 { arg $ $@ } # last arg
-# select [r]andom
+# use a [r]andom
+# e.g: `rr echo`
 function rr { arg $((RANDOM % $(args-list-size) + 1)) $@ }
-# select in rang[e]
+# use args in rang[e]
+# e.g: `e 2 5 echo`, or more explicitly `e 2 5 echo ~~`
 function e { for i in $(seq $1 $2); do echo; arg $i ${${@:3}}; done }
-# select via iterator
+# use all args via iterator
+# e.g: `each echo`, `all echo`, `map '$((echo ~~ * 2))'` # TODO fix bad math expression
 function each { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@; done }
 function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@ &; done; wait }
 function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | save-args }
-# select colum[n] by letter- referencing the bottom row
+# list / select colum[n] by letter
+# e.g `n` to list all, `n d` to select the fourth column based on the bottom row
 function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-columns-bar $N } || { args-mark-references! $1 $N; args-select-column!; [[ $ARGS_PUSHED -eq 0 && $(index-of "$(args-columns $N)" b) -ne 0 ]] && args-columns-bar $N }; return 0 }
-# select colum[n] by letter- referencing the top row
+# list / select colum[n] by letter, based on the top row instead of the bottom row
 function nn { NN=1 n $@ }
 # select the first column
 function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
-# strip all leading / trailing spaces
+# strip leading / trailing spaces from all args
 function z { args | strip | save-args }
 # [c]opy into pasteboard
+# e.g `c` to copy all args, `11 c` to copy the eleventh arg
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
-# [u]ndo / [r]edo changes
+# [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }
-# [y]ank / [p]ut across tabs
+# [y]ank / [p]ut current args to a different tab
 function y { args > ~/.zshrc.args }
 function p { echo "$(<~/.zshrc.args)" | save-args }
 # helpers
@@ -86,14 +95,14 @@ function args-list-plain { args | nl | no-color | expand }
 function args-list-size { args | wc -l | awk '{print $1}' }
 function args-columns { ARGS_COLUMNS=''; ARGS_COL_CURR=a; ARGS_SKIP_NL=1; [[ ${1:-$ARGS_BOTTOM_ROW} -eq 1 ]] && ARG=$(args-list-plain | tail -1) || ARG=$(args-list-plain | head -1); for i in $(seq 1 ${#ARG}); do args-label-column! $i; done; echo $ARGS_COLUMNS }
 function args-columns-bar { green-bg "$(args-columns $1)" }
-# helpers! (`!` means the function sets env vars to be used by its caller)
+# helpers! (`!` means the function sets env vars to be consumed by its caller)
 function args-build-greps! { ARGS_FILTER="grep ${*// / | grep }"; ARGS_FILTER=${ARGS_FILTER// -/ --invert-match }; ARGS_FILTER=${ARGS_FILTER//grep/grep --color=never --ignore-case}; ARGS_HIGHLIGHT="egrep --color=always --ignore-case '${${@:#-*}// /|}'" }
 function args-label-column! { [[ $ARG[$1-1] == ' ' && $ARG[$1] != ' ' ]] && { [[ $ARGS_SKIP_NL -eq 1 ]] && { ARGS_SKIP_NL=0; ARGS_COLUMNS+=' ' } || { ARGS_COLUMNS+=$ARGS_COL_CURR; ARGS_COL_CURR=$(next-ascii $ARGS_COL_CURR) } } || ARGS_COLUMNS+=' ' }
 function args-mark-references! { ARGS_COLUMNS=$(args-columns $2); ARGS_COL_FIRST=$(index-of $ARGS_COLUMNS a); ARGS_COL_TARGET=$(index-of $ARGS_COLUMNS $1); ARGS_COL_NEXT=$(index-of $ARGS_COLUMNS $(next-ascii $1)); ARGS_BOTTOM_ROW=$2 }
 function args-select-column! { args-list-plain | cut -c $([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)-$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1))) | strip | save-args }
 function args-get-new! { ARGS_NEW=$(cat - | head -1000 | no-empty); [[ -n $1 ]] && ARGS_NEW=$(echo $ARGS_NEW | insert-hash); ARGS_NEW_PLAIN=$(echo $ARGS_NEW | no-color | expand) }
 function args-push-if-different! { [[ $ARGS_NEW_PLAIN != $(args-plain) ]] && { args-push $ARGS; ARGS_PUSHED=1 } || ARGS_PUSHED=0 }
-# |
+# | after a list
 function save-args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-push-if-different!; args-replace $ARGS_NEW; args-list } } # always replace in case grep highlighting has updated
 
 ### Args history interface
@@ -117,43 +126,43 @@ function args-redo-bar { [[ $ARGS_REDO_EXCEEDED -eq 1 ]] && { ARGS_REDO_EXCEEDED
 function args-replace { ARGS_HISTORY[$ARGS_CURSOR]=$1 }
 function args-increment { echo $(($1 % ARGS_HISTORY_MAX + 1)) }
 function args-decrement { ARGS_DECREMENT=$(($ARGS_CURSOR - 1)); [[ $ARGS_DECREMENT -eq 0 ]] && ARGS_DECREMENT=$ARGS_HISTORY_MAX; echo $ARGS_DECREMENT }
-# debug
+# debug # TODO add labels
 function args-history { echo $ARGS_HISTORY; echo -n $ARGS_CURSOR; echo -n $ARGS_HEAD; echo $ARGS_TAIL }
 
 ### AWS
-# regions
+# select region
 export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
 function c1 { echo-eval 'export AWS_DEFAULT_REGION=eu-central-1' }
 function e1 { echo-eval 'export AWS_DEFAULT_REGION=us-east-1' }
 function e2 { echo-eval 'export AWS_DEFAULT_REGION=us-east-2' }
 function w1 { echo-eval 'export AWS_DEFAULT_REGION=us-west-1' }
 function w2 { echo-eval 'export AWS_DEFAULT_REGION=us-west-2' }
-# open [ec2] page
-function ec2 { open "https://us-east-1.console.aws.amazon.com/ec2/home?region=$(echo $AWS_DEFAULT_REGION)#InstanceDetails:instanceId=$(ec2-id $@)" }
-# ec2 [pre]fix search
+# find [ec2] / [asg] by name tag prefix
+function ec2 { ec2-args "Name=tag:Name, Values=$@*" }
 function asg { ec2-args "Name=tag:aws:autoscaling:groupName, Values=$@*" }
-function pre { ec2-args "Name=tag:Name, Values=$@*" }
-# ec2 ssh via [ssm]
-function ssm {
+# open ec2 page
+function TODO { open "https://us-east-1.console.aws.amazon.com/ec2/home?region=$(echo $AWS_DEFAULT_REGION)#InstanceDetails:instanceId=$(ec2-id $@)" }
+# use [ssm] to ssh into ec2 by instance id, private ip, or name tag
+function ssm { # e.g `ssm <instance-id>`, or `0 ssm` to use the last entry from `args`
     aws ssm start-session \
         --document-name 'AWS-StartInteractiveCommand' \
         --parameters '{"command": ["sudo -i"]}' \
         --target $(ec2-id $@)
 }
 function ssm_ { aws ssm start-session --target $(ec2-id $@) }
-function ssm-cmd {
+function ssm-cmd { # e.g `ssm-run date <instance-id>`, or `all ssm-run date` to use all `args`
     aws ssm start-session \
         --document-name 'AWS-StartNonInteractiveCommand' \
         --parameters "{\"command\": [\"${(j: :)@[1,-2]}\"]}" \
         --target $(ec2-id $@[-1]) \
     | pcregrep --multiline --ignore-case --invert-match "(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
 }
-# [p]arameter [s]tore
+# [p]arameter [s]tore [g]et
 function psg { PSG=$(aws ssm get-parameter --name $1 $([[ -n $2 ]] && echo --version $2) --query Parameter.Value --output text); [[ $PSG == {*} ]] && echo $PSG | jq || echo $PSG }
-# [s]ecrets [m]anager
+# [s]ecrets [m]anager [g]et / [d]elete
 function smg { SMG=$(aws secretsmanager get-secret-value --secret-id $1 $([[ -n $2 ]] && echo --version-id $2) --query SecretString --output text); [[ $SMG == {*} ]] && echo $SMG | jq || echo $SMG }
 function smd { aws secretsmanager delete-secret --secret-id $@ --force-delete-without-recovery }
-# sts [decode]
+# [decode] sts message
 function decode { aws sts decode-authorization-message --encoded-message $@ --output text | jq . }
 # helpers
 function ec2-args { aws ec2 describe-instances --filters $@ 'Name=instance-state-name, Values=running' --query "$(ec2-query)" --output text | sort --key=3 | sed 's/+00:00\t/Z  /g' | save-args }
@@ -164,7 +173,7 @@ function ip-id { aws ec2 describe-instances --filters "Name=private-ip-address, 
 function name-id { aws ec2 describe-instances --filters "Name=tag:Name, Values=$@" --query 'Reservations[].Instances[].InstanceId' --output text }
 
 ### [C]hange [d]ir
-# go up
+# go up folders
 function .. { cd .. }
 function ... { cd ../.. }
 function .... { cd ../../.. }
@@ -174,7 +183,7 @@ function ....... { cd ../../../../../.. }
 function ........ { cd ../../../../../../.. }
 function ......... { cd ../../../../../../../.. }
 function .......... { cd ../../../../../../../../.. }
-# go to folder
+# go to a folder
 function cd- { CD=$(paste-when-empty $@); [[ -d $CD ]] && cd $CD || cd ${${CD}%/*} }
 # go to mac folders
 function cdl { cd ~/Downloads }
@@ -232,19 +241,20 @@ function gxx { gxx-pre! $@; [[ -n $GXX_HEAD_NUM ]] && gxx-head-num || gxx-main-b
 # rebase conflict
 function gxa { git rebase --abort }
 function gxc { git add --all; git rebase --continue }
-# [u]ndo and discard
+# [u]ndo and / or discard
 function gu { git reset --soft HEAD~$@ }
 function gz { git add --all; git reset --hard; gi }
 function guz { gu $@; gz }
 # g[r]ep
+# e.g `gr` to list all, `gr foo and bar` to filter
 function gr { GR_GREPS="--grep='${*// /' --grep='}'"; eval "git log ${1:+--all} $GR_FIRST_PARENT $GR_GREPS --all-match --extended-regexp --regexp-ignore-case --pretty=format:\"%C(yellow)%h %C(magenta)%as %C(green)'%s' %C(cyan)%an\"" }
 function grr { GR_FIRST_PARENT=--first-parent gr $@ }
-# helpers (gb)
+# helper for `gb`
 function gb-merged { git branch --merged | grep --invert-match 'main$' | grep --invert-match 'master$' | grep --invert-match '^\*' }
-# helpers (gxx)
+# helpers for `gxx`
 function gxx-main-branch { git fetch $GXX_REMOTE $GXX_BRANCH && git rebase --interactive --autosquash $GXX_REMOTE/$GXX_BRANCH }
 function gxx-head-num { git rebase --interactive --autosquash HEAD~$(($GXX_HEAD_NUM + 1)) } # `+ 1` to cover the `fixup!` commit
-function gxx-pre! { # (`!` means the function sets env vars to be used by its caller)
+function gxx-pre! { # (`!` means the function sets env vars to be consumed by its caller)
     GXX_REMOTE=origin
     GXX_BRANCH=main
     GXX_HEAD_NUM=
@@ -280,11 +290,11 @@ function branch { git rev-parse --abbrev-ref HEAD }
 #             [p] [y] |  f  [g] [c] [r] [l]
 #  a   o  [e]  u   i  | [d]  h   t   n  [s]
 #     [q] [j] [k] [x] | [b]  m   w   v   z
-# help: g[r]ep / [s]ave / e[x]plain
+# resources ref: g[r]ep / [s]ave / e[x]plain
 function kr { cat ~/Documents/k8.txt | grep "$*" | save-args }
 function ks { kubectl api-resources > ~/Documents/k8.txt }
 function kx { kubectl explain $@ }
-# [n]ame[s]pace
+# set [n]ame[s]pace
 function kns { kubectl config set-context --current --namespace $@ }
 # general
 function k { kubectl $@ }
@@ -293,17 +303,16 @@ function ke { kubectl exec $@ }
 function kg { kubectl get $@ }
 function kk { kubectl get $@ | save-args }
 # pod shortcuts
-function kl { kubectl logs $@ }
-function kp { kubectl port-forward $@ }
-# pod exec shortcuts
 function kb { kubectl exec -it $@ -- bash }
 function kc { kubectl exec $@[-1] -- $@[1,-2] }
+function kl { kubectl logs $@ }
+function kp { kubectl port-forward $@ }
 # get resource as [j]son / [y]aml
 function kj { [[ -n $1 ]] && kubectl get $@ -o json > ~/Documents/k8.json | jq }
 function kjj { cat ~/Documents/k8.json }
 function ky { [[ -n $1 ]] && kubectl get $@ -o yaml > ~/Documents/k8.yaml | cat }
 function kyy { cat ~/Documents/k8.yaml }
-# [q]uery json output
+# [q]uery saved json output
 function kq { jq ${@:-.} ~/Documents/k8.json }
 
 ### [T]erra[f]orm
@@ -315,33 +324,33 @@ function tfi { mkdir -p ~/.terraform.cache; terraform init $@ }
 function tfiu { terraform init -upgrade }
 function tfir { terraform init -reconfigure }
 function tfim { terraform init -migrate-state }
-# post init
+# post `tfi`
+# e.g `tfp` to plan, `tfp iu` to init upgrade then plan
 function tfp { tf-pre $@ && terraform plan -out=tfplan }
 function tfl { tf-pre $@ && terraform state list | sed "s/.*/'&'/" | save-args }
 function tfo { tf-pre $@ && terraform output }
 function tfn { tf-pre $@ && terraform console }
 function tfv { tf-pre $@ && terraform validate }
-# debug plan
-function tf { pushd ~/gh/scratch/tf-debug > /dev/null; [[ -z $1 ]] && terraform console || echo "local.$@" | terraform console; popd > /dev/null }
-# post plan
+# post `tfp`
 function tfa { terraform apply }
 function tfd { terraform destroy }
 function tfg { terraform show -no-color tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web }
 function tfz { terraform force-unlock $@ }
-# post list
+# post `tfl`
 function tfs { terraform state show $@ }
 function tft { terraform taint $@ }
 function tfu { terraform untaint $@ }
 function tfm { terraform state mv $1 $2 }
 function tfr { terraform state rm $@ }
-# [f]ormat
+# [f]ormat file / folder
 function tff { terraform fmt -recursive $@ }
-# [c]lean
+# [c]lear cache
 function tfc { rm -rf tfplan .terraform ~/.terraform.d }
 function tfcc { rm -rf tfplan .terraform ~/.terraform.d ~/.terraform.cache }
 # non-prod shortcut
 function tfaa { tf-pre $@ && terraform apply -auto-approve }
 # helpers
+function tf { pushd ~/gh/scratch/tf-debug > /dev/null; [[ -z $1 ]] && terraform console || echo "local.$@" | terraform console; popd > /dev/null }
 function tf-pre {
     [[ -z $1 ]] && return
 
@@ -357,7 +366,7 @@ function tf-pre {
 }
 
 ### Util
-# config
+# config # TODO move to dd-init {}
 DD_DUMP_DIR="$HOME/.zshrc.terminal-dump.d"
 DD_CLEAR_TERMINAL=1
 # singles (they save into `args`)
@@ -384,38 +393,38 @@ function tt { ~/gh/tt/tt.rb $@ }
 function uu { diff --unified $1 $2 }
 function xx { echo "bind '\"\\\e[A\": history-search-backward'\nbind '\"\\\e[B\": history-search-forward'" | pbcopy }
 function yy { YY=$(prev-command); echo -n $YY | pbcopy }
-# misc (standalone)
+# one-offs
 function bif { brew install --formula $@ }
 function flush { sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder }
 function jcurl { curl --silent $1 | jq | { [[ -z $2 ]] && cat || grep -A${3:-0} -B${3:-0} $2 } }
 function ren { for file in *$1*; do mv "$file" "${file//$1/$2}"; done }
-# helpers (not standalone)
+# helpers
 function echo-eval { echo $@ >&2; eval $@ }
 function ellipsize { [[ ${#1} -gt $COLUMNS ]] && echo -n "${1:0:$((COLUMNS - 4))} \e[30m\e[47m...\e[0m" || echo $@ }
 function index-of { awk -v str1="$(echo $1 | no-color)" -v str2="$(echo $2 | no-color)" 'BEGIN { print index(str1, str2) }' }
 function next-ascii { printf "%b" $(printf "\\$(printf "%o" $(($(printf "%d" "'$@") + 1)))") }
 function paste-when-empty { echo ${@:-$(pbpaste)} }
 function prev-command { fc -ln -1 }
-# helpers (f)
+# helper for `f`
 function f-pre {
 	[[ $@ == gh ]] && gh repo list $(org) --no-archived --limit 1000 --json name | jq -r '.[].name'
 	[[ $@ == tf ]] && find ~+ -name main.tf | grep --invert-match '\.terraform' | sed "s|$HOME|~|g" | trim 0 8
 }
-# helpers (dd)
+# helpers for `dd`
 function dd-is-terminal-output { [[ $(pbpaste | no-empty | strip | sed -n '$p') == \$* ]] }
 function dd-dump-file { echo "$DD_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt" }
 function dd-taint-pasteboard { $(echo "$(pbpaste)\n\n(Dumped to '$DD')" | pbcopy) }
 function dd-clear-terminal { [[ $DD_CLEAR_TERMINAL -eq 1 ]] && clear }
-# | (after strings)
+# | after strings
 function hex { hexdump -C }
 function no-color { sed -E 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g' }
 function no-empty { sed '/^$/d' }
 function strip { sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' }
 function trim { no-color | cut -c $(($1 + 1))- | { [[ -z $2 ]] && cat || rev | cut -c $(($2 + 1))- | rev } }
-# | (after columns)
+# | after columns
 function insert-hash { awk 'NF >= 2 {col_2_index = index($0, $2); col_1 = substr($0, 1, col_2_index - 1); col_rest = substr($0, col_2_index); printf "%s# %s\n", col_1, col_rest} NF < 2 {print}' }
-function size-of { awk "{if (length(\$${1:-1}) > max_len) max_len = length(\$${1:-1})} END {print max_len}" }
-# | (after json)
+function size-of { awk "{if (length(\$${1:-0}) > max_len) max_len = length(\$${1:-0})} END {print max_len}" }
+# | after json
 function keys { jq keys | trim-list | save-args }
 function trim-list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$//' | no-empty }
 
@@ -425,10 +434,10 @@ function zm { mate ~/gh/dotfiles/zshrc.zsh }
 function zs { mate ~/.zshrc.secrets }
 # [t]est
 function zt { zsh ~/gh/dotfiles/zshrc-tests.zsh $@ }
-# source zshrc & save other dotfiles
-function zz {
-    source ~/.zshrc
-
+# source
+function zz { source ~/.zshrc }
+# [u]pload / [d]ownload other dotfiles
+function zu {
     cp ~/.colordiffrc ~/gh/dotfiles/colordiffrc.txt
     cp ~/.gitignore ~/gh/dotfiles/gitignore.txt
     cp ~/.terraformrc ~/gh/dotfiles/terraformrc.txt
@@ -444,8 +453,7 @@ function zz {
     fi
 }
 [ -f ~/.zshrc.secrets ] && source ~/.zshrc.secrets
-# lo[a]d other dotfiles
-function za {
+function zd {
     cp ~/gh/dotfiles/colordiffrc.txt ~/.colordiffrc
     cp ~/gh/dotfiles/gitignore.txt ~/.gitignore
     cp ~/gh/dotfiles/terraformrc.txt ~/.terraformrc
@@ -453,13 +461,13 @@ function za {
 }
 
 ### Zsh arrow keys
-# history search (up-down)
+# history search (up / down)
 autoload -U history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 bindkey '^[[A' history-beginning-search-backward-end
 bindkey '^[[B' history-beginning-search-forward-end
-# word separators (left-right)
+# word separators (left / right)
 WORDCHARS=${WORDCHARS/\.} # exclude .
 WORDCHARS=${WORDCHARS/\/} # exclude /
 WORDCHARS=${WORDCHARS/\=} # exclude =
@@ -472,7 +480,8 @@ HISTSIZE=10000
 SAVEHIST=10000
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
-# show / filter
+# list / filter
+# e.g `h` to list all, `h foo` to filter
 function h { egrep --ignore-case "$*" $HISTFILE | trim 15 | sort --unique | save-args }
 # [c]lear
 function hc { rm $HISTFILE }
@@ -508,7 +517,7 @@ function branch-info { BRANCH_INFO=$(branch 2> /dev/null); [[ -n $BRANCH_INFO ]]
 function region-info { [[ -n $(aws-profile) ]] && echo " $AWS_DEFAULT_REGION" }
 function sts-info { [[ -n $(aws-profile) ]] && { set-sts-info; echo " $(<$STS_INFO_DIR/$(aws-profile))" } }
 function tf-info { [[ -n $TF_VAR_datadog_api_key ]] && echo ' TF_VAR' }
-# helpers (sts-info)
+# helpers for `sts-info`
 STS_INFO_DIR="$HOME/.zshrc.sts-info.d"
 function reset-sts-info { rm -rf $STS_INFO_DIR }
 function set-sts-info { [[ ! -e $STS_INFO_DIR/$(aws-profile) ]] && { mkdir -p $STS_INFO_DIR; echo "$(account)::$(role)" > $STS_INFO_DIR/$(aws-profile) } }
@@ -522,15 +531,14 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 #  |   -->  alternative command
 #  ~   -->  repeatable command
 #  ()  -->  order of precedence
-#  ?   -->  optional
-#  ,   -->  argument
-#  #   -->  a number
-#  .   -->  a letter
+#  ,   -->  argument separator
+#  ?   -->  optional command / argument
+#  #   -->  number argument
+#  .   -->  letter argument
 #  *   -->  arbitrary argument
 #  ~~  -->  to be substituted
 #  ""  -->  quotes recommended
-#  %   -->  mac's command key
-#  +   -->  keyboard shortcut
+#  %+v -->  `cmd + v` to paste
 
 ### Git keymap
 # [] means defined in this file
@@ -549,7 +557,7 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 #      q   j   k   x  |  b  [m]  w  [v] [z]   <--   tfc|tfcc   f,tf::(a,*)?::#,cd
 
 ### Singles keymap
-# () means defined for args
+# () means defined for `args`
 # [] means defined in this file
 # {} means defined in secrets file
 # (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)
@@ -558,7 +566,7 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 #     {q} {j} [k]  x  |  b   m  {w} (v) (z)   <--   u|r::~?   y::p   d|(f,(gh|tf))|h|(i,*)|kk|l|ll::a
 
 ### Doubles keymap
-# () means defined for args
+# () means defined for `args`
 # [] means defined in this file
 # {} means defined in secrets file
 # (1)  2   3   4   5  |  6   7   8   9   0

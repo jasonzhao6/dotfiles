@@ -653,11 +653,11 @@ function test--insert-hash {
 }; run-with-filter test--insert-hash
 
 function test--size-of {
-	assert "$(echo $ls_dash_l | size-of)" '11'
+	assert "$(echo $ls_dash_l | size-of)" '64'
 }; run-with-filter test--size-of
 
 function test--size-of--third-column {
-	assert "$(echo $ls_dash_l | size-of 3)" '5'
+	assert "$(echo $ls_dash_l | size-of 2)" '1'
 }; run-with-filter test--size-of--third-column
 
 function test--size-of--variable-width-column {
