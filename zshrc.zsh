@@ -173,7 +173,7 @@ function ........ { cd ../../../../../../.. }
 function ......... { cd ../../../../../../../.. }
 function .......... { cd ../../../../../../../../.. }
 # go to <pasteboard>
-function cd- { CD=$(paste-if-empty $@); [[ -d $CD ]] && cd $CD || cd ${${CD}%/*} }
+function cd- { CD=$(paste-when-empty $@); [[ -d $CD ]] && cd $CD || cd ${${CD}%/*} }
 # go to mac folders
 function cdl { cd ~/Downloads }
 function cdm { cd ~/Documents }
@@ -393,7 +393,7 @@ function echo-eval { echo $@ >&2; eval $@ }
 function ellipsize { [[ ${#1} -gt $COLUMNS ]] && echo -n "${1:0:$((COLUMNS - 4))} \e[30m\e[47m...\e[0m" || echo $@ }
 function index-of { awk -v str1="$(echo $1 | no-color)" -v str2="$(echo $2 | no-color)" 'BEGIN { print index(str1, str2) }' }
 function next-ascii { printf "%b" $(printf "\\$(printf "%o" $(($(printf "%d" "'$@") + 1)))") }
-function paste-if-empty { echo ${@:-$(pbpaste)} }
+function paste-when-empty { echo ${@:-$(pbpaste)} }
 function prev-command { fc -ln -1 }
 # | (after strings)
 function hex { hexdump -C }

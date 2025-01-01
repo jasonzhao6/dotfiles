@@ -436,17 +436,17 @@ function test--next-ascii--of-number {
 	assert "$(next-ascii 0)" '1'
 }; run-with-filter test--next-ascii--of-number
 
-function test--paste-if-empty {
-	assert "$(echo '123 321' | pbcopy; paste-if-empty)" '123 321'
-}; run-with-filter test--paste-if-empty
+function test--paste-when-empty {
+	assert "$(echo '123 321' | pbcopy; paste-when-empty)" '123 321'
+}; run-with-filter test--paste-when-empty
 
-function test--paste-if-empty--with-one-arg {
-	assert "$(paste-if-empty 111)" '111'
-}; run-with-filter test--paste-if-empty--with-one-arg
+function test--paste-when-empty--with-one-arg {
+	assert "$(paste-when-empty 111)" '111'
+}; run-with-filter test--paste-when-empty--with-one-arg
 
-function test--paste-if-empty--with-two-args {
-	assert "$(paste-if-empty '111 222')" '111 222'
-}; run-with-filter test--paste-if-empty--with-two-args
+function test--paste-when-empty--with-two-args {
+	assert "$(paste-when-empty '111 222')" '111 222'
+}; run-with-filter test--paste-when-empty--with-two-args
 
 function test--prev-command {
 	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
