@@ -8,8 +8,8 @@ function grep-highlighting { echo "\e[1;32m\e[K$@\e[m\e[K" }
 # background setters
 function red-bg { echo "\e[41m$@\e[0m" }
 function green-bg { echo "\e[42m$@\e[0m" }
-# change modes
-function bw { # black & white
+# black-&-white vs color modes
+function bw {
     unalias diff
     unalias egrep
     unalias grep
@@ -20,13 +20,13 @@ function color {
     alias egrep='egrep --color=always'
     alias grep='grep --color=always'
     alias ls='ls --color=always'
-}; color # set color aliases ahead of function definitions, so they can expand
+}; color # enable these ahead of function definitions, so that they can expand
 
 ### [Args]
-# [s]ave to args: 1) `command; s`, 2) `command | s`
+# [s]ave into args: 1) `<command>; s`, 2) `<command> | s`
 function s { ss 'insert `#` after the first column to soft-select it' }
 function ss { [[ -t 0 ]] && { eval $(prev-command) | save-args $@ } || save-args $@ }
-# paste to args
+# paste into args
 function v { pbpaste | s }
 function vv { pbpaste | ss }
 # show / filter [a]rgs
@@ -58,26 +58,26 @@ function 0 { arg $ $@ } # last arg
 function rr { arg $((RANDOM % $(args-list-size) + 1)) $@ }
 # select in rang[e]
 function e { for i in $(seq $1 $2); do echo; arg $i ${${@:3}}; done }
-# select with iterator
+# select via iterator
 function each { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@; done }
 function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@ &; done; wait }
 function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | save-args }
-# select colum[n] via bottom row
+# select colum[n] by letter- referencing the bottom row
 function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-columns-bar $N } || { args-mark-references! $1 $N; args-select-column!; [[ $ARGS_PUSHED -eq 0 && $(index-of "$(args-columns $N)" b) -ne 0 ]] && args-columns-bar $N }; return 0 }
-# select colum[n] via headers row
+# select colum[n] by letter- referencing the top row
 function nn { NN=1 n $@ }
-# select first column
+# select the first column
 function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
-# [u]ndo / [r]edo: row / column selections
+# strip all leading / trailing spaces
+function z { args | strip | save-args }
+# [c]opy into pasteboard
+function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | strip | pbcopy }
+# [u]ndo / [r]edo changes
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }
-# [c]opy to pasteboard
-function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | strip | pbcopy }
 # [y]ank / [p]ut across tabs
 function y { args > ~/.zshrc.args }
 function p { echo "$(<~/.zshrc.args)" | save-args }
-# strip leading / trailing spaces
-function z { args | strip | save-args }
 # helpers
 function args { echo $ARGS_HISTORY[$ARGS_CURSOR] }
 function args-plain { args | no-color | expand }
@@ -86,7 +86,7 @@ function args-list-plain { args | nl | no-color | expand }
 function args-list-size { args | wc -l | awk '{print $1}' }
 function args-columns { ARGS_COLUMNS=''; ARGS_COL_CURR=a; ARGS_SKIP_NL=1; [[ ${1:-$ARGS_BOTTOM_ROW} -eq 1 ]] && ARG=$(args-list-plain | tail -1) || ARG=$(args-list-plain | head -1); for i in $(seq 1 ${#ARG}); do args-label-column! $i; done; echo $ARGS_COLUMNS }
 function args-columns-bar { green-bg "$(args-columns $1)" }
-# helpers (`!` means it sets env vars to be used by its caller function)
+# helpers! (`!` means the function sets env vars to be used by its caller)
 function args-build-greps! { ARGS_FILTER="grep ${*// / | grep }"; ARGS_FILTER=${ARGS_FILTER// -/ --invert-match }; ARGS_FILTER=${ARGS_FILTER//grep/grep --color=never --ignore-case}; ARGS_HIGHLIGHT="egrep --color=always --ignore-case '${${@:#-*}// /|}'" }
 function args-label-column! { [[ $ARG[$1-1] == ' ' && $ARG[$1] != ' ' ]] && { [[ $ARGS_SKIP_NL -eq 1 ]] && { ARGS_SKIP_NL=0; ARGS_COLUMNS+=' ' } || { ARGS_COLUMNS+=$ARGS_COL_CURR; ARGS_COL_CURR=$(next-ascii $ARGS_COL_CURR) } } || ARGS_COLUMNS+=' ' }
 function args-mark-references! { ARGS_COLUMNS=$(args-columns $2); ARGS_COL_FIRST=$(index-of $ARGS_COLUMNS a); ARGS_COL_TARGET=$(index-of $ARGS_COLUMNS $1); ARGS_COL_NEXT=$(index-of $ARGS_COLUMNS $(next-ascii $1)); ARGS_BOTTOM_ROW=$2 }
@@ -96,18 +96,18 @@ function args-push-if-different! { [[ $ARGS_NEW_PLAIN != $(args-plain) ]] && { a
 # |
 function save-args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-push-if-different!; args-replace $ARGS_NEW; args-list } } # always replace in case grep highlighting has updated
 
-### Args history helpers
+### Args history interface
 #
 #             123456789
 #  cursor     ^
 #  head       ^
 #  tail       ^
 #
-# array size is fixed, wrap around the end
-# advance `cursor` and `head` together
-# if next is `tail`, push `tail` forward
-# to undo, only `cursor` moves, up to `tail`
-# to redo, only `cursor` moves, up to `head`
+# - array size is fixed, wrap around the end
+# - advance `cursor` and `head` together
+# - if next is `tail`, push `tail` forward
+# - to undo, only `cursor` moves, up to `tail`
+# - to redo, only `cursor` moves, up to `head`
 function args-init { ARGS_HISTORY_MAX=100; ARGS_HISTORY=(); ARGS_CURSOR=0; ARGS_HEAD=0; ARGS_TAIL=0 }; [[ -z $ARGS_HISTORY_MAX ]] && args-init;
 function args-push { ARGS_CURSOR=$(args-increment $ARGS_CURSOR); ARGS_HISTORY[$ARGS_CURSOR]=$1; ARGS_HEAD=$ARGS_CURSOR; [[ $ARGS_CURSOR -eq $ARGS_TAIL ]] && ARGS_TAIL=$(args-increment $ARGS_TAIL); [[ $ARGS_TAIL -eq 0 ]] && ARGS_TAIL=1 }
 function args-undo { ARGS_PREV=$(args-decrement $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_TAIL ]] && ARGS_CURSOR=$ARGS_PREV || ARGS_UNDO_EXCEEDED=1 }
@@ -174,7 +174,7 @@ function ....... { cd ../../../../../.. }
 function ........ { cd ../../../../../../.. }
 function ......... { cd ../../../../../../../.. }
 function .......... { cd ../../../../../../../../.. }
-# go to <pasteboard>
+# go to folder
 function cd- { CD=$(paste-when-empty $@); [[ -d $CD ]] && cd $CD || cd ${${CD}%/*} }
 # go to mac folders
 function cdl { cd ~/Downloads }
@@ -218,8 +218,8 @@ function gw { git add --all; git commit --amend }
 function gv { git add --all; git commit }
 function gy { git cherry-pick $@ }
 # [p]ush / [P]ull
-function gf { git push --force }
 function gp { git push }
+function gf { git push --force }
 function gP { git pull $@ }
 # [s]tash
 function gs { git add --all; git stash save $@ }
@@ -244,7 +244,7 @@ function gb-merged { git branch --merged | grep --invert-match 'main$' | grep --
 # helpers (gxx)
 function gxx-main-branch { git fetch $GXX_REMOTE $GXX_BRANCH && git rebase --interactive --autosquash $GXX_REMOTE/$GXX_BRANCH }
 function gxx-head-num { git rebase --interactive --autosquash HEAD~$(($GXX_HEAD_NUM + 1)) } # `+ 1` to cover the `fixup!` commit
-function gxx-pre! { # (`!` means it sets env vars to be used by its caller function)
+function gxx-pre! { # (`!` means the function sets env vars to be used by its caller)
     GXX_REMOTE=origin
     GXX_BRANCH=main
     GXX_HEAD_NUM=
@@ -261,17 +261,17 @@ function gxx-pre! { # (`!` means it sets env vars to be used by its caller funct
 }
 
 ### Github
-# open tab
-function main { open https://$(domain)/$(org)/$(repo) }
+# open in browser
+function main { open https://$(domain)/$(org)/${@:-$(repo)} }
 function new { gp && gh pr create --fill && gh pr view --web }
 function pr { open https://$(domain)/$(org)/$(repo)/pull/$@ }
 function prs { open "https://$(domain)/pulls?q=is:open+is:pr+user:$(org)" }
 function sha { open https://$(domain)/$(org)/$(repo)/commit/$@ }
 # helpers
-function branch { git rev-parse --abbrev-ref HEAD }
 function domain { git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/' }
 function org { git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*/\1/' }
 function repo { git rev-parse --show-toplevel | xargs basename }
+function branch { git rev-parse --abbrev-ref HEAD }
 
 ### [K]ubectl
 # TODO move to eof once stable
@@ -298,7 +298,7 @@ function kp { kubectl port-forward $@ }
 # pod exec shortcuts
 function kb { kubectl exec -it $@ -- bash }
 function kc { kubectl exec $@[-1] -- $@[1,-2] }
-# get as [j]son / [y]aml
+# get resource as [j]son / [y]aml
 function kj { [[ -n $1 ]] && kubectl get $@ -o json > ~/Documents/k8.json | jq }
 function kjj { cat ~/Documents/k8.json }
 function ky { [[ -n $1 ]] && kubectl get $@ -o yaml > ~/Documents/k8.yaml | cat }
@@ -312,35 +312,34 @@ function tf0 { echo-eval 'export TF_LOG=' }
 function tf1 { echo-eval 'export TF_LOG=DEBUG' }
 # [i]nit
 function tfi { mkdir -p ~/.terraform.cache; terraform init $@ }
-function tfim { terraform init -migrate-state }
-function tfir { terraform init -reconfigure }
 function tfiu { terraform init -upgrade }
+function tfir { terraform init -reconfigure }
+function tfim { terraform init -migrate-state }
 # post init
-function tfa { tf-pre $@ && terraform apply }
-function tfd { tf-pre $@ && terraform destroy }
-function tfl { tf-pre $@ && terraform state list | sed "s/.*/'&'/" | save-args }
-function tfn { tf-pre $@ && terraform console }
-function tfo { tf-pre $@ && terraform output }
 function tfp { tf-pre $@ && terraform plan -out=tfplan }
+function tfl { tf-pre $@ && terraform state list | sed "s/.*/'&'/" | save-args }
+function tfo { tf-pre $@ && terraform output }
+function tfn { tf-pre $@ && terraform console }
 function tfv { tf-pre $@ && terraform validate }
-function tfx { tf-pre $@ && terraform apply -refresh-only }
+# debug plan
+function tf { pushd ~/gh/scratch/tf-debug > /dev/null; [[ -z $1 ]] && terraform console || echo "local.$@" | terraform console; popd > /dev/null }
 # post plan
+function tfa { terraform apply }
+function tfd { terraform destroy }
 function tfg { terraform show -no-color tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web }
 function tfz { terraform force-unlock $@ }
 # post list
-function tfm { terraform state mv $1 $2 }
-function tfr { terraform state rm $@ }
 function tfs { terraform state show $@ }
 function tft { terraform taint $@ }
 function tfu { terraform untaint $@ }
+function tfm { terraform state mv $1 $2 }
+function tfr { terraform state rm $@ }
 # [f]ormat
 function tff { terraform fmt -recursive $@ }
 # [c]lean
 function tfc { rm -rf tfplan .terraform ~/.terraform.d }
 function tfcc { rm -rf tfplan .terraform ~/.terraform.d ~/.terraform.cache }
-# debug
-function tf { pushd ~/gh/scratch/tf-debug > /dev/null; [[ -z $1 ]] && terraform console || echo "local.$@" | terraform console; popd > /dev/null }
-# non-prod
+# non-prod shortcut
 function tfaa { tf-pre $@ && terraform apply -auto-approve }
 # helpers
 function tf-pre {
@@ -350,9 +349,9 @@ function tf-pre {
         case $var in
             e) tfe;;
             i) tfi;;
-            im) tfim;;
-            ir) tfir;;
             iu) tfiu;;
+            ir) tfir;;
+            im) tfim;;
         esac
     done
 }
@@ -361,13 +360,13 @@ function tf-pre {
 # config
 DD_DUMP_DIR="$HOME/.zshrc.terminal-dump.d"
 DD_CLEAR_TERMINAL=1
-# singles (they all `save-args`)
+# singles (they save into `args`)
 function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args }
 function f { [[ -n $1 ]] && { f-pre $@ | sort | save-args } }
 function i { which $@ | save-args }
 function l { ls -l | awk '{print $9}' | save-args } # Not taking search pattern b/c folder matches break column alignment
 function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.' | save-args } # Show only hidden files
-# doubles (they do not `save-args`)
+# doubles (they do not save into `args`)
 function bb { pmset sleepnow }
 function cc { eval $(prev-command) | no-color | ruby -e 'puts STDIN.read.strip' | pbcopy }
 function dd { mkdir -p $DD_DUMP_DIR; dd-is-terminal-output && { DD=$(dd-dump-file); $(pbpaste > $DD); dd-taint-pasteboard; dd-clear-terminal } || dd-clear-terminal }
@@ -385,12 +384,12 @@ function tt { ~/gh/tt/tt.rb $@ }
 function uu { diff --unified $1 $2 }
 function xx { echo "bind '\"\\\e[A\": history-search-backward'\nbind '\"\\\e[B\": history-search-forward'" | pbcopy }
 function yy { YY=$(prev-command); echo -n $YY | pbcopy }
-# misc
+# misc (standalone)
 function bif { brew install --formula $@ }
 function flush { sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder }
 function jcurl { curl --silent $1 | jq | { [[ -z $2 ]] && cat || grep -A${3:-0} -B${3:-0} $2 } }
 function ren { for file in *$1*; do mv "$file" "${file//$1/$2}"; done }
-# helpers
+# helpers (not standalone)
 function echo-eval { echo $@ >&2; eval $@ }
 function ellipsize { [[ ${#1} -gt $COLUMNS ]] && echo -n "${1:0:$((COLUMNS - 4))} \e[30m\e[47m...\e[0m" || echo $@ }
 function index-of { awk -v str1="$(echo $1 | no-color)" -v str2="$(echo $2 | no-color)" 'BEGIN { print index(str1, str2) }' }
@@ -426,8 +425,10 @@ function zm { mate ~/gh/dotfiles/zshrc.zsh }
 function zs { mate ~/.zshrc.secrets }
 # [t]est
 function zt { zsh ~/gh/dotfiles/zshrc-tests.zsh $@ }
-# save
+# source zshrc & save other dotfiles
 function zz {
+    source ~/.zshrc
+
     cp ~/.colordiffrc ~/gh/dotfiles/colordiffrc.txt
     cp ~/.gitignore ~/gh/dotfiles/gitignore.txt
     cp ~/.terraformrc ~/gh/dotfiles/terraformrc.txt
@@ -441,18 +442,14 @@ function zz {
             cp ~/.zshrc.secrets ~/Downloads/\>\ Archive/zsh/.zshrc.secrets/$(date +'%y.%m.%d').txt
         fi
     fi
-
-    source ~/.zshrc
 }
 [ -f ~/.zshrc.secrets ] && source ~/.zshrc.secrets
-# lo[a]d
+# lo[a]d other dotfiles
 function za {
     cp ~/gh/dotfiles/colordiffrc.txt ~/.colordiffrc
     cp ~/gh/dotfiles/gitignore.txt ~/.gitignore
     cp ~/gh/dotfiles/terraformrc.txt ~/.terraformrc
     cp ~/gh/dotfiles/tm_properties.txt ~/.tm_properties
-
-    source ~/.zshrc
 }
 
 ### Zsh arrow keys
@@ -474,9 +471,9 @@ HISTSIZE=10000
 SAVEHIST=10000
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
-# grep
+# show / filter
 function h { egrep --ignore-case "$*" $HISTFILE | trim 15 | sort --unique | save-args }
-# [c]lean
+# [c]lear
 function hc { rm $HISTFILE }
 # edit
 function hm { mate $HISTFILE }
@@ -520,49 +517,50 @@ function aws-profile { { [[ -n $AWS_PROFILE ]] && echo $AWS_PROFILE } }
 function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | awk -F'/' '{print $2}'); [[ $ROLE == *_* ]] && echo $ROLE | awk -F'_' '{print $2}' || echo $ROLE }
 
 ### Keymap annotations
-#  :   -->  subsequent command
-#  |   -->  similar commands
+#  ::  -->  subsequent command
+#  |   -->  alternative command
+#  ~   -->  repeatable command
+#  ()  -->  order of precedence
+#  ?   -->  optional
+#  ,   -->  argument
 #  #   -->  a number
 #  .   -->  a letter
-#  +   -->  a keyboard shortcut
+#  *   -->  arbitrary argument
+#  ~~  -->  to be substituted
+#  ""  -->  quotes recommended
 #  %   -->  mac's command key
-#  ()  -->  a group of args
-#  ?   -->  an optinoal arg
-#  *   -->  an arbitrary arg
-#  ~~  -->  an arg placeholder
-#  ""  -->  wrap arg in quotes
+#  +   -->  keyboard shortcut
 
 ### Git keymap
 # [] means defined in this file
 # <> means already taken, e.g `go`
-# [1]  2   3   4   5  |  6   7   8   9  [0]    <--    g1|g0
-#             [p] [y] | [f] [g] [c] [r] [l]    <--    gp|gP|gf  gg|gb|gn|(g *)  ((gr|gr-) *?):ss|s  gl|(gs *?)|(ga #?)|gc
-# [a] <o> [e] [u] [i] | [d] <h> [t] [n] [s]    <--    ge|(gx *)|gm|gw|gv  ((gu|gz|guz) #?)  gi|gd  gt|gtv|gta|gtr
-#      q   j   k  [x] | [b] [m] [w] [v] [z]    <--    (gxx (u|m|#)?):gxa|gxc  gb:(# (g|gbb|gbd))
+# [1]  2   3   4   5  |  6   7   8   9  [0]   <--   g1|g0   gt|gtv|gta|gtr   gb::#,(g|gbb|gbd)   gg|(gn,*)
+#             [p] [y] | [f] [g] [c] [r] [l]   <--   gi|gd   ge|gm|gw|gv|gy   gp|gf|gP   gs,*?::(ga,#?)|gl|gc
+# [a] <o> [e] [u] [i] | [d] <h> [t] [n] [s]   <--   gx,*::gxx,(u|m|#)?::(gxa|gxc)?   (gu|gz|guz),#?
+#      q   j   k  [x] | [b] [m] [w] [v] [z]   <--   (gr|gr-),*?::s::#,sha
 
 ### Terraform keymap
 # [] means defined in this file
 # {} means defined in secrets file
-# [1]  2   3   4   5  |  6   7   8   9  [0]    <--    tf1|tf0
-#             [p]  y  | [f] [g] [c] [r] [l]    <--    tfp:tfa|tfg|tfz  tff:tfv  tfc|tfcc  tfl:tft|tfu|tfs|tfm|tfr
-# [a] [o] {e} [u] [i] | [d]  h  [t] [n] [s]    <--    tfa|tfa-|tfo|tfd|tfx  tfi|tfiu|tfir|tfim  tfn|tf
-#      q   j   k  [x] |  b  [m]  w  [v] [z]    <--    tfw:aa|(# cd)
+# [1]  2   3   4   5  |  6   7   8   9  [0]   <--   tf1|tf0   tfi|tfiu|tfir|tfim
+#             [p]  y  | [f] [g] [c] [r] [l]   <--   tfi::(tfp|tfl|tfo|tfn|tfv),(e|i|iu|ir|im)?::tf?
+# [a] [o] {e} [u] [i] | [d]  h  [t] [n] [s]   <--   tfp::tfa|tfd|tfg|(tfz,*)   tfl::(tfs|tft|tfu|tfm|tfr),*
+#      q   j   k   x  |  b  [m]  w  [v] [z]   <--   tfc|tfcc   f,tf::(a,*)?::#,cd
 
 ### Singles keymap
 # () means defined for args
 # [] means defined in this file
 # {} means defined in secrets file
-# TODO redo annotations x2
-# (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)    <--    ((#|r|each\all\map) * ~~?)
-#             (p) (y) | [f] [g] (c) (r) [l]    <--    (f ""? *?):cc  (#? c):%+v  l:(# c)
-# (a) {o} (e) (u) [i] | [d] [h]  t  (n) (s)    <--    a:aa|rr  (e # # * ~~?)  s|s-:aa|nn
-#     {q} {j} [k]  x  |  b   m  {w} (v) [z]    <--    x:%+v
+# (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)
+#             (p) (y) | [f] [g] (c) (r) [l]   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   ((n|nn),#?)|aa|z::#
+# (a) {o} (e) (u) [i] | [d] [h]  t  (n) (s)   <--   #|rr|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
+#     {q} {j} [k]  x  |  b   m  {w} (v) (z)   <--   u|r::~?   y::p   d|(f,(gh|tf))|h|(i,*)|kk|l|ll::a
 
 ### Doubles keymap
 # () means defined for args
 # [] means defined in this file
 # {} means defined in secrets file
-# (1)  2   3   4   5  |  6   7   8   9   0        /   yy:pp  ff|bb  cc:%+v  rr:aa|nn|rr  ll:aa
-#             [p] [y] | [f] [g] [c] (r) [l]    <--    (aa #?):aa|nn|rr  ((nn|nnn) .?)|a:aa|rr  ss|vv:aa|nn
-# (a) [o] [e] [u] [i] | [d] [h] [t] (n) (s)    <--    oo|ii|mm  (ee # # * ~~):eee  uu|hh  dd:aa
-#     {q} {j} [k] [x] | [b] [m] {w} (v) [z]    <--    qq|q2:q  jj:j|aa  kk:aa|nn  xx:%+v  ww:w|aa  zz|zt
+# (1)  2   3   4   5  |  6   7   8   9   0
+#             [p] [y] | [f] [g] [c] (r) [l]   <--   pp,""?,*?::cc   yy|cc|xx::%+v   ff|bb   l|ll::a
+# (a) [o] [e] [u] [i] | [d] [h] [t] (n) (s)   <--   oo|ii|mm   ee,#,#,*,~~::eee   uu|hh   dd::ddd|ddc
+#     {q} {j} [k] [x] | [b] [m] {w} (v) [z]   <--   qq|q2::q   jj::#,j   ww::#,w   zz|zt

@@ -647,6 +647,49 @@ function test--aa--when-the-preceding-request-was-nn {
 	)"
 }; run-with-filter test--aa--when-the-preceding-request-was-nn
 
+function test--z {
+	assert "$(
+		echo $input_with_whitespace | save-args > /dev/null
+		z
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-shared-1
+		     2	terraform-application-region-shared-2
+		     3	terraform-application-region-shared-3
+		     4	terraform-application-region-program-A
+		     5	terraform-application-region-program-B
+		eof
+	)"
+}; run-with-filter test--z
+
+function test--c {
+	assert "$(
+		echo $input | save-args > /dev/null
+		c
+		pbpaste
+	)" "$(
+		cat <<-eof
+			terraform-application-region-shared-1
+			terraform-application-region-shared-2
+			terraform-application-region-shared-3
+			terraform-application-region-program-A
+			terraform-application-region-program-B
+		eof
+	)"
+}; run-with-filter test--c
+
+function test--c--with-one-arg {
+	assert "$(c '123'; pbpaste)" '123'
+}; run-with-filter test--c--with-one-arg
+
+function test--c--with-two-args {
+	assert "$(c '123 321'; pbpaste)" '123 321'
+}; run-with-filter test--c--with-two-args
+
+function test--c--with-spaces {
+	assert "$(c '     123 321     '; pbpaste)" '123 321'
+}; run-with-filter test--c--with-spaces
+
 function test--u {
 	assert "$(
 		echo $input | save-args > /dev/null
@@ -880,34 +923,6 @@ function test--r--when-redoing-beyond-new-head {
 	)"
 }; run-with-filter test--r--when-redoing-beyond-new-head
 
-function test--c {
-	assert "$(
-		echo $input | save-args > /dev/null
-		c
-		pbpaste
-	)" "$(
-		cat <<-eof
-			terraform-application-region-shared-1
-			terraform-application-region-shared-2
-			terraform-application-region-shared-3
-			terraform-application-region-program-A
-			terraform-application-region-program-B
-		eof
-	)"
-}; run-with-filter test--c
-
-function test--c--with-one-arg {
-	assert "$(c '123'; pbpaste)" '123'
-}; run-with-filter test--c--with-one-arg
-
-function test--c--with-two-args {
-	assert "$(c '123 321'; pbpaste)" '123 321'
-}; run-with-filter test--c--with-two-args
-
-function test--c--with-spaces {
-	assert "$(c '     123 321     '; pbpaste)" '123 321'
-}; run-with-filter test--c--with-spaces
-
 function test--y {
 	assert "$(
 		echo $input | save-args > /dev/null
@@ -929,21 +944,6 @@ function test--p {
 		eof
 	)"
 }; run-with-filter test--p
-
-function test--z {
-	assert "$(
-		echo $input_with_whitespace | save-args > /dev/null
-		z
-	)" "$(
-		cat <<-eof
-		     1	terraform-application-region-shared-1
-		     2	terraform-application-region-shared-2
-		     3	terraform-application-region-shared-3
-		     4	terraform-application-region-program-A
-		     5	terraform-application-region-program-B
-		eof
-	)"
-}; run-with-filter test--z
 
 function test--save-args {
 	assert "$(echo $input | save-args)" "$(

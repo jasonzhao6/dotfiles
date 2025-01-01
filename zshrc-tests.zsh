@@ -88,3 +88,7 @@ fi
 #
 
 [[ -z $filter ]] && { echo; ruby ~/gh/dotfiles/zshrc-tests/verify_keymaps.rb }
+
+#
+# Section 5: TODO double check that all things to be restored are restored
+#
