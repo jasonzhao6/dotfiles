@@ -350,7 +350,6 @@ function test--eee {
 
 function test--eee--with-multiple-substitutions {
 	assert "$(
-		echo $input | save-args > /dev/null
 		eee 3 4 echo ~~ and ~~ again 2>&1
 	)" "$(
 		cat <<-eof
@@ -366,7 +365,6 @@ function test--eee--with-multiple-substitutions {
 
 function test--eee--with-multiple-substitutions-in-quotes {
 	assert "$(
-		echo $input | save-args > /dev/null
 		eee 3 4 'echo ~~ and ~~ again' 2>&1
 	)" "$(
 		cat <<-eof
@@ -382,7 +380,6 @@ function test--eee--with-multiple-substitutions-in-quotes {
 
 function test--eee--with-math {
 	assert "$(
-		echo $input | save-args > /dev/null
 		eee 3 4 echo ~~ and '$((~~ + 10))' too 2>&1
 	)" "$(
 		cat <<-eof
