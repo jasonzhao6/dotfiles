@@ -369,7 +369,10 @@ function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.
 # doubles
 function bb { pmset sleepnow }
 function cc { eval $(prev-command) | no-color | ruby -e 'puts STDIN.read.strip' | pbcopy }
-function dd { clear } # TODO dump pasteboard to file if looks like termal output, then clear screen
+# TODO test x3
+function dd { [[ $(pbpaste | no-empty | strip | sed -n '$p') == \$* ]] && { mkdir -p ~/$TERMINAL_DUMP_DIR; DD="$TERMINAL_DUMP_DIR/$(date +'%Y-%m-%d_%H.%M.%S').txt"; $(pbpaste > ~/$DD); $(echo "$(pbpaste)\n\n(Dumped to '~/$DD')" | pbcopy); clear } || clear }
+function ddd { mkdir -p ~/$TERMINAL_DUMP_DIR; cd ~/$TERMINAL_DUMP_DIR }
+function ddc { rm -rf ~/$TERMINAL_DUMP_DIR }
 function ee { for i in $(seq $1 $2); do echo ${${@:3}//~~/$i}; done }
 function eee { for i in $(seq $1 $2); do echo; echo-eval ${${@:3}//~~/$i}; done }
 function ff { caffeinate }
