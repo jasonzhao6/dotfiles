@@ -470,12 +470,12 @@ HISTSIZE=10000
 SAVEHIST=10000
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
-# grep # TODO test
-function h { egrep --ignore-case "$*" ~/.zsh_history | trim 15 | sort --unique | save-args }
+# grep
+function h { egrep --ignore-case "$*" $HISTFILE | trim 15 | sort --unique | save-args }
 # [c]lean
-function hc { rm ~/.zsh_history }
+function hc { rm $HISTFILE }
 # edit
-function hm { mate ~/.zsh_history }
+function hm { mate $HISTFILE }
 # session persistence
 function h0 { unset -f zshaddhistory }              #  disk &&  memory
 function h1 { function zshaddhistory { return 1 } } # !disk && !memory
