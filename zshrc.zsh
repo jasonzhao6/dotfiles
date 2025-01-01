@@ -312,7 +312,7 @@ function tf0 { echo-eval 'export TF_LOG=' }
 function tf1 { echo-eval 'export TF_LOG=DEBUG' }
 # [c]lean
 function tfc { rm -rf tfplan .terraform ~/.terraform.d }
-function tfcc { rm -rf tfplan .terraform ~/.terraform.d ~/.terraform.cache; mkdir -p ~/.terraform.cache }
+function tfcc { rm -rf tfplan .terraform ~/.terraform.d ~/.terraform.cache }
 # debug
 function tf { pushd ~/gh/scratch/tf-debug > /dev/null; [[ -z $1 ]] && terraform console || echo "local.$@" | terraform console; popd > /dev/null }
 # find
@@ -320,7 +320,7 @@ function tfw { find ~+ -name main.tf | grep --invert-match '\.terraform' | sed "
 # [f]ormat
 function tff { terraform fmt -recursive $@ }
 # [i]nit
-function tfi { terraform init $@ }
+function tfi { mkdir -p ~/.terraform.cache; terraform init $@ }
 function tfim { terraform init -migrate-state }
 function tfir { terraform init -reconfigure }
 function tfiu { terraform init -upgrade }
@@ -439,8 +439,6 @@ function za {
     cp ~/gh/dotfiles/gitignore.txt ~/.gitignore
     cp ~/gh/dotfiles/terraformrc.txt ~/.terraformrc
     cp ~/gh/dotfiles/tm_properties.txt ~/.tm_properties
-
-    mkdir -p ~/.terraform.cache
 
     source ~/.zshrc
 }
