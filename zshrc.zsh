@@ -553,7 +553,7 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # [] means defined in this file
 # {} means defined in secrets file
 # (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)
-#             (p) (y) | [f] [g] (c) (r) [l]   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   ((n|nn),#?)|aa|z::#
+#             (p) (y) | [f] [g] (c) (r) [l]   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   ((n|nn),.?)|aa|z::#
 # (a) {o} (e) (u) [i] | [d] [h]  t  (n) (s)   <--   #|rr|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
 #     {q} {j} [k]  x  |  b   m  {w} (v) (z)   <--   u|r::~?   y::p   d|(f,(gh|tf))|h|(i,*)|kk|l|ll::a
 
