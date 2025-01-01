@@ -25,7 +25,7 @@ function color {
 ### [Args]
 # [s]ave into args: 1) `<command>; s`, 2) `<command> | s`
 function s { ss 'insert `#` after the first column to soft-select it' }
-function ss { [[ -t 0 ]] && { eval $(prev-command) | save-args $@ } || save-args $@ }
+function ss { [[ -t 0 ]] && eval $(prev-command) | save-args $@ || save-args $@ }
 # paste into args
 function v { pbpaste | s }
 function vv { pbpaste | ss }
@@ -362,7 +362,7 @@ DD_DUMP_DIR="$HOME/.zshrc.terminal-dump.d"
 DD_CLEAR_TERMINAL=1
 # singles (they save into `args`)
 function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args }
-function f { [[ -n $1 ]] && { f-pre $@ | sort | save-args } }
+function f { [[ -n $1 ]] && f-pre $@ | sort | save-args }
 function i { which $@ | save-args }
 function l { ls -l | awk '{print $9}' | save-args } # Not taking search pattern b/c folder matches break column alignment
 function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.' | save-args } # Show only hidden files
