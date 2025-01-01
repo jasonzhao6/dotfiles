@@ -504,12 +504,12 @@ $'\n'\
 # helpers
 function branch-info { BRANCH_INFO=$(branch 2> /dev/null); [[ -n $BRANCH_INFO ]] && echo " #$BRANCH_INFO" }
 function region-info { [[ -n $(aws-profile) ]] && echo " $AWS_DEFAULT_REGION" }
-function sts-info { [[ -n $(aws-profile) ]] && { set-sts-info; echo " $(<~/$STS_INFO_DIR/$(aws-profile))" } }
+function sts-info { [[ -n $(aws-profile) ]] && { set-sts-info; echo " $(<$STS_INFO_DIR/$(aws-profile))" } }
 function tf-info { [[ -n $TF_VAR_datadog_api_key ]] && echo ' TF_VAR' }
 # helpers (sts-info)
-STS_INFO_DIR='.zshrc.sts-info.d'
-function reset-sts-info { rm -rf ~/$STS_INFO_DIR }
-function set-sts-info { [[ ! -e ~/$STS_INFO_DIR/$(aws-profile) ]] && { mkdir -p ~/$STS_INFO_DIR; echo "$(account)::$(role)" > ~/$STS_INFO_DIR/$(aws-profile) } }
+STS_INFO_DIR="$HOME/.zshrc.sts-info.d"
+function reset-sts-info { rm -rf $STS_INFO_DIR }
+function set-sts-info { [[ ! -e $STS_INFO_DIR/$(aws-profile) ]] && { mkdir -p $STS_INFO_DIR; echo "$(account)::$(role)" > $STS_INFO_DIR/$(aws-profile) } }
 function account { aws iam list-account-aliases --query 'AccountAliases[0]' --output text }
 function aws-key { [[ -n $AWS_ACCESS_KEY_ID ]] && echo $AWS_ACCESS_KEY_ID }
 function aws-profile { { [[ -n $AWS_PROFILE ]] && echo $AWS_PROFILE } }

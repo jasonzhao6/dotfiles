@@ -154,7 +154,7 @@ function test--dd {
 
 function test--dd {
 	assert "$(
-		local dd_terminal_dump_dir=$DD_DUMP_DIR
+		local dd_dump_dir=$DD_DUMP_DIR
 		DD_DUMP_DIR="/tmp/test--dd"
 		DD_CLEAR_TERMINAL=0
 		rm -rf $DD_DUMP_DIR
@@ -164,7 +164,7 @@ function test--dd {
 		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
 		cat $DD_DUMP_DIR/*
 
-		DD_DUMP_DIR=$dd_terminal_dump_dir
+		DD_DUMP_DIR=$dd_dump_dir
 		DD_CLEAR_TERMINAL=1
 		rm -rf $DD_DUMP_DIR
 	)" "$(
@@ -177,7 +177,7 @@ function test--dd {
 
 function test--dd--when-dumping-same-pasteboard-twice {
 	assert "$(
-		local dd_terminal_dump_dir=$DD_DUMP_DIR
+		local dd_dump_dir=$DD_DUMP_DIR
 		DD_DUMP_DIR="/tmp/test--dd"
 		DD_CLEAR_TERMINAL=0
 		rm -rf $DD_DUMP_DIR
@@ -188,7 +188,7 @@ function test--dd--when-dumping-same-pasteboard-twice {
 		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
 		cat $DD_DUMP_DIR/*
 
-		DD_DUMP_DIR=$dd_terminal_dump_dir
+		DD_DUMP_DIR=$dd_dump_dir
 		DD_CLEAR_TERMINAL=1
 		rm -rf $DD_DUMP_DIR
 	)" "$(
@@ -201,7 +201,7 @@ function test--dd--when-dumping-same-pasteboard-twice {
 
 function test--dd--when-dumping-two-different-pasteboards {
 	assert "$(
-		local dd_terminal_dump_dir=$DD_DUMP_DIR
+		local dd_dump_dir=$DD_DUMP_DIR
 		DD_DUMP_DIR="/tmp/test--dd"
 		DD_CLEAR_TERMINAL=0
 		rm -rf $DD_DUMP_DIR
@@ -213,7 +213,7 @@ function test--dd--when-dumping-two-different-pasteboards {
 		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
 		cat $DD_DUMP_DIR/*
 
-		DD_DUMP_DIR=$dd_terminal_dump_dir
+		DD_DUMP_DIR=$dd_dump_dir
 		DD_CLEAR_TERMINAL=1
 		rm -rf $DD_DUMP_DIR
 	)" "$(
@@ -229,7 +229,7 @@ function test--dd--when-dumping-two-different-pasteboards {
 
 function test--dd--when-not-terminal-output {
 	assert "$(
-		local dd_terminal_dump_dir=$DD_DUMP_DIR
+		local dd_dump_dir=$DD_DUMP_DIR
 		DD_DUMP_DIR="/tmp/test--dd"
 		DD_CLEAR_TERMINAL=0
 		rm -rf $DD_DUMP_DIR
@@ -238,7 +238,7 @@ function test--dd--when-not-terminal-output {
 		dd
 		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
 
-		DD_DUMP_DIR=$dd_terminal_dump_dir
+		DD_DUMP_DIR=$dd_dump_dir
 		DD_CLEAR_TERMINAL=1
 	)" '0'
 }; run-with-filter test--dd--when-not-terminal-output
@@ -249,14 +249,14 @@ function test--ddd {
 
 function test--ddc {
 	assert "$(
-		local dd_terminal_dump_dir=$DD_DUMP_DIR
+		local dd_dump_dir=$DD_DUMP_DIR
 		DD_DUMP_DIR="/tmp/test--dd"
 		mkdir -p $DD_DUMP_DIR
 
 		ddc
 		[[ -e $DD_DUMP_DIR ]] && echo present || echo absent
 
-		DD_DUMP_DIR=$dd_terminal_dump_dir
+		DD_DUMP_DIR=$dd_dump_dir
 	)" 'absent'
 }; run-with-filter test--ddc
 
