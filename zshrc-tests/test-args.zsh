@@ -185,7 +185,7 @@ function test--arg {
 		arg 3 echo 2>&1
 	)" "$(
 		cat <<-eof
-			echo 'terraform-application-region-shared-3'
+			echo terraform-application-region-shared-3
 			terraform-application-region-shared-3
 		eof
 	)"
@@ -197,7 +197,7 @@ function test--arg--with-whitespace {
 		arg 3 echo 2>&1
 	)" "$(
 		cat <<-eof
-			echo 'terraform-application-region-shared-3'
+			echo terraform-application-region-shared-3
 			terraform-application-region-shared-3
 		eof
 	)"
@@ -209,7 +209,7 @@ function test--arg--with-substitution {
 		arg 3 echo http://~~:8080 2>&1
 	)" "$(
 		cat <<-eof
-			echo http://'terraform-application-region-shared-3':8080
+			echo http://terraform-application-region-shared-3:8080
 			http://terraform-application-region-shared-3:8080
 		eof
 	)"
@@ -221,7 +221,7 @@ function test--arg--with-multiple-substitutions {
 		arg 3 echo http://~~:80 and https://~~:443 2>&1
 	)" "$(
 		cat <<-eof
-			echo http://'terraform-application-region-shared-3':80 and https://'terraform-application-region-shared-3':443
+			echo http://terraform-application-region-shared-3:80 and https://terraform-application-region-shared-3:443
 			http://terraform-application-region-shared-3:80 and https://terraform-application-region-shared-3:443
 		eof
 	)"
@@ -233,7 +233,7 @@ function test--arg--with-multiple-substitutions-in-quotes {
 		arg 3 'echo http://~~:80 and https://~~:443' 2>&1
 	)" "$(
 		cat <<-eof
-			echo http://'terraform-application-region-shared-3':80 and https://'terraform-application-region-shared-3':443
+			echo http://terraform-application-region-shared-3:80 and https://terraform-application-region-shared-3:443
 			http://terraform-application-region-shared-3:80 and https://terraform-application-region-shared-3:443
 		eof
 	)"
@@ -245,7 +245,7 @@ function test--1 {
 		1 echo 2>&1
 	)" "$(
 		cat <<-eof
-			echo 'terraform-application-region-shared-1'
+			echo terraform-application-region-shared-1
 			terraform-application-region-shared-1
 		eof
 	)"
@@ -257,7 +257,7 @@ function test--5 {
 		5 echo 2>&1
 	)" "$(
 		cat <<-eof
-			echo 'terraform-application-region-program-B'
+			echo terraform-application-region-program-B
 			terraform-application-region-program-B
 		eof
 	)"
@@ -267,7 +267,7 @@ function test--6 {
 	assert "$(
 		echo $input | save-args > /dev/null
 		6 echo 2>&1
-	)" "echo ''"
+	)" "echo "
 }; run-with-filter test--6
 
 function test--0 {
@@ -276,7 +276,7 @@ function test--0 {
 		0 echo 2>&1
 	)" "$(
 		cat <<-eof
-			echo 'terraform-application-region-program-B'
+			echo terraform-application-region-program-B
 			terraform-application-region-program-B
 		eof
 	)"
@@ -289,11 +289,11 @@ function test--rr {
 	)" "$(
 		cat <<-eof
 
-			echo 'terraform-application-region-program-A'
-			echo 'terraform-application-region-program-B'
-			echo 'terraform-application-region-shared-1'
-			echo 'terraform-application-region-shared-2'
-			echo 'terraform-application-region-shared-3'
+			echo terraform-application-region-program-A
+			echo terraform-application-region-program-B
+			echo terraform-application-region-shared-1
+			echo terraform-application-region-shared-2
+			echo terraform-application-region-shared-3
 			rr echo
 			terraform-application-region-program-A
 			terraform-application-region-program-B
@@ -311,10 +311,10 @@ function test--e {
 	)" "$(
 		cat <<-eof
 
-			echo 'terraform-application-region-shared-3'
+			echo terraform-application-region-shared-3
 			terraform-application-region-shared-3
 
-			echo 'terraform-application-region-program-A'
+			echo terraform-application-region-program-A
 			terraform-application-region-program-A
 		eof
 	)"
@@ -327,10 +327,10 @@ function test--e--with-multiple-substitutions {
 	)" "$(
 		cat <<-eof
 
-			echo 'terraform-application-region-shared-3' and 'terraform-application-region-shared-3' again
+			echo terraform-application-region-shared-3 and terraform-application-region-shared-3 again
 			terraform-application-region-shared-3 and terraform-application-region-shared-3 again
 
-			echo 'terraform-application-region-program-A' and 'terraform-application-region-program-A' again
+			echo terraform-application-region-program-A and terraform-application-region-program-A again
 			terraform-application-region-program-A and terraform-application-region-program-A again
 		eof
 	)"
@@ -343,19 +343,19 @@ function test--each {
 	)" "$(
 		cat <<-eof
 
-			echo 'terraform-application-region-shared-1'
+			echo terraform-application-region-shared-1
 			terraform-application-region-shared-1
 
-			echo 'terraform-application-region-shared-2'
+			echo terraform-application-region-shared-2
 			terraform-application-region-shared-2
 
-			echo 'terraform-application-region-shared-3'
+			echo terraform-application-region-shared-3
 			terraform-application-region-shared-3
 
-			echo 'terraform-application-region-program-A'
+			echo terraform-application-region-program-A
 			terraform-application-region-program-A
 
-			echo 'terraform-application-region-program-B'
+			echo terraform-application-region-program-B
 			terraform-application-region-program-B
 		eof
 	)"
@@ -368,13 +368,13 @@ function test--each--with-comments {
 	)" "$(
 		cat <<-eof
 
-			echo '10.0.0.1'
+			echo 10.0.0.1
 			10.0.0.1
 
-			echo '10.0.0.2'
+			echo 10.0.0.2
 			10.0.0.2
 
-			echo '10.0.0.3'
+			echo 10.0.0.3
 			10.0.0.3
 		eof
 	)"
@@ -405,19 +405,19 @@ function test--map {
 	)" "$(
 		cat <<-eof
 
-			echo -n pre-; echo 'terraform-application-region-shared-1'
+			echo -n pre-; echo terraform-application-region-shared-1
 			pre-terraform-application-region-shared-1
 
-			echo -n pre-; echo 'terraform-application-region-shared-2'
+			echo -n pre-; echo terraform-application-region-shared-2
 			pre-terraform-application-region-shared-2
 
-			echo -n pre-; echo 'terraform-application-region-shared-3'
+			echo -n pre-; echo terraform-application-region-shared-3
 			pre-terraform-application-region-shared-3
 
-			echo -n pre-; echo 'terraform-application-region-program-A'
+			echo -n pre-; echo terraform-application-region-program-A
 			pre-terraform-application-region-program-A
 
-			echo -n pre-; echo 'terraform-application-region-program-B'
+			echo -n pre-; echo terraform-application-region-program-B
 			pre-terraform-application-region-program-B
 
 		     1	pre-terraform-application-region-shared-1
@@ -428,6 +428,37 @@ function test--map {
 		eof
 	)"
 }; run-with-filter test--map
+
+function test--map--with-math {
+	assert "$(
+		seq 1 5 | save-args > /dev/null
+		map echo ~~ doubles to '$((~~ * 10))' 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo 1 doubles to \$((1 * 10))
+			1 doubles to 10
+
+			echo 2 doubles to \$((2 * 10))
+			2 doubles to 20
+
+			echo 3 doubles to \$((3 * 10))
+			3 doubles to 30
+
+			echo 4 doubles to \$((4 * 10))
+			4 doubles to 40
+
+			echo 5 doubles to \$((5 * 10))
+			5 doubles to 50
+
+			     1	1 doubles to 10
+			     2	2 doubles to 20
+			     3	3 doubles to 30
+			     4	4 doubles to 40
+			     5	5 doubles to 50
+		eof
+	)"
+}; run-with-filter test--map--with-math
 
 function test--n {
 	assert "$(

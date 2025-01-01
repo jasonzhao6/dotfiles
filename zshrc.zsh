@@ -36,7 +36,7 @@ function vv { pbpaste | ss }
 function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | save-args } }
 # use an [arg] by number
 # e.g: `arg <number> echo`, or more explicitly `arg <number> echo ~~`
-function arg { [[ -n $1 && -n $2 ]] && { ARG="'$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)'"; [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
+function arg { [[ -n $1 && -n $2 ]] && { ARG="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"; [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
 function 1 { arg $0 $@ }
 function 2 { arg $0 $@ }
 function 3 { arg $0 $@ }
@@ -65,7 +65,7 @@ function rr { arg $((RANDOM % $(args-list-size) + 1)) $@ }
 # e.g: `e 2 5 echo`, or more explicitly `e 2 5 echo ~~`
 function e { for i in $(seq $1 $2); do echo; arg $i ${${@:3}}; done }
 # use all args via iterator
-# e.g: `each echo`, `all echo`, `map '$((echo ~~ * 2))'` # TODO fix bad math expression
+# e.g: `each echo`, `all echo`, `map echo '$((~~ * 2))'`
 function each { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@; done }
 function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@ &; done; wait }
 function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | save-args }
