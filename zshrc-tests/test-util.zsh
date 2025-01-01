@@ -44,6 +44,35 @@ function test--d--with-protocol-and-path {
 	)"
 }; run-with-filter test--d--with-protocol-and-path
 
+function test--f--for-gh {
+	# Skip: Cannot test b/c requires querying github
+}
+
+function test--f--for-tf {
+	assert "$(
+		local home=$HOME
+		local pwd=$PWD
+		HOME="/tmp/test--f"
+		mkdir -p $HOME/project/module/.terraform
+
+		touch $HOME/project/main.tf
+		touch $HOME/project/module/main.tf
+		touch $HOME/project/module/.terraform/main.tf
+
+		cd $HOME
+		f tf
+
+		rm -rf $HOME
+		HOME=$home
+		cd $pwd
+	)" "$(
+		cat <<-eof
+		     1	~/project
+		     2	~/project/module
+		eof
+	)"
+}; run-with-filter test--f--for-tf
+
 function test--i {
 	assert "$(i i)" "$(
 		cat <<-eof

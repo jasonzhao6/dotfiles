@@ -265,7 +265,6 @@ function new { gp && gh pr create --fill && gh pr view --web }
 function pr { open https://$(domain)/$(org)/$(repo)/pull/$@ }
 function prs { open "https://$(domain)/pulls?q=is:open+is:pr+user:$(org)" }
 function sha { open https://$(domain)/$(org)/$(repo)/commit/$@ }
-function repos { gh repo list $(org) --no-archived --limit 1000 --json name | jq -r '.[].name' | sort | save-args }
 # helpers
 function branch { git rev-parse --abbrev-ref HEAD }
 function domain { git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/' }
@@ -309,8 +308,6 @@ function kq { jq ${@:-.} ~/Documents/k8.json }
 # config
 function tf0 { echo-eval 'export TF_LOG=' }
 function tf1 { echo-eval 'export TF_LOG=DEBUG' }
-# find manifests
-function tfw { find ~+ -name main.tf | grep --invert-match '\.terraform' | sed "s|$HOME|~|g" | sort | trim 0 8 | save-args }
 # [i]nit
 function tfi { mkdir -p ~/.terraform.cache; terraform init $@ }
 function tfim { terraform init -migrate-state }
@@ -364,9 +361,9 @@ DD_DUMP_DIR="$HOME/.zshrc.terminal-dump.d"
 DD_CLEAR_TERMINAL=1
 # singles (they all `save-args`)
 function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args }
-function f { echo } # TODO find tf files and gh repos
+function f { [[ -n $1 ]] && { f-pre $@ | sort | save-args } }
 function i { which $@ | save-args }
-function l { ls -l | awk '{print $9}' | save-args } # Not taking input b/c any folder matches break column alignment
+function l { ls -l | awk '{print $9}' | save-args } # Not taking search pattern b/c folder matches break column alignment
 function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.' | save-args } # Show only hidden files
 # doubles (they do not `save-args`)
 function bb { pmset sleepnow }
@@ -398,6 +395,11 @@ function index-of { awk -v str1="$(echo $1 | no-color)" -v str2="$(echo $2 | no-
 function next-ascii { printf "%b" $(printf "\\$(printf "%o" $(($(printf "%d" "'$@") + 1)))") }
 function paste-when-empty { echo ${@:-$(pbpaste)} }
 function prev-command { fc -ln -1 }
+# helpers (f)
+function f-pre {
+	[[ $@ == gh ]] && gh repo list $(org) --no-archived --limit 1000 --json name | jq -r '.[].name'
+	[[ $@ == tf ]] && find ~+ -name main.tf | grep --invert-match '\.terraform' | sed "s|$HOME|~|g" | trim 0 8
+}
 # helpers (dd)
 function dd-is-terminal-output { [[ $(pbpaste | no-empty | strip | sed -n '$p') == \$* ]] }
 function dd-dump-file { echo "$DD_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt" }
@@ -542,7 +544,7 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # [1]  2   3   4   5  |  6   7   8   9  [0]    <--    tf1|tf0
 #             [p]  y  | [f] [g] [c] [r] [l]    <--    tfp:tfa|tfg|tfz  tff:tfv  tfc|tfcc  tfl:tft|tfu|tfs|tfm|tfr
 # [a] [o] {e} [u] [i] | [d]  h  [t] [n] [s]    <--    tfa|tfa-|tfo|tfd|tfx  tfi|tfiu|tfir|tfim  tfn|tf
-#      q   j   k  [x] |  b  [m] [w] [v] [z]    <--    tfw:aa|(# cd)
+#      q   j   k  [x] |  b  [m]  w  [v] [z]    <--    tfw:aa|(# cd)
 
 ### Singles keymap
 # () means defined for args
