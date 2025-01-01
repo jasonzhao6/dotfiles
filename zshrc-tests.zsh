@@ -1,5 +1,5 @@
 # Test config
-local filter=$([[ -n $1 ]] && echo "test--$1")
+local filter=$([[ -n $1 ]] && echo $1)
 
 # Test helpers
 function init {
