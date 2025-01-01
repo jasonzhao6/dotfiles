@@ -45,7 +45,7 @@ class VerifyTestInvocations
   private
 
   def print_summary
-    system("echo \"\n(#{@passes}/#{@total} tests were invoked immediately after defined)\"")
+    system("echo \"\n(#{@passes}/#{@total} tests defined were invoked)\"")
 
     unless @failed.empty?
       system('echo')

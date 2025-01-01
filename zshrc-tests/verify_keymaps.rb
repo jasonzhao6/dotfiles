@@ -206,7 +206,7 @@ class VerifyKeymaps
   end
 
   def print_summary
-    system("echo \"\n(#{@passes}/#{@total} keymaps are in the correct files)\"")
+    system("echo \"\n(#{@passes}/#{@total} keymaps are up-to-date)\"")
 
     unless @failed.empty?
       system('echo')

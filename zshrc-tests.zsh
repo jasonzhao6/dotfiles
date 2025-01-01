@@ -79,7 +79,7 @@ if [[ -z $filter ]]; then
 
 	for test in $(find-tests); do verify-test-ordering ~/gh/dotfiles/zshrc.zsh $test; done
 
-	echo "\n($passes/$total functions match the test order)"
+	echo "\n($passes/$total functions matched the testing order)"
 	[[ $passes -ne $total ]] && echo $failed
 fi
 
@@ -90,5 +90,19 @@ fi
 [[ -z $filter ]] && { echo; ruby ~/gh/dotfiles/zshrc-tests/verify_keymaps.rb }
 
 #
-# Section 5: TODO double check that all things to be restored are restored
+# Section 5: Verify all env vars overwritten are getting restored
 #
+
+if [[ -z $filter ]]; then
+	init
+	echo
+
+	[[ $ARGS_HISTORY_MAX -eq 100 ]] && pass || fail "ARGS_HISTORY_MAX: expected '3', got '$ARGS_HISTORY_MAX'"
+	[[ $DD_CLEAR_TERMINAL -eq 1 ]] && pass || fail "DD_CLEAR_TERMINAL: expected '1', got '$DD_CLEAR_TERMINAL'"
+	[[ $DD_DUMP_DIR == "$HOME/.zshrc.terminal-dump.d" ]] && pass || fail "DD_DUMP_DIR: expected '$HOME/.zshrc.terminal-dump.d', got '$DD_DUMP_DIR'"
+	[[ $HISTFILE == "$HOME/.zsh_history" ]] && pass || fail "HISTFILE: expected '$HOME/.zsh_history', got '$HISTFILE'"
+	[[ $HOME == '/Users/yzhao' ]] && pass || fail "HOME: expected '/Users/yzhao', got '$HOME'"
+
+	echo "\n($passes/$total env vars were restored)"
+	[[ $passes -ne $total ]] && echo $failed
+fi

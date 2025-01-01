@@ -467,6 +467,7 @@ WORDCHARS+='|'
 
 ### Zsh [h]istory
 # config
+HISTFILE="$HOME/.zsh_history"
 HISTSIZE=10000
 SAVEHIST=10000
 setopt INC_APPEND_HISTORY
