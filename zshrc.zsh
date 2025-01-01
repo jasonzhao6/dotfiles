@@ -117,7 +117,7 @@ function save-args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-push-if-diff
 # - if next is `tail`, push `tail` forward
 # - to undo, only `cursor` moves, up to `tail`
 # - to redo, only `cursor` moves, up to `head`
-function args-init { ARGS_HISTORY_MAX=100; ARGS_HISTORY=(); ARGS_CURSOR=0; ARGS_HEAD=0; ARGS_TAIL=0 }; [[ -z $ARGS_HISTORY_MAX ]] && args-init;
+function args-init { ARGS_HISTORY_MAX=100; ARGS_HISTORY=(); ARGS_CURSOR=0; ARGS_HEAD=0; ARGS_TAIL=0 }; [[ -z $ARGS_HISTORY_MAX ]] && args-init
 function args-push { ARGS_CURSOR=$(args-increment $ARGS_CURSOR); ARGS_HISTORY[$ARGS_CURSOR]=$1; ARGS_HEAD=$ARGS_CURSOR; [[ $ARGS_CURSOR -eq $ARGS_TAIL ]] && ARGS_TAIL=$(args-increment $ARGS_TAIL); [[ $ARGS_TAIL -eq 0 ]] && ARGS_TAIL=1 }
 function args-undo { ARGS_PREV=$(args-decrement $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_TAIL ]] && ARGS_CURSOR=$ARGS_PREV || ARGS_UNDO_EXCEEDED=1 }
 function args-redo { ARGS_NEXT=$(args-increment $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_HEAD ]] && ARGS_CURSOR=$ARGS_NEXT || ARGS_REDO_EXCEEDED=1 }
@@ -366,9 +366,6 @@ function tf-pre {
 }
 
 ### Util
-# config # TODO move to dd-init {}
-DD_DUMP_DIR="$HOME/.zshrc.terminal-dump.d"
-DD_CLEAR_TERMINAL=1
 # singles (they save into `args`)
 function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args }
 function f { [[ -n $1 ]] && f-pre $@ | sort | save-args }
@@ -411,6 +408,7 @@ function f-pre {
 	[[ $@ == tf ]] && find ~+ -name main.tf | grep --invert-match '\.terraform' | sed "s|$HOME|~|g" | trim 0 8
 }
 # helpers for `dd`
+function dd-init { DD_DUMP_DIR="$HOME/.zshrc.terminal-dump.d"; DD_CLEAR_TERMINAL=1 }; dd-init
 function dd-is-terminal-output { [[ $(pbpaste | no-empty | strip | sed -n '$p') == \$* ]] }
 function dd-dump-file { echo "$DD_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt" }
 function dd-taint-pasteboard { $(echo "$(pbpaste)\n\n(Dumped to '$DD')" | pbcopy) }
