@@ -58,6 +58,7 @@ local pasteboard=$(pbpaste) # Save pasteboard value since some tests will overwr
 source ~/gh/dotfiles/zshrc.zsh
 for test in $(find-tests); do source $test; done
 
+args-init # Reset args history
 echo $pasteboard | pbcopy # Restore pasteboard value
 
 echo "\n($passes/$total tests passed)"
