@@ -53,13 +53,13 @@ function verify-test-ordering {
 #
 
 init
-local pasteboard=$(pbpaste) # Save pasteboard value since some tests will overwrite it
+local pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
 
 source ~/gh/dotfiles/zshrc.zsh
 for test in $(find-tests); do source $test; done
 
-args-init # Reset args history
-echo $pasteboard | pbcopy # Restore pasteboard value
+args-init # Reset args history since some tests overwrote it
+echo $pasteboard | pbcopy # Restore saved pasteboard value
 
 echo "\n($passes/$total tests passed)"
 [[ $passes -ne $total ]] && echo $failed $debug
@@ -98,11 +98,22 @@ if [[ -z $filter ]]; then
 	init
 	echo
 
-	[[ $ARGS_HISTORY_MAX -eq 100 ]] && pass || fail "ARGS_HISTORY_MAX: expected '3', got '$ARGS_HISTORY_MAX'"
-	[[ $DD_CLEAR_TERMINAL -eq 1 ]] && pass || fail "DD_CLEAR_TERMINAL: expected '1', got '$DD_CLEAR_TERMINAL'"
-	[[ $DD_DUMP_DIR == "$HOME/.zshrc.terminal-dump.d" ]] && pass || fail "DD_DUMP_DIR: expected '$HOME/.zshrc.terminal-dump.d', got '$DD_DUMP_DIR'"
-	[[ $HISTFILE == "$HOME/.zsh_history" ]] && pass || fail "HISTFILE: expected '$HOME/.zsh_history', got '$HISTFILE'"
-	[[ $HOME == '/Users/yzhao' ]] && pass || fail "HOME: expected '/Users/yzhao', got '$HOME'"
+	local expected=
+
+	expected=100
+	[[ $ARGS_HISTORY_MAX -eq $expected ]] && pass || fail "ARGS_HISTORY_MAX: expected '$expected', got '$ARGS_HISTORY_MAX'"
+
+	expected=1
+	[[ $DD_CLEAR_TERMINAL -eq $expected ]] && pass || fail "DD_CLEAR_TERMINAL: expected '$expected', got '$DD_CLEAR_TERMINAL'"
+
+	expected="$HOME/.zshrc.terminal-dump.d"
+	[[ $DD_DUMP_DIR == $expected ]] && pass || fail "DD_DUMP_DIR: expected '$expected', got '$DD_DUMP_DIR'"
+
+	expected="$HOME/.zsh_history"
+	[[ $HISTFILE == $expected ]] && pass || fail "HISTFILE: expected '$expected', got '$HISTFILE'"
+
+	expected='/Users/yzhao'
+	[[ $HOME == $expected ]] && pass || fail "HOME: expected '$expected', got '$HOME'"
 
 	echo "\n($passes/$total env vars were restored)"
 	[[ $passes -ne $total ]] && echo $failed
