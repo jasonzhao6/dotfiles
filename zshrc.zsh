@@ -68,7 +68,7 @@ function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
 # [u]ndo / [r]edo: row / column selections
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }
-# [c]opy / paste via clipboard
+# [c]opy / paste via pasteboard
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | strip | pbcopy }
 function v { pbpaste | save-args }
 # [y]ank / [p]ut across tabs
@@ -360,7 +360,8 @@ function tf-pre {
 
 ### Util
 # config
-TERMINAL_DUMP_DIR='.zshrc.terminal-dump.d'
+DD_DUMP_DIR="$HOME/.zshrc.terminal-dump.d"
+DD_CLEAR_TERMINAL=1
 # singles (they all `save-args`)
 function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args }
 function f { echo } # TODO find tf files and gh repos
@@ -370,10 +371,9 @@ function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.
 # doubles (they do not `save-args`)
 function bb { pmset sleepnow }
 function cc { eval $(prev-command) | no-color | ruby -e 'puts STDIN.read.strip' | pbcopy }
-# TODO test x3
-function dd { [[ $(pbpaste | no-empty | strip | sed -n '$p') == \$* ]] && { mkdir -p ~/$TERMINAL_DUMP_DIR; DD="$TERMINAL_DUMP_DIR/$(date +'%Y-%m-%d_%H.%M.%S').txt"; $(pbpaste > ~/${DD}); $(echo "$(pbpaste)\n\n(Dumped to '~/$DD')" | pbcopy); clear } || clear }
-function ddd { mkdir -p ~/$TERMINAL_DUMP_DIR; cd ~/$TERMINAL_DUMP_DIR }
-function ddc { rm -rf ~/$TERMINAL_DUMP_DIR }
+function dd { mkdir -p $DD_DUMP_DIR; dd-is-terminal-output && { DD=$(dd-dump-file); $(pbpaste > $DD); dd-taint-pasteboard; dd-clear-terminal } || dd-clear-terminal }
+function ddd { mkdir -p $DD_DUMP_DIR; cd $DD_DUMP_DIR }
+function ddc { rm -rf $DD_DUMP_DIR }
 function ee { for i in $(seq $1 $2); do echo ${${@:3}//~~/$i}; done }
 function eee { for i in $(seq $1 $2); do echo; echo-eval ${${@:3}//~~/$i}; done }
 function ff { caffeinate }
@@ -398,6 +398,11 @@ function index-of { awk -v str1="$(echo $1 | no-color)" -v str2="$(echo $2 | no-
 function next-ascii { printf "%b" $(printf "\\$(printf "%o" $(($(printf "%d" "'$@") + 1)))") }
 function paste-when-empty { echo ${@:-$(pbpaste)} }
 function prev-command { fc -ln -1 }
+# helpers (dd)
+function dd-is-terminal-output { [[ $(pbpaste | no-empty | strip | sed -n '$p') == \$* ]] }
+function dd-dump-file { echo "$DD_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt" }
+function dd-taint-pasteboard { $(echo "$(pbpaste)\n\n(Dumped to '$DD')" | pbcopy) }
+function dd-clear-terminal { [[ $DD_CLEAR_TERMINAL -eq 1 ]] && clear }
 # | (after strings)
 function hex { hexdump -C }
 function no-color { sed -E 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g' }

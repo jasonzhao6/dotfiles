@@ -53,12 +53,12 @@ function verify-test-ordering {
 #
 
 init
-local clipboard=$(pbpaste) # Save clipboard value since some tests will overwrite it
+local pasteboard=$(pbpaste) # Save pasteboard value since some tests will overwrite it
 
 source ~/gh/dotfiles/zshrc.zsh
 for test in $(find-tests); do source $test; done
 
-echo $clipboard | pbcopy # Restore clipboard value
+echo $pasteboard | pbcopy # Restore pasteboard value
 
 echo "\n($passes/$total tests passed)"
 [[ $passes -ne $total ]] && echo $failed $debug

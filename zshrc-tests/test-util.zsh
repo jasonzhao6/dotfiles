@@ -152,6 +152,114 @@ function test--dd {
 	# Skip: Not testing b/c requires network call
 }
 
+function test--dd {
+	assert "$(
+		local dd_terminal_dump_dir=$DD_DUMP_DIR
+		DD_DUMP_DIR="/tmp/test--dd"
+		DD_CLEAR_TERMINAL=0
+		rm -rf $DD_DUMP_DIR
+
+		echo '$' | pbcopy
+		dd
+		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
+		cat $DD_DUMP_DIR/*
+
+		DD_DUMP_DIR=$dd_terminal_dump_dir
+		DD_CLEAR_TERMINAL=1
+		rm -rf $DD_DUMP_DIR
+	)" "$(
+		cat <<-eof
+			1
+			$
+		eof
+	)"
+}; run-with-filter test--dd
+
+function test--dd--when-dumping-same-pasteboard-twice {
+	assert "$(
+		local dd_terminal_dump_dir=$DD_DUMP_DIR
+		DD_DUMP_DIR="/tmp/test--dd"
+		DD_CLEAR_TERMINAL=0
+		rm -rf $DD_DUMP_DIR
+
+		echo '$' | pbcopy
+		dd
+		dd
+		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
+		cat $DD_DUMP_DIR/*
+
+		DD_DUMP_DIR=$dd_terminal_dump_dir
+		DD_CLEAR_TERMINAL=1
+		rm -rf $DD_DUMP_DIR
+	)" "$(
+		cat <<-eof
+			1
+			$
+		eof
+	)"
+}; run-with-filter test--dd--when-dumping-same-pasteboard-twice
+
+function test--dd--when-dumping-two-different-pasteboards {
+	assert "$(
+		local dd_terminal_dump_dir=$DD_DUMP_DIR
+		DD_DUMP_DIR="/tmp/test--dd"
+		DD_CLEAR_TERMINAL=0
+		rm -rf $DD_DUMP_DIR
+
+		echo "pasteboard 1\n$" | pbcopy
+		dd
+		echo "pasteboard 2\n$" | pbcopy
+		dd
+		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
+		cat $DD_DUMP_DIR/*
+
+		DD_DUMP_DIR=$dd_terminal_dump_dir
+		DD_CLEAR_TERMINAL=1
+		rm -rf $DD_DUMP_DIR
+	)" "$(
+		cat <<-eof
+			2
+			pasteboard 1
+			$
+			pasteboard 2
+			$
+		eof
+	)"
+}; run-with-filter test--dd--when-dumping-two-different-pasteboards
+
+function test--dd--when-not-terminal-output {
+	assert "$(
+		local dd_terminal_dump_dir=$DD_DUMP_DIR
+		DD_DUMP_DIR="/tmp/test--dd"
+		DD_CLEAR_TERMINAL=0
+		rm -rf $DD_DUMP_DIR
+
+		echo 'not terminal output' | pbcopy
+		dd
+		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
+
+		DD_DUMP_DIR=$dd_terminal_dump_dir
+		DD_CLEAR_TERMINAL=1
+	)" '0'
+}; run-with-filter test--dd--when-not-terminal-output
+
+function test--ddd {
+	assert "$(ddd; pwd)" "$DD_DUMP_DIR"
+}; run-with-filter test--ddd
+
+function test--ddc {
+	assert "$(
+		local dd_terminal_dump_dir=$DD_DUMP_DIR
+		DD_DUMP_DIR="/tmp/test--dd"
+		mkdir -p $DD_DUMP_DIR
+
+		ddc
+		[[ -e $DD_DUMP_DIR ]] && echo present || echo absent
+
+		DD_DUMP_DIR=$dd_terminal_dump_dir
+	)" 'absent'
+}; run-with-filter test--ddc
+
 function test--ee {
 	assert "$(
 		ee 3 4 echo ~~
