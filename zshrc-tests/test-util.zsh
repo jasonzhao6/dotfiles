@@ -64,8 +64,9 @@ function test--l {
 		mkdir /tmp/test--l
 		cd /tmp/test--l
 		mkdir 1 2 3
+		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
-		touch .1.hidden .2.hidden .3.hidden
+		touch .2.hidden .3.hidden
 		l | no-color
 		rm -rf /tmp/test--l
 	)" "$(
@@ -86,8 +87,9 @@ function test--l--with-search-pattern-to-ignore {
 		mkdir /tmp/test--l--with-search-pattern-to-ignore
 		cd /tmp/test--l--with-search-pattern-to-ignore
 		mkdir 1 2 3
+		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
-		touch .1.hidden .2.hidden .3.hidden
+		touch .2.hidden .3.hidden
 		l *log | no-color
 		rm -rf /tmp/test--l--with-search-pattern-to-ignore
 	)" "$(
@@ -101,6 +103,46 @@ function test--l--with-search-pattern-to-ignore {
 		eof
 	)"
 }; run-with-filter test--l--with-search-pattern-to-ignore
+
+function test--ll {
+	assert "$(
+		rm -rf /tmp/test--ll
+		mkdir /tmp/test--ll
+		cd /tmp/test--ll
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		ll | no-color
+		rm -rf /tmp/test--ll
+	)" "$(
+		cat <<-eof
+		     1	.1.hidden
+		     2	.2.hidden
+		     3	.3.hidden
+		eof
+	)"
+}; run-with-filter test--ll
+
+function test--ll--with-search-pattern-to-ignore {
+	assert "$(
+		rm -rf /tmp/test--ll--with-search-pattern-to-ignore
+		mkdir /tmp/test--ll--with-search-pattern-to-ignore
+		cd /tmp/test--ll--with-search-pattern-to-ignore
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		ll *log | no-color
+		rm -rf /tmp/test--ll--with-search-pattern-to-ignore
+	)" "$(
+		cat <<-eof
+		     1	.1.hidden
+		     2	.2.hidden
+		     3	.3.hidden
+		eof
+	)"
+}; run-with-filter test--ll--with-search-pattern-to-ignore
 
 function test--bb {
 	# Skip: Not interesting to test
@@ -258,56 +300,6 @@ function test--hh {
 function test--ii {
 	# Skip: Not interesting to test
 }
-
-function test--ll {
-	assert "$(
-		rm -rf /tmp/test--ll
-		mkdir /tmp/test--ll
-		cd /tmp/test--ll
-		mkdir 1 2 3
-		touch 1.log 2.log 3.txt
-		touch .1.hidden .2.hidden .3.hidden
-		ll | no-color
-		rm -rf /tmp/test--ll
-	)" "$(
-		cat <<-eof
-		     1	.1.hidden
-		     2	.2.hidden
-		     3	.3.hidden
-		     4	1
-		     5	1.log
-		     6	2
-		     7	2.log
-		     8	3
-		     9	3.txt
-		eof
-	)"
-}; run-with-filter test--ll
-
-function test--ll--with-search-pattern-to-ignore {
-	assert "$(
-		rm -rf /tmp/test--ll--with-search-pattern-to-ignore
-		mkdir /tmp/test--ll--with-search-pattern-to-ignore
-		cd /tmp/test--ll--with-search-pattern-to-ignore
-		mkdir 1 2 3
-		touch 1.log 2.log 3.txt
-		touch .1.hidden .2.hidden .3.hidden
-		ll *log | no-color
-		rm -rf /tmp/test--ll--with-search-pattern-to-ignore
-	)" "$(
-		cat <<-eof
-		     1	.1.hidden
-		     2	.2.hidden
-		     3	.3.hidden
-		     4	1
-		     5	1.log
-		     6	2
-		     7	2.log
-		     8	3
-		     9	3.txt
-		eof
-	)"
-}; run-with-filter test--ll--with-search-pattern-to-ignore
 
 function test--mm {
 	# Skip: Not interesting to test
