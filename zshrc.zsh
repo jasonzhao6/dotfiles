@@ -32,7 +32,7 @@ function vv { pbpaste | ss }
 # show / filter [a]rgs
 function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | save-args } }
 # select [arg] by number
-function arg { [[ -n $1 && -n $2 ]] && { ARG="'$(args-plain | sed -n "$1p" | sed 's/ *#.*//')'"; [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
+function arg { [[ -n $1 && -n $2 ]] && { ARG="'$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)'"; [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
 function 1 { arg $0 $@ }
 function 2 { arg $0 $@ }
 function 3 { arg $0 $@ }
@@ -71,7 +71,7 @@ function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
 # strip all leading / trailing spaces
 function z { args | strip | save-args }
 # [c]opy into pasteboard
-function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | strip | pbcopy }
+function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
 # [u]ndo / [r]edo changes
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }

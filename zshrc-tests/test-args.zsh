@@ -191,6 +191,18 @@ function test--arg {
 	)"
 }; run-with-filter test--arg
 
+function test--arg--with-whitespace {
+	assert "$(
+		echo $input_with_whitespace | save-args > /dev/null
+		arg 3 echo 2>&1
+	)" "$(
+		cat <<-eof
+			echo 'terraform-application-region-shared-3'
+			terraform-application-region-shared-3
+		eof
+	)"
+}; run-with-filter test--arg--with-whitespace
+
 function test--arg--with-substitution {
 	assert "$(
 		echo $input | save-args > /dev/null
@@ -685,10 +697,6 @@ function test--c--with-one-arg {
 function test--c--with-two-args {
 	assert "$(c '123 321'; pbpaste)" '123 321'
 }; run-with-filter test--c--with-two-args
-
-function test--c--with-spaces {
-	assert "$(c '     123 321     '; pbpaste)" '123 321'
-}; run-with-filter test--c--with-spaces
 
 function test--u {
 	assert "$(
