@@ -82,6 +82,38 @@ function test--ss {
 	)"
 }; run-with-filter test--ss
 
+function test--v {
+	assert "$(
+		echo $input_with_headers | pbcopy
+		v
+	)" "$(
+		cat <<-eof
+		     1	MANIFEST                                # COMMENT
+		     2	terraform-application-region-shared-1   # hello world
+		     3	terraform-application-region-shared-2   # foo bar
+		     4	terraform-application-region-shared-3   # sup
+		     5	terraform-application-region-program-A  # how are you
+		     6	terraform-application-region-program-B  # select via headers for this one
+		eof
+	)"
+}; run-with-filter test--v
+
+function test--vv {
+	assert "$(
+		echo $input_with_headers | pbcopy
+		vv
+	)" "$(
+		cat <<-eof
+		     1	MANIFEST                                COMMENT
+		     2	terraform-application-region-shared-1   hello world
+		     3	terraform-application-region-shared-2   foo bar
+		     4	terraform-application-region-shared-3   sup
+		     5	terraform-application-region-program-A  how are you
+		     6	terraform-application-region-program-B  select via headers for this one
+		eof
+	)"
+}; run-with-filter test--vv
+
 function test--a {
 	assert "$(
 		echo $input | save-args > /dev/null
@@ -875,21 +907,6 @@ function test--c--with-two-args {
 function test--c--with-spaces {
 	assert "$(c '     123 321     '; pbpaste)" '123 321'
 }; run-with-filter test--c--with-spaces
-
-function test--v {
-	assert "$(
-		echo $input | pbcopy
-		v
-	)" "$(
-		cat <<-eof
-		     1	terraform-application-region-shared-1
-		     2	terraform-application-region-shared-2
-		     3	terraform-application-region-shared-3
-		     4	terraform-application-region-program-A
-		     5	terraform-application-region-program-B
-		eof
-	)"
-}; run-with-filter test--v
 
 function test--y {
 	assert "$(

@@ -3,12 +3,12 @@
 export GREP_COLOR='1;32'
 export LSCOLORS='gxcxbxexfxegedabagaced'
 export JQ_COLORS='1;35:1;35:1;35:1;35:1;32:1;33:1;33:1;36' # v1.7+
-# helpers (foreground)
+# foreground setter
 function grep-highlighting { echo "\e[1;32m\e[K$@\e[m\e[K" }
-# helpers (background)
+# background setters
 function red-bg { echo "\e[41m$@\e[0m" }
 function green-bg { echo "\e[42m$@\e[0m" }
-# helpers (commands)
+# change modes
 function bw { # black & white
     unalias diff
     unalias egrep
@@ -23,9 +23,12 @@ function color {
 }; color # set color aliases ahead of function definitions, so they can expand
 
 ### [Args]
-# [s]ave args
+# [s]ave to args: 1) `command; s`, 2) `command | s`
 function s { ss 'insert `#` after the first column to soft-select it' }
 function ss { [[ -t 0 ]] && { eval $(prev-command) | save-args $@ } || save-args $@ }
+# paste to args
+function v { pbpaste | s }
+function vv { pbpaste | ss }
 # show / filter [a]rgs
 function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | save-args } }
 # select [arg] by number
@@ -68,9 +71,8 @@ function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
 # [u]ndo / [r]edo: row / column selections
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }
-# [c]opy / paste via pasteboard
+# [c]opy to pasteboard
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | strip | pbcopy }
-function v { pbpaste | save-args }
 # [y]ank / [p]ut across tabs
 function y { args > ~/.zshrc.args }
 function p { echo "$(<~/.zshrc.args)" | save-args }
@@ -563,4 +565,4 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # (1)  2   3   4   5  |  6   7   8   9   0        /   yy:pp  ff|bb  cc:%+v  rr:aa|nn|rr  ll:aa
 #             [p] [y] | [f] [g] [c] (r) [l]    <--    (aa #?):aa|nn|rr  ((nn|nnn) .?)|a:aa|rr  ss|vv:aa|nn
 # (a) [o] [e] [u] [i] | [d] [h] [t] (n) (s)    <--    oo|ii|mm  (ee # # * ~~):eee  uu|hh  dd:aa
-#     {q} {j} [k] [x] | [b] [m] {w}  v  [z]    <--    qq|q2:q  jj:j|aa  kk:aa|nn  xx:%+v  ww:w|aa  zz|zt
+#     {q} {j} [k] [x] | [b] [m] {w} (v) [z]    <--    qq|q2:q  jj:j|aa  kk:aa|nn  xx:%+v  ww:w|aa  zz|zt
