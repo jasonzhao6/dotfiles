@@ -305,6 +305,10 @@ function org { git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*/\1/' }
 function repo { git rev-parse --show-toplevel | xargs basename }
 function branch { git rev-parse --abbrev-ref HEAD }
 
+### Lis[t] # TODO wip
+function t { [[ -z $1 ]] && echo 'to # no args' | save-args || echo-eval "$@[-1] $@[1,-2]" }
+function to { for k v in ${(kv)T_OPAL}; do echo $v $k; done | sort -k2,2 | column -t | s }
+
 ### [K]ubectl
 # TODO move to eof once stable
 ### Kubectl keymap
@@ -389,7 +393,7 @@ function tf-pre {
 
 ### Util
 # singles (they save into `args`)
-function d { [[ -n $1 ]] && { D=${${${@}#*://}%%/*}; [[ -z $D_UNDER_TEST ]] && dig +short $D | save-args || echo "test output for\n$D" | ss } }
+function d { [[ -n $1 ]] && { D=${${${@}#*://}%%/*}; [[ -z $D_UNDER_TEST ]] && dig +short $D | save-args || echo "test output for\n$D" | save-args } }
 function f { [[ -n $1 ]] && f-pre $@ | sort | save-args }
 function i { which $@ | save-args }
 function l { ls -l | awk '{print $9}' | save-args } # Not taking search pattern b/c folder matches break column alignment
@@ -583,7 +587,7 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # {} means defined in secrets file
 # (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)
 #             (p) (y) | [f] [g] (c) (r) [l]   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   (n|nn),_?::#
-# (a) {o} (e) (u) [i] | [d] [h]  t  (n) (s)   <--   #|aa|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
+# (a) {o} (e) (u) [i] | [d] [h] [t] (n) (s)   <--   #|aa|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
 #     {q} {j} [k]  x  |  b   m  {w} (v) (z)   <--   u|r::~?   y::p   d|(f,(gh|tf))|h|(i,*)|kk|l|ll::a
 
 ### Doubles keymap
