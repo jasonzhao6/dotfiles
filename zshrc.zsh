@@ -85,6 +85,9 @@ function p { echo "$(<~/.zshrc.args)" | save-args }
 # [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }
+# list / select historical args by [i]ndex # TODO test
+# (e.g `i` to list history, `i 8` to select the args at index 8)
+function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args-history || { ARGS_CURSOR=$1; a } }
 # helpers
 function args { echo $ARGS_HISTORY[$ARGS_CURSOR] }
 function args-plain { args | no-color | expand }
@@ -124,7 +127,6 @@ function args-redo-bar { [[ $ARGS_REDO_EXCEEDED -eq 1 ]] && { ARGS_REDO_EXCEEDED
 function args-replace { ARGS_HISTORY[$ARGS_CURSOR]=$1 }
 function args-increment { echo $(($1 % ARGS_HISTORY_MAX + 1)) }
 function args-decrement { ARGS_DECREMENT=$(($ARGS_CURSOR - 1)); [[ $ARGS_DECREMENT -eq 0 ]] && ARGS_DECREMENT=$ARGS_HISTORY_MAX; echo $ARGS_DECREMENT }
-# debug
 function args-history {
 	echo "cursor: $ARGS_CURSOR"
 	echo "head: $ARGS_HEAD"
@@ -587,8 +589,8 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # {} means defined in secrets file
 # (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)
 #             (p) (y) | [f] [g] (c) (r) [l]   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   (n|nn),_?::#
-# (a) {o} (e) (u)  i  | [d] [h] [t] (n) (s)   <--   #|aa|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
-#     {q} {j} [k]  x  |  b   m  [w] (v) (z)   <--   u|r::~?   y::p   d|(f,(gh|tf))|h|(w,*)|kk|l|ll::a
+# (a) {o} (e) (u) (i) | [d] [h] [t] (n) (s)   <--   #|aa|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
+#     {q} {j} [k]  x  |  b   m  [w] (v) (z)   <--   y::p   u|r::~?   i::i,#   d|f|h|w|kk|l|ll::a
 
 ### Doubles keymap
 # () means defined for `args`
