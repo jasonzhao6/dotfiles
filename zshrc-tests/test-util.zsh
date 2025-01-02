@@ -1,12 +1,3 @@
-dig_input='dns.google'
-
-dig_output=$(
-	cat <<-eof
-		8.8.4.4
-		8.8.8.8
-	eof
-)
-
 ls_dash_l=$(
 	cat <<-eof
 		drwxr-xr-x  9 yzhao  staff    288 Dec 29 21:58 al-archive
@@ -22,36 +13,34 @@ ls_dash_l=$(
 )
 
 function test--d {
-	has-internet || {assert 1 1; return}
-
-	assert "$(
-		d $dig_input > /dev/null
-		args | sort
-	)" "$dig_output"
+	assert "$(D_UNDER_TEST=1 d www.google.com)" "$(
+		cat <<-eof
+		     1	test output for
+		     2	www.google.com
+		eof
+	)"
 }; run-with-filter test--d
 
 function test--d--without-input {
-	has-internet || {assert 1 1; return}
-
-	assert "$(d)" ''
+	assert "$(D_UNDER_TEST=1 d)" ''
 }; run-with-filter test--d--without-input
 
 function test--d--with-protocol {
-	has-internet || {assert 1 1; return}
-
-	assert "$(
-		d https://$dig_input > /dev/null
-		args | sort
-	)" "$dig_output"
+	assert "$(D_UNDER_TEST=1 d https://www.google.com)" "$(
+		cat <<-eof
+		     1	test output for
+		     2	www.google.com
+		eof
+	)"
 }; run-with-filter test--d--with-protocol
 
 function test--d--with-protocol-and-path {
-	has-internet || {assert 1 1; return}
-
-	assert "$(
-		d https://$dig_input/path/to/file > /dev/null
-		args | sort
-	)" "$dig_output"
+	assert "$(D_UNDER_TEST=1 d https://www.google.com/path/to/page)" "$(
+		cat <<-eof
+		     1	test output for
+		     2	www.google.com
+		eof
+	)"
 }; run-with-filter test--d--with-protocol-and-path
 
 function test--f--for-gh {

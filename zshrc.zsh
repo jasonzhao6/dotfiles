@@ -367,7 +367,7 @@ function tf-pre {
 
 ### Util
 # singles (they save into `args`)
-function d { [[ -n $1 ]] && dig +short ${${${@}#*://}%%/*} | save-args }
+function d { [[ -n $1 ]] && { D=${${${@}#*://}%%/*}; [[ -z $D_UNDER_TEST ]] && dig +short $D | save-args || echo "test output for\n$D" | ss } }
 function f { [[ -n $1 ]] && f-pre $@ | sort | save-args }
 function i { which $@ | save-args }
 function l { ls -l | awk '{print $9}' | save-args } # Not taking search pattern b/c folder matches break column alignment
