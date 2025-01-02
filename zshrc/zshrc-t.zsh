@@ -15,14 +15,22 @@ function t {
 			  t <type prefix> <arguments>?
 
 			Types:
+			  $([[ -n $T_UNDER_TEST ]] && echo -n 't test <arg1> <arg2>')
 
 			  # t asg <asg name prefix>
 			  # t ec2 <ec2 name prefix>
 			  t opal
 		eof
 	else
+		[[ 'test' == $type_prefix* ]] && t-test "${@:2}"
+
 		[[ 'opal' == $type_prefix* ]] && t-opal
 	fi
+}
+
+function t-test {
+	echo "arg1: $1"
+	echo "arg2: $2"
 }
 
 function t-opal {

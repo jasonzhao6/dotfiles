@@ -1,6 +1,6 @@
-function test--grep-highlighting {
-	assert "$(echo 'hello world' | grep ello)" "h$(grep-highlighting ello) world"
-}; run-with-filter test--grep-highlighting
+function test--grep-color {
+	assert "$(echo 'hello world' | grep ello)" "h$(grep-color ello) world"
+}; run-with-filter test--grep-color
 
 function test--bw--for-diff {
 	assert "$(bw; which diff)" '/usr/bin/diff'

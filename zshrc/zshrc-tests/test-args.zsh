@@ -134,9 +134,9 @@ function test--a--adds-color {
 		a shared
 	)" "$(
 		cat <<-eof
-		     1	terraform-application-region-$(grep-highlighting shared)-1
-		     2	terraform-application-region-$(grep-highlighting shared)-2
-		     3	terraform-application-region-$(grep-highlighting shared)-3
+		     1	terraform-application-region-$(grep-color shared)-1
+		     2	terraform-application-region-$(grep-color shared)-2
+		     3	terraform-application-region-$(grep-color shared)-3
 		eof
 	)"
 }; run-with-filter test--a--adds-color
@@ -148,9 +148,9 @@ function test--a--replaces-color {
 		a region
 	)" "$(
 		cat <<-eof
-		     1	terraform-application-$(grep-highlighting region)-shared-1
-		     2	terraform-application-$(grep-highlighting region)-shared-2
-		     3	terraform-application-$(grep-highlighting region)-shared-3
+		     1	terraform-application-$(grep-color region)-shared-1
+		     2	terraform-application-$(grep-color region)-shared-2
+		     3	terraform-application-$(grep-color region)-shared-3
 		eof
 	)"
 }; run-with-filter test--a--replaces-color
@@ -161,7 +161,7 @@ function test--a--with-two-args-out-of-order {
 		a 2 shared
 	)" "$(
 		cat <<-eof
-		     1	terraform-application-region-$(grep-highlighting shared)-$(grep-highlighting 2)
+		     1	terraform-application-region-$(grep-color shared)-$(grep-color 2)
 		eof
 	)"
 }; run-with-filter test--a--with-two-args-out-of-order
@@ -172,8 +172,8 @@ function test--a--with-two-args-including-negation {
 		a -2 shared
 	)" "$(
 		cat <<-eof
-		     1	terraform-application-region-$(grep-highlighting shared)-1
-		     2	terraform-application-region-$(grep-highlighting shared)-3
+		     1	terraform-application-region-$(grep-color shared)-1
+		     2	terraform-application-region-$(grep-color shared)-3
 		eof
 	)"
 }; run-with-filter test--a--with-two-args-including-negation
@@ -856,8 +856,8 @@ function test--u--when-undoing-then-redoing-with-color {
 		r
 	)" "$(
 		cat <<-eof
-		     1	terraform-application-region-$(grep-highlighting program)-A
-		     2	terraform-application-region-$(grep-highlighting program)-B
+		     1	terraform-application-region-$(grep-color program)-A
+		     2	terraform-application-region-$(grep-color program)-B
 		eof
 	)"
 }; run-with-filter test--u--when-undoing-then-redoing-with-color
@@ -873,11 +873,11 @@ function test--u--when-undoing-then-redoing-then-undoing-again-with-color {
 		u
 	)" "$(
 		cat <<-eof
-		     1	terraform-$(grep-highlighting application)-region-shared-1
-		     2	terraform-$(grep-highlighting application)-region-shared-2
-		     3	terraform-$(grep-highlighting application)-region-shared-3
-		     4	terraform-$(grep-highlighting application)-region-program-A
-		     5	terraform-$(grep-highlighting application)-region-program-B
+		     1	terraform-$(grep-color application)-region-shared-1
+		     2	terraform-$(grep-color application)-region-shared-2
+		     3	terraform-$(grep-color application)-region-shared-3
+		     4	terraform-$(grep-color application)-region-program-A
+		     5	terraform-$(grep-color application)-region-program-B
 		eof
 	)"
 }; run-with-filter test--u--when-undoing-then-redoing-then-undoing-again-with-color

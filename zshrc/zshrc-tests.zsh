@@ -30,7 +30,14 @@ echo $pasteboard | pbcopy # Restore saved pasteboard value
 if [[ -z $filter ]]; then
 	echo
 	init
-	for test in $(find-tests); do verify-testing-order $ZSHRC_DIR/zshrc.zsh $test; done
+	for test in $(find-tests); do
+		# TODO temp conditional
+		if [[ $test =~ 'zsh-t' ]]; then
+			verify-testing-order $ZSHRC_DIR/zshrc-t.zsh $test
+		else
+			verify-testing-order $ZSHRC_DIR/zshrc.zsh $test
+		fi
+	done
 	print-summary 'tests matched the testing order'
 fi
 

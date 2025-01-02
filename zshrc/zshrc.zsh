@@ -6,7 +6,7 @@ export GREP_COLOR='1;32'
 export LSCOLORS='gxcxbxexfxegedabagaced'
 export JQ_COLORS='1;35:1;35:1;35:1;35:1;32:1;33:1;33:1;36' # v1.7+
 # set foreground
-function grep-highlighting { echo "\e[1;32m\e[K$@\e[m\e[K" }
+function grep-color { echo "\e[1;32m\e[K$@\e[m\e[K" }
 # set background
 function red-bg { echo "\e[41m$@\e[0m" }
 function green-bg { echo "\e[42m$@\e[0m" }
@@ -35,7 +35,7 @@ function v { pbpaste | s }
 function vv { pbpaste | ss }
 # list / filter [a]rgs
 # (e.g `a` to list all, `a foo and bar -not -baz` to filter)
-function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | ss } }
+function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTERS | $ARGS_COLOR" | ss } }
 # select a random arg
 # (e.g `aa echo`)
 function aa { arg $((RANDOM % $(args-list-size) + 1)) $@ }
@@ -97,7 +97,7 @@ function args-list-size { args | wc -l | awk '{print $1}' }
 function args-columns { ARGS_COLUMNS=''; ARGS_COL_CURR=a; ARGS_SKIP_NL=1; args-pick-header! $@; for i in $(seq 1 ${#ARG}); do args-label-column! $i; done; echo $ARGS_COLUMNS }
 function args-columns-bar { green-bg "$(args-columns $1)" }
 # helpers! (`!` means the function sets env vars to be consumed by its caller)
-function args-build-greps! { ARGS_FILTER="grep ${*// / | grep }"; ARGS_FILTER=${ARGS_FILTER// -/ --invert-match }; ARGS_FILTER=${ARGS_FILTER//grep/grep --color=never --ignore-case}; ARGS_HIGHLIGHT="egrep --color=always --ignore-case '${${@:#-*}// /|}'" }
+function args-build-greps! { ARGS_FILTERS="grep ${*// / | grep }"; ARGS_FILTERS=${ARGS_FILTERS// -/ --invert-match }; ARGS_FILTERS=${ARGS_FILTERS//grep/grep --color=never --ignore-case}; ARGS_COLOR="egrep --color=always --ignore-case '${${@:#-*}// /|}'" }
 function args-pick-header! { [[ -z ${1:-$ARGS_USE_BOTTOM_ROW} || ${1:-$ARGS_USE_BOTTOM_ROW} -eq 1 ]] && ARG=$(args-list-plain | tail -1) || ARG=$(args-list-plain | head -1) }
 function args-label-column! { [[ $ARG[$1-1] == ' ' && $ARG[$1] != ' ' ]] && { [[ $ARGS_SKIP_NL -eq 1 ]] && { ARGS_SKIP_NL=0; ARGS_COLUMNS+=' ' } || { ARGS_COLUMNS+=$ARGS_COL_CURR; ARGS_COL_CURR=$(next-ascii $ARGS_COL_CURR) } } || ARGS_COLUMNS+=' ' }
 function args-mark-references! { ARGS_USE_BOTTOM_ROW=$2; ARGS_COLUMNS=$(args-columns $2); ARGS_COL_FIRST=$(index-of $ARGS_COLUMNS a); ARGS_COL_TARGET=$(index-of $ARGS_COLUMNS $1); ARGS_COL_NEXT=$(index-of $ARGS_COLUMNS $(next-ascii $1)) }
