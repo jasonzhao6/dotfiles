@@ -8,8 +8,8 @@ function grep-highlighting { echo "\e[1;32m\e[K$@\e[m\e[K" }
 # set background
 function red-bg { echo "\e[41m$@\e[0m" }
 function green-bg { echo "\e[42m$@\e[0m" }
-# switch [b]lack-[w]hite vs [color] modes
-function bw {
+# switch modes
+function bw { # black and white
     unalias diff
     unalias egrep
     unalias grep
@@ -20,22 +20,22 @@ function color {
     alias egrep='egrep --color=always'
     alias grep='grep --color=always'
     alias ls='ls --color=always'
-}; color # enable aliases ahead of more function definitions, so that aliases can expand
+}; color # enable these aliases ahead of function definitions, so that they will expand
 
 ### [Args]
 # [s]ave into args history
-# e.g: `<command>; s` and `<command> | s` both work
+# (e.g `seq 100 105; s`, or alternatively `seq 100 105 | s`)
 function s { ss 'insert `#` after the first column to soft-select it' }
 function ss { [[ -t 0 ]] && eval $(prev-command) | save-args $@ || save-args $@ }
 # paste into args history
-# e.g: copy list to pasteboard, then `v`
+# (e.g copy a list to pasteboard, then `v`)
 function v { pbpaste | s }
 function vv { pbpaste | ss }
 # list / filter [a]rgs
-# e.g: `a` to list all, `a foo and bar -not -baz` to filter
+# (e.g `a` to list all, `a foo and bar -not -baz` to filter)
 function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | save-args } }
 # use an [arg] by number
-# e.g: `arg <number> echo`, or more explicitly `arg <number> echo ~~`
+# (e.g `arg <number> echo`, or with explicit positioning `arg <number> echo ~~`)
 function arg { [[ -n $1 && -n $2 ]] && { ARG="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"; [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
 function 1 { arg $0 $@ }
 function 2 { arg $0 $@ }
@@ -59,27 +59,27 @@ function 19 { arg $0 $@ }
 function 20 { arg $0 $@ }
 function 0 { arg $ $@ } # last arg
 # use a [r]andom arg
-# e.g: `rr echo` # TODO collapse for easier scanning
+# (e.g `rr echo`)
 function rr { arg $((RANDOM % $(args-list-size) + 1)) $@ }
 # use args within a rang[e]
-# e.g: `e 2 5 echo`, or more explicitly `e 2 5 echo ~~`
+# (e.g `e 2 5 echo`, or with explicit positioning `e 2 5 echo ~~ and ~~ again`)
 function e { for i in $(seq $1 $2); do echo; arg $i ${${@:3}}; done }
 # use all args via an iterator
-# e.g: `each echo`, `all echo`, `map echo '$((~~ * 2))'`
+# (e.g `each echo`, `all echo`, `map echo '$((~~ * 2))'`)
 function each { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@; done }
 function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@ &; done; wait }
 function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | save-args }
 # list / select a colum[n] by letter
-# e.g `n` to list all, `n d` to select the fourth column based on the bottom row
+# (e.g `n` to list all, `n d` to select the fourth column based on the bottom row)
 function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-columns-bar $N } || { args-mark-references! $1 $N; args-select-column!; [[ $ARGS_PUSHED -eq 0 && $(index-of "$(args-columns $N)" b) -ne 0 ]] && args-columns-bar $N }; return 0 }
-# list / select a colum[n] by letter, based on the top row instead of the bottom row
+# (`nn` is like `n`, but based on the top row instead of bottom row)
 function nn { NN=1 n $@ }
 # select the first column
 function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
 # strip leading / trailing spaces from all args
 function z { args | strip | save-args }
 # [c]opy into pasteboard
-# e.g `c` to copy all args, `11 c` to copy the eleventh arg
+# (e.g `c` to copy all args, `11 c` to copy only the eleventh arg)
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
 # [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
@@ -167,14 +167,14 @@ function oec2 { oecc $@ }
 function oecc { open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$(ec2-id $@)" }
 function oasg { open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$@" }
 # use [ssm] to ssh into ec2 by instance id, private ip, or name tag
-function ssm { # e.g `ssm <instance-id>`, or `0 ssm` to use the last entry from `args`
+function ssm { # (e.g `ssm <instance-id>`, or `0 ssm` to use the last entry from `args`)
     aws ssm start-session \
         --document-name 'AWS-StartInteractiveCommand' \
         --parameters '{"command": ["sudo -i"]}' \
         --target $(ec2-id $@)
 }
 function ssm_ { aws ssm start-session --target $(ec2-id $@) }
-function ssm-cmd { # e.g `ssm-run date <instance-id>`, or `all ssm-run date` to use all `args`
+function ssm-cmd { # (e.g `ssm-run date <instance-id>`, or `each ssm-run date` to iterate through `args`)
     aws ssm start-session \
         --document-name 'AWS-StartNonInteractiveCommand' \
         --parameters "{\"command\": [\"${(j: :)@[1,-2]}\"]}" \
@@ -270,7 +270,7 @@ function gu { git reset --soft HEAD~$@ }
 function gz { git add --all; git reset --hard; gi }
 function guz { gu $@; gz }
 # g[r]ep
-# e.g `gr` to list all, `gr foo and bar` to filter
+# (e.g `gr` to list all, `gr foo and bar` to filter)
 function gr { GR_GREPS="--grep='${*// /' --grep='}'"; eval "git log ${1:+--all} $GR_FIRST_PARENT $GR_GREPS --all-match --extended-regexp --regexp-ignore-case --pretty=format:\"%C(yellow)%h %C(magenta)%as %C(green)'%s' %C(cyan)%an\"" }
 function grr { GR_FIRST_PARENT=--first-parent gr $@ }
 # helper for `gb`
@@ -349,7 +349,7 @@ function tfiu { terraform init -upgrade }
 function tfir { terraform init -reconfigure }
 function tfim { terraform init -migrate-state }
 # post `tfi`
-# e.g `tfp` to plan, `tfp iu` to init upgrade then plan
+# (e.g `tfp` to plan, `tfp iu` to init upgrade then plan)
 function tfp { tf-pre $@ && terraform plan -out=tfplan }
 function tfl { tf-pre $@ && terraform state list | sed "s/.*/'&'/" | save-args }
 function tfo { tf-pre $@ && terraform output }
@@ -504,7 +504,7 @@ SAVEHIST=10000
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 # list / filter
-# e.g `h` to list all, `h foo` to filter
+# (e.g `h` to list all, `h foo` to filter)
 function h { egrep --ignore-case "$*" $HISTFILE | trim 15 | sort --unique | save-args }
 # [c]lear
 function hc { rm $HISTFILE }
