@@ -79,12 +79,12 @@ function z { args | strip | save-args }
 # [c]opy into pasteboard
 # (e.g `c` to copy all args, `11 c` to copy only the eleventh arg)
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
-# [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
-function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
-function r { args-redo; args-list; args-redo-bar }
 # [y]ank / [p]ut current args into a different tab
 function y { args > ~/.zshrc.args }
 function p { echo "$(<~/.zshrc.args)" | save-args }
+# [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
+function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
+function r { args-redo; args-list; args-redo-bar }
 # helpers
 function args { echo $ARGS_HISTORY[$ARGS_CURSOR] }
 function args-plain { args | no-color | expand }

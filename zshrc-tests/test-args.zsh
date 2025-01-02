@@ -666,6 +666,28 @@ function test--c--with-two-args {
 	assert "$(c '123 321'; pbpaste)" '123 321'
 }; run-with-filter test--c--with-two-args
 
+function test--y {
+	assert "$(
+		echo $input | save-args > /dev/null
+		rm -f ~/.zshrc.args
+		y
+		cat ~/.zshrc.args
+	)" "$input"
+}; run-with-filter test--y
+
+function test--p {
+	assert "$(
+		seq 3 > ~/.zshrc.args
+		p
+	)" "$(
+		cat <<-eof
+		     1	1
+		     2	2
+		     3	3
+		eof
+	)"
+}; run-with-filter test--p
+
 function test--u {
 	assert "$(
 		echo $input | save-args > /dev/null
@@ -897,28 +919,6 @@ function test--r--when-redoing-beyond-new-head {
 		eof
 	)"
 }; run-with-filter test--r--when-redoing-beyond-new-head
-
-function test--y {
-	assert "$(
-		echo $input | save-args > /dev/null
-		rm -f ~/.zshrc.args
-		y
-		cat ~/.zshrc.args
-	)" "$input"
-}; run-with-filter test--y
-
-function test--p {
-	assert "$(
-		seq 3 > ~/.zshrc.args
-		p
-	)" "$(
-		cat <<-eof
-		     1	1
-		     2	2
-		     3	3
-		eof
-	)"
-}; run-with-filter test--p
 
 function test--save-args {
 	assert "$(echo $input | save-args)" "$(
