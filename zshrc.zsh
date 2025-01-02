@@ -126,8 +126,29 @@ function args-redo-bar { [[ $ARGS_REDO_EXCEEDED -eq 1 ]] && { ARGS_REDO_EXCEEDED
 function args-replace { ARGS_HISTORY[$ARGS_CURSOR]=$1 }
 function args-increment { echo $(($1 % ARGS_HISTORY_MAX + 1)) }
 function args-decrement { ARGS_DECREMENT=$(($ARGS_CURSOR - 1)); [[ $ARGS_DECREMENT -eq 0 ]] && ARGS_DECREMENT=$ARGS_HISTORY_MAX; echo $ARGS_DECREMENT }
-# debug # TODO add labels
-function args-history { echo $ARGS_HISTORY; echo -n $ARGS_CURSOR; echo -n $ARGS_HEAD; echo $ARGS_TAIL }
+# debug
+function args-history {
+	echo "cursor: $ARGS_CURSOR"
+	echo "head: $ARGS_HEAD"
+	echo "tail: $ARGS_TAIL"
+	echo "max: $ARGS_HISTORY_MAX"
+
+	local index=$ARGS_HEAD
+
+	# Print from head to tail, inclusive
+	while true; do
+		echo
+		echo '----------------------------------------'
+		echo "Index $index"
+		echo '----------------------------------------'
+		echo ${ARGS_HISTORY[index]}
+
+		[[ $index -eq $ARGS_TAIL ]] && break
+
+		# Decrement index accounting for wrap-around and 1-based indexing
+		index=$(((index - 2 + $ARGS_HISTORY_MAX) % $ARGS_HISTORY_MAX + 1))
+	done
+}
 
 ### AWS
 # select region
