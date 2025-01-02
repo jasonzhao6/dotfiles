@@ -241,15 +241,15 @@ function gbd { git branch --delete --force $@; git push origin --delete $@; gb }
 function g { git checkout $@ }
 function gg { git checkout main || git checkout master; git pull; git status }
 function gn { gg; git checkout -b $@ }
-# g[i]t status / [d]iff
-function gi { git status }
+# git [d]iff / status
 function gd { git diff }
+function gq { git status }
 # commit
 function ge { git commit --allow-empty -m 're-run: Empty commit to trigger build' }
 function gm { git add --all; git commit --amend --no-edit }
 function gw { git add --all; git commit --amend }
 function gv { git add --all; git commit }
-function gy { git cherry-pick $@ }
+function gi { git cherry-pick $@ }
 # [p]ush / [P]ull
 function gp { git push }
 function gf { git push --force }
@@ -567,9 +567,9 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # [] means defined in this file
 # <> means already taken, e.g `go`
 # [1]  2   3   4   5  |  6   7   8   9  [0]   <--   g1|g0   gt|gtv|gta|gtr   gb::#,(g|gbb|gbd)   gg|(gn,*)
-#             [p] [y] | [f] [g] [c] [r] [l]   <--   gi|gd   ge|gm|gw|gv|gy   gp|gf|gP   gs,*?::(ga,#?)|gl|gc
+#             [p]  y  | [f] [g] [c] [r] [l]   <--   gd|gq   ge|gm|gw|gv|gi   gp|gf|gP   gs,*?::(ga,#?)|gl|gc
 # [a] <o> [e] [u] [i] | [d] <h> [t] [n] [s]   <--   gx,*::gxx,(u|m|#)?::(gxa|gxc)?   (gu|gz|guz),#?
-#      q   j   k  [x] | [b] [m] [w] [v] [z]   <--   (gr|gr-),*?::s::#,sha
+#     [q]  j   k  [x] | [b] [m] [w] [v] [z]   <--   (gr|gr-),*?::s::#,sha
 
 ### Terraform keymap
 # [] means defined in this file
