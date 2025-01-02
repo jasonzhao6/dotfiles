@@ -309,10 +309,10 @@ function repo { git rev-parse --show-toplevel | xargs basename }
 function branch { git rev-parse --abbrev-ref HEAD }
 
 ### Lis[t]
-source "$DOTFILES_DIR/zshrc-t.zsh"
+source "$DOTFILES_DIR/zshrc/zshrc-t.zsh"
 
 ### [O]pen
-source "$DOTFILES_DIR/zshrc-o.zsh"
+source "$DOTFILES_DIR/zshrc/zshrc-o.zsh"
 
 ### [K]ubectl
 # TODO move to eof once stable
