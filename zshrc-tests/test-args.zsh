@@ -627,21 +627,6 @@ function test--nn--with-one-column {
 	)"
 }; run-with-filter test--nn--with-one-column
 
-function test--z {
-	assert "$(
-		echo $input_with_whitespace | save-args > /dev/null
-		z
-	)" "$(
-		cat <<-eof
-		     1	terraform-application-region-shared-1
-		     2	terraform-application-region-shared-2
-		     3	terraform-application-region-shared-3
-		     4	terraform-application-region-program-A
-		     5	terraform-application-region-program-B
-		eof
-	)"
-}; run-with-filter test--z
-
 function test--c {
 	assert "$(
 		echo $input | save-args > /dev/null

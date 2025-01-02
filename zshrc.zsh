@@ -74,8 +74,6 @@ function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $A
 function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-columns-bar $N } || { args-mark-references! $1 $N; args-select-column!; [[ $ARGS_PUSHED -eq 0 && $(index-of "$(args-columns $N)" b) -ne 0 ]] && args-columns-bar $N }; return 0 }
 # (`nn` is like `n`, but based on the top row instead of bottom row)
 function nn { NN=1 n $@ }
-# strip leading / trailing spaces from all args
-function z { args | strip | save-args }
 # [c]opy into pasteboard
 # (e.g `c` to copy all args, `11 c` to copy only the eleventh arg)
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
@@ -590,7 +588,7 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)
 #             (p) (y) | [f] [g] (c) (r) [l]   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   (n|nn),_?::#
 # (a) {o} (e) (u) (i) | [d] [h] [t] (n) (s)   <--   #|aa|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
-#     {q} {j} [k]  x  |  b   m  [w] (v) (z)   <--   y::p   u|r::~?   i::i,#   d|f|h|w|kk|l|ll::a
+#     {q} {j} [k]  x  |  b   m  [w] (v)  z    <--   y::p   u|r::~?   i::i,#   d|f|h|w|kk|l|ll::a
 
 ### Doubles keymap
 # () means defined for `args`
