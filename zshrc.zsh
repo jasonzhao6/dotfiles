@@ -30,16 +30,16 @@ function color {
 function s { ss 'insert `#` after the first column to soft-select it' }
 function ss { [[ -t 0 ]] && eval $(prev-command) | save-args $@ || save-args $@ }
 # paste into args history
-# (e.g copy a list to pasteboard, then `v`)
+# (e.g copy a list into pasteboard, then `v`)
 function v { pbpaste | s }
 function vv { pbpaste | ss }
 # list / filter [a]rgs
 # (e.g `a` to list all, `a foo and bar -not -baz` to filter)
 function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | save-args } }
-# use a random arg
+# select a random arg
 # (e.g `aa echo`)
 function aa { arg $((RANDOM % $(args-list-size) + 1)) $@ }
-# use an [arg] by number
+# select an [arg] by number
 # (e.g `arg <number> echo`, or with explicit positioning `arg <number> echo ~~`)
 function arg { [[ -n $1 && -n $2 ]] && { ARG="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"; [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
 function 1 { arg $0 $@ }
@@ -63,18 +63,18 @@ function 18 { arg $0 $@ }
 function 19 { arg $0 $@ }
 function 20 { arg $0 $@ }
 function 0 { arg $ $@ } # last arg
-# use args within a rang[e]
+# select args within a rang[e]
 # (e.g `e 2 5 echo`, or with explicit positioning `e 2 5 echo ~~ and ~~ again`)
 function e { for i in $(seq $1 $2); do echo; arg $i ${${@:3}}; done }
-# use all args via an iterator
+# select all args via an iterator
 # (e.g `each echo`, `all echo`, `map echo '$((~~ * 2))'`)
 function each { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@; done }
 function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@ &; done; wait }
 function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | save-args }
-# list / select a colum[n] by letter
-# (e.g `n` to list all, `n d` to select the fourth column based on the bottom row)
+# list / filter colum[n] by letter
+# (e.g `n` to list all, `n d` to keep only the fourth column, delimited based on the bottom row)
 function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-columns-bar $N } || { args-mark-references! $1 $N; _N=$N; args-select-column!; N=$_N; [[ $ARGS_PUSHED -eq 0 && $(index-of "$(args-columns $N)" b) -ne 0 ]] && args-columns-bar $N } }
-# (`nn` is like `n`, but based on the top row instead of bottom row)
+# (`nn` is like `n`, but delimited based on the top row)
 function nn { NN=1 n $@ }
 # [c]opy into pasteboard
 # (e.g `c` to copy all args, `11 c` to copy only the eleventh arg)
