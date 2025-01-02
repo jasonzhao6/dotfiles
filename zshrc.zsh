@@ -35,7 +35,7 @@ function v { pbpaste | s }
 function vv { pbpaste | ss }
 # list / filter [a]rgs
 # (e.g `a` to list all, `a foo and bar -not -baz` to filter)
-function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | save-args } }
+function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | ss } }
 # select a random arg
 # (e.g `aa echo`)
 function aa { arg $((RANDOM % $(args-list-size) + 1)) $@ }
@@ -70,7 +70,7 @@ function e { for i in $(seq $1 $2); do echo; arg $i ${${@:3}}; done }
 # (e.g `each echo`, `all echo`, `map echo '$((~~ * 2))'`)
 function each { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@; done }
 function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@ &; done; wait }
-function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | save-args }
+function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | ss }
 # list / filter colum[n] by letter
 # (e.g `n` to list all, `n d` to keep only the fourth column, delimited based on the bottom row)
 function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-columns-bar $N } || { args-mark-references! $1 $N; _N=$N; args-select-column!; N=$_N; [[ $ARGS_PUSHED -eq 0 && $(index-of "$(args-columns $N)" b) -ne 0 ]] && args-columns-bar $N } }
@@ -81,7 +81,7 @@ function nn { NN=1 n $@ }
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
 # [y]ank / [p]ut current args into a different tab
 function y { args > ~/.zshrc.args }
-function p { echo "$(<~/.zshrc.args)" | save-args }
+function p { echo "$(<~/.zshrc.args)" | ss }
 # [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ -n $N && ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }
@@ -101,7 +101,7 @@ function args-build-greps! { ARGS_FILTER="grep ${*// / | grep }"; ARGS_FILTER=${
 function args-pick-header! { [[ -z ${1:-$ARGS_USE_BOTTOM_ROW} || ${1:-$ARGS_USE_BOTTOM_ROW} -eq 1 ]] && ARG=$(args-list-plain | tail -1) || ARG=$(args-list-plain | head -1) }
 function args-label-column! { [[ $ARG[$1-1] == ' ' && $ARG[$1] != ' ' ]] && { [[ $ARGS_SKIP_NL -eq 1 ]] && { ARGS_SKIP_NL=0; ARGS_COLUMNS+=' ' } || { ARGS_COLUMNS+=$ARGS_COL_CURR; ARGS_COL_CURR=$(next-ascii $ARGS_COL_CURR) } } || ARGS_COLUMNS+=' ' }
 function args-mark-references! { ARGS_USE_BOTTOM_ROW=$2; ARGS_COLUMNS=$(args-columns $2); ARGS_COL_FIRST=$(index-of $ARGS_COLUMNS a); ARGS_COL_TARGET=$(index-of $ARGS_COLUMNS $1); ARGS_COL_NEXT=$(index-of $ARGS_COLUMNS $(next-ascii $1)) }
-function args-select-column! { args-list-plain | cut -c $([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)-$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1))) | strip-right | save-args }
+function args-select-column! { args-list-plain | cut -c $([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)-$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1))) | strip-right | ss }
 function args-get-new! { ARGS_NEW=$(cat - | head -1000 | no-empty); [[ -n $1 ]] && ARGS_NEW=$(echo $ARGS_NEW | insert-hash); ARGS_NEW_PLAIN=$(echo $ARGS_NEW | no-color | expand) }
 function args-push-if-different! { [[ $ARGS_NEW_PLAIN != $(args-plain) ]] && { args-push $ARGS; ARGS_PUSHED=1; N= } || ARGS_PUSHED=0 }
 # | after a list
@@ -235,7 +235,7 @@ function gta { git remote add $1 $2 }
 function gtr { git remote remove $@ }
 function gtv { git remote --verbose }
 # [b]ranch
-function gb { GB=$(gb-merged); [[ $GB ]] && GB="\n----------------\n$GB"; echo "$(git branch)$GB" | save-args }
+function gb { GB=$(gb-merged); [[ $GB ]] && GB="\n----------------\n$GB"; echo "$(git branch)$GB" | ss }
 function gbb { gb-merged | xargs git branch --delete; git remote prune origin; echo; gb }
 function gbd { git branch --delete --force $@; git push origin --delete $@; gb }
 # [g]it checkout
@@ -322,7 +322,7 @@ source "$DOTFILES_DIR/zshrc-o.zsh"
 #  a   o  [e]  u   i  | [d]  h   t   n  [s]
 #     [q] [j] [k] [x] | [b]  m   w   v   z
 # resources ref: g[r]ep / [s]ave / e[x]plain
-function kr { cat ~/Documents/k8.txt | grep "$*" | save-args }
+function kr { cat ~/Documents/k8.txt | grep "$*" | ss }
 function ks { kubectl api-resources > ~/Documents/k8.txt }
 function kx { kubectl explain $@ }
 # set [n]ame[s]pace
@@ -332,7 +332,7 @@ function k { kubectl $@ }
 function kd { kubectl describe $@ }
 function ke { kubectl exec $@ }
 function kg { kubectl get $@ }
-function kk { kubectl get $@ | save-args }
+function kk { kubectl get $@ | ss }
 # pod shortcuts
 function kb { kubectl exec -it $@ -- bash }
 function kc { kubectl exec $@[-1] -- $@[1,-2] }
@@ -358,7 +358,7 @@ function tfim { terraform init -migrate-state }
 # post `tfi`
 # (e.g `tfp` to plan, `tfp iu` to init upgrade then plan)
 function tfp { tf-pre $@ && terraform plan -out=tfplan }
-function tfl { tf-pre $@ && terraform state list | sed "s/.*/'&'/" | save-args }
+function tfl { tf-pre $@ && terraform state list | sed "s/.*/'&'/" | ss }
 function tfo { tf-pre $@ && terraform output }
 function tfn { tf-pre $@ && terraform console }
 function tfv { tf-pre $@ && terraform validate }
@@ -398,11 +398,11 @@ function tf-pre {
 
 ### Util
 # singles (they save into `args`)
-function d { [[ -n $1 ]] && { D=${${${@}#*://}%%/*}; [[ -z $D_UNDER_TEST ]] && dig +short $D | save-args || echo "test output for\n$D" | save-args } }
-function f { [[ -n $1 ]] && f-pre $@ | sort | save-args }
-function l { ls -l | awk '{print $9}' | save-args } # Not taking search pattern b/c folder matches break column alignment
-function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.' | save-args } # Show only hidden files
-function w { which $@ | save-args }
+function d { [[ -n $1 ]] && { D=${${${@}#*://}%%/*}; [[ -z $D_UNDER_TEST ]] && dig +short $D | ss || echo "test output for\n$D" | ss } }
+function f { [[ -n $1 ]] && f-pre $@ | sort | ss }
+function l { ls -l | awk '{print $9}' | ss } # Not taking search pattern b/c folder matches break column alignment
+function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.' | ss } # Show only hidden files
+function w { which $@ | ss }
 # doubles (they do not save into `args`)
 function bb { pmset sleepnow }
 function cc { eval $(prev-command) | no-color | ruby -e 'puts STDIN.read.strip' | pbcopy }
@@ -466,7 +466,7 @@ function trim { no-color | cut -c $(($1 + 1))- | { [[ -z $2 ]] && cat || rev | c
 function insert-hash { awk 'NF >= 2 {col_2_index = index($0, $2); col_1 = substr($0, 1, col_2_index - 1); col_rest = substr($0, col_2_index); printf "%s# %s\n", col_1, col_rest} NF < 2 {print}' }
 function size-of { awk "{if (length(\$${1:-0}) > max_len) max_len = length(\$${1:-0})} END {print max_len}" }
 # | after json
-function keys { jq keys | trim-list | save-args }
+function keys { jq keys | trim-list | ss }
 function trim-list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$//' | no-empty }
 
 ### [Z]shrc
@@ -522,7 +522,7 @@ setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 # list / filter
 # (e.g `h` to list all, `h foo` to filter)
-function h { egrep --ignore-case "$*" $HISTFILE | trim 15 | sort --unique | save-args }
+function h { egrep --ignore-case "$*" $HISTFILE | trim 15 | sort --unique | ss }
 # [c]lear
 function hc { rm $HISTFILE }
 # edit

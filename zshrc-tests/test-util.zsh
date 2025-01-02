@@ -170,7 +170,7 @@ function test--w {
 	)" "$(
 		cat <<-eof
 		     1	w () {
-		     2		which \$@ | save-args
+		     2		which \$@ | ss
 		     3	}
 		eof
 	)"

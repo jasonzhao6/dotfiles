@@ -115,7 +115,7 @@ function test--vv {
 
 function test--a {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		a
 	)" "$(
 		cat <<-eof
@@ -130,7 +130,7 @@ function test--a {
 
 function test--a--adds-color {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		a shared
 	)" "$(
 		cat <<-eof
@@ -143,7 +143,7 @@ function test--a--adds-color {
 
 function test--a--replaces-color {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		a shared > /dev/null
 		a region
 	)" "$(
@@ -157,7 +157,7 @@ function test--a--replaces-color {
 
 function test--a--with-two-args-out-of-order {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		a 2 shared
 	)" "$(
 		cat <<-eof
@@ -168,7 +168,7 @@ function test--a--with-two-args-out-of-order {
 
 function test--a--with-two-args-including-negation {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		a -2 shared
 	)" "$(
 		cat <<-eof
@@ -180,7 +180,7 @@ function test--a--with-two-args-including-negation {
 
 function test--aa {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		eee 1 $(($(args-list-size) * 10)) aa echo 2>&1 | sort | uniq
 	)" "$(
 		cat <<-eof
@@ -202,7 +202,7 @@ function test--aa {
 
 function test--arg {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		arg 3 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -214,7 +214,7 @@ function test--arg {
 
 function test--arg--with-whitespace {
 	assert "$(
-		echo $input_with_whitespace | save-args > /dev/null
+		echo $input_with_whitespace | ss > /dev/null
 		arg 3 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -226,7 +226,7 @@ function test--arg--with-whitespace {
 
 function test--arg--with-substitution {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		arg 3 echo http://~~:8080 2>&1
 	)" "$(
 		cat <<-eof
@@ -238,7 +238,7 @@ function test--arg--with-substitution {
 
 function test--arg--with-multiple-substitutions {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		arg 3 echo http://~~:80 and https://~~:443 2>&1
 	)" "$(
 		cat <<-eof
@@ -250,7 +250,7 @@ function test--arg--with-multiple-substitutions {
 
 function test--arg--with-multiple-substitutions-in-quotes {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		arg 3 'echo http://~~:80 and https://~~:443' 2>&1
 	)" "$(
 		cat <<-eof
@@ -262,7 +262,7 @@ function test--arg--with-multiple-substitutions-in-quotes {
 
 function test--1 {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		1 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -274,7 +274,7 @@ function test--1 {
 
 function test--5 {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		5 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -286,14 +286,14 @@ function test--5 {
 
 function test--6 {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		6 echo 2>&1
 	)" "echo "
 }; run-with-filter test--6
 
 function test--0 {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		0 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -305,7 +305,7 @@ function test--0 {
 
 function test--e {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		e 3 4 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -321,7 +321,7 @@ function test--e {
 
 function test--e--with-multiple-substitutions {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		e 3 4 echo ~~ and ~~ again 2>&1
 	)" "$(
 		cat <<-eof
@@ -337,7 +337,7 @@ function test--e--with-multiple-substitutions {
 
 function test--each {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		each echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -362,7 +362,7 @@ function test--each {
 
 function test--each--with-comments {
 	assert "$(
-		echo $input_with_comments | save-args > /dev/null
+		echo $input_with_comments | ss > /dev/null
 		each echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -383,7 +383,7 @@ function test--all {
 	function test--all--sleep-and-echo { sleep $@; echo $@ }
 
 	assert "$(
-		echo '0.01\n0.03\n0.05' | save-args > /dev/null
+		echo '0.01\n0.03\n0.05' | ss > /dev/null
 		all test--all--sleep-and-echo 2>/dev/null
 	)" "$(
 		cat <<-eof
@@ -399,7 +399,7 @@ function test--all {
 
 function test--map {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		map 'echo -n pre-; echo' 2>&1
 	)" "$(
 		cat <<-eof
@@ -430,7 +430,7 @@ function test--map {
 
 function test--map--with-math {
 	assert "$(
-		seq 1 5 | save-args > /dev/null
+		seq 1 5 | ss > /dev/null
 		map echo ~~ doubles to '$((~~ * 10))' 2>&1
 	)" "$(
 		cat <<-eof
@@ -461,7 +461,7 @@ function test--map--with-math {
 
 function test--n {
 	assert "$(
-		echo $input_with_tabs | save-args > /dev/null
+		echo $input_with_tabs | ss > /dev/null
 		n
 	)" "$(
 		cat <<-eof
@@ -475,7 +475,7 @@ function test--n {
 
 function test--n--when-selecting-first {
 	assert "$(
-		echo $input_with_tabs | save-args > /dev/null
+		echo $input_with_tabs | ss > /dev/null
 		n a
 	)" "$(
 		cat <<-eof
@@ -488,7 +488,7 @@ function test--n--when-selecting-first {
 
 function test--n--when-selecting-third {
 	assert "$(
-		echo $input_with_tabs | save-args > /dev/null
+		echo $input_with_tabs | ss > /dev/null
 		n c
 	)" "$(
 		cat <<-eof
@@ -501,7 +501,7 @@ function test--n--when-selecting-third {
 
 function test--n--when-selecting-last {
 	assert "$(
-		echo $input_with_tabs | save-args > /dev/null
+		echo $input_with_tabs | ss > /dev/null
 		n d
 	)" "$(
 		cat <<-eof
@@ -514,7 +514,7 @@ function test--n--when-selecting-last {
 
 function test--n--when-selecting-with-color {
 	assert "$(
-		echo $input_with_tabs | grep 00 | save-args > /dev/null
+		echo $input_with_tabs | grep 00 | ss > /dev/null
 		n d
 	)" "$(
 		cat <<-eof
@@ -527,7 +527,7 @@ function test--n--when-selecting-with-color {
 
 function test--n--when-selecting-out-of-bound {
 	assert "$(
-		echo $input_with_tabs | save-args > /dev/null
+		echo $input_with_tabs | ss > /dev/null
 		n z
 	)" "$(
 		cat <<-eof
@@ -550,7 +550,7 @@ function test--n--with-kubectl-get-pods-output {
 	)
 
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		n e
 	)" "$(
 		cat <<-eof
@@ -564,7 +564,7 @@ function test--n--with-kubectl-get-pods-output {
 
 function test--n--with-one-column {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		n a
 	)" "$(
 		cat <<-eof
@@ -579,7 +579,7 @@ function test--n--with-one-column {
 
 function test--n--with-whitespace {
 	assert "$(
-		echo $input_with_whitespace | save-args > /dev/null
+		echo $input_with_whitespace | ss > /dev/null
 		n a
 	)" "$(
 		cat <<-eof
@@ -593,7 +593,7 @@ function test--n--with-whitespace {
 
 function test--n--with-headers {
 	assert "$(
-		echo $input_with_headers | save-args > /dev/null
+		echo $input_with_headers | ss > /dev/null
 		n
 	)" "$(
 		cat <<-eof
@@ -610,7 +610,7 @@ function test--n--with-headers {
 
 function test--nn {
 	assert "$(
-		echo $input_with_headers | save-args > /dev/null
+		echo $input_with_headers | ss > /dev/null
 		nn
 	)" "$(
 		cat <<-eof
@@ -627,7 +627,7 @@ function test--nn {
 
 function test--nn--with-one-column {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		nn a
 	)" "$(
 		cat <<-eof
@@ -642,7 +642,7 @@ function test--nn--with-one-column {
 
 function test--c {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		c
 		pbpaste
 	)" "$(
@@ -666,7 +666,7 @@ function test--c--with-two-args {
 
 function test--y {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		rm -f ~/.zshrc.args
 		y
 		cat ~/.zshrc.args
@@ -688,7 +688,7 @@ function test--p {
 
 function test--u {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		a program > /dev/null
 		u
 	)" "$(
@@ -704,7 +704,7 @@ function test--u {
 
 function test--u--when-undoing-n-with-headers {
 	assert "$(
-		echo $input_with_headers | save-args > /dev/null
+		echo $input_with_headers | ss > /dev/null
 		n a > /dev/null
 		u
 	)" "$(
@@ -722,7 +722,7 @@ function test--u--when-undoing-n-with-headers {
 
 function test--u--when-undoing-nn-with-headers {
 	assert "$(
-		echo $input_with_headers | save-args > /dev/null
+		echo $input_with_headers | ss > /dev/null
 		nn a > /dev/null
 		u
 	)" "$(
@@ -740,7 +740,7 @@ function test--u--when-undoing-nn-with-headers {
 
 function test--u--when-undoing-nn-then-requesting-n {
 	assert "$(
-		echo $input_with_headers | save-args > /dev/null
+		echo $input_with_headers | ss > /dev/null
 		nn a > /dev/null
 		u > /dev/null
 		n
@@ -759,7 +759,7 @@ function test--u--when-undoing-nn-then-requesting-n {
 
 function test--u--when-undoing-nn-with-headers-top-heavy {
 	assert "$(
-		echo $input_with_headers_top_heavy | save-args > /dev/null
+		echo $input_with_headers_top_heavy | ss > /dev/null
 		nn a > /dev/null
 		u
 	)" "$(
@@ -777,9 +777,9 @@ function test--u--when-undoing-nn-with-headers-top-heavy {
 
 function test--u--when-undoing-ss-that-could-look-like-nn {
 	assert "$(
-		echo $input_with_headers | save-args > /dev/null
+		echo $input_with_headers | ss > /dev/null
 		nn > /dev/null
-		echo $input_with_headers_top_heavy | save-args > /dev/null
+		echo $input_with_headers_top_heavy | ss > /dev/null
 		u
 	)" "$(
 		cat <<-eof
@@ -795,9 +795,9 @@ function test--u--when-undoing-ss-that-could-look-like-nn {
 
 function test--u--when-undoing-x2 {
 	assert "$(
-		seq 1 2 | save-args > /dev/null
-		seq 2 3 | save-args > /dev/null
-		seq 3 4 | save-args > /dev/null
+		seq 1 2 | ss > /dev/null
+		seq 2 3 | ss > /dev/null
+		seq 3 4 | ss > /dev/null
 		u > /dev/null
 		u
 	)" "$(
@@ -810,9 +810,9 @@ function test--u--when-undoing-x2 {
 
 function test--u--when-undoing-beyond-tail {
 	assert "$(
-		seq 1 2 | save-args > /dev/null
-		seq 2 3 | save-args > /dev/null
-		seq 3 4 | save-args > /dev/null
+		seq 1 2 | ss > /dev/null
+		seq 2 3 | ss > /dev/null
+		seq 3 4 | ss > /dev/null
 		u > /dev/null
 		u > /dev/null
 		u
@@ -830,10 +830,10 @@ function test--u--when-pushing-beyond-head-then-undoing-beyond-tail {
 	ARGS_HISTORY_MAX=3
 
 	assert "$(
-		seq 1 2 | save-args > /dev/null
-		seq 2 3 | save-args > /dev/null
-		seq 3 4 | save-args > /dev/null
-		seq 4 5 | save-args > /dev/null
+		seq 1 2 | ss > /dev/null
+		seq 2 3 | ss > /dev/null
+		seq 3 4 | ss > /dev/null
+		seq 4 5 | ss > /dev/null
 		u > /dev/null
 		u > /dev/null
 		u
@@ -850,7 +850,7 @@ function test--u--when-pushing-beyond-head-then-undoing-beyond-tail {
 
 function test--u--when-undoing-then-redoing-with-color {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		a program > /dev/null
 		u > /dev/null
 		r
@@ -864,7 +864,7 @@ function test--u--when-undoing-then-redoing-with-color {
 
 function test--u--when-undoing-then-redoing-then-undoing-again-with-color {
 	assert "$(
-		echo $input | save-args > /dev/null
+		echo $input | ss > /dev/null
 		a program > /dev/null
 		u > /dev/null
 		a terraform > /dev/null
@@ -884,9 +884,9 @@ function test--u--when-undoing-then-redoing-then-undoing-again-with-color {
 
 function test--r--when-redoing-x2 {
 	assert "$(
-		seq 1 2 | save-args > /dev/null
-		seq 2 3 | save-args > /dev/null
-		seq 3 4 | save-args > /dev/null
+		seq 1 2 | ss > /dev/null
+		seq 2 3 | ss > /dev/null
+		seq 3 4 | ss > /dev/null
 		u > /dev/null
 		u > /dev/null
 		r > /dev/null
@@ -901,9 +901,9 @@ function test--r--when-redoing-x2 {
 
 function test--r--when-redoing-beyond-head {
 	assert "$(
-		seq 1 2 | save-args > /dev/null
-		seq 2 3 | save-args > /dev/null
-		seq 3 4 | save-args > /dev/null
+		seq 1 2 | ss > /dev/null
+		seq 2 3 | ss > /dev/null
+		seq 3 4 | ss > /dev/null
 		u > /dev/null
 		u > /dev/null
 		r > /dev/null
@@ -920,12 +920,12 @@ function test--r--when-redoing-beyond-head {
 
 function test--r--when-redoing-beyond-new-head {
 	assert "$(
-		seq 1 2 | save-args > /dev/null
-		seq 2 3 | save-args > /dev/null
-		seq 3 4 | save-args > /dev/null
+		seq 1 2 | ss > /dev/null
+		seq 2 3 | ss > /dev/null
+		seq 3 4 | ss > /dev/null
 		u > /dev/null
 		u > /dev/null
-		seq 4 5 | save-args > /dev/null
+		seq 4 5 | ss > /dev/null
 		r
 	)" "$(
 		cat <<-eof
