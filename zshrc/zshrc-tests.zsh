@@ -2,32 +2,41 @@ source $ZSHRC_DIR/zshrc-tests/harness.zsh
 source $ZSHRC_DIR/zshrc-tests/helpers.zsh
 
 # $1: Filter tests by partial name match
-local filter=$([[ -n $1 ]] && echo $1)
+local test_filter=$([[ -n $1 ]] && echo $1)
+
+# Filter sections by number, leave it unset usually
+local section_filter=
+
+# Source .zshrc for multiple sections that need it
+UNDER_TEST=1 source ~/.zshrc
 
 #
 # Section 1: Run all test cases
 #
 
-local pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
+if [[ $section_filter -eq 1 || -z $section_filter ]]; then
+	local pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
 
-init
-UNDER_TEST=1 source ~/.zshrc
-for test in $(find-tests); do source $test; done
-print-summary 'tests passed'
+	init
+	for test in $(find-tests); do source $test; done
+	print-summary 'tests passed'
 
-echo $pasteboard | pbcopy # Restore saved pasteboard value
+	echo $pasteboard | pbcopy # Restore saved pasteboard value
+fi
 
 #
 # Section 2: Verify all tests defined are getting invoked
 #
 
-[[ -z $filter ]] && { echo; ruby $ZSHRC_DIR/zshrc-tests/verify_test_invocations.rb }
+if [[ ($section_filter -eq 2 || -z $section_filter) && -z $test_filter ]]; then
+	echo; ruby $ZSHRC_DIR/zshrc-tests/verify_test_invocations.rb
+fi
 
 #
 # Section 3: Verify tests are defined in the same order as their definitions in .zshrc
 #
 
-if [[ -z $filter ]]; then
+if [[ ($section_filter -eq 3 || -z $section_filter) && -z $test_filter ]]; then
 	echo
 	init
 	for test in $(find-tests); do
@@ -45,13 +54,15 @@ fi
 # Section 4: Verify keymaps at the bottom of .zshrc are up-to-date
 #
 
-[[ -z $filter ]] && { echo; ruby $ZSHRC_DIR/zshrc-tests/verify_keymaps.rb }
+if [[ ($section_filter -eq 4 || -z $section_filter) && -z $test_filter ]]; then
+	echo; ruby $ZSHRC_DIR/zshrc-tests/verify_keymaps.rb
+fi
 
 #
 # Section 5: Verify all env vars overwritten are getting restored
 #
 
-if [[ -z $filter ]]; then
+if [[ ($section_filter -eq 5 || -z $section_filter) && -z $test_filter ]]; then
 	echo
 	init
 	local expected=
