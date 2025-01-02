@@ -1,6 +1,6 @@
 function test--t {
 	local usage='t test <arg1> <arg2>'
-	assert "$(T_UNDER_TEST=1 t | grep --only-matching $usage)" "$(grep-color $usage)"
+	assert "$(T_UNDER_TEST=1 t | grep --only-matching "$usage")" "$(grep-color "$usage")"
 }; run-with-filter test--t
 
 function test--t--with-type {
@@ -27,21 +27,12 @@ function test--t--with-type-prefix {
 
 function test--t-opal {
 	assert "$(
-		local t_opal=$T_OPAL
-		T_OPAL=(
-			'name1 url1'
-			'name2 url2'
-			'name3 url3'
-		)
-
 		t-opal
-
-		T_OPAL=$t_opal
 	)" "$(
 		cat <<-eof
-		     1	name1  url1
-		     2	name2  url2
-		     3	name3  url3
+		     1	non-secret-placeholder1  url1
+		     2	non-secret-placeholder2  url2
+		     3	non-secret-placeholder3  url3
 		eof
 	)"
 }; run-with-filter test--t-opal

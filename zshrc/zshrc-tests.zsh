@@ -11,7 +11,7 @@ local filter=$([[ -n $1 ]] && echo $1)
 local pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
 
 init
-source ~/.zshrc
+UNDER_TEST=1 source ~/.zshrc
 for test in $(find-tests); do source $test; done
 print-summary 'tests passed'
 

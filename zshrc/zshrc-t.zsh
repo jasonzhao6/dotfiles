@@ -33,6 +33,12 @@ function t-test {
 	echo "arg2: $2"
 }
 
+T_OPAL=(
+	'non-secret-placeholder1 url1'
+	'non-secret-placeholder2 url2'
+	'non-secret-placeholder3 url3'
+)
+
 function t-opal {
 	print -l "${T_OPAL[@]}" | sort | column -t | ss
 }

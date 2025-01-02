@@ -463,7 +463,7 @@ function trim-list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$
 
 ### [Z]shrc
 # source / test
-[ -f ~/.zshrc.secrets ] && source ~/.zshrc.secrets
+[[ -z $UNDER_TEST && -f ~/.zshrc.secrets ]] && source ~/.zshrc.secrets
 function z { source ~/.zshrc }
 function zz { zsh $ZSHRC_DIR/zshrc-tests.zsh $@ }
 # edit
