@@ -84,7 +84,6 @@ for test in $(find-tests); do source $test; done
 print-summary 'tests passed'
 
 echo $pasteboard | pbcopy # Restore saved pasteboard value
-args-init # Reset args history since some tests overwrote it
 
 #
 # Section 2: Verify all tests defined are getting invoked

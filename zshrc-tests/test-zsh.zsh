@@ -8,6 +8,7 @@ function test--zz--when-args-history-is-not-initialized {
 		echo $ARGS_HISTORY_MAX
 	)" "$args_history_max"
 
+	args-init
 }; run-with-filter test--zz--when-args-history-is-not-initialized
 
 function test--zz--when-args-history-is-already-initialized {
@@ -18,6 +19,8 @@ function test--zz--when-args-history-is-already-initialized {
 		zz
 		echo $ARGS_HISTORY_MAX
 	)" "$overwrite"
+
+	args-init
 }; run-with-filter test--zz--when-args-history-is-already-initialized
 
 function test--h {

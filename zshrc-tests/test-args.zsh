@@ -851,7 +851,6 @@ function test--u--when-undoing-beyond-tail {
 }; run-with-filter test--u--when-undoing-beyond-tail
 
 function test--u--when-pushing-beyond-head-then-undoing-beyond-tail {
-	local args_history_max=$ARGS_HISTORY_MAX
 	args-init
 	ARGS_HISTORY_MAX=3
 
@@ -871,7 +870,7 @@ function test--u--when-pushing-beyond-head-then-undoing-beyond-tail {
 		eof
 	)"
 
-	ARGS_HISTORY_MAX=$args_history_max
+	args-init
 }; run-with-filter test--u--when-pushing-beyond-head-then-undoing-beyond-tail
 
 function test--u--when-undoing-then-redoing-with-color {
