@@ -34,6 +34,9 @@ function vv { pbpaste | ss }
 # list / filter [a]rgs
 # (e.g `a` to list all, `a foo and bar -not -baz` to filter)
 function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTER | $ARGS_HIGHLIGHT" | save-args } }
+# use a random arg
+# (e.g `aa echo`)
+function aa { arg $((RANDOM % $(args-list-size) + 1)) $@ }
 # use an [arg] by number
 # (e.g `arg <number> echo`, or with explicit positioning `arg <number> echo ~~`)
 function arg { [[ -n $1 && -n $2 ]] && { ARG="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"; [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
@@ -58,9 +61,6 @@ function 18 { arg $0 $@ }
 function 19 { arg $0 $@ }
 function 20 { arg $0 $@ }
 function 0 { arg $ $@ } # last arg
-# use a [r]andom arg
-# (e.g `rr echo`)
-function rr { arg $((RANDOM % $(args-list-size) + 1)) $@ }
 # use args within a rang[e]
 # (e.g `e 2 5 echo`, or with explicit positioning `e 2 5 echo ~~ and ~~ again`)
 function e { for i in $(seq $1 $2); do echo; arg $i ${${@:3}}; done }
@@ -583,7 +583,7 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # {} means defined in secrets file
 # (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)
 #             (p) (y) | [f] [g] (c) (r) [l]   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   (n|nn),_?::#
-# (a) {o} (e) (u) [i] | [d] [h]  t  (n) (s)   <--   #|rr|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
+# (a) {o} (e) (u) [i] | [d] [h]  t  (n) (s)   <--   #|aa|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
 #     {q} {j} [k]  x  |  b   m  {w} (v) (z)   <--   u|r::~?   y::p   d|(f,(gh|tf))|h|(i,*)|kk|l|ll::a
 
 ### Doubles keymap
@@ -591,6 +591,6 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # [] means defined in this file
 # {} means defined in secrets file
 # (1)  2   3   4   5  |  6   7   8   9   0
-#             [p] [y] | [f] [g] [c] (r) [l]   <--   pp,""?,*?::cc   yy|cc|xx::%+v   ff|bb   l|ll::a
-#  a  [o] [e] [u] [i] | [d] [h] [t] (n) (s)   <--   oo|ii|mm   ee,#,#,*,~~::eee   uu|hh   dd::ddd|ddc
+#             [p] [y] | [f] [g] [c]  r  [l]   <--   pp,""?,*?::cc   yy|cc|xx::%+v   ff|bb   l|ll::a
+# (a) [o] [e] [u] [i] | [d] [h] [t] (n) (s)   <--   oo|ii|mm   ee,#,#,*,~~::eee   uu|hh   dd::ddd|ddc
 #     {q} {j} [k] [x] | [b] [m] {w} (v) [z]   <--   qq|q2::q   jj::#,j   ww::#,w   zz|zt

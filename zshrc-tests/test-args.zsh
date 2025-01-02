@@ -179,6 +179,28 @@ function test--a--with-two-args-including-negation {
 	)"
 }; run-with-filter test--a--with-two-args-including-negation
 
+function test--aa {
+	assert "$(
+		echo $input | save-args > /dev/null
+		eee 1 $(($(args-list-size) * 10)) aa echo 2>&1 | sort | uniq
+	)" "$(
+		cat <<-eof
+
+			aa echo
+			echo terraform-application-region-program-A
+			echo terraform-application-region-program-B
+			echo terraform-application-region-shared-1
+			echo terraform-application-region-shared-2
+			echo terraform-application-region-shared-3
+			terraform-application-region-program-A
+			terraform-application-region-program-B
+			terraform-application-region-shared-1
+			terraform-application-region-shared-2
+			terraform-application-region-shared-3
+		eof
+	)"
+}; run-with-filter test--aa
+
 function test--arg {
 	assert "$(
 		echo $input | save-args > /dev/null
@@ -281,28 +303,6 @@ function test--0 {
 		eof
 	)"
 }; run-with-filter test--0
-
-function test--rr {
-	assert "$(
-		echo $input | save-args > /dev/null
-		eee 1 $(($(args-list-size) * 10)) rr echo 2>&1 | sort | uniq
-	)" "$(
-		cat <<-eof
-
-			echo terraform-application-region-program-A
-			echo terraform-application-region-program-B
-			echo terraform-application-region-shared-1
-			echo terraform-application-region-shared-2
-			echo terraform-application-region-shared-3
-			rr echo
-			terraform-application-region-program-A
-			terraform-application-region-program-B
-			terraform-application-region-shared-1
-			terraform-application-region-shared-2
-			terraform-application-region-shared-3
-		eof
-	)"
-}; run-with-filter test--rr
 
 function test--e {
 	assert "$(
