@@ -85,7 +85,7 @@ function p { echo "$(<~/.zshrc.args)" | ss }
 # [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ -n $N && ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }
-# list / select historical args by [i]ndex # TODO test
+# list / select historical args by [i]ndex
 # (e.g `i` to list history, `i 8` to select the args at index 8)
 function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args-history || { ARGS_CURSOR=$1; a } }
 # helpers

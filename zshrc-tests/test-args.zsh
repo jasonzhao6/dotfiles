@@ -936,6 +936,116 @@ function test--r--when-redoing-beyond-new-head {
 	)"
 }; run-with-filter test--r--when-redoing-beyond-new-head
 
+function test--i {
+	assert "$(
+		seq 1 2 | ss > /dev/null
+		seq 2 3 | ss > /dev/null
+		seq 3 4 | ss > /dev/null
+		i
+	)" "$(
+		cat <<-eof
+			cursor: 3
+			head: 3
+			tail: 1
+			max: 100
+
+			----------------------------------------
+			Index 3
+			----------------------------------------
+			3
+			4
+
+			----------------------------------------
+			Index 2
+			----------------------------------------
+			2
+			3
+
+			----------------------------------------
+			Index 1
+			----------------------------------------
+			1
+			2
+		eof
+	)"
+}; run-with-filter test--i
+
+function test--i--when-selecting-out-of-head-and-tail {
+	assert "$(
+		seq 1 2 | ss > /dev/null
+		seq 2 3 | ss > /dev/null
+		seq 3 4 | ss > /dev/null
+		i 4
+	)" "$(
+		cat <<-eof
+			cursor: 3
+			head: 3
+			tail: 1
+			max: 100
+
+			----------------------------------------
+			Index 3
+			----------------------------------------
+			3
+			4
+
+			----------------------------------------
+			Index 2
+			----------------------------------------
+			2
+			3
+
+			----------------------------------------
+			Index 1
+			----------------------------------------
+			1
+			2
+		eof
+	)"
+}; run-with-filter test--i--when-selecting-out-of-head-and-tail
+
+function test--i--when-selecting-head-index {
+	assert "$(
+		seq 1 2 | ss > /dev/null
+		seq 2 3 | ss > /dev/null
+		seq 3 4 | ss > /dev/null
+		i 3
+	)" "$(
+		cat <<-eof
+		     1	3
+		     2	4
+		eof
+	)"
+}; run-with-filter test--i--when-selecting-head-index
+
+function test--i--when-selecting-middle-index {
+	assert "$(
+		seq 1 2 | ss > /dev/null
+		seq 2 3 | ss > /dev/null
+		seq 3 4 | ss > /dev/null
+		i 2
+	)" "$(
+		cat <<-eof
+		     1	2
+		     2	3
+		eof
+	)"
+}; run-with-filter test--i--when-selecting-middle-index
+
+function test--i--when-selecting-tail-index {
+	assert "$(
+		seq 1 2 | ss > /dev/null
+		seq 2 3 | ss > /dev/null
+		seq 3 4 | ss > /dev/null
+		i 1
+	)" "$(
+		cat <<-eof
+		     1	1
+		     2	2
+		eof
+	)"
+}; run-with-filter test--i--when-selecting-tail-index
+
 function test--save-args {
 	assert "$(echo $input | save-args)" "$(
 		cat <<-eof
