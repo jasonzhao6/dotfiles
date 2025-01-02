@@ -158,11 +158,14 @@ function e1 { echo-eval 'export AWS_DEFAULT_REGION=us-east-1' }
 function e2 { echo-eval 'export AWS_DEFAULT_REGION=us-east-2' }
 function w1 { echo-eval 'export AWS_DEFAULT_REGION=us-west-1' }
 function w2 { echo-eval 'export AWS_DEFAULT_REGION=us-west-2' }
-# find [ec2] / [asg] by name tag prefix
-function ec2 { ec2-args "Name=tag:Name, Values=$@*" }
+# find [ec2] / [asg] instances by name tag prefix
+function ec2 { ecc $@ }
+function ecc { ec2-args "Name=tag:Name, Values=$@*" }
 function asg { ec2-args "Name=tag:aws:autoscaling:groupName, Values=$@*" }
-# open ec2 page
-function TODO { open "https://us-east-1.console.aws.amazon.com/ec2/home?region=$(echo $AWS_DEFAULT_REGION)#InstanceDetails:instanceId=$(ec2-id $@)" }
+# open [ec2] / [asg] page by resource id
+function oec2 { oecc $@ }
+function oecc { open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$(ec2-id $@)" }
+function oasg { open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$@" }
 # use [ssm] to ssh into ec2 by instance id, private ip, or name tag
 function ssm { # e.g `ssm <instance-id>`, or `0 ssm` to use the last entry from `args`
     aws ssm start-session \
