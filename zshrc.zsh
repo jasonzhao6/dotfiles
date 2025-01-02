@@ -395,9 +395,9 @@ function tf-pre {
 # singles (they save into `args`)
 function d { [[ -n $1 ]] && { D=${${${@}#*://}%%/*}; [[ -z $D_UNDER_TEST ]] && dig +short $D | save-args || echo "test output for\n$D" | save-args } }
 function f { [[ -n $1 ]] && f-pre $@ | sort | save-args }
-function i { which $@ | save-args }
 function l { ls -l | awk '{print $9}' | save-args } # Not taking search pattern b/c folder matches break column alignment
 function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.' | save-args } # Show only hidden files
+function w { which $@ | save-args }
 # doubles (they do not save into `args`)
 function bb { pmset sleepnow }
 function cc { eval $(prev-command) | no-color | ruby -e 'puts STDIN.read.strip' | pbcopy }
@@ -587,8 +587,8 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # {} means defined in secrets file
 # (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)
 #             (p) (y) | [f] [g] (c) (r) [l]   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   (n|nn),_?::#
-# (a) {o} (e) (u) [i] | [d] [h] [t] (n) (s)   <--   #|aa|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
-#     {q} {j} [k]  x  |  b   m  {w} (v) (z)   <--   u|r::~?   y::p   d|(f,(gh|tf))|h|(i,*)|kk|l|ll::a
+# (a) {o} (e) (u)  i  | [d] [h] [t] (n) (s)   <--   #|aa|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
+#     {q} {j} [k]  x  |  b   m  [w] (v) (z)   <--   u|r::~?   y::p   d|(f,(gh|tf))|h|(w,*)|kk|l|ll::a
 
 ### Doubles keymap
 # () means defined for `args`
@@ -597,4 +597,4 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # (1)  2   3   4   5  |  6   7   8   9   0
 #             [p] [y] | [f] [g] [c]  r  [l]   <--   pp,""?,*?::cc   yy|cc|xx::%+v   ff|bb   l|ll::a
 # (a) [o] [e] [u] [i] | [d] [h] [t] (n) (s)   <--   oo|ii|mm   ee,#,#,*,~~::eee   uu|hh   dd::ddd|ddc
-#     {q} {j} [k] [x] | [b] [m] {w} (v) [z]   <--   qq|q2::q   jj::#,j   ww::#,w   zz|zt
+#     {q} {j} [k] [x] | [b] [m]  w  (v) [z]   <--   qq|q2::q   jj::#,j   zz|zt

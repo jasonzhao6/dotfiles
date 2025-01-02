@@ -78,18 +78,6 @@ function test--f--for-tf {
 	)"
 }; run-with-filter test--f--for-tf
 
-function test--i {
-	assert "$(
-		i i
-	)" "$(
-		cat <<-eof
-		     1	i () {
-		     2		which \$@ | save-args
-		     3	}
-		eof
-	)"
-}; run-with-filter test--i
-
 function test--l {
 	assert "$(
 		rm -rf /tmp/test--l
@@ -175,6 +163,18 @@ function test--ll--with-search-pattern-to-ignore {
 		eof
 	)"
 }; run-with-filter test--ll--with-search-pattern-to-ignore
+
+function test--w {
+	assert "$(
+		w w
+	)" "$(
+		cat <<-eof
+		     1	w () {
+		     2		which \$@ | save-args
+		     3	}
+		eof
+	)"
+}; run-with-filter test--w
 
 function test--bb {
 	# Skip: Not interesting to test
