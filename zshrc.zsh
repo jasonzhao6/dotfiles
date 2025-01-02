@@ -268,7 +268,7 @@ function gxa { git rebase --abort }
 function gxc { git add --all; git rebase --continue }
 # [u]ndo and / or discard
 function gu { git reset --soft HEAD~$@ }
-function gz { git add --all; git reset --hard; gi }
+function gz { git add --all; git reset --hard; git status }
 function guz { gu $@; gz }
 # g[r]ep
 # (e.g `gr` to list all, `gr foo and bar` to filter)
