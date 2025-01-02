@@ -15,20 +15,26 @@ function o {
 
 			Usage:
 
-			  o <string containing urls>
-			  o <type> <arguments>*
-			  o <type prefix> <arguments>*
+			  o
+			  o <url>
+			  o <type> <arguments>?
+			  o <type prefix> <arguments>?
 
 			Types:
 
-			  # o main-branch
-			  # o new-pr
+			  o main-branch
+			  o new-pr
 		eof
 	else
-		[[ 'new-pr' == $type_prefix* ]] && o_new_pr
+		[[ 'main-branch' == $type_prefix* ]] && o-main-branch
+		[[ 'new-pr' == $type_prefix* ]] && o-new-pr
 	fi
 }
 
-function o_new_pr {
-	echo todo
+function o-main-branch {
+	echo main
+}
+
+function o-new-pr {
+	echo new
 }

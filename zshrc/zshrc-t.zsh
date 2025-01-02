@@ -10,8 +10,9 @@ function t {
 
 			Usage:
 
-			  t <type> <arguments>*
-			  t <type prefix> <arguments>*
+			  t
+			  t <type> <arguments>?
+			  t <type prefix> <arguments>?
 
 			Types:
 
@@ -20,10 +21,10 @@ function t {
 			  t opal
 		eof
 	else
-		[[ 'opal' == $type_prefix* ]] && t_opal
+		[[ 'opal' == $type_prefix* ]] && t-opal
 	fi
 }
 
-function t_opal {
-	print -l "${T_OPAL[@]}" | sort -k2 | column -t | ss
+function t-opal {
+	print -l "${T_OPAL[@]}" | sort | column -t | ss
 }
