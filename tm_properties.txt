@@ -20,7 +20,8 @@ tabSize = 4
 tabSize = 4
 
 [ source.shell ]
-tabSize = 4
+# Heredoc trims only leading tabs, e.g `cat <<-eof; ...; eof`
+softTabs = false
 
 # File extension chosen for .zshrc unit tests
 [ *.zsh ]

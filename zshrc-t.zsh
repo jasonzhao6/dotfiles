@@ -25,7 +25,5 @@ function t {
 }
 
 function t_opal {
-	for k v in ${(kv)T_OPAL}; do
-		echo $v $k
-	done | sort -k2,2 | column -t | s
+	print -l "${T_OPAL[@]}" | sort -k2 | column -t | s
 }
