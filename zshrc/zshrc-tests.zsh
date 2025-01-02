@@ -1,79 +1,11 @@
-#
-# Test config
-#
+source $ZSHRC_DIR/zshrc-tests/harness.zsh
+source $ZSHRC_DIR/zshrc-tests/helpers.zsh
 
-# Filter tests by partial name match
+# $1: Filter tests by partial name match
 local filter=$([[ -n $1 ]] && echo $1)
 
 #
-# Test harness
-#
-
-function init {
-	passes=0
-	total=0
-	failed=''
-	debug=''
-}
-
-function pass {
-	((passes++))
-	((total++))
-	echo -n .
-}
-
-function fail {
-	local name=$1
-
-	failed+="\nfail: $name"
-	((total++))
-	echo -n f
-
-	debug+="\n\ndebug: $name\n"
-	debug+=$(diff -u <(echo $expected) <(echo $output) | sed '/--- /d; /+++ /d; /@@ /d')
-}
-
-function assert {
-	local output=$1
-	local expected=$2
-
-	[[ $output == $expected ]] && pass || fail "'$funcstack[2]'"
-}
-
-function run-with-filter {
-	[[ -z $filter || $(index-of $@ $filter) -ne 0 ]] && $@
-}
-
-function print-summary {
-	local message=$1
-
-	echo "\n($passes/$total $message)"
-	[[ $passes -ne $total ]] && echo $failed $debug
-}
-
-#
-# Test helpers
-#
-
-function find-tests {
-	find "$ZSHRC_DIR/zshrc-tests" -name '*.zsh'
-}
-
-function verify-testing-order {
-	local source=$(grep '^function' $1 | sed 's/ {.*/ {/')
-	local target=$(grep '^function' $2 | sed -e 's/test--//' -e 's/--[^-].*/ {/' | uniq)
-
-	diff -U999999 <(echo $source) <(echo $target) | no-color | while IFS= read -r line; do
-		if [[ $line =~ '^ function' ]]; then
-			pass
-		elif [[ $line =~ '^\+function' ]]; then
-			fail "'$(echo "$line" | trim 10 2)' does not match"
-		fi
-	done
-}
-
-#
-# Section 1: Run test cases
+# Section 1: Run all test cases
 #
 
 local pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it

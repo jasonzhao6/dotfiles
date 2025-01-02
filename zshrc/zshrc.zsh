@@ -1,4 +1,4 @@
-ZSHRC_DIR="$HOME/gh/dotfiles/zshrc"
+export ZSHRC_DIR="$HOME/gh/dotfiles/zshrc"
 
 ### Colors
 # config
