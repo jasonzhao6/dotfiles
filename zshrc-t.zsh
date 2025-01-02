@@ -3,9 +3,9 @@
 #
 
 function t {
-	local type_prefix=$1
+	local type_prefix=$1; shift
 
-	if [[ -z $1 ]]; then
+	if [[ -z $type_prefix ]]; then
 		cat <<-eof
 
 			Usage:
@@ -20,10 +20,11 @@ function t {
 			  t opal
 		eof
 	else
+		[[ 'opal' == $type_prefix* ]] && t_opal
 	fi
 }
 
-function to {
+function t_opal {
 	for k v in ${(kv)T_OPAL}; do
 		echo $v $k
 	done | sort -k2,2 | column -t | s
