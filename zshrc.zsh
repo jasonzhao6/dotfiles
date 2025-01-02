@@ -458,13 +458,13 @@ function keys { jq keys | trim-list | save-args }
 function trim-list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$//' | no-empty }
 
 ### [Z]shrc
+# source
+function z { source ~/.zshrc }
 # edit
 function zm { mate $DOTFILES_DIR/zshrc.zsh }
 function zs { mate ~/.zshrc.secrets }
 # [t]est
 function zt { zsh $DOTFILES_DIR/zshrc-tests.zsh $@ }
-# source
-function zz { source ~/.zshrc }
 # [u]pload / [d]ownload other dotfiles
 function zu {
     cp ~/.colordiffrc $DOTFILES_DIR/colordiffrc.txt
@@ -589,10 +589,10 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # () means defined for `args`
 # [] means defined in this file
 # {} means defined in secrets file
-# (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)
-#             (p) (y) | [f] [g] (c) (r) [l]   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   (n|nn),_?::#
-# (a) {o} (e) (u) (i) | [d] [h] [t] (n) (s)   <--   #|aa|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
-#     {q} {j} [k]  x  |  b   m  [w] (v)  z    <--   y::p   u|r::~?   i::i,#   d|f|h|w|kk|l|ll::a
+# (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   (n|nn),_?::#
+#             (p) (y) | [f] [g] (c) (r) [l]   <--   #|aa|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
+# (a) {o} (e) (u) (i) | [d] [h] [t] (n) (s)   <--   y::p   u|r::~?   i::i,#   d|f|h|w|kk|l|ll::a
+#     {q} {j} [k]  x  |  b   m  [w] (v) [z]   <--   z|zt
 
 ### Doubles keymap
 # () means defined for `args`
@@ -601,4 +601,4 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # (1)  2   3   4   5  |  6   7   8   9   0
 #             [p] [y] | [f] [g] [c]  r  [l]   <--   pp,""?,*?::cc   yy|cc|xx::%+v   ff|bb   l|ll::a
 # (a) [o] [e] [u] [i] | [d] [h] [t] (n) (s)   <--   oo|ii|mm   ee,#,#,*,~~::eee   uu|hh   dd::ddd|ddc
-#     {q} {j} [k] [x] | [b] [m]  w  (v) [z]   <--   qq|q2::q   jj::#,j   zz|zt
+#     {q} {j} [k] [x] | [b] [m]  w  (v)  z    <--   qq|q2::q   jj::#,j

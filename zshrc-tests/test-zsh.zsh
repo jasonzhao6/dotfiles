@@ -1,27 +1,27 @@
-function test--zz--when-args-history-is-not-initialized {
+function test--z--when-args-history-is-not-initialized {
 	args-init
 	local args_history_max=$ARGS_HISTORY_MAX
 
 	assert "$(
 		ARGS_HISTORY_MAX=
-		zz
+		z
 		echo $ARGS_HISTORY_MAX
 	)" "$args_history_max"
 
 	args-init
-}; run-with-filter test--zz--when-args-history-is-not-initialized
+}; run-with-filter test--z--when-args-history-is-not-initialized
 
-function test--zz--when-args-history-is-already-initialized {
+function test--z--when-args-history-is-already-initialized {
 	local overwrite='<overwrite>'
 
 	assert "$(
 		ARGS_HISTORY_MAX=$overwrite
-		zz
+		z
 		echo $ARGS_HISTORY_MAX
 	)" "$overwrite"
 
 	args-init
-}; run-with-filter test--zz--when-args-history-is-already-initialized
+}; run-with-filter test--z--when-args-history-is-already-initialized
 
 function test--h {
 	local history=$(
