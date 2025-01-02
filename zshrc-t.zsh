@@ -3,17 +3,17 @@
 #
 
 function t {
-	local type_prefix=$1; shift
+	local type_prefix=$1
 
 	if [[ -z $type_prefix ]]; then
 		cat <<-eof
 
 			Usage:
 
-			  t <type_prefix> <arguments...>
-			  t <type_prefix prefix> <arguments...> # Use the first type_prefix matching prefix
+			  t <type> <arguments>*
+			  t <type prefix> <arguments>*
 
-			Available types:
+			Types:
 
 			  # t asg <asg name prefix>
 			  # t ec2 <ec2 name prefix>
@@ -25,5 +25,5 @@ function t {
 }
 
 function t_opal {
-	print -l "${T_OPAL[@]}" | sort -k2 | column -t | s
+	print -l "${T_OPAL[@]}" | sort -k2 | column -t | ss
 }

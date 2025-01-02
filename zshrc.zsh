@@ -311,6 +311,9 @@ function branch { git rev-parse --abbrev-ref HEAD }
 ### Lis[t]
 source "$DOTFILES_DIR/zshrc-t.zsh"
 
+### [O]pen
+source "$DOTFILES_DIR/zshrc-o.zsh"
+
 ### [K]ubectl
 # TODO move to eof once stable
 ### Kubectl keymap
@@ -443,6 +446,15 @@ function dd-dump-file { echo "$DD_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt
 function dd-taint-pasteboard { $(echo "$(pbpaste)\n\n(Dumped to '$DD')" | pbcopy) }
 function dd-clear-terminal { [[ $DD_CLEAR_TERMINAL -eq 1 ]] && clear }
 # | after strings
+# TODO test
+#- http://example.com
+#- https://example.org/path?query=value
+#- https://example.org/path?query=value?key=value#fragment
+#- www.example.net
+#- example.com/page
+#- example.com/page,
+#- subdomain.example.com/page,
+function extract-urls { pcregrep --only-matching '\b(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,6}(?:\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?\b' }
 function hex { hexdump -C }
 function no-color { sed -E 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g' }
 function no-empty { sed '/^$/d' }
@@ -458,13 +470,13 @@ function keys { jq keys | trim-list | save-args }
 function trim-list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$//' | no-empty }
 
 ### [Z]shrc
-# source
+# source / test
+[ -f ~/.zshrc.secrets ] && source ~/.zshrc.secrets
 function z { source ~/.zshrc }
+function zz { zsh $DOTFILES_DIR/zshrc-tests.zsh $@ }
 # edit
 function zm { mate $DOTFILES_DIR/zshrc.zsh }
 function zs { mate ~/.zshrc.secrets }
-# [t]est
-function zt { zsh $DOTFILES_DIR/zshrc-tests.zsh $@ }
 # [u]pload / [d]ownload other dotfiles
 function zu {
     cp ~/.colordiffrc $DOTFILES_DIR/colordiffrc.txt
@@ -481,7 +493,6 @@ function zu {
         fi
     fi
 }
-[ -f ~/.zshrc.secrets ] && source ~/.zshrc.secrets
 function zd {
     cp $DOTFILES_DIR/colordiffrc.txt ~/.colordiffrc
     cp $DOTFILES_DIR/gitignore.txt ~/.gitignore
@@ -591,8 +602,8 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # {} means defined in secrets file
 # (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   (n|nn),_?::#
 #             (p) (y) | [f] [g] (c) (r) [l]   <--   #|aa|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
-# (a) {o} (e) (u) (i) | [d] [h] [t] (n) (s)   <--   y::p   u|r::~?   i::i,#   d|f|h|w|kk|l|ll::a
-#     {q} {j} [k]  x  |  b   m  [w] (v) [z]   <--   z|zt
+# (a) [o] (e) (u) (i) | [d] [h] [t] (n) (s)   <--   y::p   u|r::~?   i::i,#   d|f|h|w|kk|l|ll::a
+#     {q} {j} [k]  x  |  b   m  [w] (v) [z]   <--   z|zz
 
 ### Doubles keymap
 # () means defined for `args`
@@ -601,4 +612,4 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # (1)  2   3   4   5  |  6   7   8   9   0
 #             [p] [y] | [f] [g] [c]  r  [l]   <--   pp,""?,*?::cc   yy|cc|xx::%+v   ff|bb   l|ll::a
 # (a) [o] [e] [u] [i] | [d] [h] [t] (n) (s)   <--   oo|ii|mm   ee,#,#,*,~~::eee   uu|hh   dd::ddd|ddc
-#     {q} {j} [k] [x] | [b] [m]  w  (v)  z    <--   qq|q2::q   jj::#,j
+#     {q} {j} [k] [x] | [b] [m]  w  (v) [z]   <--   qq|q2::q   jj::#,j
