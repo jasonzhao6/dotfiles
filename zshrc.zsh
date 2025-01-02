@@ -23,11 +23,11 @@ function color {
 }; color # enable aliases ahead of more function definitions, so that aliases can expand
 
 ### [Args]
-# [s]ave into args
+# [s]ave into args history
 # e.g: `<command>; s` and `<command> | s` both work
 function s { ss 'insert `#` after the first column to soft-select it' }
 function ss { [[ -t 0 ]] && eval $(prev-command) | save-args $@ || save-args $@ }
-# paste into args
+# paste into args history
 # e.g: copy list to pasteboard, then `v`
 function v { pbpaste | s }
 function vv { pbpaste | ss }
@@ -58,21 +58,21 @@ function 18 { arg $0 $@ }
 function 19 { arg $0 $@ }
 function 20 { arg $0 $@ }
 function 0 { arg $ $@ } # last arg
-# use a [r]andom
-# e.g: `rr echo`
+# use a [r]andom arg
+# e.g: `rr echo` # TODO collapse for easier scanning
 function rr { arg $((RANDOM % $(args-list-size) + 1)) $@ }
-# use args in rang[e]
+# use args within a rang[e]
 # e.g: `e 2 5 echo`, or more explicitly `e 2 5 echo ~~`
 function e { for i in $(seq $1 $2); do echo; arg $i ${${@:3}}; done }
-# use all args via iterator
+# use all args via an iterator
 # e.g: `each echo`, `all echo`, `map echo '$((~~ * 2))'`
 function each { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@; done }
 function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@ &; done; wait }
 function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | save-args }
-# list / select colum[n] by letter
+# list / select a colum[n] by letter
 # e.g `n` to list all, `n d` to select the fourth column based on the bottom row
 function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-columns-bar $N } || { args-mark-references! $1 $N; args-select-column!; [[ $ARGS_PUSHED -eq 0 && $(index-of "$(args-columns $N)" b) -ne 0 ]] && args-columns-bar $N }; return 0 }
-# list / select colum[n] by letter, based on the top row instead of the bottom row
+# list / select a colum[n] by letter, based on the top row instead of the bottom row
 function nn { NN=1 n $@ }
 # select the first column
 function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
@@ -84,7 +84,7 @@ function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
 # [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
 function u { ARG_SIZE_PREV=$(args-columns | strip); args-undo; args-list; args-undo-bar; ARG_SIZE_CURR=$(args-columns | strip); [[ ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args-redo; args-list; args-redo-bar }
-# [y]ank / [p]ut current args to a different tab
+# [y]ank / [p]ut current args into a different tab
 function y { args > ~/.zshrc.args }
 function p { echo "$(<~/.zshrc.args)" | save-args }
 # helpers
@@ -189,7 +189,7 @@ function smd { aws secretsmanager delete-secret --secret-id $@ --force-delete-wi
 # [decode] sts message
 function decode { aws sts decode-authorization-message --encoded-message $@ --output text | jq . }
 # helpers
-function ec2-args { aws ec2 describe-instances --filters $@ 'Name=instance-state-name, Values=running' --query "$(ec2-query)" --output text | sort --key=3 | sed 's/+00:00\t/Z  /g' | save-args }
+function ec2-args { aws ec2 describe-instances --filters $@ 'Name=instance-state-name, Values=running' --query "$(ec2-query)" --output text | sort --key=3 | sed 's/+00:00\t/Z  /g' | s }
 function ec2-query { echo 'Reservations[].Instances[].[PrivateIpAddress, LaunchTime, Tags[?Key==`Name` || Key==`aws:autoscaling:groupName`].Value|[0]]' }
 function ec2-id { [[ $@ =~ ^(i-)?[a-z0-9]{17}$ ]] && { [[ $@ =~ ^i-.*$ ]] && echo $@ || echo i-$@ } || { [[ $@ =~ ^[0-9\.]+$ ]] && ip-id $@ || name-id $@ } }
 function id-name { aws ec2 describe-instances --filters "Name=instance-id, Values=$@" --query 'Reservations[].Instances[].Tags[?Key==`Name`].Value' --output text }
