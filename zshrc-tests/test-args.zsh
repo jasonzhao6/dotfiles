@@ -762,6 +762,24 @@ function test--u--when-undoing-nn-with-headers-top-heavy {
 	)"
 }; run-with-filter test--u--when-undoing-nn-with-headers-top-heavy
 
+function test--u--when-undoing-ss-that-could-look-like-nn {
+	assert "$(
+		echo $input_with_headers | save-args > /dev/null
+		nn > /dev/null
+		echo $input_with_headers_top_heavy | save-args > /dev/null
+		u
+	)" "$(
+		cat <<-eof
+		     1	MANIFEST                                COMMENT
+		     2	terraform-application-region-shared-1   hello world
+		     3	terraform-application-region-shared-2   foo bar
+		     4	terraform-application-region-shared-3   sup
+		     5	terraform-application-region-program-A  how are you
+		     6	terraform-application-region-program-B  select via headers for this one
+		eof
+	)"
+}; run-with-filter test--u--when-undoing-ss-that-could-look-like-nn
+
 function test--u--when-undoing-x2 {
 	assert "$(
 		seq 1 2 | save-args > /dev/null
