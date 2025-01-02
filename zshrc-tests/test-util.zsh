@@ -1,3 +1,12 @@
+dig_input='dns.google'
+
+dig_output=$(
+	cat <<-eof
+		8.8.4.4
+		8.8.8.8
+	eof
+)
+
 ls_dash_l=$(
 	cat <<-eof
 		drwxr-xr-x  9 yzhao  staff    288 Dec 29 21:58 al-archive
@@ -13,35 +22,36 @@ ls_dash_l=$(
 )
 
 function test--d {
-	assert "$(d localhost)" "$(
-		cat <<-eof
-		     1	127.0.0.1
-		eof
-	)"
+	has-internet || {assert 1 1; return}
+
+	assert "$(
+		d $dig_input > /dev/null
+		args | sort
+	)" "$dig_output"
 }; run-with-filter test--d
 
 function test--d--without-input {
-	assert "$(d)" "$(
-		cat <<-eof
+	has-internet || {assert 1 1; return}
 
-		eof
-	)"
+	assert "$(d)" ''
 }; run-with-filter test--d--without-input
 
 function test--d--with-protocol {
-	assert "$(d http://localhost)" "$(
-		cat <<-eof
-		     1	127.0.0.1
-		eof
-	)"
+	has-internet || {assert 1 1; return}
+
+	assert "$(
+		d https://$dig_input > /dev/null
+		args | sort
+	)" "$dig_output"
 }; run-with-filter test--d--with-protocol
 
 function test--d--with-protocol-and-path {
-	assert "$(d http://localhost/path/to/file)" "$(
-		cat <<-eof
-		     1	127.0.0.1
-		eof
-	)"
+	has-internet || {assert 1 1; return}
+
+	assert "$(
+		d https://$dig_input/path/to/file > /dev/null
+		args | sort
+	)" "$dig_output"
 }; run-with-filter test--d--with-protocol-and-path
 
 function test--f--for-gh {
@@ -528,6 +538,10 @@ function test--echo-eval {
 function test--ellipsize {
 	assert "$(ellipsize $(printf "%.0sX" {1..1000}) | no-color | wc -c | awk '{print $1}')" "$COLUMNS"
 }; run-with-filter test--ellipsize
+
+function test--has-internet {
+	# Skip: Not interesting to test
+}
 
 function test--index-of--first {
 	assert "$(index-of '10 20 30 40' 10)" '1'

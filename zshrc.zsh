@@ -398,6 +398,7 @@ function ren { for file in *$1*; do mv "$file" "${file//$1/$2}"; done }
 # helpers
 function echo-eval { echo $@ >&2; eval $@ }
 function ellipsize { [[ ${#1} -gt $COLUMNS ]] && echo -n "${1:0:$((COLUMNS - 4))} \e[30m\e[47m...\e[0m" || echo $@ }
+function has-internet { curl -s --max-time 1 http://www.google.com &> /dev/null }
 function index-of { awk -v str1="$(echo $1 | no-color)" -v str2="$(echo $2 | no-color)" 'BEGIN { print index(str1, str2) }' }
 function next-ascii { printf "%b" $(printf "\\$(printf "%o" $(($(printf "%d" "'$@") + 1)))") }
 function paste-when-empty { echo ${@:-$(pbpaste)} }
