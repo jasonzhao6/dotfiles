@@ -2,10 +2,29 @@
 # Lis[t]
 #
 
-function t { [[ -z $1 ]] && echo 'to # no args' | save-args || echo-eval "$@[-1] $@[1,-2]" }
+function t {
+	local type_prefix=$1
 
-#
-# List type: Opal
-#
+	if [[ -z $1 ]]; then
+		cat <<-eof
 
-function to { for k v in ${(kv)T_OPAL}; do echo $v $k; done | sort -k2,2 | column -t | s }
+			Usage:
+
+			  t <type_prefix> <arguments...>
+			  t <type_prefix prefix> <arguments...> # Use the first type_prefix matching prefix
+
+			Available types:
+
+			  # t asg <asg name prefix>
+			  # t ec2 <ec2 name prefix>
+			  t opal
+		eof
+	else
+	fi
+}
+
+function to {
+	for k v in ${(kv)T_OPAL}; do
+		echo $v $k
+	done | sort -k2,2 | column -t | s
+}
