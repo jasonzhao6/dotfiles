@@ -56,7 +56,7 @@ function print-summary {
 #
 
 function find-tests {
-	find ~/gh/dotfiles/zshrc-tests -name '*.zsh'
+	find "$ZSHRC_DIR/zshrc-tests" -name '*.zsh'
 }
 
 function verify-testing-order {
@@ -79,7 +79,7 @@ function verify-testing-order {
 local pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
 
 init
-source ~/gh/dotfiles/zshrc.zsh
+source ~/.zshrc
 for test in $(find-tests); do source $test; done
 print-summary 'tests passed'
 
@@ -89,7 +89,7 @@ echo $pasteboard | pbcopy # Restore saved pasteboard value
 # Section 2: Verify all tests defined are getting invoked
 #
 
-[[ -z $filter ]] && { echo; ruby ~/gh/dotfiles/zshrc-tests/verify_test_invocations.rb }
+[[ -z $filter ]] && { echo; ruby $ZSHRC_DIR/zshrc-tests/verify_test_invocations.rb }
 
 #
 # Section 3: Verify tests are defined in the same order as their definitions in .zshrc
@@ -98,7 +98,7 @@ echo $pasteboard | pbcopy # Restore saved pasteboard value
 if [[ -z $filter ]]; then
 	echo
 	init
-	for test in $(find-tests); do verify-testing-order ~/gh/dotfiles/zshrc.zsh $test; done
+	for test in $(find-tests); do verify-testing-order $ZSHRC_DIR/zshrc.zsh $test; done
 	print-summary 'tests matched the testing order'
 fi
 
@@ -106,7 +106,7 @@ fi
 # Section 4: Verify keymaps at the bottom of .zshrc are up-to-date
 #
 
-[[ -z $filter ]] && { echo; ruby ~/gh/dotfiles/zshrc-tests/verify_keymaps.rb }
+[[ -z $filter ]] && { echo; ruby $ZSHRC_DIR/zshrc-tests/verify_keymaps.rb }
 
 #
 # Section 5: Verify all env vars overwritten are getting restored

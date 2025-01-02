@@ -98,11 +98,11 @@ function test--.......... {
 }; run-with-filter test--..........
 
 function test--cd---with-dir {
-	assert "$(cd- ~/gh/dotfiles 2>&1; pwd)" "$HOME/gh/dotfiles"
+	assert "$(cd- ~/Documents 2>&1; pwd)" "$HOME/Documents"
 }; run-with-filter test--cd---with-dir
 
 function test--cd---with-file {
-	assert "$(cd- ~/gh/dotfiles/zshrc-tests.zsh 2>&1; pwd)" "$HOME/gh/dotfiles"
+	assert "$(cd- ~/Documents/file.txt 2>&1; pwd)" "$HOME/Documents"
 }; run-with-filter test--cd---with-file
 
 function test--cdl {

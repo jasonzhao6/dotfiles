@@ -1,8 +1,8 @@
 class VerifyKeymaps
   # Run-command files
   HOME = `echo $HOME`.chomp
-  DOTFILES_DIR = "#{HOME}/gh/dotfiles"
-  ZSHRC = "#{DOTFILES_DIR}/zshrc.zsh"
+  ZSHRC_DIR = "#{HOME}/gh/dotfiles/zshrc"
+  ZSHRC = "#{ZSHRC_DIR}/zshrc.zsh"
   ZSHRC_SECRETS = "#{HOME}/.zshrc.secrets"
 
   # Keymap namespaces
@@ -63,7 +63,7 @@ class VerifyKeymaps
 
     # Gather info from `ZSHRC` sub files to prepare to verification
     @zshrc_sub_files.each do |file|
-      File.open("#{DOTFILES_DIR}/#{file}").each do |line|
+      File.open("#{ZSHRC_DIR}/#{file}").each do |line|
         name = extract_function_name(line)
         @zshrc_functions << name if name
       end
@@ -101,7 +101,7 @@ class VerifyKeymaps
   end
 
   def extract_sourced_file(line)
-    has_sourced_file = /^source "\$DOTFILES_DIR\/(?<file>.+)"/ =~ line
+    has_sourced_file = /^source "\$ZSHRC_DIR\/(?<file>.+)"/ =~ line
     file if has_sourced_file
   end
 

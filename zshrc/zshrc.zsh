@@ -1,4 +1,4 @@
-DOTFILES_DIR="$HOME/gh/dotfiles"
+ZSHRC_DIR="$HOME/gh/dotfiles/zshrc"
 
 ### Colors
 # config
@@ -217,7 +217,7 @@ function cdt { cd ~/Desktop }
 function tmp { cd /tmp }
 # go to github folders
 # TODO reorg as ~/github/<org>/<repo>
-function cdd { cd $DOTFILES_DIR }
+function cdd { cd ~/gh/dotfiles }
 function cde { cd ~/gh/excalidraw; ruby _touch.rb; oo }
 function cdg { cd ~/gh }
 function cdj { cd ~/gh/jasonzhao6 }
@@ -309,10 +309,10 @@ function repo { git rev-parse --show-toplevel | xargs basename }
 function branch { git rev-parse --abbrev-ref HEAD }
 
 ### Lis[t]
-source "$DOTFILES_DIR/zshrc/zshrc-t.zsh"
+source "$ZSHRC_DIR/zshrc-t.zsh"
 
 ### [O]pen
-source "$DOTFILES_DIR/zshrc/zshrc-o.zsh"
+source "$ZSHRC_DIR/zshrc-o.zsh"
 
 ### [K]ubectl
 # TODO move to eof once stable
@@ -465,16 +465,16 @@ function trim-list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$
 # source / test
 [ -f ~/.zshrc.secrets ] && source ~/.zshrc.secrets
 function z { source ~/.zshrc }
-function zz { zsh $DOTFILES_DIR/zshrc-tests.zsh $@ }
+function zz { zsh $ZSHRC_DIR/zshrc-tests.zsh $@ }
 # edit
-function zm { mate $DOTFILES_DIR/zshrc.zsh }
+function zm { mate $ZSHRC_DIR/zshrc.zsh }
 function zs { mate ~/.zshrc.secrets }
 # [u]pload / [d]ownload other dotfiles
 function zu {
-    cp ~/.colordiffrc $DOTFILES_DIR/colordiffrc.txt
-    cp ~/.gitignore $DOTFILES_DIR/gitignore.txt
-    cp ~/.terraformrc $DOTFILES_DIR/terraformrc.txt
-    cp ~/.tm_properties $DOTFILES_DIR/tm_properties.txt
+    cp ~/.colordiffrc $ZSHRC_DIR/colordiffrc.txt
+    cp ~/.gitignore $ZSHRC_DIR/gitignore.txt
+    cp ~/.terraformrc $ZSHRC_DIR/terraformrc.txt
+    cp ~/.tm_properties $ZSHRC_DIR/tm_properties.txt
 
     if [[ -f ~/.zshrc.secrets ]]; then
         openssl sha1 ~/.zshrc.secrets > ~/.zshrc.secrets_sha1_candidate
@@ -486,10 +486,10 @@ function zu {
     fi
 }
 function zd {
-    cp $DOTFILES_DIR/colordiffrc.txt ~/.colordiffrc
-    cp $DOTFILES_DIR/gitignore.txt ~/.gitignore
-    cp $DOTFILES_DIR/terraformrc.txt ~/.terraformrc
-    cp $DOTFILES_DIR/tm_properties.txt ~/.tm_properties
+    cp $ZSHRC_DIR/colordiffrc.txt ~/.colordiffrc
+    cp $ZSHRC_DIR/gitignore.txt ~/.gitignore
+    cp $ZSHRC_DIR/terraformrc.txt ~/.terraformrc
+    cp $ZSHRC_DIR/tm_properties.txt ~/.tm_properties
 }
 
 ### Zsh arrow keys
