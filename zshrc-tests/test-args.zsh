@@ -14,7 +14,6 @@ input_with_whitespace=$(
 		terraform-application-region-shared-2
 		  terraform-application-region-shared-3
 		terraform-application-region-program-A
-		  terraform-application-region-program-B
 	eof
 )
 
@@ -578,6 +577,20 @@ function test--n--with-one-column {
 	)"
 }; run-with-filter test--n--with-one-column
 
+function test--n--with-whitespace {
+	assert "$(
+		echo $input_with_whitespace | save-args > /dev/null
+		n a
+	)" "$(
+		cat <<-eof
+		     1	  terraform-application-region-shared-1
+		     2	terraform-application-region-shared-2
+		     3	  terraform-application-region-shared-3
+		     4	terraform-application-region-program-A
+		eof
+	)"
+}; run-with-filter test--n--with-whitespace
+
 function test--n--with-headers {
 	assert "$(
 		echo $input_with_headers | save-args > /dev/null
@@ -942,7 +955,6 @@ function test--save-args--with-leading-whitespace {
 		     2	terraform-application-region-shared-2
 		     3	  terraform-application-region-shared-3
 		     4	terraform-application-region-program-A
-		     5	  terraform-application-region-program-B
 		eof
 	)"
 }; run-with-filter test--save-args--with-leading-whitespace

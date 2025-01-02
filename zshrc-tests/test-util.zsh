@@ -635,6 +635,14 @@ function test--strip {
 	assert "$(echo '    111 222   ' | strip)" '111 222'
 }; run-with-filter test--strip
 
+function test--strip-left {
+	assert "$(echo '    111 222   ' | strip-left)" '111 222   '
+}; run-with-filter test--strip-left
+
+function test--strip-right {
+	assert "$(echo '    111 222   ' | strip-right)" '    111 222'
+}; run-with-filter test--strip-right
+
 function test--trim {
 	assert "$(echo 1234567890 | trim)" '1234567890'
 }; run-with-filter test--trim
