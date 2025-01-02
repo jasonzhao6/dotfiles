@@ -1,3 +1,5 @@
+DOTFILES_DIR="$HOME/gh/dotfiles"
+
 ### Colors
 # config
 export GREP_COLOR='1;32'
@@ -215,7 +217,7 @@ function cdt { cd ~/Desktop }
 function tmp { cd /tmp }
 # go to github folders
 # TODO reorg as ~/github/<org>/<repo>
-function cdd { cd ~/gh/dotfiles }
+function cdd { cd $DOTFILES_DIR }
 function cde { cd ~/gh/excalidraw; ruby _touch.rb; oo }
 function cdg { cd ~/gh }
 function cdj { cd ~/gh/jasonzhao6 }
@@ -306,9 +308,8 @@ function org { git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*/\1/' }
 function repo { git rev-parse --show-toplevel | xargs basename }
 function branch { git rev-parse --abbrev-ref HEAD }
 
-### Lis[t] # TODO wip
-function t { [[ -z $1 ]] && echo 'to # no args' | save-args || echo-eval "$@[-1] $@[1,-2]" }
-function to { for k v in ${(kv)T_OPAL}; do echo $v $k; done | sort -k2,2 | column -t | s }
+### Lis[t]
+source "$DOTFILES_DIR/zshrc-t.zsh"
 
 ### [K]ubectl
 # TODO move to eof once stable
@@ -458,18 +459,18 @@ function trim-list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$
 
 ### [Z]shrc
 # edit
-function zm { mate ~/gh/dotfiles/zshrc.zsh }
+function zm { mate $DOTFILES_DIR/zshrc.zsh }
 function zs { mate ~/.zshrc.secrets }
 # [t]est
-function zt { zsh ~/gh/dotfiles/zshrc-tests.zsh $@ }
+function zt { zsh $DOTFILES_DIR/zshrc-tests.zsh $@ }
 # source
 function zz { source ~/.zshrc }
 # [u]pload / [d]ownload other dotfiles
 function zu {
-    cp ~/.colordiffrc ~/gh/dotfiles/colordiffrc.txt
-    cp ~/.gitignore ~/gh/dotfiles/gitignore.txt
-    cp ~/.terraformrc ~/gh/dotfiles/terraformrc.txt
-    cp ~/.tm_properties ~/gh/dotfiles/tm_properties.txt
+    cp ~/.colordiffrc $DOTFILES_DIR/colordiffrc.txt
+    cp ~/.gitignore $DOTFILES_DIR/gitignore.txt
+    cp ~/.terraformrc $DOTFILES_DIR/terraformrc.txt
+    cp ~/.tm_properties $DOTFILES_DIR/tm_properties.txt
 
     if [[ -f ~/.zshrc.secrets ]]; then
         openssl sha1 ~/.zshrc.secrets > ~/.zshrc.secrets_sha1_candidate
@@ -482,10 +483,10 @@ function zu {
 }
 [ -f ~/.zshrc.secrets ] && source ~/.zshrc.secrets
 function zd {
-    cp ~/gh/dotfiles/colordiffrc.txt ~/.colordiffrc
-    cp ~/gh/dotfiles/gitignore.txt ~/.gitignore
-    cp ~/gh/dotfiles/terraformrc.txt ~/.terraformrc
-    cp ~/gh/dotfiles/tm_properties.txt ~/.tm_properties
+    cp $DOTFILES_DIR/colordiffrc.txt ~/.colordiffrc
+    cp $DOTFILES_DIR/gitignore.txt ~/.gitignore
+    cp $DOTFILES_DIR/terraformrc.txt ~/.terraformrc
+    cp $DOTFILES_DIR/tm_properties.txt ~/.tm_properties
 }
 
 ### Zsh arrow keys

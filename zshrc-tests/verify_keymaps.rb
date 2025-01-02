@@ -1,7 +1,8 @@
 class VerifyKeymaps
   # Run-command files
   HOME = `echo $HOME`.chomp
-  ZSHRC = "#{HOME}/gh/dotfiles/zshrc.zsh"
+  DOTFILES_DIR = "#{HOME}/gh/dotfiles"
+  ZSHRC = "#{DOTFILES_DIR}/zshrc.zsh"
   ZSHRC_SECRETS = "#{HOME}/.zshrc.secrets"
 
   # Keymap namespaces
@@ -32,14 +33,15 @@ class VerifyKeymaps
     .map { |_char, index| [index, 2] }
 
   def initialize
-    # Function names
+    # Info needed to perform verification
     @zshrc_functions = []
+    @zshrc_sub_files = []
     @zshrc_secrets_functions = []
 
     # Keymap partitions
-    @non_secrets = nil
-    @secrets = nil
-    @not_used = nil
+    @non_secrets = nil # Should be in `ZSHRC` or a sub file
+    @secrets = nil     # Should be in `ZSHRC_SECRETS`
+    @not_used = nil    # Should be in neither
 
     # Verification result
     @failed = []
@@ -50,16 +52,30 @@ class VerifyKeymaps
   def run
     current_namespace = nil
 
+    # Gather info from `ZSHRC` to prepare to verification
     File.open(ZSHRC).each do |line|
       name = extract_function_name(line)
       @zshrc_functions << name if name
+
+      file = extract_sourced_file(line)
+      @zshrc_sub_files << file if file
     end
 
+    # Gather info from `ZSHRC` sub files to prepare to verification
+    @zshrc_sub_files.each do |file|
+      File.open("#{DOTFILES_DIR}/#{file}").each do |line|
+        name = extract_function_name(line)
+        @zshrc_functions << name if name
+      end
+    end
+
+    # Gather info from `ZSHRC_SECRETS` to prepare to verification
     File.open(ZSHRC_SECRETS).each do |line|
       name = extract_function_name(line)
       @zshrc_secrets_functions << name if name
     end
 
+    # Do verification with info gathered
     File.open(ZSHRC).each do |line|
       current_namespace = extract_keymap_namespace(line) || current_namespace
 
@@ -79,8 +95,14 @@ class VerifyKeymaps
   private
 
   def extract_function_name(line)
+    # Note: `(.+?) {` not greedy in case line contains multiple `{`
     has_function = /^function (?<name>.+?) {/ =~ line
     name if has_function
+  end
+
+  def extract_sourced_file(line)
+    has_sourced_file = /^source "\$DOTFILES_DIR\/(?<file>.+)"/ =~ line
+    file if has_sourced_file
   end
 
   def extract_keymap_namespace(line)
