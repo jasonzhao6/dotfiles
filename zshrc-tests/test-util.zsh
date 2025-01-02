@@ -13,7 +13,9 @@ ls_dash_l=$(
 )
 
 function test--d {
-	assert "$(D_UNDER_TEST=1 d www.google.com)" "$(
+	assert "$(
+		D_UNDER_TEST=1 d www.google.com
+	)" "$(
 		cat <<-eof
 		     1	test output for
 		     2	www.google.com
@@ -26,7 +28,9 @@ function test--d--without-input {
 }; run-with-filter test--d--without-input
 
 function test--d--with-protocol {
-	assert "$(D_UNDER_TEST=1 d https://www.google.com)" "$(
+	assert "$(
+		D_UNDER_TEST=1 d https://www.google.com
+	)" "$(
 		cat <<-eof
 		     1	test output for
 		     2	www.google.com
@@ -35,7 +39,9 @@ function test--d--with-protocol {
 }; run-with-filter test--d--with-protocol
 
 function test--d--with-protocol-and-path {
-	assert "$(D_UNDER_TEST=1 d https://www.google.com/path/to/page)" "$(
+	assert "$(
+		D_UNDER_TEST=1 d https://www.google.com/path/to/page
+	)" "$(
 		cat <<-eof
 		     1	test output for
 		     2	www.google.com
@@ -73,7 +79,9 @@ function test--f--for-tf {
 }; run-with-filter test--f--for-tf
 
 function test--i {
-	assert "$(i i)" "$(
+	assert "$(
+		i i
+	)" "$(
 		cat <<-eof
 		     1	i () {
 		     2		which \$@ | save-args
@@ -409,7 +417,9 @@ function test--hh {
 		eof
 	)
 
-	assert "$(hh <(echo $old) <(echo $new) | no-color)" "$(
+	assert "$(
+		hh <(echo $old) <(echo $new) | no-color
+	)" "$(
 		cat <<-eof
 			This is the original content.                                   |       This is the modified content.
 			                                                                >       New Line
@@ -459,7 +469,9 @@ function test--uu {
 		eof
 	)
 
-	assert "$(uu <(echo $old) <(echo $new) | no-color | sed 1,2d)" "$(
+	assert "$(
+		uu <(echo $old) <(echo $new) | no-color | sed 1,2d
+	)" "$(
 		cat <<-eof
 			@@ -1,5 +1,6 @@
 			-This is the original content.
@@ -516,7 +528,9 @@ function test--ren {
 }; run-with-filter test--ren
 
 function test--echo-eval {
-	assert "$(echo-eval echo 123 2>&1)" "$(
+	assert "$(
+		echo-eval echo 123 2>&1
+	)" "$(
 		cat <<-eof
 			echo 123
 			123
@@ -525,7 +539,9 @@ function test--echo-eval {
 }; run-with-filter test--echo-eval
 
 function test--ellipsize {
-	assert "$(ellipsize $(printf "%.0sX" {1..1000}) | no-color | wc -c | awk '{print $1}')" "$COLUMNS"
+	assert "$(
+		ellipsize $(printf "%.0sX" {1..1000}) | no-color | wc -c | awk '{print $1}'
+	)" "$COLUMNS"
 }; run-with-filter test--ellipsize
 
 function test--has-internet {
@@ -581,7 +597,9 @@ function test--prev-command {
 }
 
 function test--hex {
-	assert "$(echo 123 | hex)" "$(
+	assert "$(
+		echo 123 | hex
+	)" "$(
 		cat <<-eof
 			00000000  31 32 33 0a                                       |123.|
 			00000004
@@ -603,7 +621,9 @@ function test--no-empty {
 		eof
 	)
 
-	assert "$(echo $input | no-empty)" "$(
+	assert "$(
+		echo $input | no-empty
+	)" "$(
 		cat <<-eof
 			[
 			]
@@ -628,18 +648,20 @@ function test--trim--with-two-args {
 }; run-with-filter test--trim--with-two-args
 
 function test--insert-hash {
-	assert "$(echo $ls_dash_l | insert-hash)" "$(
-	cat <<-eof
-		drwxr-xr-x  # 9 yzhao  staff    288 Dec 29 21:58 al-archive
-		-rw-r--r--  # 1 yzhao  staff    228 Dec 30 00:12 colordiffrc.txt
-		-rw-r--r--@ # 1 yzhao  staff    135 Dec 30 00:12 gitignore.txt
-		-rw-r--r--@ # 1 yzhao  staff     44 Dec 30 00:12 terraformrc.txt
-		-rw-r--r--@ # 1 yzhao  staff    871 Dec 30 00:12 tm_properties.txt
-		drwxr-xr-x  # 6 yzhao  staff    192 Dec 29 21:58 vimium
-		drwxr-xr-x  # 7 yzhao  staff    224 Dec 30 00:14 zshrc-tests
-		-rwxr-xr-x@ # 1 yzhao  staff   2208 Dec 30 00:12 zshrc-tests.zsh
-		-rw-r--r--@ # 1 yzhao  staff  23929 Dec 30 00:12 zshrc.txt
-	eof
+	assert "$(
+		echo $ls_dash_l | insert-hash
+	)" "$(
+		cat <<-eof
+			drwxr-xr-x  # 9 yzhao  staff    288 Dec 29 21:58 al-archive
+			-rw-r--r--  # 1 yzhao  staff    228 Dec 30 00:12 colordiffrc.txt
+			-rw-r--r--@ # 1 yzhao  staff    135 Dec 30 00:12 gitignore.txt
+			-rw-r--r--@ # 1 yzhao  staff     44 Dec 30 00:12 terraformrc.txt
+			-rw-r--r--@ # 1 yzhao  staff    871 Dec 30 00:12 tm_properties.txt
+			drwxr-xr-x  # 6 yzhao  staff    192 Dec 29 21:58 vimium
+			drwxr-xr-x  # 7 yzhao  staff    224 Dec 30 00:14 zshrc-tests
+			-rwxr-xr-x@ # 1 yzhao  staff   2208 Dec 30 00:12 zshrc-tests.zsh
+			-rw-r--r--@ # 1 yzhao  staff  23929 Dec 30 00:12 zshrc.txt
+		eof
 )"
 }; run-with-filter test--insert-hash
 
@@ -666,7 +688,9 @@ function test--keys {
 		eof
 	)
 
-	assert "$(echo $input | keys)" "$(
+	assert "$(
+		echo $input | keys
+	)" "$(
 		cat <<-eof
 		     1	key1
 		     2	key2
@@ -686,7 +710,9 @@ function test--trim-list {
 		eof
 	)
 
-	assert "$(echo $input | trim-list)" "$(
+	assert "$(
+		echo $input | trim-list
+	)" "$(
 		cat <<-eof
 			row-1
 			row-2

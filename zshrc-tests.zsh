@@ -59,7 +59,7 @@ function find-tests {
 	find ~/gh/dotfiles/zshrc-tests -name '*.zsh'
 }
 
-function verify-test-ordering {
+function verify-testing-order {
 	local source=$(grep '^function' $1 | sed 's/ {.*/ {/')
 	local target=$(grep '^function' $2 | sed -e 's/test--//' -e 's/--[^-].*/ {/' | uniq)
 
@@ -98,7 +98,7 @@ echo $pasteboard | pbcopy # Restore saved pasteboard value
 if [[ -z $filter ]]; then
 	echo
 	init
-	for test in $(find-tests); do verify-test-ordering ~/gh/dotfiles/zshrc.zsh $test; done
+	for test in $(find-tests); do verify-testing-order ~/gh/dotfiles/zshrc.zsh $test; done
 	print-summary 'tests matched the testing order'
 fi
 

@@ -51,10 +51,10 @@ input_with_tabs=$(
 input_with_comments=$input_with_tabs
 
 function test--s {
-	# Testing only the `<command> | ss` use case
-	# Cannot test the `<command>; ss` use case b/c `fc -l` throws 'no such event' error
-
-	assert "$(echo $input_with_headers | s)" "$(
+	# Can test `<command> | s`, but not `<command>; s`. The latter requires an interactive shell.
+	assert "$(
+		echo $input_with_headers | s
+	)" "$(
 		cat <<-eof
 		     1	MANIFEST                                # COMMENT
 		     2	terraform-application-region-shared-1   # hello world
@@ -67,10 +67,10 @@ function test--s {
 }; run-with-filter test--s
 
 function test--ss {
-	# Testing only the `<command> | ss` use case
-	# Cannot test the `<command>; ss` use case b/c `fc -l` throws 'no such event' error
-
-	assert "$(echo $input_with_headers | ss)" "$(
+	# Can test `<command> | ss`, but not `<command>; ss`. The latter requires an interactive shell.
+	assert "$(
+		echo $input_with_headers | ss
+	)" "$(
 		cat <<-eof
 		     1	MANIFEST                                COMMENT
 		     2	terraform-application-region-shared-1   hello world
