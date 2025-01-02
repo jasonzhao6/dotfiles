@@ -804,7 +804,7 @@ function test--u--when-undoing-beyond-tail {
 		cat <<-eof
 		     1	1
 		     2	2
-		$(red-bg 'Reached the end of undo history')
+		$(red-bg '  Reached the end of undo history  ')
 		eof
 	)"
 }; run-with-filter test--u--when-undoing-beyond-tail
@@ -825,7 +825,7 @@ function test--u--when-pushing-beyond-head-then-undoing-beyond-tail {
 		cat <<-eof
 		     1	2
 		     2	3
-		$(red-bg 'Reached the end of undo history')
+		$(red-bg '  Reached the end of undo history  ')
 		eof
 	)"
 
@@ -897,7 +897,7 @@ function test--r--when-redoing-beyond-head {
 		cat <<-eof
 		     1	3
 		     2	4
-		$(red-bg 'Reached the end of redo history')
+		$(red-bg '  Reached the end of redo history  ')
 		eof
 	)"
 }; run-with-filter test--r--when-redoing-beyond-head
@@ -915,7 +915,7 @@ function test--r--when-redoing-beyond-new-head {
 		cat <<-eof
 		     1	4
 		     2	5
-		$(red-bg 'Reached the end of redo history')
+		$(red-bg '  Reached the end of redo history  ')
 		eof
 	)"
 }; run-with-filter test--r--when-redoing-beyond-new-head
