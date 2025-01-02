@@ -596,6 +596,57 @@ function test--prev-command {
 	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
 }
 
+function test--extract-urls {
+	local url='example.com'
+	assert "$(echo $url | extract-urls)" $url
+}; run-with-filter test--extract-urls
+
+function test--extract-urls--with-www {
+	local url='www.example.com'
+	assert "$(echo $url | extract-urls)" $url
+}; run-with-filter test--extract-urls--with-www
+
+function test--extract-urls--with-subdomain {
+	local url='subdomain.example.com'
+	assert "$(echo $url | extract-urls)" $url
+}; run-with-filter test--extract-urls--with-subdomain
+
+function test--extract-urls--with-http {
+	local url='http://www.example.com'
+	assert "$(echo $url | extract-urls)" $url
+}; run-with-filter test--extract-urls--with-http
+
+function test--extract-urls--with-https {
+	local url='https://www.example.com'
+	assert "$(echo $url | extract-urls)" $url
+}; run-with-filter test--extract-urls--with-https
+
+function test--extract-urls--with-path {
+	local url='https://www.example.com/path'
+	assert "$(echo $url | extract-urls)" $url
+}; run-with-filter test--extract-urls--with-path
+
+function test--extract-urls--with-query {
+	local url='https://www.example.com/path?key=value'
+	assert "$(echo $url | extract-urls)" $url
+}; run-with-filter test--extract-urls--with-query
+
+function test--extract-urls--with-fragment {
+	local url='https://www.example.com/path?key=value#heading'
+	assert "$(echo $url | extract-urls)" $url
+}; run-with-filter test--extract-urls--with-fragment
+
+function test--extract-urls--with-multiple-urls {
+	assert "$(
+		echo '2 urls https://www.example.com/path?key=value#heading, google.com' | extract-urls
+	)" "$(
+		cat <<-eof
+			https://www.example.com/path?key=value#heading
+			google.com
+		eof
+	)"
+}; run-with-filter test--extract-urls--with-multiple-urls
+
 function test--hex {
 	assert "$(
 		echo 123 | hex
