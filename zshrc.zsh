@@ -74,8 +74,6 @@ function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $A
 function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-columns-bar $N } || { args-mark-references! $1 $N; args-select-column!; [[ $ARGS_PUSHED -eq 0 && $(index-of "$(args-columns $N)" b) -ne 0 ]] && args-columns-bar $N }; return 0 }
 # (`nn` is like `n`, but based on the top row instead of bottom row)
 function nn { NN=1 n $@ }
-# select the first column
-function aa { [[ -z $N || $N -eq 1 ]] && n a || nn a }
 # strip leading / trailing spaces from all args
 function z { args | strip | save-args }
 # [c]opy into pasteboard
@@ -584,7 +582,7 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # [] means defined in this file
 # {} means defined in secrets file
 # (1) (2) (3) (4) (5) | (6) (7) (8) (9) (0)
-#             (p) (y) | [f] [g] (c) (r) [l]   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   ((n|nn),.?)|aa|z::#
+#             (p) (y) | [f] [g] (c) (r) [l]   <--   s|ss|v|vv::a|n   a,*?,-*?::~?::#   (n|nn),.?::#
 # (a) {o} (e) (u) [i] | [d] [h]  t  (n) (s)   <--   #|rr|each|all|map,*,~~?   e,#,#,*,~~?   #?,c::%+v
 #     {q} {j} [k]  x  |  b   m  {w} (v) (z)   <--   u|r::~?   y::p   d|(f,(gh|tf))|h|(i,*)|kk|l|ll::a
 
@@ -594,5 +592,5 @@ function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | a
 # {} means defined in secrets file
 # (1)  2   3   4   5  |  6   7   8   9   0
 #             [p] [y] | [f] [g] [c] (r) [l]   <--   pp,""?,*?::cc   yy|cc|xx::%+v   ff|bb   l|ll::a
-# (a) [o] [e] [u] [i] | [d] [h] [t] (n) (s)   <--   oo|ii|mm   ee,#,#,*,~~::eee   uu|hh   dd::ddd|ddc
+#  a  [o] [e] [u] [i] | [d] [h] [t] (n) (s)   <--   oo|ii|mm   ee,#,#,*,~~::eee   uu|hh   dd::ddd|ddc
 #     {q} {j} [k] [x] | [b] [m] {w} (v) [z]   <--   qq|q2::q   jj::#,j   ww::#,w   zz|zt

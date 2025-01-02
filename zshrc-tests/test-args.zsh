@@ -627,69 +627,6 @@ function test--nn--with-one-column {
 	)"
 }; run-with-filter test--nn--with-one-column
 
-function test--aa {
-	assert "$(
-		echo $input_with_tabs | save-args > /dev/null
-		aa
-	)" "$(
-		cat <<-eof
-		     1	10.0.0.1
-		     2	10.0.0.2
-		     3	10.0.0.3
-		eof
-	)"
-}; run-with-filter test--aa
-
-function test--aa--when-there-was-no-preceding-request {
-	assert "$(
-		echo $input_with_headers_top_heavy | save-args > /dev/null
-		aa
-	)" "$(
-		cat <<-eof
-		     1	MANIFEST                                COMMENT
-		     2	terraform-application-region-shared-1   hello world
-		     3	terraform-application-region-shared-2
-		     4	terraform-application-region-shared-3
-		     5	terraform-application-region-program-A
-		     6	terraform-application-region-program-B
-		eof
-	)"
-}; run-with-filter test--aa--when-there-was-no-preceding-request
-
-function test--aa--when-the-preceding-request-was-n {
-	assert "$(
-		echo $input_with_headers_top_heavy | save-args > /dev/null
-		n > /dev/null
-		aa
-	)" "$(
-		cat <<-eof
-		     1	MANIFEST                                COMMENT
-		     2	terraform-application-region-shared-1   hello world
-		     3	terraform-application-region-shared-2
-		     4	terraform-application-region-shared-3
-		     5	terraform-application-region-program-A
-		     6	terraform-application-region-program-B
-		eof
-	)"
-}; run-with-filter test--aa--when-the-preceding-request-was-n
-
-function test--aa--when-the-preceding-request-was-nn {
-	assert "$(
-		echo $input_with_headers_top_heavy | save-args > /dev/null
-		nn > /dev/null
-		aa
-	)" "$(
-		cat <<-eof
-		     1	MANIFEST
-		     2	terraform-application-region-shared-1
-		     3	terraform-application-region-shared-2
-		     4	terraform-application-region-shared-3
-		     5	terraform-application-region-program-A
-		     6	terraform-application-region-program-B
-		eof
-	)"
-}; run-with-filter test--aa--when-the-preceding-request-was-nn
-
 function test--z {
 	assert "$(
 		echo $input_with_whitespace | save-args > /dev/null
