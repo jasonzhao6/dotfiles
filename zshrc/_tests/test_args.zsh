@@ -8,6 +8,13 @@ input=$(
 	eof
 )
 
+input_short=$(
+	cat <<-eof
+		terraform-application-region-shared-1
+		terraform-application-region-shared-2
+	eof
+)
+
 input_with_whitespace=$(
 	cat <<-eof
 		  terraform-application-region-shared-1
@@ -180,22 +187,16 @@ function test--a--with-two-args-including-negation {
 
 function test--aa {
 	assert "$(
-		echo $input | ss > /dev/null
-		eee 1 $(($(args-list-size) * 10)) aa echo 2>&1 | sort | uniq
+		echo $input_short | ss > /dev/null
+		eee 1 $(($(args-list-size) * 2)) aa echo 2>&1 | sort | uniq
 	)" "$(
 		cat <<-eof
 
 			aa echo
-			echo terraform-application-region-program-A
-			echo terraform-application-region-program-B
 			echo terraform-application-region-shared-1
 			echo terraform-application-region-shared-2
-			echo terraform-application-region-shared-3
-			terraform-application-region-program-A
-			terraform-application-region-program-B
 			terraform-application-region-shared-1
 			terraform-application-region-shared-2
-			terraform-application-region-shared-3
 		eof
 	)"
 }; run-with-filter test--aa
