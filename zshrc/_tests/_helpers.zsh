@@ -1,5 +1,5 @@
 function find-tests {
-	find "$ZSHRC_DIR/_tests" -name 'test-*.zsh'
+	find "$ZSHRC_DIR/_tests" -name 'test_*.zsh'
 }
 
 function verify-testing-order {

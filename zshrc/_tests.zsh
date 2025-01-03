@@ -57,7 +57,7 @@ if [[ ($section_filter -eq 3 || -z $section_filter) && -z $test_filter ]]; then
 	init
 
 	for test in $(find-tests); do
-		test_target="${test/_tests\/test-}"
+		test_target="${test/_tests\/test_}"
 
 		if [[ -f $test_target ]]; then
 			verify-testing-order "$test_target" "$test"
