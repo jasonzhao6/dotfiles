@@ -6,8 +6,8 @@ ls_dash_l=$(
 		-rw-r--r--@ 1 yzhao  staff     44 Dec 30 00:12 terraformrc.txt
 		-rw-r--r--@ 1 yzhao  staff    871 Dec 30 00:12 tm_properties.txt
 		drwxr-xr-x  6 yzhao  staff    192 Dec 29 21:58 vimium
-		drwxr-xr-x  7 yzhao  staff    224 Dec 30 00:14 _zshrc-tests
-		-rwxr-xr-x@ 1 yzhao  staff   2208 Dec 30 00:12 _zshrc-tests.zsh
+		drwxr-xr-x  7 yzhao  staff    224 Dec 30 00:14 _tests
+		-rwxr-xr-x@ 1 yzhao  staff   2208 Dec 30 00:12 _tests.zsh
 		-rw-r--r--@ 1 yzhao  staff  23929 Dec 30 00:12 zshrc.txt
 	eof
 )
@@ -717,8 +717,8 @@ function test--insert-hash {
 			-rw-r--r--@ # 1 yzhao  staff     44 Dec 30 00:12 terraformrc.txt
 			-rw-r--r--@ # 1 yzhao  staff    871 Dec 30 00:12 tm_properties.txt
 			drwxr-xr-x  # 6 yzhao  staff    192 Dec 29 21:58 vimium
-			drwxr-xr-x  # 7 yzhao  staff    224 Dec 30 00:14 _zshrc-tests
-			-rwxr-xr-x@ # 1 yzhao  staff   2208 Dec 30 00:12 _zshrc-tests.zsh
+			drwxr-xr-x  # 7 yzhao  staff    224 Dec 30 00:14 _tests
+			-rwxr-xr-x@ # 1 yzhao  staff   2208 Dec 30 00:12 _tests.zsh
 			-rw-r--r--@ # 1 yzhao  staff  23929 Dec 30 00:12 zshrc.txt
 		eof
 )"

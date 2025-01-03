@@ -1,7 +1,7 @@
 export ZSHRC_DIR="$HOME/gh/dotfiles/zshrc"
 
 # Enable color aliases first to allow expansion in all subsequent functions
-source "$ZSHRC_DIR/zshrc-colors.zsh"; color
+source "$ZSHRC_DIR/colors.zsh"; color
 
 ### [Args]
 # [s]ave into args history
@@ -288,10 +288,10 @@ function repo { git rev-parse --show-toplevel | xargs basename }
 function branch { git rev-parse --abbrev-ref HEAD }
 
 ### Lis[t]
-source "$ZSHRC_DIR/zshrc-t.zsh"
+source "$ZSHRC_DIR/t.zsh"
 
 ### [O]pen
-source "$ZSHRC_DIR/zshrc-o.zsh"
+source "$ZSHRC_DIR/o.zsh"
 
 ### [K]ubectl
 # TODO move to eof once stable
@@ -444,9 +444,9 @@ function trim-list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$
 # source / test
 [[ -z $UNDER_TEST && -f ~/.zshrc.secrets ]] && source ~/.zshrc.secrets
 function z { source ~/.zshrc }
-function zz { zsh $ZSHRC_DIR/_zshrc-tests.zsh $@ }
+function zz { zsh $ZSHRC_DIR/_tests.zsh $@ }
 # edit
-function zm { mate $ZSHRC_DIR/zshrc.zsh }
+function zm { mate $ZSHRC_DIR }
 function zs { mate ~/.zshrc.secrets }
 # [u]pload / [d]ownload other dotfiles
 function zu {
