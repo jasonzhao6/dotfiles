@@ -1,3 +1,5 @@
+# shellcheck disable=SC2034
+
 # TODO
 
 input=$(
@@ -61,7 +63,7 @@ input_with_comments=$input_with_tabs
 function test__s {
 	# Can test `<command> | s`, but not `<command>; s`. The latter requires an interactive shell.
 	assert "$(
-		echo $input_with_headers | s
+		echo "$input_with_headers" | s
 	)" "$(
 		cat <<-eof
 		     1	MANIFEST                                # COMMENT
@@ -77,7 +79,7 @@ function test__s {
 function test__ss {
 	# Can test `<command> | ss`, but not `<command>; ss`. The latter requires an interactive shell.
 	assert "$(
-		echo $input_with_headers | ss
+		echo "$input_with_headers" | ss
 	)" "$(
 		cat <<-eof
 		     1	MANIFEST                                COMMENT
@@ -92,7 +94,7 @@ function test__ss {
 
 function test__v {
 	assert "$(
-		echo $input_with_headers | pbcopy
+		echo "$input_with_headers" | pbcopy
 		v
 	)" "$(
 		cat <<-eof
@@ -108,7 +110,7 @@ function test__v {
 
 function test__vv {
 	assert "$(
-		echo $input_with_headers | pbcopy
+		echo "$input_with_headers" | pbcopy
 		vv
 	)" "$(
 		cat <<-eof
@@ -124,7 +126,7 @@ function test__vv {
 
 function test__a {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		a
 	)" "$(
 		cat <<-eof
@@ -139,7 +141,7 @@ function test__a {
 
 function test__a__adds_color {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		a shared
 	)" "$(
 		cat <<-eof
@@ -152,7 +154,7 @@ function test__a__adds_color {
 
 function test__a__replaces_color {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		a shared > /dev/null
 		a region
 	)" "$(
@@ -166,7 +168,7 @@ function test__a__replaces_color {
 
 function test__a__with_two_args_out_of_order {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		a 2 shared
 	)" "$(
 		cat <<-eof
@@ -177,7 +179,7 @@ function test__a__with_two_args_out_of_order {
 
 function test__a__with_two_args_including_negation {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		a -2 shared
 	)" "$(
 		cat <<-eof
@@ -189,7 +191,7 @@ function test__a__with_two_args_including_negation {
 
 function test__aa {
 	assert "$(
-		echo $input_short | ss > /dev/null
+		echo "$input_short" | ss > /dev/null
 		eee 1 $(($(args-list-size) * 2)) aa echo 2>&1 | sort | uniq
 	)" "$(
 		cat <<-eof
@@ -205,7 +207,7 @@ function test__aa {
 
 function test__arg {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		arg 3 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -217,7 +219,7 @@ function test__arg {
 
 function test__arg__with_whitespace {
 	assert "$(
-		echo $input_with_whitespace | ss > /dev/null
+		echo "$input_with_whitespace" | ss > /dev/null
 		arg 3 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -229,7 +231,7 @@ function test__arg__with_whitespace {
 
 function test__arg__with_substitution {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		arg 3 echo http://~~:8080 2>&1
 	)" "$(
 		cat <<-eof
@@ -241,7 +243,7 @@ function test__arg__with_substitution {
 
 function test__arg__with_multiple_substitutions {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		arg 3 echo http://~~:80 and https://~~:443 2>&1
 	)" "$(
 		cat <<-eof
@@ -253,7 +255,7 @@ function test__arg__with_multiple_substitutions {
 
 function test__arg__with_multiple_substitutions_in_quotes {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		arg 3 'echo http://~~:80 and https://~~:443' 2>&1
 	)" "$(
 		cat <<-eof
@@ -265,7 +267,7 @@ function test__arg__with_multiple_substitutions_in_quotes {
 
 function test__1 {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		1 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -277,7 +279,7 @@ function test__1 {
 
 function test__5 {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		5 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -289,14 +291,14 @@ function test__5 {
 
 function test__6 {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		6 echo 2>&1
 	)" "echo "
 }; run_with_filter test__6
 
 function test__0 {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		0 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -308,7 +310,7 @@ function test__0 {
 
 function test__e {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		e 3 4 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -324,7 +326,7 @@ function test__e {
 
 function test__e__with_multiple_substitutions {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		e 3 4 echo ~~ and ~~ again 2>&1
 	)" "$(
 		cat <<-eof
@@ -340,7 +342,7 @@ function test__e__with_multiple_substitutions {
 
 function test__each {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		each echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -365,7 +367,7 @@ function test__each {
 
 function test__each__with_comments {
 	assert "$(
-		echo $input_with_comments | ss > /dev/null
+		echo "$input_with_comments" | ss > /dev/null
 		each echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -383,10 +385,10 @@ function test__each__with_comments {
 }; run_with_filter test__each__with_comments
 
 function test__all {
-	function test__all__sleep_and_echo { sleep $@; echo $@ }
+	function test__all__sleep_and_echo { sleep "$@"; echo "$@"; }
 
 	assert "$(
-		echo '0.01\n0.03\n0.05' | ss > /dev/null
+		printf '0.01\n0.03\n0.05' | ss > /dev/null
 		all test__all__sleep_and_echo 2>/dev/null
 	)" "$(
 		cat <<-eof
@@ -402,7 +404,7 @@ function test__all {
 
 function test__map {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		map 'echo -n pre-; echo' 2>&1
 	)" "$(
 		cat <<-eof
@@ -432,6 +434,7 @@ function test__map {
 }; run_with_filter test__map
 
 function test__map__with_math {
+	# shellcheck disable=SC2016
 	assert "$(
 		seq 1 5 | ss > /dev/null
 		map echo ~~ doubles to '$((~~ * 10))' 2>&1
@@ -464,7 +467,7 @@ function test__map__with_math {
 
 function test__n {
 	assert "$(
-		echo $input_with_tabs | ss > /dev/null
+		echo "$input_with_tabs" | ss > /dev/null
 		n
 	)" "$(
 		cat <<-eof
@@ -478,7 +481,7 @@ function test__n {
 
 function test__n__when_selecting_first {
 	assert "$(
-		echo $input_with_tabs | ss > /dev/null
+		echo "$input_with_tabs" | ss > /dev/null
 		n a
 	)" "$(
 		cat <<-eof
@@ -491,7 +494,7 @@ function test__n__when_selecting_first {
 
 function test__n__when_selecting_third {
 	assert "$(
-		echo $input_with_tabs | ss > /dev/null
+		echo "$input_with_tabs" | ss > /dev/null
 		n c
 	)" "$(
 		cat <<-eof
@@ -504,7 +507,7 @@ function test__n__when_selecting_third {
 
 function test__n__when_selecting_last {
 	assert "$(
-		echo $input_with_tabs | ss > /dev/null
+		echo "$input_with_tabs" | ss > /dev/null
 		n d
 	)" "$(
 		cat <<-eof
@@ -517,7 +520,7 @@ function test__n__when_selecting_last {
 
 function test__n__when_selecting_with_color {
 	assert "$(
-		echo $input_with_tabs | grep 00 | ss > /dev/null
+		echo "$input_with_tabs" | grep 00 | ss > /dev/null
 		n d
 	)" "$(
 		cat <<-eof
@@ -530,7 +533,7 @@ function test__n__when_selecting_with_color {
 
 function test__n__when_selecting_out_of_bound {
 	assert "$(
-		echo $input_with_tabs | ss > /dev/null
+		echo "$input_with_tabs" | ss > /dev/null
 		n z
 	)" "$(
 		cat <<-eof
@@ -543,7 +546,7 @@ function test__n__when_selecting_out_of_bound {
 }; run_with_filter test__n__when_selecting_out_of_bound
 
 function test__n__with_kubectl_get_pods_output {
-	local input=$(
+	local input; input=$(
 		cat <<-eof
 			pod-1           1/1     Running     1 (15h ago)        15h
 			pod-2           1/1     Running     0                  7d14h
@@ -553,7 +556,7 @@ function test__n__with_kubectl_get_pods_output {
 	)
 
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		n e
 	)" "$(
 		cat <<-eof
@@ -567,7 +570,7 @@ function test__n__with_kubectl_get_pods_output {
 
 function test__n__with_one_column {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		n a
 	)" "$(
 		cat <<-eof
@@ -582,7 +585,7 @@ function test__n__with_one_column {
 
 function test__n__with_whitespace {
 	assert "$(
-		echo $input_with_whitespace | ss > /dev/null
+		echo "$input_with_whitespace" | ss > /dev/null
 		n a
 	)" "$(
 		cat <<-eof
@@ -596,7 +599,7 @@ function test__n__with_whitespace {
 
 function test__n__with_headers {
 	assert "$(
-		echo $input_with_headers | ss > /dev/null
+		echo "$input_with_headers" | ss > /dev/null
 		n
 	)" "$(
 		cat <<-eof
@@ -613,7 +616,7 @@ function test__n__with_headers {
 
 function test__nn {
 	assert "$(
-		echo $input_with_headers | ss > /dev/null
+		echo "$input_with_headers" | ss > /dev/null
 		nn
 	)" "$(
 		cat <<-eof
@@ -630,7 +633,7 @@ function test__nn {
 
 function test__nn__with_one_column {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		nn a
 	)" "$(
 		cat <<-eof
@@ -645,7 +648,7 @@ function test__nn__with_one_column {
 
 function test__c {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		c
 		pbpaste
 	)" "$(
@@ -669,7 +672,7 @@ function test__c__with_two_args {
 
 function test__y {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		rm -f ~/.zshrc.args
 		y
 		cat ~/.zshrc.args
@@ -691,7 +694,7 @@ function test__p {
 
 function test__u {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		a program > /dev/null
 		u
 	)" "$(
@@ -707,7 +710,7 @@ function test__u {
 
 function test__u__when_undoing_n_with_headers {
 	assert "$(
-		echo $input_with_headers | ss > /dev/null
+		echo "$input_with_headers" | ss > /dev/null
 		n a > /dev/null
 		u
 	)" "$(
@@ -725,7 +728,7 @@ function test__u__when_undoing_n_with_headers {
 
 function test__u__when_undoing_nn_with_headers {
 	assert "$(
-		echo $input_with_headers | ss > /dev/null
+		echo "$input_with_headers" | ss > /dev/null
 		nn a > /dev/null
 		u
 	)" "$(
@@ -743,7 +746,7 @@ function test__u__when_undoing_nn_with_headers {
 
 function test__u__when_undoing_nn_then_requesting_n {
 	assert "$(
-		echo $input_with_headers | ss > /dev/null
+		echo "$input_with_headers" | ss > /dev/null
 		nn a > /dev/null
 		u > /dev/null
 		n
@@ -762,7 +765,7 @@ function test__u__when_undoing_nn_then_requesting_n {
 
 function test__u__when_undoing_nn_with_headers_top_heavy {
 	assert "$(
-		echo $input_with_headers_top_heavy | ss > /dev/null
+		echo "$input_with_headers_top_heavy" | ss > /dev/null
 		nn a > /dev/null
 		u
 	)" "$(
@@ -780,9 +783,9 @@ function test__u__when_undoing_nn_with_headers_top_heavy {
 
 function test__u__when_undoing_ss_that_could_look_like_nn {
 	assert "$(
-		echo $input_with_headers | ss > /dev/null
+		echo "$input_with_headers" | ss > /dev/null
 		nn > /dev/null
-		echo $input_with_headers_top_heavy | ss > /dev/null
+		echo "$input_with_headers_top_heavy" | ss > /dev/null
 		u
 	)" "$(
 		cat <<-eof
@@ -853,7 +856,7 @@ function test__u__when_pushing_beyond_head_then_undoing_beyond_tail {
 
 function test__u__when_undoing_then_redoing_with_color {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		a program > /dev/null
 		u > /dev/null
 		r
@@ -867,7 +870,7 @@ function test__u__when_undoing_then_redoing_with_color {
 
 function test__u__when_undoing_then_redoing_then_undoing_again_with_color {
 	assert "$(
-		echo $input | ss > /dev/null
+		echo "$input" | ss > /dev/null
 		a program > /dev/null
 		u > /dev/null
 		a terraform > /dev/null
@@ -1050,7 +1053,7 @@ function test__i__when_selecting_tail_index {
 }; run_with_filter test__i__when_selecting_tail_index
 
 function test__save_args {
-	assert "$(echo $input | save_args)" "$(
+	assert "$(echo "$input" | save_args)" "$(
 		cat <<-eof
 		     1	terraform-application-region-shared-1
 		     2	terraform-application-region-shared-2
@@ -1062,7 +1065,7 @@ function test__save_args {
 }; run_with_filter test__save_args
 
 function test__save_args__with_leading_whitespace {
-	assert "$(echo $input_with_whitespace | save_args)" "$(
+	assert "$(echo "$input_with_whitespace" | save_args)" "$(
 		cat <<-eof
 		     1	  terraform-application-region-shared-1
 		     2	terraform-application-region-shared-2
@@ -1073,7 +1076,8 @@ function test__save_args__with_leading_whitespace {
 }; run_with_filter test__save_args__with_leading_whitespace
 
 function test__save_args__with_hash_inserted {
-	assert "$(echo $input_with_headers | save_args 'insert `#`')" "$(
+	# shellcheck disable=SC2016
+	assert "$(echo "$input_with_headers" | save_args 'insert `#`')" "$(
 		cat <<-eof
 		     1	MANIFEST                                # COMMENT
 		     2	terraform-application-region-shared-1   # hello world
