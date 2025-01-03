@@ -1,5 +1,3 @@
-# TODO
-
 # go up folders
 function .. { cd ..; }
 function ... { cd ../..; }
