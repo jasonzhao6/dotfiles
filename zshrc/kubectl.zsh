@@ -23,10 +23,3 @@ function ky { [[ -n $1 ]] && kubectl get "$@" -o yaml > ~/Documents/k8.yaml | ca
 function kyy { cat ~/Documents/k8.yaml; }
 # [q]uery saved json output
 function kq { jq "${@:-.}" ~/Documents/k8.json; }
-
-# TODO move to eof once stable
-### Kubectl keymap
-#  1   2   3   4   5  |  6   7   8   9   0
-#             [p] [y] |  f  [g] [c] [r] [l]
-#  a   o  [e]  u   i  | [d]  h   t   n  [s]
-#     [q] [j] [k] [x] | [b]  m   w   v   z

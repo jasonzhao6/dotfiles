@@ -20,6 +20,12 @@
 # [a] <o> [e] [u] [i] | [d] <h> [t] [n] [s]   <--   gx,*::gxx,(u|m|#)?::(gxa|gxc)?   (gu|gz|guz),#?
 #     [q]  j   k  [x] | [b] [m] [w] [v] [z]   <--   (gr|gr-),*?::s::#,sha
 
+### Kubectl keymap
+#  1   2   3   4   5  |  6   7   8   9   0
+#             [p] [y] |  f  [g] [c] [r] [l]
+#  a   o  [e]  u   i  | [d]  h   t   n  [s]
+#     [q] [j] [k] [x] | [b]  m   w   v   z
+
 ### Terraform keymap
 # [] means defined in this file
 # {} means defined in secrets file
