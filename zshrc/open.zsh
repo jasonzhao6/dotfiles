@@ -2,6 +2,7 @@
 # [O]pen
 #
 
+# TODO gist
 O_TYPES=(
 	'commit-sha <sha>?'
 	'main-branch <repo>?'

@@ -27,6 +27,8 @@ function args-reset {
 	ARGS_CURSOR=0
 	ARGS_HEAD=0
 	ARGS_TAIL=0
+	ARGS_UNDO_EXCEEDED=0
+	ARGS_REDO_EXCEEDED=0
 }
 
 function args-push {
@@ -44,14 +46,14 @@ function args-push {
 
 function args-undo {
 	# To undo, move only `cursor` backward, up to `tail`, inclusive
-	ARGS_PREV=$(args-decrement "$ARGS_CURSOR")
-	[[ $ARGS_CURSOR -ne $ARGS_TAIL ]] && ARGS_CURSOR=$ARGS_PREV || ARGS_UNDO_EXCEEDED=1
+	local args_prev; args_prev=$(args-decrement "$ARGS_CURSOR")
+	[[ $ARGS_CURSOR -ne $ARGS_TAIL ]] && ARGS_CURSOR=$args_prev || ARGS_UNDO_EXCEEDED=1
 }
 
 function args-redo {
 	# To redo, move only `cursor` forward, up to `head`, inclusive
-	ARGS_NEXT=$(args-increment "$ARGS_CURSOR")
-	[[ $ARGS_CURSOR -ne $ARGS_HEAD ]] && ARGS_CURSOR=$ARGS_NEXT || ARGS_REDO_EXCEEDED=1
+	local args_next; args_next=$(args-increment "$ARGS_CURSOR")
+	[[ $ARGS_CURSOR -ne $ARGS_HEAD ]] && ARGS_CURSOR=$args_next || ARGS_REDO_EXCEEDED=1
 }
 
 function args-undo-bar {
@@ -104,7 +106,7 @@ function args-increment {
 }
 
 function args-decrement {
-	ARGS_DECREMENT=$((ARGS_CURSOR - 1))
-	[[ $ARGS_DECREMENT -eq 0 ]] && ARGS_DECREMENT=$ARGS_HISTORY_MAX
-	echo $ARGS_DECREMENT
+	local args_decrement; args_decrement=$((ARGS_CURSOR - 1))
+	[[ $args_decrement -eq 0 ]] && args_decrement=$ARGS_HISTORY_MAX
+	echo $args_decrement
 }

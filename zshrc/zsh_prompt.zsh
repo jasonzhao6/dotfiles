@@ -28,8 +28,8 @@ $'\n'\
 #
 
 function branch_info {
-	BRANCH_INFO=$(branch 2> /dev/null)
-	[[ -n $BRANCH_INFO ]] && echo " #$BRANCH_INFO"
+	local branch_info=$(branch 2> /dev/null)
+	[[ -n $branch_info ]] && echo " #$branch_info"
 }
 
 STS_INFO_DIR="$HOME/.zshrc.sts_info.d"

@@ -1,10 +1,9 @@
 # shellcheck disable=SC1090
 
-# Source
-function z { source ~/.zshrc; }
 [[ -z $UNDER_TEST && -f ~/.zshrc.secrets ]] && source ~/.zshrc.secrets
 
-# Test
+# Source / test
+function z { source ~/.zshrc; }
 function zz { zsh "$ZSHRC_DIR"/_tests.zsh "$@"; }
 
 # Edit

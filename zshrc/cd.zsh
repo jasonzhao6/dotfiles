@@ -12,12 +12,12 @@ function .......... { cd ../../../../../../../../..; }
 # If it's a file path in clipboard, go to its parent folder
 # If it's a folder path in clipboard, go to that folder
 function cd- {
-	CD=$(paste_when_empty "$@")
+	local path; path=$(paste_when_empty "$@")
 
-	if [[ -d $CD ]]; then
-		cd "$CD" || return
+	if [[ -d $path ]]; then
+		cd "$path" || return
 	else
-		cd ${${CD}%/*} || return
+		cd ${${path}%/*} || return
 	fi
 }
 

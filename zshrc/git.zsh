@@ -9,7 +9,8 @@ function gta { git remote add "$1" "$2"; }
 function gtr { git remote remove "$@"; }
 function gtv { git remote --verbose; }
 # [B]ranch
-function gb { GB=$(gb-merged); [[ $GB ]] && GB="\n----------------\n$GB"; echo "$(git branch)$GB" | ss; }
+# shellcheck disable=SC2015
+function gb { local merged; merged=$(gb-merged); [[ -n $merged ]] && merged="\n----------------\n$merged"; echo "$(git branch)$merged" | ss; }
 function gbb { gb-merged | xargs git branch --delete; git remote prune origin; echo; gb; }
 function gbd { git branch --delete --force "$@"; git push origin --delete "$@"; gb; }
 # [G]it checkout
@@ -31,7 +32,7 @@ function gp { git push; }
 function gf { git push --force; }
 # [S]tash
 function gs { git add --all; git stash save "$@"; }
-function ga { echo git stash apply "stash@{${1:-0}}"; }
+function ga { git stash apply "stash@{${1:-0}}"; }
 function gl { git stash list --pretty=format:'%C(yellow)%gd %C(magenta)%as %C(green)%s'; }
 function gc { git stash clear; }
 # Rebase
@@ -46,7 +47,7 @@ function gz { git add --all; git reset --hard; git status; }
 function guz { gu "$1"; gz; }
 # G[r]ep
 # (E.g `gr` to list all, `gr foo and bar` to filter)
-function gr { GR_GREPS="--grep='${*// /' --grep='}'"; eval "git log ${1:+--all} $GR_FIRST_PARENT $GR_GREPS --all-match --extended-regexp --regexp-ignore-case --pretty=format:\"%C(yellow)%h %C(magenta)%as %C(green)'%s' %C(cyan)%an\""; }
+function gr { local greps; greps="--grep='${*// /' --grep='}'"; eval "git log $GR_FIRST_PARENT ${1:+--all} $greps --all-match --extended-regexp --regexp-ignore-case --pretty=format:\"%C(yellow)%h %C(magenta)%as %C(green)'%s' %C(cyan)%an\""; }
 function grr { GR_FIRST_PARENT=--first-parent gr "$@"; }
 
 #
@@ -59,22 +60,22 @@ function gb-merged {
 }
 
 function gxx-actual {
-	GXX_REMOTE=origin
-	GXX_BRANCH=main
-	GXX_HEAD_NUM=
+	local gxx_remote; gxx_remote=origin
+	local gxx_branch; gxx_branch=main
+	local gxx_head_num
 
 	for var in "$@"; do
 		case $var in
-			u) GXX_REMOTE=upstream;;
-			m) GXX_BRANCH=master;;
-			*) GXX_HEAD_NUM=$var;;
+			u) gxx_remote=upstream;;
+			m) gxx_branch=master;;
+			*) gxx_head_num=$var;;
 		esac
 	done
 
-	if [[ -n $GXX_HEAD_NUM ]]; then
+	if [[ -n $gxx_head_num ]]; then
 		# The `+ 1` is to count the `fixup!` commit itself
-		git rebase --interactive --autosquash HEAD~$((GXX_HEAD_NUM + 1))
+		git rebase --interactive --autosquash HEAD~$((gxx_head_num + 1))
 	else
-		git fetch "$GXX_REMOTE" "$GXX_BRANCH" && git rebase --interactive --autosquash "$GXX_REMOTE/$GXX_BRANCH"
+		git fetch "$gxx_remote" "$gxx_branch" && git rebase --interactive --autosquash "$gxx_remote/$gxx_branch"
 	fi
 }
