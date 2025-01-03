@@ -3,7 +3,7 @@
 #
 # - Line 1: <empty>
 # - Line 2:
-#   - Variation A: @repo/path #branch (sts-info region-info tf-info)
+#   - Variation A: @repo/path #branch (sts_info region_info tf_info)
 #   - Variation B: ~/home/path (...)
 #   - Variation C: /root/path (...)
 # - Line 3: $ █
@@ -15,10 +15,10 @@ setopt PROMPT_SUBST
 PROMPT=\
 $'\n'\
 '%{%F{yellow}%}% ${${PWD/#$HOME/~}/\~\/gh\//@}'\
-'%{%F{cyan}%}% $(branch-info)'\
-'%{%F{green}%}% $(sts-info)'\
-'%{%F{magenta}%}% $(region-info)'\
-'%{%F{yellow}%}% $(tf-info)'\
+'%{%F{cyan}%}% $(branch_info)'\
+'%{%F{green}%}% $(sts_info)'\
+'%{%F{magenta}%}% $(region_info)'\
+'%{%F{yellow}%}% $(tf_info)'\
 $'\n'\
 '%{%F{yellow}%}% $'\
 '%{%f%}%  '
@@ -27,18 +27,18 @@ $'\n'\
 # Helpers
 #
 
-function branch-info {
+function branch_info {
 	BRANCH_INFO=$(branch 2> /dev/null)
 	[[ -n $BRANCH_INFO ]] && echo " #$BRANCH_INFO"
 }
 
-STS_INFO_DIR="$HOME/.zshrc.sts-info.d"
+STS_INFO_DIR="$HOME/.zshrc.sts_info.d"
 
-function sts-info-clear {
+function sts_info_clear {
 	rm -rf "$STS_INFO_DIR"
 }
 
-function sts-info {
+function sts_info {
 	[[ -z $AWS_PROFILE ]] && return
 
 	if [[ ! -e $STS_INFO_DIR/$AWS_PROFILE ]]; then
@@ -52,10 +52,10 @@ function sts-info {
 	echo " $(<"$STS_INFO_DIR"/"$AWS_PROFILE")"
 }
 
-function region-info {
+function region_info {
 	[[ -n $AWS_PROFILE ]] && echo " $AWS_DEFAULT_REGION"
 }
 
-function tf-info {
+function tf_info {
 	[[ -n $TF_VAR_datadog_api_key ]] && echo ' TF_VAR'
 }
