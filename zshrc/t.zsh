@@ -2,43 +2,58 @@
 # Lis[t]
 #
 
+T_TYPES=(
+	'opal'
+)
+
+[[ -n $UNDER_TEST ]] && T_TYPES+=('t_test <arg1> <arg2>')
+
 function t {
 	local type_prefix=$1
 
 	if [[ -z $type_prefix ]]; then
-		cat <<-eof
-
-			Usage:
-
-			  t
-			  t <type> <arguments>?
-			  t <type prefix> <arguments>?
-
-			Types:
-			  $([[ -n $T_UNDER_TEST ]] && echo -n 't test <arg1> <arg2>')
-
-			  # t asg <asg name prefix>
-			  # t ec2 <ec2 name prefix>
-			  t opal
-		eof
+		t_print_usage
 	else
-		[[ 'test' == $type_prefix* ]] && t-test "${@:2}"
-
-		[[ 'opal' == $type_prefix* ]] && t-opal
+		for type in "${T_TYPES[@]}"; do
+			[[ $type == $type_prefix* ]] && $(echo "$type" | awk '{print $1}') "${@:2}"
+		done
 	fi
 }
 
-function t-test {
-	echo "arg1: $1"
-	echo "arg2: $2"
-}
-
-T_OPAL=(
-	'non-secret-placeholder1 url1'
-	'non-secret-placeholder2 url2'
-	'non-secret-placeholder3 url3'
+OPAL=(
+	'non-secret-placeholder-1 url-1'
+	'non-secret-placeholder-2 url-2'
+	'non-secret-placeholder-3 url-3'
 )
 
-function t-opal {
-	print -l "${T_OPAL[@]}" | sort | column -t | ss
+function opal {
+	print -l "${OPAL[@]}" | sort | column -t | ss
+}
+
+#
+# Helpers
+#
+
+function t_print_usage {
+	cat <<-eof
+
+		Usage:
+
+		  $(command-color-dim 't')
+		  $(command-color-dim 't <type> <arguments>?')
+		  $(command-color-dim 't <type prefix> <arguments>?')
+
+		Types:
+
+	eof
+
+	for type in "${T_TYPES[@]}"; do
+		echo -n '  '
+		command-color "${type/#/t }"
+	done
+}
+
+function t_test {
+	echo "arg1: $1"
+	echo "arg2: $2"
 }
