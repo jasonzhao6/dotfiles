@@ -6,6 +6,8 @@ source "$ZSHRC_DIR/colors.zsh"; color
 # `git_info` needs to come before `zsh_prompt`
 source "$ZSHRC_DIR/git_info.zsh"
 
+source "$ZSHRC_DIR/zsh_prompt.zsh"
+
 ### [Args]
 # [s]ave into args history
 # (e.g `seq 100 105; s`, or alternatively `seq 100 105 | s`)
@@ -492,40 +494,6 @@ function hm { mate $HISTFILE }
 function h0 { unset -f zshaddhistory }              #  disk &&  memory
 function h1 { function zshaddhistory { return 1 } } # !disk && !memory
 function h2 { function zshaddhistory { return 2 } } # !disk &&  memory
-
-### Zsh prompt
-# config
-setopt PROMPT_SUBST
-# composition
-# - Line 1: <empty>
-# - Line 2:
-#   - Variation A: @repo/path #branch (sts-info region-info tf-info)
-#   - Variation B: ~/home/path (...)
-#   - Variation C: /root/path (...)
-# - Line 3: $ █
-PROMPT=\
-$'\n'\
-'%{%F{yellow}%}% ${${PWD/#$HOME/~}/\~\/gh\//@}'\
-'%{%F{cyan}%}% $(branch-info)'\
-'%{%F{green}%}% $(sts-info)'\
-'%{%F{magenta}%}% $(region-info)'\
-'%{%F{yellow}%}% $(tf-info)'\
-$'\n'\
-'%{%F{yellow}%}% $'\
-'%{%f%}%  '
-# helpers
-function branch-info { BRANCH_INFO=$(branch 2> /dev/null); [[ -n $BRANCH_INFO ]] && echo " #$BRANCH_INFO" }
-function region-info { [[ -n $(aws-profile) ]] && echo " $AWS_DEFAULT_REGION" }
-function sts-info { [[ -n $(aws-profile) ]] && { set-sts-info; echo " $(<$STS_INFO_DIR/$(aws-profile))" } }
-function tf-info { [[ -n $TF_VAR_datadog_api_key ]] && echo ' TF_VAR' }
-# helpers for `sts-info`
-STS_INFO_DIR="$HOME/.zshrc.sts-info.d"
-function reset-sts-info { rm -rf $STS_INFO_DIR }
-function set-sts-info { [[ ! -e $STS_INFO_DIR/$(aws-profile) ]] && { mkdir -p $STS_INFO_DIR; echo "$(account)::$(role)" > $STS_INFO_DIR/$(aws-profile) } }
-function account { aws iam list-account-aliases --query 'AccountAliases[0]' --output text }
-function aws-key { [[ -n $AWS_ACCESS_KEY_ID ]] && echo $AWS_ACCESS_KEY_ID }
-function aws-profile { { [[ -n $AWS_PROFILE ]] && echo $AWS_PROFILE } }
-function role { ROLE=$(aws sts get-caller-identity --query Arn --output text | awk -F'/' '{print $2}'); [[ $ROLE == *_* ]] && echo $ROLE | awk -F'_' '{print $2}' || echo $ROLE }
 
 ### Keymap annotations
 #  ::  -->  subsequent command
