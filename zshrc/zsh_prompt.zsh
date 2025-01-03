@@ -11,6 +11,7 @@
 
 setopt PROMPT_SUBST
 
+# shellcheck disable=SC2016,SC2034
 PROMPT=\
 $'\n'\
 '%{%F{yellow}%}% ${${PWD/#$HOME/~}/\~\/gh\//@}'\
@@ -33,18 +34,22 @@ function branch-info {
 
 STS_INFO_DIR="$HOME/.zshrc.sts-info.d"
 
+function sts-info-clear {
+	rm -rf "$STS_INFO_DIR"
+}
+
 function sts-info {
 	[[ -z $AWS_PROFILE ]] && return
 
 	if [[ ! -e $STS_INFO_DIR/$AWS_PROFILE ]]; then
-		local account=$(aws iam list-account-aliases --query 'AccountAliases[0]' --output text)
-		local role=$(aws sts get-caller-identity --query Arn --output text | awk -F'/' '{print $2}' | awk -F'_' '{print $2}')
+		local account; account=$(aws iam list-account-aliases --query 'AccountAliases[0]' --output text)
+		local role; role=$(aws sts get-caller-identity --query Arn --output text | awk -F'/' '{print $2}' | awk -F'_' '{print $2}')
 
-		mkdir -p $STS_INFO_DIR
-		echo "$(account)::$(role)" > $STS_INFO_DIR/$AWS_PROFILE
+		mkdir -p "$STS_INFO_DIR"
+		echo "$account::$role" > "$STS_INFO_DIR"/"$AWS_PROFILE"
 	fi
 
-	echo " $(<$STS_INFO_DIR/$AWS_PROFILE)"
+	echo " $(<"$STS_INFO_DIR"/"$AWS_PROFILE")"
 }
 
 function region-info {
