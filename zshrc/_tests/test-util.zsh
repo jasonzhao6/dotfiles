@@ -597,19 +597,19 @@ function test--prev-command {
 }
 
 function test--extract-urls {
-	local url='example.com'
+	local url='http://example.com'
 	assert "$(echo $url | extract-urls)" $url
 }; run-with-filter test--extract-urls
 
-function test--extract-urls--with-www {
-	local url='www.example.com'
-	assert "$(echo $url | extract-urls)" $url
-}; run-with-filter test--extract-urls--with-www
-
 function test--extract-urls--with-subdomain {
-	local url='subdomain.example.com'
+	local url='http://my.example.com'
 	assert "$(echo $url | extract-urls)" $url
 }; run-with-filter test--extract-urls--with-subdomain
+
+function test--extract-urls--with-www {
+	local url='http://www.example.com'
+	assert "$(echo $url | extract-urls)" $url
+}; run-with-filter test--extract-urls--with-www
 
 function test--extract-urls--with-http {
 	local url='http://www.example.com'
@@ -638,11 +638,11 @@ function test--extract-urls--with-fragment {
 
 function test--extract-urls--with-multiple-urls {
 	assert "$(
-		echo '2 urls https://www.example.com/path?key=value#heading, google.com' | extract-urls
+		echo '2 urls https://www.example.com/path?key=value#heading, https://www.google.com' | extract-urls
 	)" "$(
 		cat <<-eof
 			https://www.example.com/path?key=value#heading
-			google.com
+			https://www.google.com
 		eof
 	)"
 }; run-with-filter test--extract-urls--with-multiple-urls

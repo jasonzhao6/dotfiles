@@ -425,7 +425,7 @@ function dd-dump-file { echo "$DD_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt
 function dd-taint-pasteboard { $(echo "$(pbpaste)\n\n(Dumped to '$DD')" | pbcopy) }
 function dd-clear-terminal { [[ $DD_CLEAR_TERMINAL -eq 1 ]] && clear }
 # | after strings
-function extract-urls { pcregrep --only-matching '\b(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,6}(?:\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?\b' }
+function extract-urls { pcregrep --only-matching '\b(?:https?:\/\/)(?:www\.)?[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,6}(?:\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?\b' }
 function hex { hexdump -C }
 function no-color { sed -E 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g' }
 function no-empty { sed '/^$/d' }
