@@ -13,7 +13,7 @@ class VerifyTestInvocations
 
     TESTS_FILES.each do |test_file|
       File.open(test_file).each do |line|
-        is_test_definition = /^function (?<test>test--.+) {$/ =~ line
+        is_test_definition = /^function (?<test>test__.+) {$/ =~ line
         if is_test_definition
           @failed << "Test was not called: #{current_test}" if current_test
           current_test = test
@@ -22,7 +22,7 @@ class VerifyTestInvocations
         is_test_skipped = /^	# Skip: / =~line
         current_test = nil if is_test_skipped
 
-        is_test_invocation = /^}; run-with-filter (?<test>test--.+)$/ =~ line
+        is_test_invocation = /^}; run_with_filter (?<test>test__.+)$/ =~ line
         if is_test_invocation
           if test == current_test
             current_test = nil

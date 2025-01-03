@@ -1,4 +1,4 @@
-function test--z--when-args-history-is-not-initialized {
+function test__z__when_args_history_is_not_initialized {
 	args-init
 	local args_history_max=$ARGS_HISTORY_MAX
 
@@ -9,9 +9,9 @@ function test--z--when-args-history-is-not-initialized {
 	)" "$args_history_max"
 
 	args-init
-}; run-with-filter test--z--when-args-history-is-not-initialized
+}; run_with_filter test__z__when_args_history_is_not_initialized
 
-function test--z--when-args-history-is-already-initialized {
+function test__z__when_args_history_is_already_initialized {
 	local overwrite='<overwrite>'
 
 	assert "$(
@@ -21,9 +21,9 @@ function test--z--when-args-history-is-already-initialized {
 	)" "$overwrite"
 
 	args-init
-}; run-with-filter test--z--when-args-history-is-already-initialized
+}; run_with_filter test__z__when_args_history_is_already_initialized
 
-function test--h {
+function test__h {
 	local history=$(
 		cat <<-eof
 			: 1735711246:0;echo 5
@@ -54,9 +54,9 @@ function test--h {
 		     5	echo 5
 		eof
 	)"
-}; run-with-filter test--h
+}; run_with_filter test__h
 
-function test--hc {
+function test__hc {
 	assert "$(
 		local histfile=$HISTFILE
 		HISTFILE='/tmp/test--h'
@@ -67,4 +67,4 @@ function test--hc {
 
 		HISTFILE=$histfile
 	)" 'absent'
-}; run-with-filter test--hc
+}; run_with_filter test__hc

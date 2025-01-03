@@ -13,7 +13,7 @@ O_TYPES=(
 
 function o {
 	# `$1` could be either a string containing urls or a type prefix, see 'Usage' below
-	local urls; urls=$(echo "$@" | extract-urls)
+	local urls; urls=$(echo "$@" | extract_urls)
 	local type_prefix=$1
 
 	if [[ -n $urls ]]; then

@@ -56,7 +56,7 @@ input_with_tabs=$(
 
 input_with_comments=$input_with_tabs
 
-function test--s {
+function test__s {
 	# Can test `<command> | s`, but not `<command>; s`. The latter requires an interactive shell.
 	assert "$(
 		echo $input_with_headers | s
@@ -70,9 +70,9 @@ function test--s {
 		     6	terraform-application-region-program-B  # select via headers for this one
 		eof
 	)"
-}; run-with-filter test--s
+}; run_with_filter test__s
 
-function test--ss {
+function test__ss {
 	# Can test `<command> | ss`, but not `<command>; ss`. The latter requires an interactive shell.
 	assert "$(
 		echo $input_with_headers | ss
@@ -86,9 +86,9 @@ function test--ss {
 		     6	terraform-application-region-program-B  select via headers for this one
 		eof
 	)"
-}; run-with-filter test--ss
+}; run_with_filter test__ss
 
-function test--v {
+function test__v {
 	assert "$(
 		echo $input_with_headers | pbcopy
 		v
@@ -102,9 +102,9 @@ function test--v {
 		     6	terraform-application-region-program-B  # select via headers for this one
 		eof
 	)"
-}; run-with-filter test--v
+}; run_with_filter test__v
 
-function test--vv {
+function test__vv {
 	assert "$(
 		echo $input_with_headers | pbcopy
 		vv
@@ -118,9 +118,9 @@ function test--vv {
 		     6	terraform-application-region-program-B  select via headers for this one
 		eof
 	)"
-}; run-with-filter test--vv
+}; run_with_filter test__vv
 
-function test--a {
+function test__a {
 	assert "$(
 		echo $input | ss > /dev/null
 		a
@@ -133,59 +133,59 @@ function test--a {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--a
+}; run_with_filter test__a
 
-function test--a--adds-color {
+function test__a__adds_color {
 	assert "$(
 		echo $input | ss > /dev/null
 		a shared
 	)" "$(
 		cat <<-eof
-		     1	terraform-application-region-$(grep-color shared)-1
-		     2	terraform-application-region-$(grep-color shared)-2
-		     3	terraform-application-region-$(grep-color shared)-3
+		     1	terraform-application-region-$(grep_color shared)-1
+		     2	terraform-application-region-$(grep_color shared)-2
+		     3	terraform-application-region-$(grep_color shared)-3
 		eof
 	)"
-}; run-with-filter test--a--adds-color
+}; run_with_filter test__a__adds_color
 
-function test--a--replaces-color {
+function test__a__replaces_color {
 	assert "$(
 		echo $input | ss > /dev/null
 		a shared > /dev/null
 		a region
 	)" "$(
 		cat <<-eof
-		     1	terraform-application-$(grep-color region)-shared-1
-		     2	terraform-application-$(grep-color region)-shared-2
-		     3	terraform-application-$(grep-color region)-shared-3
+		     1	terraform-application-$(grep_color region)-shared-1
+		     2	terraform-application-$(grep_color region)-shared-2
+		     3	terraform-application-$(grep_color region)-shared-3
 		eof
 	)"
-}; run-with-filter test--a--replaces-color
+}; run_with_filter test__a__replaces_color
 
-function test--a--with-two-args-out-of-order {
+function test__a__with_two_args_out_of_order {
 	assert "$(
 		echo $input | ss > /dev/null
 		a 2 shared
 	)" "$(
 		cat <<-eof
-		     1	terraform-application-region-$(grep-color shared)-$(grep-color 2)
+		     1	terraform-application-region-$(grep_color shared)-$(grep_color 2)
 		eof
 	)"
-}; run-with-filter test--a--with-two-args-out-of-order
+}; run_with_filter test__a__with_two_args_out_of_order
 
-function test--a--with-two-args-including-negation {
+function test__a__with_two_args_including_negation {
 	assert "$(
 		echo $input | ss > /dev/null
 		a -2 shared
 	)" "$(
 		cat <<-eof
-		     1	terraform-application-region-$(grep-color shared)-1
-		     2	terraform-application-region-$(grep-color shared)-3
+		     1	terraform-application-region-$(grep_color shared)-1
+		     2	terraform-application-region-$(grep_color shared)-3
 		eof
 	)"
-}; run-with-filter test--a--with-two-args-including-negation
+}; run_with_filter test__a__with_two_args_including_negation
 
-function test--aa {
+function test__aa {
 	assert "$(
 		echo $input_short | ss > /dev/null
 		eee 1 $(($(args-list-size) * 2)) aa echo 2>&1 | sort | uniq
@@ -199,9 +199,9 @@ function test--aa {
 			terraform-application-region-shared-2
 		eof
 	)"
-}; run-with-filter test--aa
+}; run_with_filter test__aa
 
-function test--arg {
+function test__arg {
 	assert "$(
 		echo $input | ss > /dev/null
 		arg 3 echo 2>&1
@@ -211,9 +211,9 @@ function test--arg {
 			terraform-application-region-shared-3
 		eof
 	)"
-}; run-with-filter test--arg
+}; run_with_filter test__arg
 
-function test--arg--with-whitespace {
+function test__arg__with_whitespace {
 	assert "$(
 		echo $input_with_whitespace | ss > /dev/null
 		arg 3 echo 2>&1
@@ -223,9 +223,9 @@ function test--arg--with-whitespace {
 			terraform-application-region-shared-3
 		eof
 	)"
-}; run-with-filter test--arg--with-whitespace
+}; run_with_filter test__arg__with_whitespace
 
-function test--arg--with-substitution {
+function test__arg__with_substitution {
 	assert "$(
 		echo $input | ss > /dev/null
 		arg 3 echo http://~~:8080 2>&1
@@ -235,9 +235,9 @@ function test--arg--with-substitution {
 			http://terraform-application-region-shared-3:8080
 		eof
 	)"
-}; run-with-filter test--arg--with-substitution
+}; run_with_filter test__arg__with_substitution
 
-function test--arg--with-multiple-substitutions {
+function test__arg__with_multiple_substitutions {
 	assert "$(
 		echo $input | ss > /dev/null
 		arg 3 echo http://~~:80 and https://~~:443 2>&1
@@ -247,9 +247,9 @@ function test--arg--with-multiple-substitutions {
 			http://terraform-application-region-shared-3:80 and https://terraform-application-region-shared-3:443
 		eof
 	)"
-}; run-with-filter test--arg--with-multiple-substitutions
+}; run_with_filter test__arg__with_multiple_substitutions
 
-function test--arg--with-multiple-substitutions-in-quotes {
+function test__arg__with_multiple_substitutions_in_quotes {
 	assert "$(
 		echo $input | ss > /dev/null
 		arg 3 'echo http://~~:80 and https://~~:443' 2>&1
@@ -259,9 +259,9 @@ function test--arg--with-multiple-substitutions-in-quotes {
 			http://terraform-application-region-shared-3:80 and https://terraform-application-region-shared-3:443
 		eof
 	)"
-}; run-with-filter test--arg--with-multiple-substitutions-in-quotes
+}; run_with_filter test__arg__with_multiple_substitutions_in_quotes
 
-function test--1 {
+function test__1 {
 	assert "$(
 		echo $input | ss > /dev/null
 		1 echo 2>&1
@@ -271,9 +271,9 @@ function test--1 {
 			terraform-application-region-shared-1
 		eof
 	)"
-}; run-with-filter test--1
+}; run_with_filter test__1
 
-function test--5 {
+function test__5 {
 	assert "$(
 		echo $input | ss > /dev/null
 		5 echo 2>&1
@@ -283,16 +283,16 @@ function test--5 {
 			terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--5
+}; run_with_filter test__5
 
-function test--6 {
+function test__6 {
 	assert "$(
 		echo $input | ss > /dev/null
 		6 echo 2>&1
 	)" "echo "
-}; run-with-filter test--6
+}; run_with_filter test__6
 
-function test--0 {
+function test__0 {
 	assert "$(
 		echo $input | ss > /dev/null
 		0 echo 2>&1
@@ -302,9 +302,9 @@ function test--0 {
 			terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--0
+}; run_with_filter test__0
 
-function test--e {
+function test__e {
 	assert "$(
 		echo $input | ss > /dev/null
 		e 3 4 echo 2>&1
@@ -318,9 +318,9 @@ function test--e {
 			terraform-application-region-program-A
 		eof
 	)"
-}; run-with-filter test--e
+}; run_with_filter test__e
 
-function test--e--with-multiple-substitutions {
+function test__e__with_multiple_substitutions {
 	assert "$(
 		echo $input | ss > /dev/null
 		e 3 4 echo ~~ and ~~ again 2>&1
@@ -334,9 +334,9 @@ function test--e--with-multiple-substitutions {
 			terraform-application-region-program-A and terraform-application-region-program-A again
 		eof
 	)"
-}; run-with-filter test--e--with-multiple-substitutions
+}; run_with_filter test__e__with_multiple_substitutions
 
-function test--each {
+function test__each {
 	assert "$(
 		echo $input | ss > /dev/null
 		each echo 2>&1
@@ -359,9 +359,9 @@ function test--each {
 			terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--each
+}; run_with_filter test__each
 
-function test--each--with-comments {
+function test__each__with_comments {
 	assert "$(
 		echo $input_with_comments | ss > /dev/null
 		each echo 2>&1
@@ -378,14 +378,14 @@ function test--each--with-comments {
 			10.0.0.3
 		eof
 	)"
-}; run-with-filter test--each--with-comments
+}; run_with_filter test__each__with_comments
 
-function test--all {
-	function test--all--sleep-and-echo { sleep $@; echo $@ }
+function test__all {
+	function test__all__sleep_and_echo { sleep $@; echo $@ }
 
 	assert "$(
 		echo '0.01\n0.03\n0.05' | ss > /dev/null
-		all test--all--sleep-and-echo 2>/dev/null
+		all test__all__sleep_and_echo 2>/dev/null
 	)" "$(
 		cat <<-eof
 
@@ -396,9 +396,9 @@ function test--all {
 			0.05
 		eof
 	)"
-}; run-with-filter test--all
+}; run_with_filter test__all
 
-function test--map {
+function test__map {
 	assert "$(
 		echo $input | ss > /dev/null
 		map 'echo -n pre-; echo' 2>&1
@@ -427,9 +427,9 @@ function test--map {
 		     5	pre-terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--map
+}; run_with_filter test__map
 
-function test--map--with-math {
+function test__map__with_math {
 	assert "$(
 		seq 1 5 | ss > /dev/null
 		map echo ~~ doubles to '$((~~ * 10))' 2>&1
@@ -458,9 +458,9 @@ function test--map--with-math {
 			     5	5 doubles to 50
 		eof
 	)"
-}; run-with-filter test--map--with-math
+}; run_with_filter test__map__with_math
 
-function test--n {
+function test__n {
 	assert "$(
 		echo $input_with_tabs | ss > /dev/null
 		n
@@ -472,9 +472,9 @@ function test--n {
 			$(green-bg '        a               b c                             d          ')
 		eof
 	)"
-}; run-with-filter test--n
+}; run_with_filter test__n
 
-function test--n--when-selecting-first {
+function test__n__when_selecting_first {
 	assert "$(
 		echo $input_with_tabs | ss > /dev/null
 		n a
@@ -485,9 +485,9 @@ function test--n--when-selecting-first {
 		     3	10.0.0.3
 		eof
 	)"
-}; run-with-filter test--n--when-selecting-first
+}; run_with_filter test__n__when_selecting_first
 
-function test--n--when-selecting-third {
+function test__n__when_selecting_third {
 	assert "$(
 		echo $input_with_tabs | ss > /dev/null
 		n c
@@ -498,9 +498,9 @@ function test--n--when-selecting-third {
 		     3	2023-06-21T20:24:59+00:00
 		eof
 	)"
-}; run-with-filter test--n--when-selecting-third
+}; run_with_filter test__n__when_selecting_third
 
-function test--n--when-selecting-last {
+function test__n__when_selecting_last {
 	assert "$(
 		echo $input_with_tabs | ss > /dev/null
 		n d
@@ -511,9 +511,9 @@ function test--n--when-selecting-last {
 		     3	webhook-asg
 		eof
 	)"
-}; run-with-filter test--n--when-selecting-last
+}; run_with_filter test__n__when_selecting_last
 
-function test--n--when-selecting-with-color {
+function test__n__when_selecting_with_color {
 	assert "$(
 		echo $input_with_tabs | grep 00 | ss > /dev/null
 		n d
@@ -524,9 +524,9 @@ function test--n--when-selecting-with-color {
 		     3	webhook-asg
 		eof
 	)"
-}; run-with-filter test--n--when-selecting-with-color
+}; run_with_filter test__n__when_selecting_with_color
 
-function test--n--when-selecting-out-of-bound {
+function test__n__when_selecting_out_of_bound {
 	assert "$(
 		echo $input_with_tabs | ss > /dev/null
 		n z
@@ -538,9 +538,9 @@ function test--n--when-selecting-out-of-bound {
 			$(green-bg '        a               b c                             d          ')
 		eof
 	)"
-}; run-with-filter test--n--when-selecting-out-of-bound
+}; run_with_filter test__n__when_selecting_out_of_bound
 
-function test--n--with-kubectl-get-pods-output {
+function test__n__with_kubectl_get_pods_output {
 	local input=$(
 		cat <<-eof
 			pod-1           1/1     Running     1 (15h ago)        15h
@@ -561,9 +561,9 @@ function test--n--with-kubectl-get-pods-output {
 		     4	14h
 		eof
 	)"
-}; run-with-filter test--n--with-kubectl-get-pods-output
+}; run_with_filter test__n__with_kubectl_get_pods_output
 
-function test--n--with-one-column {
+function test__n__with_one_column {
 	assert "$(
 		echo $input | ss > /dev/null
 		n a
@@ -576,9 +576,9 @@ function test--n--with-one-column {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--n--with-one-column
+}; run_with_filter test__n__with_one_column
 
-function test--n--with-whitespace {
+function test__n__with_whitespace {
 	assert "$(
 		echo $input_with_whitespace | ss > /dev/null
 		n a
@@ -590,9 +590,9 @@ function test--n--with-whitespace {
 		     4	terraform-application-region-program-A
 		eof
 	)"
-}; run-with-filter test--n--with-whitespace
+}; run_with_filter test__n__with_whitespace
 
-function test--n--with-headers {
+function test__n__with_headers {
 	assert "$(
 		echo $input_with_headers | ss > /dev/null
 		n
@@ -607,9 +607,9 @@ function test--n--with-headers {
 			$(green-bg '        a                                       b      c   d       e   f    g  ')
 		eof
 	)"
-}; run-with-filter test--n--with-headers
+}; run_with_filter test__n__with_headers
 
-function test--nn {
+function test__nn {
 	assert "$(
 		echo $input_with_headers | ss > /dev/null
 		nn
@@ -624,9 +624,9 @@ function test--nn {
 			$(green-bg '        a                                       b      ')
 		eof
 	)"
-}; run-with-filter test--nn
+}; run_with_filter test__nn
 
-function test--nn--with-one-column {
+function test__nn__with_one_column {
 	assert "$(
 		echo $input | ss > /dev/null
 		nn a
@@ -639,9 +639,9 @@ function test--nn--with-one-column {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--nn--with-one-column
+}; run_with_filter test__nn__with_one_column
 
-function test--c {
+function test__c {
 	assert "$(
 		echo $input | ss > /dev/null
 		c
@@ -655,26 +655,26 @@ function test--c {
 			terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--c
+}; run_with_filter test__c
 
-function test--c--with-one-arg {
+function test__c__with_one_arg {
 	assert "$(c '123'; pbpaste)" '123'
-}; run-with-filter test--c--with-one-arg
+}; run_with_filter test__c__with_one_arg
 
-function test--c--with-two-args {
+function test__c__with_two_args {
 	assert "$(c '123 321'; pbpaste)" '123 321'
-}; run-with-filter test--c--with-two-args
+}; run_with_filter test__c__with_two_args
 
-function test--y {
+function test__y {
 	assert "$(
 		echo $input | ss > /dev/null
 		rm -f ~/.zshrc.args
 		y
 		cat ~/.zshrc.args
 	)" "$input"
-}; run-with-filter test--y
+}; run_with_filter test__y
 
-function test--p {
+function test__p {
 	assert "$(
 		seq 3 > ~/.zshrc.args
 		p
@@ -685,9 +685,9 @@ function test--p {
 		     3	3
 		eof
 	)"
-}; run-with-filter test--p
+}; run_with_filter test__p
 
-function test--u {
+function test__u {
 	assert "$(
 		echo $input | ss > /dev/null
 		a program > /dev/null
@@ -701,9 +701,9 @@ function test--u {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--u
+}; run_with_filter test__u
 
-function test--u--when-undoing-n-with-headers {
+function test__u__when_undoing_n_with_headers {
 	assert "$(
 		echo $input_with_headers | ss > /dev/null
 		n a > /dev/null
@@ -719,9 +719,9 @@ function test--u--when-undoing-n-with-headers {
 			$(green-bg '        a                                       b      c   d       e   f    g  ')
 		eof
 	)"
-}; run-with-filter test--u--when-undoing-n-with-headers
+}; run_with_filter test__u__when_undoing_n_with_headers
 
-function test--u--when-undoing-nn-with-headers {
+function test__u__when_undoing_nn_with_headers {
 	assert "$(
 		echo $input_with_headers | ss > /dev/null
 		nn a > /dev/null
@@ -737,9 +737,9 @@ function test--u--when-undoing-nn-with-headers {
 			$(green-bg '        a                                       b      ')
 		eof
 	)"
-}; run-with-filter test--u--when-undoing-nn-with-headers
+}; run_with_filter test__u__when_undoing_nn_with_headers
 
-function test--u--when-undoing-nn-then-requesting-n {
+function test__u__when_undoing_nn_then_requesting_n {
 	assert "$(
 		echo $input_with_headers | ss > /dev/null
 		nn a > /dev/null
@@ -756,9 +756,9 @@ function test--u--when-undoing-nn-then-requesting-n {
 			$(green-bg '        a                                       b      c   d       e   f    g  ')
 		eof
 	)"
-}; run-with-filter test--u--when-undoing-nn-then-requesting-n
+}; run_with_filter test__u__when_undoing_nn_then_requesting_n
 
-function test--u--when-undoing-nn-with-headers-top-heavy {
+function test__u__when_undoing_nn_with_headers_top_heavy {
 	assert "$(
 		echo $input_with_headers_top_heavy | ss > /dev/null
 		nn a > /dev/null
@@ -774,9 +774,9 @@ function test--u--when-undoing-nn-with-headers-top-heavy {
 			$(green-bg '        a                                       b      ')
 		eof
 	)"
-}; run-with-filter test--u--when-undoing-nn-with-headers-top-heavy
+}; run_with_filter test__u__when_undoing_nn_with_headers_top_heavy
 
-function test--u--when-undoing-ss-that-could-look-like-nn {
+function test__u__when_undoing_ss_that_could_look_like_nn {
 	assert "$(
 		echo $input_with_headers | ss > /dev/null
 		nn > /dev/null
@@ -792,9 +792,9 @@ function test--u--when-undoing-ss-that-could-look-like-nn {
 		     6	terraform-application-region-program-B  select via headers for this one
 		eof
 	)"
-}; run-with-filter test--u--when-undoing-ss-that-could-look-like-nn
+}; run_with_filter test__u__when_undoing_ss_that_could_look_like_nn
 
-function test--u--when-undoing-x2 {
+function test__u__when_undoing_x2 {
 	assert "$(
 		seq 1 2 | ss > /dev/null
 		seq 2 3 | ss > /dev/null
@@ -807,9 +807,9 @@ function test--u--when-undoing-x2 {
 		     2	2
 		eof
 	)"
-}; run-with-filter test--u--when-undoing-x2
+}; run_with_filter test__u__when_undoing_x2
 
-function test--u--when-undoing-beyond-tail {
+function test__u__when_undoing_beyond_tail {
 	assert "$(
 		seq 1 2 | ss > /dev/null
 		seq 2 3 | ss > /dev/null
@@ -824,9 +824,9 @@ function test--u--when-undoing-beyond-tail {
 		$(red-bg '  Reached the end of undo history  ')
 		eof
 	)"
-}; run-with-filter test--u--when-undoing-beyond-tail
+}; run_with_filter test__u__when_undoing_beyond_tail
 
-function test--u--when-pushing-beyond-head-then-undoing-beyond-tail {
+function test__u__when_pushing_beyond_head_then_undoing_beyond_tail {
 	args-init
 	ARGS_HISTORY_MAX=3
 
@@ -847,9 +847,9 @@ function test--u--when-pushing-beyond-head-then-undoing-beyond-tail {
 	)"
 
 	args-init
-}; run-with-filter test--u--when-pushing-beyond-head-then-undoing-beyond-tail
+}; run_with_filter test__u__when_pushing_beyond_head_then_undoing_beyond_tail
 
-function test--u--when-undoing-then-redoing-with-color {
+function test__u__when_undoing_then_redoing_with_color {
 	assert "$(
 		echo $input | ss > /dev/null
 		a program > /dev/null
@@ -857,13 +857,13 @@ function test--u--when-undoing-then-redoing-with-color {
 		r
 	)" "$(
 		cat <<-eof
-		     1	terraform-application-region-$(grep-color program)-A
-		     2	terraform-application-region-$(grep-color program)-B
+		     1	terraform-application-region-$(grep_color program)-A
+		     2	terraform-application-region-$(grep_color program)-B
 		eof
 	)"
-}; run-with-filter test--u--when-undoing-then-redoing-with-color
+}; run_with_filter test__u__when_undoing_then_redoing_with_color
 
-function test--u--when-undoing-then-redoing-then-undoing-again-with-color {
+function test__u__when_undoing_then_redoing_then_undoing_again_with_color {
 	assert "$(
 		echo $input | ss > /dev/null
 		a program > /dev/null
@@ -874,16 +874,16 @@ function test--u--when-undoing-then-redoing-then-undoing-again-with-color {
 		u
 	)" "$(
 		cat <<-eof
-		     1	terraform-$(grep-color application)-region-shared-1
-		     2	terraform-$(grep-color application)-region-shared-2
-		     3	terraform-$(grep-color application)-region-shared-3
-		     4	terraform-$(grep-color application)-region-program-A
-		     5	terraform-$(grep-color application)-region-program-B
+		     1	terraform-$(grep_color application)-region-shared-1
+		     2	terraform-$(grep_color application)-region-shared-2
+		     3	terraform-$(grep_color application)-region-shared-3
+		     4	terraform-$(grep_color application)-region-program-A
+		     5	terraform-$(grep_color application)-region-program-B
 		eof
 	)"
-}; run-with-filter test--u--when-undoing-then-redoing-then-undoing-again-with-color
+}; run_with_filter test__u__when_undoing_then_redoing_then_undoing_again_with_color
 
-function test--r--when-redoing-x2 {
+function test__r__when_redoing_x2 {
 	assert "$(
 		seq 1 2 | ss > /dev/null
 		seq 2 3 | ss > /dev/null
@@ -898,9 +898,9 @@ function test--r--when-redoing-x2 {
 		     2	4
 		eof
 	)"
-}; run-with-filter test--r--when-redoing-x2
+}; run_with_filter test__r__when_redoing_x2
 
-function test--r--when-redoing-beyond-head {
+function test__r__when_redoing_beyond_head {
 	assert "$(
 		seq 1 2 | ss > /dev/null
 		seq 2 3 | ss > /dev/null
@@ -917,9 +917,9 @@ function test--r--when-redoing-beyond-head {
 		$(red-bg '  Reached the end of redo history  ')
 		eof
 	)"
-}; run-with-filter test--r--when-redoing-beyond-head
+}; run_with_filter test__r__when_redoing_beyond_head
 
-function test--r--when-redoing-beyond-new-head {
+function test__r__when_redoing_beyond_new_head {
 	assert "$(
 		seq 1 2 | ss > /dev/null
 		seq 2 3 | ss > /dev/null
@@ -935,9 +935,9 @@ function test--r--when-redoing-beyond-new-head {
 		$(red-bg '  Reached the end of redo history  ')
 		eof
 	)"
-}; run-with-filter test--r--when-redoing-beyond-new-head
+}; run_with_filter test__r__when_redoing_beyond_new_head
 
-function test--i {
+function test__i {
 	assert "$(
 		seq 1 2 | ss > /dev/null
 		seq 2 3 | ss > /dev/null
@@ -969,9 +969,9 @@ function test--i {
 			2
 		eof
 	)"
-}; run-with-filter test--i
+}; run_with_filter test__i
 
-function test--i--when-selecting-out-of-head-and-tail {
+function test__i__when_selecting_out_of_head_and_tail {
 	assert "$(
 		seq 1 2 | ss > /dev/null
 		seq 2 3 | ss > /dev/null
@@ -1003,9 +1003,9 @@ function test--i--when-selecting-out-of-head-and-tail {
 			2
 		eof
 	)"
-}; run-with-filter test--i--when-selecting-out-of-head-and-tail
+}; run_with_filter test__i__when_selecting_out_of_head_and_tail
 
-function test--i--when-selecting-head-index {
+function test__i__when_selecting_head_index {
 	assert "$(
 		seq 1 2 | ss > /dev/null
 		seq 2 3 | ss > /dev/null
@@ -1017,9 +1017,9 @@ function test--i--when-selecting-head-index {
 		     2	4
 		eof
 	)"
-}; run-with-filter test--i--when-selecting-head-index
+}; run_with_filter test__i__when_selecting_head_index
 
-function test--i--when-selecting-middle-index {
+function test__i__when_selecting_middle_index {
 	assert "$(
 		seq 1 2 | ss > /dev/null
 		seq 2 3 | ss > /dev/null
@@ -1031,9 +1031,9 @@ function test--i--when-selecting-middle-index {
 		     2	3
 		eof
 	)"
-}; run-with-filter test--i--when-selecting-middle-index
+}; run_with_filter test__i__when_selecting_middle_index
 
-function test--i--when-selecting-tail-index {
+function test__i__when_selecting_tail_index {
 	assert "$(
 		seq 1 2 | ss > /dev/null
 		seq 2 3 | ss > /dev/null
@@ -1045,10 +1045,10 @@ function test--i--when-selecting-tail-index {
 		     2	2
 		eof
 	)"
-}; run-with-filter test--i--when-selecting-tail-index
+}; run_with_filter test__i__when_selecting_tail_index
 
-function test--save-args {
-	assert "$(echo $input | save-args)" "$(
+function test__save_args {
+	assert "$(echo $input | save_args)" "$(
 		cat <<-eof
 		     1	terraform-application-region-shared-1
 		     2	terraform-application-region-shared-2
@@ -1057,10 +1057,10 @@ function test--save-args {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run-with-filter test--save-args
+}; run_with_filter test__save_args
 
-function test--save-args--with-leading-whitespace {
-	assert "$(echo $input_with_whitespace | save-args)" "$(
+function test__save_args__with_leading_whitespace {
+	assert "$(echo $input_with_whitespace | save_args)" "$(
 		cat <<-eof
 		     1	  terraform-application-region-shared-1
 		     2	terraform-application-region-shared-2
@@ -1068,10 +1068,10 @@ function test--save-args--with-leading-whitespace {
 		     4	terraform-application-region-program-A
 		eof
 	)"
-}; run-with-filter test--save-args--with-leading-whitespace
+}; run_with_filter test__save_args__with_leading_whitespace
 
-function test--save-args--with-hash-inserted {
-	assert "$(echo $input_with_headers | save-args 'insert `#`')" "$(
+function test__save_args__with_hash_inserted {
+	assert "$(echo $input_with_headers | save_args 'insert `#`')" "$(
 		cat <<-eof
 		     1	MANIFEST                                # COMMENT
 		     2	terraform-application-region-shared-1   # hello world
@@ -1081,4 +1081,4 @@ function test--save-args--with-hash-inserted {
 		     6	terraform-application-region-program-B  # select via headers for this one
 		eof
 	)"
-}; run-with-filter test--save-args--with-hash-inserted
+}; run_with_filter test__save_args__with_hash_inserted

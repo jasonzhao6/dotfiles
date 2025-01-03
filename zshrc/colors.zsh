@@ -36,7 +36,7 @@ function gray-fg { echo "\e[90m$*\e[0m"; }
 BACKTICK="\e[90m\`\e[0m"
 function command-color { echo "$BACKTICK$(cyan-fg "$@")$BACKTICK"; }
 function command-color-dim { echo "$BACKTICK$(gray-fg "$@")$BACKTICK"; }
-function grep-color { echo "\e[1;32m\e[K$*\e[m\e[K"; }
+function grep_color { echo "\e[1;32m\e[K$*\e[m\e[K"; }
 
 # Set background
 function red-bg { echo "\e[41m$*\e[0m"; }

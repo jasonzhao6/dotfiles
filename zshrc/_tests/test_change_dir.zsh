@@ -1,4 +1,4 @@
-function test--.. {
+function test__.. {
 	assert "$(
 		rm -rf /tmp/_..
 		mkdir -p /tmp/_../1
@@ -7,9 +7,9 @@ function test--.. {
 		pwd
 		rm -rf /tmp/_..
 	)" '/tmp/_..'
-}; run-with-filter test--..
+}; run_with_filter test__..
 
-function test--... {
+function test__... {
 	assert "$(
 		rm -rf /tmp/_...
 		mkdir -p /tmp/_.../1/2
@@ -18,9 +18,9 @@ function test--... {
 		pwd
 		rm -rf /tmp/_...
 	)" '/tmp/_...'
-}; run-with-filter test--...
+}; run_with_filter test__...
 
-function test--.... {
+function test__.... {
 	assert "$(
 		rm -rf /tmp/_....
 		mkdir -p /tmp/_..../1/2/3
@@ -29,9 +29,9 @@ function test--.... {
 		pwd
 		rm -rf /tmp/_....
 	)" '/tmp/_....'
-}; run-with-filter test--....
+}; run_with_filter test__....
 
-function test--..... {
+function test__..... {
 	assert "$(
 		rm -rf /tmp/_.....
 		mkdir -p /tmp/_...../1/2/3/4
@@ -40,9 +40,9 @@ function test--..... {
 		pwd
 		rm -rf /tmp/_.....
 	)" '/tmp/_.....'
-}; run-with-filter test--.....
+}; run_with_filter test__.....
 
-function test--...... {
+function test__...... {
 	assert "$(
 		rm -rf /tmp/_......
 		mkdir -p /tmp/_....../1/2/3/4/5
@@ -51,9 +51,9 @@ function test--...... {
 		pwd
 		rm -rf /tmp/_......
 	)" '/tmp/_......'
-}; run-with-filter test--......
+}; run_with_filter test__......
 
-function test--....... {
+function test__....... {
 	assert "$(
 		rm -rf /tmp/_.......
 		mkdir -p /tmp/_......./1/2/3/4/5/6
@@ -62,9 +62,9 @@ function test--....... {
 		pwd
 		rm -rf /tmp/_.......
 	)" '/tmp/_.......'
-}; run-with-filter test--.......
+}; run_with_filter test__.......
 
-function test--........ {
+function test__........ {
 	assert "$(
 		rm -rf /tmp/_........
 		mkdir -p /tmp/_......../1/2/3/4/5/6/7
@@ -73,9 +73,9 @@ function test--........ {
 		pwd
 		rm -rf /tmp/_........
 	)" '/tmp/_........'
-}; run-with-filter test--........
+}; run_with_filter test__........
 
-function test--......... {
+function test__......... {
 	assert "$(
 		rm -rf /tmp/_.........
 		mkdir -p /tmp/_........./1/2/3/4/5/6/7/8
@@ -84,9 +84,9 @@ function test--......... {
 		pwd
 		rm -rf /tmp/_.........
 	)" '/tmp/_.........'
-}; run-with-filter test--.........
+}; run_with_filter test__.........
 
-function test--.......... {
+function test__.......... {
 	assert "$(
 		rm -rf /tmp/_..........
 		mkdir -p /tmp/_........../1/2/3/4/5/6/7/8/9
@@ -95,52 +95,52 @@ function test--.......... {
 		pwd
 		rm -rf /tmp/_..........
 	)" '/tmp/_..........'
-}; run-with-filter test--..........
+}; run_with_filter test__..........
 
-function test--cd---with-dir {
+function test__cd-__with_dir {
 	assert "$(cd- ~/Documents 2>&1; pwd)" "$HOME/Documents"
-}; run-with-filter test--cd---with-dir
+}; run_with_filter test__cd-__with_dir
 
-function test--cd---with-file {
+function test__cd-__with_file {
 	assert "$(cd- ~/Documents/file.txt 2>&1; pwd)" "$HOME/Documents"
-}; run-with-filter test--cd---with-file
+}; run_with_filter test__cd-__with_file
 
-function test--cdl {
+function test__cdl {
 	assert "$(cdl; pwd)" "$HOME/Downloads"
-}; run-with-filter test--cdl
+}; run_with_filter test__cdl
 
-function test--cdm {
+function test__cdm {
 	assert "$(cdm; pwd)" "$HOME/Documents"
-}; run-with-filter test--cdm
+}; run_with_filter test__cdm
 
-function test--cdt {
+function test__cdt {
 	assert "$(cdt; pwd)" "$HOME/Desktop"
-}; run-with-filter test--cdt
+}; run_with_filter test__cdt
 
-function test--tmp {
+function test__tmp {
 	assert "$(tmp; pwd)" '/tmp'
-}; run-with-filter test--tmp
+}; run_with_filter test__tmp
 
-function test--cdd {
+function test__cdd {
 	assert "$(cdd; pwd)" "$HOME/gh/dotfiles"
-}; run-with-filter test--cdd
+}; run_with_filter test__cdd
 
-function test--cde {
+function test__cde {
 	# Skip: Not testing b/c function has other side effects
 }
 
-function test--cdg {
+function test__cdg {
 	assert "$(cdg; pwd)" "$HOME/gh"
-}; run-with-filter test--cdg
+}; run_with_filter test__cdg
 
-function test--cdj {
+function test__cdj {
 	assert "$(cdj; pwd)" "$HOME/gh/jasonzhao6"
-}; run-with-filter test--cdj
+}; run_with_filter test__cdj
 
-function test--cds {
+function test__cds {
 	assert "$(cds; pwd)" "$HOME/gh/scratch"
-}; run-with-filter test--cds
+}; run_with_filter test__cds
 
-function test--cdtf {
+function test__cdtf {
 	assert "$(cdtf; pwd)" "$HOME/gh/scratch/tf-debug"
-}; run-with-filter test--cdtf
+}; run_with_filter test__cdtf

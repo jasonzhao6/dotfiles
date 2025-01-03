@@ -1,35 +1,35 @@
-function test--color--for-diff {
+function test__color__for_diff {
 	assert "$(color; which diff)" 'diff: aliased to colordiff'
-}; run-with-filter test--color--for-diff
+}; run_with_filter test__color__for_diff
 
-function test--color--for-egrep {
+function test__color__for_egrep {
 	assert "$(color; which egrep)" 'egrep: aliased to egrep --color=always'
-}; run-with-filter test--color--for-egrep
+}; run_with_filter test__color__for_egrep
 
-function test--color--for-grep {
+function test__color__for_grep {
 	assert "$(color; which grep)" 'grep: aliased to grep --color=always'
-}; run-with-filter test--color--for-grep
+}; run_with_filter test__color__for_grep
 
-function test--color--for-ls {
+function test__color__for_ls {
 	assert "$(color; which ls)" 'ls: aliased to ls --color=always'
-}; run-with-filter test--color--for-ls
+}; run_with_filter test__color__for_ls
 
-function test--bw--for-diff {
+function test__bw__for_diff {
 	assert "$(bw; which diff)" '/usr/bin/diff'
-}; run-with-filter test--bw--for-diff
+}; run_with_filter test__bw__for_diff
 
-function test--bw--for-egrep {
+function test__bw__for_egrep {
 	assert "$(bw; which egrep)" '/usr/bin/egrep'
-}; run-with-filter test--bw--for-egrep
+}; run_with_filter test__bw__for_egrep
 
-function test--bw--for-grep {
+function test__bw__for_grep {
 	assert "$(bw; which grep)" '/usr/bin/grep'
-}; run-with-filter test--bw--for-grep
+}; run_with_filter test__bw__for_grep
 
-function test--bw--for-ls {
+function test__bw__for_ls {
 	assert "$(bw; which ls)" '/bin/ls'
-}; run-with-filter test--bw--for-ls
+}; run_with_filter test__bw__for_ls
 
-function test--grep-color {
-	assert "$(echo 'hello world' | grep ello)" "h$(grep-color ello) world"
-}; run-with-filter test--grep-color
+function test__grep_color {
+	assert "$(echo 'hello world' | grep ello)" "h$(grep_color ello) world"
+}; run_with_filter test__grep_color

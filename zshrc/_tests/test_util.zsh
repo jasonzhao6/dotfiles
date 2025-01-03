@@ -12,7 +12,7 @@ ls_dash_l=$(
 	eof
 )
 
-function test--d {
+function test__d {
 	assert "$(
 		D_UNDER_TEST=1 d www.google.com
 	)" "$(
@@ -21,13 +21,13 @@ function test--d {
 		     2	www.google.com
 		eof
 	)"
-}; run-with-filter test--d
+}; run_with_filter test__d
 
-function test--d--without-input {
+function test__d__without_input {
 	assert "$(D_UNDER_TEST=1 d)" ''
-}; run-with-filter test--d--without-input
+}; run_with_filter test__d__without_input
 
-function test--d--with-protocol {
+function test__d__with_protocol {
 	assert "$(
 		D_UNDER_TEST=1 d https://www.google.com
 	)" "$(
@@ -36,9 +36,9 @@ function test--d--with-protocol {
 		     2	www.google.com
 		eof
 	)"
-}; run-with-filter test--d--with-protocol
+}; run_with_filter test__d__with_protocol
 
-function test--d--with-protocol-and-path {
+function test__d__with_protocol_and_path {
 	assert "$(
 		D_UNDER_TEST=1 d https://www.google.com/path/to/page
 	)" "$(
@@ -47,13 +47,13 @@ function test--d--with-protocol-and-path {
 		     2	www.google.com
 		eof
 	)"
-}; run-with-filter test--d--with-protocol-and-path
+}; run_with_filter test__d__with_protocol_and_path
 
-function test--f--for-gh {
+function test__f__for_gh {
 	# Skip: Cannot test b/c requires querying github
 }
 
-function test--f--for-tf {
+function test__f__for_tf {
 	assert "$(
 		local home=$HOME
 		local pwd=$PWD
@@ -76,9 +76,9 @@ function test--f--for-tf {
 		     2	~/project/module
 		eof
 	)"
-}; run-with-filter test--f--for-tf
+}; run_with_filter test__f__for_tf
 
-function test--l {
+function test__l {
 	assert "$(
 		rm -rf /tmp/test--l
 		mkdir /tmp/test--l
@@ -87,7 +87,7 @@ function test--l {
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		l | no-color
+		l | no_color
 		rm -rf /tmp/test--l
 	)" "$(
 		cat <<-eof
@@ -99,9 +99,9 @@ function test--l {
 		     6	3.txt
 		eof
 	)"
-}; run-with-filter test--l
+}; run_with_filter test__l
 
-function test--l--with-search-pattern-to-ignore {
+function test__l__with_search_pattern_to_ignore {
 	assert "$(
 		rm -rf /tmp/test--l--with-search-pattern-to-ignore
 		mkdir /tmp/test--l--with-search-pattern-to-ignore
@@ -110,7 +110,7 @@ function test--l--with-search-pattern-to-ignore {
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		l *log | no-color
+		l *log | no_color
 		rm -rf /tmp/test--l--with-search-pattern-to-ignore
 	)" "$(
 		cat <<-eof
@@ -122,9 +122,9 @@ function test--l--with-search-pattern-to-ignore {
 		     6	3.txt
 		eof
 	)"
-}; run-with-filter test--l--with-search-pattern-to-ignore
+}; run_with_filter test__l__with_search_pattern_to_ignore
 
-function test--ll {
+function test__ll {
 	assert "$(
 		rm -rf /tmp/test--ll
 		mkdir /tmp/test--ll
@@ -133,7 +133,7 @@ function test--ll {
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		ll | no-color
+		ll | no_color
 		rm -rf /tmp/test--ll
 	)" "$(
 		cat <<-eof
@@ -142,9 +142,9 @@ function test--ll {
 		     3	.3.hidden
 		eof
 	)"
-}; run-with-filter test--ll
+}; run_with_filter test__ll
 
-function test--ll--with-search-pattern-to-ignore {
+function test__ll__with_search_pattern_to_ignore {
 	assert "$(
 		rm -rf /tmp/test--ll--with-search-pattern-to-ignore
 		mkdir /tmp/test--ll--with-search-pattern-to-ignore
@@ -153,7 +153,7 @@ function test--ll--with-search-pattern-to-ignore {
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		ll *log | no-color
+		ll *log | no_color
 		rm -rf /tmp/test--ll--with-search-pattern-to-ignore
 	)" "$(
 		cat <<-eof
@@ -162,9 +162,9 @@ function test--ll--with-search-pattern-to-ignore {
 		     3	.3.hidden
 		eof
 	)"
-}; run-with-filter test--ll--with-search-pattern-to-ignore
+}; run_with_filter test__ll__with_search_pattern_to_ignore
 
-function test--w {
+function test__w {
 	assert "$(
 		w w
 	)" "$(
@@ -174,21 +174,21 @@ function test--w {
 		     3	}
 		eof
 	)"
-}; run-with-filter test--w
+}; run_with_filter test__w
 
-function test--bb {
+function test__bb {
 	# Skip: Not interesting to test
 }
 
-function test--cc {
+function test__cc {
 	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
 }
 
-function test--dd {
+function test__dd {
 	# Skip: Not testing b/c requires network call
 }
 
-function test--dd {
+function test__dd {
 	assert "$(
 		DD_DUMP_DIR="/tmp/test--dd"
 		DD_CLEAR_TERMINAL=0
@@ -207,9 +207,9 @@ function test--dd {
 			$
 		eof
 	)"
-}; run-with-filter test--dd
+}; run_with_filter test__dd
 
-function test--dd--when-dumping-same-pasteboard-twice {
+function test__dd__when_dumping_same_pasteboard_twice {
 	assert "$(
 		DD_DUMP_DIR="/tmp/test--dd"
 		DD_CLEAR_TERMINAL=0
@@ -229,9 +229,9 @@ function test--dd--when-dumping-same-pasteboard-twice {
 			$
 		eof
 	)"
-}; run-with-filter test--dd--when-dumping-same-pasteboard-twice
+}; run_with_filter test__dd__when_dumping_same_pasteboard_twice
 
-function test--dd--when-dumping-two-different-pasteboards {
+function test__dd__when_dumping_two_different_pasteboards {
 	assert "$(
 		DD_DUMP_DIR="/tmp/test--dd"
 		DD_CLEAR_TERMINAL=0
@@ -255,9 +255,9 @@ function test--dd--when-dumping-two-different-pasteboards {
 			$
 		eof
 	)"
-}; run-with-filter test--dd--when-dumping-two-different-pasteboards
+}; run_with_filter test__dd__when_dumping_two_different_pasteboards
 
-function test--dd--when-not-terminal-output {
+function test__dd__when_not_terminal_output {
 	assert "$(
 		DD_DUMP_DIR="/tmp/test--dd"
 		DD_CLEAR_TERMINAL=0
@@ -269,13 +269,13 @@ function test--dd--when-not-terminal-output {
 
 		dd-init
 	)" '0'
-}; run-with-filter test--dd--when-not-terminal-output
+}; run_with_filter test__dd__when_not_terminal_output
 
-function test--ddd {
+function test__ddd {
 	assert "$(ddd; pwd)" "$DD_DUMP_DIR"
-}; run-with-filter test--ddd
+}; run_with_filter test__ddd
 
-function test--ddc {
+function test__ddc {
 	assert "$(
 		DD_DUMP_DIR="/tmp/test--dd"
 		mkdir -p $DD_DUMP_DIR
@@ -285,9 +285,9 @@ function test--ddc {
 
 		dd-init
 	)" 'absent'
-}; run-with-filter test--ddc
+}; run_with_filter test__ddc
 
-function test--ee {
+function test__ee {
 	assert "$(
 		ee 3 4 echo ~~
 	)" "$(
@@ -296,9 +296,9 @@ function test--ee {
 			echo 4
 		eof
 	)"
-}; run-with-filter test--ee
+}; run_with_filter test__ee
 
-function test--ee--with-multiple-substitutions {
+function test__ee__with_multiple_substitutions {
 	assert "$(
 		ee 3 4 echo ~~ and ~~ again
 	)" "$(
@@ -307,9 +307,9 @@ function test--ee--with-multiple-substitutions {
 			echo 4 and 4 again
 		eof
 	)"
-}; run-with-filter test--ee--with-multiple-substitutions
+}; run_with_filter test__ee__with_multiple_substitutions
 
-function test--ee--with-multiple-substitutions-in-quotes {
+function test__ee__with_multiple_substitutions_in_quotes {
 	assert "$(
 		ee 3 4 'echo ~~ and ~~ again'
 	)" "$(
@@ -318,9 +318,9 @@ function test--ee--with-multiple-substitutions-in-quotes {
 			echo 4 and 4 again
 		eof
 	)"
-}; run-with-filter test--ee--with-multiple-substitutions-in-quotes
+}; run_with_filter test__ee__with_multiple_substitutions_in_quotes
 
-function test--ee--with-math {
+function test__ee__with_math {
 	assert "$(
 		ee 3 4 echo ~~ and '$((~~ + 10))' too
 	)" "$(
@@ -329,9 +329,9 @@ function test--ee--with-math {
 			echo 4 and \$((4 + 10)) too
 		eof
 	)"
-}; run-with-filter test--ee--with-math
+}; run_with_filter test__ee__with_math
 
-function test--eee {
+function test__eee {
 	assert "$(
 		eee 3 4 echo ~~ 2>&1
 	)" "$(
@@ -344,9 +344,9 @@ function test--eee {
 			4
 		eof
 	)"
-}; run-with-filter test--eee
+}; run_with_filter test__eee
 
-function test--eee--with-multiple-substitutions {
+function test__eee__with_multiple_substitutions {
 	assert "$(
 		eee 3 4 echo ~~ and ~~ again 2>&1
 	)" "$(
@@ -359,9 +359,9 @@ function test--eee--with-multiple-substitutions {
 			4 and 4 again
 		eof
 	)"
-}; run-with-filter test--eee--with-multiple-substitutions
+}; run_with_filter test__eee__with_multiple_substitutions
 
-function test--eee--with-multiple-substitutions-in-quotes {
+function test__eee__with_multiple_substitutions_in_quotes {
 	assert "$(
 		eee 3 4 'echo ~~ and ~~ again' 2>&1
 	)" "$(
@@ -374,9 +374,9 @@ function test--eee--with-multiple-substitutions-in-quotes {
 			4 and 4 again
 		eof
 	)"
-}; run-with-filter test--eee--with-multiple-substitutions-in-quotes
+}; run_with_filter test__eee__with_multiple_substitutions_in_quotes
 
-function test--eee--with-math {
+function test__eee__with_math {
 	assert "$(
 		eee 3 4 echo ~~ and '$((~~ + 10))' too 2>&1
 	)" "$(
@@ -389,13 +389,13 @@ function test--eee--with-math {
 			4 and 14 too
 		eof
 	)"
-}; run-with-filter test--eee--with-math
+}; run_with_filter test__eee__with_math
 
-function test--ff {
+function test__ff {
 	# Skip: Not interesting to test
 }
 
-function test--hh {
+function test__hh {
 	local old=$(
 		cat <<-eof
 			This is the original content.
@@ -418,36 +418,36 @@ function test--hh {
 	)
 
 	assert "$(
-		hh <(echo $old) <(echo $new) | no-color
+		hh <(echo $old) <(echo $new) | no_color
 	)" "$(
 		cat <<-eof
 			This is the original content.                                   |       This is the modified content.
 			                                                                >       New Line
 		eof
 	)"
-}; run-with-filter test--hh
+}; run_with_filter test__hh
 
-function test--ii {
+function test__ii {
 	# Skip: Not interesting to test
 }
 
-function test--mm {
+function test__mm {
 	# Skip: Not interesting to test
 }
 
-function test--oo {
+function test__oo {
 	# Skip: Not interesting to test
 }
 
-function test--pp {
+function test__pp {
 	# Skip: Not interesting b/c it has its own specs
 }
 
-function test--tt {
+function test__tt {
 	# Skip: Not interesting to test
 }
 
-function test--uu {
+function test__uu {
 	local old=$(
 		cat <<-eof
 			This is the original content.
@@ -470,7 +470,7 @@ function test--uu {
 	)
 
 	assert "$(
-		uu <(echo $old) <(echo $new) | no-color | sed 1,2d
+		uu <(echo $old) <(echo $new) | no_color | sed 1,2d
 	)" "$(
 		cat <<-eof
 			@@ -1,5 +1,6 @@
@@ -483,9 +483,9 @@ function test--uu {
 			 Line 4
 		eof
 	)"
-}; run-with-filter test--uu
+}; run_with_filter test__uu
 
-function test--xx {
+function test__xx {
 	assert "$(
 		xx
 		pbpaste
@@ -495,21 +495,21 @@ function test--xx {
 			bind '"\e[B": history-search-forward'
 		eof
 	)"
-}; run-with-filter test--xx
+}; run_with_filter test__xx
 
-function test--bif {
+function test__bif {
 	# Skip: Not testing b/c requires network call
 }
 
-function test--flush {
+function test__flush {
 	# Skip: Not testing b/c requires network call
 }
 
-function test--jcurl {
+function test__jcurl {
 	# Skip: Not interesting to test
 }
 
-function test--ren {
+function test__ren {
 	assert "$(
 		rm -rf /tmp/test--ren
 		mkdir /tmp/test--ren
@@ -525,129 +525,129 @@ function test--ren {
 			3.txt
 		eof
 	)"
-}; run-with-filter test--ren
+}; run_with_filter test__ren
 
-function test--echo-eval {
+function test__echo_eval {
 	assert "$(
-		echo-eval echo 123 2>&1
+		echo_eval echo 123 2>&1
 	)" "$(
 		cat <<-eof
 			echo 123
 			123
 		eof
 	)"
-}; run-with-filter test--echo-eval
+}; run_with_filter test__echo_eval
 
-function test--ellipsize {
+function test__ellipsize {
 	assert "$(
-		ellipsize $(printf "%.0sX" {1..1000}) | no-color | wc -c | awk '{print $1}'
+		ellipsize $(printf "%.0sX" {1..1000}) | no_color | wc -c | awk '{print $1}'
 	)" "$COLUMNS"
-}; run-with-filter test--ellipsize
+}; run_with_filter test__ellipsize
 
-function test--has-internet {
+function test__has_internet {
 	# Skip: Not interesting to test
 }
 
-function test--index-of--first {
-	assert "$(index-of '10 20 30 40' 10)" '1'
-}; run-with-filter test--index-of--first
+function test__index_of__first {
+	assert "$(index_of '10 20 30 40' 10)" '1'
+}; run_with_filter test__index_of__first
 
-function test--index-of--third {
-	assert "$(index-of '10 20 30 40' 30)" '7'
-}; run-with-filter test--index-of--third
+function test__index_of__third {
+	assert "$(index_of '10 20 30 40' 30)" '7'
+}; run_with_filter test__index_of__third
 
-function test--index-of--last {
-	assert "$(index-of '10 20 30 40' 40)" '10'
-}; run-with-filter test--index-of--last
+function test__index_of__last {
+	assert "$(index_of '10 20 30 40' 40)" '10'
+}; run_with_filter test__index_of__last
 
-function test--index-of--out-of-bound {
-	assert "$(index-of '10 20 30 40' 100)" '0'
-}; run-with-filter test--index-of--out-of-bound
+function test__index_of__out_of_bound {
+	assert "$(index_of '10 20 30 40' 100)" '0'
+}; run_with_filter test__index_of__out_of_bound
 
-function test--index-of--with-color {
-	assert "$(index-of "$(green-bg a b c)" m)" '0'
-}; run-with-filter test--index-of--with-color
+function test__index_of__with_color {
+	assert "$(index_of "$(green-bg a b c)" m)" '0'
+}; run_with_filter test__index_of__with_color
 
-function test--next-ascii--of-lower-case {
-	assert "$(next-ascii a)" 'b'
-}; run-with-filter test--next-ascii--of-lower-case
+function test__next_ascii__of_lower_case {
+	assert "$(next_ascii a)" 'b'
+}; run_with_filter test__next_ascii__of_lower_case
 
-function test--next-ascii--of-upper-case {
-	assert "$(next-ascii A)" 'B'
-}; run-with-filter test--next-ascii--of-upper-case
+function test__next_ascii__of_upper_case {
+	assert "$(next_ascii A)" 'B'
+}; run_with_filter test__next_ascii__of_upper_case
 
-function test--next-ascii--of-number {
-	assert "$(next-ascii 0)" '1'
-}; run-with-filter test--next-ascii--of-number
+function test__next_ascii__of_number {
+	assert "$(next_ascii 0)" '1'
+}; run_with_filter test__next_ascii__of_number
 
-function test--paste-when-empty {
-	assert "$(echo '123 321' | pbcopy; paste-when-empty)" '123 321'
-}; run-with-filter test--paste-when-empty
+function test__paste_when_empty {
+	assert "$(echo '123 321' | pbcopy; paste_when_empty)" '123 321'
+}; run_with_filter test__paste_when_empty
 
-function test--paste-when-empty--with-one-arg {
-	assert "$(paste-when-empty 111)" '111'
-}; run-with-filter test--paste-when-empty--with-one-arg
+function test__paste_when_empty__with_one_arg {
+	assert "$(paste_when_empty 111)" '111'
+}; run_with_filter test__paste_when_empty__with_one_arg
 
-function test--paste-when-empty--with-two-args {
-	assert "$(paste-when-empty '111 222')" '111 222'
-}; run-with-filter test--paste-when-empty--with-two-args
+function test__paste_when_empty__with_two_args {
+	assert "$(paste_when_empty '111 222')" '111 222'
+}; run_with_filter test__paste_when_empty__with_two_args
 
-function test--prev-command {
+function test__prev_command {
 	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
 }
 
-function test--extract-urls {
+function test__extract_urls {
 	local url='http://example.com'
-	assert "$(echo $url | extract-urls)" $url
-}; run-with-filter test--extract-urls
+	assert "$(echo $url | extract_urls)" $url
+}; run_with_filter test__extract_urls
 
-function test--extract-urls--with-subdomain {
+function test__extract_urls__with_subdomain {
 	local url='http://my.example.com'
-	assert "$(echo $url | extract-urls)" $url
-}; run-with-filter test--extract-urls--with-subdomain
+	assert "$(echo $url | extract_urls)" $url
+}; run_with_filter test__extract_urls__with_subdomain
 
-function test--extract-urls--with-www {
+function test__extract_urls__with_www {
 	local url='http://www.example.com'
-	assert "$(echo $url | extract-urls)" $url
-}; run-with-filter test--extract-urls--with-www
+	assert "$(echo $url | extract_urls)" $url
+}; run_with_filter test__extract_urls__with_www
 
-function test--extract-urls--with-http {
+function test__extract_urls__with_http {
 	local url='http://www.example.com'
-	assert "$(echo $url | extract-urls)" $url
-}; run-with-filter test--extract-urls--with-http
+	assert "$(echo $url | extract_urls)" $url
+}; run_with_filter test__extract_urls__with_http
 
-function test--extract-urls--with-https {
+function test__extract_urls__with_https {
 	local url='https://www.example.com'
-	assert "$(echo $url | extract-urls)" $url
-}; run-with-filter test--extract-urls--with-https
+	assert "$(echo $url | extract_urls)" $url
+}; run_with_filter test__extract_urls__with_https
 
-function test--extract-urls--with-path {
+function test__extract_urls__with_path {
 	local url='https://www.example.com/path'
-	assert "$(echo $url | extract-urls)" $url
-}; run-with-filter test--extract-urls--with-path
+	assert "$(echo $url | extract_urls)" $url
+}; run_with_filter test__extract_urls__with_path
 
-function test--extract-urls--with-query {
+function test__extract_urls__with_query {
 	local url='https://www.example.com/path?key=value'
-	assert "$(echo $url | extract-urls)" $url
-}; run-with-filter test--extract-urls--with-query
+	assert "$(echo $url | extract_urls)" $url
+}; run_with_filter test__extract_urls__with_query
 
-function test--extract-urls--with-fragment {
+function test__extract_urls__with_fragment {
 	local url='https://www.example.com/path?key=value#heading'
-	assert "$(echo $url | extract-urls)" $url
-}; run-with-filter test--extract-urls--with-fragment
+	assert "$(echo $url | extract_urls)" $url
+}; run_with_filter test__extract_urls__with_fragment
 
-function test--extract-urls--with-multiple-urls {
+function test__extract_urls__with_multiple_urls {
 	assert "$(
-		echo '2 urls https://www.example.com/path?key=value#heading, https://www.google.com' | extract-urls
+		echo '2 urls https://www.example.com/path?key=value#heading, https://www.google.com' | extract_urls
 	)" "$(
 		cat <<-eof
 			https://www.example.com/path?key=value#heading
 			https://www.google.com
 		eof
 	)"
-}; run-with-filter test--extract-urls--with-multiple-urls
+}; run_with_filter test__extract_urls__with_multiple_urls
 
-function test--hex {
+function test__hex {
 	assert "$(
 		echo 123 | hex
 	)" "$(
@@ -656,13 +656,13 @@ function test--hex {
 			00000004
 		eof
 	)"
-}; run-with-filter test--hex
+}; run_with_filter test__hex
 
-function test--no-color {
-	assert "$(echo "\e[30m\e[47m...\e[0m" | no-color)" '...'
-}; run-with-filter test--no-color
+function test__no_color {
+	assert "$(echo "\e[30m\e[47m...\e[0m" | no_color)" '...'
+}; run_with_filter test__no_color
 
-function test--no-empty {
+function test__no_empty {
 	local input=$(
 		cat <<-eof
 			[
@@ -673,42 +673,42 @@ function test--no-empty {
 	)
 
 	assert "$(
-		echo $input | no-empty
+		echo $input | no_empty
 	)" "$(
 		cat <<-eof
 			[
 			]
 		eof
 	)"
-}; run-with-filter test--no-empty
+}; run_with_filter test__no_empty
 
-function test--strip {
+function test__strip {
 	assert "$(echo '    111 222   ' | strip)" '111 222'
-}; run-with-filter test--strip
+}; run_with_filter test__strip
 
-function test--strip-left {
-	assert "$(echo '    111 222   ' | strip-left)" '111 222   '
-}; run-with-filter test--strip-left
+function test__strip_left {
+	assert "$(echo '    111 222   ' | strip_left)" '111 222   '
+}; run_with_filter test__strip_left
 
-function test--strip-right {
-	assert "$(echo '    111 222   ' | strip-right)" '    111 222'
-}; run-with-filter test--strip-right
+function test__strip_right {
+	assert "$(echo '    111 222   ' | strip_right)" '    111 222'
+}; run_with_filter test__strip_right
 
-function test--trim {
+function test__trim {
 	assert "$(echo 1234567890 | trim)" '1234567890'
-}; run-with-filter test--trim
+}; run_with_filter test__trim
 
-function test--trim--with-one-arg {
+function test__trim__with_one_arg {
 	assert "$(echo 1234567890 | trim 3)" '4567890'
-}; run-with-filter test--trim--with-one-arg
+}; run_with_filter test__trim__with_one_arg
 
-function test--trim--with-two-args {
+function test__trim__with_two_args {
 	assert "$(echo 1234567890 | trim 3 2)" '45678'
-}; run-with-filter test--trim--with-two-args
+}; run_with_filter test__trim__with_two_args
 
-function test--insert-hash {
+function test__insert_hash {
 	assert "$(
-		echo $ls_dash_l | insert-hash
+		echo $ls_dash_l | insert_hash
 	)" "$(
 		cat <<-eof
 			drwxr-xr-x  # 9 yzhao  staff    288 Dec 29 21:58 al-archive
@@ -722,21 +722,21 @@ function test--insert-hash {
 			-rw-r--r--@ # 1 yzhao  staff  23929 Dec 30 00:12 zshrc.txt
 		eof
 )"
-}; run-with-filter test--insert-hash
+}; run_with_filter test__insert_hash
 
-function test--size-of {
-	assert "$(echo $ls_dash_l | size-of)" '64'
-}; run-with-filter test--size-of
+function test__size_of {
+	assert "$(echo $ls_dash_l | size_of)" '64'
+}; run_with_filter test__size_of
 
-function test--size-of--third-column {
-	assert "$(echo $ls_dash_l | size-of 2)" '1'
-}; run-with-filter test--size-of--third-column
+function test__size_of__third_column {
+	assert "$(echo $ls_dash_l | size_of 2)" '1'
+}; run_with_filter test__size_of__third_column
 
-function test--size-of--variable-width-column {
-	assert "$(echo $ls_dash_l | size-of 5)" '5'
-}; run-with-filter test--size-of--variable-width-column
+function test__size_of__variable_width_column {
+	assert "$(echo $ls_dash_l | size_of 5)" '5'
+}; run_with_filter test__size_of__variable_width_column
 
-function test--keys {
+function test__keys {
 	local input=$(
 		cat <<-eof
 			{
@@ -756,9 +756,9 @@ function test--keys {
 		     3	key3
 		eof
 	)"
-}; run-with-filter test--keys
+}; run_with_filter test__keys
 
-function test--trim-list {
+function test__trim_list {
 	local input=$(
 		cat <<-eof
 			[
@@ -770,7 +770,7 @@ function test--trim-list {
 	)
 
 	assert "$(
-		echo $input | trim-list
+		echo $input | trim_list
 	)" "$(
 		cat <<-eof
 			row-1
@@ -778,4 +778,4 @@ function test--trim-list {
 			row-3
 		eof
 	)"
-}; run-with-filter test--trim-list
+}; run_with_filter test__trim_list

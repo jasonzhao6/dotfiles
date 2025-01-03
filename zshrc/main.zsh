@@ -12,7 +12,7 @@ source "$ZSHRC_DIR/zsh_prompt.zsh"
 # [s]ave into args history
 # (e.g `seq 100 105; s`, or alternatively `seq 100 105 | s`)
 function s { ss 'insert `#` after the first column to soft-select it' }
-function ss { [[ -t 0 ]] && eval $(prev-command) | save-args $@ || save-args $@ }
+function ss { [[ -t 0 ]] && eval $(prev_command) | save_args $@ || save_args $@ }
 # paste into args history
 # (e.g copy a list into pasteboard, then `v`)
 function v { pbpaste | s }
@@ -25,7 +25,7 @@ function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | ev
 function aa { arg $((RANDOM % $(args-list-size) + 1)) $@ }
 # select an [arg] by number
 # (e.g `arg <number> echo`, or with explicit positioning `arg <number> echo ~~`)
-function arg { [[ -n $1 && -n $2 ]] && { ARG="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"; [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && { echo-eval "${@:2} $ARG"; return 0 } || echo-eval ${${@:2}//~~/$ARG} } }
+function arg { [[ -n $1 && -n $2 ]] && { ARG="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"; [[ $(index_of ${(j: :)@} '~~') -eq 0 ]] && { echo_eval "${@:2} $ARG"; return 0 } || echo_eval ${${@:2}//~~/$ARG} } }
 function 1 { arg $0 $@ }
 function 2 { arg $0 $@ }
 function 3 { arg $0 $@ }
@@ -57,7 +57,7 @@ function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE)
 function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | ss }
 # list / filter colum[n] by letter
 # (e.g `n` to list all, `n d` to keep only the fourth column, delimited based on the bottom row)
-function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-columns-bar $N } || { args-mark-references! $1 $N; _N=$N; args-select-column!; N=$_N; [[ $ARGS_PUSHED -eq 0 && $(index-of "$(args-columns $N)" b) -ne 0 ]] && args-columns-bar $N } }
+function n { [[ $NN -eq 1 ]] && N=0 || N=1; [[ -z $1 ]] && { args-list; args-columns-bar $N } || { args-mark-references! $1 $N; _N=$N; args-select-column!; N=$_N; [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args-columns $N)" b) -ne 0 ]] && args-columns-bar $N } }
 # (`nn` is like `n`, but delimited based on the top row)
 function nn { NN=1 n $@ }
 # [c]opy into pasteboard
@@ -74,22 +74,22 @@ function r { args-redo; args-list; args-redo-bar }
 function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args-history || { ARGS_CURSOR=$1; a } }
 # helpers
 function args { echo $ARGS_HISTORY[$ARGS_CURSOR] }
-function args-plain { args | no-color | expand }
+function args-plain { args | no_color | expand }
 function args-list { args | nl }
-function args-list-plain { args | nl | no-color | expand }
+function args-list-plain { args | nl | no_color | expand }
 function args-list-size { args | wc -l | awk '{print $1}' }
 function args-columns { ARGS_COLUMNS=''; ARGS_COL_CURR=a; ARGS_SKIP_NL=1; args-pick-header! $@; for i in $(seq 1 ${#ARG}); do args-label-column! $i; done; echo $ARGS_COLUMNS }
 function args-columns-bar { green-bg "$(args-columns $1)" }
 # helpers! (`!` means the function sets env vars to be consumed by its caller)
 function args-build-greps! { ARGS_FILTERS="grep ${*// / | grep }"; ARGS_FILTERS=${ARGS_FILTERS// -/ --invert-match }; ARGS_FILTERS=${ARGS_FILTERS//grep/grep --color=never --ignore-case}; ARGS_COLOR="egrep --color=always --ignore-case '${${@:#-*}// /|}'" }
 function args-pick-header! { [[ -z ${1:-$ARGS_USE_BOTTOM_ROW} || ${1:-$ARGS_USE_BOTTOM_ROW} -eq 1 ]] && ARG=$(args-list-plain | tail -1) || ARG=$(args-list-plain | head -1) }
-function args-label-column! { [[ $ARG[$1-1] == ' ' && $ARG[$1] != ' ' ]] && { [[ $ARGS_SKIP_NL -eq 1 ]] && { ARGS_SKIP_NL=0; ARGS_COLUMNS+=' ' } || { ARGS_COLUMNS+=$ARGS_COL_CURR; ARGS_COL_CURR=$(next-ascii $ARGS_COL_CURR) } } || ARGS_COLUMNS+=' ' }
-function args-mark-references! { ARGS_USE_BOTTOM_ROW=$2; ARGS_COLUMNS=$(args-columns $2); ARGS_COL_FIRST=$(index-of $ARGS_COLUMNS a); ARGS_COL_TARGET=$(index-of $ARGS_COLUMNS $1); ARGS_COL_NEXT=$(index-of $ARGS_COLUMNS $(next-ascii $1)) }
-function args-select-column! { args-list-plain | cut -c $([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)-$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1))) | strip-right | ss }
-function args-get-new! { ARGS_NEW=$(cat - | head -1000 | no-empty); [[ -n $1 ]] && ARGS_NEW=$(echo $ARGS_NEW | insert-hash); ARGS_NEW_PLAIN=$(echo $ARGS_NEW | no-color | expand) }
+function args-label-column! { [[ $ARG[$1-1] == ' ' && $ARG[$1] != ' ' ]] && { [[ $ARGS_SKIP_NL -eq 1 ]] && { ARGS_SKIP_NL=0; ARGS_COLUMNS+=' ' } || { ARGS_COLUMNS+=$ARGS_COL_CURR; ARGS_COL_CURR=$(next_ascii $ARGS_COL_CURR) } } || ARGS_COLUMNS+=' ' }
+function args-mark-references! { ARGS_USE_BOTTOM_ROW=$2; ARGS_COLUMNS=$(args-columns $2); ARGS_COL_FIRST=$(index_of $ARGS_COLUMNS a); ARGS_COL_TARGET=$(index_of $ARGS_COLUMNS $1); ARGS_COL_NEXT=$(index_of $ARGS_COLUMNS $(next_ascii $1)) }
+function args-select-column! { args-list-plain | cut -c $([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)-$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1))) | strip_right | ss }
+function args-get-new! { ARGS_NEW=$(cat - | head -1000 | no_empty); [[ -n $1 ]] && ARGS_NEW=$(echo $ARGS_NEW | insert_hash); ARGS_NEW_PLAIN=$(echo $ARGS_NEW | no_color | expand) }
 function args-push-if-different! { [[ $ARGS_NEW_PLAIN != $(args-plain) ]] && { args-push $ARGS; ARGS_PUSHED=1; N= } || ARGS_PUSHED=0 }
 # | after a list
-function save-args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-push-if-different!; args-replace $ARGS_NEW; args-list } }
+function save_args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-push-if-different!; args-replace $ARGS_NEW; args-list } }
 
 ### Args history interface
 #
@@ -138,11 +138,11 @@ function args-history {
 ### AWS
 # select region
 export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
-function c1 { echo-eval 'export AWS_DEFAULT_REGION=eu-central-1' }
-function e1 { echo-eval 'export AWS_DEFAULT_REGION=us-east-1' }
-function e2 { echo-eval 'export AWS_DEFAULT_REGION=us-east-2' }
-function w1 { echo-eval 'export AWS_DEFAULT_REGION=us-west-1' }
-function w2 { echo-eval 'export AWS_DEFAULT_REGION=us-west-2' }
+function c1 { echo_eval 'export AWS_DEFAULT_REGION=eu-central-1' }
+function e1 { echo_eval 'export AWS_DEFAULT_REGION=us-east-1' }
+function e2 { echo_eval 'export AWS_DEFAULT_REGION=us-east-2' }
+function w1 { echo_eval 'export AWS_DEFAULT_REGION=us-west-1' }
+function w2 { echo_eval 'export AWS_DEFAULT_REGION=us-west-2' }
 # find [ec2] / [asg] instances by name tag prefix
 function ec2 { ecc $@ }
 function ecc { ec2-args "Name=tag:Name, Values=$@*" }
@@ -193,7 +193,7 @@ function ........ { cd ../../../../../../.. }
 function ......... { cd ../../../../../../../.. }
 function .......... { cd ../../../../../../../../.. }
 # go to a folder
-function cd- { CD=$(paste-when-empty $@); [[ -d $CD ]] && cd $CD || cd ${${CD}%/*} }
+function cd- { CD=$(paste_when_empty $@); [[ -d $CD ]] && cd $CD || cd ${${CD}%/*} }
 # go to mac folders
 function cdl { cd ~/Downloads }
 function cdm { cd ~/Documents }
@@ -319,8 +319,8 @@ function kq { jq ${@:-.} ~/Documents/k8.json }
 
 ### [T]erra[f]orm
 # config
-function tf0 { echo-eval 'export TF_LOG=' }
-function tf1 { echo-eval 'export TF_LOG=DEBUG' }
+function tf0 { echo_eval 'export TF_LOG=' }
+function tf1 { echo_eval 'export TF_LOG=DEBUG' }
 # [i]nit
 function tfi { mkdir -p ~/.terraform.cache; terraform init $@ }
 function tfiu { terraform init -upgrade }
@@ -336,7 +336,7 @@ function tfv { tf-pre $@ && terraform validate }
 # post `tfp`
 function tfa { terraform apply }
 function tfd { terraform destroy }
-function tfg { terraform show -no-color tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web }
+function tfg { terraform show -no_color tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web }
 function tfz { terraform force-unlock $@ }
 # post `tfl`
 function tfs { terraform state show $@ }
@@ -376,12 +376,12 @@ function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.
 function w { which $@ | ss }
 # doubles (they do not save into `args`)
 function bb { pmset sleepnow }
-function cc { eval $(prev-command) | no-color | ruby -e 'puts STDIN.read.strip' | pbcopy }
+function cc { eval $(prev_command) | no_color | ruby -e 'puts STDIN.read.strip' | pbcopy }
 function dd { mkdir -p $DD_DUMP_DIR; dd-is-terminal-output && { DD=$(dd-dump-file); $(pbpaste > $DD); dd-taint-pasteboard; dd-clear-terminal } || dd-clear-terminal }
 function ddd { mkdir -p $DD_DUMP_DIR; cd $DD_DUMP_DIR }
 function ddc { rm -rf $DD_DUMP_DIR }
 function ee { for i in $(seq $1 $2); do echo ${${@:3}//~~/$i}; done }
-function eee { for i in $(seq $1 $2); do echo; echo-eval ${${@:3}//~~/$i}; done }
+function eee { for i in $(seq $1 $2); do echo; echo_eval ${${@:3}//~~/$i}; done }
 function ff { caffeinate }
 function hh { diff --side-by-side --suppress-common-lines $1 $2 }
 function ii { open -na 'IntelliJ IDEA CE.app' --args ${@:-.} }
@@ -391,20 +391,20 @@ function pp { ruby ~/gh/jasonzhao6/sql_formatter.rb/run.rb $@ }
 function tt { ~/gh/tt/tt.rb $@ }
 function uu { diff --unified $1 $2 }
 function xx { echo "bind '\"\\\e[A\": history-search-backward'\nbind '\"\\\e[B\": history-search-forward'" | pbcopy }
-function yy { YY=$(prev-command); echo -n $YY | pbcopy }
+function yy { YY=$(prev_command); echo -n $YY | pbcopy }
 # one-offs
 function bif { brew install --formula $@ }
 function flush { sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder }
 function jcurl { curl --silent $1 | jq | { [[ -z $2 ]] && cat || grep -A${3:-0} -B${3:-0} $2 } }
 function ren { for file in *$1*; do mv "$file" "${file//$1/$2}"; done }
 # helpers
-function echo-eval { echo $@ >&2; eval $@ }
+function echo_eval { echo $@ >&2; eval $@ }
 function ellipsize { [[ ${#1} -gt $COLUMNS ]] && echo -n "${1:0:$((COLUMNS - 4))} \e[30m\e[47m...\e[0m" || echo $@ }
-function has-internet { curl -s --max-time 1 http://www.google.com &> /dev/null }
-function index-of { awk -v str1="$(echo $1 | no-color)" -v str2="$(echo $2 | no-color)" 'BEGIN { print index(str1, str2) }' }
-function next-ascii { printf "%b" $(printf "\\$(printf "%o" $(($(printf "%d" "'$@") + 1)))") }
-function paste-when-empty { echo ${@:-$(pbpaste)} }
-function prev-command { fc -ln -1 }
+function has_internet { curl -s --max-time 1 http://www.google.com &> /dev/null }
+function index_of { awk -v str1="$(echo $1 | no_color)" -v str2="$(echo $2 | no_color)" 'BEGIN { print index(str1, str2) }' }
+function next_ascii { printf "%b" $(printf "\\$(printf "%o" $(($(printf "%d" "'$@") + 1)))") }
+function paste_when_empty { echo ${@:-$(pbpaste)} }
+function prev_command { fc -ln -1 }
 # helper for `f`
 function f-pre {
 	[[ $@ == gh ]] && gh repo list $(org) --no-archived --limit 1000 --json name | jq -r '.[].name'
@@ -412,25 +412,25 @@ function f-pre {
 }
 # helpers for `dd`
 function dd-init { DD_DUMP_DIR="$HOME/.zshrc.terminal-dump.d"; DD_CLEAR_TERMINAL=1 }; dd-init
-function dd-is-terminal-output { [[ $(pbpaste | no-empty | strip | sed -n '$p') == \$* ]] }
+function dd-is-terminal-output { [[ $(pbpaste | no_empty | strip | sed -n '$p') == \$* ]] }
 function dd-dump-file { echo "$DD_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt" }
 function dd-taint-pasteboard { $(echo "$(pbpaste)\n\n(Dumped to '$DD')" | pbcopy) }
 function dd-clear-terminal { [[ $DD_CLEAR_TERMINAL -eq 1 ]] && clear }
 # | after strings
-function extract-urls { pcregrep --only-matching '\b(?:https?:\/\/)(?:www\.)?[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,6}(?:\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?\b' }
+function extract_urls { pcregrep --only-matching '\b(?:https?:\/\/)(?:www\.)?[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,6}(?:\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?\b' }
 function hex { hexdump -C }
-function no-color { sed -E 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g' }
-function no-empty { sed '/^$/d' }
-function strip { strip-left | strip-right }
-function strip-left { sed 's/^[[:space:]]*//' }
-function strip-right { sed 's/[[:space:]]*$//' }
-function trim { no-color | cut -c $(($1 + 1))- | { [[ -z $2 ]] && cat || rev | cut -c $(($2 + 1))- | rev } }
+function no_color { sed -E 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g' }
+function no_empty { sed '/^$/d' }
+function strip { strip_left | strip_right }
+function strip_left { sed 's/^[[:space:]]*//' }
+function strip_right { sed 's/[[:space:]]*$//' }
+function trim { no_color | cut -c $(($1 + 1))- | { [[ -z $2 ]] && cat || rev | cut -c $(($2 + 1))- | rev } }
 # | after columns
-function insert-hash { awk 'NF >= 2 {col_2_index = index($0, $2); col_1 = substr($0, 1, col_2_index - 1); col_rest = substr($0, col_2_index); printf "%s# %s\n", col_1, col_rest} NF < 2 {print}' }
-function size-of { awk "{if (length(\$${1:-0}) > max_len) max_len = length(\$${1:-0})} END {print max_len}" }
+function insert_hash { awk 'NF >= 2 {col_2_index = index($0, $2); col_1 = substr($0, 1, col_2_index - 1); col_rest = substr($0, col_2_index); printf "%s# %s\n", col_1, col_rest} NF < 2 {print}' }
+function size_of { awk "{if (length(\$${1:-0}) > max_len) max_len = length(\$${1:-0})} END {print max_len}" }
 # | after json
-function keys { jq keys | trim-list | ss }
-function trim-list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$//' | no-empty }
+function keys { jq keys | trim_list | ss }
+function trim_list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$//' | no_empty }
 
 ### [Z]shrc
 # source / test

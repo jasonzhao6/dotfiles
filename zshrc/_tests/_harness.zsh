@@ -30,8 +30,8 @@ function assert {
 	[[ $output == "$expected" ]] && pass || fail "'${funcstack[2]}'"
 }
 
-function run-with-filter {
-	[[ -z $test_filter || $(index-of "$@" "$test_filter") -ne 0 ]] && "$@"
+function run_with_filter {
+	[[ -z $test_filter || $(index_of "$@" "$test_filter") -ne 0 ]] && "$@"
 }
 
 function print-summary {

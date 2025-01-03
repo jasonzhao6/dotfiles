@@ -1,15 +1,15 @@
-function test--domain {
+function test__domain {
 	assert "$(cds; domain)" 'github.com'
-}; run-with-filter test--domain
+}; run_with_filter test__domain
 
-function test--org {
+function test__org {
 	assert "$(cds; org)" 'jasonzhao6'
-}; run-with-filter test--org
+}; run_with_filter test__org
 
-function test--repo {
+function test__repo {
 	assert "$(cds; repo)" 'scratch'
-}; run-with-filter test--repo
+}; run_with_filter test__repo
 
-function test--branch {
+function test__branch {
 	assert "$(cds; branch)" 'main'
-}; run-with-filter test--branch
+}; run_with_filter test__branch

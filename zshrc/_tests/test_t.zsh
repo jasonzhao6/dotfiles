@@ -1,9 +1,9 @@
-function test--t {
+function test__t {
 	local usage='t t_test <arg1> <arg2>'
-	assert "$(t | grep --only-matching "$usage")" "$(grep-color "$usage")"
-}; run-with-filter test--t
+	assert "$(t | grep --only-matching "$usage")" "$(grep_color "$usage")"
+}; run_with_filter test__t
 
-function test--t--with-type {
+function test__t__with_type {
 	assert "$(
 		t t_test 11 22
 	)" "$(
@@ -12,9 +12,9 @@ function test--t--with-type {
 			arg2: 22
 		eof
 	)"
-}; run-with-filter test--t--with-type
+}; run_with_filter test__t__with_type
 
-function test--t--with-type-prefix {
+function test__t__with_type_prefix {
 	assert "$(
 		t t_tes 11 22
 	)" "$(
@@ -23,9 +23,9 @@ function test--t--with-type-prefix {
 			arg2: 22
 		eof
 	)"
-}; run-with-filter test--t--with-type-prefix
+}; run_with_filter test__t__with_type_prefix
 
-function test--opal {
+function test__opal {
 	assert "$(
 		opal
 	)" "$(
@@ -35,4 +35,4 @@ function test--opal {
 		     3	non-secret-placeholder-3  url-3
 		eof
 	)"
-}; run-with-filter test--opal
+}; run_with_filter test__opal
