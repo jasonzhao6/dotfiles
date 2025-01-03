@@ -9,7 +9,7 @@ O_TYPES=(
 	'pull-request <id>'
 )
 
-[[ -n $UNDER_TEST ]] && O_TYPES+=('o-test <arg1> <arg2>')
+[[ -n $UNDER_TEST ]] && O_TYPES+=('o_test <arg1> <arg2>')
 
 function o {
 	# `$1` could be either a string containing urls or a type prefix, see 'Usage' below
@@ -17,9 +17,9 @@ function o {
 	local type_prefix=$1
 
 	if [[ -n $urls ]]; then
-		o-open-url
+		o_open_url
 	elif [[ -z $type_prefix ]]; then
-		o-print-usage
+		o_print_usage
 	else
 		for type in "${O_TYPES[@]}"; do
 			[[ $type == $type_prefix* ]] && $(echo "$type" | awk '{print $1}') "${@:2}"
@@ -47,13 +47,13 @@ function pull-request {
 # Helpers
 #
 
-function o-open-url {
+function o_open_url {
 	echo "$urls" | while IFS= read -r url; do
 		open "$url"
 	done
 }
 
-function o-print-usage {
+function o_print_usage {
 	cat <<-eof
 
 		Usage:
@@ -73,7 +73,7 @@ function o-print-usage {
 	done
 }
 
-function o-test {
+function o_test {
 	echo "arg1: $1"
 	echo "arg2: $2"
 }

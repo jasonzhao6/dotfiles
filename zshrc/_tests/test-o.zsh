@@ -1,11 +1,11 @@
 function test--o {
-	local usage='o o-test <arg1> <arg2>'
+	local usage='o o_test <arg1> <arg2>'
 	assert "$(o | grep --only-matching "$usage")" "$(grep-color "$usage")"
 }; run-with-filter test--o
 
 function test--o--with-type {
 	assert "$(
-		o o-test 11 22
+		o o_test 11 22
 	)" "$(
 		cat <<-eof
 			arg1: 11
@@ -16,7 +16,7 @@ function test--o--with-type {
 
 function test--o--with-type-prefix {
 	assert "$(
-		o o-tes 11 22
+		o o_tes 11 22
 	)" "$(
 		cat <<-eof
 			arg1: 11
