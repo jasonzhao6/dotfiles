@@ -1,3 +1,5 @@
+# shellcheck disable=SC1090
+
 source "$ZSHRC_DIR"/_tests/_harness.zsh
 source "$ZSHRC_DIR"/_tests/_helpers.zsh
 
@@ -8,7 +10,6 @@ section_filter=
 test_filter=$([[ -n $1 ]] && echo "$1")
 
 # Source .zshrc for multiple sections
-# shellcheck source="$HOME/.zshrc"
 UNDER_TEST=1 source ~/.zshrc
 
 #
@@ -24,7 +25,6 @@ if [[ $section_filter -eq 1 || -z $section_filter ]]; then
 	init
 
 	for test in $(find-tests); do
-		# shellcheck source=/dev/null
 		source "$test"
 	done
 

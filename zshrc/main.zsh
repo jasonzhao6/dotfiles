@@ -6,6 +6,7 @@ source "$ZSHRC_DIR/colors.zsh"; color
 # `git_info` needs to come before `zsh_prompt`
 source "$ZSHRC_DIR/git_info.zsh"
 
+source "$ZSHRC_DIR/z.zsh"
 source "$ZSHRC_DIR/zsh_arrow_keys.zsh"
 source "$ZSHRC_DIR/zsh_history.zsh"
 source "$ZSHRC_DIR/zsh_prompt.zsh"
@@ -433,37 +434,6 @@ function size_of { awk "{if (length(\$${1:-0}) > max_len) max_len = length(\$${1
 # | after json
 function keys { jq keys | trim_list | ss }
 function trim_list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$//' | no_empty }
-
-### [Z]shrc
-# source / test
-[[ -z $UNDER_TEST && -f ~/.zshrc.secrets ]] && source ~/.zshrc.secrets
-function z { source ~/.zshrc }
-function zz { zsh $ZSHRC_DIR/_tests.zsh $@ }
-# edit
-function zm { mate $ZSHRC_DIR }
-function zs { mate ~/.zshrc.secrets }
-# [u]pload / [d]ownload other dotfiles
-function zu {
-    cp ~/.colordiffrc $ZSHRC_DIR/colordiffrc.txt
-    cp ~/.gitignore $ZSHRC_DIR/gitignore.txt
-    cp ~/.terraformrc $ZSHRC_DIR/terraformrc.txt
-    cp ~/.tm_properties $ZSHRC_DIR/tm_properties.txt
-
-    if [[ -f ~/.zshrc.secrets ]]; then
-        openssl sha1 ~/.zshrc.secrets > ~/.zshrc.secrets_sha1_candidate
-        diff ~/.zshrc.secrets_sha1_candidate ~/.zshrc.secrets_sha1 > /dev/null 2>&1
-        if [[ $? -ne 0 ]]; then
-            cp ~/.zshrc.secrets_sha1_candidate ~/.zshrc.secrets_sha1
-            cp ~/.zshrc.secrets ~/Downloads/\>\ Archive/zsh/.zshrc.secrets/$(date +'%y.%m.%d').txt
-        fi
-    fi
-}
-function zd {
-    cp $ZSHRC_DIR/colordiffrc.txt ~/.colordiffrc
-    cp $ZSHRC_DIR/gitignore.txt ~/.gitignore
-    cp $ZSHRC_DIR/terraformrc.txt ~/.terraformrc
-    cp $ZSHRC_DIR/tm_properties.txt ~/.tm_properties
-}
 
 ### Keymap annotations
 #  ::  -->  subsequent command
