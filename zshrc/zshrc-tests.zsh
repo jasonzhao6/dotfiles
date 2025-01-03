@@ -40,9 +40,8 @@ if [[ ($section_filter -eq 3 || -z $section_filter) && -z $test_filter ]]; then
 	echo
 	init
 	for test in $(find-tests); do
-		# TODO temp conditional
-		if [[ $test =~ 'zsh-t' ]]; then
-			verify-testing-order $ZSHRC_DIR/zshrc-t.zsh $test
+		if [[ $test =~ 'zshrc-[to].zsh' ]]; then
+			verify-testing-order ${test/zshrc-tests\/test-} $test
 		else
 			verify-testing-order $ZSHRC_DIR/zshrc.zsh $test
 		fi

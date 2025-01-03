@@ -21,14 +21,22 @@ function o {
 			  o <type prefix> <arguments>?
 
 			Types:
+			  $([[ -n $O_UNDER_TEST ]] && echo -n 'o test <arg1> <arg2>')
 
 			  o main-branch
 			  o new-pr
 		eof
 	else
+		[[ 'test' == $type_prefix* ]] && o-test "${@:2}"
+
 		[[ 'main-branch' == $type_prefix* ]] && o-main-branch
 		[[ 'new-pr' == $type_prefix* ]] && o-new-pr
 	fi
+}
+
+function o-test {
+	echo "arg1: $1"
+	echo "arg2: $2"
 }
 
 function o-main-branch {

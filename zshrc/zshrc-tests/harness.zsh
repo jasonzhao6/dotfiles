@@ -30,7 +30,7 @@ function assert {
 }
 
 function run-with-filter {
-	[[ -z $filter || $(index-of $@ $filter) -ne 0 ]] && $@
+	[[ -z $test_filter || $(index-of $@ $test_filter) -ne 0 ]] && $@
 }
 
 function print-summary {
