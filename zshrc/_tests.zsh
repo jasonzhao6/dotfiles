@@ -1,13 +1,13 @@
-# shellcheck disable=SC1090
+# shellcheck disable=SC1090,SC2030,SC2031
 
 source "$ZSHRC_DIR"/_tests/_harness.zsh
 source "$ZSHRC_DIR"/_tests/_helpers.zsh
 
-# Filter sections by number
-section_filter=
+# Filter sections by number (1-5)
+section_filter=$([[ $1 -ge 1 && $1 -le 5  ]] && echo "$1")
 
 # Filter tests by partial name match
-test_filter=$([[ -n $1 ]] && echo "$1")
+test_filter=$([[ -z $section_filter && -n $1 ]] && echo "$1")
 
 # Source .zshrc for multiple sections
 UNDER_TEST=1 source ~/.zshrc
