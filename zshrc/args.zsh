@@ -1,6 +1,6 @@
 # TODO
 
-source "$ZSHRC_DIR/args.history.zsh"
+source "$ZSHRC_DIR/args.history.zsh"; args-init
 
 ### [Args]
 # [s]ave into args history

@@ -848,7 +848,7 @@ function test__u__when_pushing_beyond_head_then_undoing_beyond_tail {
 		eof
 	)"
 
-	args-init
+	args-reset
 }; run_with_filter test__u__when_pushing_beyond_head_then_undoing_beyond_tail
 
 function test__u__when_undoing_then_redoing_with_color {
