@@ -1,5 +1,7 @@
 # TODO
 
+source "$ZSHRC_DIR/args.history.zsh"
+
 ### [Args]
 # [s]ave into args history
 # (e.g `seq 100 105; s`, or alternatively `seq 100 105 | s`)
@@ -82,47 +84,3 @@ function args-get-new! { ARGS_NEW=$(cat - | head -1000 | no_empty); [[ -n $1 ]] 
 function args-push-if-different! { [[ $ARGS_NEW_PLAIN != $(args-plain) ]] && { args-push $ARGS; ARGS_PUSHED=1; N= } || ARGS_PUSHED=0 }
 # | after a list
 function save_args { args-get-new! $1; [[ -n $ARGS_NEW ]] && { args-push-if-different!; args-replace $ARGS_NEW; args-list } }
-
-### Args history interface
-#
-#             123456789
-#  cursor     ^
-#  head       ^
-#  tail       ^
-#
-# - array size is fixed, wrap around the end
-# - advance `cursor` and `head` together
-# - if next is `tail`, push `tail` forward
-# - to undo, only `cursor` moves, up to `tail`
-# - to redo, only `cursor` moves, up to `head`
-function args-init { ARGS_HISTORY_MAX=100; ARGS_HISTORY=(); ARGS_CURSOR=0; ARGS_HEAD=0; ARGS_TAIL=0 }; [[ -z $ARGS_HISTORY_MAX ]] && args-init
-function args-push { ARGS_CURSOR=$(args-increment $ARGS_CURSOR); ARGS_HISTORY[$ARGS_CURSOR]=$1; ARGS_HEAD=$ARGS_CURSOR; [[ $ARGS_CURSOR -eq $ARGS_TAIL ]] && ARGS_TAIL=$(args-increment $ARGS_TAIL); [[ $ARGS_TAIL -eq 0 ]] && ARGS_TAIL=1 }
-function args-undo { ARGS_PREV=$(args-decrement $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_TAIL ]] && ARGS_CURSOR=$ARGS_PREV || ARGS_UNDO_EXCEEDED=1 }
-function args-redo { ARGS_NEXT=$(args-increment $ARGS_CURSOR); [[ $ARGS_CURSOR -ne $ARGS_HEAD ]] && ARGS_CURSOR=$ARGS_NEXT || ARGS_REDO_EXCEEDED=1 }
-function args-undo-bar { [[ $ARGS_UNDO_EXCEEDED -eq 1 ]] && { ARGS_UNDO_EXCEEDED=0; red-bg '  Reached the end of undo history  ' } }
-function args-redo-bar { [[ $ARGS_REDO_EXCEEDED -eq 1 ]] && { ARGS_REDO_EXCEEDED=0; red-bg '  Reached the end of redo history  ' } }
-function args-replace { ARGS_HISTORY[$ARGS_CURSOR]=$1 }
-function args-increment { echo $(($1 % ARGS_HISTORY_MAX + 1)) }
-function args-decrement { ARGS_DECREMENT=$(($ARGS_CURSOR - 1)); [[ $ARGS_DECREMENT -eq 0 ]] && ARGS_DECREMENT=$ARGS_HISTORY_MAX; echo $ARGS_DECREMENT }
-function args-history {
-	echo "cursor: $ARGS_CURSOR"
-	echo "head: $ARGS_HEAD"
-	echo "tail: $ARGS_TAIL"
-	echo "max: $ARGS_HISTORY_MAX"
-
-	local index=$ARGS_HEAD
-
-	# Print from head to tail, inclusive
-	while true; do
-		echo
-		echo '----------------------------------------'
-		echo "Index $index"
-		echo '----------------------------------------'
-		echo ${ARGS_HISTORY[index]}
-
-		[[ $index -eq $ARGS_TAIL ]] && break
-
-		# Decrement index accounting for wrap-around and 1-based indexing
-		index=$(((index - 2 + $ARGS_HISTORY_MAX) % $ARGS_HISTORY_MAX + 1))
-	done
-}
