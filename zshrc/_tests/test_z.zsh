@@ -5,7 +5,7 @@ function test__z__when_args_history_is_not_initialized {
 	assert "$(
 		ARGS_HISTORY_MAX=
 		z
-		echo $ARGS_HISTORY_MAX
+		echo "$ARGS_HISTORY_MAX"
 	)" "$args_history_max"
 
 	args-init

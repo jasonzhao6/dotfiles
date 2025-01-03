@@ -1,3 +1,5 @@
+# TODO
+
 export ZSHRC_DIR="$HOME/gh/dotfiles/zshrc"
 
 # Enable color aliases immediately to allow alias expansion in subsequent functions

@@ -11,10 +11,11 @@ function test__h {
 		eof
 	)
 
+	# shellcheck disable=SC2030
 	assert "$(
 		local histfile=$HISTFILE
 		HISTFILE='/tmp/test__h'
-		echo $history > $HISTFILE
+		echo "$history" > $HISTFILE
 
 		h
 
@@ -32,6 +33,7 @@ function test__h {
 }; run_with_filter test__h
 
 function test__hc {
+	# shellcheck disable=SC2031
 	assert "$(
 		local histfile=$HISTFILE
 		HISTFILE='/tmp/test__h'

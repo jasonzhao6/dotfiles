@@ -2,7 +2,7 @@ function test__.. {
 	assert "$(
 		rm -rf /tmp/_..
 		mkdir -p /tmp/_../1
-		cd /tmp/_../1
+		cd /tmp/_../1 || return
 		..
 		pwd
 		rm -rf /tmp/_..
@@ -13,7 +13,7 @@ function test__... {
 	assert "$(
 		rm -rf /tmp/_...
 		mkdir -p /tmp/_.../1/2
-		cd /tmp/_.../1/2
+		cd /tmp/_.../1/2 || return
 		...
 		pwd
 		rm -rf /tmp/_...
@@ -24,7 +24,7 @@ function test__.... {
 	assert "$(
 		rm -rf /tmp/_....
 		mkdir -p /tmp/_..../1/2/3
-		cd /tmp/_..../1/2/3
+		cd /tmp/_..../1/2/3 || return
 		....
 		pwd
 		rm -rf /tmp/_....
@@ -35,7 +35,7 @@ function test__..... {
 	assert "$(
 		rm -rf /tmp/_.....
 		mkdir -p /tmp/_...../1/2/3/4
-		cd /tmp/_...../1/2/3/4
+		cd /tmp/_...../1/2/3/4 || return
 		.....
 		pwd
 		rm -rf /tmp/_.....
@@ -46,7 +46,7 @@ function test__...... {
 	assert "$(
 		rm -rf /tmp/_......
 		mkdir -p /tmp/_....../1/2/3/4/5
-		cd /tmp/_....../1/2/3/4/5
+		cd /tmp/_....../1/2/3/4/5 || return
 		......
 		pwd
 		rm -rf /tmp/_......
@@ -57,7 +57,7 @@ function test__....... {
 	assert "$(
 		rm -rf /tmp/_.......
 		mkdir -p /tmp/_......./1/2/3/4/5/6
-		cd /tmp/_......./1/2/3/4/5/6
+		cd /tmp/_......./1/2/3/4/5/6 || return
 		.......
 		pwd
 		rm -rf /tmp/_.......
@@ -68,7 +68,7 @@ function test__........ {
 	assert "$(
 		rm -rf /tmp/_........
 		mkdir -p /tmp/_......../1/2/3/4/5/6/7
-		cd /tmp/_......../1/2/3/4/5/6/7
+		cd /tmp/_......../1/2/3/4/5/6/7 || return
 		........
 		pwd
 		rm -rf /tmp/_........
@@ -79,7 +79,7 @@ function test__......... {
 	assert "$(
 		rm -rf /tmp/_.........
 		mkdir -p /tmp/_........./1/2/3/4/5/6/7/8
-		cd /tmp/_........./1/2/3/4/5/6/7/8
+		cd /tmp/_........./1/2/3/4/5/6/7/8 || return
 		.........
 		pwd
 		rm -rf /tmp/_.........
@@ -90,7 +90,7 @@ function test__.......... {
 	assert "$(
 		rm -rf /tmp/_..........
 		mkdir -p /tmp/_........../1/2/3/4/5/6/7/8/9
-		cd /tmp/_........../1/2/3/4/5/6/7/8/9
+		cd /tmp/_........../1/2/3/4/5/6/7/8/9 || return
 		..........
 		pwd
 		rm -rf /tmp/_..........
@@ -127,6 +127,7 @@ function test__cdd {
 
 function test__cde {
 	# Skip: Not testing b/c function has other side effects
+	return
 }
 
 function test__cdg {
