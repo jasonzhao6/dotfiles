@@ -1,7 +1,10 @@
 export ZSHRC_DIR="$HOME/gh/dotfiles/zshrc"
 
-# Enable color aliases first to allow expansion in all subsequent functions
+# Enable color aliases immediately to allow alias expansion in subsequent functions
 source "$ZSHRC_DIR/colors.zsh"; color
+
+# `git_info` needs to come before `zsh_prompt`
+source "$ZSHRC_DIR/git_info.zsh"
 
 ### [Args]
 # [s]ave into args history
@@ -273,19 +276,6 @@ function gxx-pre! { # (`!` means the function sets env vars to be consumed by it
         esac
     done
 }
-
-### Github
-# open in browser
-function main { open https://$(domain)/$(org)/${@:-$(repo)} }
-function new { gp && gh pr create --fill && gh pr view --web }
-function pr { open https://$(domain)/$(org)/$(repo)/pull/$@ }
-function prs { open "https://$(domain)/pulls?q=is:open+is:pr+user:$(org)" }
-function sha { open https://$(domain)/$(org)/$(repo)/commit/$@ }
-# helpers
-function domain { git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/' }
-function org { git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*/\1/' }
-function repo { git rev-parse --show-toplevel | xargs basename }
-function branch { git rev-parse --abbrev-ref HEAD }
 
 ### Lis[t]
 source "$ZSHRC_DIR/t.zsh"
