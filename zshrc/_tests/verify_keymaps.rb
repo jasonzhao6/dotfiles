@@ -4,6 +4,7 @@ class VerifyKeymaps
   ZSHRC_DIR = "#{HOME}/gh/dotfiles/zshrc"
   ZSHRC = "#{ZSHRC_DIR}/main.zsh"
   ZSHRC_SECRETS = "#{HOME}/.zshrc.secrets"
+  KEYMAPS = "#{ZSHRC_DIR}/_keymaps.zsh"
 
   # Keymap namespaces
   GIT = 'Git'
@@ -75,8 +76,8 @@ class VerifyKeymaps
       @zshrc_secrets_functions << name if name
     end
 
-    # Do verification with info gathered
-    File.open(ZSHRC).each do |line|
+    # Verify keymaps with all the info gathered
+    File.open(KEYMAPS).each do |line|
       current_namespace = extract_keymap_namespace(line) || current_namespace
 
       next unless current_namespace
