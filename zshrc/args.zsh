@@ -5,7 +5,7 @@ source "$ZSHRC_DIR/args.history.zsh"; args_init
 ### [Args]
 # [s]ave into args history
 # (e.g `seq 100 105; s`, or alternatively `seq 100 105 | s`)
-function s { ss 'Insert `#` after the first column to soft-select it' }
+function s { ss 'Insert `#` after the first column to soft-select it' } # TODO S=1, S=2
 function ss { [[ -t 0 ]] && eval $(prev_command) | args_save $@ || args_save $@ }
 # paste into args history
 # (e.g copy a list into pasteboard, then `v`)
@@ -51,9 +51,9 @@ function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE)
 function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | ss }
 # list / filter colum[n] by letter
 # (e.g `n` to list all, `n d` to keep only the fourth column, delimited based on the bottom row)
-function n { args_select_column $@ }
+function n { N=1 args_select_column $@ }
 # (`nn` is like `n`, but delimited based on the top row)
-function nn { ARGS_USE_TOP_ROW=1 n $@ }
+function nn { N=2 args_select_column $@ }
 # [c]opy into pasteboard
 # (e.g `c` to copy all args, `11 c` to copy only the eleventh arg)
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
@@ -61,7 +61,7 @@ function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
 function y { args > ~/.zshrc.args }
 function p { echo "$(<~/.zshrc.args)" | ss }
 # [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
-function u { ARG_SIZE_PREV=$(args-columns | strip); args_undo; args-list; args_undo_bar; ARG_SIZE_CURR=$(args-columns | strip); [[ -n $N && ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
+function u { ARG_SIZE_PREV=$(args-columns | strip); args_undo; args-list; args_undo_bar; ARG_SIZE_CURR=$(args-columns | strip); [[ -n $ARGS_USE_TOP_ROW && ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
 function r { args_redo; args-list; args_redo_bar }
 # list / select historical args by [i]ndex
 # (e.g `i` to list history, `i 8` to select the args at index 8)
@@ -72,37 +72,74 @@ function args-plain { args | no_color | expand }
 function args-list { args | nl }
 function args-list-plain { args | nl | no_color | expand }
 function args-list-size { args | wc -l | awk '{print $1}' }
-function args-columns { ARGS_COLUMNS=''; ARGS_COL_CURR=a; ARGS_SKIP_NL=1; args-pick-header! $@; for i in $(seq 1 ${#ARG}); do args-label-column! $i; done; echo $ARGS_COLUMNS }
 function args-columns-bar { green-bg "$(args-columns $1)" }
 # helpers! (`!` means the function sets env vars to be consumed by its caller)
 function args-build-greps! { ARGS_FILTERS="grep ${*// / | grep }"; ARGS_FILTERS=${ARGS_FILTERS// -/ --invert-match }; ARGS_FILTERS=${ARGS_FILTERS//grep/grep --color=never --ignore-case}; ARGS_COLOR="egrep --color=always --ignore-case '${${@:#-*}// /|}'" }
-function args-pick-header! { [[ -z ${1:-$ARGS_USE_BOTTOM_ROW} || ${1:-$ARGS_USE_BOTTOM_ROW} -eq 1 ]] && ARG=$(args-list-plain | tail -1) || ARG=$(args-list-plain | head -1) }
-function args-label-column! { [[ $ARG[$1-1] == ' ' && $ARG[$1] != ' ' ]] && { [[ $ARGS_SKIP_NL -eq 1 ]] && { ARGS_SKIP_NL=0; ARGS_COLUMNS+=' ' } || { ARGS_COLUMNS+=$ARGS_COL_CURR; ARGS_COL_CURR=$(next_ascii $ARGS_COL_CURR) } } || ARGS_COLUMNS+=' ' }
-function args-mark-references! { ARGS_USE_BOTTOM_ROW=$2; ARGS_COLUMNS=$(args-columns $2); ARGS_COL_FIRST=$(index_of $ARGS_COLUMNS a); ARGS_COL_TARGET=$(index_of $ARGS_COLUMNS $1); ARGS_COL_NEXT=$(index_of $ARGS_COLUMNS $(next_ascii $1)) }
-function args-select-column! { args-list-plain | cut -c $([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)-$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1))) | strip_right | ss }
 
 #
-# Helpers
+# Getters
+#
+
+function args-columns {
+	ARGS_COLUMNS=''
+	ARGS_COL_CURR=a
+	ARGS_SKIP_NL=1
+
+	if [[ ${1:-$ARGS_USED_TOP_ROW} -eq 1 ]]; then
+		ARG=$(args-list-plain | head -1)
+	else
+		ARG=$(args-list-plain | tail -1)
+	fi
+
+	for i in $(seq 1 ${#ARG}); do
+		if [[ $ARG[$i-1] == ' ' && $ARG[$i] != ' ' ]]; then
+			if [[ $ARGS_SKIP_NL -eq 1 ]]; then
+				ARGS_SKIP_NL=0
+				ARGS_COLUMNS+=' '
+			else
+				ARGS_COLUMNS+=$ARGS_COL_CURR
+				ARGS_COL_CURR=$(next_ascii $ARGS_COL_CURR)
+			fi
+		else
+			ARGS_COLUMNS+=' '
+		fi
+	done
+
+	echo $ARGS_COLUMNS
+}
+
+#
+# Setters
 #
 
 function args_select_column {
-	[[ $ARGS_USE_TOP_ROW -eq 1 ]] && N=0 || N=1
+	[[ $N -eq 2 ]] && ARGS_USE_TOP_ROW=1 || ARGS_USE_TOP_ROW=0
+
 	if [[ -z $1 ]]; then
 		args-list
-		args-columns-bar $N
+		args-columns-bar $ARGS_USE_TOP_ROW
 	else
-		args-mark-references! $1 $N
-		_N=$N
-		args-select-column!
-		N=$_N
+		ARGS_USED_TOP_ROW=$ARGS_USE_TOP_ROW
+		ARGS_COLUMNS=$(args-columns $ARGS_USE_TOP_ROW)
+		ARGS_COL_FIRST=$(index_of $ARGS_COLUMNS a)
+		ARGS_COL_TARGET=$(index_of $ARGS_COLUMNS $1)
+		ARGS_COL_NEXT=$(index_of $ARGS_COLUMNS $(next_ascii $1))
 
-		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args-columns $N)" b) -ne 0 ]]; then
-			args-columns-bar $N
+		_ARGS_USE_TOP_ROW=$ARGS_USE_TOP_ROW
+
+		TEMP_START=$([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)
+		TEMP_END=$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1)))
+		args-list-plain | cut -c $TEMP_START-$TEMP_END | strip_right | ss
+
+		ARGS_USE_TOP_ROW=$_ARGS_USE_TOP_ROW
+
+		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args-columns $ARGS_USE_TOP_ROW)" b) -ne 0 ]]; then
+			args-columns-bar $ARGS_USE_TOP_ROW
 		fi
 	fi
 }
 
-# | after a list
+# Call this function with a pipe to save the args
 function args_save {
 	local new_args; new_args=$(cat - | head -1000 | no_empty)
 
@@ -115,7 +152,7 @@ function args_save {
 		if [[ $new_args_plain != $(args-plain) ]]; then
 			args_push $ARGS
 			ARGS_PUSHED=1
-			N= # TODO rename
+			ARGS_USE_TOP_ROW= # TODO rename
 		else
 			ARGS_PUSHED=0
 		fi
