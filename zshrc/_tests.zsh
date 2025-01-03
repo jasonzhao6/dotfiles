@@ -12,12 +12,12 @@ test_filter=$([[ -n $1 ]] && echo "$1")
 UNDER_TEST=1 source ~/.zshrc
 
 #
-# Section 1: Run all test cases
+# 1: Run all test cases
 #
 
 if [[ $section_filter -eq 1 || -z $section_filter ]]; then
 	echo
-	echo 'Section 1: Run all test cases'
+	echo '1: Run all test cases'
 
 	pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
 
@@ -34,25 +34,25 @@ if [[ $section_filter -eq 1 || -z $section_filter ]]; then
 fi
 
 #
-# Section 2: Verify all tests defined are getting invoked
+# 2: Verify all tests defined are getting invoked
 #
 
 if [[ ($section_filter -eq 2 || -z $section_filter) && -z $test_filter ]]; then
 	echo
 	echo
-	echo 'Section 2: Verify all tests defined are getting invoked'
+	echo '2: Verify all tests defined are getting invoked'
 
 	ruby "$ZSHRC_DIR"/_tests/verify_test_invocations.rb
 fi
 
 #
-# Section 3: Verify tests are defined in the same order as their definitions
+# 3: Verify tests are defined in the same order as their definitions
 #
 
 if [[ ($section_filter -eq 3 || -z $section_filter) && -z $test_filter ]]; then
 	echo
 	echo
-	echo 'Section 3: Verify tests are defined in the same order as their definitions'
+	echo '3: Verify tests are defined in the same order as their definitions'
 
 	init
 
@@ -70,26 +70,26 @@ if [[ ($section_filter -eq 3 || -z $section_filter) && -z $test_filter ]]; then
 fi
 
 #
-# Section 4: Verify keymaps at the bottom of .zshrc are up-to-date
+# 4: Verify keymaps at the bottom of .zshrc are up-to-date
 #
 
 if [[ ($section_filter -eq 4 || -z $section_filter) && -z $test_filter ]]; then
 	echo
 	echo
-	echo 'Section 4: Verify keymaps at the bottom of .zshrc are up-to-date'
+	echo '4: Verify keymaps at the bottom of .zshrc are up-to-date'
 
 	ruby "$ZSHRC_DIR"/_tests/verify_keymaps.rb
 fi
 
 #
-# Section 5: Verify all env vars overwritten are getting restored
+# 5: Verify all env vars overwritten are getting restored
 #
 
 # shellcheck disable=SC2015
 if [[ ($section_filter -eq 5 || -z $section_filter) && -z $test_filter ]]; then
 	echo
 	echo
-	echo 'Section 5: Verify all env vars overwritten are getting restored'
+	echo '5: Verify all env vars overwritten are getting restored'
 
 	init
 
