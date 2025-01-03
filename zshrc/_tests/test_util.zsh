@@ -1,4 +1,4 @@
-# TODO
+# shellcheck disable=SC2012
 
 ls_dash_l=$(
 	cat <<-eof
@@ -53,6 +53,7 @@ function test__d__with_protocol_and_path {
 
 function test__f__for_gh {
 	# Skip: Cannot test b/c requires querying github
+	return
 }
 
 function test__f__for_tf {
@@ -66,12 +67,12 @@ function test__f__for_tf {
 		touch $HOME/project/module/main.tf
 		touch $HOME/project/module/.terraform/main.tf
 
-		cd $HOME
+		cd $HOME || return
 		f tf
 
 		rm -rf $HOME
 		HOME=$home
-		cd $pwd
+		cd "$pwd" || return
 	)" "$(
 		cat <<-eof
 		     1	~/project
@@ -84,7 +85,7 @@ function test__l {
 	assert "$(
 		rm -rf /tmp/test__l
 		mkdir /tmp/test__l
-		cd /tmp/test__l
+		cd /tmp/test__l || return
 		mkdir 1 2 3
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
@@ -107,12 +108,12 @@ function test__l__with_search_pattern_to_ignore {
 	assert "$(
 		rm -rf /tmp/test__l--with-search-pattern-to-ignore
 		mkdir /tmp/test__l--with-search-pattern-to-ignore
-		cd /tmp/test__l--with-search-pattern-to-ignore
+		cd /tmp/test__l--with-search-pattern-to-ignore || return
 		mkdir 1 2 3
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		l *log | no_color
+		l ./*log | no_color
 		rm -rf /tmp/test__l--with-search-pattern-to-ignore
 	)" "$(
 		cat <<-eof
@@ -130,7 +131,7 @@ function test__ll {
 	assert "$(
 		rm -rf /tmp/test__ll
 		mkdir /tmp/test__ll
-		cd /tmp/test__ll
+		cd /tmp/test__ll || return
 		mkdir 1 2 3
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
@@ -150,12 +151,12 @@ function test__ll__with_search_pattern_to_ignore {
 	assert "$(
 		rm -rf /tmp/test__ll--with-search-pattern-to-ignore
 		mkdir /tmp/test__ll--with-search-pattern-to-ignore
-		cd /tmp/test__ll--with-search-pattern-to-ignore
+		cd /tmp/test__ll--with-search-pattern-to-ignore || return
 		mkdir 1 2 3
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		ll *log | no_color
+		ll ./*log | no_color
 		rm -rf /tmp/test__ll--with-search-pattern-to-ignore
 	)" "$(
 		cat <<-eof
@@ -180,14 +181,17 @@ function test__w {
 
 function test__bb {
 	# Skip: Not interesting to test
+	return
 }
 
 function test__cc {
 	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
+	return
 }
 
 function test__dd {
 	# Skip: Not testing b/c requires network call
+	return
 }
 
 function test__dd {
@@ -239,9 +243,9 @@ function test__dd__when_dumping_two_different_pasteboards {
 		DD_CLEAR_TERMINAL=0
 		rm -rf $DD_DUMP_DIR
 
-		echo "pasteboard 1\n$" | pbcopy
+		printf "pasteboard 1\n$\n" | pbcopy
 		dd
-		echo "pasteboard 2\n$" | pbcopy
+		printf "pasteboard 2\n$\n" | pbcopy
 		dd
 		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
 		cat $DD_DUMP_DIR/*
@@ -260,6 +264,7 @@ function test__dd__when_dumping_two_different_pasteboards {
 }; run_with_filter test__dd__when_dumping_two_different_pasteboards
 
 function test__dd__when_not_terminal_output {
+	# shellcheck disable=SC2030,SC2034
 	assert "$(
 		DD_DUMP_DIR="/tmp/test__dd"
 		DD_CLEAR_TERMINAL=0
@@ -274,6 +279,7 @@ function test__dd__when_not_terminal_output {
 }; run_with_filter test__dd__when_not_terminal_output
 
 function test__ddd {
+	# shellcheck disable=SC2031
 	assert "$(ddd; pwd)" "$DD_DUMP_DIR"
 }; run_with_filter test__ddd
 
@@ -324,6 +330,7 @@ function test__ee__with_multiple_substitutions_in_quotes {
 
 function test__ee__with_math {
 	assert "$(
+		# shellcheck disable=SC2016
 		ee 3 4 echo ~~ and '$((~~ + 10))' too
 	)" "$(
 		cat <<-eof
@@ -380,6 +387,7 @@ function test__eee__with_multiple_substitutions_in_quotes {
 
 function test__eee__with_math {
 	assert "$(
+		# shellcheck disable=SC2016
 		eee 3 4 echo ~~ and '$((~~ + 10))' too 2>&1
 	)" "$(
 		cat <<-eof
@@ -395,10 +403,11 @@ function test__eee__with_math {
 
 function test__ff {
 	# Skip: Not interesting to test
+	return
 }
 
 function test__hh {
-	local old=$(
+	local old; old=$(
 		cat <<-eof
 			This is the original content.
 			Line 1
@@ -408,7 +417,7 @@ function test__hh {
 		eof
 	)
 
-	local new=$(
+	local new; new=$(
 		cat <<-eof
 			This is the modified content.
 			Line 1
@@ -420,7 +429,7 @@ function test__hh {
 	)
 
 	assert "$(
-		hh <(echo $old) <(echo $new) | no_color
+		hh <(echo "$old") <(echo "$new") | no_color
 	)" "$(
 		cat <<-eof
 			This is the original content.                                   |       This is the modified content.
@@ -431,26 +440,31 @@ function test__hh {
 
 function test__ii {
 	# Skip: Not interesting to test
+	return
 }
 
 function test__mm {
 	# Skip: Not interesting to test
+	return
 }
 
 function test__oo {
 	# Skip: Not interesting to test
+	return
 }
 
 function test__pp {
 	# Skip: Not interesting b/c it has its own specs
+	return
 }
 
 function test__tt {
 	# Skip: Not interesting to test
+	return
 }
 
 function test__uu {
-	local old=$(
+	local old; old=$(
 		cat <<-eof
 			This is the original content.
 			Line 1
@@ -460,7 +474,7 @@ function test__uu {
 		eof
 	)
 
-	local new=$(
+	local new; new=$(
 		cat <<-eof
 			This is the modified content.
 			Line 1
@@ -472,7 +486,7 @@ function test__uu {
 	)
 
 	assert "$(
-		uu <(echo $old) <(echo $new) | no_color | sed 1,2d
+		uu <(echo "$old") <(echo "$new") | no_color | sed 1,2d
 	)" "$(
 		cat <<-eof
 			@@ -1,5 +1,6 @@
@@ -501,21 +515,24 @@ function test__xx {
 
 function test__bif {
 	# Skip: Not testing b/c requires network call
+	return
 }
 
 function test__flush {
 	# Skip: Not testing b/c requires network call
+	return
 }
 
 function test__jcurl {
 	# Skip: Not interesting to test
+	return
 }
 
 function test__ren {
 	assert "$(
 		rm -rf /tmp/test__ren
 		mkdir /tmp/test__ren
-		cd /tmp/test__ren
+		cd /tmp/test__ren || return
 		touch 1.log 2.log 3.txt
 		ren log txt
 		ls
@@ -542,12 +559,13 @@ function test__echo_eval {
 
 function test__ellipsize {
 	assert "$(
-		ellipsize $(printf "%.0sX" {1..1000}) | no_color | wc -c | awk '{print $1}'
+		ellipsize "$(printf "%.0sX" {1..1000})" | no_color | wc -c | awk '{print $1}'
 	)" "$COLUMNS"
 }; run_with_filter test__ellipsize
 
 function test__has_internet {
 	# Skip: Not interesting to test
+	return
 }
 
 function test__index_of__first {
@@ -596,6 +614,7 @@ function test__paste_when_empty__with_two_args {
 
 function test__prev_command {
 	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
+	return
 }
 
 function test__extract_urls {
@@ -630,12 +649,12 @@ function test__extract_urls__with_path {
 
 function test__extract_urls__with_query {
 	local url='https://www.example.com/path?key=value'
-	assert "$(echo $url | extract_urls)" $url
+	assert "$(echo "$url" | extract_urls)" "$url"
 }; run_with_filter test__extract_urls__with_query
 
 function test__extract_urls__with_fragment {
 	local url='https://www.example.com/path?key=value#heading'
-	assert "$(echo $url | extract_urls)" $url
+	assert "$(echo "$url" | extract_urls)" "$url"
 }; run_with_filter test__extract_urls__with_fragment
 
 function test__extract_urls__with_multiple_urls {
@@ -665,7 +684,7 @@ function test__no_color {
 }; run_with_filter test__no_color
 
 function test__no_empty {
-	local input=$(
+	local input; input=$(
 		cat <<-eof
 			[
 
@@ -675,7 +694,7 @@ function test__no_empty {
 	)
 
 	assert "$(
-		echo $input | no_empty
+		echo "$input" | no_empty
 	)" "$(
 		cat <<-eof
 			[
@@ -710,6 +729,7 @@ function test__trim__with_two_args {
 
 function test__insert_hash {
 	assert "$(
+		# shellcheck disable=SC2086
 		echo $ls_dash_l | insert_hash
 	)" "$(
 		cat <<-eof
@@ -727,19 +747,20 @@ function test__insert_hash {
 }; run_with_filter test__insert_hash
 
 function test__size_of {
-	assert "$(echo $ls_dash_l | size_of)" '64'
+	assert "$(echo "$ls_dash_l" | size_of)" '64'
 }; run_with_filter test__size_of
 
 function test__size_of__third_column {
-	assert "$(echo $ls_dash_l | size_of 2)" '1'
+	assert "$(echo "$ls_dash_l" | size_of 2)" '1'
 }; run_with_filter test__size_of__third_column
 
 function test__size_of__variable_width_column {
+	# shellcheck disable=SC2086
 	assert "$(echo $ls_dash_l | size_of 5)" '5'
 }; run_with_filter test__size_of__variable_width_column
 
 function test__keys {
-	local input=$(
+	local input; input=$(
 		cat <<-eof
 			{
 			  "key1": "value1",
@@ -750,7 +771,7 @@ function test__keys {
 	)
 
 	assert "$(
-		echo $input | keys
+		echo "$input" | keys
 	)" "$(
 		cat <<-eof
 		     1	key1
@@ -761,7 +782,7 @@ function test__keys {
 }; run_with_filter test__keys
 
 function test__trim_list {
-	local input=$(
+	local input; input=$(
 		cat <<-eof
 			[
 			  "row-1",
@@ -772,7 +793,7 @@ function test__trim_list {
 	)
 
 	assert "$(
-		echo $input | trim_list
+		echo "$input" | trim_list
 	)" "$(
 		cat <<-eof
 			row-1

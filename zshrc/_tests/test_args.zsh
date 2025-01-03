@@ -1,7 +1,3 @@
-# shellcheck disable=SC2034
-
-# TODO
-
 input=$(
 	cat <<-eof
 		terraform-application-region-shared-1
@@ -831,6 +827,7 @@ function test__u__when_undoing_beyond_tail {
 	)"
 }; run_with_filter test__u__when_undoing_beyond_tail
 
+# shellcheck disable=SC2034
 function test__u__when_pushing_beyond_head_then_undoing_beyond_tail {
 	args-init
 	ARGS_HISTORY_MAX=3
