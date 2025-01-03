@@ -1,28 +1,7 @@
 export ZSHRC_DIR="$HOME/gh/dotfiles/zshrc"
 
-### Colors
-# config
-export GREP_COLOR='1;32'
-export LSCOLORS='gxcxbxexfxegedabagaced'
-export JQ_COLORS='1;35:1;35:1;35:1;35:1;32:1;33:1;33:1;36' # v1.7+
-# set foreground
-function grep-color { echo "\e[1;32m\e[K$@\e[m\e[K" }
-# set background
-function red-bg { echo "\e[41m$@\e[0m" }
-function green-bg { echo "\e[42m$@\e[0m" }
-# switch modes
-function bw { # black and white
-    unalias diff
-    unalias egrep
-    unalias grep
-    unalias ls
-}
-function color {
-    alias diff='colordiff'
-    alias egrep='egrep --color=always'
-    alias grep='grep --color=always'
-    alias ls='ls --color=always'
-}; color # enable these aliases ahead of function definitions, so that they will expand
+# Enable color aliases first to allow expansion in all subsequent functions
+source "$ZSHRC_DIR/zshrc-colors.zsh"; color
 
 ### [Args]
 # [s]ave into args history

@@ -1,13 +1,13 @@
 source "$ZSHRC_DIR"/zshrc-tests/harness.zsh
 source "$ZSHRC_DIR"/zshrc-tests/helpers.zsh
 
-# $1: Filter tests by partial name match
-test_filter=$([[ -n $1 ]] && echo "$1")
-
 # Filter sections by number, leave it unset usually
 section_filter=
 
-# Source .zshrc for multiple sections that need it
+# $1: Filter tests by partial name match
+test_filter=$([[ -n $1 ]] && echo "$1")
+
+# Source .zshrc for multiple sections
 # shellcheck source="$HOME/.zshrc"
 UNDER_TEST=1 source ~/.zshrc
 
@@ -16,6 +16,9 @@ UNDER_TEST=1 source ~/.zshrc
 #
 
 if [[ $section_filter -eq 1 || -z $section_filter ]]; then
+	echo
+	echo 'Section 1: Run all test cases'
+
 	pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
 
 	init
@@ -36,23 +39,31 @@ fi
 
 if [[ ($section_filter -eq 2 || -z $section_filter) && -z $test_filter ]]; then
 	echo
+	echo
+	echo 'Section 2: Verify all tests defined are getting invoked'
+
 	ruby "$ZSHRC_DIR"/zshrc-tests/verify_test_invocations.rb
 fi
 
 #
-# Section 3: Verify tests are defined in the same order as their definitions in .zshrc
+# Section 3: Verify tests are defined in the same order as their definitions
 #
 
 if [[ ($section_filter -eq 3 || -z $section_filter) && -z $test_filter ]]; then
 	echo
+	echo
+	echo 'Section 3: Verify tests are defined in the same order as their definitions'
+
 	init
+
 	for test in $(find-tests); do
-		if [[ $test =~ zshrc-[to].zsh ]]; then
+		if [[ $test =~ zshrc-[a-z]+.zsh ]]; then
 			verify-testing-order "${test/zshrc-tests\/test-}" "$test"
 		else
 			verify-testing-order "$ZSHRC_DIR"/zshrc.zsh "$test"
 		fi
 	done
+
 	print-summary 'tests matched the testing order'
 fi
 
@@ -62,6 +73,9 @@ fi
 
 if [[ ($section_filter -eq 4 || -z $section_filter) && -z $test_filter ]]; then
 	echo
+	echo
+	echo 'Section 4: Verify keymaps at the bottom of .zshrc are up-to-date'
+
 	ruby "$ZSHRC_DIR"/zshrc-tests/verify_keymaps.rb
 fi
 
@@ -72,6 +86,9 @@ fi
 # shellcheck disable=SC2015
 if [[ ($section_filter -eq 5 || -z $section_filter) && -z $test_filter ]]; then
 	echo
+	echo
+	echo 'Section 5: Verify all env vars overwritten are getting restored'
+
 	init
 
 	expected=100
