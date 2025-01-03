@@ -58,10 +58,10 @@ function o-print-usage {
 
 		Usage:
 
-		  $(command-color 'o')
-		  $(command-color 'o <url>')
-		  $(command-color 'o <type> <arguments>?')
-		  $(command-color 'o <type prefix> <arguments>?')
+		  $(command-color-dim 'o')
+		  $(command-color-dim 'o <url>')
+		  $(command-color-dim 'o <type> <arguments>?')
+		  $(command-color-dim 'o <type prefix> <arguments>?')
 
 		Types:
 
