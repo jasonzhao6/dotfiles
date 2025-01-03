@@ -14,11 +14,11 @@ function pass {
 function fail {
 	local name=$1
 
-	failed+="\nfail: $name"
+	failed+="\n$(red-bg fail): $name"
 	((total++))
 	echo -n f
 
-	debug+="\n\ndebug: $name\n"
+	debug+="\n\n$(red-bg debug): $name\n"
 	debug+=$(diff -u <(echo $expected) <(echo $output) | sed '/--- /d; /+++ /d; /@@ /d')
 }
 
