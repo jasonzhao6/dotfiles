@@ -188,7 +188,7 @@ function test__a__with_two_args_including_negation {
 function test__aa {
 	assert "$(
 		echo "$input_short" | ss > /dev/null
-		eee 1 $(($(args-list-size) * 2)) aa echo 2>&1 | sort | uniq
+		eee 1 $(($(args-list-size) * 3)) aa echo 2>&1 | sort | uniq
 	)" "$(
 		cat <<-eof
 
