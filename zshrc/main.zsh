@@ -20,7 +20,7 @@ function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | ev
 function aa { arg $((RANDOM % $(args-list-size) + 1)) $@ }
 # select an [arg] by number
 # (e.g `arg <number> echo`, or with explicit positioning `arg <number> echo ~~`)
-function arg { [[ -n $1 && -n $2 ]] && { ARG="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"; [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && echo-eval "${@:2} $ARG" || echo-eval ${${@:2}//~~/$ARG} } }
+function arg { [[ -n $1 && -n $2 ]] && { ARG="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"; [[ $(index-of ${(j: :)@} '~~') -eq 0 ]] && { echo-eval "${@:2} $ARG"; return 0 } || echo-eval ${${@:2}//~~/$ARG} } }
 function 1 { arg $0 $@ }
 function 2 { arg $0 $@ }
 function 3 { arg $0 $@ }

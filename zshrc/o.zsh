@@ -3,8 +3,9 @@
 #
 
 O_TYPES=(
-	main-branch
-	new-pr
+	'commit-sha <sha>?'
+	'main-branch <repo>?'
+	'new-pr'
 )
 
 function o {
@@ -41,22 +42,40 @@ function o {
 		fi
 	else
 		for type in "${O_TYPES[@]}"; do
-			[[ $type == $type_prefix* ]] && "o-$type"
+			[[ $type == $type_prefix* ]] && $(echo "$type" | awk '{print $1}') "${@:2}"
 		done
 
 		[[ 'test' == $type_prefix* ]] && o-test "${@:2}"
 	fi
 }
 
-function o-main-branch {
-	echo main
+function commit-sha {
+	open https://"$(domain)"/"$(org)"/"$(repo)"/commit/"$1"
 }
 
-function o-new-pr {
-	echo new
+function main-branch {
+	open https://"$(domain)"/"$(org)"/"${*:-$(repo)}"
 }
+
+function new-pr {
+	gp && gh pr create --fill && gh pr view --web
+}
+
+#
+# Helpers
+#
 
 function o-test {
 	echo "arg1: $1"
 	echo "arg2: $2"
 }
+
+## open in browser
+#function pr { open https://$(domain)/$(org)/$(repo)/pull/$@ }
+#function prs { open "https://$(domain)/pulls?q=is:open+is:pr+user:$(org)" }
+
+## helpers
+#function domain { git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/' }
+#function org { git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*/\1/' }
+#function repo { git rev-parse --show-toplevel | xargs basename }
+#function branch { git rev-parse --abbrev-ref HEAD }
