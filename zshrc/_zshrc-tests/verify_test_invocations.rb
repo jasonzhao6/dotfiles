@@ -1,5 +1,5 @@
 class VerifyTestInvocations
-  TESTS_FILES = `find ~/gh/dotfiles/zshrc/zshrc-tests -name '*.zsh'`.split
+  TESTS_FILES = `find ~/gh/dotfiles/zshrc/_zshrc-tests -name '*.zsh'`.split
 
   def initialize
     # Verification result

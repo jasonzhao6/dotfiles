@@ -1,5 +1,5 @@
-source "$ZSHRC_DIR"/zshrc-tests/harness.zsh
-source "$ZSHRC_DIR"/zshrc-tests/helpers.zsh
+source "$ZSHRC_DIR"/_zshrc-tests/_harness.zsh
+source "$ZSHRC_DIR"/_zshrc-tests/_helpers.zsh
 
 # Filter sections by number, leave it unset usually
 section_filter=
@@ -42,7 +42,7 @@ if [[ ($section_filter -eq 2 || -z $section_filter) && -z $test_filter ]]; then
 	echo
 	echo 'Section 2: Verify all tests defined are getting invoked'
 
-	ruby "$ZSHRC_DIR"/zshrc-tests/verify_test_invocations.rb
+	ruby "$ZSHRC_DIR"/_zshrc-tests/verify_test_invocations.rb
 fi
 
 #
@@ -58,7 +58,7 @@ if [[ ($section_filter -eq 3 || -z $section_filter) && -z $test_filter ]]; then
 
 	for test in $(find-tests); do
 		if [[ $test =~ zshrc-[a-z]+.zsh ]]; then
-			verify-testing-order "${test/zshrc-tests\/test-}" "$test"
+			verify-testing-order "${test/_zshrc-tests\/test-}" "$test"
 		else
 			verify-testing-order "$ZSHRC_DIR"/zshrc.zsh "$test"
 		fi
@@ -76,7 +76,7 @@ if [[ ($section_filter -eq 4 || -z $section_filter) && -z $test_filter ]]; then
 	echo
 	echo 'Section 4: Verify keymaps at the bottom of .zshrc are up-to-date'
 
-	ruby "$ZSHRC_DIR"/zshrc-tests/verify_keymaps.rb
+	ruby "$ZSHRC_DIR"/_zshrc-tests/verify_keymaps.rb
 fi
 
 #
