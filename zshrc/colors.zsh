@@ -29,6 +29,11 @@ export JQ_COLORS='1;35:1;35:1;35:1;35:1;32:1;33:1;33:1;36' # v1.7+
 #
 
 # set foreground
+function cyan-fg { echo "\e[36m$*\e[0m"; }
+
+# set foreground by use case
+BACKTICK="\e[90m\`\e[0m"
+function command-color { echo "$BACKTICK$(cyan-fg "$@")$BACKTICK"; }
 function grep-color { echo "\e[1;32m\e[K$*\e[m\e[K"; }
 
 # set background

@@ -1,10 +1,10 @@
 source "$ZSHRC_DIR"/_tests/_harness.zsh
 source "$ZSHRC_DIR"/_tests/_helpers.zsh
 
-# Filter sections by number, leave it unset usually
+# Filter sections by number
 section_filter=
 
-# $1: Filter tests by partial name match
+# Filter tests by partial name match
 test_filter=$([[ -n $1 ]] && echo "$1")
 
 # Source .zshrc for multiple sections
