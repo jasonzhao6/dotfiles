@@ -11,17 +11,17 @@ export JQ_COLORS='1;35:1;35:1;35:1;35:1;32:1;33:1;33:1;36' # v1.7+
 #
 
 function color {
-    alias diff='colordiff'
-    alias egrep='egrep --color=always'
-    alias grep='grep --color=always'
-    alias ls='ls --color=always'
+	alias diff='colordiff'
+	alias egrep='egrep --color=always'
+	alias grep='grep --color=always'
+	alias ls='ls --color=always'
 };
 
 function bw { # Black and white
-    unalias diff
-    unalias egrep
-    unalias grep
-    unalias ls
+	unalias diff
+	unalias egrep
+	unalias grep
+	unalias ls
 }
 
 #
