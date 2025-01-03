@@ -6,6 +6,7 @@ source "$ZSHRC_DIR/colors.zsh"; color
 # `git_info` needs to come before `zsh_prompt`
 source "$ZSHRC_DIR/git_info.zsh"
 
+source "$ZSHRC_DIR/zsh_arrow_keys.zsh"
 source "$ZSHRC_DIR/zsh_history.zsh"
 source "$ZSHRC_DIR/zsh_prompt.zsh"
 
@@ -463,19 +464,6 @@ function zd {
     cp $ZSHRC_DIR/terraformrc.txt ~/.terraformrc
     cp $ZSHRC_DIR/tm_properties.txt ~/.tm_properties
 }
-
-### Zsh arrow keys
-# history search (up / down)
-autoload -U history-search-end
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-bindkey '^[[A' history-beginning-search-backward-end
-bindkey '^[[B' history-beginning-search-forward-end
-# word separators (left / right)
-WORDCHARS=${WORDCHARS/\.} # exclude .
-WORDCHARS=${WORDCHARS/\/} # exclude /
-WORDCHARS=${WORDCHARS/\=} # exclude =
-WORDCHARS+='|'
 
 ### Keymap annotations
 #  ::  -->  subsequent command
