@@ -18,7 +18,11 @@ UNDER_TEST=1 source ~/.zshrc
 
 if [[ $section_filter -eq 1 || -z $section_filter ]]; then
 	echo
-	echo "1: Run$([[ -z $test_filter ]] && echo ' all') test cases$([[ -n $test_filter ]] && echo ": *$test_filter*")"
+	if [[ -z $test_filter ]]; then
+		echo '1: Run all test cases'
+	else
+		echo "1: Run test cases matching '*$test_filter*'"
+	fi
 
 	pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
 
