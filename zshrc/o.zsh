@@ -5,7 +5,8 @@
 O_TYPES=(
 	'commit-sha <sha>?'
 	'main-branch <repo>?'
-	'new-pr'
+	'new-pull-request'
+	'pull-request <id>'
 )
 
 [[ -n $UNDER_TEST ]] && O_TYPES+=('o-test <arg1> <arg2>')
@@ -34,8 +35,12 @@ function main-branch {
 	open https://"$(domain)"/"$(org)"/"${*:-$(repo)}"
 }
 
-function new-pr {
+function new-pull-request {
 	gp && gh pr create --fill && gh pr view --web
+}
+
+function pull-request {
+	open https://"$(domain)"/"$(org)"/"$(repo)"/pull/"$1"
 }
 
 #
@@ -53,10 +58,10 @@ function o-print-usage {
 
 		Usage:
 
-			$(command-color 'o')
-			$(command-color 'o <url>')
-			$(command-color 'o <type> <arguments>?')
-			$(command-color 'o <type prefix> <arguments>?')
+		  $(command-color 'o')
+		  $(command-color 'o <url>')
+		  $(command-color 'o <type> <arguments>?')
+		  $(command-color 'o <type prefix> <arguments>?')
 
 		Types:
 
@@ -72,13 +77,3 @@ function o-test {
 	echo "arg1: $1"
 	echo "arg2: $2"
 }
-
-## open in browser
-#function pr { open https://$(domain)/$(org)/$(repo)/pull/$@ }
-#function prs { open "https://$(domain)/pulls?q=is:open+is:pr+user:$(org)" }
-
-## helpers
-#function domain { git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/' }
-#function org { git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*/\1/' }
-#function repo { git rev-parse --show-toplevel | xargs basename }
-#function branch { git rev-parse --abbrev-ref HEAD }
