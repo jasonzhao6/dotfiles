@@ -34,7 +34,7 @@ function test__h {
 function test__hc {
 	assert "$(
 		local histfile=$HISTFILE
-		HISTFILE='/tmp/test--h'
+		HISTFILE='/tmp/test__h'
 		touch $HISTFILE
 
 		hc

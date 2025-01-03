@@ -57,7 +57,7 @@ function test__f__for_tf {
 	assert "$(
 		local home=$HOME
 		local pwd=$PWD
-		HOME="/tmp/test--f"
+		HOME="/tmp/test__f"
 		mkdir -p $HOME/project/module/.terraform
 
 		touch $HOME/project/main.tf
@@ -80,15 +80,15 @@ function test__f__for_tf {
 
 function test__l {
 	assert "$(
-		rm -rf /tmp/test--l
-		mkdir /tmp/test--l
-		cd /tmp/test--l
+		rm -rf /tmp/test__l
+		mkdir /tmp/test__l
+		cd /tmp/test__l
 		mkdir 1 2 3
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
 		l | no_color
-		rm -rf /tmp/test--l
+		rm -rf /tmp/test__l
 	)" "$(
 		cat <<-eof
 		     1	1
@@ -103,15 +103,15 @@ function test__l {
 
 function test__l__with_search_pattern_to_ignore {
 	assert "$(
-		rm -rf /tmp/test--l--with-search-pattern-to-ignore
-		mkdir /tmp/test--l--with-search-pattern-to-ignore
-		cd /tmp/test--l--with-search-pattern-to-ignore
+		rm -rf /tmp/test__l--with-search-pattern-to-ignore
+		mkdir /tmp/test__l--with-search-pattern-to-ignore
+		cd /tmp/test__l--with-search-pattern-to-ignore
 		mkdir 1 2 3
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
 		l *log | no_color
-		rm -rf /tmp/test--l--with-search-pattern-to-ignore
+		rm -rf /tmp/test__l--with-search-pattern-to-ignore
 	)" "$(
 		cat <<-eof
 		     1	1
@@ -126,15 +126,15 @@ function test__l__with_search_pattern_to_ignore {
 
 function test__ll {
 	assert "$(
-		rm -rf /tmp/test--ll
-		mkdir /tmp/test--ll
-		cd /tmp/test--ll
+		rm -rf /tmp/test__ll
+		mkdir /tmp/test__ll
+		cd /tmp/test__ll
 		mkdir 1 2 3
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
 		ll | no_color
-		rm -rf /tmp/test--ll
+		rm -rf /tmp/test__ll
 	)" "$(
 		cat <<-eof
 		     1	.1.hidden
@@ -146,15 +146,15 @@ function test__ll {
 
 function test__ll__with_search_pattern_to_ignore {
 	assert "$(
-		rm -rf /tmp/test--ll--with-search-pattern-to-ignore
-		mkdir /tmp/test--ll--with-search-pattern-to-ignore
-		cd /tmp/test--ll--with-search-pattern-to-ignore
+		rm -rf /tmp/test__ll--with-search-pattern-to-ignore
+		mkdir /tmp/test__ll--with-search-pattern-to-ignore
+		cd /tmp/test__ll--with-search-pattern-to-ignore
 		mkdir 1 2 3
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
 		ll *log | no_color
-		rm -rf /tmp/test--ll--with-search-pattern-to-ignore
+		rm -rf /tmp/test__ll--with-search-pattern-to-ignore
 	)" "$(
 		cat <<-eof
 		     1	.1.hidden
@@ -190,7 +190,7 @@ function test__dd {
 
 function test__dd {
 	assert "$(
-		DD_DUMP_DIR="/tmp/test--dd"
+		DD_DUMP_DIR="/tmp/test__dd"
 		DD_CLEAR_TERMINAL=0
 		rm -rf $DD_DUMP_DIR
 
@@ -211,7 +211,7 @@ function test__dd {
 
 function test__dd__when_dumping_same_pasteboard_twice {
 	assert "$(
-		DD_DUMP_DIR="/tmp/test--dd"
+		DD_DUMP_DIR="/tmp/test__dd"
 		DD_CLEAR_TERMINAL=0
 		rm -rf $DD_DUMP_DIR
 
@@ -233,7 +233,7 @@ function test__dd__when_dumping_same_pasteboard_twice {
 
 function test__dd__when_dumping_two_different_pasteboards {
 	assert "$(
-		DD_DUMP_DIR="/tmp/test--dd"
+		DD_DUMP_DIR="/tmp/test__dd"
 		DD_CLEAR_TERMINAL=0
 		rm -rf $DD_DUMP_DIR
 
@@ -259,7 +259,7 @@ function test__dd__when_dumping_two_different_pasteboards {
 
 function test__dd__when_not_terminal_output {
 	assert "$(
-		DD_DUMP_DIR="/tmp/test--dd"
+		DD_DUMP_DIR="/tmp/test__dd"
 		DD_CLEAR_TERMINAL=0
 		rm -rf $DD_DUMP_DIR
 
@@ -277,7 +277,7 @@ function test__ddd {
 
 function test__ddc {
 	assert "$(
-		DD_DUMP_DIR="/tmp/test--dd"
+		DD_DUMP_DIR="/tmp/test__dd"
 		mkdir -p $DD_DUMP_DIR
 
 		ddc
@@ -511,13 +511,13 @@ function test__jcurl {
 
 function test__ren {
 	assert "$(
-		rm -rf /tmp/test--ren
-		mkdir /tmp/test--ren
-		cd /tmp/test--ren
+		rm -rf /tmp/test__ren
+		mkdir /tmp/test__ren
+		cd /tmp/test__ren
 		touch 1.log 2.log 3.txt
 		ren log txt
 		ls
-		rm -rf /tmp/test--ren
+		rm -rf /tmp/test__ren
 	)" "$(
 		cat <<-eof
 			1.txt
