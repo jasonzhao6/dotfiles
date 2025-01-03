@@ -6,6 +6,9 @@ source "$ZSHRC_DIR/colors.zsh"; color
 # `git_info` needs to come before `zsh_prompt`
 source "$ZSHRC_DIR/git_info.zsh"
 
+source "$ZSHRC_DIR/cd.zsh"
+source "$ZSHRC_DIR/o.zsh"
+source "$ZSHRC_DIR/t.zsh"
 source "$ZSHRC_DIR/z.zsh"
 source "$ZSHRC_DIR/zsh_arrow_keys.zsh"
 source "$ZSHRC_DIR/zsh_history.zsh"
@@ -185,31 +188,6 @@ function ip-id { aws ec2 describe-instances --filters "Name=private-ip-address, 
 function name-id { aws ec2 describe-instances --filters "Name=tag:Name, Values=$@" --query 'Reservations[].Instances[].InstanceId' --output text }
 
 ### [C]hange [d]ir
-# go up folders
-function .. { cd .. }
-function ... { cd ../.. }
-function .... { cd ../../.. }
-function ..... { cd ../../../.. }
-function ...... { cd ../../../../.. }
-function ....... { cd ../../../../../.. }
-function ........ { cd ../../../../../../.. }
-function ......... { cd ../../../../../../../.. }
-function .......... { cd ../../../../../../../../.. }
-# go to a folder
-function cd- { CD=$(paste_when_empty $@); [[ -d $CD ]] && cd $CD || cd ${${CD}%/*} }
-# go to mac folders
-function cdl { cd ~/Downloads }
-function cdm { cd ~/Documents }
-function cdt { cd ~/Desktop }
-function tmp { cd /tmp }
-# go to github folders
-# TODO reorg as ~/github/<org>/<repo>
-function cdd { cd ~/gh/dotfiles }
-function cde { cd ~/gh/excalidraw; ruby _touch.rb; oo }
-function cdg { cd ~/gh }
-function cdj { cd ~/gh/jasonzhao6 }
-function cds { cd ~/gh/scratch }
-function cdtf { cd ~/gh/scratch/tf-debug }
 
 ### [G]it
 # config
@@ -281,12 +259,6 @@ function gxx-pre! { # (`!` means the function sets env vars to be consumed by it
         esac
     done
 }
-
-### Lis[t]
-source "$ZSHRC_DIR/t.zsh"
-
-### [O]pen
-source "$ZSHRC_DIR/o.zsh"
 
 ### [K]ubectl
 # TODO move to eof once stable

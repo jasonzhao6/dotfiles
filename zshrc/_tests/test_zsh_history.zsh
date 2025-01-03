@@ -1,5 +1,5 @@
 function test__h {
-	local history=$(
+	local history; history=$(
 		cat <<-eof
 			: 1735711246:0;echo 5
 			: 1735711248:0;echo 1
@@ -13,7 +13,7 @@ function test__h {
 
 	assert "$(
 		local histfile=$HISTFILE
-		HISTFILE='/tmp/test--h'
+		HISTFILE='/tmp/test__h'
 		echo $history > $HISTFILE
 
 		h

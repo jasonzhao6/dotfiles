@@ -102,7 +102,7 @@ function test__cd-__with_dir {
 }; run_with_filter test__cd-__with_dir
 
 function test__cd-__with_file {
-	assert "$(cd- ~/Documents/file.txt 2>&1; pwd)" "$HOME/Documents"
+	assert "$(cd- ~/Documents/.zshrc 2>&1; pwd)" "$HOME/Documents"
 }; run_with_filter test__cd-__with_file
 
 function test__cdl {
