@@ -19,23 +19,25 @@ function fail {
 	echo -n f
 
 	debug+="\n\n$(red-bg debug): $name\n"
-	debug+=$(diff -u <(echo $expected) <(echo $output) | sed '/--- /d; /+++ /d; /@@ /d')
+	debug+=$(diff -u <(echo "$expected") <(echo "$output") | sed '/--- /d; /+++ /d; /@@ /d')
 }
 
 function assert {
 	local output=$1
 	local expected=$2
 
-	[[ $output == $expected ]] && pass || fail "'$funcstack[2]'"
+	# shellcheck disable=SC2015,SC2154
+	[[ $output == "$expected" ]] && pass || fail "'${funcstack[2]}'"
 }
 
 function run-with-filter {
-	[[ -z $test_filter || $(index-of $@ $test_filter) -ne 0 ]] && $@
+	[[ -z $test_filter || $(index-of "$@" "$test_filter") -ne 0 ]] && "$@"
 }
 
 function print-summary {
 	local message=$1
 
-	echo "\n($passes/$total $message)"
-	[[ $passes -ne $total ]] && echo $failed $debug
+	echo
+	echo "($passes/$total $message)"
+	[[ $passes -ne $total ]] && echo "$failed" "$debug"
 }

@@ -3,10 +3,11 @@ function find-tests {
 }
 
 function verify-testing-order {
-	local source=$(grep '^function' $1 | sed 's/ {.*/ {/')
-	local target=$(grep '^function' $2 | sed -e 's/test--//' -e 's/--[^-].*/ {/' | uniq)
+	local source; source=$(grep '^function' "$1" | sed 's/ {.*/ {/')
+	local target; target=$(grep '^function' "$2" | sed -e 's/test--//' -e 's/--[^-].*/ {/' | uniq)
 
-	diff -U999999 <(echo $source) <(echo $target) | no-color | while IFS= read -r line; do
+	diff -U999999 <(echo "$source") <(echo "$target") | no-color | while IFS= read -r line; do
+		# shellcheck disable=SC2076
 		if [[ $line =~ '^ function' ]]; then
 			pass
 		elif [[ $line =~ '^\+function' ]]; then

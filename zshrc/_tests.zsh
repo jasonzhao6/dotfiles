@@ -60,7 +60,7 @@ if [[ ($section_filter -eq 3 || -z $section_filter) && -z $test_filter ]]; then
 		test_target="${test/_tests\/test-}"
 
 		if [[ -f $test_target ]]; then
-			verify-testing-order $test_target "$test"
+			verify-testing-order "$test_target" "$test"
 		else
 			verify-testing-order "$ZSHRC_DIR"/main.zsh "$test"
 		fi
