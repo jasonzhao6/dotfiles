@@ -1,11 +1,11 @@
 function test__t {
-	local usage='t t_test <arg1> <arg2>'
+	local usage='t list_test <arg1> <arg2>'
 	assert "$(t | grep --only-matching "$usage")" "$(grep_color "$usage")"
 }; run_with_filter test__t
 
 function test__t__with_type {
 	assert "$(
-		t t_test 11 22
+		t list_test 11 22
 	)" "$(
 		cat <<-eof
 			arg1: 11
@@ -16,7 +16,7 @@ function test__t__with_type {
 
 function test__t__with_type_prefix {
 	assert "$(
-		t t_tes 11 22
+		t list_tes 11 22
 	)" "$(
 		cat <<-eof
 			arg1: 11

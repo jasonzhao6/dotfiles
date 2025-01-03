@@ -829,7 +829,7 @@ function test__u__when_undoing_beyond_tail {
 
 # shellcheck disable=SC2034
 function test__u__when_pushing_beyond_head_then_undoing_beyond_tail {
-	args-init
+	args_init
 	ARGS_HISTORY_MAX=3
 
 	assert "$(
@@ -848,7 +848,7 @@ function test__u__when_pushing_beyond_head_then_undoing_beyond_tail {
 		eof
 	)"
 
-	args-reset
+	args_reset
 }; run_with_filter test__u__when_pushing_beyond_head_then_undoing_beyond_tail
 
 function test__u__when_undoing_then_redoing_with_color {
@@ -1049,8 +1049,8 @@ function test__i__when_selecting_tail_index {
 	)"
 }; run_with_filter test__i__when_selecting_tail_index
 
-function test__save_args {
-	assert "$(echo "$input" | save_args)" "$(
+function test__args_save {
+	assert "$(echo "$input" | args_save)" "$(
 		cat <<-eof
 		     1	terraform-application-region-shared-1
 		     2	terraform-application-region-shared-2
@@ -1059,10 +1059,10 @@ function test__save_args {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run_with_filter test__save_args
+}; run_with_filter test__args_save
 
-function test__save_args__with_leading_whitespace {
-	assert "$(echo "$input_with_whitespace" | save_args)" "$(
+function test__args_save__with_leading_whitespace {
+	assert "$(echo "$input_with_whitespace" | args_save)" "$(
 		cat <<-eof
 		     1	  terraform-application-region-shared-1
 		     2	terraform-application-region-shared-2
@@ -1070,11 +1070,11 @@ function test__save_args__with_leading_whitespace {
 		     4	terraform-application-region-program-A
 		eof
 	)"
-}; run_with_filter test__save_args__with_leading_whitespace
+}; run_with_filter test__args_save__with_leading_whitespace
 
-function test__save_args__with_hash_inserted {
+function test__args_save__with_hash_inserted {
 	# shellcheck disable=SC2016
-	assert "$(echo "$input_with_headers" | save_args 'insert `#`')" "$(
+	assert "$(echo "$input_with_headers" | args_save 'insert `#`')" "$(
 		cat <<-eof
 		     1	MANIFEST                                # COMMENT
 		     2	terraform-application-region-shared-1   # hello world
@@ -1084,4 +1084,4 @@ function test__save_args__with_hash_inserted {
 		     6	terraform-application-region-program-B  # select via headers for this one
 		eof
 	)"
-}; run_with_filter test__save_args__with_hash_inserted
+}; run_with_filter test__args_save__with_hash_inserted

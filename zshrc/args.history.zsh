@@ -17,11 +17,11 @@
 # - To undo, move only `cursor` backward, up to `tail`, inclusive
 # - To redo, move only `cursor` forward, up to `head`, inclusive
 
-function args-init {
-	[[ -z $ARGS_HISTORY_MAX ]] && args-reset
+function args_init {
+	[[ -z $ARGS_HISTORY_MAX ]] && args_reset
 }
 
-function args-reset {
+function args_reset {
 	ARGS_HISTORY_MAX=100
 	ARGS_HISTORY=()
 	ARGS_CURSOR=0
@@ -31,50 +31,50 @@ function args-reset {
 	ARGS_REDO_EXCEEDED=0
 }
 
-function args-push {
+function args_push {
 	# Move `cursor` and `head` forward together
-	ARGS_CURSOR=$(args-increment $ARGS_CURSOR)
+	ARGS_CURSOR=$(args_increment $ARGS_CURSOR)
 	ARGS_HEAD=$ARGS_CURSOR
 	ARGS_HISTORY[$ARGS_CURSOR]=$1
 
 	# When reaching tail, keep `tail` always one step ahead
-	[[ $ARGS_CURSOR -eq $ARGS_TAIL ]] && ARGS_TAIL=$(args-increment $ARGS_TAIL)
+	[[ $ARGS_CURSOR -eq $ARGS_TAIL ]] && ARGS_TAIL=$(args_increment $ARGS_TAIL)
 
 	# Array size is fixed, wrap around the end
 	[[ $ARGS_TAIL -eq 0 ]] && ARGS_TAIL=1
 }
 
-function args-undo {
+function args_undo {
 	# To undo, move only `cursor` backward, up to `tail`, inclusive
-	local args_prev; args_prev=$(args-decrement "$ARGS_CURSOR")
+	local args_prev; args_prev=$(args_decrement "$ARGS_CURSOR")
 	[[ $ARGS_CURSOR -ne $ARGS_TAIL ]] && ARGS_CURSOR=$args_prev || ARGS_UNDO_EXCEEDED=1
 }
 
-function args-redo {
+function args_redo {
 	# To redo, move only `cursor` forward, up to `head`, inclusive
-	local args_next; args_next=$(args-increment "$ARGS_CURSOR")
+	local args_next; args_next=$(args_increment "$ARGS_CURSOR")
 	[[ $ARGS_CURSOR -ne $ARGS_HEAD ]] && ARGS_CURSOR=$args_next || ARGS_REDO_EXCEEDED=1
 }
 
-function args-undo-bar {
+function args_undo_bar {
 	[[ $ARGS_UNDO_EXCEEDED -ne 1 ]] && return
 
 	ARGS_UNDO_EXCEEDED=0
 	red-bg '  Reached the end of undo history  '
 }
 
-function args-redo-bar {
+function args_redo_bar {
 	[[ $ARGS_REDO_EXCEEDED -ne 1 ]] && return
 
 	ARGS_REDO_EXCEEDED=0
 	red-bg '  Reached the end of redo history  '
 }
 
-function args-replace {
+function args_replace {
 	ARGS_HISTORY[$ARGS_CURSOR]=$1
 }
 
-function args-history {
+function args_history {
 	echo "cursor: $ARGS_CURSOR"
 	echo "head: $ARGS_HEAD"
 	echo "tail: $ARGS_TAIL"
@@ -101,11 +101,11 @@ function args-history {
 # Helpers
 #
 
-function args-increment {
+function args_increment {
 	echo $(($1 % ARGS_HISTORY_MAX + 1))
 }
 
-function args-decrement {
+function args_decrement {
 	local args_decrement; args_decrement=$((ARGS_CURSOR - 1))
 	[[ $args_decrement -eq 0 ]] && args_decrement=$ARGS_HISTORY_MAX
 	echo $args_decrement
