@@ -16,7 +16,7 @@ ls_dash_l=$(
 
 function test__d {
 	assert "$(
-		D_UNDER_TEST=1 d www.google.com
+		ZSHRC_UNDER_TEST=1 d www.google.com
 	)" "$(
 		cat <<-eof
 		     1	test output for
@@ -26,12 +26,12 @@ function test__d {
 }; run_with_filter test__d
 
 function test__d__without_input {
-	assert "$(D_UNDER_TEST=1 d)" ''
+	assert "$(ZSHRC_UNDER_TEST=1 d)" ''
 }; run_with_filter test__d__without_input
 
 function test__d__with_protocol {
 	assert "$(
-		D_UNDER_TEST=1 d https://www.google.com
+		ZSHRC_UNDER_TEST=1 d https://www.google.com
 	)" "$(
 		cat <<-eof
 		     1	test output for
@@ -42,7 +42,7 @@ function test__d__with_protocol {
 
 function test__d__with_protocol_and_path {
 	assert "$(
-		D_UNDER_TEST=1 d https://www.google.com/path/to/page
+		ZSHRC_UNDER_TEST=1 d https://www.google.com/path/to/page
 	)" "$(
 		cat <<-eof
 		     1	test output for

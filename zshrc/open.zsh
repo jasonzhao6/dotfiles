@@ -3,14 +3,14 @@
 #
 
 # TODO gist
-O_TYPES=(
+OPEN_TYPES=(
 	'commit-sha <sha>?'
 	'main-branch <repo>?'
 	'new-pull-request'
 	'pull-request <id>'
 )
 
-[[ -n $UNDER_TEST ]] && O_TYPES+=('o_test <arg1> <arg2>')
+[[ -n $ZSHRC_UNDER_TEST ]] && OPEN_TYPES+=('open_test <arg1> <arg2>')
 
 function o {
 	# `$1` could be either a string containing urls or a type prefix, see 'Usage' below
@@ -18,11 +18,11 @@ function o {
 	local type_prefix=$1
 
 	if [[ -n $urls ]]; then
-		o_open_url
+		open_open_url
 	elif [[ -z $type_prefix ]]; then
-		o_print_usage
+		open_print_usage
 	else
-		for type in "${O_TYPES[@]}"; do
+		for type in "${OPEN_TYPES[@]}"; do
 			[[ $type == $type_prefix* ]] && $(echo "$type" | awk '{print $1}') "${@:2}"
 		done
 	fi
@@ -48,13 +48,13 @@ function pull-request {
 # Helpers
 #
 
-function o_open_url {
+function open_open_url {
 	echo "$urls" | while IFS= read -r url; do
 		open "$url"
 	done
 }
 
-function o_print_usage {
+function open_print_usage {
 	cat <<-eof
 
 		Usage:
@@ -68,13 +68,13 @@ function o_print_usage {
 
 	eof
 
-	for type in "${O_TYPES[@]}"; do
+	for type in "${OPEN_TYPES[@]}"; do
 		echo -n '  '
 		command-color "${type/#/o }"
 	done
 }
 
-function o_test {
+function open_test {
 	echo "arg1: $1"
 	echo "arg2: $2"
 }

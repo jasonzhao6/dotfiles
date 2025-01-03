@@ -10,7 +10,7 @@ section_filter=$([[ $1 -ge 1 && $1 -le 5  ]] && echo "$1")
 test_filter=$([[ -z $section_filter && -n $1 ]] && echo "$1")
 
 # Source .zshrc for multiple sections
-UNDER_TEST=1 source ~/.zshrc
+ZSHRC_UNDER_TEST=1 source ~/.zshrc
 
 #
 # 1: Run all test cases

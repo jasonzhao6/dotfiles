@@ -2,7 +2,7 @@
 
 ### Util
 # singles (they save into `args`)
-function d { [[ -n $1 ]] && { D=${${${@}#*://}%%/*}; [[ -z $D_UNDER_TEST ]] && dig +short $D | ss || echo "test output for\n$D" | ss } }
+function d { [[ -n $1 ]] && { D=${${${@}#*://}%%/*}; [[ -z $ZSHRC_UNDER_TEST ]] && dig +short $D | ss || echo "test output for\n$D" | ss } }
 function f { [[ -n $1 ]] && f-pre $@ | sort | ss }
 function l { ls -l | awk '{print $9}' | ss } # Not taking search pattern b/c folder matches break column alignment
 function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.' | ss } # Show only hidden files

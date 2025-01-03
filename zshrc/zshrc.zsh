@@ -1,6 +1,6 @@
 # shellcheck disable=SC1090
 
-[[ -z $UNDER_TEST && -f ~/.zshrc.secrets ]] && source ~/.zshrc.secrets
+[[ -z $ZSHRC_UNDER_TEST && -f ~/.zshrc.secrets ]] && source ~/.zshrc.secrets
 
 # Source / test
 function z { source ~/.zshrc; }

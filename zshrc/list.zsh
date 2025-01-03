@@ -2,19 +2,19 @@
 # Lis[t]
 #
 
-T_TYPES=(
+LIST_TYPES=(
 	'opal'
 )
 
-[[ -n $UNDER_TEST ]] && T_TYPES+=('t_test <arg1> <arg2>')
+[[ -n $ZSHRC_UNDER_TEST ]] && LIST_TYPES+=('list_test <arg1> <arg2>')
 
 function t {
 	local type_prefix=$1
 
 	if [[ -z $type_prefix ]]; then
-		t_print_usage
+		list_print_usage
 	else
-		for type in "${T_TYPES[@]}"; do
+		for type in "${LIST_TYPES[@]}"; do
 			[[ $type == $type_prefix* ]] && $(echo "$type" | awk '{print $1}') "${@:2}"
 		done
 	fi
@@ -34,7 +34,7 @@ function opal {
 # Helpers
 #
 
-function t_print_usage {
+function list_print_usage {
 	cat <<-eof
 
 		Usage:
@@ -47,13 +47,13 @@ function t_print_usage {
 
 	eof
 
-	for type in "${T_TYPES[@]}"; do
+	for type in "${LIST_TYPES[@]}"; do
 		echo -n '  '
 		command-color "${type/#/t }"
 	done
 }
 
-function t_test {
+function list_test {
 	echo "arg1: $1"
 	echo "arg2: $2"
 }
