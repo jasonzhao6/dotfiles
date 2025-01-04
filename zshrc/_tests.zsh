@@ -1,4 +1,4 @@
-# shellcheck disable=SC1090,SC2030,SC2031
+# shellcheck disable=SC1090,SC2015,SC2030,SC2031
 
 source "$ZSHRC_DIR"/_tests/_harness.zsh
 source "$ZSHRC_DIR"/_tests/_helpers.zsh
@@ -89,7 +89,6 @@ fi
 # 5: Verify all env vars overwritten are getting restored
 #
 
-# shellcheck disable=SC2015
 if [[ ($section_filter -eq 5 || -z $section_filter) && -z $test_filter ]]; then
 	echo
 	echo

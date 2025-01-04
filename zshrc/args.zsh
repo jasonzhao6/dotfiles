@@ -1,10 +1,11 @@
+# shellcheck disable=SC2015
+
 source "$ZSHRC_DIR/args.history.zsh"; args_init
 
 ### [Args]
 # [s]ave into args history
 # (e.g `seq 100 105; s`, or alternatively `seq 100 105 | s`)
 function s { ss "Insert '#' after the first column to soft-select it"; }
-# shellcheck disable=SC2015
 function ss { [[ -t 0 ]] && eval "$(prev_command)" | args_save "$@" || args_save "$@"; }
 # paste into args history
 # (e.g copy a list into pasteboard, then `v`)
@@ -12,7 +13,7 @@ function v { pbpaste | s; }
 function vv { pbpaste | ss; }
 # list / filter [a]rgs
 # (e.g `a` to list all, `a foo and bar -not -baz` to filter)
-# shellcheck disable=SC2015,SC2120
+# shellcheck disable=SC2120
 function a { [[ -z $1 ]] && args-list || { args-plain | eval "$(args_filtering "$@") | $(args_coloring "$@")" | ss; }; }
 # select a random arg
 # (e.g `aa echo`)
@@ -56,7 +57,6 @@ function n { args_select_column 0 "$1"; }
 function nn { args_select_column 1 "$1"; }
 # [c]opy into pasteboard
 # (e.g `c` to copy all args, `11 c` to copy only the eleventh arg)
-# shellcheck disable=SC2015
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n "$@" | pbcopy; }
 # [y]ank / [p]ut current args into a different tab
 function y { args > ~/.zshrc.args; }
@@ -66,7 +66,6 @@ function u { args_undo_selection; }
 function r { args_redo; args-list; args_redo_bar; }
 # list / select historical args by [i]ndex
 # (e.g `i` to list history, `i 8` to select the args at index 8)
-# shellcheck disable=SC2015
 function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_history || { ARGS_CURSOR=$1; a; }; }
 
 #

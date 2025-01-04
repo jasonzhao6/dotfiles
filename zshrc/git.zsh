@@ -1,3 +1,5 @@
+# shellcheck disable=SC2015
+
 ### [G]it
 # Config
 export EDITOR='mate --wait'
@@ -9,7 +11,6 @@ function gta { git remote add "$1" "$2"; }
 function gtr { git remote remove "$@"; }
 function gtv { git remote --verbose; }
 # [B]ranch
-# shellcheck disable=SC2015
 function gb { local merged; merged=$(gb-merged); [[ -n $merged ]] && merged="\n----------------\n$merged"; echo "$(git branch)$merged" | ss; }
 function gbb { gb-merged | xargs git branch --delete; git remote prune origin; echo; gb; }
 function gbd { git branch --delete --force "$@"; git push origin --delete "$@"; gb; }

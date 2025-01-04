@@ -1,3 +1,5 @@
+# shellcheck disable=SC2015
+
 function init {
 	passes=0
 	total=0
@@ -26,7 +28,7 @@ function assert {
 	local output=$1
 	local expected=$2
 
-	# shellcheck disable=SC2015,SC2154
+	# shellcheck disable=SC2154
 	[[ $output == "$expected" ]] && pass || fail "'${funcstack[2]}'"
 }
 
