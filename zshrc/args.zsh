@@ -46,9 +46,9 @@ function 0 { arg $ $@ } # last arg
 function e { for i in $(seq $1 $2); do echo; arg $i ${${@:3}}; done }
 # select all args via an iterator
 # (e.g `each echo`, `all echo`, `map echo '$((~~ * 2))'`)
-function each { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@; done }
-function all { ARGS_ROW_SIZE=$(args-list-size); for i in $(seq 1 $ARGS_ROW_SIZE); do echo; arg $i $@ &; done; wait }
-function map { ARGS_ROW_SIZE=$(args-list-size); ARGS_MAP=''; for i in $(seq 1 $ARGS_ROW_SIZE); do echo; ARG=$(arg $i $@); echo $ARG; ARGS_MAP+="$ARG\n"; done; echo; echo $ARGS_MAP | ss }
+function each { for i in $(seq 1 $(args-list-size)); do echo; arg $i $@; done }
+function all { for i in $(seq 1 $(args-list-size)); do echo; arg $i $@ &; done; wait }
+function map { local map=''; for i in $(seq 1 $(args-list-size)); do echo; local el=$(arg $i $@); echo $el; map+="$el\n"; done; echo; echo $map | ss }
 # list / filter colum[n] by letter
 # (e.g `n` to list all, `n d` to keep only the fourth column, delimited based on the bottom row)
 function n { N=1 args_select_column $@ }
