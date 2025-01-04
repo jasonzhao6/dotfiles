@@ -92,7 +92,7 @@ function test__l {
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		l | no_color
+		l | bw
 		rm -rf /tmp/test__l
 	)" "$(
 		cat <<-eof
@@ -115,7 +115,7 @@ function test__l__with_search_pattern_to_ignore {
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		l ./*log | no_color
+		l ./*log | bw
 		rm -rf /tmp/test__l--with-search-pattern-to-ignore
 	)" "$(
 		cat <<-eof
@@ -138,7 +138,7 @@ function test__ll {
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		ll | no_color
+		ll | bw
 		rm -rf /tmp/test__ll
 	)" "$(
 		cat <<-eof
@@ -158,7 +158,7 @@ function test__ll__with_search_pattern_to_ignore {
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		ll ./*log | no_color
+		ll ./*log | bw
 		rm -rf /tmp/test__ll--with-search-pattern-to-ignore
 	)" "$(
 		cat <<-eof
@@ -430,7 +430,7 @@ function test__hh {
 	)
 
 	assert "$(
-		hh <(echo "$old") <(echo "$new") | no_color
+		hh <(echo "$old") <(echo "$new") | bw
 	)" "$(
 		cat <<-eof
 			This is the original content.                                   |       This is the modified content.
@@ -487,7 +487,7 @@ function test__uu {
 	)
 
 	assert "$(
-		uu <(echo "$old") <(echo "$new") | no_color | sed 1,2d
+		uu <(echo "$old") <(echo "$new") | bw | sed 1,2d
 	)" "$(
 		cat <<-eof
 			@@ -1,5 +1,6 @@
@@ -560,7 +560,7 @@ function test__echo_eval {
 
 function test__ellipsize {
 	assert "$(
-		ellipsize "$(printf "%.0sX" {1..1000})" | no_color | wc -c | awk '{print $1}'
+		ellipsize "$(printf "%.0sX" {1..1000})" | bw | wc -c | awk '{print $1}'
 	)" "$COLUMNS"
 }; run_with_filter test__ellipsize
 
@@ -617,6 +617,30 @@ function test__prev_command {
 	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
 	return
 }
+
+function test__bw {
+	assert "$(echo "\e[30m\e[47m...\e[0m" | bw)" '...'
+}; run_with_filter test__bw
+
+function test__compact {
+	local input; input=$(
+		cat <<-eof
+			[
+
+
+			]
+		eof
+	)
+
+	assert "$(
+		echo "$input" | compact
+	)" "$(
+		cat <<-eof
+			[
+			]
+		eof
+	)"
+}; run_with_filter test__compact
 
 function test__extract_urls {
 	local url='http://example.com'
@@ -679,30 +703,6 @@ function test__hex {
 		eof
 	)"
 }; run_with_filter test__hex
-
-function test__no_color {
-	assert "$(echo "\e[30m\e[47m...\e[0m" | no_color)" '...'
-}; run_with_filter test__no_color
-
-function test__no_empty {
-	local input; input=$(
-		cat <<-eof
-			[
-
-
-			]
-		eof
-	)
-
-	assert "$(
-		echo "$input" | no_empty
-	)" "$(
-		cat <<-eof
-			[
-			]
-		eof
-	)"
-}; run_with_filter test__no_empty
 
 function test__strip {
 	assert "$(echo '    111 222   ' | strip)" '111 222'

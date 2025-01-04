@@ -17,7 +17,7 @@ function color {
 	alias ls='ls --color=always'
 };
 
-function bw { # Black and white
+function no_color {
 	unalias diff
 	unalias egrep
 	unalias grep

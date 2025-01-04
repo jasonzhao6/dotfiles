@@ -73,9 +73,9 @@ function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_histo
 #
 
 function args { echo "${ARGS_HISTORY[$ARGS_CURSOR]}"; }
-function args_plain { args | no_color | expand; }
+function args_plain { args | bw | expand; }
 function args_list { args | nl; }
-function args_list_plain { args | nl | no_color | expand; }
+function args_list_plain { args | nl | bw | expand; }
 function args_list_size { args | wc -l | awk '{print $1}'; }
 function args_coloring { echo "egrep --color=always --ignore-case '${${@:#-*}// /|}'"; }
 
@@ -141,13 +141,13 @@ function args_columns_bar {
 
 # Call this function with a pipe to save the args
 function args_save {
-	local new_args; new_args=$(cat - | head -1000 | no_empty)
+	local new_args; new_args=$(cat - | head -1000 | compact)
 
 	# Insert '#' after the first column to soft-select it
 	[[ -n $1 ]] && new_args=$(echo "$new_args" | insert_hash)
 
 	if [[ -n "$new_args" ]]; then
-		local new_args_plain; new_args_plain=$(echo "$new_args" | no_color | expand)
+		local new_args_plain; new_args_plain=$(echo "$new_args" | bw | expand)
 
 		if [[ "$new_args_plain" != $(args_plain) ]]; then
 			args_push "$ARGS"

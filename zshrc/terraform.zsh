@@ -17,7 +17,7 @@ function tfv { tf_pre "$@" && terraform validate; }
 # Post `tfp`
 function tfa { terraform apply; }
 function tfd { terraform destroy; }
-function tfg { terraform show -no_color tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web; }
+function tfg { terraform show -bw tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web; }
 function tfz { terraform force-unlock "$@"; }
 # Post `tfl`
 function tfs { terraform state show "$@"; }
