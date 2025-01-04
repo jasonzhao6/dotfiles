@@ -1,6 +1,6 @@
-### Vimium keymap
-# ['] [,]  .  [p] [y] | [f] [g] [c] [r] [l]      <--  '|,    y:p  f:g
-# [a]  o   e   u  [i] | [d] [h] [t] [n] [s] [-]  <--  a|;|d  h|t  n|s  -|b
+### Vimium keymap                                <--  '|,    y:p  f:g|G  c|C
+# ['] [,]  .  [p] [y] | [f] [g] [c] [r] [l]      <--         h|t  n|s
+# [a]  o   e   u  [i] | [d] [h] [t] [n] [s] [-]  <--  a|;|d  H|T  N|S    -|b
 # [;]  q   j   k   x  | [b] [m] [w] [v] [z]      <--         m|w  v|z
 
 # Clean slate
