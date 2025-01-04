@@ -27,8 +27,7 @@ function cdm { cd ~/Documents || true; }
 function cdt { cd ~/Desktop || true; }
 function tmp { cd /tmp || true; }
 
-# Shortcuts to github folders
-# TODO reorg as ~/github/<org>/<repo>
+# Shortcuts to github folders (~/github/<org>/<repo>)
 function cdd { cd ~/gh/dotfiles || return; }
 function cde { cd ~/gh/excalidraw || return; ruby _touch.rb; oo; }
 function cdg { cd ~/gh || true; }

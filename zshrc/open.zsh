@@ -2,18 +2,16 @@
 # [O]pen
 #
 
-# TODO gist
 OPEN_TYPES=(
 	'commit-sha <sha>?'
+	'gist'
 	'main-branch <repo>?'
 	'new-pull-request'
 	'pull-request <id>'
 )
 
-[[ -n $ZSHRC_UNDER_TEST ]] && OPEN_TYPES+=('open_test <arg1> <arg2>')
-
 function o {
-	# `$1` could be either a string containing urls or a type prefix, see 'Usage' below
+	# `$1` could be either a string containing urls or a type prefix, see `open_usage`
 	local urls; urls=$(echo "$@" | extract_urls)
 	local type_prefix=$1
 
@@ -26,6 +24,13 @@ function o {
 			[[ $type == $type_prefix* ]] && $(echo "$type" | awk '{print $1}') "${@:2}"
 		done
 	fi
+}
+
+# To be overwritten by `.zshrc.secrets`
+GIST='https://gist.github.com'
+
+function gist {
+	open $GIST
 }
 
 function commit-sha {
@@ -73,6 +78,8 @@ function open_usage {
 		command_color "${type/#/o }"
 	done
 }
+
+[[ -n $ZSHRC_UNDER_TEST ]] && OPEN_TYPES+=('open_test <arg1> <arg2>')
 
 function open_test {
 	echo "arg1: $1"

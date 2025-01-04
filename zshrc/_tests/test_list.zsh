@@ -32,7 +32,6 @@ function test__opal {
 		cat <<-eof
 		     1	non-secret-placeholder-1  url-1
 		     2	non-secret-placeholder-2  url-2
-		     3	non-secret-placeholder-3  url-3
 		eof
 	)"
 }; run_with_filter test__opal

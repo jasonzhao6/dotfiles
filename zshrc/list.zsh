@@ -6,8 +6,6 @@ LIST_TYPES=(
 	'opal'
 )
 
-[[ -n $ZSHRC_UNDER_TEST ]] && LIST_TYPES+=('list_test <arg1> <arg2>')
-
 function t {
 	local type_prefix=$1
 
@@ -20,11 +18,10 @@ function t {
 	fi
 }
 
-# Actual values in `.zshrc.secrets`
+# To be overwritten by `.zshrc.secrets`
 OPAL=(
 	'non-secret-placeholder-1 url-1'
 	'non-secret-placeholder-2 url-2'
-	'non-secret-placeholder-3 url-3'
 )
 
 function opal {
@@ -53,6 +50,8 @@ function list_usage {
 		command_color "${type/#/t }"
 	done
 }
+
+[[ -n $ZSHRC_UNDER_TEST ]] && LIST_TYPES+=('list_test <arg1> <arg2>')
 
 function list_test {
 	echo "arg1: $1"
