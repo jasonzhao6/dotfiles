@@ -5,7 +5,7 @@ source "$ZSHRC_DIR/args.history.zsh"; args_init
 ### [Args]
 # [s]ave into args history
 # (e.g `seq 100 105; s`, or alternatively `seq 100 105 | s`)
-function s { ss 'Insert `#` after the first column to soft-select it' } # TODO S=1, S=2
+function s { ss 'Insert `#` after the first column to soft-select it' }
 function ss { [[ -t 0 ]] && eval $(prev_command) | args_save $@ || args_save $@ }
 # paste into args history
 # (e.g copy a list into pasteboard, then `v`)
@@ -61,7 +61,7 @@ function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
 function y { args > ~/.zshrc.args }
 function p { echo "$(<~/.zshrc.args)" | ss }
 # [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
-function u { ARG_SIZE_PREV=$(args-columns | strip); args_undo; args-list; args_undo_bar; ARG_SIZE_CURR=$(args-columns | strip); [[ -n $ARGS_USE_TOP_ROW && ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar }
+function u { args_undo_selection }
 function r { args_redo; args-list; args_redo_bar }
 # list / select historical args by [i]ndex
 # (e.g `i` to list history, `i 8` to select the args at index 8)
@@ -112,33 +112,6 @@ function args-columns {
 # Setters
 #
 
-function args_select_column {
-	[[ $N -eq 2 ]] && ARGS_USE_TOP_ROW=1 || ARGS_USE_TOP_ROW=0
-
-	if [[ -z $1 ]]; then
-		args-list
-		args-columns-bar $ARGS_USE_TOP_ROW
-	else
-		ARGS_USED_TOP_ROW=$ARGS_USE_TOP_ROW
-		ARGS_COLUMNS=$(args-columns $ARGS_USE_TOP_ROW)
-		ARGS_COL_FIRST=$(index_of $ARGS_COLUMNS a)
-		ARGS_COL_TARGET=$(index_of $ARGS_COLUMNS $1)
-		ARGS_COL_NEXT=$(index_of $ARGS_COLUMNS $(next_ascii $1))
-
-		_ARGS_USE_TOP_ROW=$ARGS_USE_TOP_ROW
-
-		TEMP_START=$([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)
-		TEMP_END=$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1)))
-		args-list-plain | cut -c $TEMP_START-$TEMP_END | strip_right | ss
-
-		ARGS_USE_TOP_ROW=$_ARGS_USE_TOP_ROW
-
-		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args-columns $ARGS_USE_TOP_ROW)" b) -ne 0 ]]; then
-			args-columns-bar $ARGS_USE_TOP_ROW
-		fi
-	fi
-}
-
 # Call this function with a pipe to save the args
 function args_save {
 	local new_args; new_args=$(cat - | head -1000 | no_empty)
@@ -152,7 +125,7 @@ function args_save {
 		if [[ $new_args_plain != $(args-plain) ]]; then
 			args_push $ARGS
 			ARGS_PUSHED=1
-			ARGS_USE_TOP_ROW= # TODO rename
+			ARGS_USED_TOP_ROW= # TODO rename
 		else
 			ARGS_PUSHED=0
 		fi
@@ -161,4 +134,41 @@ function args_save {
 		args_replace $new_args
 		args-list
 	fi
+}
+
+function args_select_column {
+	[[ $N -eq 2 ]] && ARGS_USE_TOP_ROW=1 || ARGS_USE_TOP_ROW=0
+
+	if [[ -z $1 ]]; then
+		args-list
+		args-columns-bar $ARGS_USE_TOP_ROW
+	else
+		ARGS_COLUMNS=$(args-columns $ARGS_USE_TOP_ROW)
+		ARGS_COL_FIRST=$(index_of $ARGS_COLUMNS a)
+		ARGS_COL_TARGET=$(index_of $ARGS_COLUMNS $1)
+		ARGS_COL_NEXT=$(index_of $ARGS_COLUMNS $(next_ascii $1))
+
+		TEMP_START=$([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)
+		TEMP_END=$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1)))
+		args-list-plain | cut -c $TEMP_START-$TEMP_END | strip_right | ss
+
+		# If a column was not selected, show columns bar again for convenience
+		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args-columns $ARGS_USE_TOP_ROW)" b) -ne 0 ]]; then
+			args-columns-bar $ARGS_USE_TOP_ROW
+		fi
+
+		ARGS_USED_TOP_ROW=$ARGS_USE_TOP_ROW
+	fi
+}
+
+function args_undo_selection {
+	ARG_SIZE_PREV=$(args-columns | strip)
+	args_undo
+	args-list
+	args_undo_bar
+	ARG_SIZE_CURR=$(args-columns | strip)
+
+		args_replace $new_args
+	# If undoing a column selection, show columns bar for convenience
+	[[ -n $ARGS_USED_TOP_ROW && ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar
 }
