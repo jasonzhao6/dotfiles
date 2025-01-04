@@ -48,12 +48,12 @@ function e { for i in $(seq $1 $2); do echo; arg $i ${${@:3}}; done }
 # (e.g `each echo`, `all echo`, `map echo '$((~~ * 2))'`)
 function each { for i in $(seq 1 $(args-list-size)); do echo; arg $i $@; done }
 function all { for i in $(seq 1 $(args-list-size)); do echo; arg $i $@ &; done; wait }
-function map { local map=''; for i in $(seq 1 $(args-list-size)); do echo; local el=$(arg $i $@); echo $el; map+="$el\n"; done; echo; echo $map | ss }
+function map { local map=''; for i in $(seq 1 $(args-list-size)); do echo; local row=$(arg $i $@); echo $row; map+="$row\n"; done; echo; echo $map | ss }
 # list / filter colum[n] by letter
 # (e.g `n` to list all, `n d` to keep only the fourth column, delimited based on the bottom row)
-function n { N=1 args_select_column $@ }
+function n { args_select_column 0 $1 }
 # (`nn` is like `n`, but delimited based on the top row)
-function nn { N=2 args_select_column $@ }
+function nn { args_select_column 1 $1 }
 # [c]opy into pasteboard
 # (e.g `c` to copy all args, `11 c` to copy only the eleventh arg)
 function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n $@ | pbcopy }
@@ -95,33 +95,37 @@ function args_filtering {
 }
 
 function args-columns {
+	# Whether to delimit based on the top row vs the bottom row
 	local use_top_row=$1
 
-	ARGS_COLUMNS=''
-	ARGS_COL_CURR=a
-	ARGS_SKIP_NL=1
+	# Skip the `nl` column, then start accumulating `columns` starting with `current_column`
+	local skip_nl_column=1
+	local current_column=a
+	local columns=''
 
-	if [[ ${use_top_row:-$ARGS_USED_TOP_ROW} -eq 1 ]]; then
-		ARG=$(args-list-plain | head -1)
+	if [[ ${use_top_row} -eq 1 ]]; then
+		row=$(args-list-plain | head -1)
 	else
-		ARG=$(args-list-plain | tail -1)
+		row=$(args-list-plain | tail -1)
 	fi
 
-	for i in $(seq 1 ${#ARG}); do
-		if [[ $ARG[$i-1] == ' ' && $ARG[$i] != ' ' ]]; then
-			if [[ $ARGS_SKIP_NL -eq 1 ]]; then
-				ARGS_SKIP_NL=0
-				ARGS_COLUMNS+=' '
+	for i in $(seq 1 ${#row}); do
+		# A new column starts when transitioning from a space to a non-space character
+		if [[ $row[$i-1] == ' ' && $row[$i] != ' ' ]]; then
+			# Skip the `nl` column
+			if [[ $skip_nl_column -eq 1 ]]; then
+				skip_nl_column=0
+				columns+=' '
 			else
-				ARGS_COLUMNS+=$ARGS_COL_CURR
-				ARGS_COL_CURR=$(next_ascii $ARGS_COL_CURR)
+				columns+=$current_column
+				current_column=$(next_ascii $current_column)
 			fi
 		else
-			ARGS_COLUMNS+=' '
+			columns+=' '
 		fi
 	done
 
-	echo $ARGS_COLUMNS
+	echo $columns
 }
 
 function args-columns-bar {
@@ -146,9 +150,12 @@ function args_save {
 
 		if [[ $new_args_plain != $(args-plain) ]]; then
 			args_push $ARGS
+
+			# Set global states used by `n, nn, u`
 			ARGS_PUSHED=1
-			ARGS_USED_TOP_ROW= # TODO rename
+			ARGS_USED_TOP_ROW=
 		else
+			# Set global states used by `n, nn`
 			ARGS_PUSHED=0
 		fi
 
@@ -160,48 +167,52 @@ function args_save {
 
 function args_use_selection {
 	if [[ -n $1 && -n $2 ]]; then
-		ARG="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"
+		local row="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"
 
 		if [[ $(index_of ${(j: :)@} '~~') -eq 0 ]]; then
-			echo_eval "${@:2} $ARG"
+			echo_eval "${@:2} $row"
 		else
-			echo_eval ${${@:2}//~~/$ARG}
+			echo_eval ${${@:2}//~~/$row}
 		fi
 	fi
 }
 
 function args_select_column {
-	[[ $N -eq 2 ]] && ARGS_USE_TOP_ROW=1 || ARGS_USE_TOP_ROW=0
+	local use_top_row=$1
+	local selected_column=$2
 
-	if [[ -z $1 ]]; then
+	if [[ -z $2 ]]; then
 		args-list
-		args-columns-bar $ARGS_USE_TOP_ROW
+		args-columns-bar $use_top_row
 	else
-		ARGS_COLUMNS=$(args-columns $ARGS_USE_TOP_ROW)
-		ARGS_COL_FIRST=$(index_of $ARGS_COLUMNS a)
-		ARGS_COL_TARGET=$(index_of $ARGS_COLUMNS $1)
-		ARGS_COL_NEXT=$(index_of $ARGS_COLUMNS $(next_ascii $1))
+		local columns=$(args-columns $use_top_row)
+		local first_column=$(index_of $columns a)
+		local target_column=$(index_of $columns $2)
+		local next_column=$(index_of $columns $(next_ascii $2))
+		local column_start=$([[ $target_column -ne 0 ]] && echo $target_column || echo $first_column)
+		local column_end=$([[ $next_column -ne 0 ]] && echo $((next_column - 1)))
 
-		TEMP_START=$([[ $ARGS_COL_TARGET -ne 0 ]] && echo $ARGS_COL_TARGET || echo $ARGS_COL_FIRST)
-		TEMP_END=$([[ $ARGS_COL_NEXT -ne 0 ]] && echo $((ARGS_COL_NEXT - 1)))
-		args-list-plain | cut -c $TEMP_START-$TEMP_END | strip_right | ss
+		args-list-plain | cut -c $column_start-$column_end | strip_right | ss
 
 		# If a column was not selected, show columns bar again for convenience
-		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args-columns $ARGS_USE_TOP_ROW)" b) -ne 0 ]]; then
-			args-columns-bar $ARGS_USE_TOP_ROW
+		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args-columns $use_top_row)" b) -ne 0 ]]; then
+			args-columns-bar $use_top_row
 		fi
 
-		ARGS_USED_TOP_ROW=$ARGS_USE_TOP_ROW
+		# Set global states used by `u`
+		ARGS_USED_TOP_ROW=$use_top_row
 	fi
 }
 
 function args_undo_selection {
-	ARG_SIZE_PREV=$(args-columns | strip)
+	local use_top_row=$ARGS_USED_TOP_ROW
+
+	local column_size_before=$(args-columns $use_top_row | strip)
 	args_undo
 	args-list
 	args_undo_bar
-	ARG_SIZE_CURR=$(args-columns | strip)
+	local column_size_after=$(args-columns $use_top_row | strip)
 
 	# If undoing a column selection, show columns bar for convenience
-	[[ -n $ARGS_USED_TOP_ROW && ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar
+	[[ -n $use_top_row && ${#column_size_before} -lt ${#column_size_after} ]] && args-columns-bar $use_top_row
 }
