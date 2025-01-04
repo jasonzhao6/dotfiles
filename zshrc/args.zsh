@@ -13,7 +13,7 @@ function v { pbpaste | s }
 function vv { pbpaste | ss }
 # list / filter [a]rgs
 # (e.g `a` to list all, `a foo and bar -not -baz` to filter)
-function a { [[ -z $1 ]] && args-list || { args-build-greps! $@; args-plain | eval "$ARGS_FILTERS | $ARGS_COLOR" | ss } }
+function a { [[ -z $1 ]] && args-list || { args-plain | eval "$(args_filtering $@) | $(args_coloring $@)" | ss } }
 # select a random arg
 # (e.g `aa echo`)
 function aa { arg $((RANDOM % $(args-list-size) + 1)) $@ }
@@ -66,26 +66,42 @@ function r { args_redo; args-list; args_redo_bar }
 # list / select historical args by [i]ndex
 # (e.g `i` to list history, `i 8` to select the args at index 8)
 function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_history || { ARGS_CURSOR=$1; a } }
-# helpers
-function args { echo $ARGS_HISTORY[$ARGS_CURSOR] }
-function args-plain { args | no_color | expand }
-function args-list { args | nl }
-function args-list-plain { args | nl | no_color | expand }
-function args-list-size { args | wc -l | awk '{print $1}' }
-function args-columns-bar { green-bg "$(args-columns $1)" }
-# helpers! (`!` means the function sets env vars to be consumed by its caller)
-function args-build-greps! { ARGS_FILTERS="grep ${*// / | grep }"; ARGS_FILTERS=${ARGS_FILTERS// -/ --invert-match }; ARGS_FILTERS=${ARGS_FILTERS//grep/grep --color=never --ignore-case}; ARGS_COLOR="egrep --color=always --ignore-case '${${@:#-*}// /|}'" }
 
 #
 # Getters
 #
 
+function args { echo $ARGS_HISTORY[$ARGS_CURSOR] }
+function args-plain { args | no_color | expand }
+function args-list { args | nl }
+function args-list-plain { args | nl | no_color | expand }
+function args-list-size { args | wc -l | awk '{print $1}' }
+function args_coloring { echo "egrep --color=always --ignore-case '${${@:#-*}// /|}'" }
+
+function args_filtering {
+	local filters
+
+	# Expand each argument into a separate `grep` filter to allow matching out-of-order
+	filters="grep ${*// / | grep }"
+
+	# Treat any argument with a leading `-` as a negative match
+	filters=${filters// -/ --invert-match }
+
+	# Do not add coloring yet as coloring from a previous `grep` can mess up the next `grep`
+	# `args_coloring` will add coloring for all positive matches immediately after `args_filtering`
+	filters=${filters//grep/grep --color=never --ignore-case}
+
+	echo $filters
+}
+
 function args-columns {
+	local use_top_row=$1
+
 	ARGS_COLUMNS=''
 	ARGS_COL_CURR=a
 	ARGS_SKIP_NL=1
 
-	if [[ ${1:-$ARGS_USED_TOP_ROW} -eq 1 ]]; then
+	if [[ ${use_top_row:-$ARGS_USED_TOP_ROW} -eq 1 ]]; then
 		ARG=$(args-list-plain | head -1)
 	else
 		ARG=$(args-list-plain | tail -1)
@@ -106,6 +122,12 @@ function args-columns {
 	done
 
 	echo $ARGS_COLUMNS
+}
+
+function args-columns-bar {
+	local use_top_row=$1
+
+	green-bg "$(args-columns $use_top_row)"
 }
 
 #
@@ -168,7 +190,6 @@ function args_undo_selection {
 	args_undo_bar
 	ARG_SIZE_CURR=$(args-columns | strip)
 
-		args_replace $new_args
 	# If undoing a column selection, show columns bar for convenience
 	[[ -n $ARGS_USED_TOP_ROW && ${#ARG_SIZE_PREV} -lt ${#ARG_SIZE_CURR} ]] && args-columns-bar
 }
