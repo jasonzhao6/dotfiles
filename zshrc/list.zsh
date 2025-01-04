@@ -12,7 +12,7 @@ function t {
 	local type_prefix=$1
 
 	if [[ -z $type_prefix ]]; then
-		list_print_usage
+		list_usage
 	else
 		for type in "${LIST_TYPES[@]}"; do
 			[[ $type == $type_prefix* ]] && $(echo "$type" | awk '{print $1}') "${@:2}"
@@ -34,14 +34,14 @@ function opal {
 # Helpers
 #
 
-function list_print_usage {
+function list_usage {
 	cat <<-eof
 
 		Usage:
 
-		  $(command-color-dim 't')
-		  $(command-color-dim 't <type> <arguments>?')
-		  $(command-color-dim 't <type prefix> <arguments>?')
+		  $(command_color_dim 't')
+		  $(command_color_dim 't <type> <arguments>?')
+		  $(command_color_dim 't <type prefix> <arguments>?')
 
 		Types:
 
@@ -49,7 +49,7 @@ function list_print_usage {
 
 	for type in "${LIST_TYPES[@]}"; do
 		echo -n '  '
-		command-color "${type/#/t }"
+		command_color "${type/#/t }"
 	done
 }
 

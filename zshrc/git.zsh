@@ -12,8 +12,8 @@ function gta { git remote add "$1" "$2"; }
 function gtr { git remote remove "$@"; }
 function gtv { git remote --verbose; }
 # [B]ranch
-function gb { local merged; merged=$(gb-merged); [[ -n $merged ]] && merged="\n----------------\n$merged"; echo "$(git branch)$merged" | ss; }
-function gbb { gb-merged | xargs git branch --delete; git remote prune origin; echo; gb; }
+function gb { local merged; merged=$(gb_merged); [[ -n $merged ]] && merged="\n----------------\n$merged"; echo "$(git branch)$merged" | ss; }
+function gbb { gb_merged | xargs git branch --delete; git remote prune origin; echo; gb; }
 function gbd { git branch --delete --force "$@"; git push origin --delete "$@"; gb; }
 # [G]it checkout
 function g { git checkout "$@"; }
@@ -39,7 +39,7 @@ function gl { git stash list --pretty=format:'%C(yellow)%gd %C(magenta)%as %C(gr
 function gc { git stash clear; }
 # Rebase
 function gx { git add --all; git commit --fixup "$@"; }
-function gxx { gxx-actual "$@"; }
+function gxx { gxx_rebase "$@"; }
 # Resolve conflict
 function gxa { git rebase --abort; }
 function gxc { git add --all; git rebase --continue; }
@@ -56,11 +56,11 @@ function grr { GR_FIRST_PARENT=--first-parent gr "$@"; }
 # Helpers
 #
 
-function gb-merged {
+function gb_merged {
 	git branch --merged | egrep --invert-match '^\*.*$|^  main$|^  master$'
 }
 
-function gxx-actual {
+function gxx_rebase {
 	local gxx_remote; gxx_remote=origin
 	local gxx_branch; gxx_branch=main
 	local gxx_head_num

@@ -29,15 +29,15 @@ function bw { # Black and white
 #
 
 # Set foreground
-function cyan-fg { echo "\e[36m$*\e[0m"; }
-function gray-fg { echo "\e[90m$*\e[0m"; }
+function cyan_fg { echo "\e[36m$*\e[0m"; }
+function gray_fg { echo "\e[90m$*\e[0m"; }
 
 # Set foreground by use case
 BACKTICK="\e[90m\`\e[0m"
-function command-color { echo "$BACKTICK$(cyan-fg "$@")$BACKTICK"; }
-function command-color-dim { echo "$BACKTICK$(gray-fg "$@")$BACKTICK"; }
+function command_color { echo "$BACKTICK$(cyan_fg "$@")$BACKTICK"; }
+function command_color_dim { echo "$BACKTICK$(gray_fg "$@")$BACKTICK"; }
 function grep_color { echo "\e[1;32m\e[K$*\e[m\e[K"; }
 
 # Set background
-function red-bg { echo "\e[41m$*\e[0m"; }
-function green-bg { echo "\e[42m$*\e[0m"; }
+function red_bg { echo "\e[41m$*\e[0m"; }
+function green_bg { echo "\e[42m$*\e[0m"; }

@@ -1,8 +1,8 @@
-function find-tests {
+function find_tests {
 	find "$ZSHRC_DIR/_tests" -name 'test_*.zsh'
 }
 
-function verify-testing-order {
+function verify_ordering {
 	local source; source=$(grep '^function' "$1" | sed 's/ {.*/ {/')
 	local target; target=$(grep '^function' "$2" | sed -e 's/test__//' -e 's/__.*/ {/' | uniq)
 

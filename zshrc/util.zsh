@@ -5,14 +5,14 @@
 ### Util
 # singles (they save into `args`)
 function d { [[ -n "$1" ]] && { D=${${${@}#*://}%%/*}; [[ -z $ZSHRC_UNDER_TEST ]] && dig +short $D | ss || printf "test output for\n%s" "$D" | ss; }; }
-function f { [[ -n "$1" ]] && f-pre "$@" | sort | ss; }
+function f { [[ -n "$1" ]] && f_pre "$@" | sort | ss; }
 function l { ls -l | awk '{print $9}' | ss; } # Not taking search pattern b/c folder matches break column alignment
 function ll { ls -lA | awk '{print $9}' | egrep --color=never '^(\e\[3[0-9]m)?\.' | ss; } # Show only hidden files
 function w { which "$@" | ss; }
 # doubles (they do not save into `args`)
 function bb { pmset sleepnow; }
 function cc { eval "$(prev_command)" | no_color | ruby -e 'puts STDIN.read.strip' | pbcopy; }
-function dd { mkdir -p "$DD_DUMP_DIR"; dd-is-terminal-output && { DD=$(dd-dump-file); pbpaste > "$DD"; dd-taint-pasteboard; dd-clear-terminal; } || dd-clear-terminal; }
+function dd { mkdir -p "$DD_DUMP_DIR"; dd_is_terminal_output && { DD=$(dd_dump_file); pbpaste > "$DD"; dd_taint_pasteboard; dd_clear_terminal; } || dd_clear_terminal; }
 function ddd { mkdir -p "$DD_DUMP_DIR"; cd "$DD_DUMP_DIR" || return; }
 function ddc { rm -rf "$DD_DUMP_DIR"; }
 function ee { for i in $(seq "$1" "$2"); do echo ${${@:3}//~~/$i}; done; }
@@ -42,16 +42,16 @@ function next_ascii { printf "%b" "$(printf "\\$(printf "%o" $(($(printf "%d" "'
 function paste_when_empty { echo "${@:-$(pbpaste)}"; }
 function prev_command { fc -ln -1; }
 # helper for `f`
-function f-pre {
+function f_pre {
 	[[ "$1" == gh ]] && gh repo list "$(org)" --no-archived --limit 1000 --json name | jq -r '.[].name'
 	[[ "$1" == tf ]] && find ~+ -name main.tf | grep --invert-match '\.terraform' | sed "s|$HOME|~|g" | trim 0 8
 }
 # helpers for `dd`
-function dd-init { DD_DUMP_DIR="$HOME/.zshrc.terminal-dump.d"; DD_CLEAR_TERMINAL=1; }; dd-init
-function dd-is-terminal-output { [[ $(pbpaste | no_empty | strip | sed -n '$p') == \$* ]]; }
-function dd-dump-file { echo "$DD_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt"; }
-function dd-taint-pasteboard { printf "$(pbpaste)\n\n(Dumped to '%s')" "$DD" | pbcopy; }
-function dd-clear-terminal { [[ $DD_CLEAR_TERMINAL -eq 1 ]] && clear; }
+function dd_init { DD_DUMP_DIR="$HOME/.zshrc.terminal-dump.d"; DD_CLEAR_TERMINAL=1; }; dd_init
+function dd_is_terminal_output { [[ $(pbpaste | no_empty | strip | sed -n '$p') == \$* ]]; }
+function dd_dump_file { echo "$DD_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt"; }
+function dd_taint_pasteboard { printf "$(pbpaste)\n\n(Dumped to '%s')" "$DD" | pbcopy; }
+function dd_clear_terminal { [[ $DD_CLEAR_TERMINAL -eq 1 ]] && clear; }
 # | after strings
 function extract_urls { pcregrep --only-matching '\b(?:https?:\/\/)(?:www\.)?[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,6}(?:\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?\b'; }
 function hex { hexdump -C; }

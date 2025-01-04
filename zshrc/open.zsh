@@ -18,9 +18,9 @@ function o {
 	local type_prefix=$1
 
 	if [[ -n $urls ]]; then
-		open_open_url
+		open_url
 	elif [[ -z $type_prefix ]]; then
-		open_print_usage
+		open_usage
 	else
 		for type in "${OPEN_TYPES[@]}"; do
 			[[ $type == $type_prefix* ]] && $(echo "$type" | awk '{print $1}') "${@:2}"
@@ -48,21 +48,21 @@ function pull-request {
 # Helpers
 #
 
-function open_open_url {
+function open_url {
 	echo "$urls" | while IFS= read -r url; do
 		open "$url"
 	done
 }
 
-function open_print_usage {
+function open_usage {
 	cat <<-eof
 
 		Usage:
 
-		  $(command-color-dim 'o')
-		  $(command-color-dim 'o <url>')
-		  $(command-color-dim 'o <type> <arguments>?')
-		  $(command-color-dim 'o <type prefix> <arguments>?')
+		  $(command_color_dim 'o')
+		  $(command_color_dim 'o <url>')
+		  $(command_color_dim 'o <type> <arguments>?')
+		  $(command_color_dim 'o <type prefix> <arguments>?')
 
 		Types:
 
@@ -70,7 +70,7 @@ function open_print_usage {
 
 	for type in "${OPEN_TYPES[@]}"; do
 		echo -n '  '
-		command-color "${type/#/o }"
+		command_color "${type/#/o }"
 	done
 }
 

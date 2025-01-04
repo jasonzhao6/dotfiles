@@ -31,11 +31,11 @@ if [[ $section_filter -eq 1 || -z $section_filter ]]; then
 
 	init
 
-	for test in $(find-tests); do
+	for test in $(find_tests); do
 		source "$test"
 	done
 
-	print-summary 'tests passed'
+	print_summary 'tests passed'
 
 	echo "$pasteboard" | pbcopy # Restore saved pasteboard value
 fi
@@ -63,17 +63,17 @@ if [[ ($section_filter -eq 3 || -z $section_filter) && -z $test_filter ]]; then
 
 	init
 
-	for test in $(find-tests); do
+	for test in $(find_tests); do
 		test_target="${test/_tests\/test_}"
 
 		if [[ -f $test_target ]]; then
-			verify-testing-order "$test_target" "$test"
+			verify_ordering "$test_target" "$test"
 		else
-			verify-testing-order "$ZSHRC_DIR"/main.zsh "$test"
+			verify_ordering "$ZSHRC_DIR"/main.zsh "$test"
 		fi
 	done
 
-	print-summary 'tests matched the testing order'
+	print_summary 'tests matched the function ordering'
 fi
 
 #
@@ -114,5 +114,5 @@ if [[ ($section_filter -eq 5 || -z $section_filter) && -z $test_filter ]]; then
 	expected='/Users/yzhao'
 	[[ $HOME == "$expected" ]] && pass || fail "HOME: expected '$expected', got '$HOME'"
 
-	print-summary 'env vars restored'
+	print_summary 'env vars restored'
 fi

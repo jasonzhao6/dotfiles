@@ -14,10 +14,10 @@ function vv { pbpaste | ss; }
 # list / filter [a]rgs
 # (e.g `a` to list all, `a foo and bar -not -baz` to filter)
 # shellcheck disable=SC2120
-function a { [[ -z $1 ]] && args-list || { args-plain | eval "$(args_filtering "$@") | $(args_coloring "$@")" | ss; }; }
+function a { [[ -z $1 ]] && args_list || { args_plain | eval "$(args_filtering "$@") | $(args_coloring "$@")" | ss; }; }
 # select a random arg
 # (e.g `aa echo`)
-function aa { arg $((RANDOM % $(args-list-size) + 1)) "$@"; }
+function aa { arg $((RANDOM % $(args_list_size) + 1)) "$@"; }
 # select an [arg] by number
 # (e.g `arg <number> echo`, or with explicit positioning `arg <number> echo ~~`)
 function arg { args_use_selection "$@"; }
@@ -47,9 +47,9 @@ function 0 { arg $ "$@"; } # last arg
 function e { for i in $(seq "$1" "$2"); do echo; arg "$i" "${@:3}"; done; }
 # select all args via an iterator
 # (e.g `each echo`, `all echo`, `map echo '$((~~ * 2))'`)
-function each { for i in $(seq 1 "$(args-list-size)"); do echo; arg "$i" "$@"; done; }
-function all { for i in $(seq 1 "$(args-list-size)"); do echo; arg "$i" "$@" & done; wait; }
-function map { local map=''; local row; for i in $(seq 1 "$(args-list-size)"); do echo; row=$(arg "$i" "$@"); echo "$row"; map+="$row\n"; done; echo; echo "$map" | ss; }
+function each { for i in $(seq 1 "$(args_list_size)"); do echo; arg "$i" "$@"; done; }
+function all { for i in $(seq 1 "$(args_list_size)"); do echo; arg "$i" "$@" & done; wait; }
+function map { local map=''; local row; for i in $(seq 1 "$(args_list_size)"); do echo; row=$(arg "$i" "$@"); echo "$row"; map+="$row\n"; done; echo; echo "$map" | ss; }
 # list / filter colum[n] by letter
 # (e.g `n` to list all, `n d` to keep only the fourth column, delimited based on the bottom row)
 function n { args_select_column 0 "$1"; }
@@ -57,13 +57,13 @@ function n { args_select_column 0 "$1"; }
 function nn { args_select_column 1 "$1"; }
 # [c]opy into pasteboard
 # (e.g `c` to copy all args, `11 c` to copy only the eleventh arg)
-function c { [[ -z $1 ]] && args-plain | pbcopy || echo -n "$@" | pbcopy; }
+function c { [[ -z $1 ]] && args_plain | pbcopy || echo -n "$@" | pbcopy; }
 # [y]ank / [p]ut current args into a different tab
 function y { args > ~/.zshrc.args; }
 function p { echo "$(<~/.zshrc.args)" | ss; }
 # [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
 function u { args_undo_selection; }
-function r { args_redo; args-list; args_redo_bar; }
+function r { args_redo; args_list; args_redo_bar; }
 # list / select historical args by [i]ndex
 # (e.g `i` to list history, `i 8` to select the args at index 8)
 function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_history || { ARGS_CURSOR=$1; a; }; }
@@ -73,10 +73,10 @@ function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_histo
 #
 
 function args { echo "${ARGS_HISTORY[$ARGS_CURSOR]}"; }
-function args-plain { args | no_color | expand; }
-function args-list { args | nl; }
-function args-list-plain { args | nl | no_color | expand; }
-function args-list-size { args | wc -l | awk '{print $1}'; }
+function args_plain { args | no_color | expand; }
+function args_list { args | nl; }
+function args_list_plain { args | nl | no_color | expand; }
+function args_list_size { args | wc -l | awk '{print $1}'; }
 function args_coloring { echo "egrep --color=always --ignore-case '${${@:#-*}// /|}'"; }
 
 function args_filtering {
@@ -95,7 +95,7 @@ function args_filtering {
 	echo "$filters"
 }
 
-function args-columns {
+function args_columns {
 	# Whether to delimit based on the top row vs the bottom row
 	local use_top_row=$1
 
@@ -105,9 +105,9 @@ function args-columns {
 	local columns=''
 
 	if [[ ${use_top_row} -eq 1 ]]; then
-		row=$(args-list-plain | head -1)
+		row=$(args_list_plain | head -1)
 	else
-		row=$(args-list-plain | tail -1)
+		row=$(args_list_plain | tail -1)
 	fi
 
 	for i in $(seq 1 ${#row}); do
@@ -129,10 +129,10 @@ function args-columns {
 	echo "$columns"
 }
 
-function args-columns-bar {
+function args_columns_bar {
 	local use_top_row=$1
 
-	green-bg "$(args-columns "$use_top_row")"
+	green_bg "$(args_columns "$use_top_row")"
 }
 
 #
@@ -149,7 +149,7 @@ function args_save {
 	if [[ -n "$new_args" ]]; then
 		local new_args_plain; new_args_plain=$(echo "$new_args" | no_color | expand)
 
-		if [[ "$new_args_plain" != $(args-plain) ]]; then
+		if [[ "$new_args_plain" != $(args_plain) ]]; then
 			args_push "$ARGS"
 
 			# Set global states used by `n, nn, u`
@@ -162,13 +162,13 @@ function args_save {
 
 		# Always replace the args; sometimes content is the same, but grep coloring is different
 		args_replace "$new_args"
-		args-list
+		args_list
 	fi
 }
 
 function args_use_selection {
 	if [[ -n $1 && -n $2 ]]; then
-		local row; row="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"
+		local row; row="$(args_plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"
 
 		if [[ $(index_of "${(j: :)@}" '~~') -eq 0 ]]; then
 			echo_eval "${*:2} $row"
@@ -183,21 +183,21 @@ function args_select_column {
 	local selected_column=$2
 
 	if [[ -z $2 ]]; then
-		args-list
-		args-columns-bar "$use_top_row"
+		args_list
+		args_columns_bar "$use_top_row"
 	else
-		local columns; columns=$(args-columns "$use_top_row")
+		local columns; columns=$(args_columns "$use_top_row")
 		local first_column; first_column=$(index_of "$columns" a)
 		local target_column; target_column=$(index_of "$columns" "$selected_column")
 		local next_column; next_column=$(index_of "$columns" "$(next_ascii "$selected_column")")
 		local column_start; column_start=$([[ "$target_column" -ne 0 ]] && echo "$target_column" || echo "$first_column")
 		local column_end; column_end=$([[ "$next_column" -ne 0 ]] && echo $((next_column - 1)))
 
-		args-list-plain | cut -c "$column_start"-"$column_end" | strip_right | ss
+		args_list_plain | cut -c "$column_start"-"$column_end" | strip_right | ss
 
 		# If a column was not selected, show columns bar again for convenience
-		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args-columns "$use_top_row")" b) -ne 0 ]]; then
-			args-columns-bar "$use_top_row"
+		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args_columns "$use_top_row")" b) -ne 0 ]]; then
+			args_columns_bar "$use_top_row"
 		fi
 
 		# Set global states used by `u`
@@ -208,12 +208,12 @@ function args_select_column {
 function args_undo_selection {
 	local use_top_row=$ARGS_USED_TOP_ROW
 
-	local column_size_before; column_size_before=$(args-columns "$use_top_row" | strip)
+	local column_size_before; column_size_before=$(args_columns "$use_top_row" | strip)
 	args_undo
-	args-list
+	args_list
 	args_undo_bar
-	local column_size_after; column_size_after=$(args-columns "$use_top_row" | strip)
+	local column_size_after; column_size_after=$(args_columns "$use_top_row" | strip)
 
 	# If undoing a column selection, show columns bar for convenience
-	[[ -n $use_top_row && ${#column_size_before} -lt ${#column_size_after} ]] && args-columns-bar "$use_top_row"
+	[[ -n $use_top_row && ${#column_size_before} -lt ${#column_size_after} ]] && args_columns_bar "$use_top_row"
 }

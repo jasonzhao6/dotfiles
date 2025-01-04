@@ -16,11 +16,11 @@ function pass {
 function fail {
 	local name=$1
 
-	failed+="\n$(red-bg fail): $name"
+	failed+="\n$(red_bg fail): $name"
 	((total++))
 	echo -n f
 
-	debug+="\n\n$(red-bg debug): $name\n"
+	debug+="\n\n$(red_bg debug): $name\n"
 	debug+=$(diff -u <(echo "$expected") <(echo "$output") | sed '/--- /d; /+++ /d; /@@ /d')
 }
 
@@ -36,7 +36,7 @@ function run_with_filter {
 	[[ -z $test_filter || $(index_of "$@" "$test_filter") -ne 0 ]] && "$@"
 }
 
-function print-summary {
+function print_summary {
 	local message=$1
 
 	echo

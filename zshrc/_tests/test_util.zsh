@@ -205,7 +205,7 @@ function test__dd {
 		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
 		cat $DD_DUMP_DIR/*
 
-		dd-init
+		dd_init
 		rm -rf $DD_DUMP_DIR
 	)" "$(
 		cat <<-eof
@@ -227,7 +227,7 @@ function test__dd__when_dumping_same_pasteboard_twice {
 		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
 		cat $DD_DUMP_DIR/*
 
-		dd-init
+		dd_init
 		rm -rf $DD_DUMP_DIR
 	)" "$(
 		cat <<-eof
@@ -250,7 +250,7 @@ function test__dd__when_dumping_two_different_pasteboards {
 		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
 		cat $DD_DUMP_DIR/*
 
-		dd-init
+		dd_init
 		rm -rf $DD_DUMP_DIR
 	)" "$(
 		cat <<-eof
@@ -274,7 +274,7 @@ function test__dd__when_not_terminal_output {
 		dd
 		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
 
-		dd-init
+		dd_init
 	)" '0'
 }; run_with_filter test__dd__when_not_terminal_output
 
@@ -291,7 +291,7 @@ function test__ddc {
 		ddc
 		[[ -e $DD_DUMP_DIR ]] && echo present || echo absent
 
-		dd-init
+		dd_init
 	)" 'absent'
 }; run_with_filter test__ddc
 
@@ -585,7 +585,7 @@ function test__index_of__out_of_bound {
 }; run_with_filter test__index_of__out_of_bound
 
 function test__index_of__with_color {
-	assert "$(index_of "$(green-bg a b c)" m)" '0'
+	assert "$(index_of "$(green_bg a b c)" m)" '0'
 }; run_with_filter test__index_of__with_color
 
 function test__next_ascii__of_lower_case {

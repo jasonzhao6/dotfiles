@@ -42,7 +42,7 @@ function sts_info {
 	[[ -z $AWS_PROFILE ]] && return
 
 	if [[ ! -e $STS_INFO_DIR/$AWS_PROFILE ]]; then
-		local account; account=$(aws iam list-account-aliases --query 'AccountAliases[0]' --output text)
+		local account; account=$(aws iam list_account-aliases --query 'AccountAliases[0]' --output text)
 		local role; role=$(aws sts get-caller-identity --query Arn --output text | awk -F'/' '{print $2}' | awk -F'_' '{print $2}')
 
 		mkdir -p "$STS_INFO_DIR"

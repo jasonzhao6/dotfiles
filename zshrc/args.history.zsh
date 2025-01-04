@@ -60,14 +60,14 @@ function args_undo_bar {
 	[[ $ARGS_UNDO_EXCEEDED -ne 1 ]] && return
 
 	ARGS_UNDO_EXCEEDED=0
-	red-bg '  Reached the end of undo history  '
+	red_bg '  Reached the end of undo history  '
 }
 
 function args_redo_bar {
 	[[ $ARGS_REDO_EXCEEDED -ne 1 ]] && return
 
 	ARGS_REDO_EXCEEDED=0
-	red-bg '  Reached the end of redo history  '
+	red_bg '  Reached the end of redo history  '
 }
 
 function args_replace {

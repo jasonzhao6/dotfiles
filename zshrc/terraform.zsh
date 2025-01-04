@@ -9,11 +9,11 @@ function tfiu { terraform init -upgrade; }
 function tfir { terraform init -reconfigure; }
 function tfim { terraform init -migrate-state; }
 # Post `tfi` (In case of init error, append ` i|iu|ir|im` to retry)
-function tfp { tf-pre "$@" && terraform plan -out=tfplan; }
-function tfl { tf-pre "$@" && terraform state list | sed "s/.*/'&'/" | ss; }
-function tfo { tf-pre "$@" && terraform output; }
-function tfn { tf-pre "$@" && terraform console; }
-function tfv { tf-pre "$@" && terraform validate; }
+function tfp { tf_pre "$@" && terraform plan -out=tfplan; }
+function tfl { tf_pre "$@" && terraform state list | sed "s/.*/'&'/" | ss; }
+function tfo { tf_pre "$@" && terraform output; }
+function tfn { tf_pre "$@" && terraform console; }
+function tfv { tf_pre "$@" && terraform validate; }
 # Post `tfp`
 function tfa { terraform apply; }
 function tfd { terraform destroy; }
@@ -31,7 +31,7 @@ function tff { terraform fmt -recursive "$@"; }
 function tfc { rm -rf tfplan .terraform ~/.terraform.d; }
 function tfcc { rm -rf tfplan .terraform ~/.terraform.d ~/.terraform.cache; }
 # Non-prod shortcut
-function tfaa { tf-pre "$@" && terraform apply -auto-approve; }
+function tfaa { tf_pre "$@" && terraform apply -auto-approve; }
 
 #
 # Helpers
@@ -49,7 +49,7 @@ function tf {
 	popd > /dev/null || return
 }
 
-function tf-pre {
+function tf_pre {
     [[ -z $1 ]] && return
 
     for var in "$@"; do
