@@ -1,3 +1,5 @@
+# shellcheck disable=SC2196 # Allow `egrep`
+
 # Config
 # shellcheck disable=SC2034
 SAVEHIST=10000
@@ -8,7 +10,6 @@ setopt SHARE_HISTORY
 
 # List / filter
 # (e.g `h` to list all, `h foo` to filter)
-# shellcheck disable=SC2196
 function h { egrep --ignore-case "$*" "$HISTFILE" | trim 15 | sort --unique | ss; }
 
 # [C]lear

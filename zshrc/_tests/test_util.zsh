@@ -1,4 +1,4 @@
-# shellcheck disable=SC2012
+# shellcheck disable=SC2012 # Allow `ls -l`
 
 ls_dash_l=$(
 	cat <<-eof

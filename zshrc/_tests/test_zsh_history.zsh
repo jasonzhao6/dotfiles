@@ -1,3 +1,5 @@
+# shellcheck disable=SC2030 # Allow modifying env var in subshell
+
 function test__h {
 	local history; history=$(
 		cat <<-eof
@@ -11,7 +13,6 @@ function test__h {
 		eof
 	)
 
-	# shellcheck disable=SC2030
 	assert "$(
 		local histfile=$HISTFILE
 		HISTFILE='/tmp/test__h'

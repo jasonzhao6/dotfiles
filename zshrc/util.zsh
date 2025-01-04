@@ -1,4 +1,6 @@
-# shellcheck disable=SC2012,SC2015,SC2196
+# shellcheck disable=SC2012 # Allow `ls -l`
+# shellcheck disable=SC2015 # Allow `A && B || C`
+# shellcheck disable=SC2196 # Allow `egrep`
 
 ### Util
 # singles (they save into `args`)

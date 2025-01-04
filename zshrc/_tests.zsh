@@ -1,4 +1,5 @@
-# shellcheck disable=SC1090,SC2015,SC2030,SC2031
+# shellcheck source=/dev/null
+# shellcheck disable=SC2015 # Allow `A && B || C`
 
 source "$ZSHRC_DIR"/_tests/_harness.zsh
 source "$ZSHRC_DIR"/_tests/_helpers.zsh
@@ -7,6 +8,7 @@ source "$ZSHRC_DIR"/_tests/_helpers.zsh
 section_filter=$([[ $1 -ge 1 && $1 -le 5  ]] && echo "$1")
 
 # Filter tests by partial name match
+# shellcheck disable=SC2030
 test_filter=$([[ -z $section_filter && -n $1 ]] && echo "$1")
 
 # Source .zshrc for multiple sections
@@ -16,6 +18,7 @@ ZSHRC_UNDER_TEST=1 source ~/.zshrc
 # 1: Run all test cases
 #
 
+# shellcheck disable=SC2031
 if [[ $section_filter -eq 1 || -z $section_filter ]]; then
 	echo
 	if [[ -z $test_filter ]]; then

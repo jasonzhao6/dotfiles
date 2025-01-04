@@ -1,4 +1,4 @@
-# shellcheck disable=SC2015
+# shellcheck disable=SC2015 # Allow `A && B || C`
 
 source "$ZSHRC_DIR/args.history.zsh"; args_init
 

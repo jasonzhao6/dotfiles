@@ -1,4 +1,4 @@
-# shellcheck disable=SC1090
+# shellcheck source=/dev/null
 
 [[ -z $ZSHRC_UNDER_TEST && -f ~/.zshrc.secrets ]] && source ~/.zshrc.secrets
 

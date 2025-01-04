@@ -1,4 +1,5 @@
-# shellcheck disable=SC2015
+# shellcheck disable=SC2015 # Allow `A && B || C`
+# shellcheck disable=SC2196 # Allow `egrep`
 
 ### [G]it
 # Config
@@ -56,7 +57,6 @@ function grr { GR_FIRST_PARENT=--first-parent gr "$@"; }
 #
 
 function gb-merged {
-	# shellcheck disable=SC2196
 	git branch --merged | egrep --invert-match '^\*.*$|^  main$|^  master$'
 }
 
