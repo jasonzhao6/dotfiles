@@ -4,6 +4,8 @@
 
 LIST_TYPES=(
 	'opal'
+	'zsh_aliases <partial match>'
+	'zsh_functions <partial match>'
 )
 
 function t {
@@ -28,6 +30,14 @@ function opal {
 	print -l "${OPAL[@]}" | sort | column -t | ss
 }
 
+function zsh_aliases {
+	alias | egrep ".*$1.*" | bw | ss
+}
+
+function zsh_functions {
+	typeset -f | pcregrep -o "^[\S]*$1[\S]* (?=\(\))" | bw | ss
+}
+
 #
 # Helpers
 #
@@ -38,8 +48,8 @@ function list_usage {
 		Usage:
 
 		  $(command_color_dim 't')
-		  $(command_color_dim 't <type> <arguments>?')
-		  $(command_color_dim 't <type prefix> <arguments>?')
+		  $(command_color_dim 't <type> <args>?')
+		  $(command_color_dim 't <type prefix> <args>?')
 
 		Types:
 

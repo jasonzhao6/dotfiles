@@ -1,3 +1,5 @@
+# shellcheck disable=SC2196 # Allow `egrep`
+
 function test__t {
 	local usage='t list_test <arg1> <arg2>'
 	assert "$(t | grep --only-matching "$usage")" "$(grep_color "$usage")"
@@ -35,3 +37,36 @@ function test__opal {
 		eof
 	)"
 }; run_with_filter test__opal
+
+function test__zsh_aliases {
+	assert "$(
+		local count; count=$(zsh_aliases | wc -l)
+		local min_count; min_count=$(grep --count '^\talias ' "$ZSHRC_DIR"/colors.zsh)
+
+		[[ $count -ge $min_count ]] && echo 1
+	)" '1'
+}; run_with_filter test__zsh_aliases
+
+function test__zsh_aliases__when_counting_greps {
+	assert "$(
+		local count; count=$(zsh_aliases grep | wc -l)
+		local actual_count; actual_count=$(grep --count '^\talias.*grep' "$ZSHRC_DIR"/colors.zsh)
+
+		[[ $count -eq actual_count ]] && echo 1
+	)" '1'
+}; run_with_filter test__zsh_aliases__when_counting_greps
+
+function test__zsh_functions {
+	assert "$(
+		[[ $(zsh_functions | wc -l) -gt 10 ]] && echo 1
+	)" '1'
+}; run_with_filter test__zsh_functions
+
+function test__zsh_functions__when_counting_._functions {
+	assert "$(
+		local count; count=$(zsh_functions 'test__\.' | wc -l)
+		local actual_count; actual_count=$(egrep --count '^function \.+ {' "$ZSHRC_DIR"/cd.zsh)
+
+		[[ $count -eq actual_count ]] && echo 1
+	)" '1'
+}; run_with_filter test__zsh_functions__when_counting_._functions

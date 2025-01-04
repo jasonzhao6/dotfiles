@@ -66,8 +66,8 @@ function open_usage {
 
 		  $(command_color_dim 'o')
 		  $(command_color_dim 'o <url>')
-		  $(command_color_dim 'o <type> <arguments>?')
-		  $(command_color_dim 'o <type prefix> <arguments>?')
+		  $(command_color_dim 'o <type> <args>?')
+		  $(command_color_dim 'o <type prefix> <args>?')
 
 		Types:
 
