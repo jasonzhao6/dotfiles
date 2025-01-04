@@ -15,5 +15,5 @@ source "$ZSHRC_DIR/terraform.zsh"
 source "$ZSHRC_DIR/util.zsh"
 source "$ZSHRC_DIR/zsh_arrow_keys.zsh"
 source "$ZSHRC_DIR/zsh_history.zsh"
-source "$ZSHRC_DIR/zsh_prompt.zsh" # Depends on `git_info`
-source "$ZSHRC_DIR/zshrc.zsh"
+source "$ZSHRC_DIR/zsh_prompt.zsh" # Depend on `git_info`
+source "$ZSHRC_DIR/zshrc.zsh" # Will load `.zshrc.secrets`

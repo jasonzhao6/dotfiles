@@ -1,4 +1,6 @@
 # shellcheck disable=SC2012 # Allow `ls -l`
+# shellcheck disable=SC2030 # Allow overwriting global var in subshell
+# shellcheck disable=SC2034 # Allow setting global var and not using it
 
 ls_dash_l=$(
 	cat <<-eof
@@ -264,7 +266,6 @@ function test__dd__when_dumping_two_different_pasteboards {
 }; run_with_filter test__dd__when_dumping_two_different_pasteboards
 
 function test__dd__when_not_terminal_output {
-	# shellcheck disable=SC2030,SC2034
 	assert "$(
 		DD_DUMP_DIR="/tmp/test__dd"
 		DD_CLEAR_TERMINAL=0

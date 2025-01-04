@@ -1,7 +1,7 @@
+# shellcheck disable=SC2034 # Allow setting global var and not using it
 # shellcheck disable=SC2196 # Allow `egrep`
 
 # Config
-# shellcheck disable=SC2034
 SAVEHIST=10000
 HISTSIZE=10000
 HISTFILE="$HOME/.zsh_history"

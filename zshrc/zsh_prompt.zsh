@@ -1,3 +1,5 @@
+# shellcheck disable=SC2034 # Allow setting global var and not using it
+
 #
 # Zsh prompt
 #
@@ -11,7 +13,7 @@
 
 setopt PROMPT_SUBST
 
-# shellcheck disable=SC2016,SC2034
+# shellcheck disable=SC2016
 PROMPT=\
 $'\n'\
 '%{%F{yellow}%}% ${${PWD/#$HOME/~}/\~\/gh\//@}'\
@@ -28,7 +30,7 @@ $'\n'\
 #
 
 function branch_info {
-	local branch_info=$(branch 2> /dev/null)
+	local branch_info; branch_info=$(branch 2> /dev/null)
 	[[ -n $branch_info ]] && echo " #$branch_info"
 }
 

@@ -1,4 +1,4 @@
-# shellcheck disable=SC2030 # Allow modifying env var in subshell
+# shellcheck disable=SC2030 # Allow overwriting global var in subshell
 
 function test__h {
 	local history; history=$(

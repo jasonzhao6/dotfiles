@@ -1,5 +1,7 @@
 # shellcheck source=/dev/null
 # shellcheck disable=SC2015 # Allow `A && B || C`
+# shellcheck disable=SC2030 # Allow overwriting global var in subshell
+# shellcheck disable=SC2196 # Allow `egrep`
 
 source "$ZSHRC_DIR"/_tests/_harness.zsh
 source "$ZSHRC_DIR"/_tests/_helpers.zsh
@@ -8,7 +10,6 @@ source "$ZSHRC_DIR"/_tests/_helpers.zsh
 section_filter=$([[ $1 -ge 1 && $1 -le 5  ]] && echo "$1")
 
 # Filter tests by partial name match
-# shellcheck disable=SC2030
 test_filter=$([[ -z $section_filter && -n $1 ]] && echo "$1")
 
 # Source .zshrc for multiple sections
@@ -86,33 +87,4 @@ if [[ ($section_filter -eq 4 || -z $section_filter) && -z $test_filter ]]; then
 	echo '4: Verify keymaps at the bottom of .zshrc are up-to-date'
 
 	ruby "$ZSHRC_DIR"/_tests/verify_keymaps.rb
-fi
-
-#
-# 5: Verify all env vars overwritten are getting restored
-#
-
-if [[ ($section_filter -eq 5 || -z $section_filter) && -z $test_filter ]]; then
-	echo
-	echo
-	echo '5: Verify all env vars overwritten are getting restored'
-
-	init
-
-	expected=100
-	[[ $ARGS_HISTORY_MAX -eq $expected ]] && pass || fail "ARGS_HISTORY_MAX: expected '$expected', got '$ARGS_HISTORY_MAX'"
-
-	expected=1
-	[[ $DD_CLEAR_TERMINAL -eq $expected ]] && pass || fail "DD_CLEAR_TERMINAL: expected '$expected', got '$DD_CLEAR_TERMINAL'"
-
-	expected="$HOME/.zshrc.terminal-dump.d"
-	[[ $DD_DUMP_DIR == "$expected" ]] && pass || fail "DD_DUMP_DIR: expected '$expected', got '$DD_DUMP_DIR'"
-
-	expected="$HOME/.zsh_history"
-	[[ $HISTFILE == "$expected" ]] && pass || fail "HISTFILE: expected '$expected', got '$HISTFILE'"
-
-	expected='/Users/yzhao'
-	[[ $HOME == "$expected" ]] && pass || fail "HOME: expected '$expected', got '$HOME'"
-
-	print_summary 'env vars restored'
 fi

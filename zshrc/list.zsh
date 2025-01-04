@@ -20,6 +20,7 @@ function t {
 	fi
 }
 
+# Actual values in `.zshrc.secrets`
 OPAL=(
 	'non-secret-placeholder-1 url-1'
 	'non-secret-placeholder-2 url-2'
