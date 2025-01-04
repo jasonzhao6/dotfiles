@@ -19,7 +19,7 @@ function a { [[ -z $1 ]] && args-list || { args-plain | eval "$(args_filtering $
 function aa { arg $((RANDOM % $(args-list-size) + 1)) $@ }
 # select an [arg] by number
 # (e.g `arg <number> echo`, or with explicit positioning `arg <number> echo ~~`)
-function arg { [[ -n $1 && -n $2 ]] && { ARG="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"; [[ $(index_of ${(j: :)@} '~~') -eq 0 ]] && { echo_eval "${@:2} $ARG"; return 0 } || echo_eval ${${@:2}//~~/$ARG} } }
+function arg { args_use_selection $@ }
 function 1 { arg $0 $@ }
 function 2 { arg $0 $@ }
 function 3 { arg $0 $@ }
@@ -155,6 +155,18 @@ function args_save {
 		# Always replace the args; sometimes content is the same, but grep coloring is different
 		args_replace $new_args
 		args-list
+	fi
+}
+
+function args_use_selection {
+	if [[ -n $1 && -n $2 ]]; then
+		ARG="$(args-plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"
+
+		if [[ $(index_of ${(j: :)@} '~~') -eq 0 ]]; then
+			echo_eval "${@:2} $ARG"
+		else
+			echo_eval ${${@:2}//~~/$ARG}
+		fi
 	fi
 }
 
