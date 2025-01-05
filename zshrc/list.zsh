@@ -7,22 +7,25 @@ LIST_USAGE=(
 	't [list] [args]... # Select a list'
 )
 
-LIST_KEYMAPS=(
+LIST_KEYMAP=(
 	't o # List Opal groups'
 	't za [partial name] # List Zsh aliases'
 	't zf [partial name] # List Zsh functions'
 )
 
 function t {
-	local type_prefix=$1
+	local keymap=$1
 
-	if [[ -z $type_prefix ]]; then
-		keymaps_help "${LIST_USAGE[@]}" "${LIST_KEYMAPS[@]}" ${#LIST_USAGE}
-	else
-		for type in "${LIST_KEYMAPS[@]}"; do
-			[[ $type == $type_prefix* ]] && $(echo "$type" | awk '{print $1}') "${@:2}"
-		done
-	fi
+	local keymap_invoked;
+
+	for line in "${LIST_KEYMAP[@]}"; do
+		if [[ $line == "t $keymap "* ]]; then
+			keymap_invoked=1
+			"t_$keymap" "${@:2}"
+		fi
+	done
+
+	[[ -z $keymap_invoked ]] && keymap_help "${LIST_USAGE[@]}" "${LIST_KEYMAP[@]}" ${#LIST_USAGE}
 }
 
 # To be overwritten by `.zshrc.secrets`
@@ -31,15 +34,15 @@ OPAL=(
 	'non-secret-placeholder-2 url-2'
 )
 
-function opal {
+function t_o {
 	print -l "${OPAL[@]}" | sort | column -t | ss
 }
 
-function zsh_aliases {
+function t_za {
 	alias | egrep ".*$1.*" | bw | ss
 }
 
-function zsh_functions {
+function t_zf {
 	typeset -f | pgrep -o "^[\S]*$1[\S]* (?=\(\))" | bw | ss
 }
 
@@ -48,9 +51,9 @@ function zsh_functions {
 #
 
 # Intentionally testing lack of `#` comment in the keymap string
-[[ -n $ZSHRC_UNDER_TEST ]] && LIST_KEYMAPS+=('test__namespace test__keymap [test__arg1] [test__arg2]')
+[[ -n $ZSHRC_UNDER_TEST ]] && LIST_KEYMAP+=('t test [arg1] [arg2]')
 
-function list_test {
+function t_test {
 	echo "arg1: $1"
 	echo "arg2: $2"
 }

@@ -1,72 +1,68 @@
 function test__t {
-	local keymap='test__namespace test__keymap [test__arg1] [test__arg2]'
-	local keymap_escape='test__namespace test__keymap \[test__arg1\] \[test__arg2\]'
+	local keymap='t test [arg1] [arg2]'
+	local keymap_escape='t test \[arg1\] \[arg2\]'
 
 	assert "$(t | grep --only-matching "$keymap_escape")" "$(grep_color "$keymap")"
 }; run_with_filter test__t
 
-function test__t__with_type {
+function test__t__with_a_not_found_keymap {
+	local keymap='t test [arg1] [arg2]'
+	local keymap_escape='t test \[arg1\] \[arg2\]'
+
+	assert "$(t not_found| grep --only-matching "$keymap_escape")" "$(grep_color "$keymap")"
+}; run_with_filter test__t__with_a_not_found_keymap
+
+function test__t__with_the_test_keymap {
 	assert "$(
-		t list_test 11 22
+		t test 11 22
 	)" "$(
 		cat <<-eof
 			arg1: 11
 			arg2: 22
 		eof
 	)"
-}; run_with_filter test__t__with_type
+}; run_with_filter test__t__with_the_test_keymap
 
-function test__t__with_type_prefix {
+function test__t_o {
 	assert "$(
-		t list_tes 11 22
-	)" "$(
-		cat <<-eof
-			arg1: 11
-			arg2: 22
-		eof
-	)"
-}; run_with_filter test__t__with_type_prefix
-
-function test__opal {
-	assert "$(
-		opal
+		t o
 	)" "$(
 		cat <<-eof
 		     1	non-secret-placeholder-1  url-1
 		     2	non-secret-placeholder-2  url-2
 		eof
 	)"
-}; run_with_filter test__opal
+}; run_with_filter test__t_o
 
-function test__zsh_aliases {
+function test__t_za {
 	assert "$(
-		local count; count=$(zsh_aliases | wc -l)
+		local count; count=$(t za | wc -l)
 		local min_count; min_count=$(grep --count '^\talias ' "$ZSHRC_DIR"/colors.zsh)
 
 		[[ $count -ge $min_count ]] && echo 1
 	)" '1'
-}; run_with_filter test__zsh_aliases
+}; run_with_filter test__t_za
 
-function test__zsh_aliases__when_counting_greps {
+function test__t_za__when_counting_greps {
 	assert "$(
-		local count; count=$(zsh_aliases grep | wc -l)
+		local count; count=$(t za grep | wc -l)
 		local actual_count; actual_count=$(grep --count '^\talias.*grep' "$ZSHRC_DIR"/colors.zsh)
 
 		[[ $count -eq actual_count ]] && echo 1
 	)" '1'
-}; run_with_filter test__zsh_aliases__when_counting_greps
+}; run_with_filter test__t_za__when_counting_greps
 
-function test__zsh_functions {
+function test__t_zf {
 	assert "$(
-		[[ $(zsh_functions | wc -l) -gt 10 ]] && echo 1
+		[[ $(t zf | wc -l) -gt 10 ]] && echo 1
 	)" '1'
-}; run_with_filter test__zsh_functions
+}; run_with_filter test__t_zf
 
-function test__zsh_functions__when_counting_._functions {
+function test__t_zf__when_counting_._functions {
 	assert "$(
-		local count; count=$(zsh_functions 'test__\.' | wc -l)
+		local count; count=$(t zf 'test__\.' | wc -l)
 		local actual_count; actual_count=$(egrep --count '^function \.+ {' "$ZSHRC_DIR"/cd.zsh)
 
 		[[ $count -eq actual_count ]] && echo 1
 	)" '1'
-}; run_with_filter test__zsh_functions__when_counting_._functions
+}; run_with_filter test__t_zf__when_counting_._functions

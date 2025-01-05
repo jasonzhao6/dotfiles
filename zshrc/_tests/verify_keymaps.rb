@@ -4,7 +4,7 @@ class VerifyKeymaps
   ZSHRC_DIR = "#{HOME}/gh/dotfiles/zshrc"
   ZSHRC = "#{ZSHRC_DIR}/main.zsh"
   ZSHRC_SECRETS = "#{HOME}/.zshrc.secrets"
-  KEYMAPS = "#{ZSHRC_DIR}/_keymaps.zsh"
+  KEYMAPS = "#{ZSHRC_DIR}/_keymap.zsh"
 
   # Keymap namespaces
   GIT = 'Git'
@@ -81,7 +81,7 @@ class VerifyKeymaps
       current_namespace = extract_keymap_namespace(line) || current_namespace
 
       next unless current_namespace
-      next unless has_keymaps?(line)
+      next unless is_keymap?(line)
 
       partition_keymaps(current_namespace, line)
 
@@ -114,7 +114,7 @@ class VerifyKeymaps
     end
   end
 
-  def has_keymaps?(line)
+  def is_keymap?(line)
     KEYMAP_FORMAT.chars.each.with_index.all? do |char, index|
       case char
       when '#', ' ', '|' then char == line[index]

@@ -1,58 +1,75 @@
-# TODO tests
+# TODO test
 
-function keymaps_help {
+# A keymap is a namespaced collection of shortcuts following this format:
+#
+#   [namespace] [key] [args]... # Optional comment
+#
+# Executing `[namespace]` prints the list of shortcuts in that namespace
+# Executing `[namespace] [key]` invokes the `[namespace]_[key]` function
+#
+
+function keymap_help {
+	# Reconstruct arrays from args: `usage[]..., keymap[]..., usage_size`
 	local usage=()
-	local keymaps=()
+	local keymap=()
 	local usage_size="${*[-1]}"
 
-	# Reconstruct arrays from args: `usage[]..., keymaps[]..., usage_size`
 	for ((i = 1; i < ${#@}; i++)); do
 		[[ $i -le $usage_size ]] && usage+=("${*[$i]}")
-		[[ $i -gt $usage_size ]] && keymaps+=("${*[$i]}")
+		[[ $i -gt $usage_size ]] && keymap+=("${*[$i]}")
 	done
 
-	# Get the max command size in order to align their comments
+	# Get the max command size to be used to align comments across commands, e.g
+	#   ```
+	#   $ <command>      # comment
+	#   $ <long command> # another comment
+	#   ```
 	local max_command_size
-	max_command_size=$(keymaps_get_max_command_size "${@[1,-2]}")
+	# Exclude the last element of args, which is `usage_size`
+	max_command_size=$(keymap_get_max_command_size "${@[1,-2]}")
 
 	echo
 	echo 'Usage'
 	echo
 
-	for line in "${usage[@]}"; do
-		keymaps_print_command "$line" "$max_command_size"
+	for entry in "${usage[@]}"; do
+		keymap_print_entry "$entry" "$max_command_size"
 	done
 
 	echo
 	echo 'Keymaps'
 	echo
 
-	for line in "${keymaps[@]}"; do
-		keymaps_print_command "$line" "$max_command_size"
+	for entry in "${keymap[@]}"; do
+		keymap_print_entry "$entry" "$max_command_size"
 	done
 }
 
-function keymaps_get_max_command_size {
+#
+# Helpers
+#
+
+function keymap_get_max_command_size {
 	local max_command_size=0
 
-	for line in "$@"; do
-		local command_size="${#line% \#*}"
+	for entry in "$@"; do
+		local command_size="${#entry% \#*}"
 		[[ $command_size -gt $max_command_size ]] && max_command_size=$command_size
 	done
 
 	echo "$max_command_size"
 }
 
-KEYMAPS_PROMPT=$(yellow_fg '  $')
+KEYMAP_PROMPT=$(yellow_fg '  $')
 
-function keymaps_print_command {
-	local list_type=$1
+function keymap_print_entry {
+	local entry=$1
 	local command_size=$2
 
-	local command="${list_type% \#*}"
-	local comment; [[ $list_type = *#* ]] && comment="# ${list_type#*\# }"
+	local command="${entry% \#*}"
+	local comment; [[ $entry = *#* ]] && comment="# ${entry#*\# }"
 
-	printf "%s %-*s %s\n" "$KEYMAPS_PROMPT" "$command_size" "$command" "$(gray_fg "$comment")"
+	printf "%s %-*s %s\n" "$KEYMAP_PROMPT" "$command_size" "$command" "$(gray_fg "$comment")"
 }
 
 ### Keymap annotations
