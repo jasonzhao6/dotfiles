@@ -14,18 +14,13 @@ LIST_KEYMAP=(
 )
 
 function t {
-	local keymap=$1
+	local output; output="$(keymap_invoke ${#LIST_KEYMAP} "${LIST_KEYMAP[@]}" 't' "$@")"
 
-	local keymap_invoked;
-
-	for line in "${LIST_KEYMAP[@]}"; do
-		if [[ $line == "t $keymap "* ]]; then
-			keymap_invoked=1
-			"t_$keymap" "${@:2}"
-		fi
-	done
-
-	[[ -z $keymap_invoked ]] && keymap_help "${LIST_USAGE[@]}" "${LIST_KEYMAP[@]}" ${#LIST_USAGE}
+	if [[ -n $output ]]; then
+		echo "$output"
+	else
+		keymap_help "${LIST_USAGE[@]}" "${LIST_KEYMAP[@]}" ${#LIST_USAGE}
+	fi
 }
 
 # To be overwritten by `.zshrc.secrets`

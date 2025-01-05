@@ -15,11 +15,11 @@ function keymap_help {
 	local usage_size="${*[-1]}"
 
 	for ((i = 1; i < ${#@}; i++)); do
-		[[ $i -le $usage_size ]] && usage+=("${*[$i]}")
+		[[ $i -le $usage_size ]] && usage+=("${*[$i]}") # TODO ternary
 		[[ $i -gt $usage_size ]] && keymap+=("${*[$i]}")
 	done
 
-	# Get the max command size to be used to align comments across commands, e.g
+	# Get the max command size used to align comments across commands, e.g
 	#   ```
 	#   $ <command>      # comment
 	#   $ <long command> # another comment
@@ -45,6 +45,19 @@ function keymap_help {
 	done
 }
 
+function keymap_invoke {
+	local keymap_size=$1; shift
+	local keymap=("${@:1:$keymap_size}"); shift "$keymap_size"
+	local namespace=$1; shift
+	local key=$1; [[ -n $key ]] && shift || return
+
+	for entry in "${keymap[@]}"; do
+		if [[ $entry == "$namespace $key "* ]]; then
+			"${namespace}_${key}" "$@"
+		fi
+	done
+}
+
 #
 # Helpers
 #
@@ -67,7 +80,7 @@ function keymap_print_entry {
 	local command_size=$2
 
 	local command="${entry% \#*}"
-	local comment; [[ $entry = *#* ]] && comment="# ${entry#*\# }"
+	local comment; [[ $entry = *\#* ]] && comment="# ${entry#*\# }"
 
 	printf "%s %-*s %s\n" "$KEYMAP_PROMPT" "$command_size" "$command" "$(gray_fg "$comment")"
 }
