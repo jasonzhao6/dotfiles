@@ -1,5 +1,5 @@
 #
-# Lis[t]
+# Namespace: Lis[t]
 #
 
 LIST_USAGE=(
@@ -23,6 +23,10 @@ function t {
 	fi
 }
 
+#
+# Mappings
+#
+
 # To be overwritten by `.zshrc.secrets`
 OPAL=(
 	'non-secret-placeholder-1 url-1'
@@ -39,16 +43,4 @@ function t_za {
 
 function t_zf {
 	typeset -f | pgrep -o "^[\S]*$1[\S]* (?=\(\))" | bw
-}
-
-#
-# Helpers
-#
-
-# Intentionally testing lack of `#` comment in the keymap string
-[[ -n $ZSHRC_UNDER_TEST ]] && LIST_KEYMAP+=('t test [arg1] [arg2]')
-
-function t_test {
-	echo "arg1: $1"
-	echo "arg2: $2"
 }

@@ -1,27 +1,10 @@
 function test__t {
-	local keymap='t test [arg1] [arg2]'
-	local keymap_escape='t test \[arg1\] \[arg2\]'
-
-	assert "$(t | grep --only-matching "$keymap_escape")" "$(grep_color "$keymap")"
+	assert "$(t | grep --only-matching "Usage")" "$(grep_color Usage)"
 }; run_with_filter test__t
 
-function test__t__with_a_not_found_keymap {
-	local keymap='t test [arg1] [arg2]'
-	local keymap_escape='t test \[arg1\] \[arg2\]'
-
-	assert "$(t not_found| grep --only-matching "$keymap_escape")" "$(grep_color "$keymap")"
-}; run_with_filter test__t__with_a_not_found_keymap
-
-function test__t__with_a_test_keymap {
-	assert "$(
-		t test 11 22
-	)" "$(
-		cat <<-eof
-		     1	arg1: 11
-		     2	arg2: 22
-		eof
-	)"
-}; run_with_filter test__t__with_a_test_keymap
+function test__t__with_a_not_found_key {
+	assert "$(t not_found| grep --only-matching "Usage")" "$(grep_color Usage)"
+}; run_with_filter test__t__with_a_not_found_key
 
 function test__t_o {
 	assert "$(

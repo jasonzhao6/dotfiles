@@ -44,7 +44,7 @@ function keymap_invoke {
 	local namespace=$1; shift
 	local key=$1; [[ -n $key ]] && shift || return
 
-	local dupes; dupes=$(check_for_dupes "${keymap[@]}")
+	local dupes; dupes=$(keymap_check_for_dupes "${keymap[@]}")
 	[[ -n $dupes ]] && echo "$dupes\n$KEYMAP_DUPE_ERROR_BAR" && return
 
 	for entry in "${keymap[@]}"; do
@@ -81,7 +81,7 @@ function keymap_print_entry {
 	printf "%s %-*s %s\n" "$KEYMAP_PROMPT" "$command_size" "$command" "$(gray_fg "$comment")"
 }
 
-function check_for_dupes {
+function keymap_check_for_dupes {
 	typeset -A seen
 
 	for entry in "$@"; do
