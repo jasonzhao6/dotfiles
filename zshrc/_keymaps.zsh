@@ -1,3 +1,58 @@
+function keymaps_help {
+	local usage=()
+	local keymaps=()
+	local usage_size="${*[-1]}"
+
+	# Reconstruct arrays from args: `usage[]..., keymaps[]..., usage_size`
+	for ((i = 1; i < ${#@}; i++)); do
+		[[ $i -le $usage_size ]] && usage+=("${*[$i]}")
+		[[ $i -gt $usage_size ]] && keymaps+=("${*[$i]}")
+	done
+
+	# Get the max command size in order to align their comments
+	local max_command_size
+	max_command_size=$(keymaps_get_max_command_size "${@[1,-2]}")
+
+	echo
+	echo 'Usage'
+	echo
+
+	for line in "${usage[@]}"; do
+		keymaps_print_command "$line" "$max_command_size"
+	done
+
+	echo
+	echo 'Types'
+	echo
+
+	for line in "${keymaps[@]}"; do
+		keymaps_print_command "$line" "$max_command_size"
+	done
+}
+
+function keymaps_get_max_command_size {
+	local max_command_size=0
+
+	for line in "$@"; do
+		local command_size="${#line% \#*}"
+		[[ $command_size -gt $max_command_size ]] && max_command_size=$command_size
+	done
+
+	echo "$max_command_size"
+}
+
+KEYMAPS_PROMPT=$(yellow_fg '  $')
+
+function keymaps_print_command {
+	local list_type=$1
+	local command_size=$2
+
+	local command="${list_type% \#*}"
+	local comment="# ${list_type#*\# }"
+
+	printf "%s %-*s %s\n" "$KEYMAPS_PROMPT" "$command_size" "$command" "$(gray_fg "$comment")"
+}
+
 ### Keymap annotations
 #  ::  -->  subsequent command
 #  |   -->  alternative command
