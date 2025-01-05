@@ -1,6 +1,8 @@
 function test__t {
-	local usage='t list_test <arg1> <arg2>'
-	assert "$(t | grep --only-matching "$usage")" "$(grep_color "$usage")"
+	local keymap='test__namespace test__keymap [test__arg1] [test__arg2]'
+	local keymap_escape='test__namespace test__keymap \[test__arg1\] \[test__arg2\]'
+
+	assert "$(t | grep --only-matching "$keymap_escape")" "$(grep_color "$keymap")"
 }; run_with_filter test__t
 
 function test__t__with_type {

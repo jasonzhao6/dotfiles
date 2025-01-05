@@ -1,3 +1,5 @@
+# TODO tests
+
 function keymaps_help {
 	local usage=()
 	local keymaps=()
@@ -22,7 +24,7 @@ function keymaps_help {
 	done
 
 	echo
-	echo 'Types'
+	echo 'Keymaps'
 	echo
 
 	for line in "${keymaps[@]}"; do
@@ -48,7 +50,7 @@ function keymaps_print_command {
 	local command_size=$2
 
 	local command="${list_type% \#*}"
-	local comment="# ${list_type#*\# }"
+	local comment; [[ $list_type = *#* ]] && comment="# ${list_type#*\# }"
 
 	printf "%s %-*s %s\n" "$KEYMAPS_PROMPT" "$command_size" "$command" "$(gray_fg "$comment")"
 }

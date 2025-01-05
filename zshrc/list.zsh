@@ -47,7 +47,8 @@ function zsh_functions {
 # Helpers
 #
 
-[[ -n $ZSHRC_UNDER_TEST ]] && LIST_KEYMAPS+=('list_test <arg1> <arg2>')
+# Intentionally testing lack of `#` comment in the keymap string
+[[ -n $ZSHRC_UNDER_TEST ]] && LIST_KEYMAPS+=('test__namespace test__keymap [test__arg1] [test__arg2]')
 
 function list_test {
 	echo "arg1: $1"
