@@ -3,9 +3,9 @@
 #
 
 LIST_TYPES=(
-	'opal'
-	'zsh_aliases <partial match>'
-	'zsh_functions <partial match>'
+	't o # Opal'
+	't za [partial name] # Zsh aliases'
+	't zf [partial name] # Zsh functions'
 )
 
 function t {
@@ -47,18 +47,36 @@ function list_usage {
 
 		Usage:
 
-		  $(command_color_dim 't')
-		  $(command_color_dim 't <type> <args>?')
-		  $(command_color_dim 't <type prefix> <args>?')
+		  $(gray_fg '` t `')
+		  $(gray_fg '` t [type] [args]... `')
 
 		Types:
 
 	eof
 
+	local max_command_size=0
+
 	for type in "${LIST_TYPES[@]}"; do
-		echo -n '  '
-		command_color "${type/#/t }"
+		local command_size="${#type% \#*}"
+		[[ $command_size -gt $max_command_size ]] && max_command_size=$command_size
 	done
+
+	for type in "${LIST_TYPES[@]}"; do
+		echo -n "  $LIST_PROMPT"
+		list_type_coloring "$type" "$max_command_size"
+	done
+}
+
+LIST_PROMPT=$(yellow_fg '$ ')
+
+function list_type_coloring {
+	local list_type=$1
+	local command_size=$2
+
+	local command="${list_type% \#*}"
+	local comment="# ${list_type#*\# }"
+
+	printf "%-*s %s\n" "$command_size" "$command" "$(gray_fg $comment)"
 }
 
 [[ -n $ZSHRC_UNDER_TEST ]] && LIST_TYPES+=('list_test <arg1> <arg2>')

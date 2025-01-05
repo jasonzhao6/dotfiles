@@ -64,10 +64,10 @@ function open_usage {
 
 		Usage:
 
-		  $(command_color_dim 'o')
-		  $(command_color_dim 'o <url>')
-		  $(command_color_dim 'o <type> <args>?')
-		  $(command_color_dim 'o <type prefix> <args>?')
+		  $(gray_fg 'o')
+		  $(gray_fg 'o <url>')
+		  $(gray_fg 'o <type> <args>?')
+		  $(gray_fg 'o <type prefix> <args>?')
 
 		Types:
 
@@ -75,7 +75,7 @@ function open_usage {
 
 	for type in "${OPEN_TYPES[@]}"; do
 		echo -n '  '
-		command_color "${type/#/o }"
+		cyan_fg "${type/#/o }"
 	done
 }
 

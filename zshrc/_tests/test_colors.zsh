@@ -29,7 +29,3 @@ function test__no_color__for_grep {
 function test__no_color__for_ls {
 	assert "$(no_color; which ls)" '/bin/ls'
 }; run_with_filter test__no_color__for_ls
-
-function test__grep_color {
-	assert "$(echo 'hello world' | grep ello)" "h$(grep_color ello) world"
-}; run_with_filter test__grep_color

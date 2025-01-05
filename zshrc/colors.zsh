@@ -32,16 +32,22 @@ function no_color {
 #
 
 # Set foreground
+function black_fg { echo "\e[30m$*\e[0m"; }
+function red_fg { echo "\e[31m$*\e[0m"; }
+function green_fg { echo "\e[32m$*\e[0m"; }
+function yellow_fg { echo "\e[33m$*\e[0m"; }
+function blue_fg { echo "\e[34m$*\e[0m"; }
+function magenta_fg { echo "\e[35m$*\e[0m"; }
 function cyan_fg { echo "\e[36m$*\e[0m"; }
+function white_fg { echo "\e[37m$*\e[0m"; }
 function gray_fg { echo "\e[90m$*\e[0m"; }
 
-# Set foreground by use case
-BACKTICK="\e[90m\`\e[0m"
-function command_color { echo "$BACKTICK$(cyan_fg "$@")$BACKTICK"; }
-function command_color_dim { echo "$BACKTICK$(gray_fg "$@")$BACKTICK"; }
-function grep_color { echo "\e[1;32m\e[K$*\e[m\e[K"; }
-function pgrep_color { echo "\e[1;32m$*\e[00m"; }
-
 # Set background
+function black_bg { echo "\e[40m$*\e[0m"; }
 function red_bg { echo "\e[41m$*\e[0m"; }
 function green_bg { echo "\e[42m$*\e[0m"; }
+function yellow_bg { echo "\e[43m$*\e[0m"; }
+function blue_bg { echo "\e[44m$*\e[0m"; }
+function magenta_bg { echo "\e[45m$*\e[0m"; }
+function cyan_bg { echo "\e[46m$*\e[0m"; }
+function white_bg { echo "\e[47m$*\e[0m"; }
