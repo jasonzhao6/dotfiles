@@ -17,8 +17,8 @@ function test__t__with_the_test_keymap {
 		t test 11 22
 	)" "$(
 		cat <<-eof
-			arg1: 11
-			arg2: 22
+		     1	arg1: 11
+		     2	arg2: 22
 		eof
 	)"
 }; run_with_filter test__t__with_the_test_keymap

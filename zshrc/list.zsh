@@ -19,7 +19,7 @@ function t {
 	if [[ -n $output ]]; then
 		echo "$output" | ss
 	else
-		keymap_help "${LIST_USAGE[@]}" "${LIST_KEYMAP[@]}" ${#LIST_USAGE}
+		keymap_help ${#LIST_USAGE} "${LIST_USAGE[@]}" "${LIST_KEYMAP[@]}"
 	fi
 }
 

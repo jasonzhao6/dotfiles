@@ -9,24 +9,17 @@
 #
 
 function keymap_help {
-	# Reconstruct arrays from args: `usage[]..., keymap[]..., usage_size`
-	local usage=()
-	local keymap=()
-	local usage_size="${*[-1]}"
-
-	for ((i = 1; i < ${#@}; i++)); do
-		[[ $i -le $usage_size ]] && usage+=("${*[$i]}") # TODO ternary
-		[[ $i -gt $usage_size ]] && keymap+=("${*[$i]}")
-	done
+	# Reconstruct arrays from these args: `usage_size, usage[]..., keymap[]...`
+	local usage_size=$1; shift
+	local usage=("${@:1:$usage_size}")
+	local keymap=("${@:$usage_size + 1}")
 
 	# Get the max command size used to align comments across commands, e.g
 	#   ```
 	#   $ <command>      # comment
 	#   $ <long command> # another comment
 	#   ```
-	local max_command_size
-	# Exclude the last element of args, which is `usage_size`
-	max_command_size=$(keymap_get_max_command_size "${@[1,-2]}")
+	local max_command_size; max_command_size=$(keymap_get_max_command_size "$@")
 
 	echo
 	echo 'Usage'

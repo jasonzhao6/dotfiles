@@ -20,6 +20,7 @@ ZSHRC_UNDER_TEST=1 source ~/.zshrc
 # shellcheck disable=SC2031
 if [[ $section_filter -eq 1 || -z $section_filter ]]; then
 	echo
+
 	if [[ -z $test_filter ]]; then
 		echo '1: Run all test cases'
 	else
@@ -29,11 +30,7 @@ if [[ $section_filter -eq 1 || -z $section_filter ]]; then
 	pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
 
 	init
-
-	for test in $(find_tests); do
-		source "$test"
-	done
-
+	for test in $(find_tests); do source "$test"; done
 	print_summary 'tests passed'
 
 	echo "$pasteboard" | pbcopy # Restore saved pasteboard value
