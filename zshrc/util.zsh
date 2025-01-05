@@ -55,7 +55,7 @@ function dd_clear_terminal { [[ $DD_CLEAR_TERMINAL -eq 1 ]] && clear; }
 # | after strings
 function bw { sed -E 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g'; }
 function compact { sed '/^$/d'; }
-function extract_urls { pcregrep --only-matching '\b(?:https?:\/\/)(?:www\.)?[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,6}(?:\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?\b'; }
+function extract_urls { pgrep --only-matching '\b(?:https?:\/\/)(?:www\.)?[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,6}(?:\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?\b'; }
 function hex { hexdump -C; }
 function strip { strip_left | strip_right; }
 function strip_left { sed 's/^[[:space:]]*//'; }

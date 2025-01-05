@@ -30,7 +30,7 @@ function ssm_cmd { # (e.g `ssm-run date <instance-id>`, or `each ssm-run date` t
         --document-name 'AWS-StartNonInteractiveCommand' \
         --parameters "{\"command\": [\"${(j: :)@[1,-2]}\"]}" \
         --target "$(ec2_id "$*[-1]")" \
-    | pcregrep --multiline --ignore-case --invert-match "(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
+    | pgrep --multiline --ignore-case --invert-match "(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
 }
 # [p]arameter [s]tore [g]et
 function psg { PSG=$(aws ssm get-parameter --name "$1" "$([[ -n "$2" ]] && echo --version "$2")" --query Parameter.Value --output text); [[ $PSG == \{*\} ]] && echo "$PSG" | jq || echo "$PSG"; }

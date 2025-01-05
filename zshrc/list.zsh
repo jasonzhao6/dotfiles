@@ -35,7 +35,7 @@ function zsh_aliases {
 }
 
 function zsh_functions {
-	typeset -f | pcregrep -o "^[\S]*$1[\S]* (?=\(\))" | bw | ss
+	typeset -f | pgrep -o "^[\S]*$1[\S]* (?=\(\))" | bw | ss
 }
 
 #
