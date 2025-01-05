@@ -122,7 +122,7 @@ function test__tmp {
 }; run_with_filter test__tmp
 
 function test__cdd {
-	assert "$(cdd; pwd)" "$HOME/gh/dotfiles"
+	assert "$(cdd; pwd)" "$DOTFILES_DIR"
 }; run_with_filter test__cdd
 
 function test__cde {
