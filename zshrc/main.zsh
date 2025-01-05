@@ -9,8 +9,8 @@ source "$ZSHRC_DIR/colors.zsh"; color
 source "$ZSHRC_DIR/_keymap.zsh"
 
 # Load keymap namespaces
-source "$ZSHRC_DIR/list.zsh"
-source "$ZSHRC_DIR/open.zsh"
+source "$ZSHRC_DIR/list_keymap.zsh"
+source "$ZSHRC_DIR/open_keymap.zsh"
 
 # Load non-keymaps
 source "$ZSHRC_DIR/args.zsh"
