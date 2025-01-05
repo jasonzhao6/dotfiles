@@ -1,5 +1,3 @@
-# TODO test
-
 # A keymap is a namespaced collection of shortcuts following this format:
 #
 #   [namespace] [key] [args]... # Optional comment
@@ -38,11 +36,16 @@ function keymap_help {
 	done
 }
 
+KEYMAP_DUPE_ERROR_BAR="$(red_bg '  Error: Cannot have duplicate keys  ')"
+
 function keymap_invoke {
 	local keymap_size=$1; shift
 	local keymap=("${@:1:$keymap_size}"); shift "$keymap_size"
 	local namespace=$1; shift
 	local key=$1; [[ -n $key ]] && shift || return
+
+	local dupes; dupes=$(check_for_dupes "${keymap[@]}")
+	[[ -n $dupes ]] && echo "$dupes\n$KEYMAP_DUPE_ERROR_BAR" && return
 
 	for entry in "${keymap[@]}"; do
 		if [[ $entry == "$namespace $key "* ]]; then
@@ -76,6 +79,21 @@ function keymap_print_entry {
 	local comment; [[ $entry = *\#* ]] && comment="# ${entry#*\# }"
 
 	printf "%s %-*s %s\n" "$KEYMAP_PROMPT" "$command_size" "$command" "$(gray_fg "$comment")"
+}
+
+function check_for_dupes {
+	typeset -A seen
+
+	for entry in "$@"; do
+		first_two_words="${(j: :)${(z)entry}[1,2]}"
+
+		if [[ -z ${seen[$first_two_words]} ]]; then
+			seen[$first_two_words]=$entry
+		else
+			echo "${seen[$first_two_words]}"
+			echo "$entry"
+		fi
+	done
 }
 
 ### Keymap annotations

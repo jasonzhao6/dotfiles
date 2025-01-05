@@ -12,7 +12,7 @@ function test__t__with_a_not_found_keymap {
 	assert "$(t not_found| grep --only-matching "$keymap_escape")" "$(grep_color "$keymap")"
 }; run_with_filter test__t__with_a_not_found_keymap
 
-function test__t__with_the_test_keymap {
+function test__t__with_a_test_keymap {
 	assert "$(
 		t test 11 22
 	)" "$(
@@ -21,7 +21,7 @@ function test__t__with_the_test_keymap {
 		     2	arg2: 22
 		eof
 	)"
-}; run_with_filter test__t__with_the_test_keymap
+}; run_with_filter test__t__with_a_test_keymap
 
 function test__t_o {
 	assert "$(
