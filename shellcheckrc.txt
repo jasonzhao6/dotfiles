@@ -1,0 +1,5 @@
+source=/dev/null
+disable=SC2012 # Allow `ls -l`
+disable=SC2015 # Allow `A && B || C`
+disable=SC2016 # Allow `'<expression>'`
+disable=SC2196 # Allow `egrep`

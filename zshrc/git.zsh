@@ -1,6 +1,3 @@
-# shellcheck disable=SC2015 # Allow `A && B || C`
-# shellcheck disable=SC2196 # Allow `egrep`
-
 ### [G]it
 # Config
 export EDITOR='mate --wait'

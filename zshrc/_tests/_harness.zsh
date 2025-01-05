@@ -1,5 +1,3 @@
-# shellcheck disable=SC2015 # Allow `A && B || C`
-
 function init {
 	passes=0
 	total=0

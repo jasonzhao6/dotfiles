@@ -1,6 +1,8 @@
-export ZSHRC_DIR="$HOME/gh/dotfiles/zshrc"
+export DOTFILES_DIR="$HOME/gh/dotfiles"
+export ZSHRC_DIR="$DOTFILES_DIR/zshrc"
+export ZSHRC_TESTS_DIR="$DOTFILES_DIR/_tests"
 
-# Enable color aliases first to allow their expansion in subsequent function definitions
+# First, set color aliases so they expand in subsequent function definitions
 source "$ZSHRC_DIR/colors.zsh"; color
 
 source "$ZSHRC_DIR/args.zsh"
@@ -15,5 +17,8 @@ source "$ZSHRC_DIR/terraform.zsh"
 source "$ZSHRC_DIR/util.zsh"
 source "$ZSHRC_DIR/zsh_arrow_keys.zsh"
 source "$ZSHRC_DIR/zsh_history.zsh"
-source "$ZSHRC_DIR/zsh_prompt.zsh" # Depend on `git_info`
-source "$ZSHRC_DIR/zshrc.zsh" # Will load `.zshrc.secrets`
+source "$ZSHRC_DIR/zsh_prompt.zsh"
+source "$ZSHRC_DIR/zshrc.zsh"
+
+# Last, set secret values from `ZSHRC_SECRETS`
+[[ -z $ZSHRC_UNDER_TEST && -f ~/.zshrc.secrets ]] && source ~/.zshrc.secrets

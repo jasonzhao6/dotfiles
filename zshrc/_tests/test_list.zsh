@@ -1,5 +1,3 @@
-# shellcheck disable=SC2196 # Allow `egrep`
-
 function test__t {
 	local usage='t list_test <arg1> <arg2>'
 	assert "$(t | grep --only-matching "$usage")" "$(grep_color "$usage")"

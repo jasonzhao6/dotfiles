@@ -1,8 +1,3 @@
-# shellcheck source=/dev/null
-# shellcheck disable=SC2015 # Allow `A && B || C`
-# shellcheck disable=SC2030 # Allow overwriting global var in subshell
-# shellcheck disable=SC2196 # Allow `egrep`
-
 source "$ZSHRC_DIR"/_tests/_harness.zsh
 source "$ZSHRC_DIR"/_tests/_helpers.zsh
 
@@ -10,6 +5,7 @@ source "$ZSHRC_DIR"/_tests/_helpers.zsh
 section_filter=$([[ $1 -ge 1 && $1 -le 5 ]] && echo "$1")
 
 # Filter tests by partial name match
+# shellcheck disable=SC2030
 test_filter=$([[ -z $section_filter && -n $1 ]] && echo "$1")
 
 # Source .zshrc for multiple sections

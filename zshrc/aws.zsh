@@ -1,6 +1,3 @@
-# shellcheck disable=SC2015 # Allow `A && B || C`
-# shellcheck disable=SC2016 # Allow ec2 query to have '...Key==`Name`...'
-
 ### AWS
 # select region
 export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1' }

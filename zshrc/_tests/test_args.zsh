@@ -1,5 +1,3 @@
-# shellcheck disable=SC2034 # Allow setting global var and not using it
-
 input=$(
 	cat <<-eof
 		terraform-application-region-shared-1
@@ -432,7 +430,6 @@ function test__map {
 }; run_with_filter test__map
 
 function test__map__with_math {
-	# shellcheck disable=SC2016
 	assert "$(
 		seq 1 5 | ss > /dev/null
 		map echo ~~ doubles to '$((~~ * 10))' 2>&1
@@ -830,8 +827,10 @@ function test__u__when_undoing_beyond_tail {
 }; run_with_filter test__u__when_undoing_beyond_tail
 
 function test__u__when_pushing_beyond_head_then_undoing_beyond_tail {
-	args_init
+	# shellcheck disable=SC2034
 	ARGS_HISTORY_MAX=3
+
+	args_init
 
 	assert "$(
 		seq 1 2 | ss > /dev/null
@@ -1074,7 +1073,6 @@ function test__args_save__with_leading_whitespace {
 }; run_with_filter test__args_save__with_leading_whitespace
 
 function test__args_save__with_hash_inserted {
-	# shellcheck disable=SC2016
 	assert "$(echo "$input_with_headers" | args_save 'insert `#`')" "$(
 		cat <<-eof
 		     1	MANIFEST                                # COMMENT

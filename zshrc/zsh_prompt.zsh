@@ -1,5 +1,3 @@
-# shellcheck disable=SC2034 # Allow setting global var and not using it
-
 #
 # Zsh prompt
 #
@@ -13,7 +11,7 @@
 
 setopt PROMPT_SUBST
 
-# shellcheck disable=SC2016
+# shellcheck disable=SC2034
 PROMPT=\
 $'\n'\
 '%{%F{yellow}%}% ${${PWD/#$HOME/~}/\~\/gh\//@}'\

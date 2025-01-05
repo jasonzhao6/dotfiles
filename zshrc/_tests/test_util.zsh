@@ -1,7 +1,3 @@
-# shellcheck disable=SC2012 # Allow `ls -l`
-# shellcheck disable=SC2030 # Allow overwriting global var in subshell
-# shellcheck disable=SC2034 # Allow setting global var and not using it
-
 ls_dash_l=$(
 	cat <<-eof
 		drwxr-xr-x  9 yzhao  staff    288 Dec 29 21:58 al-archive
@@ -198,8 +194,8 @@ function test__dd {
 
 function test__dd {
 	assert "$(
-		DD_DUMP_DIR="/tmp/test__dd"
 		DD_CLEAR_TERMINAL=0
+		DD_DUMP_DIR="/tmp/test__dd"
 		rm -rf $DD_DUMP_DIR
 
 		echo '$' | pbcopy
@@ -219,8 +215,8 @@ function test__dd {
 
 function test__dd__when_dumping_same_pasteboard_twice {
 	assert "$(
-		DD_DUMP_DIR="/tmp/test__dd"
 		DD_CLEAR_TERMINAL=0
+		DD_DUMP_DIR="/tmp/test__dd"
 		rm -rf $DD_DUMP_DIR
 
 		echo '$' | pbcopy
@@ -241,8 +237,8 @@ function test__dd__when_dumping_same_pasteboard_twice {
 
 function test__dd__when_dumping_two_different_pasteboards {
 	assert "$(
-		DD_DUMP_DIR="/tmp/test__dd"
 		DD_CLEAR_TERMINAL=0
+		DD_DUMP_DIR="/tmp/test__dd"
 		rm -rf $DD_DUMP_DIR
 
 		printf "pasteboard 1\n$\n" | pbcopy
@@ -267,8 +263,10 @@ function test__dd__when_dumping_two_different_pasteboards {
 
 function test__dd__when_not_terminal_output {
 	assert "$(
-		DD_DUMP_DIR="/tmp/test__dd"
+		# shellcheck disable=SC2034
 		DD_CLEAR_TERMINAL=0
+		# shellcheck disable=SC2030
+		DD_DUMP_DIR="/tmp/test__dd"
 		rm -rf $DD_DUMP_DIR
 
 		echo 'not terminal output' | pbcopy
@@ -331,7 +329,6 @@ function test__ee__with_multiple_substitutions_in_quotes {
 
 function test__ee__with_math {
 	assert "$(
-		# shellcheck disable=SC2016
 		ee 3 4 echo ~~ and '$((~~ + 10))' too
 	)" "$(
 		cat <<-eof
@@ -388,7 +385,6 @@ function test__eee__with_multiple_substitutions_in_quotes {
 
 function test__eee__with_math {
 	assert "$(
-		# shellcheck disable=SC2016
 		eee 3 4 echo ~~ and '$((~~ + 10))' too 2>&1
 	)" "$(
 		cat <<-eof

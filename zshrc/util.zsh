@@ -1,7 +1,3 @@
-# shellcheck disable=SC2012 # Allow `ls -l`
-# shellcheck disable=SC2015 # Allow `A && B || C`
-# shellcheck disable=SC2196 # Allow `egrep`
-
 ### Util
 # singles (they save into `args`)
 function d { [[ -n "$1" ]] && { D=${${${@}#*://}%%/*}; [[ -z $ZSHRC_UNDER_TEST ]] && dig +short $D | ss || printf "test output for\n%s" "$D" | ss; }; }
@@ -47,7 +43,7 @@ function f_pre {
 	[[ "$1" == tf ]] && find ~+ -name main.tf | grep --invert-match '\.terraform' | sed "s|$HOME|~|g" | trim 0 8
 }
 # helpers for `dd`
-function dd_init { DD_DUMP_DIR="$HOME/.zshrc.terminal-dump.d"; DD_CLEAR_TERMINAL=1; }; dd_init
+function dd_init { DD_CLEAR_TERMINAL=1; DD_DUMP_DIR="$HOME/.zshrc.terminal-dump.d"; }; dd_init
 function dd_is_terminal_output { [[ $(pbpaste | compact | strip | sed -n '$p') == \$* ]]; }
 function dd_dump_file { echo "$DD_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt"; }
 function dd_taint_pasteboard { printf "$(pbpaste)\n\n(Dumped to '%s')" "$DD" | pbcopy; }
