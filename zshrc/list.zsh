@@ -17,7 +17,7 @@ function t {
 	local output; output="$(keymap_invoke ${#LIST_KEYMAP} "${LIST_KEYMAP[@]}" 't' "$@")"
 
 	if [[ -n $output ]]; then
-		echo "$output"
+		echo "$output" | ss
 	else
 		keymap_help "${LIST_USAGE[@]}" "${LIST_KEYMAP[@]}" ${#LIST_USAGE}
 	fi
@@ -30,15 +30,15 @@ OPAL=(
 )
 
 function t_o {
-	print -l "${OPAL[@]}" | sort | column -t | ss
+	print -l "${OPAL[@]}" | sort | column -t
 }
 
 function t_za {
-	alias | egrep ".*$1.*" | bw | ss
+	alias | egrep ".*$1.*" | bw
 }
 
 function t_zf {
-	typeset -f | pgrep -o "^[\S]*$1[\S]* (?=\(\))" | bw | ss
+	typeset -f | pgrep -o "^[\S]*$1[\S]* (?=\(\))" | bw
 }
 
 #
