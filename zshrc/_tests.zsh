@@ -1,3 +1,5 @@
+export ZSHRC_TESTS_DIR="$ZSHRC_DIR/_tests"
+
 source "$ZSHRC_DIR"/_tests/_harness.zsh
 source "$ZSHRC_DIR"/_tests/_helpers.zsh
 

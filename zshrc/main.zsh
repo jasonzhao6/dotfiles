@@ -1,6 +1,6 @@
 export DOTFILES_DIR="$HOME/gh/dotfiles"
 export ZSHRC_DIR="$DOTFILES_DIR/zshrc"
-export ZSHRC_TESTS_DIR="$DOTFILES_DIR/_tests"
+export ZSHRC_SECRETS="$HOME/.zshrc.secrets"
 
 # First, set color aliases so they expand in subsequent function definitions
 source "$ZSHRC_DIR/colors.zsh"; color
@@ -20,5 +20,5 @@ source "$ZSHRC_DIR/zsh_history.zsh"
 source "$ZSHRC_DIR/zsh_prompt.zsh"
 source "$ZSHRC_DIR/zshrc.zsh"
 
-# Last, set secret values from `ZSHRC_SECRETS`
-[[ -z $ZSHRC_UNDER_TEST && -f ~/.zshrc.secrets ]] && source ~/.zshrc.secrets
+# Last, overwrite with secret values from `ZSHRC_SECRETS`
+[[ -z $ZSHRC_UNDER_TEST && -f $ZSHRC_SECRETS ]] && source "$ZSHRC_SECRETS"
