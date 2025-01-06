@@ -1,7 +1,7 @@
 class VerifyKeymaps
   # Run-command files
   HOME = `echo $HOME`.chomp
-  ZSHRC_DIR = "#{HOME}/gh/dotfiles/zshrc"
+  ZSHRC_DIR = "#{HOME}/gh/jasonzhao6/dotfiles/zshrc"
   ZSHRC = "#{ZSHRC_DIR}/main.zsh"
   ZSHRC_SECRETS = "#{HOME}/.zshrc.secrets"
   KEYMAPS = "#{ZSHRC_DIR}/_keymap.zsh"

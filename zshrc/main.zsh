@@ -1,4 +1,4 @@
-export DOTFILES_DIR="$HOME/gh/dotfiles"
+export DOTFILES_DIR="$HOME/gh/jasonzhao6/dotfiles"
 export ZSHRC_DIR="$DOTFILES_DIR/zshrc"
 export ZSHRC_SECRETS="$HOME/.zshrc.secrets"
 
