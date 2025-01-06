@@ -17,7 +17,7 @@ function ff { caffeinate; }
 function hh { diff --side-by-side --suppress-common-lines "$1" "$2"; }
 function ii { open -na 'IntelliJ IDEA CE.app' --args "${@:-.}"; }
 function mm { mate "${@:-.}"; }
-function oo { open "${@:-.}"; }
+function oo { open "${@:-.}"; } # TODO echo "$@" | extract_urls | while IFS= read -r url; do open "$url"; done
 function pp { ruby ~/gh/jasonzhao6/sql_formatter.rb/run.rb "$@"; }
 function tt { ~/gh/tt/tt.rb "$@"; }
 function uu { diff --unified "$1" "$2"; }

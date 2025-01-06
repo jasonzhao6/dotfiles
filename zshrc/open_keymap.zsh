@@ -1,87 +1,52 @@
 #
-# [O]pen
+# Namespace: [O]pen
 #
+OPEN_USAGE=(
+  'o # Show this help'
+	'o <key> <args>* # Invoke a key mapping'
+)
 
-OPEN_TYPES=(
-	'commit-sha <sha>?'
-	'gist'
-	'main-branch <repo>?'
-	'new-pull-request'
-	'pull-request <id>'
+OPEN_KEYMAP=(
+	'o c <sha>? # Open specified commit, or fallback to the latest commit'
+	'o g # Open page to create a new gist'
+	'o n # Create new PR, then go to it'
+	'o p <pr id> # Open specified PR, or fallback to `/pulls`'
+	'o r <repo>? # Open specified repo, or fallback to the current working repo'
 )
 
 function o {
-	# `$1` could be either a string containing urls or a type prefix, see `open_usage`
-	local urls; urls=$(echo "$@" | extract_urls)
-	local type_prefix=$1
+	local output; output="$(keymap_invoke ${#OPEN_KEYMAP} "${OPEN_KEYMAP[@]}" 'o' "$@")"
 
-	if [[ -n $urls ]]; then
-		open_url
-	elif [[ -z $type_prefix ]]; then
-		open_usage
+	if [[ -n $output ]]; then
+		echo "$output" | ss
 	else
-		for type in "${OPEN_TYPES[@]}"; do
-			[[ $type == $type_prefix* ]] && $(echo "$type" | awk '{print $1}') "${@:2}"
-		done
+		keymap_help ${#OPEN_USAGE} "${OPEN_USAGE[@]}" "${OPEN_KEYMAP[@]}"
 	fi
 }
+
+#
+# Key mappings
+#
 
 # To be overwritten by `.zshrc.secrets`
 GIST='https://gist.github.com'
 
-function gist {
-	open $GIST
-}
-
-function commit-sha {
+function o_c {
 	open https://"$(domain)"/"$(org)"/"$(repo)"/commit/"$1"
 }
 
-function main-branch {
-	open https://"$(domain)"/"$(org)"/"${*:-$(repo)}"
+function o_g {
+	open $GIST
 }
 
-function new-pull-request {
+function o_n {
 	gp && gh pr create --fill && gh pr view --web
 }
 
-function pull-request {
+function o_p {
 	open https://"$(domain)"/"$(org)"/"$(repo)"/pull/"$1"
 }
 
-#
-# Helpers
-#
-
-function open_url {
-	echo "$urls" | while IFS= read -r url; do
-		open "$url"
-	done
-}
-
-function open_usage {
-	cat <<-eof
-
-		Usage:
-
-		  $(gray_fg 'o')
-		  $(gray_fg 'o <url>')
-		  $(gray_fg 'o <type> <args>?')
-		  $(gray_fg 'o <type prefix> <args>?')
-
-		Types:
-
-	eof
-
-	for type in "${OPEN_TYPES[@]}"; do
-		echo -n '  '
-		cyan_fg "${type/#/o }"
-	done
-}
-
-[[ -n $ZSHRC_UNDER_TEST ]] && OPEN_TYPES+=('open_test <arg1> <arg2>')
-
-function open_test {
-	echo "arg1: $1"
-	echo "arg2: $2"
+function o_r {
+	open https://"$(domain)"/"$(org)"/"${*:-$(repo)}"
 }

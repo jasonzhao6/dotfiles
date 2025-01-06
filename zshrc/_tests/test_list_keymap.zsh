@@ -1,9 +1,11 @@
 function test__t {
-	assert "$(t | grep --only-matching "Usage")" "$(grep_color Usage)"
+	local show_help='# Show this help'
+	assert "$(t | grep --only-matching "$show_help")" "$(grep_color "$show_help")"
 }; run_with_filter test__t
 
 function test__t__with_a_not_found_key {
-	assert "$(t not_found| grep --only-matching "Usage")" "$(grep_color Usage)"
+	local show_help='# Show this help'
+	assert "$(t not_found | grep --only-matching "$show_help")" "$(grep_color "$show_help")"
 }; run_with_filter test__t__with_a_not_found_key
 
 function test__t_o {

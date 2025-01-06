@@ -3,14 +3,14 @@
 #
 
 LIST_USAGE=(
-	't # Show all lists'
-	't [list] [args]... # Select a list'
+	't # Show this help'
+	't <key> <args>* # Invoke a key mapping'
 )
 
 LIST_KEYMAP=(
 	't o # List Opal groups'
-	't za [partial name] # List Zsh aliases'
-	't zf [partial name] # List Zsh functions'
+	't za <partial name>? # List Zsh aliases'
+	't zf <partial name>? # List Zsh functions'
 )
 
 function t {
@@ -24,7 +24,7 @@ function t {
 }
 
 #
-# Mappings
+# Key mappings
 #
 
 # To be overwritten by `.zshrc.secrets`

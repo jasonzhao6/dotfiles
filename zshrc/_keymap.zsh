@@ -28,7 +28,7 @@ function keymap_help {
 	done
 
 	echo
-	echo 'Keymaps'
+	echo 'Keymap'
 	echo
 
 	for entry in "${keymap[@]}"; do
