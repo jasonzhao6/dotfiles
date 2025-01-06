@@ -74,7 +74,7 @@ function args { echo "${ARGS_HISTORY[$ARGS_CURSOR]}"; }
 function args_plain { args | bw | expand; }
 function args_list { args | nl; }
 function args_list_plain { args | nl | bw | expand; }
-function args_list_size { args | wc -l | awk '{print $1}'; }
+function args_list_size { args | wc -l; }
 function args_coloring { echo "egrep --color=always --ignore-case '${${@:#-*}// /|}'"; }
 
 function args_filtering {
