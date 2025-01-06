@@ -25,13 +25,14 @@ OPAL=(
 )
 
 function t_o {
-	print -l "${OPAL[@]}" | sort | column -t | egrep ".*$1.*" | bw
+	print -l "${OPAL[@]}" | sort | column -t | contain "$1"
 }
 
 function t_za {
-	alias | egrep ".*$1.*" | bw
+	alias | contain "$1"
 }
 
 function t_zf {
-	typeset -f | pgrep -o "^[\S]*$1[\S]* (?=\(\) {)" | bw
+	# Trim the trailing ` () {` function definition suffix
+	typeset -f | grep ' () {' | contain "$1" | trim 0 5
 }

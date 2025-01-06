@@ -638,6 +638,48 @@ function test__compact {
 	)"
 }; run_with_filter test__compact
 
+function test__contain {
+	local input; input=$(
+		cat <<-eof
+			foo 12
+			foo 23
+			foo 34
+			foo 45
+		eof
+	)
+
+	assert "$(
+		echo "$input" | contain 3
+	)" "$(
+		cat <<-eof
+			foo 23
+			foo 34
+		eof
+	)"
+}; run_with_filter test__contain
+
+function test__contain__when_arg_is_empty {
+	local input; input=$(
+		cat <<-eof
+			foo 12
+			foo 23
+			foo 34
+			foo 45
+		eof
+	)
+
+	assert "$(
+		echo "$input" | contain
+	)" "$(
+		cat <<-eof
+			foo 12
+			foo 23
+			foo 34
+			foo 45
+		eof
+	)"
+}; run_with_filter test__contain__when_arg_is_empty
+
 function test__extract_urls {
 	local url='http://example.com'
 	assert "$(echo $url | extract_urls)" "$(pgrep_color "$url")"
