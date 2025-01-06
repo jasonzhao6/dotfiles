@@ -17,7 +17,7 @@ function ff { caffeinate; }
 function hh { diff --side-by-side --suppress-common-lines "$1" "$2"; }
 function ii { open -na 'IntelliJ IDEA CE.app' --args "${@:-.}"; }
 function mm { mate "${@:-.}"; }
-function oo { open "${@:-.}"; } # TODO echo "$@" | extract_urls | while IFS= read -r url; do open "$url"; done
+function oo { oo_open "$@"; }
 function pp { ruby ~/gh/jasonzhao6/sql_formatter.rb/run.rb "$@"; }
 function tt { ~/gh/tt/tt.rb "$@"; }
 function uu { diff --unified "$1" "$2"; }
@@ -48,6 +48,14 @@ function dd_is_terminal_output { [[ $(pbpaste | compact | strip | sed -n '$p') =
 function dd_dump_file { echo "$DD_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt"; }
 function dd_taint_pasteboard { printf "$(pbpaste)\n\n(Dumped to '%s')" "$DD" | pbcopy; }
 function dd_clear_terminal { [[ $DD_CLEAR_TERMINAL -eq 1 ]] && clear; }
+# helper for `oo`
+function oo_open {
+	[[ -z $1 ]] && open . && return
+	[[ -d $1 ]] && open "$1" && return
+	[[ -f $1 ]] && open "$1" && return
+
+	echo "$@" | extract_urls | bw | while IFS= read -r url; do open "$url"; done
+}
 # | after strings
 function bw { sed -E 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g'; }
 function compact { sed '/^$/d'; }
