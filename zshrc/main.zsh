@@ -11,6 +11,7 @@ source "$ZSHRC_DIR/_keymap.zsh"
 # Load keymap namespaces
 source "$ZSHRC_DIR/list_keymap.zsh"
 source "$ZSHRC_DIR/open_keymap.zsh"
+source "$ZSHRC_DIR/numbers_keymap.zsh"
 
 # Load non-keymaps
 source "$ZSHRC_DIR/args.zsh"
