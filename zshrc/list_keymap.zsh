@@ -2,11 +2,6 @@
 # Namespace: Lis[t]
 #
 
-LIST_USAGE=(
-	't # Show this help'
-	't <key> <args>* # Invoke a key mapping'
-)
-
 LIST_KEYMAP=(
 	't o # List Opal groups'
 	't za <partial name>? # List Zsh aliases'
@@ -14,13 +9,9 @@ LIST_KEYMAP=(
 )
 
 function t {
-	local output; output="$(keymap_invoke ${#LIST_KEYMAP} "${LIST_KEYMAP[@]}" 't' "$@")"
-
-	if [[ -n $output ]]; then
-		echo "$output" | ss
-	else
-		keymap_help ${#LIST_USAGE} "${LIST_USAGE[@]}" "${LIST_KEYMAP[@]}"
-	fi
+	local namespace='t'
+	local output; output="$(keymap $namespace ${#LIST_KEYMAP} "${LIST_KEYMAP[@]}" "$@")"
+	local exit_code=$?; [[ $exit_code -eq 0 ]] && echo "$output" | ss || echo "$output"
 }
 
 #

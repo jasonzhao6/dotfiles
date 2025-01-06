@@ -1,6 +1,7 @@
 #
 # Namespace: [O]pen
 #
+
 OPEN_USAGE=(
   'o # Show this help'
 	'o <key> <args>* # Invoke a key mapping'
@@ -15,25 +16,24 @@ OPEN_KEYMAP=(
 )
 
 function o {
-	local output; output="$(keymap_invoke ${#OPEN_KEYMAP} "${OPEN_KEYMAP[@]}" 'o' "$@")"
+	local namespace='o'
 
-	if [[ -n $output ]]; then
-		echo "$output" | ss
-	else
-		keymap_help ${#OPEN_USAGE} "${OPEN_USAGE[@]}" "${OPEN_KEYMAP[@]}"
-	fi
+	local output; output="$(keymap $namespace ${#OPEN_KEYMAP} "${OPEN_KEYMAP[@]}" "$@")"
+	local exit_code=$?
+
+	[[ $exit_code -eq 0 ]] && echo "$output" | ss || echo "$output"
 }
 
 #
 # Key mappings
 #
 
-# To be overwritten by `.zshrc.secrets`
-GIST='https://gist.github.com'
-
 function o_c {
 	open https://"$(domain)"/"$(org)"/"$(repo)"/commit/"$1"
 }
+
+# To be overwritten by `.zshrc.secrets`
+GIST='https://gist.github.com'
 
 function o_g {
 	open $GIST

@@ -1,30 +1,64 @@
-# A keymap is a namespaced collection of shortcuts following this format:
+# `_` is a placeholder for a single-letter namespace.
+# It is to be substituted with the passed in namespace when printing.
+# It's important to keep it the same length as the longest namespace for
+# the purpose of aligning the comments in the `keymap_help` function.
+KEYMAP_USAGE=(
+  '_ # Show this help'
+	'_ <key> <args>* # Invoke a key mapping'
+)
+
+KEYMAP_DUPE_ERROR_BAR="$(red_bg '  Error: Cannot have duplicate keys  ')" # TODO
+
+# Possible outcomes:
+# - Print usage with exit code 1
+# - Print error with exit code 1
+# - Print invocation output with exit code 0
+function keymap {
+	local namespace=$1; shift
+	local keymap_size=$1; shift
+	local keymap=("${@:1:$keymap_size}"); shift "$keymap_size"
+	local key=$1; [[ -n $key ]] && shift || { keymap_help "$namespace" "${keymap[@]}"; return 1; }
+	local args=("$@")
+
+	#	If keymap contains duplicate `key`s, abort and print error
+	local dupes; dupes=$(keymap_check_for_dupes "${keymap[@]}") # TODO move up
+	[[ -n $dupes ]] && printf "%s\n\n%s", "$dupes", "$KEYMAP_DUPE_ERROR_BAR" && return 1
+
+	# Look for a key mapping and invoke it; otherwise, print usage
+	local output
+
+	for entry in "${keymap[@]}"; do
+		if [[ $entry == "$namespace $key "* ]]; then
+			output=$("${namespace}_${key}" "${args[@]}")
+		fi
+	done
+
+	[[ -n $output ]] && echo "$output" || { keymap_help "$namespace" "${keymap[@]}"; return 1; }
+}
+
 #
-#   [namespace] [key] [args]... # Optional comment
-#
-# Executing `[namespace]` prints the list of shortcuts in that namespace
-# Executing `[namespace] [key]` invokes the `[namespace]_[key]` function
+# Helpers
 #
 
 function keymap_help {
 	# Reconstruct arrays from these args: `usage_size, usage[]..., keymap[]...`
-	local usage_size=$1; shift
-	local usage=("${@:1:$usage_size}")
-	local keymap=("${@:$usage_size + 1}")
+	local namespace=$1; shift
+	local keymap=("$@")
 
-	# Get the max command size used to align comments across commands, e.g
+	# Get the max command size in order to align comments across commands, e.g
 	#   ```
 	#   $ <command>      # comment
 	#   $ <long command> # another comment
 	#   ```
-	local max_command_size; max_command_size=$(keymap_get_max_command_size "$@")
+	local max_command_size
+	max_command_size=$(keymap_get_max_command_size "${KEYMAP_USAGE[@]}" "${keymap[@]}")
 
 	echo
 	echo 'Usage'
 	echo
 
-	for entry in "${usage[@]}"; do
-		keymap_print_entry "$entry" "$max_command_size"
+	for entry in "${KEYMAP_USAGE[@]}"; do
+		keymap_print_entry "${entry/_/$namespace}" "$max_command_size"
 	done
 
 	echo
@@ -36,32 +70,12 @@ function keymap_help {
 	done
 }
 
-KEYMAP_DUPE_ERROR_BAR="$(red_bg '  Error: Cannot have duplicate keys  ')"
-
-function keymap_invoke {
-	local keymap_size=$1; shift
-	local keymap=("${@:1:$keymap_size}"); shift "$keymap_size"
-	local namespace=$1; shift
-	local key=$1; [[ -n $key ]] && shift || return
-
-	local dupes; dupes=$(keymap_check_for_dupes "${keymap[@]}")
-	[[ -n $dupes ]] && echo "$dupes\n$KEYMAP_DUPE_ERROR_BAR" && return
-
-	for entry in "${keymap[@]}"; do
-		if [[ $entry == "$namespace $key "* ]]; then
-			"${namespace}_${key}" "$@"
-		fi
-	done
-}
-
-#
-# Helpers
-#
-
 function keymap_get_max_command_size {
+	local entries=("$@")
+
 	local max_command_size=0
 
-	for entry in "$@"; do
+	for entry in "${entries[@]}"; do
 		local command_size="${#entry% \#*}"
 		[[ $command_size -gt $max_command_size ]] && max_command_size=$command_size
 	done
@@ -82,16 +96,19 @@ function keymap_print_entry {
 }
 
 function keymap_check_for_dupes {
+	local entries=("$@")
+
 	typeset -A seen
 
-	for entry in "$@"; do
+	for entry in "${entries[@]}"; do
 		first_two_words="${(j: :)${(z)entry}[1,2]}"
 
 		if [[ -z ${seen[$first_two_words]} ]]; then
 			seen[$first_two_words]=$entry
 		else
-			echo "${seen[$first_two_words]}"
-			echo "$entry"
+			echo
+			echo "> ${seen[$first_two_words]}"
+			echo "> $entry"
 		fi
 	done
 }
