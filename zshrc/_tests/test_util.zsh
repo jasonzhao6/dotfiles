@@ -200,14 +200,14 @@ function test__dd {
 
 		echo '$' | pbcopy
 		dd
-		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
+		ls -l $DD_DUMP_DIR | wc -l
 		cat $DD_DUMP_DIR/*
 
 		dd_init
 		rm -rf $DD_DUMP_DIR
 	)" "$(
 		cat <<-eof
-			1
+			       2
 			$
 		eof
 	)"
@@ -222,14 +222,14 @@ function test__dd__when_dumping_same_pasteboard_twice {
 		echo '$' | pbcopy
 		dd
 		dd
-		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
+		ls -l $DD_DUMP_DIR | wc -l
 		cat $DD_DUMP_DIR/*
 
 		dd_init
 		rm -rf $DD_DUMP_DIR
 	)" "$(
 		cat <<-eof
-			1
+			       2
 			$
 		eof
 	)"
@@ -245,14 +245,14 @@ function test__dd__when_dumping_two_different_pasteboards {
 		dd
 		printf "pasteboard 2\n$\n" | pbcopy
 		dd
-		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
+		ls -l $DD_DUMP_DIR | wc -l
 		cat $DD_DUMP_DIR/*
 
 		dd_init
 		rm -rf $DD_DUMP_DIR
 	)" "$(
 		cat <<-eof
-			2
+			       3
 			pasteboard 1
 			$
 			pasteboard 2
@@ -271,10 +271,10 @@ function test__dd__when_not_terminal_output {
 
 		echo 'not terminal output' | pbcopy
 		dd
-		ls -l $DD_DUMP_DIR | wc -l | awk '{print $1 - 1}'
+		ls -l $DD_DUMP_DIR | wc -l
 
 		dd_init
-	)" '0'
+	)" '       1'
 }; run_with_filter test__dd__when_not_terminal_output
 
 function test__ddd {
