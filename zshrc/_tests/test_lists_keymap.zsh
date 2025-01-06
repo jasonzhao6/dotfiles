@@ -45,7 +45,7 @@ function test__t_zf {
 
 function test__t_zf__when_counting_._functions {
 	assert "$(
-		local count; count=$(t zf 'test__\.' | wc -l)
+		local count; count=$(t zf '\.\.' | wc -l)
 		local actual_count; actual_count=$(egrep --count '^function \.+ {' "$ZSHRC_DIR"/cd.zsh)
 
 		[[ $count -eq actual_count ]] && echo 1

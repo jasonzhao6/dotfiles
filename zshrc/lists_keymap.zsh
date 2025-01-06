@@ -1,8 +1,8 @@
 #
-# Namespace: Lis[t]
+# Namespace: Lis[t]s
 #
 
-LIST_KEYMAP=(
+LISTS_KEYMAP=(
 	't o # List Opal groups'
 	't za <partial name>? # List Zsh aliases'
 	't zf <partial name>? # List Zsh functions'
@@ -10,7 +10,7 @@ LIST_KEYMAP=(
 
 function t {
 	local namespace='t'
-	local output; output="$(keymap $namespace ${#LIST_KEYMAP} "${LIST_KEYMAP[@]}" "$@")"
+	local output; output="$(keymap $namespace ${#LISTS_KEYMAP} "${LISTS_KEYMAP[@]}" "$@")"
 	local exit_code=$?; [[ $exit_code -eq 0 ]] && echo "$output" | ss || echo "$output"
 }
 

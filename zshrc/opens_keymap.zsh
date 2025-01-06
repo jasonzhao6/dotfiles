@@ -1,13 +1,8 @@
 #
-# Namespace: [O]pen
+# Namespace: [O]pens
 #
 
-OPEN_USAGE=(
-  'o # Show this help'
-	'o <key> <args>* # Invoke a key mapping'
-)
-
-OPEN_KEYMAP=(
+OPENS_KEYMAP=(
 	'o c <sha>? # Open specified commit, or fallback to the latest commit'
 	'o g # Open page to create a new gist'
 	'o n # Create new PR, then go to it'
@@ -17,11 +12,8 @@ OPEN_KEYMAP=(
 
 function o {
 	local namespace='o'
-
-	local output; output="$(keymap $namespace ${#OPEN_KEYMAP} "${OPEN_KEYMAP[@]}" "$@")"
-	local exit_code=$?
-
-	[[ $exit_code -eq 0 ]] && echo "$output" | ss || echo "$output"
+	local output; output="$(keymap $namespace ${#OPENS_KEYMAP} "${OPENS_KEYMAP[@]}" "$@")"
+	local exit_code=$?; [[ $exit_code -eq 0 ]] && echo "$output" | ss || echo "$output"
 }
 
 #
