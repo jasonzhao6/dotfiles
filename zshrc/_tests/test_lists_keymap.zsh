@@ -19,6 +19,16 @@ function test__t_o {
 	)"
 }; run_with_filter test__t_o
 
+function test__t_o__when_filtering_for_2 {
+	assert "$(
+		t o 2
+	)" "$(
+		cat <<-eof
+		     1	non-secret-placeholder-2  url-2
+		eof
+	)"
+}; run_with_filter test__t_o__when_filtering_for_2
+
 function test__t_za {
 	assert "$(
 		local count; count=$(t za | wc -l)

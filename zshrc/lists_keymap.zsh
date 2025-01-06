@@ -3,7 +3,7 @@
 #
 
 LISTS_KEYMAP=(
-	't o # List Opal groups'
+	't o <partial name>? # List Opal groups'
 	't za <partial name>? # List Zsh aliases'
 	't zf <partial name>? # List Zsh functions'
 )
@@ -25,7 +25,7 @@ OPAL=(
 )
 
 function t_o {
-	print -l "${OPAL[@]}" | sort | column -t
+	print -l "${OPAL[@]}" | sort | column -t | egrep ".*$1.*" | bw
 }
 
 function t_za {
@@ -33,5 +33,5 @@ function t_za {
 }
 
 function t_zf {
-	typeset -f | pgrep -o "^[\S]*$1[\S]* (?=\(\))" | bw
+	typeset -f | pgrep -o "^[\S]*$1[\S]* (?=\(\) {)" | bw
 }

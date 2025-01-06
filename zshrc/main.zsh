@@ -8,7 +8,7 @@ source "$ZSHRC_DIR/colors.zsh"; color
 # Include helper functions to be used by all keymap namespaces
 source "$ZSHRC_DIR/_keymap.zsh"
 
-# Load keymap namespaces
+# Load keymaps
 source "$ZSHRC_DIR/lists_keymap.zsh"
 source "$ZSHRC_DIR/opens_keymap.zsh"
 source "$ZSHRC_DIR/numbers_keymap.zsh"
