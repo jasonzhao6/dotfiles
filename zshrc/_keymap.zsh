@@ -13,7 +13,6 @@ KEYMAP_DUPE_ERROR_BAR="$(red_bar 'Error: Cannot have duplicate keys')"
 # - 1: Error message about keymap containing duplicate `key`s
 # - 2: Print usage since a `key` was not specified
 # - 3: Print usage since a valid `key` was not found
-# - 4: Print message about empty output from a valid `key`
 # - 0: Print output from a valid `key`
 function keymap {
 	local namespace=$1; shift
@@ -26,22 +25,25 @@ function keymap {
 	local dupes; dupes=$(keymap_check_for_dupes "${keymap[@]}")
 	[[ -n $dupes ]] && printf "%s\n\n%s" "$dupes" "$KEYMAP_DUPE_ERROR_BAR" && return 1
 
-	# If no key is passed in, print usage
+	# If no `key` was passed in, print usage
 	[[ -z $key ]] && { keymap_help "$namespace" "${keymap[@]}"; return 2; }
 
-	# Look for the key mapping and invoke it; if not found, print usage
+	# Look for the specified key and invoke it; if not found, print usage
 	local found
-	local output
 
 	for entry in "${keymap[@]}"; do
 		if [[ $entry == "$namespace $key"* ]]; then
 			found=1
-			output=$("${namespace}_${key}" "${args[@]}")
+			break
 		fi
 	done
 
-	[[ -z $found ]] && { keymap_help "$namespace" "${keymap[@]}"; return 3; }
-	[[ -n $output ]] && echo "$output" || { echo '(There was no output)'; return 4; }
+	if [[ -z $found ]]; then
+		keymap_help "$namespace" "${keymap[@]}"
+		return 3
+	else
+		"${namespace}_${key}" "${args[@]}"
+	fi
 }
 
 #
