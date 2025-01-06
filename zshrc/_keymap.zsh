@@ -99,7 +99,11 @@ function keymap_print_entry {
 	local command="${entry% \#*}"
 	local comment; [[ $entry = *\#* ]] && comment="# ${entry#*\# }"
 
-	printf "%s %-*s %s\n" "$KEYMAP_PROMPT" "$command_size" "$command" "$(gray_fg "$comment")"
+	if [[ -n $command ]]; then
+		printf "%s %-*s %s\n" "$KEYMAP_PROMPT" "$command_size" "$command" "$(gray_fg "$comment")"
+	else
+		echo
+	fi
 }
 
 function keymap_check_for_dupes {
