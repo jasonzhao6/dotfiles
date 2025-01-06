@@ -469,7 +469,7 @@ function test__n {
 		     1	10.0.0.1	# 2023-06-21T20:25:00+00:00	webhook-asg
 		     2	10.0.0.2	# 2023-06-21T20:25:00+00:00	webhook-asg
 		     3	10.0.0.3	# 2023-06-21T20:24:59+00:00	webhook-asg
-			$(green_bg '        a               b c                             d          ')
+			$(green_bar '      a               b c                             d        ')
 		eof
 	)"
 }; run_with_filter test__n
@@ -535,7 +535,7 @@ function test__n__when_selecting_out_of_bound {
 		     1	10.0.0.1        # 2023-06-21T20:25:00+00:00     webhook-asg
 		     2	10.0.0.2        # 2023-06-21T20:25:00+00:00     webhook-asg
 		     3	10.0.0.3        # 2023-06-21T20:24:59+00:00     webhook-asg
-			$(green_bg '        a               b c                             d          ')
+			$(green_bar '      a               b c                             d        ')
 		eof
 	)"
 }; run_with_filter test__n__when_selecting_out_of_bound
@@ -604,7 +604,7 @@ function test__n__with_headers {
 		     4	terraform-application-region-shared-3   sup
 		     5	terraform-application-region-program-A  how are you
 		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bg '        a                                       b      c   d       e   f    g  ')
+			$(green_bar '      a                                       b      c   d       e   f    g')
 		eof
 	)"
 }; run_with_filter test__n__with_headers
@@ -621,7 +621,7 @@ function test__nn {
 		     4	terraform-application-region-shared-3   sup
 		     5	terraform-application-region-program-A  how are you
 		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bg '        a                                       b      ')
+			$(green_bar '      a                                       b    ')
 		eof
 	)"
 }; run_with_filter test__nn
@@ -716,7 +716,7 @@ function test__u__when_undoing_n_with_headers {
 		     4	terraform-application-region-shared-3   sup
 		     5	terraform-application-region-program-A  how are you
 		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bg '        a                                       b      c   d       e   f    g  ')
+			$(green_bar '      a                                       b      c   d       e   f    g')
 		eof
 	)"
 }; run_with_filter test__u__when_undoing_n_with_headers
@@ -734,7 +734,7 @@ function test__u__when_undoing_nn_with_headers {
 		     4	terraform-application-region-shared-3   sup
 		     5	terraform-application-region-program-A  how are you
 		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bg '        a                                       b      ')
+			$(green_bar '      a                                       b    ')
 		eof
 	)"
 }; run_with_filter test__u__when_undoing_nn_with_headers
@@ -753,7 +753,7 @@ function test__u__when_undoing_nn_then_requesting_n {
 		     4	terraform-application-region-shared-3   sup
 		     5	terraform-application-region-program-A  how are you
 		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bg '        a                                       b      c   d       e   f    g  ')
+			$(green_bar '      a                                       b      c   d       e   f    g')
 		eof
 	)"
 }; run_with_filter test__u__when_undoing_nn_then_requesting_n
@@ -771,7 +771,7 @@ function test__u__when_undoing_nn_with_headers_top_heavy {
 		     4	terraform-application-region-shared-3
 		     5	terraform-application-region-program-A
 		     6	terraform-application-region-program-B
-			$(green_bg '        a                                       b      ')
+			$(green_bar '      a                                       b    ')
 		eof
 	)"
 }; run_with_filter test__u__when_undoing_nn_with_headers_top_heavy
@@ -821,7 +821,7 @@ function test__u__when_undoing_beyond_tail {
 		cat <<-eof
 		     1	1
 		     2	2
-		$(red_bg '  Reached the end of undo history  ')
+		$(red_bar 'Reached the end of undo history')
 		eof
 	)"
 }; run_with_filter test__u__when_undoing_beyond_tail
@@ -844,7 +844,7 @@ function test__u__when_pushing_beyond_head_then_undoing_beyond_tail {
 		cat <<-eof
 		     1	2
 		     2	3
-		$(red_bg '  Reached the end of undo history  ')
+		$(red_bar 'Reached the end of undo history')
 		eof
 	)"
 
@@ -916,7 +916,7 @@ function test__r__when_redoing_beyond_head {
 		cat <<-eof
 		     1	3
 		     2	4
-		$(red_bg '  Reached the end of redo history  ')
+		$(red_bar 'Reached the end of redo history')
 		eof
 	)"
 }; run_with_filter test__r__when_redoing_beyond_head
@@ -934,7 +934,7 @@ function test__r__when_redoing_beyond_new_head {
 		cat <<-eof
 		     1	4
 		     2	5
-		$(red_bg '  Reached the end of redo history  ')
+		$(red_bar 'Reached the end of redo history')
 		eof
 	)"
 }; run_with_filter test__r__when_redoing_beyond_new_head

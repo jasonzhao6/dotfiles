@@ -7,7 +7,7 @@ KEYMAP_USAGE=(
 	'_ <key> <args>* # Invoke a key mapping'
 )
 
-KEYMAP_DUPE_ERROR_BAR="$(red_bg '  Error: Cannot have duplicate keys  ')" # TODO
+KEYMAP_DUPE_ERROR_BAR="$(red_bar 'Error: Cannot have duplicate keys')"
 
 # Possible outcomes:
 # - Print error with exit code 1
