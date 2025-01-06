@@ -3,9 +3,9 @@
 #
 
 LISTS_KEYMAP=(
-	't o <partial name>? # List Opal groups'
-	't za <partial name>? # List Zsh aliases'
-	't zf <partial name>? # List Zsh functions'
+	't o <substring>? # List Opal groups'
+	't za <substring>? # List Zsh aliases'
+	't zf <substring>? # List Zsh functions'
 )
 
 function t {

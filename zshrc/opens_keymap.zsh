@@ -6,7 +6,7 @@ OPENS_KEYMAP=(
 	'o c <sha>? # Open the specified commit, or fallback to the latest commit'
 	'o g # Open tab to create a new gist'
 	'o n # Create a new PR, then go to it'
-	'o p <pr id> # Open the specified PR, or fallback to `/pulls`'
+	'o p <pr>? # Open the specified PR, or fallback to `/pulls`'
 	'o r <repo>? # Open the specified repo, or fallback to the current working repo'
 )
 
