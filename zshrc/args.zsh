@@ -202,16 +202,3 @@ function args_select_column {
 		ARGS_USED_TOP_ROW=$use_top_row
 	fi
 }
-
-function args_undo_selection {
-	local use_top_row=$ARGS_USED_TOP_ROW
-
-	local column_size_before; column_size_before=$(args_columns "$use_top_row" | strip)
-	args_undo
-	args_list
-	args_undo_bar
-	local column_size_after; column_size_after=$(args_columns "$use_top_row" | strip)
-
-	# If undoing a column selection, show columns bar for convenience
-	[[ -n $use_top_row && ${#column_size_before} -lt ${#column_size_after} ]] && args_columns_bar "$use_top_row"
-}

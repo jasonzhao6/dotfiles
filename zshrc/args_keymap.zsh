@@ -16,8 +16,6 @@ ARGS_KEYMAP=(
 )
 # TODO dim and explain • if it works well
 
-ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd column'
-
 function a {
 	local namespace='a'
 	keymap $namespace ${#ARGS_KEYMAP} "${ARGS_KEYMAP[@]}" "$@"
@@ -26,6 +24,12 @@ function a {
 #
 # Key mappings (alphabetized)
 #
+
+# Constants
+ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd column'
+
+# States
+ARGS_USED_TOP_ROW=
 
 # shellcheck disable=SC2120
 function aa {
@@ -57,7 +61,18 @@ function ah {
 }
 
 function au {
-	args_undo_selection
+	local column_size_before; column_size_before=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
+
+	args_undo
+	args_list
+	args_undo_bar
+
+	local column_size_after; column_size_after=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
+
+	# If undoing a column selection, show the columns bar for convenience
+	if [[ -n $ARGS_USED_TOP_ROW && ${#column_size_before} -lt ${#column_size_after} ]]; then
+		args_columns_bar "$ARGS_USED_TOP_ROW"
+	fi
 }
 
 function ar {
