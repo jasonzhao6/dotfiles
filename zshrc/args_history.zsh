@@ -24,7 +24,7 @@ function args_history_init {
 function args_history_reset {
 	ARGS_HISTORY=()
 	ARGS_HISTORY_MAX=100
-	ARGS_HISTORY_INDEX=99
+	ARGS_HISTORY_INDEX=0
 	ARGS_HISTORY_HEAD=$ARGS_HISTORY_INDEX
 	ARGS_HISTORY_TAIL=-1
 	ARGS_HISTORY_UNDO_EXCEEDED=0
@@ -128,6 +128,14 @@ function args_history_is_index_valid {
 		$tail -gt $index && $((tail - max)) -le $index && $index -le $head ||
 		$tail -le $index && $index -gt $head && $((index - max)) -le $head
 	]] && echo 1 || echo 0
+}
+
+function args_history_set_index {
+	local index=$1
+
+	# TODO check if within range in here
+	# TODO sanitize before set, e.g when index starts at 99, push 3, then set to 0
+	ARGS_HISTORY_INDEX=$index
 }
 
 #
