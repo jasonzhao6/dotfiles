@@ -1,5 +1,5 @@
 function test__z__when_args_history_is_not_initialized {
-	args_init
+	args_history_init
 	local args_history_max=$ARGS_HISTORY_MAX
 
 	assert "$(
@@ -8,7 +8,7 @@ function test__z__when_args_history_is_not_initialized {
 		echo "$ARGS_HISTORY_MAX"
 	)" "$args_history_max"
 
-	args_reset
+	args_history_reset
 }; run_with_filter test__z__when_args_history_is_not_initialized
 
 function test__z__when_args_history_is_already_initialized {
@@ -20,5 +20,5 @@ function test__z__when_args_history_is_already_initialized {
 		echo $ARGS_HISTORY_MAX
 	)" "$overwrite"
 
-	args_reset
+	args_history_reset
 }; run_with_filter test__z__when_args_history_is_already_initialized

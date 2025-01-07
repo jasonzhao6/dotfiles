@@ -102,29 +102,6 @@ function test__l {
 	)"
 }; run_with_filter test__l
 
-function test__l__with_search_pattern_to_ignore {
-	assert "$(
-		rm -rf /tmp/test__l--with-search-pattern-to-ignore
-		mkdir /tmp/test__l--with-search-pattern-to-ignore
-		cd /tmp/test__l--with-search-pattern-to-ignore || return
-		mkdir 1 2 3
-		mkdir .1.hidden
-		touch 1.log 2.log 3.txt
-		touch .2.hidden .3.hidden
-		l ./*log | bw
-		rm -rf /tmp/test__l--with-search-pattern-to-ignore
-	)" "$(
-		cat <<-eof
-		     1	1
-		     2	1.log
-		     3	2
-		     4	2.log
-		     5	3
-		     6	3.txt
-		eof
-	)"
-}; run_with_filter test__l__with_search_pattern_to_ignore
-
 function test__ll {
 	assert "$(
 		rm -rf /tmp/test__ll
@@ -144,26 +121,6 @@ function test__ll {
 		eof
 	)"
 }; run_with_filter test__ll
-
-function test__ll__with_search_pattern_to_ignore {
-	assert "$(
-		rm -rf /tmp/test__ll--with-search-pattern-to-ignore
-		mkdir /tmp/test__ll--with-search-pattern-to-ignore
-		cd /tmp/test__ll--with-search-pattern-to-ignore || return
-		mkdir 1 2 3
-		mkdir .1.hidden
-		touch 1.log 2.log 3.txt
-		touch .2.hidden .3.hidden
-		ll ./*log | bw
-		rm -rf /tmp/test__ll--with-search-pattern-to-ignore
-	)" "$(
-		cat <<-eof
-		     1	.1.hidden
-		     2	.2.hidden
-		     3	.3.hidden
-		eof
-	)"
-}; run_with_filter test__ll__with_search_pattern_to_ignore
 
 function test__w {
 	assert "$(

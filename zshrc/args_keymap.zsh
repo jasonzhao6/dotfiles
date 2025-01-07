@@ -1,4 +1,4 @@
-source "$ZSHRC_DIR/args.history.zsh"; args_init
+source "$ZSHRC_DIR/args.history.zsh"; args_history_init
 
 #
 # Namespace: [A]rgs
@@ -50,7 +50,7 @@ function ah {
 
 	# If there is not a valid `go_to_index`, list history
 	if [[ -z $go_to_index || $go_to_index -lt $ARGS_TAIL || $go_to_index -gt $ARGS_HEAD ]]; then
-		args_history
+		args_history_inspect
 
 	# Otherwise, go to the specified index, then list args
 	else
@@ -63,9 +63,9 @@ function ah {
 function au {
 	local column_size_before; column_size_before=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
 
-	args_undo
+	args_history_undo
 	args_list
-	args_undo_bar
+	args_history_undo_error_bar
 
 	local column_size_after; column_size_after=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
 
@@ -76,9 +76,9 @@ function au {
 }
 
 function ar {
-	args_redo
+	args_history_redo
 	args_list
-	args_redo_bar
+	args_history_redo_error_bar
 }
 
 function as {

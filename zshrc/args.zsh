@@ -1,4 +1,4 @@
-#source "$ZSHRC_DIR/args.history.zsh"; args_init
+#source "$ZSHRC_DIR/args.history.zsh"; args_history_init
 #
 #### [Args]
 ## [s]ave into args history
@@ -60,17 +60,17 @@
 #function y { args > ~/.zshrc.args; }
 #function p { echo "$(<~/.zshrc.args)" | as; }
 ## [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
-#function u { args_undo_selection; }
-#function r { args_redo; args_list; args_redo_bar; }
+#function u { args_history_undo_selection; }
+#function r { args_history_redo; args_list; args_history_redo_error_bar; }
 ## list / select historical args by [i]ndex
 ## (e.g `i` to list history, `i 8` to select the args at index 8)
-#function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_history || { ARGS_CURSOR=$1; a; }; }
+#function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_history_inspect || { ARGS_CURSOR=$1; a; }; }
 
 #
 # Getters
 #
 
-function args { echo "${ARGS_HISTORY[$ARGS_CURSOR]}"; }
+function args { echo "${ARGS_HISTORY[$ARGS_HISTORY_CURSOR]}"; }
 function args_plain { args | bw | expand; }
 function args_list { args | nl; }
 function args_list_plain { args | nl | bw | expand; }
@@ -148,7 +148,7 @@ function args_save {
 		local new_args_plain; new_args_plain=$(echo "$new_args" | bw | expand)
 
 		if [[ "$new_args_plain" != $(args_plain) ]]; then
-			args_push "$ARGS"
+			args_history_push "$ARGS"
 
 			# Set global states used by `n, nn, u`
 			ARGS_PUSHED=1
@@ -159,7 +159,7 @@ function args_save {
 		fi
 
 		# Always replace the args; sometimes content is the same, but grep coloring is different
-		args_replace "$new_args"
+		args_history_replace_current "$new_args"
 		args_list
 	fi
 }
