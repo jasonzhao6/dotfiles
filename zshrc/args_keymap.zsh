@@ -29,6 +29,7 @@ function a {
 #
 
 # Constants
+ARGS_EMPTY='(empty)'
 ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd column'
 
 # States
@@ -49,21 +50,30 @@ function aa {
 }
 
 function ah {
-	local go_to_index=$1
+	local max=$ARGS_HISTORY_MAX
+	local index=$1
+	local head=$ARGS_HISTORY_HEAD
+	local tail=$ARGS_HISTORY_TAIL
 
-	# If `go_to_index` is not specified, list all history entries
-	[[ -z $go_to_index ]] && args_history_entries && return
+	# If `index` is not specified, list all history entries
+	[[ -z $index ]] && args_history_entries && return
 
-	# If `go_to_index` is within range, set it as the index, then list args
-	if [[	$go_to_index -ge $ARGS_HISTORY_TAIL && $go_to_index -le $ARGS_HISTORY_HEAD ]]; then
+	# If `index` is within range, set it as the index, then list args
+	if [[
+		$tail -le $index && $index -le $head ||
+		$tail -gt $index && $((tail - max)) -le $index && $index -le $head ||
+		$tail -le $index && $index -gt $head && $((index - max)) -le $head
+	]]; then
+
 		# shellcheck disable=SC2034
-		ARGS_HISTORY_INDEX=$go_to_index
+		ARGS_HISTORY_INDEX=$index
 		aa
+
 	# Otherwise, list all history entries and show error bar
 	else
 		args_history_entries
 		echo
-		red_bar "Index out of range: $go_to_index"
+		red_bar "Index out of range: $index"
 	fi
 }
 

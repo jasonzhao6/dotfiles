@@ -5,7 +5,7 @@
 # Visualize
 #
 #              123456789
-#   index     ^
+#   index      ^
 #   head       ^
 #   tail       ^
 
@@ -25,8 +25,8 @@ function args_history_reset {
 	ARGS_HISTORY=()
 	ARGS_HISTORY_MAX=100
 	ARGS_HISTORY_INDEX=0
-	ARGS_HISTORY_HEAD=0
-	ARGS_HISTORY_TAIL=0
+	ARGS_HISTORY_HEAD=$ARGS_HISTORY_INDEX
+	ARGS_HISTORY_TAIL=-1
 	ARGS_HISTORY_UNDO_EXCEEDED=0
 	ARGS_HISTORY_REDO_EXCEEDED=0
 }
@@ -39,11 +39,14 @@ function args_history_push {
 
 	# When reaching `tail`, move `tail` forward, so it stays one step ahead
 	if [[ $ARGS_HISTORY_INDEX -eq $ARGS_HISTORY_TAIL ]]; then
-		ARGS_HISTORY_TAIL=$(args_history_increment $ARGS_HISTORY_TAIL)
+		ARGS_HISTORY_TAIL=$(args_history_increment "$ARGS_HISTORY_TAIL")
 	fi
 
 	# Because array size is fixed, wrap around at the end
 	[[ $ARGS_HISTORY_TAIL -eq 0 ]] && ARGS_HISTORY_TAIL=1
+
+	# If `tail` has not be set yet, set it to `index`
+	[[ $ARGS_HISTORY_TAIL -eq -1 ]] && ARGS_HISTORY_TAIL=$ARGS_HISTORY_INDEX
 }
 
 function args_history_replace_current {
@@ -89,6 +92,8 @@ function args_history_redo_error_bar {
 }
 
 function args_history_entries {
+	[[ $ARGS_HISTORY_TAIL -eq -1 ]] && echo "$ARGS_EMPTY" && return
+
 	echo "index: $ARGS_HISTORY_INDEX"
 	echo "head: $ARGS_HISTORY_HEAD"
 	echo "tail: $ARGS_HISTORY_TAIL"
