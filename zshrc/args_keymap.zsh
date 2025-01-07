@@ -14,7 +14,7 @@ ARGS_KEYMAP=(
 	'a•u # Undo save / filter'
 	'a•r # Redo save / filter'
 	'a•h # List history entries'
-	'a•h <index> # Set history cursor'
+	'a•h <index> # Set history index'
 )
 # TODO dim and explain • if it works well
 
@@ -56,7 +56,7 @@ function ah {
 	# If `go_to_index` is within range, set it as the index, then list args
 	if [[	$go_to_index -ge $ARGS_HISTORY_TAIL && $go_to_index -le $ARGS_HISTORY_HEAD ]]; then
 		# shellcheck disable=SC2034
-		ARGS_HISTORY_CURSOR=$go_to_index
+		ARGS_HISTORY_INDEX=$go_to_index
 		aa
 	# Otherwise, list all history entries and show error bar
 	else

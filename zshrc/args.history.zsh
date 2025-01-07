@@ -5,17 +5,17 @@
 # Visualize
 #
 #              123456789
-#   cursor     ^
+#   index     ^
 #   head       ^
 #   tail       ^
 
 # Behaviors
 #
 # - Because array size is fixed, wrap around at the end
-# - To push, move `cursor` and `head` forward together
+# - To push, move `index` and `head` forward together
 	# When reaching `tail`, move `tail` forward, so it stays one step ahead
-# - To undo, move only `cursor` backward, up to `tail`, inclusive
-# - To redo, move only `cursor` forward, up to `head`, inclusive
+# - To undo, move only `index` backward, up to `tail`, inclusive
+# - To redo, move only `index` forward, up to `head`, inclusive
 
 function args_history_init {
 	[[ -z $ARGS_HISTORY_MAX ]] && args_history_reset
@@ -24,7 +24,7 @@ function args_history_init {
 function args_history_reset {
 	ARGS_HISTORY=()
 	ARGS_HISTORY_MAX=100
-	ARGS_HISTORY_CURSOR=0
+	ARGS_HISTORY_INDEX=0
 	ARGS_HISTORY_HEAD=0
 	ARGS_HISTORY_TAIL=0
 	ARGS_HISTORY_UNDO_EXCEEDED=0
@@ -32,13 +32,13 @@ function args_history_reset {
 }
 
 function args_history_push {
-	# Move `cursor` and `head` forward together
-	ARGS_HISTORY_CURSOR=$(args_history_increment $ARGS_HISTORY_CURSOR)
-	ARGS_HISTORY_HEAD=$ARGS_HISTORY_CURSOR
-	ARGS_HISTORY[$ARGS_HISTORY_CURSOR]=$1
+	# Move `index` and `head` forward together
+	ARGS_HISTORY_INDEX=$(args_history_increment $ARGS_HISTORY_INDEX)
+	ARGS_HISTORY_HEAD=$ARGS_HISTORY_INDEX
+	ARGS_HISTORY[$ARGS_HISTORY_INDEX]=$1
 
 	# When reaching `tail`, move `tail` forward, so it stays one step ahead
-	if [[ $ARGS_HISTORY_CURSOR -eq $ARGS_HISTORY_TAIL ]]; then
+	if [[ $ARGS_HISTORY_INDEX -eq $ARGS_HISTORY_TAIL ]]; then
 		ARGS_HISTORY_TAIL=$(args_history_increment $ARGS_HISTORY_TAIL)
 	fi
 
@@ -47,15 +47,15 @@ function args_history_push {
 }
 
 function args_history_replace_current {
-	ARGS_HISTORY[$ARGS_HISTORY_CURSOR]=$1
+	ARGS_HISTORY[$ARGS_HISTORY_INDEX]=$1
 }
 
 function args_history_undo {
-	# To undo, move only `cursor` backward, up to `tail`, inclusive
-	local args_history_prev; args_history_prev=$(args_history_decrement "$ARGS_HISTORY_CURSOR")
+	# To undo, move only `index` backward, up to `tail`, inclusive
+	local args_history_prev; args_history_prev=$(args_history_decrement "$ARGS_HISTORY_INDEX")
 
-	if [[ $ARGS_HISTORY_CURSOR -ne $ARGS_HISTORY_TAIL ]]; then
-		ARGS_HISTORY_CURSOR=$args_history_prev
+	if [[ $ARGS_HISTORY_INDEX -ne $ARGS_HISTORY_TAIL ]]; then
+		ARGS_HISTORY_INDEX=$args_history_prev
 	else
 		ARGS_HISTORY_UNDO_EXCEEDED=1
 	fi
@@ -70,11 +70,11 @@ function args_history_undo_error_bar {
 }
 
 function args_history_redo {
-	# To redo, move only `cursor` forward, up to `head`, inclusive
-	local args_history_next; args_history_next=$(args_history_increment "$ARGS_HISTORY_CURSOR")
+	# To redo, move only `index` forward, up to `head`, inclusive
+	local args_history_next; args_history_next=$(args_history_increment "$ARGS_HISTORY_INDEX")
 
-	if [[ $ARGS_HISTORY_CURSOR -ne $ARGS_HISTORY_HEAD ]]; then
-		ARGS_HISTORY_CURSOR=$args_history_next
+	if [[ $ARGS_HISTORY_INDEX -ne $ARGS_HISTORY_HEAD ]]; then
+		ARGS_HISTORY_INDEX=$args_history_next
 	else
 		ARGS_HISTORY_REDO_EXCEEDED=1
 	fi
@@ -89,7 +89,7 @@ function args_history_redo_error_bar {
 }
 
 function args_history_entries {
-	echo "cursor: $ARGS_HISTORY_CURSOR"
+	echo "index: $ARGS_HISTORY_INDEX"
 	echo "head: $ARGS_HISTORY_HEAD"
 	echo "tail: $ARGS_HISTORY_TAIL"
 	echo "max: $ARGS_HISTORY_MAX"
@@ -120,7 +120,7 @@ function args_history_increment {
 }
 
 function args_history_decrement {
-	local args_history_decrement; args_history_decrement=$((ARGS_HISTORY_CURSOR - 1))
+	local args_history_decrement; args_history_decrement=$((ARGS_HISTORY_INDEX - 1))
 	[[ $args_history_decrement -eq 0 ]] && args_history_decrement=$ARGS_HISTORY_MAX
 	echo $args_history_decrement
 }

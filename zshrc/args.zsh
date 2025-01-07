@@ -64,13 +64,13 @@
 #function r { args_history_redo; args_list; args_history_redo_error_bar; }
 ## list / select historical args by [i]ndex
 ## (e.g `i` to list history, `i 8` to select the args at index 8)
-#function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_history_entries || { ARGS_HISTORY_CURSOR=$1; a; }; }
+#function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_history_entries || { ARGS_HISTORY_INDEX=$1; a; }; }
 
 #
 # Getters
 #
 
-function args { echo "${ARGS_HISTORY[$ARGS_HISTORY_CURSOR]}"; }
+function args { echo "${ARGS_HISTORY[$ARGS_HISTORY_INDEX]}"; }
 function args_plain { args | bw | expand; }
 function args_list { args | nl; }
 function args_list_plain { args | nl | bw | expand; }
