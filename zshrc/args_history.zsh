@@ -24,7 +24,7 @@ function args_history_init {
 function args_history_reset {
 	ARGS_HISTORY=()
 	ARGS_HISTORY_MAX=100
-	ARGS_HISTORY_INDEX=0
+	ARGS_HISTORY_INDEX=99
 	ARGS_HISTORY_HEAD=$ARGS_HISTORY_INDEX
 	ARGS_HISTORY_TAIL=-1
 	ARGS_HISTORY_UNDO_EXCEEDED=0
@@ -124,9 +124,12 @@ function args_history_is_index_valid {
 	local tail=$ARGS_HISTORY_TAIL
 
 	[[
+		# When there no wrap around
 		$tail -le $index && $index -le $head ||
-		$tail -gt $index && $((tail - max)) -le $index && $index -le $head ||
-		$tail -le $index && $index -gt $head && $((index - max)) -le $head
+		# When there is wrap around at the end, and `index` is near `0`
+		$tail -gt $head && $tail -gt $index && $((tail - max)) -le $index && $index -le $head ||
+		# When there is wrap around at the end, and `index` is near `max`
+		$tail -gt $head && $tail -le $index && $index -gt $head && $((index - max)) -le $head
 	]] && echo 1 || echo 0
 }
 
