@@ -24,7 +24,7 @@ function args_history_init {
 function args_history_reset {
 	ARGS_HISTORY=()
 	ARGS_HISTORY_MAX=100
-	ARGS_HISTORY_INDEX=0
+	ARGS_HISTORY_INDEX=99
 	ARGS_HISTORY_HEAD=$ARGS_HISTORY_INDEX
 	ARGS_HISTORY_TAIL=-1
 	ARGS_HISTORY_UNDO_EXCEEDED=0
@@ -114,6 +114,20 @@ function args_history_entries {
 		# Decrement index accounting for wrap-around and 1-based indexing
 		index=$(((index - 2 + ARGS_HISTORY_MAX) % ARGS_HISTORY_MAX + 1))
 	done
+}
+
+function args_history_is_index_valid {
+	local index=$1
+
+	local max=$ARGS_HISTORY_MAX
+	local head=$ARGS_HISTORY_HEAD
+	local tail=$ARGS_HISTORY_TAIL
+
+	[[
+		$tail -le $index && $index -le $head ||
+		$tail -gt $index && $((tail - max)) -le $index && $index -le $head ||
+		$tail -le $index && $index -gt $head && $((index - max)) -le $head
+	]] && echo 1 || echo 0
 }
 
 #

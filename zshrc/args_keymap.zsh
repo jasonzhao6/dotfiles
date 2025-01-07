@@ -29,6 +29,7 @@ function a {
 #
 
 # Constants
+# shellcheck disable=SC2034
 ARGS_EMPTY='(empty)'
 ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd column'
 
@@ -50,21 +51,13 @@ function aa {
 }
 
 function ah {
-	local max=$ARGS_HISTORY_MAX
 	local index=$1
-	local head=$ARGS_HISTORY_HEAD
-	local tail=$ARGS_HISTORY_TAIL
 
 	# If `index` is not specified, list all history entries
 	[[ -z $index ]] && args_history_entries && return
 
 	# If `index` is within range, set it as the index, then list args
-	if [[
-		$tail -le $index && $index -le $head ||
-		$tail -gt $index && $((tail - max)) -le $index && $index -le $head ||
-		$tail -le $index && $index -gt $head && $((index - max)) -le $head
-	]]; then
-
+	if [[ $(args_history_is_index_valid "$index") -eq 1 ]]; then
 		# shellcheck disable=SC2034
 		ARGS_HISTORY_INDEX=$index
 		aa
