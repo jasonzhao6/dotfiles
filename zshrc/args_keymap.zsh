@@ -15,6 +15,7 @@ ARGS_KEYMAP=(
 	'a•r # Redo save / filter'
 	'a•h # List history entries'
 	'a•h <index> # Set history index'
+	'a•z # Reset args history'
 )
 # TODO dim and explain • if it works well
 
@@ -103,4 +104,8 @@ function as {
 
 function aso {
 	as "$ARGS_SOFT_SELECT"
+}
+
+function az {
+	args_history_reset
 }
