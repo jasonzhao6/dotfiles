@@ -5,14 +5,16 @@ source "$ZSHRC_DIR/args.history.zsh"; args_history_init
 #
 
 ARGS_KEYMAP=(
-	'a•s # Save as args'
-	'a•so # Save as args & soft-select the 1st column'
+	'a•s # Save args'
+	'a•so # Save args & soft-select the 1st column'
 	''
-	'a•a <substring>* -<substring>*'
+	'a•a # List args'
+	'a•a <match>* -<mismatch>* # Filter args'
 	''
-	'a•h'
-	'a•u'
-	'a•r'
+	'a•u # Undo save / filter'
+	'a•r # Redo save / filter'
+	'a•h # List history entries'
+	'a•h <index> # Set history cursor'
 )
 # TODO dim and explain • if it works well
 

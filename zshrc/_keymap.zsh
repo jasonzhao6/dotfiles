@@ -3,16 +3,18 @@
 # keep the comments alignment logic in the `keymap_help` function working.
 KEYMAP_USAGE=(
   '_ # Show this help'
-	'_ <key> <args>* # Invoke a key mapping'
+	'_ <key> # Invoke key with no arg'
+	'_ <key> <args> # Invoke key with one arg'
+	'_ <key> <args>* # Invoke key with multiple args'
 )
 
 # TODO explain
-KEYMAP_DOT=•
+KEYMAP_DOT='•'
 
 KEYMAP_DUPE_ERROR_BAR="$(red_bar 'Error: Cannot have duplicate keys')"
 
-# Exit codes and corresponding print values
-# - 1: Print error message about duplicate `key`s
+# Exit codes and corresponding prints
+# - 1: Print error message about non-consecutive duplicate `key`s
 # - 2: Print usage since `key` was not specified
 # - 3: Print usage since `key` was not found
 # - 0: Print output from invoking `key`
@@ -23,8 +25,15 @@ function keymap {
 	local key=$1; [[ -n $key ]] && shift
 	local args=("$@")
 
-	# If keymap contains duplicate `key`s, abort and print error message
-	local dupes; dupes=$(keymap_check_for_dupes "${keymap[@]}")
+	# If keymap contains disjoint duplicate `key`s, abort and print error message
+	#   ```
+	#   o•c       # Open the latest commit
+	#   o•c <sha> # Open the specified commit  <--  Joint duplicate, likely intentional
+	#
+	#   o•a       # Do something
+	#   o•c       # Do something else          <--  Disjoint duplicate, likely unintentional
+	#   ```
+	local dupes; dupes=$(keymap_check_for_disjoint_dupes "${keymap[@]}")
 	[[ -n $dupes ]] && printf "%s\n\n%s" "$dupes" "$KEYMAP_DUPE_ERROR_BAR" && return 1
 
 	# If a `key` was not specified, abort and print usage
@@ -114,19 +123,29 @@ function keymap_print_entry {
 	fi
 }
 
-function keymap_check_for_dupes {
+function keymap_check_for_disjoint_dupes {
 	local entries=("$@")
+	local last_entry
 
 	typeset -A seen
 
 	for entry in "${entries[@]}"; do
 		namespace_dot_key="${(j: :)${(z)entry}[1,3]}"
 
-		# Seeing a `key` for the first time
+		# If it is the same as the last entry, skip it
+		if [[ $namespace_dot_key == $last_entry ]]; then
+			continue
+
+		# Otherwise, remember it for the next iteration
+		else
+			last_entry=$namespace_dot_key
+		fi
+
+		# If we have not see it, remember it
 		if [[ -z ${seen[$namespace_dot_key]} ]]; then
 			seen[$namespace_dot_key]=$entry
 
-		# Seeing a `key` already seen before
+		# Otherwise, we found a pair of disjoint dupes
 		else
 			echo
 			echo "> ${seen[$namespace_dot_key]}"
