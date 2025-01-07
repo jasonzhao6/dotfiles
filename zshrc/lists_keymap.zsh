@@ -11,11 +11,11 @@ LISTS_KEYMAP=(
 function t {
 	local namespace='t'
 	local output; output="$(keymap $namespace ${#LISTS_KEYMAP} "${LISTS_KEYMAP[@]}" "$@")"
-	local exit_code=$?; [[ $exit_code -eq 0 ]] && echo "$output" | ss || echo "$output"
+	local exit_code=$?; [[ $exit_code -eq 0 ]] && echo "$output" | as || echo "$output"
 }
 
 #
-# Key mappings
+# Key mappings (alphabetized)
 #
 
 # To be overwritten by `.zshrc.secrets`

@@ -1,19 +1,21 @@
 # `_` is a placeholder for a single-letter namespace.
-# It is to be substituted with the passed in namespace when printing.
-# It's important to keep it the same length as the longest namespace for
-# the purpose of aligning the comments in the `keymap_help` function.
+# If namespace grows beyond single-letter, update here to match in order to
+# keep the comments alignment logic in the `keymap_help` function working.
 KEYMAP_USAGE=(
   '_ # Show this help'
 	'_ <key> <args>* # Invoke a key mapping'
 )
 
+# TODO explain
+KEYMAP_DOT=•
+
 KEYMAP_DUPE_ERROR_BAR="$(red_bar 'Error: Cannot have duplicate keys')"
 
-# Exit codes and echo values
-# - 1: Error message about keymap containing duplicate `key`s
-# - 2: Print usage since a `key` was not specified
-# - 3: Print usage since a valid `key` was not found
-# - 0: Print output from a valid `key`
+# Exit codes and corresponding print values
+# - 1: Print error message about duplicate `key`s
+# - 2: Print usage since `key` was not specified
+# - 3: Print usage since `key` was not found
+# - 0: Print output from invoking `key`
 function keymap {
 	local namespace=$1; shift
 	local keymap_size=$1; shift
@@ -21,28 +23,28 @@ function keymap {
 	local key=$1; [[ -n $key ]] && shift
 	local args=("$@")
 
-	# If keymap contains duplicate `key`s, abort and print error
+	# If keymap contains duplicate `key`s, abort and print error message
 	local dupes; dupes=$(keymap_check_for_dupes "${keymap[@]}")
 	[[ -n $dupes ]] && printf "%s\n\n%s" "$dupes" "$KEYMAP_DUPE_ERROR_BAR" && return 1
 
-	# If no `key` was passed in, print usage
-	[[ -z $key ]] && { keymap_help "$namespace" "${keymap[@]}"; return 2; }
+	# If a `key` was not specified, abort and print usage
+	[[ -z $key ]] && keymap_help "$namespace" "${keymap[@]}" && return 2
 
-	# Look for the specified key and invoke it; if not found, print usage
+	# Look for the specified `key`
 	local found
 
 	for entry in "${keymap[@]}"; do
-		if [[ $entry == "$namespace $key"* ]]; then
-			found=1
-			break
-		fi
+		[[ $entry == "$namespace$KEYMAP_DOT$key"* ]] && found=1 && break
 	done
 
+	# If not found, print usage
 	if [[ -z $found ]]; then
 		keymap_help "$namespace" "${keymap[@]}"
 		return 3
+
+	# If found, invoke it with `args`
 	else
-		"${namespace}_${key}" "${args[@]}"
+		"${namespace}${key}" "${args[@]}"
 	fi
 }
 
@@ -102,8 +104,11 @@ function keymap_print_entry {
 	local command="${entry% \#*}"
 	local comment; [[ $entry = *\#* ]] && comment="# ${entry#*\# }"
 
+	# Print with color
 	if [[ -n $command ]]; then
 		printf "%s %-*s %s\n" "$KEYMAP_PROMPT" "$command_size" "$command" "$(gray_fg "$comment")"
+
+	# Allow empty line as a separator between different sections of a keymap
 	else
 		echo
 	fi
@@ -115,13 +120,16 @@ function keymap_check_for_dupes {
 	typeset -A seen
 
 	for entry in "${entries[@]}"; do
-		first_two_words="${(j: :)${(z)entry}[1,2]}"
+		namespace_dot_key="${(j: :)${(z)entry}[1,3]}"
 
-		if [[ -z ${seen[$first_two_words]} ]]; then
-			seen[$first_two_words]=$entry
+		# Seeing a `key` for the first time
+		if [[ -z ${seen[$namespace_dot_key]} ]]; then
+			seen[$namespace_dot_key]=$entry
+
+		# Seeing a `key` already seen before
 		else
 			echo
-			echo "> ${seen[$first_two_words]}"
+			echo "> ${seen[$namespace_dot_key]}"
 			echo "> $entry"
 		fi
 	done

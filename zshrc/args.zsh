@@ -8,11 +8,11 @@
 ## paste into args history
 ## (e.g copy a list into pasteboard, then `v`)
 #function v { pbpaste | s; }
-#function vv { pbpaste | ss; }
+#function vv { pbpaste | as; }
 ## list / filter [a]rgs
 ## (e.g `a` to list all, `a foo and bar -not -baz` to filter)
 ## shellcheck disable=SC2120
-#function a { [[ -z $1 ]] && args_list || { args_plain | eval "$(args_filtering "$@") | $(args_coloring "$@")" | ss; }; }
+#function a { [[ -z $1 ]] && args_list || { args_plain | eval "$(args_filtering "$@") | $(args_coloring "$@")" | as; }; }
 ## select a random arg
 ## (e.g `aa echo`)
 #function aa { arg $((RANDOM % $(args_list_size) + 1)) "$@"; }
@@ -47,7 +47,7 @@
 ## (e.g `each echo`, `all echo`, `map echo '$((~~ * 2))'`)
 #function each { for i in $(seq 1 "$(args_list_size)"); do echo; arg "$i" "$@"; done; }
 #function all { for i in $(seq 1 "$(args_list_size)"); do echo; arg "$i" "$@" & done; wait; }
-#function map { local map=''; local row; for i in $(seq 1 "$(args_list_size)"); do echo; row=$(arg "$i" "$@"); echo "$row"; map+="$row\n"; done; echo; echo "$map" | ss; }
+#function map { local map=''; local row; for i in $(seq 1 "$(args_list_size)"); do echo; row=$(arg "$i" "$@"); echo "$row"; map+="$row\n"; done; echo; echo "$map" | as; }
 ## list / filter colum[n] by letter
 ## (e.g `n` to list all, `n d` to keep only the fourth column, delimited based on the bottom row)
 #function n { args_select_column 0 "$1"; }
@@ -58,7 +58,7 @@
 #function c { [[ -z $1 ]] && args_plain | pbcopy || echo -n "$@" | pbcopy; }
 ## [y]ank / [p]ut current args into a different tab
 #function y { args > ~/.zshrc.args; }
-#function p { echo "$(<~/.zshrc.args)" | ss; }
+#function p { echo "$(<~/.zshrc.args)" | as; }
 ## [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
 #function u { args_undo_selection; }
 #function r { args_redo; args_list; args_redo_bar; }
@@ -191,7 +191,7 @@ function args_select_column {
 		local column_start; column_start=$([[ "$target_column" -ne 0 ]] && echo "$target_column" || echo "$first_column")
 		local column_end; column_end=$([[ "$next_column" -ne 0 ]] && echo $((next_column - 1)))
 
-		args_list_plain | cut -c "$column_start"-"$column_end" | strip_right | ss
+		args_list_plain | cut -c "$column_start"-"$column_end" | strip_right | as
 
 		# If a column was not selected, show columns bar again for convenience
 		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args_columns "$use_top_row")" b) -ne 0 ]]; then

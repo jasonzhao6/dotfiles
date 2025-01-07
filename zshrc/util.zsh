@@ -1,10 +1,10 @@
 ### Util
 # singles (they save into `args`)
-function d { [[ -n "$1" ]] && { D=${${${@}#*://}%%/*}; [[ -z $ZSHRC_UNDER_TEST ]] && dig +short $D | ss || printf "test output for\n%s" "$D" | ss; }; }
-function f { [[ -n "$1" ]] && f_pre "$@" | sort | ss; }
-function l { ls -l | awk '{print $9}' | ss; } # Not taking search pattern b/c folder matches break column alignment
-function ll { ls -lA | awk '{print $9}' | egrep '^(\e\[3[0-9]m)?\.' | bw | ss; } # Show only hidden files
-function w { which "$@" | ss; }
+function d { [[ -n "$1" ]] && { D=${${${@}#*://}%%/*}; [[ -z $ZSHRC_UNDER_TEST ]] && dig +short $D | as || printf "test output for\n%s" "$D" | as; }; }
+function f { [[ -n "$1" ]] && f_pre "$@" | sort | as; }
+function l { ls -l | awk '{print $9}' | as; } # Not taking search pattern b/c folder matches break column alignment
+function ll { ls -lA | awk '{print $9}' | egrep '^(\e\[3[0-9]m)?\.' | bw | as; } # Show only hidden files
+function w { which "$@" | as; }
 # doubles (they do not save into `args`)
 function bb { pmset sleepnow; }
 function cc { eval "$(prev_command)" | bw | ruby -e 'puts STDIN.read.strip' | pbcopy; }
@@ -70,5 +70,5 @@ function trim { bw | cut -c $(($1 + 1))- | { [[ -z $2 ]] && cat || rev | cut -c 
 function insert_hash { awk 'NF >= 2 {col_2_index = index($0, $2); col_1 = substr($0, 1, col_2_index - 1); col_rest = substr($0, col_2_index); printf "%s# %s\n", col_1, col_rest} NF < 2 {print}'; }
 function size_of { awk "{if (length(\$${1:-0}) > max_len) max_len = length(\$${1:-0})} END {print max_len}"; }
 # | after json
-function keys { jq keys | trim_list | ss; }
+function keys { jq keys | trim_list | as; }
 function trim_list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$//' | compact; }

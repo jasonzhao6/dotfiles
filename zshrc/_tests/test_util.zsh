@@ -171,7 +171,7 @@ function test__w {
 	)" "$(
 		cat <<-eof
 		     1	w () {
-		     2		which "\$@" | ss
+		     2		which "\$@" | as
 		     3	}
 		eof
 	)"

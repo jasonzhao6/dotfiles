@@ -13,11 +13,11 @@ OPENS_KEYMAP=(
 function o {
 	local namespace='o'
 	local output; output="$(keymap $namespace ${#OPENS_KEYMAP} "${OPENS_KEYMAP[@]}" "$@")"
-	local exit_code=$?; [[ $exit_code -eq 0 ]] && echo "$output" | ss || echo "$output"
+	local exit_code=$?; [[ $exit_code -eq 0 ]] && echo "$output" | as || echo "$output"
 }
 
 #
-# Key mappings
+# Key mappings (alphabetized)
 #
 
 function o_c {

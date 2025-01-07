@@ -9,7 +9,7 @@ function gta { git remote add "$1" "$2"; }
 function gtr { git remote remove "$@"; }
 function gtv { git remote --verbose; }
 # [B]ranch
-function gb { local merged; merged=$(gb_merged); [[ -n $merged ]] && merged="\n----------------\n$merged"; echo "$(git branch)$merged" | ss; }
+function gb { local merged; merged=$(gb_merged); [[ -n $merged ]] && merged="\n----------------\n$merged"; echo "$(git branch)$merged" | as; }
 function gbb { gb_merged | xargs git branch --delete; git remote prune origin; echo; gb; }
 function gbd { git branch --delete --force "$@"; git push origin --delete "$@"; gb; }
 # [G]it checkout
