@@ -64,7 +64,7 @@
 #function r { args_history_redo; args_list; args_history_redo_error_bar; }
 ## list / select historical args by [i]ndex
 ## (e.g `i` to list history, `i 8` to select the args at index 8)
-#function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_history_inspect || { ARGS_CURSOR=$1; a; }; }
+#function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_history_entries || { ARGS_HISTORY_CURSOR=$1; a; }; }
 
 #
 # Getters

@@ -50,15 +50,19 @@ function aa {
 function ah {
 	local go_to_index=$1
 
-	# If there is not a valid `go_to_index`, list history
-	if [[ -z $go_to_index || $go_to_index -lt $ARGS_TAIL || $go_to_index -gt $ARGS_HEAD ]]; then
-		args_history_inspect
+	# If `go_to_index` is not specified, list all history entries
+	[[ -z $go_to_index ]] && args_history_entries && return
 
-	# Otherwise, go to the specified index, then list args
-	else
+	# If `go_to_index` is within range, set it as the index, then list args
+	if [[	$go_to_index -ge $ARGS_HISTORY_TAIL && $go_to_index -le $ARGS_HISTORY_HEAD ]]; then
 		# shellcheck disable=SC2034
-		ARGS_CURSOR=$go_to_index
+		ARGS_HISTORY_CURSOR=$go_to_index
 		aa
+	# Otherwise, list all history entries and show error bar
+	else
+		args_history_entries
+		echo
+		red_bar "Index out of range: $go_to_index"
 	fi
 }
 

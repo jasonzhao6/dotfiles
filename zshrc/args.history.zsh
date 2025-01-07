@@ -46,6 +46,10 @@ function args_history_push {
 	[[ $ARGS_HISTORY_TAIL -eq 0 ]] && ARGS_HISTORY_TAIL=1
 }
 
+function args_history_replace_current {
+	ARGS_HISTORY[$ARGS_HISTORY_CURSOR]=$1
+}
+
 function args_history_undo {
 	# To undo, move only `cursor` backward, up to `tail`, inclusive
 	local args_history_prev; args_history_prev=$(args_history_decrement "$ARGS_HISTORY_CURSOR")
@@ -54,6 +58,14 @@ function args_history_undo {
 		ARGS_HISTORY_CURSOR=$args_history_prev
 	else
 		ARGS_HISTORY_UNDO_EXCEEDED=1
+	fi
+}
+
+function args_history_undo_error_bar {
+	# If we hit undo limit, show undo error bar once
+	if [[ $ARGS_HISTORY_UNDO_EXCEEDED -eq 1 ]]; then
+		ARGS_HISTORY_UNDO_EXCEEDED=0
+		red_bar 'Reached the end of undo history'
 	fi
 }
 
@@ -68,14 +80,6 @@ function args_history_redo {
 	fi
 }
 
-function args_history_undo_error_bar {
-	# If we hit undo limit, show undo error bar once
-	if [[ $ARGS_HISTORY_UNDO_EXCEEDED -eq 1 ]]; then
-		ARGS_HISTORY_UNDO_EXCEEDED=0
-		red_bar 'Reached the end of undo history'
-	fi
-}
-
 function args_history_redo_error_bar {
 	# If we hit redo limit, show redo error bar once
 	if [[ $ARGS_HISTORY_REDO_EXCEEDED -eq 1 ]]; then
@@ -84,11 +88,7 @@ function args_history_redo_error_bar {
 	fi
 }
 
-function args_history_replace_current {
-	ARGS_HISTORY[$ARGS_HISTORY_CURSOR]=$1
-}
-
-function args_history_inspect {
+function args_history_entries {
 	echo "cursor: $ARGS_HISTORY_CURSOR"
 	echo "head: $ARGS_HISTORY_HEAD"
 	echo "tail: $ARGS_HISTORY_TAIL"
