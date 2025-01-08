@@ -3,20 +3,19 @@
 #
 
 ARGS_KEYMAP=(
-	'a•s <match>* <-mismatch>* # Save args'
-	'a•so <match>* <-mismatch>* # Save args & soft-select the 1st column'
+	'a·s <match>* <-mismatch>* # Save args'
+	'a·so <match>* <-mismatch>* # Save args & soft-select the 1st column'
 	''
-	'a•a # List args'
-	'a•a <match>* <-mismatch>* # Filter args'
+	'a·a # List args'
+	'a·a <match>* <-mismatch>* # Filter args'
 	''
-	'a•z # Undo change'
-	'a•Z # Redo change'
+	'a·z # Undo change'
+	'a·Z # Redo change'
 	''
-	'a•h # List history entries'
-	'a•h <index> # Set history index'
-	'a•0 # Reset history'
+	'a·h # List history entries'
+	'a·h <index> # Set history index'
+	'a·0 # Reset history'
 )
-# TODO dim and explain • if it works well
 
 function a {
 	keymap a ${#ARGS_KEYMAP} "${ARGS_KEYMAP[@]}" "$@"

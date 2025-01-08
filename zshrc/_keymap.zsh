@@ -4,14 +4,14 @@
 KEYMAP_USAGE=(
   '_ # Show this help'
 	''
-	'_•<key> # Invoke <key>'
-	'_•<key> <arg> # Invoke <key> with <arg>'
-	'_•<key> <arg1> <arg2> # (`•` represents an optional space)'
-	'_•<key> <args>* # (`*` represents multiple optional args)'
+	'_·<key> # Invoke <key>'
+	'_·<key> <arg> # Invoke <key> with <arg>'
+	'_·<key> <arg1> <arg2> # (`·` represents an optional space)'
+	'_·<key> <args>* # (`*` represents multiple optional args)'
 )
 
 # TODO explain
-KEYMAP_DOT='•'
+KEYMAP_DOT='·'
 
 KEYMAP_DUPE_ERROR_BAR="$(red_bar 'Error: Cannot have duplicate keys')"
 
@@ -29,11 +29,11 @@ function keymap {
 
 	# If keymap contains disjoint duplicate `key`s, abort and print error message
 	#   ```
-	#   o•c       # Open the latest commit
-	#   o•c <sha> # Open the specified commit  <--  Joint duplicate, likely intentional
+	#   o·c       # Open the latest commit
+	#   o·c <sha> # Open the specified commit  <--  Joint duplicate, likely intentional
 	#
-	#   o•a       # Do something
-	#   o•c       # Do something else          <--  Disjoint duplicate, likely unintentional
+	#   o·a       # Do something
+	#   o·c       # Do something else          <--  Disjoint duplicate, likely unintentional
 	#   ```
 	local dupes; dupes=$(keymap_check_for_disjoint_dupes "${keymap[@]}")
 	[[ -n $dupes ]] && printf "%s\n\n%s" "$dupes" "$KEYMAP_DUPE_ERROR_BAR" && return 1
@@ -135,7 +135,7 @@ function keymap_check_for_disjoint_dupes {
 		namespace_dot_key="${(j: :)${(z)entry}[1,3]}"
 
 		# If it is the same as the last entry, skip it
-		if [[ $namespace_dot_key == $last_entry ]]; then
+		if [[ $namespace_dot_key == "$last_entry" ]]; then
 			continue
 
 		# Otherwise, remember it for the next iteration

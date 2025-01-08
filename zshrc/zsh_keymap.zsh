@@ -3,23 +3,23 @@
 #
 
 ZSH_KEYMAP=(
-	'z•e # Edit with IntelliJ'
-	'z•m # Edit with TextMate'
-	'z•s # Edit secrets'
+	'z·e # Edit with IntelliJ'
+	'z·m # Edit with TextMate'
+	'z·s # Edit secrets'
 	''
-	'z•z # Source'
-	'z•t # Test'
+	'z·z # Source'
+	'z·t # Test'
 	''
-	'z•w # Which'
+	'z·w # Which'
 	''
-	'z•a # List aliases'
-	'z•a <match> # Filter aliases'
+	'z·a # List aliases'
+	'z·a <match> # Filter aliases'
 	''
-	'z•f # List functions'
-	'z•f <match> # Filter functions'
+	'z·f # List functions'
+	'z·f <match> # Filter functions'
 	''
-	'z•p # Push other dotfiles from local'
-	'z•P # Pull other dotfiles to local'
+	'z·p # Push other dotfiles from local'
+	'z·P # Pull other dotfiles to local'
 )
 
 function z {

@@ -3,8 +3,8 @@
 #
 
 AWS_KEYMAP=(
-	'w•o # List Opal groups'
-	'w•o <match> # Filter Opal groups'
+	'w·o # List Opal groups'
+	'w·o <match> # Filter Opal groups'
 )
 
 function w {
