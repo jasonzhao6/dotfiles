@@ -17,7 +17,7 @@ function o {
 }
 
 #
-# Key mappings (alphabetized)
+# Key mappings (Alphabetized)
 #
 
 function o_c {

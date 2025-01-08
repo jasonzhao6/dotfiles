@@ -9,7 +9,7 @@ ARGS_KEYMAP=(
 	'a•so # Save args & soft-select the 1st column'
 	''
 	'a•a # List args'
-	'a•a <match>* -<mismatch>* # Filter args'
+	'a•a <match>* <-mismatch>* # Filter args'
 	''
 	'a•u # Undo save / filter'
 	'a•r # Redo save / filter'
@@ -25,7 +25,7 @@ function a {
 }
 
 #
-# Key mappings (alphabetized)
+# Key mappings (Alphabetized)
 #
 
 # Constants

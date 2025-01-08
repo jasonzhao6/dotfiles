@@ -15,7 +15,7 @@ function t {
 }
 
 #
-# Key mappings (alphabetized)
+# Key mappings (Alphabetized)
 #
 
 # To be overwritten by `.zshrc.secrets`
