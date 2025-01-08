@@ -4,10 +4,10 @@
 
 ARGS_KEYMAP=(
 	'a·s # Save args'
-	'a·so # Save args; soft-select the 1st column'
+	'a·s <match>* <-mismatch>* # Save args & filter'
 	''
-	'a·s <match>* <-mismatch>* # Save & filter args'
-	'a·so <match>* <-mismatch>* # Save & filter args; soft-select the 1st column'
+	'a·so # Save args & soft-select the 1st column'
+	'a·so <match>* <-mismatch>* # Save args & soft-select the 1st column & filter'
 	''
 	'a·a # List args'
 	'a·a <match>* <-mismatch>* # Filter args'
@@ -16,7 +16,7 @@ ARGS_KEYMAP=(
 	'a·Z # Redo change'
 	''
 	'a·h # List history entries'
-	'a·h <index> # Set history index'
+	'a·h <index> # Select history entry'
 	'a·0 # Reset history'
 )
 

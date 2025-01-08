@@ -5,12 +5,9 @@ KEYMAP_USAGE=(
   '_ # Show this help'
 	''
 	'_·<key> # Invoke <key>'
-	'_·<key> <arg> # Invoke <key> with <arg>'
-	'_·<key> <arg1> <arg2> # (`·` represents an optional space)'
-	'_·<key> <args>* # (`*` represents multiple optional args)'
+	'_·<key> <args>* # Invoke <key> with multiple <args>'
 )
 
-# TODO explain
 KEYMAP_DOT='·'
 
 KEYMAP_DUPE_ERROR_BAR="$(red_bar 'Error: Cannot have duplicate keys')"
@@ -91,6 +88,9 @@ function keymap_help {
 	for entry in "${keymap[@]}"; do
 		keymap_print_entry "$entry" "$max_command_size"
 	done
+
+	echo
+	gray_fg "     ^ The space between \`$namespace\` and <key> is optional."
 }
 
 function keymap_get_max_command_size {
