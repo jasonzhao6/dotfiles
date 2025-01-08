@@ -8,7 +8,7 @@ setopt SHARE_HISTORY
 
 # List / filter
 # (e.g `h` to list all, `h foo` to filter)
-function h { egrep --ignore-case "$*" "$HISTFILE" | trim 15 | sort --unique | as; }
+function hr { egrep --ignore-case "$*" "$HISTFILE" | trim 15 | sort --unique | as; }
 
 # [C]lear
 function hc { rm "$HISTFILE"; }

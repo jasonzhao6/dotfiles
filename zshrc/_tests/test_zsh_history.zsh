@@ -1,4 +1,4 @@
-function test__h {
+function test__hr {
 	local history; history=$(
 		cat <<-eof
 			: 1735711246:0;echo 5
@@ -14,10 +14,10 @@ function test__h {
 	# shellcheck disable=SC2030
 	assert "$(
 		local histfile=$HISTFILE
-		HISTFILE='/tmp/test__h'
+		HISTFILE='/tmp/test__hr'
 		echo "$history" > $HISTFILE
 
-		h
+		hr
 
 		rm $HISTFILE
 		HISTFILE=$histfile
@@ -30,7 +30,7 @@ function test__h {
 		     5	echo 5
 		eof
 	)"
-}; run_with_filter test__h
+}; run_with_filter test__hr
 
 function test__hc {
 	# shellcheck disable=SC2031

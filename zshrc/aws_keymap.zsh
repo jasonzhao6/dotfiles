@@ -15,7 +15,7 @@ function w {
 # Key mappings (Alphabetized)
 #
 
-# To be overwritten by `.zshrc.secrets`
+# To be overwritten by `$ZSH_SECRETS`
 OPAL=(
 	'non-secret-placeholder-1 url-1'
 	'non-secret-placeholder-2 url-2'
