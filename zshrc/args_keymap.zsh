@@ -43,10 +43,10 @@ function a0 {
 
 # shellcheck disable=SC2120
 function aa {
-	local filters=$1
+	local filters=("$@")
 
 	# If there is no `filters`, list args
-	if [[ -z $filters ]]; then
+	if [[ -z "${filters[*]}" ]]; then
 		args_list
 
 	# Otherwise, apply `filters`, then list args
