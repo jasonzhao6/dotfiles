@@ -13,7 +13,7 @@ function args_save {
 
 	# If requested, insert `#` after the first column to soft-select it
 	local is_soft_select=$1; shift
-	[[ $is_soft_select == $ARGS_SOFT_SELECT ]] && new_args=$(echo "$new_args" | insert_hash)
+	[[ $is_soft_select == "$ARGS_SOFT_SELECT" ]] && new_args=$(echo "$new_args" | insert_hash)
 
 	# If there are filters, apply them
 	local filters=("$@")

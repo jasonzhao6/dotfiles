@@ -56,6 +56,71 @@ input_with_tabs=$(
 
 input_with_comments=$input_with_tabs
 
+function test__aa {
+	assert "$(
+		echo "$input" | as > /dev/null
+		aa
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-shared-1
+		     2	terraform-application-region-shared-2
+		     3	terraform-application-region-shared-3
+		     4	terraform-application-region-program-A
+		     5	terraform-application-region-program-B
+		eof
+	)"
+}; run_with_filter test__aa
+
+function test__aa__adds_color {
+	assert "$(
+		echo "$input" | as > /dev/null
+		aa shared
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-$(grep_color shared)-1
+		     2	terraform-application-region-$(grep_color shared)-2
+		     3	terraform-application-region-$(grep_color shared)-3
+		eof
+	)"
+}; run_with_filter test__aa__adds_color
+
+function test__aa__replaces_color {
+	assert "$(
+		echo "$input" | as > /dev/null
+		aa shared > /dev/null
+		aa region
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-$(grep_color region)-shared-1
+		     2	terraform-application-$(grep_color region)-shared-2
+		     3	terraform-application-$(grep_color region)-shared-3
+		eof
+	)"
+}; run_with_filter test__aa__replaces_color
+
+function test__aa__with_two_args_out_of_order {
+	assert "$(
+		echo "$input" | as > /dev/null
+		aa 2 shared
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-$(grep_color shared)-$(grep_color 2)
+		eof
+	)"
+}; run_with_filter test__aa__with_two_args_out_of_order
+
+function test__aa__with_two_args_including_negation {
+	assert "$(
+		echo "$input" | as > /dev/null
+		aa -2 shared
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-$(grep_color shared)-1
+		     2	terraform-application-region-$(grep_color shared)-3
+		eof
+	)"
+}; run_with_filter test__aa__with_two_args_including_negation
+
 function test__as {
 	# Can test `<command> | as`, but not `<command>; as`
 	# The latter requires an interactive shell
@@ -148,74 +213,9 @@ function test__aso__with_filters {
 #	)"
 #}; run_with_filter test__vv
 #
-#function test__a {
-#	assert "$(
-#		echo "$input" | ss > /dev/null
-#		a
-#	)" "$(
-#		cat <<-eof
-#		     1	terraform-application-region-shared-1
-#		     2	terraform-application-region-shared-2
-#		     3	terraform-application-region-shared-3
-#		     4	terraform-application-region-program-A
-#		     5	terraform-application-region-program-B
-#		eof
-#	)"
-#}; run_with_filter test__a
-#
-#function test__a__adds_color {
-#	assert "$(
-#		echo "$input" | ss > /dev/null
-#		a shared
-#	)" "$(
-#		cat <<-eof
-#		     1	terraform-application-region-$(grep_color shared)-1
-#		     2	terraform-application-region-$(grep_color shared)-2
-#		     3	terraform-application-region-$(grep_color shared)-3
-#		eof
-#	)"
-#}; run_with_filter test__a__adds_color
-#
-#function test__a__replaces_color {
-#	assert "$(
-#		echo "$input" | ss > /dev/null
-#		a shared > /dev/null
-#		a region
-#	)" "$(
-#		cat <<-eof
-#		     1	terraform-application-$(grep_color region)-shared-1
-#		     2	terraform-application-$(grep_color region)-shared-2
-#		     3	terraform-application-$(grep_color region)-shared-3
-#		eof
-#	)"
-#}; run_with_filter test__a__replaces_color
-#
-#function test__a__with_two_args_out_of_order {
-#	assert "$(
-#		echo "$input" | ss > /dev/null
-#		a 2 shared
-#	)" "$(
-#		cat <<-eof
-#		     1	terraform-application-region-$(grep_color shared)-$(grep_color 2)
-#		eof
-#	)"
-#}; run_with_filter test__a__with_two_args_out_of_order
-#
-#function test__a__with_two_args_including_negation {
-#	assert "$(
-#		echo "$input" | ss > /dev/null
-#		a -2 shared
-#	)" "$(
-#		cat <<-eof
-#		     1	terraform-application-region-$(grep_color shared)-1
-#		     2	terraform-application-region-$(grep_color shared)-3
-#		eof
-#	)"
-#}; run_with_filter test__a__with_two_args_including_negation
-#
 #function test__aa {
 #	assert "$(
-#		echo "$input_short" | ss > /dev/null
+#		echo "$input_short" | as > /dev/null
 #		eee 1 $(($(args_list_size) * 3)) aa echo 2>&1 | sort | uniq
 #	)" "$(
 #		cat <<-eof
@@ -231,7 +231,7 @@ function test__aso__with_filters {
 #
 #function test__arg {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		arg 3 echo 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -243,7 +243,7 @@ function test__aso__with_filters {
 #
 #function test__arg__with_whitespace {
 #	assert "$(
-#		echo "$input_with_whitespace" | ss > /dev/null
+#		echo "$input_with_whitespace" | as > /dev/null
 #		arg 3 echo 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -255,7 +255,7 @@ function test__aso__with_filters {
 #
 #function test__arg__with_substitution {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		arg 3 echo http://~~:8080 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -267,7 +267,7 @@ function test__aso__with_filters {
 #
 #function test__arg__with_multiple_substitutions {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		arg 3 echo http://~~:80 and https://~~:443 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -279,7 +279,7 @@ function test__aso__with_filters {
 #
 #function test__arg__with_multiple_substitutions_in_quotes {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		arg 3 'echo http://~~:80 and https://~~:443' 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -291,7 +291,7 @@ function test__aso__with_filters {
 #
 #function test__1 {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		1 echo 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -303,7 +303,7 @@ function test__aso__with_filters {
 #
 #function test__5 {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		5 echo 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -315,14 +315,14 @@ function test__aso__with_filters {
 #
 #function test__6 {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		6 echo 2>&1
 #	)" "echo "
 #}; run_with_filter test__6
 #
 #function test__0 {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		0 echo 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -334,7 +334,7 @@ function test__aso__with_filters {
 #
 #function test__e {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		e 3 4 echo 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -350,7 +350,7 @@ function test__aso__with_filters {
 #
 #function test__e__with_multiple_substitutions {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		e 3 4 echo ~~ and ~~ again 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -366,7 +366,7 @@ function test__aso__with_filters {
 #
 #function test__each {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		each echo 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -391,7 +391,7 @@ function test__aso__with_filters {
 #
 #function test__each__with_comments {
 #	assert "$(
-#		echo "$input_with_comments" | ss > /dev/null
+#		echo "$input_with_comments" | as > /dev/null
 #		each echo 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -412,7 +412,7 @@ function test__aso__with_filters {
 #	function test__all__sleep_and_echo { sleep "$@"; echo "$@"; }
 #
 #	assert "$(
-#		printf '0.01\n0.03\n0.05' | ss > /dev/null
+#		printf '0.01\n0.03\n0.05' | as > /dev/null
 #		all test__all__sleep_and_echo 2>/dev/null
 #	)" "$(
 #		cat <<-eof
@@ -428,7 +428,7 @@ function test__aso__with_filters {
 #
 #function test__map {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		map 'echo -n pre-; echo' 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -459,7 +459,7 @@ function test__aso__with_filters {
 #
 #function test__map__with_math {
 #	assert "$(
-#		seq 1 5 | ss > /dev/null
+#		seq 1 5 | as > /dev/null
 #		map echo ~~ doubles to '$((~~ * 10))' 2>&1
 #	)" "$(
 #		cat <<-eof
@@ -490,7 +490,7 @@ function test__aso__with_filters {
 #
 #function test__n {
 #	assert "$(
-#		echo "$input_with_tabs" | ss > /dev/null
+#		echo "$input_with_tabs" | as > /dev/null
 #		n
 #	)" "$(
 #		cat <<-eof
@@ -504,7 +504,7 @@ function test__aso__with_filters {
 #
 #function test__n__when_selecting_first {
 #	assert "$(
-#		echo "$input_with_tabs" | ss > /dev/null
+#		echo "$input_with_tabs" | as > /dev/null
 #		n a
 #	)" "$(
 #		cat <<-eof
@@ -517,7 +517,7 @@ function test__aso__with_filters {
 #
 #function test__n__when_selecting_third {
 #	assert "$(
-#		echo "$input_with_tabs" | ss > /dev/null
+#		echo "$input_with_tabs" | as > /dev/null
 #		n c
 #	)" "$(
 #		cat <<-eof
@@ -530,7 +530,7 @@ function test__aso__with_filters {
 #
 #function test__n__when_selecting_last {
 #	assert "$(
-#		echo "$input_with_tabs" | ss > /dev/null
+#		echo "$input_with_tabs" | as > /dev/null
 #		n d
 #	)" "$(
 #		cat <<-eof
@@ -543,7 +543,7 @@ function test__aso__with_filters {
 #
 #function test__n__when_selecting_with_color {
 #	assert "$(
-#		echo "$input_with_tabs" | grep 00 | ss > /dev/null
+#		echo "$input_with_tabs" | grep 00 | as > /dev/null
 #		n d
 #	)" "$(
 #		cat <<-eof
@@ -556,7 +556,7 @@ function test__aso__with_filters {
 #
 #function test__n__when_selecting_out_of_bound {
 #	assert "$(
-#		echo "$input_with_tabs" | ss > /dev/null
+#		echo "$input_with_tabs" | as > /dev/null
 #		n z
 #	)" "$(
 #		cat <<-eof
@@ -579,7 +579,7 @@ function test__aso__with_filters {
 #	)
 #
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		n e
 #	)" "$(
 #		cat <<-eof
@@ -593,7 +593,7 @@ function test__aso__with_filters {
 #
 #function test__n__with_one_column {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		n a
 #	)" "$(
 #		cat <<-eof
@@ -608,7 +608,7 @@ function test__aso__with_filters {
 #
 #function test__n__with_whitespace {
 #	assert "$(
-#		echo "$input_with_whitespace" | ss > /dev/null
+#		echo "$input_with_whitespace" | as > /dev/null
 #		n a
 #	)" "$(
 #		cat <<-eof
@@ -622,7 +622,7 @@ function test__aso__with_filters {
 #
 #function test__n__with_headers {
 #	assert "$(
-#		echo "$input_with_headers" | ss > /dev/null
+#		echo "$input_with_headers" | as > /dev/null
 #		n
 #	)" "$(
 #		cat <<-eof
@@ -639,7 +639,7 @@ function test__aso__with_filters {
 #
 #function test__nn {
 #	assert "$(
-#		echo "$input_with_headers" | ss > /dev/null
+#		echo "$input_with_headers" | as > /dev/null
 #		nn
 #	)" "$(
 #		cat <<-eof
@@ -656,7 +656,7 @@ function test__aso__with_filters {
 #
 #function test__nn__with_one_column {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		nn a
 #	)" "$(
 #		cat <<-eof
@@ -671,7 +671,7 @@ function test__aso__with_filters {
 #
 #function test__c {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		c
 #		pbpaste
 #	)" "$(
@@ -695,7 +695,7 @@ function test__aso__with_filters {
 #
 #function test__y {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		rm -f ~/.zshrc.args
 #		y
 #		cat ~/.zshrc.args
@@ -717,7 +717,7 @@ function test__aso__with_filters {
 #
 #function test__u {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		a program > /dev/null
 #		u
 #	)" "$(
@@ -733,7 +733,7 @@ function test__aso__with_filters {
 #
 #function test__u__when_undoing_n_with_headers {
 #	assert "$(
-#		echo "$input_with_headers" | ss > /dev/null
+#		echo "$input_with_headers" | as > /dev/null
 #		n a > /dev/null
 #		u
 #	)" "$(
@@ -751,7 +751,7 @@ function test__aso__with_filters {
 #
 #function test__u__when_undoing_nn_with_headers {
 #	assert "$(
-#		echo "$input_with_headers" | ss > /dev/null
+#		echo "$input_with_headers" | as > /dev/null
 #		nn a > /dev/null
 #		u
 #	)" "$(
@@ -769,7 +769,7 @@ function test__aso__with_filters {
 #
 #function test__u__when_undoing_nn_then_requesting_n {
 #	assert "$(
-#		echo "$input_with_headers" | ss > /dev/null
+#		echo "$input_with_headers" | as > /dev/null
 #		nn a > /dev/null
 #		u > /dev/null
 #		n
@@ -788,7 +788,7 @@ function test__aso__with_filters {
 #
 #function test__u__when_undoing_nn_with_headers_top_heavy {
 #	assert "$(
-#		echo "$input_with_headers_top_heavy" | ss > /dev/null
+#		echo "$input_with_headers_top_heavy" | as > /dev/null
 #		nn a > /dev/null
 #		u
 #	)" "$(
@@ -806,9 +806,9 @@ function test__aso__with_filters {
 #
 #function test__u__when_undoing_ss_that_could_look_like_nn {
 #	assert "$(
-#		echo "$input_with_headers" | ss > /dev/null
+#		echo "$input_with_headers" | as > /dev/null
 #		nn > /dev/null
-#		echo "$input_with_headers_top_heavy" | ss > /dev/null
+#		echo "$input_with_headers_top_heavy" | as > /dev/null
 #		u
 #	)" "$(
 #		cat <<-eof
@@ -824,9 +824,9 @@ function test__aso__with_filters {
 #
 #function test__u__when_undoing_x2 {
 #	assert "$(
-#		seq 1 2 | ss > /dev/null
-#		seq 2 3 | ss > /dev/null
-#		seq 3 4 | ss > /dev/null
+#		seq 1 2 | as > /dev/null
+#		seq 2 3 | as > /dev/null
+#		seq 3 4 | as > /dev/null
 #		u > /dev/null
 #		u
 #	)" "$(
@@ -839,9 +839,9 @@ function test__aso__with_filters {
 #
 #function test__u__when_undoing_beyond_tail {
 #	assert "$(
-#		seq 1 2 | ss > /dev/null
-#		seq 2 3 | ss > /dev/null
-#		seq 3 4 | ss > /dev/null
+#		seq 1 2 | as > /dev/null
+#		seq 2 3 | as > /dev/null
+#		seq 3 4 | as > /dev/null
 #		u > /dev/null
 #		u > /dev/null
 #		u
@@ -861,10 +861,10 @@ function test__aso__with_filters {
 #	args_init
 #
 #	assert "$(
-#		seq 1 2 | ss > /dev/null
-#		seq 2 3 | ss > /dev/null
-#		seq 3 4 | ss > /dev/null
-#		seq 4 5 | ss > /dev/null
+#		seq 1 2 | as > /dev/null
+#		seq 2 3 | as > /dev/null
+#		seq 3 4 | as > /dev/null
+#		seq 4 5 | as > /dev/null
 #		u > /dev/null
 #		u > /dev/null
 #		u
@@ -881,7 +881,7 @@ function test__aso__with_filters {
 #
 #function test__u__when_undoing_then_redoing_with_color {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		a program > /dev/null
 #		u > /dev/null
 #		r
@@ -895,7 +895,7 @@ function test__aso__with_filters {
 #
 #function test__u__when_undoing_then_redoing_then_undoing_again_with_color {
 #	assert "$(
-#		echo "$input" | ss > /dev/null
+#		echo "$input" | as > /dev/null
 #		a program > /dev/null
 #		u > /dev/null
 #		a terraform > /dev/null
@@ -915,9 +915,9 @@ function test__aso__with_filters {
 #
 #function test__r__when_redoing_x2 {
 #	assert "$(
-#		seq 1 2 | ss > /dev/null
-#		seq 2 3 | ss > /dev/null
-#		seq 3 4 | ss > /dev/null
+#		seq 1 2 | as > /dev/null
+#		seq 2 3 | as > /dev/null
+#		seq 3 4 | as > /dev/null
 #		u > /dev/null
 #		u > /dev/null
 #		r > /dev/null
@@ -932,9 +932,9 @@ function test__aso__with_filters {
 #
 #function test__r__when_redoing_beyond_head {
 #	assert "$(
-#		seq 1 2 | ss > /dev/null
-#		seq 2 3 | ss > /dev/null
-#		seq 3 4 | ss > /dev/null
+#		seq 1 2 | as > /dev/null
+#		seq 2 3 | as > /dev/null
+#		seq 3 4 | as > /dev/null
 #		u > /dev/null
 #		u > /dev/null
 #		r > /dev/null
@@ -951,12 +951,12 @@ function test__aso__with_filters {
 #
 #function test__r__when_redoing_beyond_new_head {
 #	assert "$(
-#		seq 1 2 | ss > /dev/null
-#		seq 2 3 | ss > /dev/null
-#		seq 3 4 | ss > /dev/null
+#		seq 1 2 | as > /dev/null
+#		seq 2 3 | as > /dev/null
+#		seq 3 4 | as > /dev/null
 #		u > /dev/null
 #		u > /dev/null
-#		seq 4 5 | ss > /dev/null
+#		seq 4 5 | as > /dev/null
 #		r
 #	)" "$(
 #		cat <<-eof
@@ -969,9 +969,9 @@ function test__aso__with_filters {
 #
 #function test__i {
 #	assert "$(
-#		seq 1 2 | ss > /dev/null
-#		seq 2 3 | ss > /dev/null
-#		seq 3 4 | ss > /dev/null
+#		seq 1 2 | as > /dev/null
+#		seq 2 3 | as > /dev/null
+#		seq 3 4 | as > /dev/null
 #		i
 #	)" "$(
 #		cat <<-eof
@@ -1003,9 +1003,9 @@ function test__aso__with_filters {
 #
 #function test__i__when_selecting_out_of_head_and_tail {
 #	assert "$(
-#		seq 1 2 | ss > /dev/null
-#		seq 2 3 | ss > /dev/null
-#		seq 3 4 | ss > /dev/null
+#		seq 1 2 | as > /dev/null
+#		seq 2 3 | as > /dev/null
+#		seq 3 4 | as > /dev/null
 #		i 4
 #	)" "$(
 #		cat <<-eof
@@ -1037,9 +1037,9 @@ function test__aso__with_filters {
 #
 #function test__i__when_selecting_head_index {
 #	assert "$(
-#		seq 1 2 | ss > /dev/null
-#		seq 2 3 | ss > /dev/null
-#		seq 3 4 | ss > /dev/null
+#		seq 1 2 | as > /dev/null
+#		seq 2 3 | as > /dev/null
+#		seq 3 4 | as > /dev/null
 #		i 3
 #	)" "$(
 #		cat <<-eof
@@ -1051,9 +1051,9 @@ function test__aso__with_filters {
 #
 #function test__i__when_selecting_middle_index {
 #	assert "$(
-#		seq 1 2 | ss > /dev/null
-#		seq 2 3 | ss > /dev/null
-#		seq 3 4 | ss > /dev/null
+#		seq 1 2 | as > /dev/null
+#		seq 2 3 | as > /dev/null
+#		seq 3 4 | as > /dev/null
 #		i 2
 #	)" "$(
 #		cat <<-eof
@@ -1065,9 +1065,9 @@ function test__aso__with_filters {
 #
 #function test__i__when_selecting_tail_index {
 #	assert "$(
-#		seq 1 2 | ss > /dev/null
-#		seq 2 3 | ss > /dev/null
-#		seq 3 4 | ss > /dev/null
+#		seq 1 2 | as > /dev/null
+#		seq 2 3 | as > /dev/null
+#		seq 3 4 | as > /dev/null
 #		i 1
 #	)" "$(
 #		cat <<-eof
