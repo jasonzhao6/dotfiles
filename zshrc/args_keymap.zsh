@@ -26,6 +26,7 @@ function a {
 # Key mappings (Alphabetized)
 #
 
+source "$ZSHRC_DIR/args_helpers.zsh"
 source "$ZSHRC_DIR/args_history.zsh"; args_history_init
 
 # Constants
