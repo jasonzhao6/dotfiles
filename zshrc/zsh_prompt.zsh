@@ -34,10 +34,6 @@ function branch_info {
 
 STS_INFO_DIR="$HOME/.zshrc.sts_info.d"
 
-function sts_info_clear {
-	rm -rf "$STS_INFO_DIR"
-}
-
 function sts_info {
 	[[ -z $AWS_PROFILE ]] && return
 
