@@ -83,3 +83,5 @@ if [[ ($section_filter -eq 4 || -z $section_filter) && -z $test_filter ]]; then
 
 	ruby "$ZSHRC_DIR"/_tests/verify_keymaps.rb
 fi
+
+# TODO are keymap functions alphabetized?

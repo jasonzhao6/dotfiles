@@ -3,7 +3,7 @@ class VerifyKeymaps
   HOME = `echo $HOME`.chomp
   ZSHRC_DIR = "#{HOME}/gh/jasonzhao6/dotfiles/zshrc"
   ZSHRC = "#{ZSHRC_DIR}/main.zsh"
-  ZSHRC_SECRETS = "#{HOME}/.zshrc.secrets"
+  ZSH_SECRETS = "#{HOME}/.zshrc.secrets"
   KEYMAPS = "#{ZSHRC_DIR}/_keymap.zsh"
 
   # Keymap namespaces
@@ -18,7 +18,7 @@ class VerifyKeymaps
   SPACE = ' ' # means not used
   BRACKET = '[' # means defined in `ZSHRC`
   PAREN = '(' # means defined in `ZSHRC` for `args`
-  BRACE = '{' # means defined in `ZSHRC_SECRETS`
+  BRACE = '{' # means defined in `ZSH_SECRETS`
   ANGLE = '<' # means already taken, e.g `go`
   KEYMAP_PARTITION_LABELS = [SPACE, BRACKET, PAREN, BRACE, ANGLE]
 
@@ -37,11 +37,11 @@ class VerifyKeymaps
     # Info needed to perform verification
     @zshrc_functions = []
     @zshrc_sub_files = []
-    @zshrc_secrets_functions = []
+    @ZSH_SECRETS_functions = []
 
     # Keymap partitions
     @non_secrets = nil # Should be in `ZSHRC` or a sub file
-    @secrets = nil     # Should be in `ZSHRC_SECRETS`
+    @secrets = nil     # Should be in `ZSH_SECRETS`
     @not_used = nil    # Should be in neither
 
     # Verification result
@@ -70,10 +70,10 @@ class VerifyKeymaps
       end
     end
 
-    # Gather info from `ZSHRC_SECRETS` to prepare to verification
-    File.open(ZSHRC_SECRETS).each do |line|
+    # Gather info from `ZSH_SECRETS` to prepare to verification
+    File.open(ZSH_SECRETS).each do |line|
       name = extract_function_name(line)
-      @zshrc_secrets_functions << name if name
+      @ZSH_SECRETS_functions << name if name
     end
 
     # Verify keymaps with all the info gathered
@@ -170,16 +170,16 @@ class VerifyKeymaps
         @failed << "fail: \"'#{keymap}'\" is not in #{ZSHRC}"
       end
 
-      if @zshrc_secrets_functions.include?(keymap)
+      if @ZSH_SECRETS_functions.include?(keymap)
         failing = true
-        @failed << "fail: \"'#{keymap}'\" is in #{ZSHRC_SECRETS}"
+        @failed << "fail: \"'#{keymap}'\" is in #{ZSH_SECRETS}"
       end
 
       update_verification_result(failing)
     end
   end
 
-  # Verify `@secrets` are present only in `ZSHRC_SECRETS`
+  # Verify `@secrets` are present only in `ZSH_SECRETS`
   def verify_secrets
     @secrets.each do |keymap|
       failing = false
@@ -189,16 +189,16 @@ class VerifyKeymaps
         @failed << "fail: \"'#{keymap}'\" is in #{ZSHRC}"
       end
 
-      if !@zshrc_secrets_functions.include?(keymap)
+      if !@ZSH_SECRETS_functions.include?(keymap)
         failing = true
-        @failed << "fail: \"'#{keymap}'\" is not in #{ZSHRC_SECRETS}"
+        @failed << "fail: \"'#{keymap}'\" is not in #{ZSH_SECRETS}"
       end
 
       update_verification_result(failing)
     end
   end
 
-  # Verify `@not_used` are not present in `ZSHRC, ZSHRC_SECRETS`
+  # Verify `@not_used` are not present in `ZSHRC, ZSH_SECRETS`
   def verify_not_used
     @not_used.each do |keymap|
       failing = false
@@ -208,9 +208,9 @@ class VerifyKeymaps
         @failed << "fail: \"'#{keymap}'\" is in #{ZSHRC}"
       end
 
-      if @zshrc_secrets_functions.include?(keymap)
+      if @ZSH_SECRETS_functions.include?(keymap)
         failing = true
-        @failed << "fail: \"'#{keymap}'\" is in #{ZSHRC_SECRETS}"
+        @failed << "fail: \"'#{keymap}'\" is in #{ZSH_SECRETS}"
       end
 
       update_verification_result(failing)

@@ -1,5 +1,3 @@
-source "$ZSHRC_DIR/args_history.zsh"; args_history_init
-
 #
 # Namespace: [A]rgs
 #
@@ -11,11 +9,12 @@ ARGS_KEYMAP=(
 	'a•a # List args'
 	'a•a <match>* <-mismatch>* # Filter args'
 	''
-	'a•u # Undo save / filter'
-	'a•r # Redo save / filter'
+	'a•z # Undo change'
+	'a•Z # Redo change'
+	''
 	'a•h # List history entries'
 	'a•h <index> # Set history index'
-	'a•z # Reset args history'
+	'a•0 # Reset history'
 )
 # TODO dim and explain • if it works well
 
@@ -27,6 +26,8 @@ function a {
 # Key mappings (Alphabetized)
 #
 
+source "$ZSHRC_DIR/args_history.zsh"; args_history_init
+
 # Constants
 # shellcheck disable=SC2034
 ARGS_EMPTY='(empty)'
@@ -34,6 +35,10 @@ ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd c
 
 # States
 ARGS_USED_TOP_ROW=
+
+function a0 {
+	args_history_reset
+}
 
 # shellcheck disable=SC2120
 function aa {
@@ -69,27 +74,6 @@ function ah {
 	fi
 }
 
-function au {
-	local column_size_before; column_size_before=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
-
-	args_history_undo
-	args_list
-	args_history_undo_error_bar
-
-	local column_size_after; column_size_after=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
-
-	# If undoing a column selection, show the columns bar for convenience
-	if [[ -n $ARGS_USED_TOP_ROW && ${#column_size_before} -lt ${#column_size_after} ]]; then
-		args_columns_bar "$ARGS_USED_TOP_ROW"
-	fi
-}
-
-function ar {
-	args_history_redo
-	args_list
-	args_history_redo_error_bar
-}
-
 function as {
 	local is_soft_select=$1
 
@@ -109,5 +93,22 @@ function aso {
 }
 
 function az {
-	args_history_reset
+	local column_size_before; column_size_before=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
+
+	args_history_undo
+	args_list
+	args_history_undo_error_bar
+
+	local column_size_after; column_size_after=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
+
+	# If undoing a column selection, show the columns bar for convenience
+	if [[ -n $ARGS_USED_TOP_ROW && ${#column_size_before} -lt ${#column_size_after} ]]; then
+		args_columns_bar "$ARGS_USED_TOP_ROW"
+	fi
+}
+
+function aZ {
+	args_history_redo
+	args_list
+	args_history_redo_error_bar
 }
