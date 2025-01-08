@@ -18,7 +18,7 @@ function args_save {
 	# If there are filters, apply them
 	local filters=("$@")
 	if [[ -n "${filters[*]}" ]]; then
-		new_args=$(echo "$new_args" | eval "$(args_filtering "${filters[@]}") | $(args_coloring "${filters[@]}")")
+		new_args=$(echo "$new_args" | args_filter "${filters[@]}")
 	fi
 
 	# If the new args are different than the current args, push the new args
@@ -40,7 +40,10 @@ function args_save {
 	args_list
 }
 
-
+function args_filter {
+	local filters=("$@")
+	eval "$(args_filtering "${filters[@]}") | $(args_coloring "${filters[@]}")"
+}
 
 
 

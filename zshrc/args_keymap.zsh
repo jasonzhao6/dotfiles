@@ -53,7 +53,7 @@ function aa {
 
 	# Otherwise, apply `filters`, then list args
 	else
-		args_plain | eval "$(args_filtering "$filters") | $(args_coloring "$filters")" | as
+		args_plain | args_filter "${filters[@]}" | as
 	fi
 }
 
