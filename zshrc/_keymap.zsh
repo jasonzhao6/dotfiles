@@ -3,10 +3,11 @@
 # keep the comments alignment logic in the `keymap_help` function working.
 KEYMAP_USAGE=(
   '_ # Show this help'
-	'_•<key> # Invoke key with no arg'
-	'_•<key> <args> # Invoke key with one arg'
-	'_•<key> <args> <args> # Invoke key with two args'
-	'_•<key> <args>* # Invoke key with multiple args'
+	''
+	'_•<key> # Invoke a key'
+	'_•<key> <arg> # Invoke a key with an arg'
+	'_•<key> <arg1> <arg2> # (`•` represents an optional space)'
+	'_•<key> <args>* # (`*` represents multiple optional args)'
 )
 
 # TODO explain

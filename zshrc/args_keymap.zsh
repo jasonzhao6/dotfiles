@@ -20,8 +20,7 @@ ARGS_KEYMAP=(
 # TODO dim and explain • if it works well
 
 function a {
-	local namespace='a'
-	keymap $namespace ${#ARGS_KEYMAP} "${ARGS_KEYMAP[@]}" "$@"
+	keymap a ${#ARGS_KEYMAP} "${ARGS_KEYMAP[@]}" "$@"
 }
 
 #

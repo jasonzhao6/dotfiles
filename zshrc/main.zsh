@@ -10,6 +10,7 @@ source "$ZSHRC_DIR/_keymap.zsh"
 
 # Load keymaps
 source "$ZSHRC_DIR/args_keymap.zsh"
+source "$ZSHRC_DIR/aws_keymap.zsh"
 source "$ZSHRC_DIR/lists_keymap.zsh"
 source "$ZSHRC_DIR/opens_keymap.zsh"
 

@@ -8,9 +8,19 @@ AWS_KEYMAP=(
 )
 
 function w {
-	echo 123
+	keymap w ${#AWS_KEYMAP} "${AWS_KEYMAP[@]}" "$@"
 }
 
 #
 # Key mappings (Alphabetized)
 #
+
+# To be overwritten by `.zshrc.secrets`
+OPAL=(
+	'non-secret-placeholder-1 url-1'
+	'non-secret-placeholder-2 url-2'
+)
+
+function wo {
+	print -l "${OPAL[@]}" | sort | column -t | contain "$1" | as
+}
