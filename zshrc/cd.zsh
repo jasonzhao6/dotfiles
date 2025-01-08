@@ -9,15 +9,16 @@ function ........ { cd ../../../../../../..; }
 function ......... { cd ../../../../../../../..; }
 function .......... { cd ../../../../../../../../..; }
 
-# If it's a file path in clipboard, go to its parent folder
-# If it's a folder path in clipboard, go to that folder
+# If it's a file path in pasteboard, go to its parent folder
+# If it's a folder path in pasteboard, go to that folder
 function cd- {
-	local path; path=$(paste_when_empty "$@")
+	# Note: Do not use `local path`- It will overwrite $PATH in subshell
+	local target_path; target_path=$(paste_when_empty "$@")
 
-	if [[ -d $path ]]; then
-		cd "$path" || return
+	if [[ -d $target_path ]]; then
+		cd "$target_path" || return
 	else
-		cd ${${path}%/*} || return
+		cd ${${target_path}%/*} || return
 	fi
 }
 
