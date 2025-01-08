@@ -1,6 +1,6 @@
 ### AWS
 # select region
-export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1' }
+export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
 function c1 { echo_eval 'export AWS_DEFAULT_REGION=eu-central-1'; }
 function e1 { echo_eval 'export AWS_DEFAULT_REGION=us-east-1'; }
 function e2 { echo_eval 'export AWS_DEFAULT_REGION=us-east-2'; }

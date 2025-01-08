@@ -96,7 +96,7 @@ class VerifyKeymaps
   private
 
   def extract_function_name(line)
-    # Note: `(.+?) {` not greedy in case line contains multiple `{`
+    # Note: `(.+?) {` Non-greedy match in case line contains multiple `{`
     has_function = /^function (?<name>.+?) {/ =~ line
     name if has_function
   end
