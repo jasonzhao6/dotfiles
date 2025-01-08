@@ -73,6 +73,19 @@ function test__as {
 	)"
 }; run_with_filter test__as
 
+function test__as__with_filters {
+	# Can test `<command> | as`, but not `<command>; as`
+	# The latter requires an interactive shell
+	assert "$(
+		echo "$input_with_headers" | as -1 shared
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-$(grep_color shared)-2   foo bar
+		     2	terraform-application-region-$(grep_color shared)-3   sup
+		eof
+	)"
+}; run_with_filter test__as__with_filters
+
 function test__aso {
 	# Can test `<command> | aso`, but not `<command>; aso`
 	# The latter requires an interactive shell.
@@ -89,6 +102,19 @@ function test__aso {
 		eof
 	)"
 }; run_with_filter test__aso
+
+function test__aso__with_filters {
+	# Can test `<command> | aso`, but not `<command>; aso`
+	# The latter requires an interactive shell.
+	assert "$(
+		echo "$input_with_headers" | aso -1 shared
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-$(grep_color shared)-2   # foo bar
+		     2	terraform-application-region-$(grep_color shared)-3   # sup
+		eof
+	)"
+}; run_with_filter test__aso__with_filters
 
 #function test__v {
 #	assert "$(

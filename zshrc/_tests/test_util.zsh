@@ -102,6 +102,24 @@ function test__l {
 	)"
 }; run_with_filter test__l
 
+function test__l__with_filters {
+	assert "$(
+		rm -rf /tmp/test__l
+		mkdir /tmp/test__l
+		cd /tmp/test__l || return
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		l -1 log | bw
+		rm -rf /tmp/test__l
+	)" "$(
+		cat <<-eof
+		     1	2.log
+		eof
+	)"
+}; run_with_filter test__l__with_filters
+
 function test__ll {
 	assert "$(
 		rm -rf /tmp/test__ll
@@ -121,6 +139,25 @@ function test__ll {
 		eof
 	)"
 }; run_with_filter test__ll
+
+function test__ll__with_filters {
+	assert "$(
+		rm -rf /tmp/test__ll
+		mkdir /tmp/test__ll
+		cd /tmp/test__ll || return
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		ll -1 hidden | bw
+		rm -rf /tmp/test__ll
+	)" "$(
+		cat <<-eof
+		     1	.2.hidden
+		     2	.3.hidden
+		eof
+	)"
+}; run_with_filter test__ll__with_filters
 
 function test__bb {
 	# Skip: Not interesting to test

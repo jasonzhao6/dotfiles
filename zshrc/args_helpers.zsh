@@ -6,15 +6,20 @@
 # `|` Helpers
 #
 
-# TODO support filter
 function args_save {
 	# Get the piped input; there is not any, abort
 	local new_args; new_args=$(cat - | head -1000 | compact)
 	[[ -z "$new_args" ]] && return
 
 	# If requested, insert `#` after the first column to soft-select it
-	local is_soft_select=$1
-	[[ -n $is_soft_select ]] && new_args=$(echo "$new_args" | insert_hash)
+	local is_soft_select=$1; shift
+	[[ $is_soft_select == $ARGS_SOFT_SELECT ]] && new_args=$(echo "$new_args" | insert_hash)
+
+	# If there are filters, apply them
+	local filters=("$@")
+	if [[ -n "${filters[*]}" ]]; then
+		new_args=$(echo "$new_args" | eval "$(args_filtering "${filters[@]}") | $(args_coloring "${filters[@]}")")
+	fi
 
 	# If the new args are different than the current args, push the new args
 	if [[ $(args_plain "$new_args") != $(args_plain) ]]; then
@@ -49,7 +54,9 @@ function args_plain { [[ -z "$1" ]] && args | bw | expand || echo "$@" | bw | ex
 function args_list { args | nl; }
 function args_list_plain { args | nl | bw | expand; }
 function args_list_size { args | wc -l; }
-function args_coloring { echo "egrep --color=always --ignore-case '${${@:#-*}// /|}'"; }
+function args_coloring {
+	echo "egrep --color=always --ignore-case '${${@:#-*}// /|}'"
+}
 
 function args_filtering {
 	local filters

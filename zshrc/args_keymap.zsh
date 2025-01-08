@@ -3,8 +3,8 @@
 #
 
 ARGS_KEYMAP=(
-	'a•s # Save args'
-	'a•so # Save args & soft-select the 1st column'
+	'a•s <match>* <-mismatch>* # Save args'
+	'a•so <match>* <-mismatch>* # Save args & soft-select the 1st column'
 	''
 	'a•a # List args'
 	'a•a <match>* <-mismatch>* # Filter args'
@@ -76,21 +76,27 @@ function ah {
 }
 
 function as {
+	# Users see the interface of `as` as `as <match>* <-mismatch>*`
+	# Only `as` sees the `as` as `as <is soft select> <match>* <-mismatch>*`
 	local is_soft_select=$1
+	[[ $is_soft_select == "$ARGS_SOFT_SELECT" ]] && shift || is_soft_select=0
+
+	local filters=("$@")
 
 	# When invoked as standalone command
 	if [[ -t 0 ]]; then
-		eval "$(prev_command)" | args_save "$is_soft_select"
+		eval "$(prev_command)" | args_save "$is_soft_select" "${filters[@]}"
 
 	# When invoked after a pipe `|`
 	else
-		args_save "$is_soft_select"
+		args_save "$is_soft_select" "${filters[@]}"
 	fi
 
 }
 
 function aso {
-	as "$ARGS_SOFT_SELECT"
+	local filters=("$@")
+	as "$ARGS_SOFT_SELECT" "${filters[@]}"
 }
 
 function az {

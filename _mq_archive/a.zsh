@@ -70,7 +70,7 @@ function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_histo
 # Getters
 #
 
-function args { echo "${ARGS_HISTORY[$ARGS_CURSOR]}"; }
+function args { echo "${ARGS_HISTORY[$	_CURSOR]}"; }
 function args_plain { args | bw | expand; }
 function args_list { args | nl; }
 function args_list_plain { args | nl | bw | expand; }

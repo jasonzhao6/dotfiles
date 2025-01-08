@@ -4,8 +4,8 @@
 KEYMAP_USAGE=(
   '_ # Show this help'
 	''
-	'_•<key> # Invoke a key'
-	'_•<key> <arg> # Invoke a key with an arg'
+	'_•<key> # Invoke <key>'
+	'_•<key> <arg> # Invoke <key> with <arg>'
 	'_•<key> <arg1> <arg2> # (`•` represents an optional space)'
 	'_•<key> <args>* # (`*` represents multiple optional args)'
 )
