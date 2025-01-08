@@ -3,8 +3,11 @@
 #
 
 ARGS_KEYMAP=(
-	'a·s <match>* <-mismatch>* # Save args'
-	'a·so <match>* <-mismatch>* # Save args & soft-select the 1st column'
+	'a·s # Save args'
+	'a·so # Save args; soft-select the 1st column'
+	''
+	'a·s <match>* <-mismatch>* # Save & filter args'
+	'a·so <match>* <-mismatch>* # Save & filter args; soft-select the 1st column'
 	''
 	'a·a # List args'
 	'a·a <match>* <-mismatch>* # Filter args'
