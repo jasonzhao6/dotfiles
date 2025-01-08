@@ -16,6 +16,6 @@ function verify_ordering {
 	done
 }
 
-# Emulate grep coloring
+# Emulate `grep` coloring
 function grep_color { echo "\e[1;32m\e[K$*\e[m\e[K"; }
 function pgrep_color { echo "\e[1;32m$*\e[00m"; }
