@@ -122,18 +122,6 @@ function test__ll {
 	)"
 }; run_with_filter test__ll
 
-function test__w {
-	assert "$(
-		w w
-	)" "$(
-		cat <<-eof
-		     1	w () {
-		     2		which "\$@" | as
-		     3	}
-		eof
-	)"
-}; run_with_filter test__w
-
 function test__bb {
 	# Skip: Not interesting to test
 	return

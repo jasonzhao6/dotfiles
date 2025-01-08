@@ -31,6 +31,18 @@ function test__zf__when_counting_._functions {
 	)" '1'
 }; run_with_filter test__zf__when_counting_._functions
 
+function test__zw {
+	assert "$(
+		zw zw
+	)" "$(
+		cat <<-eof
+		     1	zw () {
+		     2		which "\$1" | as
+		     3	}
+		eof
+	)"
+}; run_with_filter test__zw
+
 function test__zz__when_args_history_is_not_initialized {
 	args_history_init
 	local args_history_max=$ARGS_HISTORY_MAX

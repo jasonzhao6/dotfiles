@@ -141,6 +141,7 @@ function args_columns_bar {
 function args_save {
 	local new_args; new_args=$(cat - | head -1000 | compact)
 
+	# TODO move inside if, move up replace, use plain func, support filter
 	# Insert '#' after the first column to soft-select it
 	[[ -n $1 ]] && new_args=$(echo "$new_args" | insert_hash)
 

@@ -4,7 +4,6 @@ function d { [[ -n "$1" ]] && { D=${${${@}#*://}%%/*}; [[ -z $ZSHRC_UNDER_TEST ]
 function f { [[ -n "$1" ]] && f_pre "$@" | sort | as; }
 function l { ls -l | awk '{print $9}' | as; } # Not taking search pattern b/c folder matches break column alignment
 function ll { ls -lA | awk '{print $9}' | egrep '^(\e\[3[0-9]m)?\.' | bw | as; } # Show only hidden files
-#function w { which "$@" | as; }
 # doubles (they do not save into `args`)
 function bb { pmset sleepnow; }
 function cc { eval "$(prev_command)" | bw | ruby -e 'puts STDIN.read.strip' | pbcopy; }

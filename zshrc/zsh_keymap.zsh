@@ -10,14 +10,16 @@ ZSH_KEYMAP=(
 	'z•z # Source'
 	'z•t # Test'
 	''
-	'z•p # Push from local'
-	'z•P # Pull to local'
+	'z•w # Which'
 	''
 	'z•a # List aliases'
 	'z•a <match> # Filter aliases'
 	''
 	'z•f # List functions'
 	'z•f <match> # Filter functions'
+	''
+	'z•p # Push other dotfiles from local'
+	'z•P # Pull other dotfiles to local'
 )
 
 function z {
@@ -71,6 +73,10 @@ function zs {
 
 function zt {
 	zsh "$ZSHRC_DIR"/_tests.zsh "$@"
+}
+
+function zw {
+	which "$1" | as
 }
 
 ZSH_SECRETS_DIR="$HOME/Downloads/_Archive/zsh/.zshrc.secrets"

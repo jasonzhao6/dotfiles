@@ -24,7 +24,7 @@ if [[ $section_filter -eq 1 || -z $section_filter ]]; then
 	if [[ -z $test_filter ]]; then
 		echo '1: Run all test cases'
 	else
-		echo "1: Run test cases matching '*$test_filter*'"
+		echo "1: Run test cases matching \`*$test_filter*\`"
 	fi
 
 	pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
