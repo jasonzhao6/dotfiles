@@ -15,29 +15,12 @@ KEYMAP_PROMPT_PLACEHOLDER='   '
 
 KEYMAP_DUPE_ERROR_BAR="$(red_bar '^ Cannot have duplicate keys')"
 
-#function keymap_init {}
-#function keymap_invoke {}
+# TODO reorder helper methods
 
-# Exit codes and corresponding prints
-# - 1: Print error message about non-consecutive duplicate `key`s
-# - 2: Print usage since `key` was not specified
-# - 3: Print usage since `key` was not found
-# - 0: Print output from invoking `key`
-function keymap {
+function keymap_init {
+	local namespace=$1; shift
 	local alias=$1; shift
-	local keymap_size=$1; shift
-	local keymap_entries=("${@:1:$keymap_size}"); shift "$keymap_size"
-	local key=$1; [[ -n $key ]] && shift
-	local args=("$@")
-
-	# Alias each key mapping # TODO once
-	local entry_key
-	for entry in "${keymap_entries[@]}"; do
-		entry_key=$(echo "$entry" | awk '{print $1}' | trim 2)
-
-		# shellcheck disable=SC2086,SC2139
-		alias $alias$entry_key="$(caller)_$entry_key"
-	done
+	local keymap_entries=("$@")
 
 	# If `keymap_entries` contains disjoint duplicate `key`s, abort and print error message
 	local dupes; dupes=$(keymap_check_for_disjoint_dupes "${keymap_entries[@]}")
@@ -46,12 +29,40 @@ function keymap {
 		return 1
 	fi
 
+	# TODO check for reserved keywords
+
+	# Alias the `<namespace>` function to `<alias>`
+	# shellcheck disable=SC2086,SC2139
+	alias $alias="$namespace"
+
+	# Alias the `<namespace>_<key>` functions to `<alias><key>`
+	local entry_key
+	for entry in "${keymap_entries[@]}"; do
+		entry_key=$(echo "$entry" | awk '{print $1}' | trim 2)
+
+		# shellcheck disable=SC2086,SC2139
+		alias $alias$entry_key="${namespace}_$entry_key"
+	done
+}
+
+# Exit codes and corresponding prints
+# - 1: Print error message about non-consecutive duplicate `key`s
+# - 2: Print usage since `key` was not specified
+# - 3: Print usage since `key` was not found
+# - 0: Print output from invoking `key`
+function keymap_invoke {
+	local namespace=$1; shift
+	local alias=$1; shift
+	local keymap_size=$1; shift
+	local keymap_entries=("${@:1:$keymap_size}"); shift "$keymap_size"
+	local key=$1; [[ -n $key ]] && shift
+	local args=("$@")
+
 	# If a `key` was not specified, abort and print usage
 	[[ -z $key ]] && keymap_help "$alias" "${keymap_entries[@]}" && return 2
 
 	# Look for the specified `key`
 	local found
-
 	for entry in "${keymap_entries[@]}"; do
 		[[ $entry == "$alias$KEYMAP_DOT$key"* ]] && found=1 && break
 	done
@@ -61,9 +72,9 @@ function keymap {
 		keymap_help "$alias" "${keymap_entries[@]}"
 		return 3
 
-	# If found, invoke it with `args`
+	# If found, invoke it with the specified `args`
 	else
-		"${alias}${key}" "${args[@]}"
+		"${namespace}_${key}" "${args[@]}"
 	fi
 }
 
