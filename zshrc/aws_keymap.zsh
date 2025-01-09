@@ -37,7 +37,7 @@ function aws_o {
 function aws_sup {
 	echo -n 'caller: '
 	caller
-	
+
 	echo -n 'callee: '
 	callee
 }
