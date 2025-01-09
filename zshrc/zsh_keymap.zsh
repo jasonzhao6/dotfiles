@@ -3,11 +3,11 @@
 #
 
 ZSH_KEYMAP=(
-	'z·e # Edit with IntelliJ'
+	'z·i # Edit with IntelliJ'
 	'z·m # Edit with TextMate'
 	'z·s # Edit secrets'
 	''
-	'z·z # Source'
+	'z·z # Re-source'
 	'z·t # Test'
 	''
 	'z·w # Which'
@@ -34,13 +34,13 @@ function za {
 	alias | contain "$1"
 }
 
-function ze {
-	open -na 'IntelliJ IDEA CE.app' --args "$ZSHRC_DIR"
-}
-
 function zf {
 	# Identify functions by the ` () {` suffix, then trim it
 	typeset -f | grep ' () {$' | contain "$1" | trim 0 5
+}
+
+function zi {
+	open -na 'IntelliJ IDEA CE.app' --args "$ZSHRC_DIR"
 }
 
 function zm {

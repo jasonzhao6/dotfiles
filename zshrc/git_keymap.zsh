@@ -1,5 +1,6 @@
 #
-# Namespace: Git / Git[H]ub
+# Namespace: [G]it # TODO
+# Alias: Git[H]ub
 #
 
 GIT_KEYMAP=(
