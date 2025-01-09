@@ -28,6 +28,8 @@ function flush { sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder; 
 function jcurl { curl --silent "$1" | jq | { [[ -z "$2" ]] && cat || grep -A"${3:-0}" -B"${3:-0}" "$2"; }; }
 function ren { for file in *"$1"*; do mv "$file" "${file//$1/$2}"; done; }
 # helpers
+function caller { echo "${funcstack[3]}"; }
+function callee { echo "${funcstack[2]}"; }
 function echo_eval { echo "$@" >&2; eval "$@"; }
 function ellipsize { [[ ${#1} -gt $COLUMNS ]] && echo -n "${1:0:$((COLUMNS - 4))} \e[30m\e[47m...\e[0m" || echo "$@"; }
 function has_internet { curl -s --max-time 1 http://www.google.com &> /dev/null; }
