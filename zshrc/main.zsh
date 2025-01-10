@@ -6,7 +6,7 @@ export ZSH_SECRETS="$HOME/.zshrc.secrets"
 source "$ZSHRC_DIR/colors.zsh"; color
 
 # Include helper functions to be used by all keymaps
-source "$ZSHRC_DIR/util.zsh"
+source "$ZSHRC_DIR/_helpers.zsh"
 source "$ZSHRC_DIR/_keymap.zsh"
 source "$ZSHRC_DIR/_reserved_keywords.zsh"
 
@@ -26,6 +26,7 @@ source "$ZSHRC_DIR/git.zsh"
 source "$ZSHRC_DIR/git_info.zsh"
 source "$ZSHRC_DIR/kubectl.zsh"
 source "$ZSHRC_DIR/terraform.zsh"
+source "$ZSHRC_DIR/util.zsh"
 source "$ZSHRC_DIR/zsh_arrow_keys.zsh"
 source "$ZSHRC_DIR/zsh_history.zsh"
 source "$ZSHRC_DIR/zsh_prompt.zsh"

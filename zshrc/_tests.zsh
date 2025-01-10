@@ -1,7 +1,7 @@
 export ZSHRC_TESTS_DIR="$ZSHRC_DIR/_tests"
 
-source "$ZSHRC_DIR"/_tests/_harness.zsh
-source "$ZSHRC_DIR"/_tests/_helpers.zsh
+source "$ZSHRC_DIR"/_tests/_test_harness.zsh
+source "$ZSHRC_DIR"/_tests/_test_helpers.zsh
 
 # Filter sections by number (1-5)
 section_filter=$([[ $1 -ge 1 && $1 -le 5 ]] && echo "$1")
