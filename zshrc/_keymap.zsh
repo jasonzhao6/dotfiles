@@ -1,17 +1,18 @@
-# A single-character `alias` arg is expected, and it will overwrite `_`
+KEYMAP_ALIAS_PLACEHOLDER='_'
+
 KEYMAP_USAGE=(
-  '_ # Show this help'
+  "$KEYMAP_ALIAS_PLACEHOLDER # Show this help"
 	''
-	'_·<key> # Invoke <key>'
-	'_·<key> <args>* # Invoke <key> with multiple <args>'
+	"$KEYMAP_ALIAS_PLACEHOLDER$KEYMAP_DOT<key> # Invoke <key>"
+	"$KEYMAP_ALIAS_PLACEHOLDER$KEYMAP_DOT<key> <args>* # Invoke <key> with multiple <args>"
 )
 
 KEYMAP_DOT='·'
-KEYMAP_DOT_POINTER='  ^'
-KEYMAP_DOT_COMMENT="$(gray_fg "# This $KEYMAP_DOT represents an optional space")"
+KEYMAP_DOT_POINTER='^'
+KEYMAP_DOT_COMMENT="$(gray_fg "# The $KEYMAP_DOT represents an optional space")"
 
 KEYMAP_PROMPT=$(yellow_fg '  $')
-KEYMAP_PROMPT_PLACEHOLDER='   '
+KEYMAP_PROMPT_PLACEHOLDER=$(echo "$KEYMAP_PROMPT" | bw)
 
 KEYMAP_DUPE_ERROR_BAR="$(red_bar '^ Cannot have duplicate keys')"
 
@@ -29,8 +30,6 @@ function keymap_init {
 		return 1
 	fi
 
-	# TODO check for reserved keywords
-
 	# Alias the `<namespace>` function to `<alias>`
 	keymap_alias "$alias" "$namespace"
 
@@ -46,6 +45,7 @@ function keymap_alias {
 	local key=$1
 	local value=$2
 
+	# Do not overwrite reserved keywords, error instead
 	if is_reserved "$key"; then
 		echo
 		red_bar "\`$key\` is a reserved keyword"
@@ -98,27 +98,35 @@ function keymap_help {
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
+	# Interpolate `alias` into keymap usage
+	local keymap_usage=()
+	for entry in "${KEYMAP_USAGE[@]}"; do
+		keymap_usage+=("${entry/$KEYMAP_ALIAS_PLACEHOLDER/$alias}")
+	done
+
 	# Get the max command size in order to align comments across commands, e.g
 	#   ```
 	#   $ <command>      # comment
 	#   $ <long command> # another comment
 	#   ```
 	local max_command_size
-	max_command_size=$(keymap_get_max_command_size "${KEYMAP_USAGE[@]}" "${keymap_entries[@]}")
+	max_command_size=$(keymap_get_max_command_size "${keymap_usage[@]}" "${keymap_entries[@]}")
 
 	echo
 	echo 'Usage'
 	echo
 
-	for entry in "${KEYMAP_USAGE[@]}"; do
-		keymap_print_entry "${entry/_/$alias}" "$max_command_size"
+	for entry in "${keymap_usage[@]}"; do
+		keymap_print_entry "$entry" "$max_command_size"
 	done
 
 	# Annotate the `KEYMAP_DOT`
 	echo
-	printf "%s %-*s %s\n" \
-		"$KEYMAP_PROMPT_PLACEHOLDER$(gray_fg "$KEYMAP_DOT_POINTER")" \
-		"$((max_command_size - ${#KEYMAP_DOT_POINTER}))" \
+	printf "%-*s %s%-*s %s\n" \
+		$((${#KEYMAP_PROMPT_PLACEHOLDER} + ${#alias})) \
+		'' \
+		"$(gray_fg "$KEYMAP_DOT_POINTER")" \
+		"$((max_command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
 		'' \
 		"$KEYMAP_DOT_COMMENT"
 

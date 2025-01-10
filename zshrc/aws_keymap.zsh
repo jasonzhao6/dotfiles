@@ -2,13 +2,9 @@
 # Namespace: AWS
 #
 
-# This file should define 1 `<namespace>` and many `<namespace>_<key>` functions
 AWS_NAMESPACE='aws'
 
-# The `<namespace>` function will be aliased to `<alias>`
-# The `<namespace>_<key>` functions will be aliased to `<alias><key>`
-# This `<alias>` is expected to be a single character
-AWS_ALIAS='w'
+AWS_ALIAS='s'
 
 AWS_KEYMAP=(
 	"$AWS_ALIAS·o # List Opal groups"

@@ -6,9 +6,9 @@ export ZSH_SECRETS="$HOME/.zshrc.secrets"
 source "$ZSHRC_DIR/colors.zsh"; color
 
 # Include helper functions to be used by all keymaps
+source "$ZSHRC_DIR/util.zsh"
 source "$ZSHRC_DIR/_keymap.zsh"
 source "$ZSHRC_DIR/_reserved_keywords.zsh"
-source "$ZSHRC_DIR/util.zsh"
 
 # Load keymaps
 source "$ZSHRC_DIR/args_keymap.zsh"
