@@ -1,8 +1,7 @@
+KEYMAP_PROMPT=$(yellow_fg '  $')
 KEYMAP_ALIAS='_PLACEHOLDER_'
-
 KEYMAP_DOT='·'
 KEYMAP_DOT_POINTER='^'
-KEYMAP_DOT_COMMENT="$(gray_fg "# The $KEYMAP_DOT represents an optional space")"
 
 KEYMAP_USAGE=(
   "$KEYMAP_ALIAS # Show this help"
@@ -11,22 +10,14 @@ KEYMAP_USAGE=(
 	"$KEYMAP_ALIAS$KEYMAP_DOT<key> <args>* # Invoke <key> with multiple <args>"
 )
 
-KEYMAP_PROMPT=$(yellow_fg '  $')
-KEYMAP_PROMPT_PLACEHOLDER=$(echo "$KEYMAP_PROMPT" | bw)
-
-KEYMAP_DUPE_ERROR_BAR="$(red_bar '^ Cannot have duplicate keys')"
-
 function keymap_init {
 	local namespace=$1; shift
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
 	# If `keymap_entries` contains disjoint duplicate `key`s, abort and print error message
-	local dupes; dupes=$(keymap_check_for_disjoint_dupes "${keymap_entries[@]}")
-	if [[ -n $dupes ]]; then
-		printf "%s\n\n  %s\n" "$dupes" "$KEYMAP_DUPE_ERROR_BAR"
-		return 1
-	fi
+	keymap_check_for_disjoint_dupes "${keymap_entries[@]}"
+	[[ $? -eq 1 ]] && return
 
 	# Alias the `<namespace>` function to `<alias>`
 	keymap_alias "$alias" "$namespace"
@@ -86,11 +77,11 @@ function keymap_invoke {
 function keymap_check_for_disjoint_dupes {
 	local entries=("$@")
 	local last_entry
+	local has_disjoint_dupes
 
 	typeset -A seen
 
 	for entry in "${entries[@]}"; do
-
 		alias_dot_key="${${(z)entry}[1]}"
 
 		# If it is the same as the last entry, allow it
@@ -109,10 +100,12 @@ function keymap_check_for_disjoint_dupes {
 		# Otherwise, report on disjoint dupes
 		else
 			echo
-			keymap_print_entry "${seen[$alias_dot_key]}" "$max_command_size"
-			keymap_print_entry "$entry" "$max_command_size"
+			red_bar "\`$alias_dot_key\` has duplicate entries"
+			has_disjoint_dupes=1
 		fi
 	done
+
+	[[ -n $has_disjoint_dupes ]] && return 1
 }
 
 function keymap_alias {
@@ -160,12 +153,12 @@ function keymap_help {
 	# Annotate the `KEYMAP_DOT`
 	echo
 	printf "%-*s %s%-*s %s\n" \
-		$((${#KEYMAP_PROMPT_PLACEHOLDER} + ${#alias})) \
+		$(($(echo -n "$KEYMAP_PROMPT" | bw | wc -c) + ${#alias})) \
 		'' \
 		"$(gray_fg "$KEYMAP_DOT_POINTER")" \
 		"$((max_command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
 		'' \
-		"$KEYMAP_DOT_COMMENT"
+		"$(gray_fg "# The $KEYMAP_DOT represents an optional space")"
 
 	echo
 	echo 'Keymap'
