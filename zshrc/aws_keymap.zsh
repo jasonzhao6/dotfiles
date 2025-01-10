@@ -23,13 +23,13 @@ function aws {
 #
 
 # To be overwritten by `$ZSH_SECRETS`
-OPAL=(
+AWS_OPAL=(
 	'non-secret-placeholder-1 url-1'
 	'non-secret-placeholder-2 url-2'
 )
 
 function aws_o {
-	print -l "${OPAL[@]}" | sort | column -t | contain "$1" | as
+	print -l "${AWS_OPAL[@]}" | sort | column -t | contain "$1" | as
 }
 
 function aws_sup {
