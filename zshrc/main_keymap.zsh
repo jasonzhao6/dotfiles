@@ -2,7 +2,7 @@ MAIN_NAMESPACE='main_keymap'
 MAIN_ALIAS='m'
 
 MAIN_KEYMAP=(
-	'a # Show Args keymap'
+	'a # Show Args keymap' # TODO generate `find . -maxdepth 2 -name '*_keymap.zsh'`
 	'g # Show Git keymap'
 	'k # Show Kubectl keymap'
 	't # Show Terraform keymap'

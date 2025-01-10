@@ -5,7 +5,7 @@ export ZSH_SECRETS="$HOME/.zshrc.secrets"
 # Set color aliases early so they can expand in subsequent function definitions
 source "$ZSHRC_DIR/colors.zsh"; color
 
-# Include helper functions to be used by all keymaps
+# Load helpers
 source "$ZSHRC_DIR/_helpers.zsh"
 source "$ZSHRC_DIR/_keymap.zsh"
 source "$ZSHRC_DIR/_reserved_keywords.zsh"

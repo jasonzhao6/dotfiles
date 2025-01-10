@@ -4,7 +4,7 @@ KEYMAP_DOT='·'
 KEYMAP_DOT_POINTER='^'
 
 KEYMAP_USAGE=(
-  "$KEYMAP_ALIAS # Show this help"
+	"$KEYMAP_ALIAS # Show this help"
 	''
 	"$KEYMAP_ALIAS$KEYMAP_DOT<key> # Invoke <key>"
 	"$KEYMAP_ALIAS$KEYMAP_DOT<key> <args>* # Invoke <key> with multiple <args>"

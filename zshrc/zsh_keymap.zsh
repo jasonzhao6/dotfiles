@@ -1,49 +1,50 @@
-#
-# Namespace: [Z]sh
-#
+ZSH_NAMESPACE='zsh_keymap'
+ZSH_ALIAS='z'
 
 ZSH_KEYMAP=(
-	'z·i # Edit with IntelliJ'
-	'z·m # Edit with TextMate'
-	'z·s # Edit secrets'
+	"$ZSH_ALIAS·i # Edit with IntelliJ"
+	"$ZSH_ALIAS·m # Edit with TextMate"
+	"$ZSH_ALIAS·s # Edit secrets"
 	''
-	'z·z # Re-source'
-	'z·t # Test'
+	"$ZSH_ALIAS·z # Re-source"
+	"$ZSH_ALIAS·t # Test"
 	''
-	'z·w # Which'
+	"$ZSH_ALIAS·w # Which"
 	''
-	'z·a # List aliases'
-	'z·a <match> # Filter aliases'
+	"$ZSH_ALIAS·a # List aliases"
+	"$ZSH_ALIAS·a <match> # Filter aliases"
 	''
-	'z·f # List functions'
-	'z·f <match> # Filter functions'
+	"$ZSH_ALIAS·f # List functions"
+	"$ZSH_ALIAS·f <match> # Filter functions"
 	''
-	'z·p # Push other dotfiles from local'
-	'z·P # Pull other dotfiles to local'
+	"$ZSH_ALIAS·p # Push other dotfiles from local"
+	"$ZSH_ALIAS·P # Pull other dotfiles to local"
 )
 
-function z {
-	keymap z ${#ZSH_KEYMAP} "${ZSH_KEYMAP[@]}" "$@"
+keymap_init $ZSH_NAMESPACE $ZSH_ALIAS "${ZSH_KEYMAP[@]}"
+
+function zsh_keymap_sh_keymap {
+	keymap_invoke $ZSH_NAMESPACE $ZSH_ALIAS ${#ZSH_KEYMAP} "${ZSH_KEYMAP[@]}" "$@"
 }
 
 #
 # Key mappings (Alphabetized)
 #
 
-function za {
+function zsh_keymap_a {
 	alias | contain "$1"
 }
 
-function zf {
+function zsh_keymap_f {
 	# Identify functions by the ` () {` suffix, then trim it
 	typeset -f | grep ' () {$' | contain "$1" | trim 0 5
 }
 
-function zi {
+function zsh_keymap_i {
 	open -na 'IntelliJ IDEA CE.app' --args "$ZSHRC_DIR"
 }
 
-function zm {
+function zsh_keymap_m {
 	mate "$ZSHRC_DIR"
 }
 
@@ -55,34 +56,34 @@ ZSH_OTHER_DOTFILES=(
 	tm_properties
 )
 
-function zp {
+function zsh_keymap_p {
 	for dotfile in "${ZSH_OTHER_DOTFILES[@]}"; do
 		cp "$HOME/.$dotfile" "$DOTFILES_DIR/$dotfile.txt"
 	done
 }
 
-function zP {
+function zsh_keymap_P {
 	for dotfile in "${ZSH_OTHER_DOTFILES[@]}"; do
 		cp "$DOTFILES_DIR/$dotfile.txt" "$HOME/.$dotfile"
 	done
 }
 
-function zs {
+function zsh_keymap_s {
 	mate "$ZSH_SECRETS"
 }
 
-function zt {
+function zsh_keymap_t {
 	zsh "$ZSHRC_DIR"/_tests.zsh "$@"
 }
 
-function zw {
+function zsh_keymap_w {
 	which "$1" | as
 }
 
 ZSH_SECRETS_DIR="$HOME/Downloads/_Archive/zsh/.zshrc.secrets"
 ZSH_SECRETS_LATEST="$ZSH_SECRETS_DIR/latest.txt"
 
-function zz {
+function zsh_keymap_z {
 	source ~/.zshrc
 
 	# Whenever `ZSH_SECRETS` changes, take a snapshot
