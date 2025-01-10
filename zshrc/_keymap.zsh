@@ -23,11 +23,15 @@ function keymap_init {
 	keymap_alias "$alias" "$namespace"
 
 	# Alias the `<namespace>_<key>` functions to `<alias><key>`
+	local alias_dot_key
 	local entry_key
 	for entry in "${keymap_entries[@]}"; do
-		[[ -z $entry ]] && continue
+		[[ -z $entry ]] && continue # Skip empty lines
 
-		entry_key=$(echo "$entry" | awk '{print $1}' | trim 2)
+		alias_dot_key=$(echo "$entry" | awk '{print $1}')
+		[[ $alias_dot_key != *$KEYMAP_DOT* ]] && continue # Skip keyless entries
+
+		entry_key=$(echo "$alias_dot_key" | trim 2)
 		keymap_alias "$alias$entry_key" "${namespace}_$entry_key"
 	done
 }
