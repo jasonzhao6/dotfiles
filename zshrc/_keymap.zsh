@@ -158,15 +158,7 @@ function keymap_help {
 		keymap_print_entry "$entry" "$max_command_size"
 	done
 
-	# Annotate the `KEYMAP_DOT`
-	echo
-	printf "%-*s %s%-*s %s\n" \
-		$(($(echo -n "$KEYMAP_PROMPT" | bw | wc -c) + ${#alias})) \
-		'' \
-		"$(gray_fg "$KEYMAP_DOT_POINTER")" \
-		"$((max_command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
-		'' \
-		"$(gray_fg "# The $KEYMAP_DOT represents an optional space")"
+	keymap_annotate_the_dot "$alias" "$max_command_size"
 
 	echo
 	echo 'Keymap'
@@ -188,6 +180,20 @@ function keymap_get_max_command_size {
 	done
 
 	echo "$max_command_size"
+}
+
+function keymap_annotate_the_dot {
+	local alias=$1
+	local command_size=$2
+
+	echo
+	printf "%-*s %s%-*s %s\n" \
+		$(($(echo -n "$KEYMAP_PROMPT" | bw | wc -c) + ${#alias})) \
+		'' \
+		"$(gray_fg "$KEYMAP_DOT_POINTER")" \
+		"$((command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
+		'' \
+		"$(gray_fg "# The $KEYMAP_DOT represents an optional space")"
 }
 
 function keymap_print_entry {
