@@ -90,7 +90,8 @@ function keymap_check_for_disjoint_dupes {
 	typeset -A seen
 
 	for entry in "${entries[@]}"; do
-		alias_dot_key="${(j: :)${(z)entry}[1,3]}"
+
+		alias_dot_key="${${(z)entry}[1]}"
 
 		# If it is the same as the last entry, allow it
 		if [[ $alias_dot_key == "$last_entry" ]]; then
