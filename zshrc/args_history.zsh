@@ -92,7 +92,7 @@ function args_history_redo_error_bar {
 }
 
 function args_history_entries {
-	[[ $ARGS_HISTORY_TAIL -eq -1 ]] && echo "$ARGS_EMPTY" && return
+	[[ $ARGS_HISTORY_TAIL -eq -1 ]] && echo '(empty)' && return
 
 	echo "index: $ARGS_HISTORY_INDEX"
 	echo "head: $ARGS_HISTORY_HEAD"

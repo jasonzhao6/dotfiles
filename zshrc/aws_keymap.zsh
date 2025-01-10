@@ -1,9 +1,4 @@
-#
-# Namespace: AWS
-#
-
 AWS_NAMESPACE='aws'
-
 AWS_ALIAS='s'
 
 AWS_KEYMAP=(
@@ -30,12 +25,4 @@ AWS_OPAL=(
 
 function aws_o {
 	print -l "${AWS_OPAL[@]}" | sort | column -t | contain "$1" | as
-}
-
-function aws_sup {
-	echo -n 'caller: '
-	caller
-
-	echo -n 'callee: '
-	callee
 }

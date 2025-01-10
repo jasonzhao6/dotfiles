@@ -25,6 +25,8 @@ function keymap_init {
 	# Alias the `<namespace>_<key>` functions to `<alias><key>`
 	local entry_key
 	for entry in "${keymap_entries[@]}"; do
+		[[ -z $entry ]] && continue
+
 		entry_key=$(echo "$entry" | awk '{print $1}' | trim 2)
 		keymap_alias "$alias$entry_key" "${namespace}_$entry_key"
 	done

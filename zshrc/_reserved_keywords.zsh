@@ -1,6 +1,8 @@
-# Generated from code below plus some manual processing
+# Generated from the code below plus some manual processing
 #
 # ```
+# echo $PATH
+#
 # entries=(
 #   /bin
 #   /opt/local/bin
@@ -33,6 +35,11 @@ function is_reserved {
 	[[ ${RESERVED[$keyword]} -eq 1 ]]
 }
 
+# Unreserved
+RESERVED[aa]=0
+RESERVED[as]=0
+
+# Reserved
 RESERVED[2to3-3.10]=1
 RESERVED[2to3-3.11]=1
 RESERVED[2to3-3.12]=1
@@ -47,7 +54,6 @@ RESERVED[ResMerger]=1
 RESERVED[Rez]=1
 RESERVED[SetFile]=1
 RESERVED[SplitForks]=1
-RESERVED[aa]=1
 RESERVED[ab]=1
 RESERVED[ac]=1
 RESERVED[accton]=1
@@ -86,7 +92,6 @@ RESERVED[arch]=1
 RESERVED[aria_chk]=1
 RESERVED[aria_pack]=1
 RESERVED[arp]=1
-RESERVED[as]=1
 RESERVED[asa]=1
 RESERVED[asciitopgm]=1
 RESERVED[aslmanager]=1

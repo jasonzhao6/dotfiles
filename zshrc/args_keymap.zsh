@@ -1,27 +1,28 @@
-#
-# Namespace: [A]rgs
-#
+ARGS_NAMESPACE='args'
+ARGS_ALIAS='a'
 
 ARGS_KEYMAP=(
-	'a·s # Save args'
-	'a·s <match>* <-mismatch>* # Save args & filter'
+	"$ARGS_ALIAS·s # Save args"
+	"$ARGS_ALIAS·s <match>* <-mismatch>* # Save args & filter"
 	''
-	'a·so # Save args & soft-select the 1st column'
-	'a·so <match>* <-mismatch>* # Save args & soft-select the 1st column & filter'
+	"$ARGS_ALIAS·so # Save args & soft-select the 1st column"
+	"$ARGS_ALIAS·so <match>* <-mismatch>* # Save args & soft-select the 1st column & filter"
 	''
-	'a·a # List args'
-	'a·a <match>* <-mismatch>* # Filter args'
+	"$ARGS_ALIAS·a # List args"
+	"$ARGS_ALIAS·a <match>* <-mismatch>* # Filter args"
 	''
-	'a·z # Undo change'
-	'a·Z # Redo change'
+	"$ARGS_ALIAS·z # Undo change"
+	"$ARGS_ALIAS·Z # Redo change"
 	''
-	'a·h # List history entries'
-	'a·h <index> # Select history entry'
-	'a·0 # Reset history'
+	"$ARGS_ALIAS·h # List history entries"
+	"$ARGS_ALIAS·h <index> # Select history entry"
+	"$ARGS_ALIAS·0 # Reset history"
 )
 
-function a {
-	keymap a ${#ARGS_KEYMAP} "${ARGS_KEYMAP[@]}" "$@"
+keymap_init $ARGS_NAMESPACE $ARGS_ALIAS "${ARGS_KEYMAP[@]}"
+
+function args {
+	keymap_invoke $ARGS_NAMESPACE $ARGS_ALIAS ${#ARGS_KEYMAP} "${ARGS_KEYMAP[@]}" "$@"
 }
 
 #
@@ -32,19 +33,17 @@ source "$ZSHRC_DIR/args_helpers.zsh"
 source "$ZSHRC_DIR/args_history.zsh"; args_history_init
 
 # Constants
-# shellcheck disable=SC2034
-ARGS_EMPTY='(empty)'
 ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd column'
 
 # States
 ARGS_USED_TOP_ROW=
 
-function a0 {
+function args_0 {
 	args_history_reset
 }
 
 # shellcheck disable=SC2120
-function aa {
+function args_a {
 	local filters=("$@")
 
 	# If there is no `filters`, list args
@@ -57,7 +56,7 @@ function aa {
 	fi
 }
 
-function ah {
+function args_h {
 	local index=$1
 
 	# If `index` is not specified, list all history entries
@@ -77,7 +76,7 @@ function ah {
 	fi
 }
 
-function as {
+function args_s {
 	# Users see the interface of `as` as `as <match>* <-mismatch>*`
 	# Only `as` sees the `as` as `as <is soft select> <match>* <-mismatch>*`
 	local is_soft_select=$1
@@ -96,12 +95,12 @@ function as {
 
 }
 
-function aso {
+function args_so {
 	local filters=("$@")
 	as "$ARGS_SOFT_SELECT" "${filters[@]}"
 }
 
-function az {
+function args_z {
 	local column_size_before; column_size_before=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
 
 	args_history_undo
@@ -116,7 +115,7 @@ function az {
 	fi
 }
 
-function aZ {
+function args_Z {
 	args_history_redo
 	args_list
 	args_history_redo_error_bar
