@@ -1,15 +1,15 @@
-KEYMAP_ALIAS_PLACEHOLDER='_'
-
-KEYMAP_USAGE=(
-  "$KEYMAP_ALIAS_PLACEHOLDER # Show this help"
-	''
-	"$KEYMAP_ALIAS_PLACEHOLDER$KEYMAP_DOT<key> # Invoke <key>"
-	"$KEYMAP_ALIAS_PLACEHOLDER$KEYMAP_DOT<key> <args>* # Invoke <key> with multiple <args>"
-)
+KEYMAP_ALIAS='_PLACEHOLDER_'
 
 KEYMAP_DOT='·'
 KEYMAP_DOT_POINTER='^'
 KEYMAP_DOT_COMMENT="$(gray_fg "# The $KEYMAP_DOT represents an optional space")"
+
+KEYMAP_USAGE=(
+  "$KEYMAP_ALIAS # Show this help"
+	''
+	"$KEYMAP_ALIAS$KEYMAP_DOT<key> # Invoke <key>"
+	"$KEYMAP_ALIAS$KEYMAP_DOT<key> <args>* # Invoke <key> with multiple <args>"
+)
 
 KEYMAP_PROMPT=$(yellow_fg '  $')
 KEYMAP_PROMPT_PLACEHOLDER=$(echo "$KEYMAP_PROMPT" | bw)
@@ -101,7 +101,7 @@ function keymap_help {
 	# Interpolate `alias` into keymap usage
 	local keymap_usage=()
 	for entry in "${KEYMAP_USAGE[@]}"; do
-		keymap_usage+=("${entry/$KEYMAP_ALIAS_PLACEHOLDER/$alias}")
+		keymap_usage+=("${entry/$KEYMAP_ALIAS/$alias}")
 	done
 
 	# Get the max command size in order to align comments across commands, e.g
