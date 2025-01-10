@@ -16,8 +16,6 @@ KEYMAP_PROMPT_PLACEHOLDER=$(echo "$KEYMAP_PROMPT" | bw)
 
 KEYMAP_DUPE_ERROR_BAR="$(red_bar '^ Cannot have duplicate keys')"
 
-# TODO reorder helper methods
-
 function keymap_init {
 	local namespace=$1; shift
 	local alias=$1; shift
@@ -26,7 +24,7 @@ function keymap_init {
 	# If `keymap_entries` contains disjoint duplicate `key`s, abort and print error message
 	local dupes; dupes=$(keymap_check_for_disjoint_dupes "${keymap_entries[@]}")
 	if [[ -n $dupes ]]; then
-		printf "%s\n\n%s %s\n" "$dupes" "$KEYMAP_PROMPT_PLACEHOLDER" "$KEYMAP_DUPE_ERROR_BAR"
+		printf "%s\n\n  %s\n" "$dupes" "$KEYMAP_DUPE_ERROR_BAR"
 		return 1
 	fi
 
@@ -39,21 +37,6 @@ function keymap_init {
 		entry_key=$(echo "$entry" | awk '{print $1}' | trim 2)
 		keymap_alias "$alias$entry_key" "${namespace}_$entry_key"
 	done
-}
-
-function keymap_alias {
-	local key=$1
-	local value=$2
-
-	# Do not overwrite reserved keywords, error instead
-	if is_reserved "$key"; then
-		echo
-		red_bar "\`$key\` is a reserved keyword"
-		return
-	fi
-
-	# shellcheck disable=SC2086,SC2139
-	alias $key="$value"
 }
 
 # Exit codes and corresponding prints
@@ -92,6 +75,59 @@ function keymap_invoke {
 #
 # Helpers
 #
+
+# ```
+# o·c       # Open the latest commit
+# o·c <sha> # Open the specified commit  <--  Joint duplicate, likely intentional
+#
+# o·a       # Do something
+# o·c       # Do something else          <--  Disjoint duplicate, likely unintentional
+# ```
+function keymap_check_for_disjoint_dupes {
+	local entries=("$@")
+	local last_entry
+
+	typeset -A seen
+
+	for entry in "${entries[@]}"; do
+		alias_dot_key="${(j: :)${(z)entry}[1,3]}"
+
+		# If it is the same as the last entry, allow it
+		if [[ $alias_dot_key == "$last_entry" ]]; then
+			continue
+
+		# Otherwise, remember it to allow dupe in the next entry
+		else
+			last_entry=$alias_dot_key
+		fi
+
+		# If we have not seen an entry, remember it
+		if [[ -z ${seen[$alias_dot_key]} ]]; then
+			seen[$alias_dot_key]=$entry
+
+		# Otherwise, report on disjoint dupes
+		else
+			echo
+			keymap_print_entry "${seen[$alias_dot_key]}" "$max_command_size"
+			keymap_print_entry "$entry" "$max_command_size"
+		fi
+	done
+}
+
+function keymap_alias {
+	local key=$1
+	local value=$2
+
+	# Do not overwrite reserved keywords, error instead
+	if is_reserved "$key"; then
+		echo
+		red_bar "\`$key\` is a reserved keyword"
+		return
+	fi
+
+	# shellcheck disable=SC2086,SC2139
+	alias $key="$value"
+}
 
 function keymap_help {
 	# Reconstruct arrays from these args: `usage_size, usage[]..., keymap_entries[]...`
@@ -167,44 +203,6 @@ function keymap_print_entry {
 	else
 		echo
 	fi
-}
-
-# ```
-# o·c       # Open the latest commit
-# o·c <sha> # Open the specified commit  <--  Joint duplicate, likely intentional
-#
-# o·a       # Do something
-# o·c       # Do something else          <--  Disjoint duplicate, likely unintentional
-# ```
-function keymap_check_for_disjoint_dupes {
-	local entries=("$@")
-	local last_entry
-
-	typeset -A seen
-
-	for entry in "${entries[@]}"; do
-		alias_dot_key="${(j: :)${(z)entry}[1,3]}"
-
-		# If it is the same as the last entry, allow it
-		if [[ $alias_dot_key == "$last_entry" ]]; then
-			continue
-
-		# Otherwise, remember it to allow dupe in the next entry
-		else
-			last_entry=$alias_dot_key
-		fi
-
-		# If we have not seen an entry, remember it
-		if [[ -z ${seen[$alias_dot_key]} ]]; then
-			seen[$alias_dot_key]=$entry
-
-		# Otherwise, report on disjoint dupes
-		else
-			echo
-			keymap_print_entry "${seen[$alias_dot_key]}" "$max_command_size"
-			keymap_print_entry "$entry" "$max_command_size"
-		fi
-	done
 }
 
 ### Keymap annotations
