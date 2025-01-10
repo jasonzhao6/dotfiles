@@ -162,8 +162,6 @@ function keymap_help {
 		keymap_print_entry "$entry" "$max_command_size"
 	done
 
-	keymap_annotate_the_dot "$alias" "$max_command_size"
-
 	echo
 	echo 'Keymap'
 	echo
@@ -171,6 +169,8 @@ function keymap_help {
 	for entry in "${keymap_entries[@]}"; do
 		keymap_print_entry "$entry" "$max_command_size"
 	done
+
+	keymap_annotate_the_dot "$alias" "$max_command_size"
 }
 
 function keymap_get_max_command_size {

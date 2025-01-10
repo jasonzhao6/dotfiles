@@ -1,25 +1,29 @@
 MAIN_NAMESPACE='main_keymap'
 MAIN_ALIAS='m'
 
-# Find dynamic keymaps
+# Find scripted keymaps
 MAIN_KEYMAP=(); while IFS='' read -r line; do MAIN_KEYMAP+=("$line"); done < <(
-	find . -maxdepth 2 -name '*_keymap.zsh'
-	echo 123 321 222
-	echo '123 321 222 # uuu'
+	find "$ZSHRC_DIR" -maxdepth 1 -name '*_keymap.zsh' | sort | while IFS= read -r file; do
+		current_namespace=$(pgrep --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$file")
+		[[ -z $current_namespace ]] && continue
+
+		current_alias=$(pgrep --only-matching "(?<=_ALIAS=')\w+(?=')" "$file")
+		echo "$current_alias # Show \`$current_namespace\`" | bw
+	done
 )
 
-# Append static keymaps
+# Append snapshotted keymaps
 MAIN_KEYMAP+=(
 	''
-	"$MAIN_ALIAS·i # Show IntelliJ keymap with \`cmd\`" # TODO
-	"$MAIN_ALIAS·ic # Show IntelliJ keymap with \`ctrl\`"
-	"$MAIN_ALIAS·ia # Show IntelliJ keymap with \`alt\`"
-	"$MAIN_ALIAS·if # Show IntelliJ keymap with \`fn\`"
+	"$MAIN_ALIAS·i # Show IntelliJ \`cmd\` keymap" # TODO
+	"$MAIN_ALIAS·ic # Show IntelliJ \`ctrl\` keymap"
+	"$MAIN_ALIAS·ia # Show IntelliJ \`alt\` keymap"
+	"$MAIN_ALIAS·if # Show IntelliJ \`fn\` keymap"
 	"$MAIN_ALIAS·t # Show TextMate keymap"
 	''
 	"$MAIN_ALIAS·k # Show Kinesis keymap"
 	''
-	"$MAIN_ALIAS·b # Show browser keymap (Vimium / Vimari)"
+	"$MAIN_ALIAS·vv # Show Vimium / Vimari keymap"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
