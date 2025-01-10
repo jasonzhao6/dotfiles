@@ -1,4 +1,4 @@
-ARGS_NAMESPACE='args'
+ARGS_NAMESPACE='args_keymap'
 ARGS_ALIAS='a'
 
 ARGS_KEYMAP=(
@@ -21,7 +21,7 @@ ARGS_KEYMAP=(
 
 keymap_init $ARGS_NAMESPACE $ARGS_ALIAS "${ARGS_KEYMAP[@]}"
 
-function args {
+function args_keymap {
 	keymap_invoke $ARGS_NAMESPACE $ARGS_ALIAS ${#ARGS_KEYMAP} "${ARGS_KEYMAP[@]}" "$@"
 }
 
@@ -38,12 +38,12 @@ ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd c
 # States
 ARGS_USED_TOP_ROW=
 
-function args_0 {
+function args_keymap_0 {
 	args_history_reset
 }
 
 # shellcheck disable=SC2120
-function args_a {
+function args_keymap_a {
 	local filters=("$@")
 
 	# If there is no `filters`, list args
@@ -56,7 +56,7 @@ function args_a {
 	fi
 }
 
-function args_h {
+function args_keymap_h {
 	local index=$1
 
 	# If `index` is not specified, list all history entries
@@ -76,7 +76,7 @@ function args_h {
 	fi
 }
 
-function args_s {
+function args_keymap_s {
 	# Users see the interface of `as` as `as <match>* <-mismatch>*`
 	# Only `as` sees the `as` as `as <is soft select> <match>* <-mismatch>*`
 	local is_soft_select=$1
@@ -95,12 +95,12 @@ function args_s {
 
 }
 
-function args_so {
+function args_keymap_so {
 	local filters=("$@")
 	as "$ARGS_SOFT_SELECT" "${filters[@]}"
 }
 
-function args_z {
+function args_keymap_z {
 	local column_size_before; column_size_before=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
 
 	args_history_undo
@@ -115,7 +115,7 @@ function args_z {
 	fi
 }
 
-function args_Z {
+function args_keymap_Z {
 	args_history_redo
 	args_list
 	args_history_redo_error_bar

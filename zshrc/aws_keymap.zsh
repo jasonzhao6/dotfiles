@@ -1,4 +1,4 @@
-AWS_NAMESPACE='aws'
+AWS_NAMESPACE='aws_keymap'
 AWS_ALIAS='s'
 
 AWS_KEYMAP=(
@@ -9,7 +9,7 @@ AWS_KEYMAP=(
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
 
-function aws {
+function aws_keymap {
 	keymap_invoke $AWS_NAMESPACE $AWS_ALIAS ${#AWS_KEYMAP} "${AWS_KEYMAP[@]}" "$@"
 }
 
@@ -23,6 +23,6 @@ AWS_OPAL=(
 	'non-secret-placeholder-2 url-2'
 )
 
-function aws_o {
+function aws_keymap_o {
 	print -l "${AWS_OPAL[@]}" | sort | column -t | contain "$1" | as
 }
