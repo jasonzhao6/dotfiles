@@ -105,7 +105,7 @@ function keymap_check_for_disjoint_dupes {
 		fi
 	done
 
-	[[ -n $has_disjoint_dupes ]] && return 1
+	[[ -n $has_disjoint_dupes ]] && return 1 || return 0
 }
 
 function keymap_alias {
