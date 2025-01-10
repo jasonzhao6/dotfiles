@@ -1,13 +1,15 @@
 MAIN_NAMESPACE='main_keymap'
 MAIN_ALIAS='m'
 
-MAIN_KEYMAP=(
-	'a # Show Args keymap' # TODO generate `find . -maxdepth 2 -name '*_keymap.zsh'`
-	'g # Show Git keymap'
-	'k # Show Kubectl keymap'
-	't # Show Terraform keymap'
-	'w # Show AWS keymap'
-	'z # Show Zsh keymap'
+# Find dynamic keymaps
+MAIN_KEYMAP=(); while IFS='' read -r line; do MAIN_KEYMAP+=("$line"); done < <(
+	find . -maxdepth 2 -name '*_keymap.zsh'
+	echo 123 321 222
+	echo '123 321 222 # uuu'
+)
+
+# Append static keymaps
+MAIN_KEYMAP+=(
 	''
 	"$MAIN_ALIAS·i # Show IntelliJ keymap with \`cmd\`" # TODO
 	"$MAIN_ALIAS·ic # Show IntelliJ keymap with \`ctrl\`"
