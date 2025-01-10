@@ -32,17 +32,28 @@ function keymap_init {
 	# TODO check for reserved keywords
 
 	# Alias the `<namespace>` function to `<alias>`
-	# shellcheck disable=SC2086,SC2139
-	alias $alias="$namespace"
+	keymap_alias "$alias" "$namespace"
 
 	# Alias the `<namespace>_<key>` functions to `<alias><key>`
 	local entry_key
 	for entry in "${keymap_entries[@]}"; do
 		entry_key=$(echo "$entry" | awk '{print $1}' | trim 2)
-
-		# shellcheck disable=SC2086,SC2139
-		alias $alias$entry_key="${namespace}_$entry_key"
+		keymap_alias "$alias$entry_key" "${namespace}_$entry_key"
 	done
+}
+
+function keymap_alias {
+	local key=$1
+	local value=$2
+
+	if is_reserved "$key"; then
+		echo
+		red_bar "\`$key\` is a reserved keyword"
+		return
+	fi
+
+	# shellcheck disable=SC2086,SC2139
+	alias $key="$value"
 }
 
 # Exit codes and corresponding prints
