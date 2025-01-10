@@ -46,7 +46,7 @@ function keymap_invoke {
 	local args=("$@")
 
 	# If a `key` was not specified, abort and print usage
-	[[ -z $key ]] && keymap_help "$alias" "${keymap_entries[@]}" && return 2
+	[[ -z $key ]] && keymap_help "$namespace" "$alias" "${keymap_entries[@]}" && return 2
 
 	# Look for the specified `key`
 	local found
@@ -56,7 +56,7 @@ function keymap_invoke {
 
 	# If not found, print usage
 	if [[ -z $found ]]; then
-		keymap_help "$alias" "${keymap_entries[@]}"
+		keymap_help "$namespace" "$alias" "${keymap_entries[@]}"
 		return 3
 
 	# If found, invoke it with the specified `args`
@@ -126,7 +126,7 @@ function keymap_alias {
 }
 
 function keymap_help {
-	# Reconstruct arrays from these args: `usage_size, usage[]..., keymap_entries[]...`
+	local namespace=$1; shift
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
@@ -143,6 +143,12 @@ function keymap_help {
 	#   ```
 	local max_command_size
 	max_command_size=$(keymap_get_max_command_size "${keymap_usage[@]}" "${keymap_entries[@]}")
+
+	echo
+	echo 'Name'
+	echo
+
+	yellow_fg "  $namespace"
 
 	echo
 	echo 'Usage'
