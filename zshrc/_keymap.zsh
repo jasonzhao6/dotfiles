@@ -27,11 +27,6 @@ function keymap_init {
 	done <<< "$(keymap_extract_uniq_keys "$alias" "${keymap_entries[@]}")"
 }
 
-# Exit codes and corresponding prints
-# - 1: Print error message about non-consecutive duplicate `key`s
-# - 2: Print usage since `key` was not specified
-# - 3: Print usage since `key` was not found
-# - 0: Print output from invoking `key`
 function keymap_invoke {
 	local namespace=$1; shift
 	local alias=$1; shift
@@ -41,7 +36,7 @@ function keymap_invoke {
 	local args=("$@")
 
 	# If a `key` was not specified, abort and print usage
-	[[ -z $key ]] && keymap_help "$namespace" "$alias" "${keymap_entries[@]}" && return 2
+	[[ -z $key ]] && keymap_help "$namespace" "$alias" "${keymap_entries[@]}" && return
 
 	# Look for the specified `key`
 	local found
@@ -52,7 +47,7 @@ function keymap_invoke {
 	# If not found, print usage
 	if [[ -z $found ]]; then
 		keymap_help "$namespace" "$alias" "${keymap_entries[@]}"
-		return 3
+		return
 
 	# If found, invoke it with the specified `args`
 	else
