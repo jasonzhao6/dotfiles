@@ -1,5 +1,4 @@
 #### [Args]
-## select a random arg
 ## select args within a rang[e]
 ## (e.g `e 2 5 echo`, or with explicit positioning `e 2 5 echo ~~ and ~~ again`)
 #function e { for i in $(seq "$1" "$2"); do echo; arg "$i" "${@:3}"; done; }
@@ -24,14 +23,6 @@
 ## [y]ank / [p]ut current args into a different tab
 #function y { args > ~/.zshrc.args; }
 #function p { echo "$(<~/.zshrc.args)" | as; }
-
-## [u]ndo / [r]edo changes, up to `ARGS_HISTORY_MAX`
-#function u { args_history_undo_selection; }
-#function r { args_history_redo; args_list; args_history_redo_error_bar; }
-
-## list / select historical args by [i]ndex
-## (e.g `i` to list history, `i 8` to select the args at index 8)
-#function i { [[ -z $1 || $1 -lt $ARGS_TAIL || $1 -gt $ARGS_HEAD ]] && args_history_entries || { ARGS_HISTORY_INDEX=$1; a; }; }
 
 ## select an [arg] by number
 #function 1 { arg "$0" "$@"; }

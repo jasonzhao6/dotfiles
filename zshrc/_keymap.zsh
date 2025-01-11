@@ -7,7 +7,7 @@ KEYMAP_USAGE=(
 	"$KEYMAP_ALIAS # Show this help"
 	''
 	"$KEYMAP_ALIAS$KEYMAP_DOT<key> # Invoke <key>"
-	"$KEYMAP_ALIAS$KEYMAP_DOT<key> <args>* # Invoke <key> with multiple <args>"
+	"$KEYMAP_ALIAS$KEYMAP_DOT<key> <arg> # Invoke <key> with <arg>"
 )
 
 function keymap_init {

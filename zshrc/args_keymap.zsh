@@ -3,22 +3,28 @@ ARGS_ALIAS='a'
 
 ARGS_KEYMAP=(
 	"$ARGS_ALIAS·s # Save as args"
-	"$ARGS_ALIAS·s <match>* <-mismatch>* # Save as args & filter"
+	"$ARGS_ALIAS·s <matches>* -<mismatches>* # Save as args & filter"
 	''
 	"$ARGS_ALIAS·so # Save as args & soft-select the 1st column"
-	"$ARGS_ALIAS·so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
+	"$ARGS_ALIAS·so <matches>* -<mismatches>* # Save as args & soft-select the 1st column & filter"
 	''
 	"$ARGS_ALIAS·v # Paste into args"
-	"$ARGS_ALIAS·v <match>* <-mismatch>* # Paste into args & filter"
+	"$ARGS_ALIAS·v <matches>* -<mismatches>* # Paste into args & filter"
 	''
 	"$ARGS_ALIAS·vo # Paste into args & soft-select the 1st column"
-	"$ARGS_ALIAS·vo <match>* <-mismatch>* # Paste into args & soft-select the 1st column & filter"
+	"$ARGS_ALIAS·vo <matches>* -<mismatches>* # Paste into args & soft-select the 1st column & filter"
 	''
-	"$ARGS_ALIAS·n <number> <command> # Use an arg by number"
-	"$ARGS_ALIAS·ny <command> # Use a random arg"
+	"$ARGS_ALIAS·n <number> <command> ~~? # Use an arg by number"
+	"$ARGS_ALIAS·ny <command> ~~? # Use a random arg"
+	''
+	"$ARGS_ALIAS·f <start> <finish> <command> ~~? # Use args within a range"
+	''
+	"$ARGS_ALIAS·m <command> ~~? # Map each arg in sequence"
+	"$ARGS_ALIAS·e <command> ~~? # Use each arg in sequence"
+	"$ARGS_ALIAS·l <command> ~~? # Use all args in parallel"
 	''
 	"$ARGS_ALIAS·a # List args"
-	"$ARGS_ALIAS·a <match>* <-mismatch>* # Filter args"
+	"$ARGS_ALIAS·a <matches>* -<mismatches>* # Filter args"
 	''
 	"$ARGS_ALIAS·u # Undo change"
 	"$ARGS_ALIAS·r # Redo change"
@@ -66,6 +72,16 @@ function args_keymap_a {
 	fi
 }
 
+function args_keymap_f {
+	local start=$1; shift
+	local finish=$1; shift # `end` is a reserved keyword
+	local command=$*
+
+	for number in $(seq "$start" "$finish"); do
+		args_keymap_n "$number" "$command"
+	done
+}
+
 function args_keymap_h {
 	local index=$1
 
@@ -82,6 +98,23 @@ function args_keymap_h {
 		echo
 		red_bar "Index out of range: $index"
 	fi
+}
+
+function args_keymap_m {
+	local command=$*
+
+	local map=''
+	local row
+
+	for number in $(seq 1 "$(args_size)"); do
+		echo
+		row=$(args_keymap_n "$number" "$@")
+		map+="$row\n"
+		echo "$row"
+	done
+
+	echo
+	echo "$map" | as
 }
 
 function args_keymap_n {
@@ -112,8 +145,8 @@ function args_keymap_r {
 }
 
 function args_keymap_s {
-	# Users see the interface of `as` as `as <match>* <-mismatch>*`
-	# Only `as` sees the `as` as `as <is soft select> <match>* <-mismatch>*`
+	# Users see the interface of this mapping as `<key> <matches>* -<mismatches>*`
+	# Only `as` sees the interface as `<key> <is soft select> <matches>* -<mismatches>*`
 	local is_soft_select=$1
 	[[ $is_soft_select == "$ARGS_SOFT_SELECT" ]] && shift || is_soft_select=0
 
@@ -154,7 +187,7 @@ function args_keymap_u {
 function args_keymap_v {
 	local filters=("$@")
 
-	pbpaste | as "${filters[@]}"
+	pbpaste | as "${filters[@]}" # TODO replace with full name
 }
 
 function args_keymap_vo {
