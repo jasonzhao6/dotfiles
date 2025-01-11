@@ -72,22 +72,6 @@ function args_columns_bar {
 # Setters
 #
 
-# TODO copy over key mapping for this
-function args_use_selection {
-	local number=$1
-	local command=$*
-
-	if [[ -n $1 && -n $2 ]]; then
-		local row; row="$(args_plain | sed -n "${number}p" | sed 's/ *#.*//' | strip)"
-
-		if [[ $(index_of "${(j: :)command}" '~~') -eq 0 ]]; then
-			echo_eval "${command:2} $row"
-		else
-			echo_eval ${${command:2}//~~/$row}
-		fi
-	fi
-}
-
 function args_select_column {
 	local use_top_row=$1
 	local selected_column=$2

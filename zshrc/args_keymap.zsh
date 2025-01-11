@@ -8,6 +8,8 @@ ARGS_KEYMAP=(
 	"$ARGS_ALIAS·so # Save args & soft-select the 1st column"
 	"$ARGS_ALIAS·so <match>* <-mismatch>* # Save args & soft-select the 1st column & filter"
 	''
+	"$ARGS_ALIAS·n <number> <command> # Use arg by number"
+	''
 	"$ARGS_ALIAS·a # List args"
 	"$ARGS_ALIAS·a <match>* <-mismatch>* # Filter args"
 	''
@@ -44,7 +46,6 @@ function args_keymap_0 {
 	args_history_reset
 }
 
-# shellcheck disable=SC2120
 function args_keymap_a {
 	local filters=("$@")
 
@@ -73,6 +74,21 @@ function args_keymap_h {
 		args_history_entries
 		echo
 		red_bar "Index out of range: $index"
+	fi
+}
+
+function args_keymap_n {
+	local number=$1
+	local command=$*
+
+	if [[ -n $1 && -n $2 ]]; then
+		local row; row="$(args_plain | sed -n "${number}p" | sed 's/ *#.*//' | strip)"
+
+		if [[ $command != *'~~'* ]]; then
+			echo_eval "${command:2} $row"
+		else
+			echo_eval ${${command:2}//~~/$row}
+		fi
 	fi
 }
 

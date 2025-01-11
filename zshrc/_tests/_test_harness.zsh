@@ -31,7 +31,7 @@ function assert {
 }
 
 function run_with_filter {
-	[[ -z $test_filter || $(index_of "$@" "$test_filter") -ne 0 ]] && "$@"
+	[[ -z $test_filter || $* == *$test_filter* ]] && "$@"
 }
 
 function print_summary {
