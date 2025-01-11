@@ -1,4 +1,5 @@
-KEYMAP_PROMPT=$(yellow_fg '  $')
+KEYMAP_COLOR='cyan_fg'
+KEYMAP_PROMPT=$($KEYMAP_COLOR '  $')
 KEYMAP_ALIAS='_PLACEHOLDER_'
 KEYMAP_DOT='·'
 KEYMAP_DOT_POINTER='^'
@@ -138,7 +139,7 @@ function keymap_help {
 	echo 'Name'
 	echo
 
-	yellow_fg "  $namespace"
+	$KEYMAP_COLOR "  $namespace"
 	keymap_print "$namespace" "$alias" "${keymap_entries[@]}"
 
 	echo
@@ -218,7 +219,7 @@ function keymap_print {
 			if [[ $char == '_' ]]; then
 				row_output+='    '
 			elif [[ -n ${main_keymap_keys[$char]} ]]; then
-				row_output+="  $(yellow_fg "$char") "
+				row_output+="  $($KEYMAP_COLOR "$char") "
 			elif [[ -z ${current_keymap_keys[$char]} ]]; then
 				row_output+="  $(gray_fg "$char") "
 			elif [[ ${current_keymap_keys[$char]} -eq 1 ]]; then
