@@ -56,7 +56,7 @@ input_with_tabs=$(
 
 input_with_comments=$input_with_tabs
 
-function test__aa {
+function test__args_keymap_a {
 	assert "$(
 		echo "$input" | as > /dev/null
 		aa
@@ -69,9 +69,9 @@ function test__aa {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run_with_filter test__aa
+}; run_with_filter test__args_keymap_a
 
-function test__aa__adds_color {
+function test__args_keymap_a__adds_color {
 	assert "$(
 		echo "$input" | as > /dev/null
 		aa shared
@@ -82,9 +82,9 @@ function test__aa__adds_color {
 		     3	terraform-application-region-$(grep_color shared)-3
 		eof
 	)"
-}; run_with_filter test__aa__adds_color
+}; run_with_filter test__args_keymap_a__adds_color
 
-function test__aa__replaces_color {
+function test__args_keymap_a__replaces_color {
 	assert "$(
 		echo "$input" | as > /dev/null
 		aa shared > /dev/null
@@ -96,9 +96,9 @@ function test__aa__replaces_color {
 		     3	terraform-application-$(grep_color region)-shared-3
 		eof
 	)"
-}; run_with_filter test__aa__replaces_color
+}; run_with_filter test__args_keymap_a__replaces_color
 
-function test__aa__with_two_args_out_of_order {
+function test__args_keymap_a__with_two_args_out_of_order {
 	assert "$(
 		echo "$input" | as > /dev/null
 		aa 2 shared
@@ -107,9 +107,9 @@ function test__aa__with_two_args_out_of_order {
 		     1	terraform-application-region-$(grep_color shared)-$(grep_color 2)
 		eof
 	)"
-}; run_with_filter test__aa__with_two_args_out_of_order
+}; run_with_filter test__args_keymap_a__with_two_args_out_of_order
 
-function test__aa__with_two_args_including_negation {
+function test__args_keymap_a__with_two_args_including_negation {
 	assert "$(
 		echo "$input" | as > /dev/null
 		aa -2 shared
@@ -119,9 +119,9 @@ function test__aa__with_two_args_including_negation {
 		     2	terraform-application-region-$(grep_color shared)-3
 		eof
 	)"
-}; run_with_filter test__aa__with_two_args_including_negation
+}; run_with_filter test__args_keymap_a__with_two_args_including_negation
 
-function test__as {
+function test__args_keymap_s {
 	# Can test `<command> | as`, but not `<command>; as`
 	# The latter requires an interactive shell
 	assert "$(
@@ -136,9 +136,9 @@ function test__as {
 		     6	terraform-application-region-program-B  select via headers for this one
 		eof
 	)"
-}; run_with_filter test__as
+}; run_with_filter test__args_keymap_s
 
-function test__as__with_filters {
+function test__args_keymap_s__with_filters {
 	# Can test `<command> | as`, but not `<command>; as`
 	# The latter requires an interactive shell
 	assert "$(
@@ -149,9 +149,9 @@ function test__as__with_filters {
 		     2	terraform-application-region-$(grep_color shared)-3   sup
 		eof
 	)"
-}; run_with_filter test__as__with_filters
+}; run_with_filter test__args_keymap_s__with_filters
 
-function test__aso {
+function test__args_keymap_so {
 	# Can test `<command> | aso`, but not `<command>; aso`
 	# The latter requires an interactive shell.
 	assert "$(
@@ -166,9 +166,9 @@ function test__aso {
 		     6	terraform-application-region-program-B  # select via headers for this one
 		eof
 	)"
-}; run_with_filter test__aso
+}; run_with_filter test__args_keymap_so
 
-function test__aso__with_filters {
+function test__args_keymap_so__with_filters {
 	# Can test `<command> | aso`, but not `<command>; aso`
 	# The latter requires an interactive shell.
 	assert "$(
@@ -179,7 +179,7 @@ function test__aso__with_filters {
 		     2	terraform-application-region-$(grep_color shared)-3   # sup
 		eof
 	)"
-}; run_with_filter test__aso__with_filters
+}; run_with_filter test__args_keymap_so__with_filters
 
 #function test__v {
 #	assert "$(
@@ -213,7 +213,7 @@ function test__aso__with_filters {
 #	)"
 #}; run_with_filter test__vv
 #
-#function test__aa {
+#function test__args_keymap_a {
 #	assert "$(
 #		echo "$input_short" | as > /dev/null
 #		eee 1 $(($(args_size) * 3)) aa echo 2>&1 | sort | uniq
@@ -227,9 +227,9 @@ function test__aso__with_filters {
 #			terraform-application-region-shared-2
 #		eof
 #	)"
-#}; run_with_filter test__aa
+#}; run_with_filter test__args_keymap_a
 #
-#function test__arg {
+#function test__args_keymap_rg {
 #	assert "$(
 #		echo "$input" | as > /dev/null
 #		arg 3 echo 2>&1
@@ -239,9 +239,9 @@ function test__aso__with_filters {
 #			terraform-application-region-shared-3
 #		eof
 #	)"
-#}; run_with_filter test__arg
+#}; run_with_filter test__args_keymap_rg
 #
-#function test__arg__with_whitespace {
+#function test__args_keymap_rg__with_whitespace {
 #	assert "$(
 #		echo "$input_with_whitespace" | as > /dev/null
 #		arg 3 echo 2>&1
@@ -251,9 +251,9 @@ function test__aso__with_filters {
 #			terraform-application-region-shared-3
 #		eof
 #	)"
-#}; run_with_filter test__arg__with_whitespace
+#}; run_with_filter test__args_keymap_rg__with_whitespace
 #
-#function test__arg__with_substitution {
+#function test__args_keymap_rg__with_substitution {
 #	assert "$(
 #		echo "$input" | as > /dev/null
 #		arg 3 echo http://~~:8080 2>&1
@@ -263,9 +263,9 @@ function test__aso__with_filters {
 #			http://terraform-application-region-shared-3:8080
 #		eof
 #	)"
-#}; run_with_filter test__arg__with_substitution
+#}; run_with_filter test__args_keymap_rg__with_substitution
 #
-#function test__arg__with_multiple_substitutions {
+#function test__args_keymap_rg__with_multiple_substitutions {
 #	assert "$(
 #		echo "$input" | as > /dev/null
 #		arg 3 echo http://~~:80 and https://~~:443 2>&1
@@ -275,9 +275,9 @@ function test__aso__with_filters {
 #			http://terraform-application-region-shared-3:80 and https://terraform-application-region-shared-3:443
 #		eof
 #	)"
-#}; run_with_filter test__arg__with_multiple_substitutions
+#}; run_with_filter test__args_keymap_rg__with_multiple_substitutions
 #
-#function test__arg__with_multiple_substitutions_in_quotes {
+#function test__args_keymap_rg__with_multiple_substitutions_in_quotes {
 #	assert "$(
 #		echo "$input" | as > /dev/null
 #		arg 3 'echo http://~~:80 and https://~~:443' 2>&1
@@ -287,7 +287,7 @@ function test__aso__with_filters {
 #			http://terraform-application-region-shared-3:80 and https://terraform-application-region-shared-3:443
 #		eof
 #	)"
-#}; run_with_filter test__arg__with_multiple_substitutions_in_quotes
+#}; run_with_filter test__args_keymap_rg__with_multiple_substitutions_in_quotes
 #
 #function test__1 {
 #	assert "$(
@@ -408,12 +408,12 @@ function test__aso__with_filters {
 #	)"
 #}; run_with_filter test__each__with_comments
 #
-#function test__all {
-#	function test__all__sleep_and_echo { sleep "$@"; echo "$@"; }
+#function test__args_keymap_ll {
+#	function test__args_keymap_ll__sleep_and_echo { sleep "$@"; echo "$@"; }
 #
 #	assert "$(
 #		printf '0.01\n0.03\n0.05' | as > /dev/null
-#		all test__all__sleep_and_echo 2>/dev/null
+#		all test__args_keymap_ll__sleep_and_echo 2>/dev/null
 #	)" "$(
 #		cat <<-eof
 #
@@ -424,7 +424,7 @@ function test__aso__with_filters {
 #			0.05
 #		eof
 #	)"
-#}; run_with_filter test__all
+#}; run_with_filter test__args_keymap_ll
 #
 #function test__map {
 #	assert "$(

@@ -1,4 +1,4 @@
-function test__wo {
+function test__aws_keymap_o {
 	assert "$(
 		wo
 	)" "$(
@@ -7,9 +7,9 @@ function test__wo {
 		     2	non-secret-placeholder-2  url-2
 		eof
 	)"
-}; run_with_filter test__wo
+}; run_with_filter test__aws_keymap_o
 
-function test__wo__when_filtering_for_2 {
+function test__aws_keymap_o__when_filtering_for_2 {
 	assert "$(
 		wo 2
 	)" "$(
@@ -17,4 +17,4 @@ function test__wo__when_filtering_for_2 {
 		     1	non-secret-placeholder-2  url-2
 		eof
 	)"
-}; run_with_filter test__wo__when_filtering_for_2
+}; run_with_filter test__aws_keymap_o__when_filtering_for_2

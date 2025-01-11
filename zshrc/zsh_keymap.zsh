@@ -23,7 +23,7 @@ ZSH_KEYMAP=(
 
 keymap_init $ZSH_NAMESPACE $ZSH_ALIAS "${ZSH_KEYMAP[@]}"
 
-function zsh_keymap_sh_keymap {
+function zsh_keymap {
 	keymap_invoke $ZSH_NAMESPACE $ZSH_ALIAS ${#ZSH_KEYMAP} "${ZSH_KEYMAP[@]}" "$@"
 }
 
