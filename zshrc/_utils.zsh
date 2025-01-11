@@ -90,9 +90,14 @@ function compact {
 }
 
 function contain {
-	local string=$*
+	local substring=$*
 
-	pgrep --only-matching ".*$string.*" | bw
+	if [[ -z $substring ]]; then
+		cat
+	else
+		# Use `pgrep` to filter, then use `grep` to color
+		pgrep --ignore-case --only-matching ".*$substring.*" | bw | grep "$substring"
+	fi
 }
 
 function extract_urls {

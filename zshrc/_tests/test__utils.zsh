@@ -121,8 +121,8 @@ function test__contain {
 		echo "$input" | contain 3
 	)" "$(
 		cat <<-eof
-			foo 23
-			foo 34
+			foo 2$(grep_color 3)
+			foo $(grep_color 3)4
 		eof
 	)"
 }; run_with_filter test__contain

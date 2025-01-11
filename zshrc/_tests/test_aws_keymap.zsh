@@ -14,7 +14,7 @@ function test__aws_keymap_o__when_filtering_for_2 {
 		aws_keymap_o 2
 	)" "$(
 		cat <<-eof
-		     1	non-secret-placeholder-2  url-2
+		     1	non-secret-placeholder-$(grep_color 2)  url-$(grep_color 2)
 		eof
 	)"
 }; run_with_filter test__aws_keymap_o__when_filtering_for_2
