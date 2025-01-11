@@ -69,6 +69,14 @@ function prev_command {
 	fc -ln -1
 }
 
+function zprod_start {
+	zmodload zsh/zprof
+}
+
+function zprod_finish {
+	zprof
+}
+
 #
 # `|` Utils after strings
 #
