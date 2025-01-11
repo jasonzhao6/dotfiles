@@ -141,7 +141,6 @@ function args_save {
 
 function args_filter {
 	local filters=("$@")
-	local filters_as_string=$*
 
 	# Expand each argument into a separate `grep` filter to allow matching out-of-order
 	local greps="grep ${filters// / | grep }"
@@ -153,7 +152,7 @@ function args_filter {
 	greps=${greps//grep/grep --color=never --ignore-case}
 
 	# Now that filtering is done, add coloring for all positive matches
-	local positive_filters=${${filters_as_string:#-*}// /|}
+	local positive_filters=${${(j: :)filters:#-*}// /|}
 	greps+=" | egrep --color=always --ignore-case '$positive_filters'"
 
 	eval "$greps"
