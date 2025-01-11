@@ -107,11 +107,16 @@ function keymap_extract_uniq_keys {
 	local cut_start=$((alias_size + 2))
 
 	for entry in "${keymap_entries[@]}"; do
-		if [[ $entry == *$KEYMAP_DOT* ]]; then
-			# Note: Originally called `awk | cut` here, but they added up to > 1s
-			echo "$entry"
-		fi
+		[[ $entry == *$KEYMAP_DOT* ]] && echo "$entry"
 	done | awk '{print $1}' | cut -c $cut_start- | uniq
+}
+
+function keymap_extract_namespace_keys {
+	local keymap_entries=("$@")
+
+	for entry in "${keymap_entries[@]}"; do
+		[[ $entry != *$KEYMAP_DOT* ]] && echo "$entry"
+	done | awk '{print $1}'
 }
 
 function keymap_alias {
@@ -153,7 +158,7 @@ function keymap_help {
 	echo
 
 	yellow_fg "  $namespace"
-	keymap_print "$alias" "${keymap_entries[@]}"
+	keymap_print "$namespace" "$alias" "${keymap_entries[@]}"
 
 	echo
 	echo 'Usage'
@@ -195,20 +200,32 @@ KEYMAP_PRINT_ROW_2=(a o e u i \| d h t n s)
 KEYMAP_PRINT_ROW_3=(_ q j k x \| b m w v z)
 
 function keymap_print {
+	local namespace=$1; shift
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
-	typeset -A keymap_keys
-
-	# Count the number of keys per key initial
+	# For the current keymap, count the number of keys per key initial
+	typeset -A current_keymap_keys
 	local key_initial
 	while IFS= read -r key; do
 		key_initial=${key:0:1}
 
-		keymap_keys[$key_initial]=$((keymap_keys[$key_initial] + 1))
+		current_keymap_keys[$key_initial]=$((current_keymap_keys[$key_initial] + 1))
 	done <<< "$(keymap_extract_uniq_keys "${#alias}" "${keymap_entries[@]}")"
 
-	# Print a map of key initials; annotate key initials with multiple keys with a `+` suffix
+	# If this is the `main_keymap`, catalog the keys to other keymaps
+	typeset -A main_keymap_keys
+	if [[ $namespace == 'main_keymap' ]]; then
+		while IFS= read -r key; do
+			main_keymap_keys[$key]=1
+		done <<< "$(keymap_extract_namespace_keys "${keymap_entries[@]}")"
+	fi
+
+	# Print a map of key initials
+	# - Print keys to other keymaps as yellow
+	# - Print used keys with a single mapping as white
+	# - Print used keys with multiple mappings as white with a `+` suffix
+	# - Print unused keys as gray
 	local row_input
 	local row_output
 	for i in {1..3}; do
@@ -219,9 +236,11 @@ function keymap_print {
 		for char in ${(P)row_input}; do
 			if [[ $char == '_' ]]; then
 				row_output+='    '
-			elif [[ -z ${keymap_keys[$char]} ]]; then
+			elif [[ -n ${main_keymap_keys[$char]} ]]; then
+				row_output+="  $(yellow_fg "$char") "
+			elif [[ -z ${current_keymap_keys[$char]} ]]; then
 				row_output+="  $(gray_fg "$char") "
-			elif [[ ${keymap_keys[$char]} -eq 1 ]]; then
+			elif [[ ${current_keymap_keys[$char]} -eq 1 ]]; then
 				row_output+="  $char "
 			else
 				row_output+="  $char+"
