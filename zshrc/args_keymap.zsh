@@ -11,8 +11,8 @@ ARGS_KEYMAP=(
 	"$ARGS_ALIAS·a # List args"
 	"$ARGS_ALIAS·a <match>* <-mismatch>* # Filter args"
 	''
-	"$ARGS_ALIAS·z # Undo change"
-	"$ARGS_ALIAS·Z # Redo change"
+	"$ARGS_ALIAS·u # Undo change"
+	"$ARGS_ALIAS·r # Redo change"
 	''
 	"$ARGS_ALIAS·h # List history entries"
 	"$ARGS_ALIAS·h <index> # Select history entry"
@@ -76,6 +76,12 @@ function args_keymap_h {
 	fi
 }
 
+function args_keymap_r {
+	args_history_redo
+	args_list
+	args_history_redo_error_bar
+}
+
 function args_keymap_s {
 	# Users see the interface of `as` as `as <match>* <-mismatch>*`
 	# Only `as` sees the `as` as `as <is soft select> <match>* <-mismatch>*`
@@ -100,7 +106,7 @@ function args_keymap_so {
 	as "$ARGS_SOFT_SELECT" "${filters[@]}"
 }
 
-function args_keymap_z {
+function args_keymap_u {
 	local column_size_before; column_size_before=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
 
 	args_history_undo
@@ -113,10 +119,4 @@ function args_keymap_z {
 	if [[ -n $ARGS_USED_TOP_ROW && ${#column_size_before} -lt ${#column_size_after} ]]; then
 		args_columns_bar "$ARGS_USED_TOP_ROW"
 	fi
-}
-
-function args_keymap_Z {
-	args_history_redo
-	args_list
-	args_history_redo_error_bar
 }

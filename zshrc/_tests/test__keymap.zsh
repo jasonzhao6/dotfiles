@@ -1,4 +1,4 @@
-# TODO after `_keymap` behavior stabilizes
+# TODO add tests after `_keymap` behavior stabilizes
 
 function test__keymap_help {
 	assert 'placeholder' 'placeholder'

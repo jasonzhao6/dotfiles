@@ -1,31 +1,4 @@
-# Generated from the code below plus some manual processing
-#
-# ```
-# echo $PATH
-#
-# entries=(
-#   /bin
-#   /opt/local/bin
-#   /opt/local/sbin
-#   /sbin
-#   /usr/bin
-#   /usr/local/bin
-#   /usr/sbin
-# )
-#
-# for entry in "${entries[@]}"; do
-#   ls $entry/?
-#   ls $entry/??
-#   ls $entry/???
-#   ls $entry/????
-#   ls $entry/?????
-#   ls $entry/??????
-#   ls $entry/???????
-#   ls $entry/????????
-#   ls $entry/?????????
-#   ls $entry/??????????
-# done
-# ```
+# See notes at the bottom of the file on how this list was generated
 
 typeset -A RESERVED
 
@@ -37,6 +10,7 @@ function is_reserved {
 
 # Unreserved
 RESERVED[aa]=0
+RESERVED[ar]=0
 RESERVED[as]=0
 
 # Reserved
@@ -87,7 +61,6 @@ RESERVED[apply]=1
 RESERVED[appsleepd]=1
 RESERVED[apropos]=1
 RESERVED[apt]=1
-RESERVED[ar]=1
 RESERVED[arch]=1
 RESERVED[aria_chk]=1
 RESERVED[aria_pack]=1
@@ -1911,3 +1884,32 @@ RESERVED[zstdgrep]=1
 RESERVED[zstdless]=1
 RESERVED[zstdmt]=1
 RESERVED[zunit]=1
+
+# This list was generated with commands below plus some manual processing
+#
+# ```
+# echo $PATH
+#
+# entries=(
+#   /bin
+#   /opt/local/bin
+#   /opt/local/sbin
+#   /sbin
+#   /usr/bin
+#   /usr/local/bin
+#   /usr/sbin
+# )
+#
+# for entry in "${entries[@]}"; do
+#   ls $entry/?
+#   ls $entry/??
+#   ls $entry/???
+#   ls $entry/????
+#   ls $entry/?????
+#   ls $entry/??????
+#   ls $entry/???????
+#   ls $entry/????????
+#   ls $entry/?????????
+#   ls $entry/??????????
+# done
+# ```

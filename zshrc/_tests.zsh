@@ -84,5 +84,4 @@ fi
 #	ruby "$ZSHRC_DIR"/_tests/verify_keymaps.rb
 #fi
 
-# TODO ^ uncomment
-# TODO are keymap functions alphabetized?
+# TODO ^ replace with are keymap functions alphabetized?

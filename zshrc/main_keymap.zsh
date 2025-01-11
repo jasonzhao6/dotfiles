@@ -15,7 +15,7 @@ MAIN_KEYMAP=(); while IFS='' read -r line; do MAIN_KEYMAP+=("$line"); done < <(
 )
 
 # Append keymap snapshots
-MAIN_KEYMAP+=( # TODO
+MAIN_KEYMAP+=( # TODO create these keymaps
 	''
 	"$MAIN_ALIAS·s # Show system default keymap"
 	''

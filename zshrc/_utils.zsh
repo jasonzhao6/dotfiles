@@ -1,4 +1,4 @@
-# TODO
+# TODO tidy up
 
 # helpers
 # shellcheck disable=SC2154
