@@ -995,38 +995,6 @@ function test__args_keymap_u__when_undoing_then_redoing_then_undoing_again_with_
 	)"
 }; run_with_filter test__args_keymap_u__when_undoing_then_redoing_then_undoing_again_with_color
 
-function test__args_keymap_v {
-	assert "$(
-		echo "$input_with_headers" | pbcopy
-		args_keymap_v
-	)" "$(
-		cat <<-eof
-		     1	MANIFEST                                COMMENT
-		     2	terraform-application-region-shared-1   hello world
-		     3	terraform-application-region-shared-2   foo bar
-		     4	terraform-application-region-shared-3   sup
-		     5	terraform-application-region-program-A  how are you
-		     6	terraform-application-region-program-B  select via headers for this one
-		eof
-	)"
-}; run_with_filter test__args_keymap_v
-
-function test__args_keymap_vo {
-	assert "$(
-		echo "$input_with_headers" | pbcopy
-		args_keymap_vo
-	)" "$(
-		cat <<-eof
-		     1	MANIFEST                                # COMMENT
-		     2	terraform-application-region-shared-1   # hello world
-		     3	terraform-application-region-shared-2   # foo bar
-		     4	terraform-application-region-shared-3   # sup
-		     5	terraform-application-region-program-A  # how are you
-		     6	terraform-application-region-program-B  # select via headers for this one
-		eof
-	)"
-}; run_with_filter test__args_keymap_vo
-
 function test__args_keymap_y {
 	assert "$(
 		echo "$input" | as > /dev/null

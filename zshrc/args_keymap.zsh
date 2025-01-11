@@ -7,11 +7,6 @@ ARGS_KEYMAP=(
 	"$ARGS_ALIAS·so # Save as args & soft-select the 1st column"
 	"$ARGS_ALIAS·so <matches>* -<mismatches>* # Save as args & soft-select the 1st column & filter"
 	''
-	"$ARGS_ALIAS·v # Paste into args"
-	"$ARGS_ALIAS·v <matches>* -<mismatches>* # Paste into args & filter"
-	"$ARGS_ALIAS·vo # Paste into args & soft-select the 1st column"
-	"$ARGS_ALIAS·vo <matches>* -<mismatches>* # Paste into args & soft-select the 1st column & filter"
-	''
 	"$ARGS_ALIAS·ny <command> ~~? # Use a random arg"
 	"$ARGS_ALIAS·n <number> <command> ~~? # Use an arg by number"
 	"$ARGS_ALIAS·q <start> <finish> <command> ~~? # Use args within a sequence"
@@ -234,18 +229,6 @@ function args_keymap_u {
 	if [[ -n $ARGS_USED_TOP_ROW && ${#column_size_before} -lt ${#column_size_after} ]]; then
 		args_columns_bar "$ARGS_USED_TOP_ROW"
 	fi
-}
-
-function args_keymap_v {
-	local filters=("$@")
-
-	pbpaste | as "${filters[@]}" # TODO replace with full name
-}
-
-function args_keymap_vo {
-	local filters=("$@")
-
-	pbpaste | aso "${filters[@]}"
 }
 
 function args_keymap_y {
