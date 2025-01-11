@@ -16,8 +16,7 @@ function keymap_init {
 	local keymap_entries=("$@")
 
 	# If `keymap_entries` contains disjoint duplicate `key`s, abort and print error message
-	keymap_check_for_disjoint_dupes "${keymap_entries[@]}"
-	[[ $? -eq 1 ]] && return
+	keymap_check_for_disjoint_dupes "${keymap_entries[@]}" || return
 
 	# Alias the `<namespace>` function to `<alias>`
 	keymap_alias "$alias" "$namespace"

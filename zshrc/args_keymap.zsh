@@ -36,6 +36,8 @@ source "$ZSHRC_DIR/args_history.zsh"; args_history_init
 ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd column'
 
 # States
+# shellcheck disable=SC2034
+ARGS_PUSHED=
 ARGS_USED_TOP_ROW=
 
 function args_keymap_0 {
@@ -62,11 +64,8 @@ function args_keymap_h {
 	# If `index` is not specified, list history entries
 	[[ -z $index ]] && args_history_entries && return
 
-	# Attempt to set history index
-	args_history_set_index "$index"
-
-	# If `index` was set, then list args at this index
-	if [[ $? -eq 0 ]]; then
+	# If `index` was set successfully, then list args at `index`
+	if args_history_set_index "$index"; then
 		aa
 
 	# Otherwise, list history entries again and show error bar

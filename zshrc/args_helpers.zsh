@@ -156,6 +156,7 @@ function args_select_column {
 		fi
 
 		# Set global states used by `u`
+		# shellcheck disable=SC2034
 		ARGS_USED_TOP_ROW=$use_top_row
 	fi
 }
