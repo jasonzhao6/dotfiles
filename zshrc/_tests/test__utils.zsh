@@ -1,4 +1,4 @@
-ls_dash_l=$(
+test__ls_dash_l=$(
 	cat <<-eof
 		drwxr-xr-x  9 yzhao  staff    288 Dec 29 21:58 al-archive
 		-rw-r--r--  1 yzhao  staff    228 Dec 30 00:12 colordiffrc.txt
@@ -238,7 +238,7 @@ function test__trim__with_two_args {
 function test__insert_hash {
 	assert "$(
 		# shellcheck disable=SC2086
-		echo $ls_dash_l | insert_hash
+		echo $test__ls_dash_l | insert_hash
 	)" "$(
 		cat <<-eof
 			drwxr-xr-x  # 9 yzhao  staff    288 Dec 29 21:58 al-archive
@@ -255,14 +255,14 @@ function test__insert_hash {
 }; run_with_filter test__insert_hash
 
 function test__size_of {
-	assert "$(echo "$ls_dash_l" | size_of)" '64'
+	assert "$(echo "$test__ls_dash_l" | size_of)" '64'
 }; run_with_filter test__size_of
 
 function test__size_of__third_column {
-	assert "$(echo "$ls_dash_l" | size_of 2)" '1'
+	assert "$(echo "$test__ls_dash_l" | size_of 2)" '1'
 }; run_with_filter test__size_of__third_column
 
 function test__size_of__variable_width_column {
 	# shellcheck disable=SC2086
-	assert "$(echo $ls_dash_l | size_of 5)" '5'
+	assert "$(echo $test__ls_dash_l | size_of 5)" '5'
 }; run_with_filter test__size_of__variable_width_column

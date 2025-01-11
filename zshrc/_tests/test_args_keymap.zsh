@@ -1,4 +1,4 @@
-input=$(
+test__input=$(
 	cat <<-eof
 		terraform-application-region-shared-1
 		terraform-application-region-shared-2
@@ -8,14 +8,14 @@ input=$(
 	eof
 )
 
-input_short=$(
+test__input_short=$(
 	cat <<-eof
 		terraform-application-region-shared-1
 		terraform-application-region-shared-2
 	eof
 )
 
-input_with_whitespace=$(
+test__input_with_whitespace=$(
 	cat <<-eof
 		  terraform-application-region-shared-1
 		terraform-application-region-shared-2
@@ -24,7 +24,7 @@ input_with_whitespace=$(
 	eof
 )
 
-input_with_headers=$(
+test__input_with_headers=$(
 	cat <<-eof
 		MANIFEST                                COMMENT
 		terraform-application-region-shared-1   hello world
@@ -35,7 +35,7 @@ input_with_headers=$(
 	eof
 )
 
-input_with_headers_top_heavy=$(
+test__input_with_headers_top_heavy=$(
 	cat <<-eof
 		MANIFEST                                COMMENT
 		terraform-application-region-shared-1   hello world
@@ -46,7 +46,7 @@ input_with_headers_top_heavy=$(
 	eof
 )
 
-input_with_tabs=$(
+test__input_with_tabs=$(
 	cat <<-eof
 		10.0.0.1	# 2023-06-21T20:25:00+00:00	webhook-asg
 		10.0.0.2	# 2023-06-21T20:25:00+00:00	webhook-asg
@@ -54,11 +54,11 @@ input_with_tabs=$(
 	eof
 )
 
-input_with_comments=$input_with_tabs
+test__input_with_comments=$test__input_with_tabs
 
 function test__args_keymap_a {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_a
 	)" "$(
 		cat <<-eof
@@ -73,7 +73,7 @@ function test__args_keymap_a {
 
 function test__args_keymap_a__adds_color {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_a shared
 	)" "$(
 		cat <<-eof
@@ -86,7 +86,7 @@ function test__args_keymap_a__adds_color {
 
 function test__args_keymap_a__replaces_color {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_a shared > /dev/null
 		args_keymap_a region
 	)" "$(
@@ -100,7 +100,7 @@ function test__args_keymap_a__replaces_color {
 
 function test__args_keymap_a__with_two_args_out_of_order {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_a 2 shared
 	)" "$(
 		cat <<-eof
@@ -111,7 +111,7 @@ function test__args_keymap_a__with_two_args_out_of_order {
 
 function test__args_keymap_a__with_two_args_including_negation {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_a -2 shared
 	)" "$(
 		cat <<-eof
@@ -123,7 +123,7 @@ function test__args_keymap_a__with_two_args_including_negation {
 
 function test__args_keymap_c {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_c
 		pbpaste
 	)" "$(
@@ -147,7 +147,7 @@ function test__args_keymap_c__with_two_args {
 
 function test__args_keymap_d {
 	assert "$(
-		echo "$input_with_tabs" | as > /dev/null
+		echo "$test__input_with_tabs" | as > /dev/null
 		args_keymap_d
 	)" "$(
 		cat <<-eof
@@ -161,7 +161,7 @@ function test__args_keymap_d {
 
 function test__args_keymap_d__when_selecting_first {
 	assert "$(
-		echo "$input_with_tabs" | as > /dev/null
+		echo "$test__input_with_tabs" | as > /dev/null
 		args_keymap_d a
 	)" "$(
 		cat <<-eof
@@ -174,7 +174,7 @@ function test__args_keymap_d__when_selecting_first {
 
 function test__args_keymap_d__when_selecting_third {
 	assert "$(
-		echo "$input_with_tabs" | as > /dev/null
+		echo "$test__input_with_tabs" | as > /dev/null
 		args_keymap_d c
 	)" "$(
 		cat <<-eof
@@ -187,7 +187,7 @@ function test__args_keymap_d__when_selecting_third {
 
 function test__args_keymap_d__when_selecting_last {
 	assert "$(
-		echo "$input_with_tabs" | as > /dev/null
+		echo "$test__input_with_tabs" | as > /dev/null
 		args_keymap_d d
 	)" "$(
 		cat <<-eof
@@ -200,7 +200,7 @@ function test__args_keymap_d__when_selecting_last {
 
 function test__args_keymap_d__when_selecting_with_color {
 	assert "$(
-		echo "$input_with_tabs" | grep 00 | as > /dev/null
+		echo "$test__input_with_tabs" | grep 00 | as > /dev/null
 		args_keymap_d d
 	)" "$(
 		cat <<-eof
@@ -213,7 +213,7 @@ function test__args_keymap_d__when_selecting_with_color {
 
 function test__args_keymap_d__when_selecting_out_of_bound {
 	assert "$(
-		echo "$input_with_tabs" | as > /dev/null
+		echo "$test__input_with_tabs" | as > /dev/null
 		args_keymap_d z
 	)" "$(
 		cat <<-eof
@@ -250,7 +250,7 @@ function test__args_keymap_d__with_kubectl_get_pods_output {
 
 function test__args_keymap_d__with_one_column {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_d a
 	)" "$(
 		cat <<-eof
@@ -265,7 +265,7 @@ function test__args_keymap_d__with_one_column {
 
 function test__args_keymap_d__with_whitespace {
 	assert "$(
-		echo "$input_with_whitespace" | as > /dev/null
+		echo "$test__input_with_whitespace" | as > /dev/null
 		args_keymap_d a
 	)" "$(
 		cat <<-eof
@@ -279,7 +279,7 @@ function test__args_keymap_d__with_whitespace {
 
 function test__args_keymap_d__with_headers {
 	assert "$(
-		echo "$input_with_headers" | as > /dev/null
+		echo "$test__input_with_headers" | as > /dev/null
 		args_keymap_d
 	)" "$(
 		cat <<-eof
@@ -296,7 +296,7 @@ function test__args_keymap_d__with_headers {
 
 function test__args_keymap_dt {
 	assert "$(
-		echo "$input_with_headers" | as > /dev/null
+		echo "$test__input_with_headers" | as > /dev/null
 		args_keymap_dt
 	)" "$(
 		cat <<-eof
@@ -313,7 +313,7 @@ function test__args_keymap_dt {
 
 function test__args_keymap_dt__with_one_column {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_dt a
 	)" "$(
 		cat <<-eof
@@ -328,7 +328,7 @@ function test__args_keymap_dt__with_one_column {
 
 function test__args_keymap_e {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 	args_keymap_e echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -353,7 +353,7 @@ function test__args_keymap_e {
 
 function test__args_keymap_e__with_comments {
 	assert "$(
-		echo "$input_with_comments" | as > /dev/null
+		echo "$test__input_with_comments" | as > /dev/null
 	args_keymap_e echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -502,7 +502,7 @@ function test__args_keymap_l {
 
 function test__args_keymap_m {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_m 'echo -n pre-; echo' 2>&1
 	)" "$(
 		cat <<-eof
@@ -564,7 +564,7 @@ function test__args_keymap_m__with_math {
 
 function test__args_keymap_n {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_n 3 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -576,7 +576,7 @@ function test__args_keymap_n {
 
 function test__args_keymap_n__with_whitespace {
 	assert "$(
-		echo "$input_with_whitespace" | as > /dev/null
+		echo "$test__input_with_whitespace" | as > /dev/null
 		args_keymap_n 3 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -588,7 +588,7 @@ function test__args_keymap_n__with_whitespace {
 
 function test__args_keymap_n__with_substitution {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_n 3 echo http://~~:8080 2>&1
 	)" "$(
 		cat <<-eof
@@ -600,7 +600,7 @@ function test__args_keymap_n__with_substitution {
 
 function test__args_keymap_n__with_multiple_substitutions {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_n 3 echo http://~~:80 and https://~~:443 2>&1
 	)" "$(
 		cat <<-eof
@@ -612,7 +612,7 @@ function test__args_keymap_n__with_multiple_substitutions {
 
 function test__args_keymap_n__with_multiple_substitutions_in_quotes {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_n 3 'echo http://~~:80 and https://~~:443' 2>&1
 	)" "$(
 		cat <<-eof
@@ -624,7 +624,7 @@ function test__args_keymap_n__with_multiple_substitutions_in_quotes {
 
 function test__args_keymap_ny {
 	assert "$(
-		echo "$input_short" | as > /dev/null
+		echo "$test__input_short" | as > /dev/null
 		eee 1 $(($(args_size) * 3)) args_keymap_ny echo 2>&1 | sort | uniq
 	)" "$(
 		cat <<-eof
@@ -653,7 +653,7 @@ function test__args_keymap_p {
 
 function test__args_keymap_q {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_q 3 4 echo 2>&1
 	)" "$(
 		cat <<-eof
@@ -669,7 +669,7 @@ function test__args_keymap_q {
 
 function test__args_keymap_q__with_multiple_substitutions {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_q 3 4 echo ~~ and ~~ again 2>&1
 	)" "$(
 		cat <<-eof
@@ -741,7 +741,7 @@ function test__args_keymap_s {
 	# Can test `<command> | as`, but not `<command>; as`
 	# The latter requires an interactive shell
 	assert "$(
-		echo "$input_with_headers" | as
+		echo "$test__input_with_headers" | as
 	)" "$(
 		cat <<-eof
 		     1	MANIFEST                                COMMENT
@@ -758,7 +758,7 @@ function test__args_keymap_s__with_filters {
 	# Can test `<command> | as`, but not `<command>; as`
 	# The latter requires an interactive shell
 	assert "$(
-		echo "$input_with_headers" | as -1 shared
+		echo "$test__input_with_headers" | as -1 shared
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-$(grep_color shared)-2   foo bar
@@ -771,7 +771,7 @@ function test__args_keymap_s__with_whitespace {
 	# Can test `<command> | as`, but not `<command>; as`
 	# The latter requires an interactive shell
 	assert "$(
-		echo "$input_with_whitespace" | as
+		echo "$test__input_with_whitespace" | as
 	)" "$(
 		cat <<-eof
 		     1	  terraform-application-region-shared-1
@@ -786,7 +786,7 @@ function test__args_keymap_so {
 	# Can test `<command> | aso`, but not `<command>; aso`
 	# The latter requires an interactive shell.
 	assert "$(
-		echo "$input_with_headers" | aso
+		echo "$test__input_with_headers" | aso
 	)" "$(
 		cat <<-eof
 		     1	MANIFEST                                # COMMENT
@@ -803,7 +803,7 @@ function test__args_keymap_so__with_filters {
 	# Can test `<command> | aso`, but not `<command>; aso`
 	# The latter requires an interactive shell.
 	assert "$(
-		echo "$input_with_headers" | aso -1 shared
+		echo "$test__input_with_headers" | aso -1 shared
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-$(grep_color shared)-2   # foo bar
@@ -814,7 +814,7 @@ function test__args_keymap_so__with_filters {
 
 function test__args_keymap_u {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_a program > /dev/null
 		args_keymap_u
 	)" "$(
@@ -830,7 +830,7 @@ function test__args_keymap_u {
 
 function test__args_keymap_u__when_undoing_n_with_headers {
 	assert "$(
-		echo "$input_with_headers" | as > /dev/null
+		echo "$test__input_with_headers" | as > /dev/null
 		args_keymap_d a > /dev/null
 		args_keymap_u
 	)" "$(
@@ -848,7 +848,7 @@ function test__args_keymap_u__when_undoing_n_with_headers {
 
 function test__args_keymap_u__when_undoing_nn_with_headers {
 	assert "$(
-		echo "$input_with_headers" | as > /dev/null
+		echo "$test__input_with_headers" | as > /dev/null
 		args_keymap_dt a > /dev/null
 		args_keymap_u
 	)" "$(
@@ -866,7 +866,7 @@ function test__args_keymap_u__when_undoing_nn_with_headers {
 
 function test__args_keymap_u__when_undoing_nn_then_requesting_n {
 	assert "$(
-		echo "$input_with_headers" | as > /dev/null
+		echo "$test__input_with_headers" | as > /dev/null
 		args_keymap_dt a > /dev/null
 		args_keymap_u > /dev/null
 		args_keymap_d
@@ -885,7 +885,7 @@ function test__args_keymap_u__when_undoing_nn_then_requesting_n {
 
 function test__args_keymap_u__when_undoing_nn_with_headers_top_heavy {
 	assert "$(
-		echo "$input_with_headers_top_heavy" | as > /dev/null
+		echo "$test__input_with_headers_top_heavy" | as > /dev/null
 		args_keymap_dt a > /dev/null
 		args_keymap_u
 	)" "$(
@@ -903,9 +903,9 @@ function test__args_keymap_u__when_undoing_nn_with_headers_top_heavy {
 
 function test__args_keymap_u__when_undoing_ss_that_could_look_like_nn {
 	assert "$(
-		echo "$input_with_headers" | as > /dev/null
+		echo "$test__input_with_headers" | as > /dev/null
 		args_keymap_dt > /dev/null
-		echo "$input_with_headers_top_heavy" | as > /dev/null
+		echo "$test__input_with_headers_top_heavy" | as > /dev/null
 		args_keymap_u
 	)" "$(
 		cat <<-eof
@@ -978,7 +978,7 @@ function test__args_keymap_u__when_pushing_beyond_head_then_undoing_beyond_tail 
 
 function test__args_keymap_u__when_undoing_then_redoing_with_color {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_a program > /dev/null
 		args_keymap_u > /dev/null
 		args_keymap_r
@@ -992,7 +992,7 @@ function test__args_keymap_u__when_undoing_then_redoing_with_color {
 
 function test__args_keymap_u__when_undoing_then_redoing_then_undoing_again_with_color {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		args_keymap_a program > /dev/null
 		args_keymap_u > /dev/null
 		args_keymap_a terraform > /dev/null
@@ -1012,9 +1012,9 @@ function test__args_keymap_u__when_undoing_then_redoing_then_undoing_again_with_
 
 function test__args_keymap_y {
 	assert "$(
-		echo "$input" | as > /dev/null
+		echo "$test__input" | as > /dev/null
 		rm -f "$ARGS_YANK_FILE"
 		args_keymap_y
 		cat "$ARGS_YANK_FILE"
-	)" "$input"
+	)" "$test__input"
 }; run_with_filter test__args_keymap_y
