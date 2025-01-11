@@ -1,36 +1,7 @@
 #
-# Shortcuts
-#
-
-function 1 { args_keymap_n "$0" "$@"; }
-function 2 { args_keymap_n "$0" "$@"; }
-function 3 { args_keymap_n "$0" "$@"; }
-function 4 { args_keymap_n "$0" "$@"; }
-function 5 { args_keymap_n "$0" "$@"; }
-function 6 { args_keymap_n "$0" "$@"; }
-function 7 { args_keymap_n "$0" "$@"; }
-function 8 { args_keymap_n "$0" "$@"; }
-function 9 { args_keymap_n "$0" "$@"; }
-function 10 { args_keymap_n "$0" "$@"; }
-function 11 { args_keymap_n "$0" "$@"; }
-function 12 { args_keymap_n "$0" "$@"; }
-function 13 { args_keymap_n "$0" "$@"; }
-function 14 { args_keymap_n "$0" "$@"; }
-function 15 { args_keymap_n "$0" "$@"; }
-function 16 { args_keymap_n "$0" "$@"; }
-function 17 { args_keymap_n "$0" "$@"; }
-function 18 { args_keymap_n "$0" "$@"; }
-function 19 { args_keymap_n "$0" "$@"; }
-function 20 { args_keymap_n "$0" "$@"; }
-function 0 { args_keymap_n $ "$@"; } # last arg
-
-#
 # Getters
 #
 
-# TODO refactor away some of these getters
-# args_plain should be a | helper
-# args_list and args_list_plain should go
 function args_plain {
 	local input=$1
 

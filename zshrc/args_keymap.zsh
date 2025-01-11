@@ -48,6 +48,7 @@ function args_keymap {
 
 source "$ZSHRC_DIR/args_helpers.zsh"
 source "$ZSHRC_DIR/args_history.zsh"; args_history_init
+source "$ZSHRC_DIR/args_shortcuts.zsh"
 
 # Constants
 ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd column'
@@ -139,13 +140,13 @@ function args_keymap_m {
 	local command=$*
 
 	local map=''
-	local row
+	local arg
 
 	for number in $(seq 1 "$(args_size)"); do
 		echo
-		row=$(args_keymap_n "$number" "$command")
-		map+="$row\n"
-		echo "$row"
+		arg=$(args_keymap_n "$number" "$command")
+		map+="$arg\n"
+		echo "$arg"
 	done
 
 	echo
@@ -157,12 +158,12 @@ function args_keymap_n {
 	local command=$*
 
 	if [[ -n $number && -n $command ]]; then
-		local row; row="$(args_plain | sed -n "${number}p" | sed 's/ *#.*//' | strip)"
+		local arg; arg="$(args_plain | sed -n "${number}p" | sed 's/ *#.*//' | strip)"
 
 		if [[ $command != *'~~'* ]]; then
-			echo_eval "$command $row"
+			echo_eval "$command $arg"
 		else
-			echo_eval "${command//~~/$row}"
+			echo_eval "${command//~~/$arg}"
 		fi
 	fi
 }

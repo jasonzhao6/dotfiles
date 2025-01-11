@@ -28,5 +28,3 @@ function size_of { awk "{if (length(\$${1:-0}) > max_len) max_len = length(\$${1
 # | after json
 function keys { jq keys | trim_list | as; }
 function trim_list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$//' | compact; }
-
-# TODO pbcopy, pbpaste

@@ -14,3 +14,5 @@ function o {
 #
 # Key mappings (Alphabetized)
 #
+
+# TODO pbcopy, pbpaste

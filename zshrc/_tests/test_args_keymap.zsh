@@ -767,6 +767,21 @@ function test__args_keymap_s__with_filters {
 	)"
 }; run_with_filter test__args_keymap_s__with_filters
 
+function test__args_keymap_s__with_whitespace {
+	# Can test `<command> | as`, but not `<command>; as`
+	# The latter requires an interactive shell
+	assert "$(
+		echo "$input_with_whitespace" | as
+	)" "$(
+		cat <<-eof
+		     1	  terraform-application-region-shared-1
+		     2	terraform-application-region-shared-2
+		     3	  terraform-application-region-shared-3
+		     4	terraform-application-region-program-A
+		eof
+	)"
+}; run_with_filter test__args_keymap_s__with_whitespace
+
 function test__args_keymap_so {
 	# Can test `<command> | aso`, but not `<command>; aso`
 	# The latter requires an interactive shell.
