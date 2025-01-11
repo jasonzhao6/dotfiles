@@ -1,54 +1,4 @@
 #
-# Helpers
-#
-
-#
-# `|` Helpers
-#
-
-function args_save {
-	# Get the piped input; there is not any, abort
-	local new_args; new_args=$(cat - | head -1000 | compact)
-	[[ -z "$new_args" ]] && return
-
-	# If requested, insert `#` after the first column to soft-select it
-	local is_soft_select=$1; shift
-	[[ $is_soft_select == "$ARGS_SOFT_SELECT" ]] && new_args=$(echo "$new_args" | insert_hash)
-
-	# If there are filters, apply them
-	local filters=("$@")
-	if [[ -n "${filters[*]}" ]]; then
-		new_args=$(echo "$new_args" | args_filter "${filters[@]}")
-	fi
-
-	# If the new args are different than the current args, push the new args
-	if [[ $(args_plain "$new_args") != $(args_plain) ]]; then
-		args_history_push "$new_args"
-
-		# Set global states used by `n, nn, u`
-		ARGS_PUSHED=1
-		ARGS_USED_TOP_ROW=
-
-	# Otherwise, replace the current args anyway in case `grep` coloring has changed
-	else
-		args_history_replace_current "$new_args"
-
-		# Set global states used by `n, nn`
-		ARGS_PUSHED=0
-	fi
-
-	args_list
-}
-
-function args_filter {
-	local filters=("$@")
-	eval "$(args_filtering "${filters[@]}") | $(args_coloring "${filters[@]}")"
-}
-
-
-
-
-#
 # Getters
 #
 
@@ -57,25 +7,6 @@ function args_plain { [[ -z "$1" ]] && args_raw | bw | expand || echo "$@" | bw 
 function args_list { args_raw | nl; }
 function args_list_plain { args_raw | nl | bw | expand; }
 function args_list_size { args_raw | wc -l; }
-function args_coloring {
-	echo "egrep --color=always --ignore-case '${${@:#-*}// /|}'"
-}
-
-function args_filtering {
-	local filters
-
-	# Expand each argument into a separate `grep` filter to allow matching out-of-order
-	filters="grep ${*// / | grep }"
-
-	# Treat any argument with a leading `-` as a negative match
-	filters=${filters// -/ --invert-match }
-
-	# Do not add coloring yet as coloring from a previous `grep` can mess up the next `grep`
-	# `args_coloring` will add coloring for all positive matches immediately after `args_filtering`
-	filters=${filters//grep/grep --color=never --ignore-case}
-
-	echo "$filters"
-}
 
 function args_columns {
 	# Whether to delimit based on the top row vs the bottom row
@@ -159,4 +90,60 @@ function args_select_column {
 		# shellcheck disable=SC2034
 		ARGS_USED_TOP_ROW=$use_top_row
 	fi
+}
+
+#
+# `|` Helpers
+#
+
+function args_save {
+	# Get the piped input; if there is not any, abort
+	local new_args; new_args=$(cat - | head -1000 | compact)
+	[[ -z "$new_args" ]] && return
+
+	# If specified, insert `#` after the first column to soft-select it
+	local is_soft_select=$1; shift
+	[[ $is_soft_select == "$ARGS_SOFT_SELECT" ]] && new_args=$(echo "$new_args" | insert_hash)
+
+	# If there are filters, apply them
+	local filters=("$@")
+	if [[ -n "${filters[*]}" ]]; then
+		new_args=$(echo "$new_args" | args_filter "${filters[@]}")
+	fi
+
+	# If the new args are different than the current args, push the new args
+	if [[ $(args_plain "$new_args") != $(args_plain) ]]; then
+		args_history_push "$new_args"
+
+		# Set global states used by `n, nn, u`
+		ARGS_PUSHED=1
+		ARGS_USED_TOP_ROW=
+
+	# Otherwise, replace the current args because `grep` coloring could have changed
+	else
+		args_history_replace_current "$new_args"
+
+		# Set global states used by `n, nn`
+		ARGS_PUSHED=0
+	fi
+
+	args_list
+}
+
+function args_filter {
+	local filters=("$@")
+
+	# Expand each argument into a separate `grep` filter to allow matching out-of-order
+	local greps="grep ${filters// / | grep }"
+
+	# Treat any argument with a leading `-` as a negative match
+	greps=${greps// -/ --invert-match }
+
+	# Do not add coloring yet as coloring from a previous `grep` can mess up the next `grep`
+	greps=${greps//grep/grep --color=never --ignore-case}
+
+	# Now that filtering is done, add coloring for all positive matches
+	greps+=" | egrep --color=always --ignore-case '${${filters:#-*}// /|}'"
+
+	eval "$greps"
 }
