@@ -5,6 +5,8 @@ MAIN_ALIAS='m'
 MAIN_KEYMAP=(); while IFS='' read -r line; do MAIN_KEYMAP+=("$line"); done < <(
 	find "$ZSHRC_DIR" -maxdepth 1 -name '*_keymap.zsh' | sort | while IFS= read -r file; do
 		current_namespace=$(pgrep --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$file")
+
+		# Exclude `_keymap.zsh` helpers via the fact that it doesn't have a namespace
 		[[ -z $current_namespace ]] && continue
 
 		current_alias=$(pgrep --only-matching "(?<=_ALIAS=')\w+(?=')" "$file")
