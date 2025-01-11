@@ -73,15 +73,5 @@ if [[ ($section_filter -eq 3 || -z $section_filter) && -z $test_filter ]]; then
 fi
 
 #
-# 4: Verify keymaps at the bottom of .zshrc are up-to-date
+# 4: Verify key mapping functions in keymaps are alphabetized # TODO
 #
-
-#if [[ ($section_filter -eq 4 || -z $section_filter) && -z $test_filter ]]; then
-#	echo
-#	echo
-#	echo '4: Verify keymaps at the bottom of .zshrc are up-to-date'
-#
-#	ruby "$ZSHRC_DIR"/_tests/verify_keymaps.rb
-#fi
-
-# TODO ^ replace with are keymap functions alphabetized?
