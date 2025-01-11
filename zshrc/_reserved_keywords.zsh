@@ -11,6 +11,7 @@ RESERVED[aa]=0
 RESERVED[ac]=0
 RESERVED[ar]=0
 RESERVED[as]=0
+RESERVED[at]=0
 
 # This list was copied from https://zsh.sourceforge.io/Doc/Release/Shell-Grammar.html#Reserved-Words
 RESERVED[case]=1
@@ -124,7 +125,6 @@ RESERVED[asciitopgm]=1
 RESERVED[aslmanager]=1
 RESERVED[asr]=1
 RESERVED[assetutil]=1
-RESERVED[at]=1
 RESERVED[atktopbm]=1
 RESERVED[atos]=1
 RESERVED[atq]=1

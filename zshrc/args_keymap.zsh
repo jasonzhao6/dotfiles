@@ -19,10 +19,11 @@ ARGS_KEYMAP=(
 	''
 	"$ARGS_ALIAS·a # List all args"
 	"$ARGS_ALIAS·a <matches>* -<mismatches>* # Filter args"
-	"$ARGS_ALIAS·d # Delimit columns via the bottom row"
-	"$ARGS_ALIAS·d <letter> # Select column by letter"
-	"$ARGS_ALIAS·dt # Delimit columns via the top row"
-	"$ARGS_ALIAS·dt <letter> # Select column by letter"
+	"$ARGS_ALIAS·d # Delimit columns based on the bottom row"
+	"$ARGS_ALIAS·d <letter> # Select a column based on the bottom row"
+	"$ARGS_ALIAS·t # Delimit columns based on the top row"
+	"$ARGS_ALIAS·t <letter> # Select a column based on the top row"
+	"$ARGS_ALIAS·z # Select the last column based on the bottom row"
 	''
 	"$ARGS_ALIAS·u # Undo \"Filter args\" or \"Select column\""
 	"$ARGS_ALIAS·r # Redo \"Filter args\" or \"Select column\""
@@ -87,12 +88,6 @@ function args_keymap_d {
 	local index=$1
 
 	args_select_column 0 "$index"
-}
-
-function args_keymap_dt {
-	local index=$1
-
-	args_select_column 1 "$index"
 }
 
 function args_keymap_e {
@@ -222,6 +217,12 @@ function args_keymap_so {
 	as "$ARGS_SOFT_SELECT" "${filters[@]}"
 }
 
+function args_keymap_t {
+	local index=$1
+
+	args_select_column 1 "$index"
+}
+
 function args_keymap_u {
 	local column_size_before; column_size_before=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
 
@@ -239,4 +240,11 @@ function args_keymap_u {
 
 function args_keymap_y {
 	args_history_current > "$ARGS_YANK_FILE"
+}
+
+function args_keymap_z {
+	local columns=$(args_columns 0 | strip_right)
+	local last_column=${columns: -1}
+
+	args_select_column 0 "$last_column"
 }

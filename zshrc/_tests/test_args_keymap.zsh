@@ -294,38 +294,6 @@ function test__args_keymap_d__with_headers {
 	)"
 }; run_with_filter test__args_keymap_d__with_headers
 
-function test__args_keymap_dt {
-	assert "$(
-		echo "$test__input_with_headers" | args_keymap_s > /dev/null
-		args_keymap_dt
-	)" "$(
-		cat <<-eof
-		     1	MANIFEST                                COMMENT
-		     2	terraform-application-region-shared-1   hello world
-		     3	terraform-application-region-shared-2   foo bar
-		     4	terraform-application-region-shared-3   sup
-		     5	terraform-application-region-program-A  how are you
-		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bar '      a                                       b    ')
-		eof
-	)"
-}; run_with_filter test__args_keymap_dt
-
-function test__args_keymap_dt__with_one_column {
-	assert "$(
-		echo "$test__input" | args_keymap_s > /dev/null
-		args_keymap_dt a
-	)" "$(
-		cat <<-eof
-		     1	terraform-application-region-shared-1
-		     2	terraform-application-region-shared-2
-		     3	terraform-application-region-shared-3
-		     4	terraform-application-region-program-A
-		     5	terraform-application-region-program-B
-		eof
-	)"
-}; run_with_filter test__args_keymap_dt__with_one_column
-
 function test__args_keymap_e {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null
@@ -812,6 +780,38 @@ function test__args_keymap_so__with_filters {
 	)"
 }; run_with_filter test__args_keymap_so__with_filters
 
+function test__args_keymap_t {
+	assert "$(
+		echo "$test__input_with_headers" | args_keymap_s > /dev/null
+		args_keymap_t
+	)" "$(
+		cat <<-eof
+		     1	MANIFEST                                COMMENT
+		     2	terraform-application-region-shared-1   hello world
+		     3	terraform-application-region-shared-2   foo bar
+		     4	terraform-application-region-shared-3   sup
+		     5	terraform-application-region-program-A  how are you
+		     6	terraform-application-region-program-B  select via headers for this one
+			$(green_bar '      a                                       b    ')
+		eof
+	)"
+}; run_with_filter test__args_keymap_t
+
+function test__args_keymap_t__with_one_column {
+	assert "$(
+		echo "$test__input" | args_keymap_s > /dev/null
+		args_keymap_t a
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-shared-1
+		     2	terraform-application-region-shared-2
+		     3	terraform-application-region-shared-3
+		     4	terraform-application-region-program-A
+		     5	terraform-application-region-program-B
+		eof
+	)"
+}; run_with_filter test__args_keymap_t__with_one_column
+
 function test__args_keymap_u {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null
@@ -828,7 +828,7 @@ function test__args_keymap_u {
 	)"
 }; run_with_filter test__args_keymap_u
 
-function test__args_keymap_u__when_undoing_n_with_headers {
+function test__args_keymap_u__when_undoing_d_with_headers {
 	assert "$(
 		echo "$test__input_with_headers" | args_keymap_s > /dev/null
 		args_keymap_d a > /dev/null
@@ -844,12 +844,12 @@ function test__args_keymap_u__when_undoing_n_with_headers {
 			$(green_bar '      a                                       b      c   d       e   f    g')
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_n_with_headers
+}; run_with_filter test__args_keymap_u__when_undoing_d_with_headers
 
-function test__args_keymap_u__when_undoing_nn_with_headers {
+function test__args_keymap_u__when_undoing_t_with_headers {
 	assert "$(
 		echo "$test__input_with_headers" | args_keymap_s > /dev/null
-		args_keymap_dt a > /dev/null
+		args_keymap_t a > /dev/null
 		args_keymap_u
 	)" "$(
 		cat <<-eof
@@ -862,12 +862,12 @@ function test__args_keymap_u__when_undoing_nn_with_headers {
 			$(green_bar '      a                                       b    ')
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_nn_with_headers
+}; run_with_filter test__args_keymap_u__when_undoing_t_with_headers
 
-function test__args_keymap_u__when_undoing_nn_then_requesting_n {
+function test__args_keymap_u__when_undoing_t_then_requesting_n {
 	assert "$(
 		echo "$test__input_with_headers" | args_keymap_s > /dev/null
-		args_keymap_dt a > /dev/null
+		args_keymap_t a > /dev/null
 		args_keymap_u > /dev/null
 		args_keymap_d
 	)" "$(
@@ -881,12 +881,12 @@ function test__args_keymap_u__when_undoing_nn_then_requesting_n {
 			$(green_bar '      a                                       b      c   d       e   f    g')
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_nn_then_requesting_n
+}; run_with_filter test__args_keymap_u__when_undoing_t_then_requesting_n
 
-function test__args_keymap_u__when_undoing_nn_with_headers_top_heavy {
+function test__args_keymap_u__when_undoing_t_with_headers_top_heavy {
 	assert "$(
 		echo "$test__input_with_headers_top_heavy" | args_keymap_s > /dev/null
-		args_keymap_dt a > /dev/null
+		args_keymap_t a > /dev/null
 		args_keymap_u
 	)" "$(
 		cat <<-eof
@@ -899,12 +899,12 @@ function test__args_keymap_u__when_undoing_nn_with_headers_top_heavy {
 			$(green_bar '      a                                       b    ')
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_nn_with_headers_top_heavy
+}; run_with_filter test__args_keymap_u__when_undoing_t_with_headers_top_heavy
 
 function test__args_keymap_u__when_undoing_ss_that_could_look_like_nn {
 	assert "$(
 		echo "$test__input_with_headers" | args_keymap_s > /dev/null
-		args_keymap_dt > /dev/null
+		args_keymap_t > /dev/null
 		echo "$test__input_with_headers_top_heavy" | args_keymap_s > /dev/null
 		args_keymap_u
 	)" "$(
@@ -1018,3 +1018,16 @@ function test__args_keymap_y {
 		cat "$ARGS_YANK_FILE"
 	)" "$test__input"
 }; run_with_filter test__args_keymap_y
+
+function test__args_keymap_z {
+	assert "$(
+		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
+		args_keymap_z
+	)" "$(
+		cat <<-eof
+		     1	webhook-asg
+		     2	webhook-asg
+		     3	webhook-asg
+		eof
+	)"
+}; run_with_filter test__args_keymap_z
