@@ -152,7 +152,8 @@ function args_filter {
 	greps=${greps//grep/grep --color=never --ignore-case}
 
 	# Now that filtering is done, add coloring for all positive matches
-	greps+=" | egrep --color=always --ignore-case '${${filters:#-*}// /|}'"
+	local positive_filters=${${filters:#-*}// /|}
+	greps+=" | egrep --color=always --ignore-case '$positive_filters'"
 
 	eval "$greps"
 }
