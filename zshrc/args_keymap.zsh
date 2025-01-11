@@ -15,6 +15,7 @@ ARGS_KEYMAP=(
 	"$ARGS_ALIAS·vo <match>* <-mismatch>* # Paste into args & soft-select the 1st column & filter"
 	''
 	"$ARGS_ALIAS·n <number> <command> # Use an arg by number"
+	"$ARGS_ALIAS·ny <command> # Use a random arg"
 	''
 	"$ARGS_ALIAS·a # List args"
 	"$ARGS_ALIAS·a <match>* <-mismatch>* # Filter args"
@@ -96,6 +97,12 @@ function args_keymap_n {
 			echo_eval ${${command:2}//~~/$row}
 		fi
 	fi
+}
+
+function args_keymap_ny {
+	local command=$*
+
+	args_keymap_n $((RANDOM % $(args_size) + 1)) "$command"
 }
 
 function args_keymap_r {
