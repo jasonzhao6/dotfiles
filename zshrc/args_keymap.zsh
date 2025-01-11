@@ -4,24 +4,20 @@ ARGS_ALIAS='a'
 ARGS_KEYMAP=(
 	"$ARGS_ALIAS·s # Save as args"
 	"$ARGS_ALIAS·s <matches>* -<mismatches>* # Save as args & filter"
-	''
 	"$ARGS_ALIAS·so # Save as args & soft-select the 1st column"
 	"$ARGS_ALIAS·so <matches>* -<mismatches>* # Save as args & soft-select the 1st column & filter"
 	''
 	"$ARGS_ALIAS·v # Paste into args"
 	"$ARGS_ALIAS·v <matches>* -<mismatches>* # Paste into args & filter"
-	''
 	"$ARGS_ALIAS·vo # Paste into args & soft-select the 1st column"
 	"$ARGS_ALIAS·vo <matches>* -<mismatches>* # Paste into args & soft-select the 1st column & filter"
 	''
-	"$ARGS_ALIAS·n <number> <command> ~~? # Use an arg by number"
 	"$ARGS_ALIAS·ny <command> ~~? # Use a random arg"
-	''
-	"$ARGS_ALIAS·f <start> <finish> <command> ~~? # Use args within a range"
-	''
-	"$ARGS_ALIAS·m <command> ~~? # Map each arg in sequence"
-	"$ARGS_ALIAS·e <command> ~~? # Use each arg in sequence"
+	"$ARGS_ALIAS·n <number> <command> ~~? # Use an arg by number"
+	"$ARGS_ALIAS·q <start> <finish> <command> ~~? # Use args within a sequence"
+	"$ARGS_ALIAS·e <command> ~~? # Use each arg in series"
 	"$ARGS_ALIAS·l <command> ~~? # Use all args in parallel"
+	"$ARGS_ALIAS·m <command> ~~? # Map args, e.g \`seq 1 10 | as; am echo '\$((~~ * 10))'\`"
 	''
 	"$ARGS_ALIAS·a # List args"
 	"$ARGS_ALIAS·a <matches>* -<mismatches>* # Filter args"
@@ -70,16 +66,6 @@ function args_keymap_a {
 	else
 		args_plain | args_filter "${filters[@]}" | as
 	fi
-}
-
-function args_keymap_f {
-	local start=$1; shift
-	local finish=$1; shift # `end` is a reserved keyword
-	local command=$*
-
-	for number in $(seq "$start" "$finish"); do
-		args_keymap_n "$number" "$command"
-	done
 }
 
 function args_keymap_h {
@@ -136,6 +122,16 @@ function args_keymap_ny {
 	local command=$*
 
 	args_keymap_n $((RANDOM % $(args_size) + 1)) "$command"
+}
+
+function args_keymap_q {
+	local start=$1; shift
+	local finish=$1; shift # `end` is a reserved keyword
+	local command=$*
+
+	for number in $(seq "$start" "$finish"); do
+		args_keymap_n "$number" "$command"
+	done
 }
 
 function args_keymap_r {
