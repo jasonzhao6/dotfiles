@@ -49,7 +49,7 @@ function test__zsh_keymap_z__when_args_history_is_not_initialized {
 
 	assert "$(
 		ARGS_HISTORY_MAX=
-		zsh_keymap_z
+		ZSHRC_UNDER_TEST=1 zsh_keymap_z
 		echo "$ARGS_HISTORY_MAX"
 	)" "$args_history_max"
 
@@ -61,7 +61,7 @@ function test__zsh_keymap_z__when_args_history_is_already_initialized {
 
 	assert "$(
 		ARGS_HISTORY_MAX=$overwrite
-		zsh_keymap_z
+		ZSHRC_UNDER_TEST=1 zsh_keymap_z
 		echo $ARGS_HISTORY_MAX
 	)" "$overwrite"
 

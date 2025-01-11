@@ -6,7 +6,7 @@ export ZSH_SECRETS="$HOME/.zshrc.secrets"
 #zmodload zsh/zprof
 
 # Track load time: Start
-zshrc_start=$(gdate +%s.%2N)
+[[ -z $ZSHRC_UNDER_TEST ]] && ZSHRC_START=$(gdate +%s.%2N)
 
 # Set color aliases early so they can expand in subsequent function definitions
 source "$ZSHRC_DIR/colors.zsh"; color
@@ -40,9 +40,7 @@ source "$ZSHRC_DIR/zsh_prompt.zsh"
 [[ -z $ZSHRC_UNDER_TEST && -f $ZSH_SECRETS ]] && source "$ZSH_SECRETS"
 
 # Track load time: Finish
-zshrc_end=$(gdate +%s.%2N)
-echo
-gray_fg "\`.zshrc\` loaded in $(echo "$zshrc_end - $zshrc_start" | bc) seconds"
+[[ -z $ZSHRC_UNDER_TEST ]] && gray_fg "\n\`.zshrc\` loaded in $(echo "$(gdate +%s.%2N) - $ZSHRC_START" | bc) seconds"
 
 # Profile load time: Finish (Usually commented out)
 #zprof
