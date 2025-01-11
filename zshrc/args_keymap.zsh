@@ -19,15 +19,19 @@ ARGS_KEYMAP=(
 	"$ARGS_ALIAS·l <command> ~~? # Use all args in parallel"
 	"$ARGS_ALIAS·m <command> ~~? # Map args, e.g \`seq 1 10 | as; am echo '\$((~~ * 10))'\`"
 	''
-	"$ARGS_ALIAS·a # List args"
+	"$ARGS_ALIAS·a # List all args"
 	"$ARGS_ALIAS·a <matches>* -<mismatches>* # Filter args"
 	''
-	"$ARGS_ALIAS·u # Undo change"
-	"$ARGS_ALIAS·r # Redo change"
+	"$ARGS_ALIAS·d # Delimit columns via the bottom row"
+	"$ARGS_ALIAS·d <letter> # Select column by letter"
+	"$ARGS_ALIAS·dt # Delimit columns via the top row"
+	"$ARGS_ALIAS·dt <letter> # Select column by letter"
 	''
-	"$ARGS_ALIAS·h # List history entries"
-	"$ARGS_ALIAS·h <index> # Select history entry"
-	"$ARGS_ALIAS·0 # Reset history"
+	"$ARGS_ALIAS·u # Undo \"Filter args\" / \"Select column\""
+	"$ARGS_ALIAS·r # Redo \"Filter args\" / \"Select column\""
+	"$ARGS_ALIAS·h # List all history entries"
+	"$ARGS_ALIAS·h <index> # Select a history entry by index"
+	"$ARGS_ALIAS·c # Reset history"
 )
 
 keymap_init $ARGS_NAMESPACE $ARGS_ALIAS "${ARGS_KEYMAP[@]}"
@@ -51,10 +55,6 @@ ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd c
 ARGS_PUSHED=
 ARGS_USED_TOP_ROW=
 
-function args_keymap_0 {
-	args_history_reset
-}
-
 function args_keymap_a {
 	local filters=("$@")
 
@@ -66,6 +66,22 @@ function args_keymap_a {
 	else
 		args_plain | args_filter "${filters[@]}" | as
 	fi
+}
+
+function args_keymap_c {
+	args_history_reset
+}
+
+function args_keymap_d {
+	local index=$1
+
+	args_select_column 0 "$index"
+}
+
+function args_keymap_dt {
+	local index=$1
+
+	args_select_column 1 "$index"
 }
 
 function args_keymap_e {
@@ -161,8 +177,8 @@ function args_keymap_r {
 }
 
 function args_keymap_s {
-	# Users see the interface of this mapping as `<key> <matches>* -<mismatches>*`
-	# Only `as` sees the interface as `<key> <is soft select> <matches>* -<mismatches>*`
+	# Users see the interface of this mapping as `s <matches>* -<mismatches>*`
+	# Only `so` know this interface as `s <is_soft_select> <matches>* -<mismatches>*`
 	local is_soft_select=$1
 	[[ $is_soft_select == "$ARGS_SOFT_SELECT" ]] && shift || is_soft_select=0
 
@@ -209,5 +225,5 @@ function args_keymap_v {
 function args_keymap_vo {
 	local filters=("$@")
 
-	pbpaste | as "$ARGS_SOFT_SELECT" "${filters[@]}"
+	pbpaste | aso "${filters[@]}"
 }

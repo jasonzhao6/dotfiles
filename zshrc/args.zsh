@@ -1,10 +1,3 @@
-## list / filter colum[n] by letter
-## (e.g `n` to list all, `n d` to keep only the fourth column, delimited based on the bottom row)
-#function n { args_select_column 0 "$1"; }
-
-## (`nn` is like `n`, but delimited based on the top row)
-#function nn { args_select_column 1 "$1"; }
-
 ## [c]opy into pasteboard
 ## (e.g `c` to copy all args, `11 c` to copy only the eleventh arg)
 #function c { [[ -z $1 ]] && args_plain | pbcopy || echo -n "$@" | pbcopy; }

@@ -142,7 +142,7 @@ function keymap_help {
 	# Get the max command size in order to align comments across commands, e.g
 	#   ```
 	#   $ <command>      # comment
-	#   $ <long command> # another comment
+	#   $ <long_command> # another comment
 	#   ```
 	local max_command_size
 	max_command_size=$(keymap_get_max_command_size "${keymap_usage[@]}" "${keymap_entries[@]}")
