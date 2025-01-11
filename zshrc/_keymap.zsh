@@ -105,7 +105,7 @@ function keymap_check_for_disjoint_dupes {
 		# Otherwise, report on disjoint dupes
 		else
 			echo
-			red_bar "\`$alias_dot_key\` has duplicate entries"
+			red_bar "\`$alias_dot_key\` has duplicate key mappings"
 			has_disjoint_dupes=1
 		fi
 	done

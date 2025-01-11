@@ -2,13 +2,19 @@ ARGS_NAMESPACE='args_keymap'
 ARGS_ALIAS='a'
 
 ARGS_KEYMAP=(
-	"$ARGS_ALIAS·s # Save args"
-	"$ARGS_ALIAS·s <match>* <-mismatch>* # Save args & filter"
+	"$ARGS_ALIAS·s # Save as args"
+	"$ARGS_ALIAS·s <match>* <-mismatch>* # Save as args & filter"
 	''
-	"$ARGS_ALIAS·so # Save args & soft-select the 1st column"
-	"$ARGS_ALIAS·so <match>* <-mismatch>* # Save args & soft-select the 1st column & filter"
+	"$ARGS_ALIAS·so # Save as args & soft-select the 1st column"
+	"$ARGS_ALIAS·so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
 	''
-	"$ARGS_ALIAS·n <number> <command> # Use arg by number"
+	"$ARGS_ALIAS·v # Paste into args"
+	"$ARGS_ALIAS·v <match>* <-mismatch>* # Paste into args & filter"
+	''
+	"$ARGS_ALIAS·vo # Paste into args & soft-select the 1st column"
+	"$ARGS_ALIAS·vo <match>* <-mismatch>* # Paste into args & soft-select the 1st column & filter"
+	''
+	"$ARGS_ALIAS·n <number> <command> # Use an arg by number"
 	''
 	"$ARGS_ALIAS·a # List args"
 	"$ARGS_ALIAS·a <match>* <-mismatch>* # Filter args"
@@ -119,6 +125,7 @@ function args_keymap_s {
 
 function args_keymap_so {
 	local filters=("$@")
+
 	as "$ARGS_SOFT_SELECT" "${filters[@]}"
 }
 
@@ -135,4 +142,16 @@ function args_keymap_u {
 	if [[ -n $ARGS_USED_TOP_ROW && ${#column_size_before} -lt ${#column_size_after} ]]; then
 		args_columns_bar "$ARGS_USED_TOP_ROW"
 	fi
+}
+
+function args_keymap_v {
+	local filters=("$@")
+
+	pbpaste | as "${filters[@]}"
+}
+
+function args_keymap_vo {
+	local filters=("$@")
+
+	pbpaste | as "$ARGS_SOFT_SELECT" "${filters[@]}"
 }
