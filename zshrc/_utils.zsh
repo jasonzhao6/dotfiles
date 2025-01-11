@@ -28,6 +28,16 @@ function ellipsize {
 	fi
 }
 
+function epoch {
+	local decimals=$1
+
+	if [[ -z $decimals || $decimals -le 0 ]]; then
+		gdate +%s
+	else
+		gdate +%s.%"${decimals}"N
+	fi
+} # TODO add test
+
 function has_internet {
 	curl -s --max-time 1 http://www.google.com &> /dev/null
 }

@@ -2,6 +2,9 @@ export DOTFILES_DIR="$HOME/gh/jasonzhao6/dotfiles"
 export ZSHRC_DIR="$DOTFILES_DIR/zshrc"
 export ZSH_SECRETS="$HOME/.zshrc.secrets"
 
+# Track load time: Start
+zshrc_start=$(gdate +%s.%2N)
+
 # Set color aliases early so they can expand in subsequent function definitions
 source "$ZSHRC_DIR/colors.zsh"; color
 
@@ -32,3 +35,8 @@ source "$ZSHRC_DIR/zsh_prompt.zsh"
 
 # Overwrite placeholders with secret values from `ZSH_SECRETS`
 [[ -z $ZSHRC_UNDER_TEST && -f $ZSH_SECRETS ]] && source "$ZSH_SECRETS"
+
+# Track load time: Finish
+zshrc_end=$(gdate +%s.%2N)
+echo
+gray_fg "\`.zshrc\` loaded in $(echo "$zshrc_end - $zshrc_start" | bc) seconds"
