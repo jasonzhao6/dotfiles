@@ -59,16 +59,17 @@ function args_keymap_a {
 function args_keymap_h {
 	local index=$1
 
-	# If `index` is not specified, list all history entries
+	# If `index` is not specified, list history entries
 	[[ -z $index ]] && args_history_entries && return
 
-	# If `index` is within range, set it as the index, then list args
-	if [[ $(args_history_is_index_valid "$index") -eq 1 ]]; then
-		# shellcheck disable=SC2034
-		ARGS_HISTORY_INDEX=$index
+	# Attempt to set history index
+	args_history_set_index "$index"
+
+	# If `index` was set, then list args at this index
+	if [[ $? -eq 0 ]]; then
 		aa
 
-	# Otherwise, list all history entries and show error bar
+	# Otherwise, list history entries again and show error bar
 	else
 		args_history_entries
 		echo

@@ -116,6 +116,18 @@ function args_history_entries {
 	done
 }
 
+function args_history_set_index {
+	local index=$1
+
+	# TODO sanitize before set, e.g when index starts at 99, push 3, then set to 0
+	if [[ $(args_history_is_index_valid "$index") -eq 1 ]]; then
+		ARGS_HISTORY_INDEX=$index
+		return 0
+	else
+		return 1
+	fi
+}
+
 function args_history_is_index_valid {
 	local index=$1
 
@@ -131,14 +143,6 @@ function args_history_is_index_valid {
 		# When there is wrap around at the end, and `index` is near `max`
 		$tail -gt $head && $tail -le $index && $index -gt $head && $((index - max)) -le $head
 	]] && echo 1 || echo 0
-}
-
-function args_history_set_index {
-	local index=$1
-
-	# TODO check if within range in here
-	# TODO sanitize before set, e.g when index starts at 99, push 3, then set to 0
-	ARGS_HISTORY_INDEX=$index
 }
 
 #
