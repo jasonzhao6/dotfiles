@@ -24,7 +24,7 @@ function args_history_init {
 function args_history_reset {
 	ARGS_HISTORY=()
 	ARGS_HISTORY_MAX=100
-	ARGS_HISTORY_INDEX=99
+	ARGS_HISTORY_INDEX=$ARGS_HISTORY_MAX # The first element will be at index 1
 	ARGS_HISTORY_HEAD=$ARGS_HISTORY_INDEX
 	ARGS_HISTORY_TAIL=-1
 	ARGS_HISTORY_UNDO_EXCEEDED=0
@@ -119,7 +119,9 @@ function args_history_entries {
 function args_history_set_index {
 	local index=$1
 
-	# TODO sanitize before set, e.g when index starts at 99, push 3, then set to 0
+	# Zsh array index is 1-based
+	[[ $index -eq 0 ]] && return 1
+
 	if [[ $(args_history_is_index_valid "$index") -eq 1 ]]; then
 		ARGS_HISTORY_INDEX=$index
 		return 0
