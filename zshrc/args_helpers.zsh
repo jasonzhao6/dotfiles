@@ -2,27 +2,47 @@
 # Getters
 #
 
-function args_raw { echo "${ARGS_HISTORY[$ARGS_HISTORY_INDEX]}"; }
-function args_plain { [[ -z "$1" ]] && args_raw | bw | expand || echo "$@" | bw | expand; }
-function args_list { args_raw | nl; }
-function args_list_plain { args_raw | nl | bw | expand; }
-function args_list_size { args_raw | wc -l; }
+# TODO refactor away some of these getters
+# args_plain should be a | helper
+# args_list and args_list_plain should go
+function args_plain {
+	local input=$1
+
+	if [[ -z "$input" ]]; then
+		args_history_current | bw | expand
+	else
+		echo "$input" | bw | expand
+	fi
+}
+
+function args_list {
+	args_history_current | nl
+}
+
+function args_list_plain {
+	args_history_current | nl | bw | expand
+}
+
+function args_size {
+	args_history_current | wc -l
+}
 
 function args_columns {
-	# Whether to delimit based on the top row vs the bottom row
 	local use_top_row=$1
 
 	# Skip the `nl` column, then start accumulating `columns` starting with `current_column`
 	local skip_nl_column=1
-	local current_column=a
 	local columns=''
+	local current_column=a
 
+	# Delimit columns using on the top row, or else use the bottom row
 	if [[ ${use_top_row} -eq 1 ]]; then
 		row=$(args_list_plain | head -1)
 	else
 		row=$(args_list_plain | tail -1)
 	fi
 
+	# Iterate over each character in the row
 	for i in $(seq 1 ${#row}); do
 		# A new column starts when transitioning from a space to a non-space character
 		if [[ ${row[$i-1]} == ' ' && ${row[$i]} != ' ' ]]; then
@@ -52,14 +72,18 @@ function args_columns_bar {
 # Setters
 #
 
+# TODO copy over key mapping for this
 function args_use_selection {
-	if [[ -n $1 && -n $2 ]]; then
-		local row; row="$(args_plain | sed -n "$1p" | sed 's/ *#.*//' | strip)"
+	local number=$1
+	local command=$*
 
-		if [[ $(index_of "${(j: :)@}" '~~') -eq 0 ]]; then
-			echo_eval "${*:2} $row"
+	if [[ -n $1 && -n $2 ]]; then
+		local row; row="$(args_plain | sed -n "${number}p" | sed 's/ *#.*//' | strip)"
+
+		if [[ $(index_of "${(j: :)command}" '~~') -eq 0 ]]; then
+			echo_eval "${command:2} $row"
 		else
-			echo_eval ${${*:2}//~~/$row}
+			echo_eval ${${command:2}//~~/$row}
 		fi
 	fi
 }
@@ -68,7 +92,7 @@ function args_select_column {
 	local use_top_row=$1
 	local selected_column=$2
 
-	if [[ -z $2 ]]; then
+	if [[ -z $selected_column ]]; then
 		args_list
 		args_columns_bar "$use_top_row"
 	else
@@ -79,15 +103,15 @@ function args_select_column {
 		local column_start; column_start=$([[ "$target_column" -ne 0 ]] && echo "$target_column" || echo "$first_column")
 		local column_end; column_end=$([[ "$next_column" -ne 0 ]] && echo $((next_column - 1)))
 
+		# Select the specified column
 		args_list_plain | cut -c "$column_start"-"$column_end" | strip_right | as
 
-		# If a column was not selected, show columns bar again for convenience
+		# If selection was out of range and had no effect, show columns bar again for convenience
 		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args_columns "$use_top_row")" b) -ne 0 ]]; then
 			args_columns_bar "$use_top_row"
 		fi
 
-		# Set global states used by `u`
-		# shellcheck disable=SC2034
+		# Set global states to be used by `u`
 		ARGS_USED_TOP_ROW=$use_top_row
 	fi
 }
@@ -115,15 +139,16 @@ function args_save {
 	if [[ $(args_plain "$new_args") != $(args_plain) ]]; then
 		args_history_push "$new_args"
 
-		# Set global states used by `n, nn, u`
+		# Set global states to be used by `n, nn, u`
 		ARGS_PUSHED=1
+		# shellcheck disable=SC2034
 		ARGS_USED_TOP_ROW=
 
 	# Otherwise, replace the current args because `grep` coloring could have changed
 	else
 		args_history_replace_current "$new_args"
 
-		# Set global states used by `n, nn`
+		# Set global states to be used by `n, nn`
 		ARGS_PUSHED=0
 	fi
 

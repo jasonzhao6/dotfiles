@@ -15,7 +15,7 @@
 #function a { [[ -z $1 ]] && args_list || { args_plain | eval "$(args_filtering "$@") | $(args_coloring "$@")" | as; }; }
 ## select a random arg
 ## (e.g `aa echo`)
-#function aa { arg $((RANDOM % $(args_list_size) + 1)) "$@"; }
+#function aa { arg $((RANDOM % $(args_size) + 1)) "$@"; }
 ## select an [arg] by number
 ## (e.g `arg <number> echo`, or with explicit positioning `arg <number> echo ~~`)
 #function arg { args_use_selection "$@"; }
@@ -45,9 +45,9 @@
 #function e { for i in $(seq "$1" "$2"); do echo; arg "$i" "${@:3}"; done; }
 ## select all args via an iterator
 ## (e.g `each echo`, `all echo`, `map echo '$((~~ * 2))'`)
-#function each { for i in $(seq 1 "$(args_list_size)"); do echo; arg "$i" "$@"; done; }
-#function all { for i in $(seq 1 "$(args_list_size)"); do echo; arg "$i" "$@" & done; wait; }
-#function map { local map=''; local row; for i in $(seq 1 "$(args_list_size)"); do echo; row=$(arg "$i" "$@"); echo "$row"; map+="$row\n"; done; echo; echo "$map" | as; }
+#function each { for i in $(seq 1 "$(args_size)"); do echo; arg "$i" "$@"; done; }
+#function all { for i in $(seq 1 "$(args_size)"); do echo; arg "$i" "$@" & done; wait; }
+#function map { local map=''; local row; for i in $(seq 1 "$(args_size)"); do echo; row=$(arg "$i" "$@"); echo "$row"; map+="$row\n"; done; echo; echo "$map" | as; }
 ## list / filter colum[n] by letter
 ## (e.g `n` to list all, `n d` to keep only the fourth column, delimited based on the bottom row)
 #function n { args_select_column 0 "$1"; }

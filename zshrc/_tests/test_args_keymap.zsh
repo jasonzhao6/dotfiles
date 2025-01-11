@@ -216,7 +216,7 @@ function test__aso__with_filters {
 #function test__aa {
 #	assert "$(
 #		echo "$input_short" | as > /dev/null
-#		eee 1 $(($(args_list_size) * 3)) aa echo 2>&1 | sort | uniq
+#		eee 1 $(($(args_size) * 3)) aa echo 2>&1 | sort | uniq
 #	)" "$(
 #		cat <<-eof
 #

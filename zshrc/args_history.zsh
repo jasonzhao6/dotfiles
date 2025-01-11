@@ -49,6 +49,10 @@ function args_history_push {
 	[[ $ARGS_HISTORY_TAIL -eq -1 ]] && ARGS_HISTORY_TAIL=$ARGS_HISTORY_INDEX
 }
 
+function args_history_current {
+	echo "${ARGS_HISTORY[$ARGS_HISTORY_INDEX]}"
+}
+
 function args_history_replace_current {
 	ARGS_HISTORY[$ARGS_HISTORY_INDEX]=$1
 }
