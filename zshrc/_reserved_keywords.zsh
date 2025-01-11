@@ -1,7 +1,3 @@
-# https://zsh.sourceforge.io/Doc/Release/Shell-Grammar.html#Reserved-Words
-# do done esac then elif else fi for case if while function repeat time until select coproc nocorrect foreach end ! [[ { } declare export float integer local readonly typeset
-# See notes at the bottom of the file on how this list was generated
-
 typeset -A RESERVED
 
 function is_reserved {
@@ -10,13 +6,69 @@ function is_reserved {
 	[[ ${RESERVED[$keyword]} -eq 1 ]]
 }
 
-# Unreserved
+# Explicitly un-reserved
 RESERVED[aa]=0
 RESERVED[ac]=0
 RESERVED[ar]=0
 RESERVED[as]=0
 
-# Reserved
+# This list was copied from https://zsh.sourceforge.io/Doc/Release/Shell-Grammar.html#Reserved-Words
+RESERVED[case]=1
+RESERVED[coproc]=1
+RESERVED[declare]=1
+RESERVED[do]=1
+RESERVED[done]=1
+RESERVED[elif]=1
+RESERVED[else]=1
+RESERVED[end]=1
+RESERVED[esac]=1
+RESERVED[export]=1
+RESERVED[fi]=1
+RESERVED[float]=1
+RESERVED[for]=1
+RESERVED[foreach]=1
+RESERVED[function]=1
+RESERVED[if]=1
+RESERVED[integer]=1
+RESERVED[local]=1
+RESERVED[nocorrect]=1
+RESERVED[readonly]=1
+RESERVED[repeat]=1
+RESERVED[select]=1
+RESERVED[then]=1
+RESERVED[time]=1
+RESERVED[typeset]=1
+RESERVED[until]=1
+RESERVED[while]=1
+
+# This list was generated from these commands plus some manual processing
+#
+# ```
+# echo $PATH
+#
+# entries=(
+#   /bin
+#   /opt/local/bin
+#   /opt/local/sbin
+#   /sbin
+#   /usr/bin
+#   /usr/local/bin
+#   /usr/sbin
+# )
+#
+# for entry in "${entries[@]}"; do
+#   ls $entry/?
+#   ls $entry/??
+#   ls $entry/???
+#   ls $entry/????
+#   ls $entry/?????
+#   ls $entry/??????
+#   ls $entry/???????
+#   ls $entry/????????
+#   ls $entry/?????????
+#   ls $entry/??????????
+# done
+# ```
 RESERVED[2to3-3.10]=1
 RESERVED[2to3-3.11]=1
 RESERVED[2to3-3.12]=1
@@ -1886,32 +1938,3 @@ RESERVED[zstdgrep]=1
 RESERVED[zstdless]=1
 RESERVED[zstdmt]=1
 RESERVED[zunit]=1
-
-# This list was generated with commands below plus some manual processing
-#
-# ```
-# echo $PATH
-#
-# entries=(
-#   /bin
-#   /opt/local/bin
-#   /opt/local/sbin
-#   /sbin
-#   /usr/bin
-#   /usr/local/bin
-#   /usr/sbin
-# )
-#
-# for entry in "${entries[@]}"; do
-#   ls $entry/?
-#   ls $entry/??
-#   ls $entry/???
-#   ls $entry/????
-#   ls $entry/?????
-#   ls $entry/??????
-#   ls $entry/???????
-#   ls $entry/????????
-#   ls $entry/?????????
-#   ls $entry/??????????
-# done
-# ```
