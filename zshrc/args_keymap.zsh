@@ -21,17 +21,21 @@ ARGS_KEYMAP=(
 	''
 	"$ARGS_ALIAS·a # List all args"
 	"$ARGS_ALIAS·a <matches>* -<mismatches>* # Filter args"
-	''
 	"$ARGS_ALIAS·d # Delimit columns via the bottom row"
 	"$ARGS_ALIAS·d <letter> # Select column by letter"
 	"$ARGS_ALIAS·dt # Delimit columns via the top row"
 	"$ARGS_ALIAS·dt <letter> # Select column by letter"
 	''
-	"$ARGS_ALIAS·u # Undo \"Filter args\" / \"Select column\""
-	"$ARGS_ALIAS·r # Redo \"Filter args\" / \"Select column\""
+	"$ARGS_ALIAS·u # Undo \"Filter args\" or \"Select column\""
+	"$ARGS_ALIAS·r # Redo \"Filter args\" or \"Select column\""
 	"$ARGS_ALIAS·h # List all history entries"
 	"$ARGS_ALIAS·h <index> # Select a history entry by index"
-	"$ARGS_ALIAS·c # Reset history"
+	"$ARGS_ALIAS·hc # Reset history"
+	''
+	"$ARGS_ALIAS·c # Copy all args into pasteboard"
+	"$ARGS_ALIAS·c <number> # Copy an arg by number into pasteboard"
+	"$ARGS_ALIAS·y # Yank all args to put into a different tab"
+	"$ARGS_ALIAS·p # In a different tab, put args"
 )
 
 keymap_init $ARGS_NAMESPACE $ARGS_ALIAS "${ARGS_KEYMAP[@]}"
@@ -66,10 +70,6 @@ function args_keymap_a {
 	else
 		args_plain | args_filter "${filters[@]}" | as
 	fi
-}
-
-function args_keymap_c {
-	args_history_reset
 }
 
 function args_keymap_d {
@@ -109,6 +109,10 @@ function args_keymap_h {
 		echo
 		red_bar "Index out of range: $index"
 	fi
+}
+
+function args_keymap_hc {
+	args_history_reset
 }
 
 function args_keymap_l {
