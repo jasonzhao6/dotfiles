@@ -1,22 +1,7 @@
-# Config
+# History config
 # shellcheck disable=SC2034
 SAVEHIST=10000
 HISTSIZE=10000
 HISTFILE="$HOME/.zsh_history"
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
-
-# List / filter
-# (e.g `h` to list all, `h foo` to filter)
-function hr { egrep --ignore-case "$*" "$HISTFILE" | trim 15 | sort --unique | args_keymap_s; }
-
-# [C]lear
-function hc { rm "$HISTFILE"; }
-
-# Edit
-function hm { mate "$HISTFILE"; }
-
-# Session persistence
-function h0 { unset -f zshaddhistory; }              #  disk &&  memory
-function h1 { function zshaddhistory { return 1; }; } # !disk && !memory
-function h2 { function zshaddhistory { return 2; }; } # !disk &&  memory
