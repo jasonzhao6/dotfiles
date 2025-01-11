@@ -15,24 +15,16 @@ function keymap_init {
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
-	# If `keymap_entries` contains disjoint duplicate `key`s, abort and print error message
-	keymap_check_for_disjoint_dupes "${keymap_entries[@]}" || return
+	# If `keymap_entries` contains disjoint duplicate `key`s, abort
+	keymap_error_on_disjoint_dupes "${keymap_entries[@]}" || return
 
 	# Alias the `<namespace>` function to `<alias>`
 	keymap_alias "$alias" "$namespace"
 
 	# Alias the `<namespace>_<key>` functions to `<alias><key>`
-	local alias_dot_key
-	local entry_key
-	for entry in "${keymap_entries[@]}"; do
-		[[ -z $entry ]] && continue # Skip empty lines
-
-		alias_dot_key=$(echo "$entry" | awk '{print $1}')
-		[[ $alias_dot_key != *$KEYMAP_DOT* ]] && continue # Skip keyless entries
-
-		entry_key=$(echo "$alias_dot_key" | trim 2)
-		keymap_alias "$alias$entry_key" "${namespace}_$entry_key"
-	done
+	while IFS= read -r key; do
+		keymap_alias "$alias$key" "${namespace}_$key"
+	done <<< "$(keymap_extract_uniq_keys "$alias" "${keymap_entries[@]}")"
 }
 
 # Exit codes and corresponding prints
@@ -74,12 +66,12 @@ function keymap_invoke {
 
 # ```
 # o·c       # Open the latest commit
-# o·c <sha> # Open the specified commit  <--  Joint duplicate, likely intentional
+# o·c <sha> # Open the specified commit  <--  Joint duplicate, likely intended
 #
 # o·a       # Do something
-# o·c       # Do something else          <--  Disjoint duplicate, likely unintentional
+# o·c       # Do something else          <--  Disjoint duplicate, likely unintended
 # ```
-function keymap_check_for_disjoint_dupes {
+function keymap_error_on_disjoint_dupes {
 	local entries=("$@")
 	local last_entry
 	local has_disjoint_dupes
@@ -111,6 +103,20 @@ function keymap_check_for_disjoint_dupes {
 	done
 
 	[[ -n $has_disjoint_dupes ]] && return 1 || return 0
+}
+
+function keymap_extract_uniq_keys {
+	local alias=$1; shift
+	local keymap_entries=("$@")
+
+	local cut_start=$((${#alias} + 2))
+
+	for entry in "${keymap_entries[@]}"; do
+		if [[ $entry == *$KEYMAP_DOT* ]]; then
+			# Note: Originally called `awk | cut` here, but they added up to > 1s
+			echo "$entry"
+		fi
+	done | awk '{print $1}' | cut -c $cut_start- | uniq
 }
 
 function keymap_alias {

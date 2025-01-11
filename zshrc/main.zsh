@@ -2,6 +2,9 @@ export DOTFILES_DIR="$HOME/gh/jasonzhao6/dotfiles"
 export ZSHRC_DIR="$DOTFILES_DIR/zshrc"
 export ZSH_SECRETS="$HOME/.zshrc.secrets"
 
+# Profile load time: Start (Usually commented out)
+#zmodload zsh/zprof
+
 # Track load time: Start
 zshrc_start=$(gdate +%s.%2N)
 
@@ -40,3 +43,6 @@ source "$ZSHRC_DIR/zsh_prompt.zsh"
 zshrc_end=$(gdate +%s.%2N)
 echo
 gray_fg "\`.zshrc\` loaded in $(echo "$zshrc_end - $zshrc_start" | bc) seconds"
+
+# Profile load time: Finish (Usually commented out)
+#zprof
