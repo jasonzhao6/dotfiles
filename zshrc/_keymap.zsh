@@ -24,7 +24,7 @@ function keymap_init {
 	# Alias the `<namespace>_<key>` functions to `<alias><key>`
 	while IFS= read -r key; do
 		keymap_alias "$alias$key" "${namespace}_$key"
-	done <<< "$(keymap_extract_uniq_keys "$alias" "${keymap_entries[@]}")"
+	done <<< "$(keymap_extract_uniq_keys "${#alias}" "${keymap_entries[@]}")"
 }
 
 function keymap_invoke {
@@ -101,10 +101,10 @@ function keymap_error_on_disjoint_dupes {
 }
 
 function keymap_extract_uniq_keys {
-	local alias=$1; shift
+	local alias_size=$1; shift
 	local keymap_entries=("$@")
 
-	local cut_start=$((${#alias} + 2))
+	local cut_start=$((alias_size + 2))
 
 	for entry in "${keymap_entries[@]}"; do
 		if [[ $entry == *$KEYMAP_DOT* ]]; then
@@ -142,8 +142,8 @@ function keymap_help {
 
 	# Get the max command size in order to align comments across commands, e.g
 	#   ```
-	#   $ <command>      # comment
-	#   $ <long_command> # another comment
+	#   $ <key>       # comment 1
+	#   $ <key> <arg> # comment 2
 	#   ```
 	local max_command_size
 	max_command_size=$(keymap_get_max_command_size "${keymap_usage[@]}" "${keymap_entries[@]}")
@@ -153,6 +153,7 @@ function keymap_help {
 	echo
 
 	yellow_fg "  $namespace"
+	keymap_print "$alias" "${keymap_entries[@]}"
 
 	echo
 	echo 'Usage'
@@ -186,18 +187,48 @@ function keymap_get_max_command_size {
 	echo "$max_command_size"
 }
 
-function keymap_annotate_the_dot {
-	local alias=$1
-	local command_size=$2
+# shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
+KEYMAP_PRINT_ROW_1=(_ _ _ p y \| f g c r l)
+# shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
+KEYMAP_PRINT_ROW_2=(a o e u i \| d h t n s)
+# shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
+KEYMAP_PRINT_ROW_3=(_ q j k x \| b m w v z)
 
-	echo
-	printf "%-*s %s%-*s %s\n" \
-		$(($(echo -n "$KEYMAP_PROMPT" | bw | wc -c) + ${#alias})) \
-		'' \
-		"$(gray_fg "$KEYMAP_DOT_POINTER")" \
-		"$((command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
-		'' \
-		"$(gray_fg "# The $KEYMAP_DOT represents an optional space")"
+function keymap_print {
+	local alias=$1; shift
+	local keymap_entries=("$@")
+
+	typeset -A keymap_keys
+
+	# Count the number of keys per key initial
+	local key_initial
+	while IFS= read -r key; do
+		key_initial=${key:0:1}
+
+		keymap_keys[$key_initial]=$((keymap_keys[$key_initial] + 1))
+	done <<< "$(keymap_extract_uniq_keys "${#alias}" "${keymap_entries[@]}")"
+
+	# Print a map of key initials; annotate key initials with multiple keys with a `+` suffix
+	local row_input
+	local row_output
+	for i in {1..3}; do
+		# shellcheck disable=SC2034 # Use via `${(P)row_input}`
+		row_input=KEYMAP_PRINT_ROW_${i}
+		row_output+="\n  "
+
+		for char in ${(P)row_input}; do
+			if [[ $char == '_' ]]; then
+				row_output+='    '
+			elif [[ -z ${keymap_keys[$char]} ]]; then
+				row_output+="  $(gray_fg "$char") "
+			elif [[ ${keymap_keys[$char]} -eq 1 ]]; then
+				row_output+="  $char "
+			else
+				row_output+="  $char+"
+			fi
+		done
+	done
+	echo "$row_output"
 }
 
 function keymap_print_entry {
@@ -215,4 +246,18 @@ function keymap_print_entry {
 	else
 		echo
 	fi
+}
+
+function keymap_annotate_the_dot {
+	local alias=$1
+	local command_size=$2
+
+	echo
+	printf "%-*s %s%-*s %s\n" \
+		$(($(echo -n "$KEYMAP_PROMPT" | bw | wc -c) + ${#alias})) \
+		'' \
+		"$(gray_fg "$KEYMAP_DOT_POINTER")" \
+		"$((command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
+		'' \
+		"$(gray_fg "# The $KEYMAP_DOT represents an optional space")"
 }
