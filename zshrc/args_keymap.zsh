@@ -53,6 +53,7 @@ source "$ZSHRC_DIR/args_history.zsh"; args_history_init
 
 # Constants
 ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd column'
+ARGS_YANK_FILE="$HOME/.zshrc.args"
 
 # States
 # shellcheck disable=SC2034
@@ -69,6 +70,16 @@ function args_keymap_a {
 	# Otherwise, apply `filters`, then list args
 	else
 		args_plain | args_filter "${filters[@]}" | as
+	fi
+}
+
+function args_keymap_c {
+	local string=$*
+
+	if [[ -z $string ]]; then
+		args_plain | pbcopy
+	else
+		echo -n "$string" | pbcopy
 	fi
 }
 
@@ -164,12 +175,17 @@ function args_keymap_ny {
 	args_keymap_n $((RANDOM % $(args_size) + 1)) "$command"
 }
 
+function args_keymap_p {
+	echo "$(<"$ARGS_YANK_FILE")" | as
+}
+
 function args_keymap_q {
 	local start=$1; shift
 	local finish=$1; shift # `end` is a reserved keyword
 	local command=$*
 
 	for number in $(seq "$start" "$finish"); do
+		echo
 		args_keymap_n "$number" "$command"
 	done
 }
@@ -230,4 +246,8 @@ function args_keymap_vo {
 	local filters=("$@")
 
 	pbpaste | aso "${filters[@]}"
+}
+
+function args_keymap_y {
+	args_history_current > "$ARGS_YANK_FILE"
 }

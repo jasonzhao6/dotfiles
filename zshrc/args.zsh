@@ -1,11 +1,3 @@
-## [c]opy into pasteboard
-## (e.g `c` to copy all args, `11 c` to copy only the eleventh arg)
-#function c { [[ -z $1 ]] && args_plain | pbcopy || echo -n "$@" | pbcopy; }
-
-## [y]ank / [p]ut current args into a different tab
-#function y { args > ~/.zshrc.args; }
-#function p { echo "$(<~/.zshrc.args)" | as; }
-
 ## select an [arg] by number
 #function 1 { arg "$0" "$@"; }
 #function 2 { arg "$0" "$@"; }
