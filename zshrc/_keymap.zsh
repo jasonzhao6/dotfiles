@@ -19,11 +19,11 @@ function keymap_init {
 	keymap_error_on_disjoint_dupes "${keymap_entries[@]}" || return
 
 	# Alias the `<namespace>` function to `<alias>`
-	keymap_alias "$alias" "$namespace"
+	keymap_set_alias "$alias" "$namespace"
 
 	# Alias the `<namespace>_<key>` functions to `<alias><key>`
 	while IFS= read -r key; do
-		keymap_alias "$alias$key" "${namespace}_$key"
+		keymap_set_alias "$alias$key" "${namespace}_$key"
 	done <<< "$(keymap_extract_uniq_keys "${#alias}" "${keymap_entries[@]}")"
 }
 
@@ -100,26 +100,7 @@ function keymap_error_on_disjoint_dupes {
 	[[ -n $has_disjoint_dupes ]] && return 1 || return 0
 }
 
-function keymap_extract_uniq_keys {
-	local alias_size=$1; shift
-	local keymap_entries=("$@")
-
-	local cut_start=$((alias_size + 2))
-
-	for entry in "${keymap_entries[@]}"; do
-		[[ $entry == *$KEYMAP_DOT* ]] && echo "$entry"
-	done | awk '{print $1}' | cut -c $cut_start- | uniq
-}
-
-function keymap_extract_namespace_keys {
-	local keymap_entries=("$@")
-
-	for entry in "${keymap_entries[@]}"; do
-		[[ $entry != *$KEYMAP_DOT* ]] && echo "$entry"
-	done | awk '{print $1}'
-}
-
-function keymap_alias {
+function keymap_set_alias {
 	local key=$1
 	local value=$2
 
@@ -168,6 +149,8 @@ function keymap_help {
 		keymap_print_entry "$entry" "$max_command_size"
 	done
 
+	keymap_annotate_the_dot "$alias" "$max_command_size"
+
 	echo
 	echo 'Keymap'
 	echo
@@ -175,8 +158,6 @@ function keymap_help {
 	for entry in "${keymap_entries[@]}"; do
 		keymap_print_entry "$entry" "$max_command_size"
 	done
-
-	keymap_annotate_the_dot "$alias" "$max_command_size"
 }
 
 function keymap_get_max_command_size {
@@ -265,6 +246,25 @@ function keymap_print_entry {
 	else
 		echo
 	fi
+}
+
+function keymap_extract_uniq_keys {
+	local alias_size=$1; shift
+	local keymap_entries=("$@")
+
+	local cut_start=$((alias_size + 2))
+
+	for entry in "${keymap_entries[@]}"; do
+		[[ $entry == *$KEYMAP_DOT* ]] && echo "$entry"
+	done | awk '{print $1}' | cut -c $cut_start- | uniq
+}
+
+function keymap_extract_namespace_keys {
+	local keymap_entries=("$@")
+
+	for entry in "${keymap_entries[@]}"; do
+		[[ $entry != *$KEYMAP_DOT* ]] && echo "$entry"
+	done | awk '{print $1}'
 }
 
 function keymap_annotate_the_dot {
