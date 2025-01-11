@@ -1,6 +1,6 @@
 function test__aws_keymap_o {
 	assert "$(
-		wo
+		aws_keymap_o
 	)" "$(
 		cat <<-eof
 		     1	non-secret-placeholder-1  url-1
@@ -11,7 +11,7 @@ function test__aws_keymap_o {
 
 function test__aws_keymap_o__when_filtering_for_2 {
 	assert "$(
-		wo 2
+		aws_keymap_o 2
 	)" "$(
 		cat <<-eof
 		     1	non-secret-placeholder-2  url-2

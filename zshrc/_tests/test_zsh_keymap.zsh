@@ -33,11 +33,11 @@ function test__zsh_keymap_f__when_counting_._functions {
 
 function test__zsh_keymap_w {
 	assert "$(
-		zw zw
+		zsh_keymap_w zsh_keymap_w
 	)" "$(
 		cat <<-eof
-		     1	zw () {
-		     2		which "\$1" | as
+		     1	zsh_keymap_w () {
+		     2		which "\$1" | args_keymap_s
 		     3	}
 		eof
 	)"

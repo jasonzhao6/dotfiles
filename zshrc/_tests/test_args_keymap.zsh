@@ -74,7 +74,7 @@ function test__args_keymap_a {
 function test__args_keymap_a__adds_color {
 	assert "$(
 		echo "$input" | as > /dev/null
-		aa shared
+		args_keymap_a shared
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-$(grep_color shared)-1
@@ -87,8 +87,8 @@ function test__args_keymap_a__adds_color {
 function test__args_keymap_a__replaces_color {
 	assert "$(
 		echo "$input" | as > /dev/null
-		aa shared > /dev/null
-		aa region
+		args_keymap_a shared > /dev/null
+		args_keymap_a region
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-$(grep_color region)-shared-1
@@ -101,7 +101,7 @@ function test__args_keymap_a__replaces_color {
 function test__args_keymap_a__with_two_args_out_of_order {
 	assert "$(
 		echo "$input" | as > /dev/null
-		aa 2 shared
+		args_keymap_a 2 shared
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-$(grep_color shared)-$(grep_color 2)
@@ -112,7 +112,7 @@ function test__args_keymap_a__with_two_args_out_of_order {
 function test__args_keymap_a__with_two_args_including_negation {
 	assert "$(
 		echo "$input" | as > /dev/null
-		aa -2 shared
+		args_keymap_a -2 shared
 	)" "$(
 		cat <<-eof
 		     1	terraform-application-region-$(grep_color shared)-1
@@ -220,7 +220,7 @@ function test__args_keymap_so__with_filters {
 #	)" "$(
 #		cat <<-eof
 #
-#			aa echo
+#			args_keymap_a echo
 #			echo terraform-application-region-shared-1
 #			echo terraform-application-region-shared-2
 #			terraform-application-region-shared-1
