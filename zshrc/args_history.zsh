@@ -120,31 +120,27 @@ function args_history_set_index {
 	local index=$1
 
 	# Zsh array index is 1-based
-	[[ $index -eq 0 ]] && return 1
-
-	if [[ $(args_history_is_index_valid "$index") -eq 1 ]]; then
-		ARGS_HISTORY_INDEX=$index
-		return 0
-	else
-		return 1
-	fi
-}
-
-function args_history_is_index_valid {
-	local index=$1
+	[[ $index -le 0 ]] && return 1
 
 	local max=$ARGS_HISTORY_MAX
 	local head=$ARGS_HISTORY_HEAD
 	local tail=$ARGS_HISTORY_TAIL
 
-	[[
+	# Check if index is within range
+	if 	[[
 		# When there no wrap around
 		$tail -le $index && $index -le $head ||
 		# When there is wrap around at the end, and `index` is near `0`
 		$tail -gt $head && $tail -gt $index && $((tail - max)) -le $index && $index -le $head ||
 		# When there is wrap around at the end, and `index` is near `max`
 		$tail -gt $head && $tail -le $index && $index -gt $head && $((index - max)) -le $head
-	]] && echo 1 || echo 0
+	]]; then
+
+		ARGS_HISTORY_INDEX=$index
+		return 0
+	else
+		return 1
+	fi
 }
 
 #
