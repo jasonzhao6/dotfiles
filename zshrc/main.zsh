@@ -19,7 +19,6 @@ source "$ZSHRC_DIR/open_keymap.zsh"
 source "$ZSHRC_DIR/zsh_keymap.zsh"
 
 # Load non-keymaps
-source "$ZSHRC_DIR/args.zsh"
 source "$ZSHRC_DIR/aws.zsh"
 source "$ZSHRC_DIR/cd.zsh"
 source "$ZSHRC_DIR/git.zsh"
