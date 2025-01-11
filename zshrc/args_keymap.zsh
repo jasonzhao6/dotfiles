@@ -68,6 +68,15 @@ function args_keymap_a {
 	fi
 }
 
+function args_keymap_e {
+	local command=$*
+
+	for number in $(seq 1 "$(args_size)"); do
+		echo
+		args_keymap_n "$number" "$command"
+	done
+}
+
 function args_keymap_h {
 	local index=$1
 
@@ -86,6 +95,17 @@ function args_keymap_h {
 	fi
 }
 
+function args_keymap_l {
+	local command=$*
+
+	for number in $(seq 1 "$(args_size)"); do
+		echo
+		args_keymap_n "$number" "$command" &
+	done
+
+	wait
+}
+
 function args_keymap_m {
 	local command=$*
 
@@ -94,7 +114,7 @@ function args_keymap_m {
 
 	for number in $(seq 1 "$(args_size)"); do
 		echo
-		row=$(args_keymap_n "$number" "$@")
+		row=$(args_keymap_n "$number" "$command")
 		map+="$row\n"
 		echo "$row"
 	done
@@ -104,16 +124,16 @@ function args_keymap_m {
 }
 
 function args_keymap_n {
-	local number=$1
+	local number=$1; shift
 	local command=$*
 
-	if [[ -n $1 && -n $2 ]]; then
+	if [[ -n $number && -n $command ]]; then
 		local row; row="$(args_plain | sed -n "${number}p" | sed 's/ *#.*//' | strip)"
 
 		if [[ $command != *'~~'* ]]; then
-			echo_eval "${command:2} $row"
+			echo_eval "$command $row"
 		else
-			echo_eval ${${command:2}//~~/$row}
+			echo_eval "${command//~~/$row}"
 		fi
 	fi
 }

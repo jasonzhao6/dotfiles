@@ -1,3 +1,5 @@
+# https://zsh.sourceforge.io/Doc/Release/Shell-Grammar.html#Reserved-Words
+# do done esac then elif else fi for case if while function repeat time until select coproc nocorrect foreach end ! [[ { } declare export float integer local readonly typeset
 # See notes at the bottom of the file on how this list was generated
 
 typeset -A RESERVED
