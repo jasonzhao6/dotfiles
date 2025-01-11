@@ -85,7 +85,7 @@ function args_select_column {
 		local column_end; column_end=$([[ "$next_column" -ne 0 ]] && echo $((next_column - 1)))
 
 		# Select the specified column
-		args_list_plain | cut -c "$column_start"-"$column_end" | strip_right | as
+		args_list_plain | cut -c "$column_start"-"$column_end" | strip_right | args_keymap_s
 
 		# If selection was out of range and had no effect, show columns bar again for convenience
 		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args_columns "$use_top_row")" b) -ne 0 ]]; then

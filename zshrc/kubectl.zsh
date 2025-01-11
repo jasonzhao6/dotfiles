@@ -1,6 +1,6 @@
 ### [K]ubectl
 # Resource references: g[r]ep / [s]ave / e[x]plain
-function kr { cat ~/Documents/k8.txt | grep "$*" | as; }
+function kr { cat ~/Documents/k8.txt | grep "$*" | args_keymap_s; }
 function ks { kubectl api-resources > ~/Documents/k8.txt; }
 function kx { kubectl explain "$@"; }
 # Set [n]ame[s]pace

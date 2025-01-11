@@ -77,7 +77,7 @@ function zsh_keymap_t {
 }
 
 function zsh_keymap_w {
-	which "$1" | as
+	which "$1" | args_keymap_s
 }
 
 ZSH_SECRETS_DIR="$HOME/Downloads/_Archive/zsh/.zshrc.secrets"

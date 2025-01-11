@@ -1,9 +1,9 @@
 ### Util
 # singles (they save into `args`)
-function d { [[ -n "$1" ]] && { D=${${${@}#*://}%%/*}; [[ -z $ZSHRC_UNDER_TEST ]] && dig +short $D | as || printf "test output for\n%s" "$D" | as; }; }
-function f { [[ -n "$1" ]] && f_pre "$@" | sort | as; }
-function l { ls -l | awk '{print $9}' | as "$@"; } # Not taking search pattern b/c folder matches break column alignment
-function ll { ls -lA | awk '{print $9}' | egrep '^(\e\[3[0-9]m)?\.' | bw | as "$@"; } # Show only hidden files
+function d { [[ -n "$1" ]] && { D=${${${@}#*://}%%/*}; [[ -z $ZSHRC_UNDER_TEST ]] && dig +short $D | args_keymap_s || printf "test output for\n%s" "$D" | args_keymap_s; }; }
+function f { [[ -n "$1" ]] && f_pre "$@" | sort | args_keymap_s; }
+function l { ls -l | awk '{print $9}' | args_keymap_s "$@"; } # Not taking search pattern b/c folder matches break column alignment
+function ll { ls -lA | awk '{print $9}' | egrep '^(\e\[3[0-9]m)?\.' | bw | args_keymap_s "$@"; } # Show only hidden files
 # doubles (they do not save into `args`)
 function bb { pmset sleepnow; }
 function cc { eval "$(prev_command)" | bw | ruby -e 'puts STDIN.read.strip' | pbcopy; }
@@ -48,5 +48,5 @@ function oo_open {
 }
 
 # | after json
-function keys { jq keys | trim_list | as; }
+function keys { jq keys | trim_list | args_keymap_s; }
 function trim_list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$//' | compact; }

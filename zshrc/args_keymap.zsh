@@ -15,7 +15,7 @@ ARGS_KEYMAP=(
 	"$ARGS_ALIAS·q <start> <finish> <command> ~~? # Use args within a sequence"
 	"$ARGS_ALIAS·e <command> ~~? # Use each arg in series"
 	"$ARGS_ALIAS·l <command> ~~? # Use all args in parallel"
-	"$ARGS_ALIAS·m <command> ~~? # Map args, e.g \`seq 1 10 | as; am echo '\$((~~ * 10))'\`"
+	"$ARGS_ALIAS·m <command> ~~? # Map args, e.g \`seq 1 10 | args_keymap_s; am echo '\$((~~ * 10))'\`"
 	''
 	"$ARGS_ALIAS·a # List all args"
 	"$ARGS_ALIAS·a <matches>* -<mismatches>* # Filter args"
@@ -68,7 +68,7 @@ function args_keymap_a {
 
 	# Otherwise, apply `filters`, then list args
 	else
-		args_plain | args_filter "${filters[@]}" | as
+		args_plain | args_filter "${filters[@]}" | args_keymap_s
 	fi
 }
 
@@ -111,7 +111,7 @@ function args_keymap_h {
 
 	# If `index` was set successfully, then list args at `index`
 	if args_history_set_index "$index"; then
-		aa
+		args_keymap_a
 
 	# Otherwise, list history entries again and show error bar
 	else
@@ -150,7 +150,7 @@ function args_keymap_m {
 	done
 
 	echo
-	echo "$map" | as
+	echo "$map" | args_keymap_s
 }
 
 function args_keymap_n {
@@ -175,7 +175,7 @@ function args_keymap_ny {
 }
 
 function args_keymap_p {
-	echo "$(<"$ARGS_YANK_FILE")" | as
+	echo "$(<"$ARGS_YANK_FILE")" | args_keymap_s
 }
 
 function args_keymap_q {

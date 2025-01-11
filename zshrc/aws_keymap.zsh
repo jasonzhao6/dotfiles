@@ -24,5 +24,5 @@ AWS_OPAL=(
 )
 
 function aws_keymap_o {
-	print -l "${AWS_OPAL[@]}" | sort | column -t | contain "$1" | as
+	print -l "${AWS_OPAL[@]}" | sort | column -t | contain "$1" | args_keymap_s
 }

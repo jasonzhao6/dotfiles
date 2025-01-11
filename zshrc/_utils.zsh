@@ -26,5 +26,5 @@ function trim { bw | cut -c $(($1 + 1))- | { [[ -z $2 ]] && cat || rev | cut -c 
 function insert_hash { awk 'NF >= 2 {col_2_index = index($0, $2); col_1 = substr($0, 1, col_2_index - 1); col_rest = substr($0, col_2_index); printf "%s# %s\n", col_1, col_rest} NF < 2 {print}'; }
 function size_of { awk "{if (length(\$${1:-0}) > max_len) max_len = length(\$${1:-0})} END {print max_len}"; }
 # | after json
-function keys { jq keys | trim_list | as; }
+function keys { jq keys | trim_list | args_keymap_s; }
 function trim_list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$//' | compact; }

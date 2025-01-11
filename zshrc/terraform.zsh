@@ -10,7 +10,7 @@ function tfir { terraform init -reconfigure; }
 function tfim { terraform init -migrate-state; }
 # Post `tfi` (In case of init error, append ` i|iu|ir|im` to retry)
 function tfp { tf_pre "$@" && terraform plan -out=tfplan; }
-function tfl { tf_pre "$@" && terraform state list | sed "s/.*/'&'/" | as; }
+function tfl { tf_pre "$@" && terraform state list | sed "s/.*/'&'/" | args_keymap_s; }
 function tfo { tf_pre "$@" && terraform output; }
 function tfn { tf_pre "$@" && terraform console; }
 function tfv { tf_pre "$@" && terraform validate; }
