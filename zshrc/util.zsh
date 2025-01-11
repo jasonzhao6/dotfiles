@@ -46,7 +46,3 @@ function oo_open {
 
 	echo "$@" | extract_urls | bw | while IFS= read -r url; do open "$url"; done
 }
-
-# | after json
-function keys { jq keys | trim_list | args_keymap_s; }
-function trim_list { sed -e 's/^\[//' -e 's/^]//' -e 's/^ *"//' -e 's/",\{0,1\}$//' | compact; }

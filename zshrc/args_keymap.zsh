@@ -59,6 +59,7 @@ ARGS_YANK_FILE="$HOME/.zshrc.args"
 ARGS_PUSHED=
 ARGS_USED_TOP_ROW=
 
+# shellcheck disable=SC2120
 function args_keymap_a {
 	local filters=("$@")
 
@@ -195,6 +196,7 @@ function args_keymap_r {
 	args_history_redo_error_bar
 }
 
+# shellcheck disable=SC2120
 function args_keymap_s {
 	# Users see the interface of this mapping as `s <matches>* -<mismatches>*`
 	# Only `so` know this interface as `s <is_soft_select> <matches>* -<mismatches>*`

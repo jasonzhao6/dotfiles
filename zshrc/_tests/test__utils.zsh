@@ -266,3 +266,48 @@ function test__size_of__variable_width_column {
 	# shellcheck disable=SC2086
 	assert "$(echo $test__ls_dash_l | size_of 5)" '5'
 }; run_with_filter test__size_of__variable_width_column
+
+function test__keys {
+	local input; input=$(
+		cat <<-eof
+			{
+			  "key1": "value1",
+			  "key2": "value2",
+			  "key3": "value3"
+			}
+		eof
+	)
+
+	assert "$(
+		echo "$input" | keys
+#which keys
+	)" "$(
+		cat <<-eof
+		     1	key1
+		     2	key2
+		     3	key3
+		eof
+	)"
+}; run_with_filter test__keys
+
+function test__trim_list {
+	local input; input=$(
+		cat <<-eof
+			[
+			  "row-1",
+			  "row-2",
+			  "row-3"
+			]
+		eof
+	)
+
+	assert "$(
+		echo "$input" | trim_list
+	)" "$(
+		cat <<-eof
+			row-1
+			row-2
+			row-3
+		eof
+	)"
+}; run_with_filter test__trim_list
