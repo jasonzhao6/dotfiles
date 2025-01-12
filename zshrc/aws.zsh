@@ -11,10 +11,6 @@ function e1 { echo_eval 'export AWS_DEFAULT_REGION=us-east-1'; }
 function e2 { echo_eval 'export AWS_DEFAULT_REGION=us-east-2'; }
 function w1 { echo_eval 'export AWS_DEFAULT_REGION=us-west-1'; }
 function w2 { echo_eval 'export AWS_DEFAULT_REGION=us-west-2'; }
-# open [ec2] / [asg] page by resource id
-function oec2 { oecc "$@"; }
-function oecc { open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$(ec2_get_id "$@")"; }
-function oasg { open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$*"; }
 # use [ssm] to ssh into ec2 by instance id, private ip, or name tag
 # [p]arameter [s]tore [g]et
 function psg { PSG=$(aws ssm get-parameter --name "$1" "$([[ -n "$2" ]] && echo --version "$2")" --query Parameter.Value --output text); [[ $PSG == \{*\} ]] && echo "$PSG" | jq || echo "$PSG"; }

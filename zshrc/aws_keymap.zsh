@@ -12,10 +12,11 @@ AWS_KEYMAP=(
 	''
 	"$AWS_ALIAS·e <prefix> # EC2 search"
 	"$AWS_ALIAS·a <prefix> # ASG search"
-	''
 	"$AWS_ALIAS·s # SSM start session with \`sudo -i\`"
 	"$AWS_ALIAS·sc # SSM start session with command"
 	"$AWS_ALIAS·sm # SSM start session"
+	"$AWS_ALIAS·oe <ec2 id> # Open new tab to the specified EC2 instance"
+	"$AWS_ALIAS·oa <asg id> # Open new tab to the specified ASG group"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
@@ -58,6 +59,17 @@ function aws_keymap_o {
 for aws_keymap_mq2 in "$HOME/.config/zsh/config.d/"*.zsh; do
 	source "${aws_keymap_mq2}"
 done; unset aws_keymap_mq2
+
+function aws_keymap_oe {
+	local id; id=$(ec2_get_id "$@")
+
+	open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$id"
+}
+function aws_keymap_oa {
+	local id=$*
+
+	open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$id"
+}
 
 function aws_keymap_q {
 	mq2 --restore
