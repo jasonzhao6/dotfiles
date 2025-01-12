@@ -2,6 +2,7 @@ export ZSHRC_TESTS_DIR="$ZSHRC_DIR/_tests"
 
 source "$ZSHRC_DIR"/_tests/__test_harness.zsh
 source "$ZSHRC_DIR"/_tests/_run_all_test_cases.zsh
+source "$ZSHRC_DIR"/_tests/_verify_keymap_definitions.zsh
 source "$ZSHRC_DIR"/_tests/_verify_keymap_ordering.zsh
 source "$ZSHRC_DIR"/_tests/_verify_test_invocations.zsh
 source "$ZSHRC_DIR"/_tests/_verify_test_ordering.zsh
@@ -34,6 +35,11 @@ if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_
 fi
 
 ZSHRC_TESTS_SECTION_NUMBER=4
+if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
+	verify_keymap_definitions_section $ZSHRC_TESTS_SECTION_NUMBER
+fi
+
+ZSHRC_TESTS_SECTION_NUMBER=5
 if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
 	verify_keymap_ordering_section $ZSHRC_TESTS_SECTION_NUMBER
 fi

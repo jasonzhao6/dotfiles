@@ -16,20 +16,20 @@ MAIN_KEYMAP=(); while IFS='' read -r line; do MAIN_KEYMAP+=("$line"); done < <(
 
 # Append keymap snapshots
 MAIN_KEYMAP+=( # TODO create these keymaps
-	''
-	"$MAIN_ALIAS·s # Show system default keymap"
-	''
-	"$MAIN_ALIAS·i # Show IntelliJ \`cmd\` keymap"
-	"$MAIN_ALIAS·ic # Show IntelliJ \`ctrl\` keymap"
-	"$MAIN_ALIAS·ia # Show IntelliJ \`alt\` keymap"
-	"$MAIN_ALIAS·if # Show IntelliJ \`fn\` keymap"
-	''
-	"$MAIN_ALIAS·m # Show TextMate keymap"
-	"$MAIN_ALIAS·n # Show Notion keymap"
-	"$MAIN_ALIAS·t # Show Terminal keymap"
+#	''
+#	"$MAIN_ALIAS s # Show system default keymap"
+#	''
+#	"$MAIN_ALIAS i # Show IntelliJ \`cmd\` keymap"
+#	"$MAIN_ALIAS ic # Show IntelliJ \`ctrl\` keymap"
+#	"$MAIN_ALIAS ia # Show IntelliJ \`alt\` keymap"
+#	"$MAIN_ALIAS if # Show IntelliJ \`fn\` keymap"
+#	''
+#	"$MAIN_ALIAS m # Show TextMate keymap"
+#	"$MAIN_ALIAS n # Show Notion keymap"
+#	"$MAIN_ALIAS t # Show Terminal keymap"
 	"$MAIN_ALIAS·vv # Show Vimium / Vimari keymap"
-	''
-	"$MAIN_ALIAS·k # Show Kinesis keymap"
+#	''
+#	"$MAIN_ALIAS k # Show Kinesis keymap"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
@@ -42,6 +42,6 @@ function main_keymap {
 # Key mappings (Alphabetized)
 #
 
-function main_keymap_b {
+function main_keymap_vv {
 	cat "$DOTFILES_DIR"/vimium/vimium-keymap.txt
 }

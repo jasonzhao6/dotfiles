@@ -4,7 +4,6 @@ AWS_ALIAS='s'
 AWS_KEYMAP=(
 	"$AWS_ALIAS·o # List Opal groups"
 	"$AWS_ALIAS·o <match> # Filter Opal groups"
-	"$AWS_ALIAS·sup <match> # Filter Opal groups"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"

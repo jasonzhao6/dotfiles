@@ -11,7 +11,7 @@ function verify_keymap_ordering_section {
 		verify_keymap_ordering "$keymap_file"
 	done
 
-	print_summary 'keymaps have alphabetized key mapping functions'
+	print_summary 'key mapping functions are alphabetized'
 }
 
 function verify_keymap_ordering {
