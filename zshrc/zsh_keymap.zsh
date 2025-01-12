@@ -10,12 +10,12 @@ ZSH_KEYMAP=(
 	''
 	"$ZSH_ALIAS·w # Which"
 	"$ZSH_ALIAS·a # List aliases"
-	"$ZSH_ALIAS·a <match> # Filter aliases"
+	"$ZSH_ALIAS·a <match>* <-mismatch>* # Filter aliases"
 	"$ZSH_ALIAS·f # List functions"
-	"$ZSH_ALIAS·f <match> # Filter functions"
+	"$ZSH_ALIAS·f <match>* <-mismatch>* # Filter functions"
 	''
 	"$ZSH_ALIAS·h # List history"
-	"$ZSH_ALIAS·h <match> # Filter history"
+	"$ZSH_ALIAS·h <match>* <-mismatch>* # Filter history"
 	"$ZSH_ALIAS·hc # Clear history"
 	"$ZSH_ALIAS·hm # Edit history file with TextMate"
 	"$ZSH_ALIAS·h1 # Do not persist history"
@@ -50,9 +50,9 @@ function zsh_keymap_f {
 }
 
 function zsh_keymap_h {
-	local pattern="$*"
+	local filters=("$@")
 
-	cut -c 16- "$HISTFILE" | egrep --ignore-case "$pattern" | sort --unique | args_keymap_s
+	cut -c 16- "$HISTFILE" | sort --unique | args_keymap_s "${filters[@]}"
 }
 
 function zsh_keymap_h0 {

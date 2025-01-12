@@ -2,12 +2,12 @@ NAV_NAMESPACE='nav_keymap'
 NAV_ALIAS='n'
 
 NAV_KEYMAP=(
-	"$NAV_ALIAS·n <matches>* -<mismatches>* # List directories & files"
-	"$NAV_ALIAS·d <matches>* -<mismatches>* # List directories"
-	"$NAV_ALIAS·f <matches>* -<mismatches>* # List files"
-	"$NAV_ALIAS·a <matches>* -<mismatches>* # List hidden directories & files"
-	"$NAV_ALIAS·ad <matches>* -<mismatches>* # List hidden directories"
-	"$NAV_ALIAS·af <matches>* -<mismatches>* # List hidden files"
+	"$NAV_ALIAS·n <match>* <-mismatch>* # List directories & files"
+	"$NAV_ALIAS·d <match>* <-mismatch>* # List directories"
+	"$NAV_ALIAS·f <match>* <-mismatch>* # List files"
+	"$NAV_ALIAS·a <match>* <-mismatch>* # List hidden directories & files"
+	"$NAV_ALIAS·ad <match>* <-mismatch>* # List hidden directories"
+	"$NAV_ALIAS·af <match>* <-mismatch>* # List hidden files"
 	''
 	"$NAV_ALIAS <directory> # Go to directory"
 	"$NAV_ALIAS·v # Go to directory in pasteboard"

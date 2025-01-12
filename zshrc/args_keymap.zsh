@@ -3,22 +3,22 @@ ARGS_ALIAS='a'
 
 ARGS_KEYMAP=(
 	"$ARGS_ALIAS·s # Save as args"
-	"$ARGS_ALIAS·s <matches>* -<mismatches>* # Save as args & filter"
+	"$ARGS_ALIAS·s <match>* <-mismatch>* # Save as args & filter"
 	"$ARGS_ALIAS·so # Save as args & soft-select the 1st column"
-	"$ARGS_ALIAS·so <matches>* -<mismatches>* # Save as args & soft-select the 1st column & filter"
+	"$ARGS_ALIAS·so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
 	''
-	'1-20 <command> ~~? # Use args 1 through 20 by number'
-	'0 <command> ~~? # Use the last arg'
+	'1-20 <command ~~?> # Use args 1 through 20 by number'
+	'0 <command ~~?> # Use the last arg'
 	''
-	"$ARGS_ALIAS·o <command> ~~? # Use a random arg"
-	"$ARGS_ALIAS·n <number> <command> ~~? # Use an arg by number"
-	"$ARGS_ALIAS·q <start> <finish> <command> ~~? # Use args within a sequence"
-	"$ARGS_ALIAS·e <command> ~~? # Use each arg in series"
-	"$ARGS_ALIAS·l <command> ~~? # Use all args in parallel"
-	"$ARGS_ALIAS·m <command> ~~? # Map args, e.g \`seq 1 10 | args_keymap_s; am echo '\$((~~ * 10))'\`"
+	"$ARGS_ALIAS·o <command ~~?> # Use a random arg"
+	"$ARGS_ALIAS·n <number> <command ~~?> # Use an arg by number"
+	"$ARGS_ALIAS·q <start> <finish> <command ~~?> # Use args within a sequence"
+	"$ARGS_ALIAS·e <command ~~?> # Use each arg in series"
+	"$ARGS_ALIAS·l <command ~~?> # Use all args in parallel"
+	"$ARGS_ALIAS·m <command ~~?> # Map args, e.g \`seq 1 10 | args_keymap_s; am echo '\$((~~ * 10))'\`"
 	''
 	"$ARGS_ALIAS·a # List all args"
-	"$ARGS_ALIAS·a <matches>* -<mismatches>* # Filter args"
+	"$ARGS_ALIAS·a <match>* <-mismatch>* # Filter args"
 	"$ARGS_ALIAS·d # Delimit columns based on the bottom row"
 	"$ARGS_ALIAS·d <letter> # Select a column based on the bottom row"
 	"$ARGS_ALIAS·t # Delimit columns based on the top row"
@@ -193,8 +193,8 @@ function args_keymap_r {
 
 # shellcheck disable=SC2120
 function args_keymap_s {
-	# Users see the interface of this mapping as `s <matches>* -<mismatches>*`
-	# Only `so` know this interface as `s <is_soft_select> <matches>* -<mismatches>*`
+	# Users see the interface of this mapping as `s <match>* <-mismatch>*`
+	# Only `so` know this interface as `s <is_soft_select> <match>* <-mismatch>*`
 	local is_soft_select=$1
 	[[ $is_soft_select == "$ARGS_SOFT_SELECT" ]] && shift || is_soft_select=0
 
