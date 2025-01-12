@@ -23,6 +23,7 @@ source "$ZSHRC_DIR/args_keymap.zsh"
 source "$ZSHRC_DIR/aws_keymap.zsh"
 source "$ZSHRC_DIR/git_keymap.zsh"
 source "$ZSHRC_DIR/main_keymap.zsh"
+source "$ZSHRC_DIR/nav_keymap.zsh"
 source "$ZSHRC_DIR/open_keymap.zsh"
 source "$ZSHRC_DIR/zsh_keymap.zsh"
 

@@ -43,7 +43,9 @@ function verify_keymap_definitions {
 	if [[ $expected_functions == "$actual_functions" ]]; then
 		functions_compared="$expected_functions"
 	else
-		functions_compared=$(diff -U999999 <(echo "$expected_functions") <(echo "$actual_functions") | bw)
+		functions_compared=$(
+			diff -U999999 <(echo "$expected_functions") <(echo "$actual_functions") | bw
+		)
 	fi
 
 	# Verify subject and test functions are defined in the same order

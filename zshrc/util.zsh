@@ -2,8 +2,6 @@
 # singles (they save into `args`)
 function d { [[ -n "$1" ]] && { D=${${${@}#*://}%%/*}; [[ -z $ZSHRC_UNDER_TESTING ]] && dig +short $D | args_keymap_s || printf "test output for\n%s" "$D" | args_keymap_s; }; }
 function f { [[ -n "$1" ]] && f_pre "$@" | sort | args_keymap_s; }
-function l { ls -l | awk '{print $9}' | args_keymap_s "$@"; } # Not taking search pattern b/c folder matches break column alignment
-function ll { ls -lA | awk '{print $9}' | egrep '^(\e\[3[0-9]m)?\.' | bw | args_keymap_s "$@"; } # Show only hidden files
 # doubles (they do not save into `args`)
 function bb { pmset sleepnow; }
 function cc { eval "$(prev_command)" | bw | ruby -e 'puts STDIN.read.strip' | pbcopy; }

@@ -35,7 +35,9 @@ function verify_keymap_ordering {
 	if [[ $mapping_functions == "$sorted_functions" ]]; then
 		functions_compared="$mapping_functions"
 	else
-		functions_compared=$(diff -U999999 <(echo "$mapping_functions") <(echo "$sorted_functions") | bw)
+		functions_compared=$(
+			diff -U999999 <(echo "$mapping_functions") <(echo "$sorted_functions") | bw
+		)
 	fi
 
 	# Verify subject and test functions are defined in the same order
