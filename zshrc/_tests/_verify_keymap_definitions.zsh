@@ -24,7 +24,10 @@ function verify_keymap_definitions {
 
 	# Find all keymap keys
 	local keymap_keys; keymap_keys=$(
-		pgrep --only-matching "(?<=$KEYMAP_DOT)\w+(?=\s)" "$keymap_file" | bw | sort --unique
+		# Ignore comment lines
+		grep --invert-match '^#' "$keymap_file" |
+			# Extract keymap keys
+			pgrep --only-matching "(?<=$KEYMAP_DOT)\w+(?=\s)" | bw | sort --unique
 	)
 
 	# Generate all expected mapping functions
