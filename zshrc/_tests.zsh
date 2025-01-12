@@ -1,7 +1,7 @@
 export ZSHRC_TESTS_DIR="$ZSHRC_DIR/_tests"
 
 source "$ZSHRC_DIR"/_tests/_test_harness.zsh
-source "$ZSHRC_DIR"/_tests/_test_helpers.zsh
+source "$ZSHRC_DIR"/_tests/_verify_test_ordering.zsh
 
 # Filter sections by number (1-5)
 ZSHRC_TESTS_SECTION_FILTER=$([[ $1 -ge 1 && $1 -le 5 ]] && echo "$1")
@@ -48,23 +48,8 @@ if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq 2 || -z $ZSHRC_TESTS_SECTION_FILTER) && -
 	ruby "$ZSHRC_DIR"/_tests/verify_test_invocations.rb
 fi
 
-#
-# 3: Verify subjects and tests are defined in the same order
-#
-
 if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq 3 || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	echo
-	echo
-	echo '3: Verify subjects and tests are defined in the same order'
-
-	init
-
-	for test_file in $(find_test_files); do
-		subject_file="${test_file/_tests\/test_}"
-		verify_ordering "$subject_file" "$test_file"
-	done
-
-	print_summary 'subjects have tests, and the tests are defined in the same order as their subjects'
+	verify_test_ordering_section 3
 fi
 
 #

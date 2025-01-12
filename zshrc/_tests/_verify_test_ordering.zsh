@@ -1,4 +1,21 @@
-function verify_ordering {
+function verify_test_ordering_section {
+	local section_number=$1
+
+	echo
+	echo
+	echo "$section_number: Verify subjects and tests are defined in the same order"
+
+	init
+
+	for test_file in $(find_test_files); do
+		subject_file="${test_file/_tests\/test_}"
+		verify_test_ordering "$subject_file" "$test_file"
+	done
+
+	print_summary 'subjects have tests; these tests are defined in the same order as their subjects'
+}
+
+function verify_test_ordering {
 	local subject_file=$1
 	local test_file=$2
 
