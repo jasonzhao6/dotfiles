@@ -2,21 +2,21 @@ GIT_NAMESPACE='git_keymap'
 GIT_ALIAS='g'
 
 GIT_KEYMAP=(
+	"$GIT_ALIAS${KEYMAP_DOT}g # Checkout the latest \`main\`"
 	"$GIT_ALIAS${KEYMAP_DOT}b # List branches"
 	"$GIT_ALIAS${KEYMAP_DOT}bb # Delete merged branches"
 	"$GIT_ALIAS${KEYMAP_DOT}bd <name> # Delete a branch by name"
 	"$GIT_ALIAS${KEYMAP_DOT}c <name> # Checkout a branch by name"
-	"$GIT_ALIAS${KEYMAP_DOT}m # Checkout the latest \`main\`"
-	"$GIT_ALIAS${KEYMAP_DOT}n <name> # Create a new branch from the latest \`main\`"
+	"$GIT_ALIAS${KEYMAP_DOT}n <name> # Create a new branch by name"
 	''
 	"$GIT_ALIAS${KEYMAP_DOT}d # Git diff"
 	"$GIT_ALIAS${KEYMAP_DOT}t # Git status"
-	"$GIT_ALIAS${KEYMAP_DOT}cn # Create a new commit"
-	"$GIT_ALIAS${KEYMAP_DOT}ca # Amend the previous commit"
-	"$GIT_ALIAS${KEYMAP_DOT}cr # Reword the previous commit"
-	"$GIT_ALIAS${KEYMAP_DOT}ce # Create an empty commit"
-	"$GIT_ALIAS${KEYMAP_DOT}cp # Cherry pick a commit"
-	"$GIT_ALIAS${KEYMAP_DOT}cf # Fix up a commit"
+	"$GIT_ALIAS${KEYMAP_DOT}j # Create a new commit"
+	"$GIT_ALIAS${KEYMAP_DOT}e # Create an empty commit"
+	"$GIT_ALIAS${KEYMAP_DOT}m # Amend the previous commit"
+	"$GIT_ALIAS${KEYMAP_DOT}w # Reword the previous commit"
+	"$GIT_ALIAS${KEYMAP_DOT}p # Cherry pick a commit"
+	"$GIT_ALIAS${KEYMAP_DOT}f # Fix up a commit"
 	''
 	"$GIT_ALIAS${KEYMAP_DOT}r <number> # Rebase the last <number> commits"
 	"$GIT_ALIAS${KEYMAP_DOT}r # Rebase with the latest main"
@@ -88,39 +88,29 @@ function git_keymap_c {
 	git checkout "$name"
 }
 
-function git_keymap_ca {
-	git add --all
-	git commit --amend --no-edit
+function git_keymap_d {
+	git diff
 }
 
-function git_keymap_ce {
+function git_keymap_e {
 	git commit --allow-empty -m 're-run: Empty commit to trigger build'
 }
 
-function git_keymap_cf {
+function git_keymap_f {
 	local sha=$1
 
 	git add --all; git commit --fixup "$sha"
 }
 
-function git_keymap_cn {
+function git_keymap_g {
+	git checkout main || git checkout master
+	git pull
+	git status
+}
+
+function git_keymap_j {
 	git add --all
 	git commit
-}
-
-function git_keymap_cp {
-	local sha=$1
-
-	git cherry-pick "$sha"
-}
-
-function git_keymap_cr {
-	git add --all
-	git commit --amend
-}
-
-function git_keymap_d {
-	git diff
 }
 
 function git_keymap_l {
@@ -128,14 +118,19 @@ function git_keymap_l {
 }
 
 function git_keymap_m {
-	git checkout main || git checkout master
-	git pull
-	git status
+	git add --all
+	git commit --amend --no-edit
 }
 
 function git_keymap_n {
 	git_keymap_m
 	git checkout -b "$@"
+}
+
+function git_keymap_p {
+	local sha=$1
+
+	git cherry-pick "$sha"
 }
 
 # TODO split into multiple keys
@@ -196,6 +191,11 @@ function git_keymap_u {
 	local number=$1
 
 	git reset --soft HEAD~"$number"
+}
+
+function git_keymap_w {
+	git add --all
+	git commit --amend
 }
 
 function git_keymap_z {
