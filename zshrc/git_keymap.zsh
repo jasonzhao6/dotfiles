@@ -18,12 +18,12 @@ GIT_KEYMAP=(
 	"$GIT_ALIAS${KEYMAP_DOT}p # Cherry pick a commit"
 	"$GIT_ALIAS${KEYMAP_DOT}f # Fix up a commit"
 	''
-	"$GIT_ALIAS${KEYMAP_DOT}r <number> # Rebase the last <number> commits"
-	"$GIT_ALIAS${KEYMAP_DOT}r # Rebase with the latest main"
-	"$GIT_ALIAS${KEYMAP_DOT}rm # Rebase with the latest master"
-	"$GIT_ALIAS${KEYMAP_DOT}ru # Rebase with the latest upstream"
-	"$GIT_ALIAS${KEYMAP_DOT}ra # Rebase abort"
-	"$GIT_ALIAS${KEYMAP_DOT}rc # Rebase continue"
+	"$GIT_ALIAS${KEYMAP_DOT}x <number> # Rebase the last <number> commits"
+	"$GIT_ALIAS${KEYMAP_DOT}x # Rebase with the latest main"
+	"$GIT_ALIAS${KEYMAP_DOT}xm # Rebase with the latest master"
+	"$GIT_ALIAS${KEYMAP_DOT}xu # Rebase with the latest upstream"
+	"$GIT_ALIAS${KEYMAP_DOT}xc # Rebase continue"
+	"$GIT_ALIAS${KEYMAP_DOT}xa # Rebase abort"
 	''
 	"$GIT_ALIAS${KEYMAP_DOT}u # Undo the last commit"
 	"$GIT_ALIAS${KEYMAP_DOT}u <number> # Undo the last <number> commits"
@@ -133,45 +133,6 @@ function git_keymap_p {
 	git cherry-pick "$sha"
 }
 
-# TODO split into multiple keys
-function git_keymap_r {
-	local gxx_remote; gxx_remote=origin
-	local gxx_branch; gxx_branch=main
-	local gxx_head_num
-
-	for var in "$@"; do
-		case $var in
-			u) gxx_remote=upstream;;
-			m) gxx_branch=master;;
-			*) gxx_head_num=$var;;
-		esac
-	done
-
-	if [[ -n $gxx_head_num ]]; then
-		# The `+ 1` is to count the `fixup!` commit itself
-		git rebase --interactive --autosquash HEAD~$((gxx_head_num + 1))
-	else
-		git fetch "$gxx_remote" "$gxx_branch" && git rebase --interactive --autosquash "$gxx_remote/$gxx_branch"
-	fi
-}
-
-function git_keymap_ra {
-	git rebase --abort
-}
-
-function git_keymap_rc {
-	git add --all
-	git rebase --continue
-}
-
-function git_keymap_rm {
-	git_keymap_r m
-}
-
-function git_keymap_ru {
-	git_keymap_r u
-}
-
 function git_keymap_s {
 	local message="$*"
 
@@ -196,6 +157,45 @@ function git_keymap_u {
 function git_keymap_w {
 	git add --all
 	git commit --amend
+}
+
+# TODO split into multiple keys
+function git_keymap_x {
+	local gxx_remote; gxx_remote=origin
+	local gxx_branch; gxx_branch=main
+	local gxx_head_num
+
+	for var in "$@"; do
+		case $var in
+			u) gxx_remote=upstream;;
+			m) gxx_branch=master;;
+			*) gxx_head_num=$var;;
+		esac
+	done
+
+	if [[ -n $gxx_head_num ]]; then
+		# The `+ 1` is to count the `fixup!` commit itself
+		git rebase --interactive --autosquash HEAD~$((gxx_head_num + 1))
+	else
+		git fetch "$gxx_remote" "$gxx_branch" && git rebase --interactive --autosquash "$gxx_remote/$gxx_branch"
+	fi
+}
+
+function git_keymap_xa {
+	git rebase --abort
+}
+
+function git_keymap_xc {
+	git add --all
+	git rebase --continue
+}
+
+function git_keymap_xm {
+	git_keymap_r m
+}
+
+function git_keymap_xu {
+	git_keymap_r u
 }
 
 function git_keymap_z {
