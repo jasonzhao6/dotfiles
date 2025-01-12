@@ -5,9 +5,6 @@ function gp { git push; }
 function gf { git push --force; }
 # [S]tash# Rebase
 # [U]ndo and / or discard
-function gu { git reset --soft HEAD~"$1"; }
-function gz { git add --all; git reset --hard; git status; }
-function guz { gu "$1"; gz; }
 # G[r]ep
 # (E.g `gr` to list all, `gr foo and bar` to filter)
 function gr { local greps; greps="--grep='${*// /' --grep='}'"; eval "git log $GR_FIRST_PARENT ${1:+--all} $greps --all-match --extended-regexp --regexp-ignore-case --pretty=format:\"%C(yellow)%h %C(magenta)%as %C(green)'%s' %C(cyan)%an\""; }

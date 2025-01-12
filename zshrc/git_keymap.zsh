@@ -25,6 +25,11 @@ GIT_KEYMAP=(
 	"$GIT_ALIAS·ra # Rebase abort"
 	"$GIT_ALIAS·rc # Rebase continue"
 	''
+	"$GIT_ALIAS·u # Undo the last commit"
+	"$GIT_ALIAS·u <number> # Undo the last <number> commits"
+	"$GIT_ALIAS·z # Discard uncommitted changes"
+	"$GIT_ALIAS·z <number> # Discard uncommitted changes & the last <number> commits"
+	''
 	"$GIT_ALIAS·s # Git stash"
 	"$GIT_ALIAS·s <message> # Git stash with message"
 	"$GIT_ALIAS·a # Git apply the last stash"
@@ -184,5 +189,23 @@ function git_keymap_sc {
 }
 
 function git_keymap_t {
+	git status
+}
+
+function git_keymap_u {
+	local number=$1
+
+	git reset --soft HEAD~"$number"
+}
+
+function git_keymap_z {
+	local number=$1
+
+	if [[ -n $number ]]; then
+		git_keymap_u "$number"
+	fi
+
+	git add --all
+	git reset --hard
 	git status
 }
