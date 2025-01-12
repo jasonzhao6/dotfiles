@@ -213,23 +213,28 @@ function keymap_print {
 	for i in {1..3}; do
 		# shellcheck disable=SC2034 # Use via `${(P)row_input}`
 		row_input=KEYMAP_PRINT_ROW_${i}
-		row_output+="\n  "
+		row_output+="\n "
 
 		for char in ${(P)row_input}; do
 			if [[ $char == '_' ]]; then
 				row_output+='    '
 			elif [[ -n ${main_keymap_keys[$char]} ]]; then
-				row_output+="  $($KEYMAP_COLOR "$char") "
+				row_output+=" $($KEYMAP_COLOR "[$char]")"
 			elif [[ -z ${current_keymap_keys[$char]} ]]; then
 				row_output+="  $(gray_fg "$char") "
 			elif [[ ${current_keymap_keys[$char]} -eq 1 ]]; then
-				row_output+="  $char "
+				row_output+=" <$char>"
 			else
-				row_output+="  $char+"
+				row_output+=" [$char]"
 			fi
 		done
 	done
 	echo "$row_output"
+
+	# Print keymap legend
+	echo
+	gray_fg '   <> indicates key has one mapping function'
+	gray_fg '   [] indicates key has multiple mapping function'
 }
 
 function keymap_print_entry {
