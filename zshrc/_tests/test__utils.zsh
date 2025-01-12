@@ -79,6 +79,10 @@ function test__paste_when_empty__with_two_args {
 # Skip: Cannot test b/c `fc -l` throws 'no such event' error
 # function test__prev_command
 
+function test__size_of {
+	assert "$(size_of "$test__ls_dash_l")" '64'
+}; run_with_filter test__size_of
+
 function test__bw {
 	assert "$(echo "\e[30m\e[47m...\e[0m" | bw)" '...'
 }; run_with_filter test__bw

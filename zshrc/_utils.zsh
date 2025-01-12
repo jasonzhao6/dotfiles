@@ -69,6 +69,12 @@ function prev_command {
 	fc -ln -1
 }
 
+function size_of {
+	local string=$1
+
+	echo -n "$string" | size
+}
+
 function zprod_start {
 	zmodload zsh/zprof
 }
@@ -153,6 +159,7 @@ function insert_hash {
 	'
 }
 
+# shellcheck disable=SC2120 # `column_index` is passed in outside of this file
 function size {
 	# Defaults to `0`, which is all columns
 	local column_index=${1:-0}
