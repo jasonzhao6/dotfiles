@@ -1,14 +1,3 @@
-# Go up folders
-function .. { cd ..; }
-function ... { cd ../..; }
-function .... { cd ../../..; }
-function ..... { cd ../../../..; }
-function ...... { cd ../../../../..; }
-function ....... { cd ../../../../../..; }
-function ........ { cd ../../../../../../..; }
-function ......... { cd ../../../../../../../..; }
-function .......... { cd ../../../../../../../../..; }
-
 # Shortcuts to mac folders
 function cdl { cd ~/Downloads || true; }
 function cdm { cd ~/Documents || true; }

@@ -11,6 +11,10 @@ NAV_KEYMAP=(
 	"$NAV_ALIAS·a <matches>* -<mismatches>* # List hidden directories & files"
 	"$NAV_ALIAS·ad <matches>* -<mismatches>* # List hidden directories"
 	"$NAV_ALIAS·af <matches>* -<mismatches>* # List hidden files"
+	''
+	"$NAV_ALIAS·u # Go up one directory"
+	"$NAV_ALIAS·uu # Go up two directories"
+	"$NAV_ALIAS·uuu # Go up three directories"
 )
 
 keymap_init $NAV_NAMESPACE $NAV_ALIAS "${NAV_KEYMAP[@]}"
@@ -73,6 +77,18 @@ function nav_keymap_n {
 	local filters=("$@")
 
 	ls -l | awk '{print $9}' | args_keymap_s "${filters[@]}"
+}
+
+function nav_keymap_u {
+	cd ..
+}
+
+function nav_keymap_uu {
+	cd ../..
+}
+
+function nav_keymap_uuu {
+	cd ../../..
 }
 
 function nav_keymap_v {

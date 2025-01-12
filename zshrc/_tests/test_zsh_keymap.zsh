@@ -22,14 +22,14 @@ function test__zsh_keymap_f {
 	)" '1'
 }; run_with_filter test__zsh_keymap_f
 
-function test__zsh_keymap_f__when_counting_._functions {
+function test__zsh_keymap_f__when_counting_0_ending_functions {
 	assert "$(
-		local count; count=$(zsh_keymap_f '^\.\.' | wc -l)
-		local actual_count; actual_count=$(egrep --count '^function \.+ {' "$ZSHRC_DIR"/cd.zsh)
+		local count; count=$(zsh_keymap_f '0$' | wc -l)
 
-		[[ $count -eq actual_count ]] && echo 1
+		# `3`: `10, 20, 0` from `args_shortcuts.zsh`
+		[[ $count -ge 3 ]] && echo 1
 	)" '1'
-}; run_with_filter test__zsh_keymap_f__when_counting_._functions
+}; run_with_filter test__zsh_keymap_f__when_counting_0_ending_functions
 
 function test__zsh_keymap_h {
 	local history_entries; history_entries=$(

@@ -52,7 +52,7 @@ function fail {
 	((total++))
 	echo -n f
 
-	if [[ -n $output && -n $expected ]]; then
+	if [[ -n $output || -n $expected ]]; then
 		debug+="\n\n$(red_bg debug): $name\n"
 		debug+=$(diff -u <(echo "$expected") <(echo "$output") | sed '/--- /d; /+++ /d; /@@ /d')
 	fi

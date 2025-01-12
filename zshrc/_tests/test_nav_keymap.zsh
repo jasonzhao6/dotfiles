@@ -78,6 +78,39 @@ function test__nav_keymap_n__with_filters {
 	)"
 }; run_with_filter test__nav_keymap_n__with_filters
 
+function test__nav_keymap_u {
+	assert "$(
+		rm -rf /tmp/_nav_keymap_u
+		mkdir -p /tmp/_nav_keymap_u/1
+		cd /tmp/_nav_keymap_u/1 || return
+		nav_keymap_u
+		pwd
+		rm -rf /tmp/_nav_keymap_u
+	)" '/tmp/_nav_keymap_u'
+}; run_with_filter test__nav_keymap_u
+
+function test__nav_keymap_uu {
+	assert "$(
+		rm -rf /tmp/_nav_keymap_uu
+		mkdir -p /tmp/_nav_keymap_uu/1/2
+		cd /tmp/_nav_keymap_uu/1/2 || return
+		nav_keymap_uu
+		pwd
+		rm -rf /tmp/_nav_keymap_uu
+	)" '/tmp/_nav_keymap_uu'
+}; run_with_filter test__nav_keymap_uu
+
+function test__nav_keymap_uuu {
+	assert "$(
+		rm -rf /tmp/_nav_keymap_uuu
+		mkdir -p /tmp/_nav_keymap_uuu/1/2/3
+		cd /tmp/_nav_keymap_uuu/1/2/3 || return
+		nav_keymap_uuu
+		pwd
+		rm -rf /tmp/_nav_keymap_uuu
+	)" '/tmp/_nav_keymap_uuu'
+}; run_with_filter test__nav_keymap_uuu
+
 function test__nav_keymap_v__with_dir {
 	assert "$(nav_keymap_v ~/Documents 2>&1; pwd)" "$HOME/Documents"
 }; run_with_filter test__nav_keymap_v__with_dir
