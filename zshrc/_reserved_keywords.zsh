@@ -12,6 +12,8 @@ RESERVED[ac]=0
 RESERVED[ar]=0
 RESERVED[as]=0
 RESERVED[at]=0
+RESERVED[gc]=0
+RESERVED[gcp]=0
 RESERVED[sa]=0
 
 # This list was copied from https://zsh.sourceforge.io/Doc/Release/Shell-Grammar.html#Reserved-Words
@@ -476,7 +478,6 @@ RESERVED[gbase32]=1
 RESERVED[gbase64]=1
 RESERVED[gbasename]=1
 RESERVED[gbasenc]=1
-RESERVED[gc]=1
 RESERVED[gcat]=1
 RESERVED[gcc]=1
 RESERVED[gchcon]=1
@@ -488,7 +489,6 @@ RESERVED[gcksum]=1
 RESERVED[gcomm]=1
 RESERVED[gcore]=1
 RESERVED[gcov]=1
-RESERVED[gcp]=1
 RESERVED[gcsplit]=1
 RESERVED[gcut]=1
 RESERVED[gd2copypal]=1
