@@ -21,6 +21,7 @@ AWS_KEYMAP=(
 	"$AWS_ALIAS·mg <name> # Secret Manager get"
 	"$AWS_ALIAS·md <name> # Secret Manager delete"
 	"$AWS_ALIAS·pg <name> # Parameter Store get"
+	"$AWS_ALIAS·t <name> # STS decode"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
@@ -162,4 +163,10 @@ function aws_keymap_sc { # (e.g `ssm-run date <instance-id>`, or `each ssm-run d
 
 function aws_keymap_sm {
 	aws ssm start-session --target "$(ec2_get_id "$@")"
+}
+
+function aws_keymap_t {
+	local message=$*
+
+	aws sts decode-authorization-message --encoded-message "$message" --output text | jq .
 }
