@@ -153,13 +153,13 @@ function insert_hash {
 	'
 }
 
-function size_of {
-	local column=$1
+function size_of_column {
+	local column=${1:-0}
 
 	awk '
 		{
-			if (length($'"${column:-0}"') > max_len) {
-				max_len = length($'"${column:-0}"')
+			if (length($'"$column"') > max_len) {
+				max_len = length($'"$column"')
 			}
 		}
 		END {
