@@ -2,8 +2,8 @@ GIT_NAMESPACE='git_keymap'
 GIT_ALIAS='h'
 
 GIT_KEYMAP=(
-	"$GIT_ALIAS·on # Create a new PR, then open tab to it"
-	"$GIT_ALIAS·og # Open tab to create a new gist"
+	"$GIT_ALIAS·np # Create a new PR, then open tab to it"
+	"$GIT_ALIAS·ng # Create a new gist, then open tab to it"
 	''
 	"$GIT_ALIAS·oc # Open tab to the latest commit"
 	"$GIT_ALIAS·oc <sha> # Open tab to the specified commit"
@@ -27,21 +27,18 @@ function git_keymap_oc {
 	open https://"$(domain)"/"$(org)"/"$(repo)"/commit/"$1"
 }
 
-# To be overwritten by `$ZSHRC_SECRETS`
-GIST='https://gist.git_keymaphub.com'
-
-function git_keymap_og {
-	open $GIST
-}
-
-function git_keymap_on {
-	gp && gh pr create --fill && gh pr view --web
-}
-
 function git_keymap_op {
 	open https://"$(domain)"/"$(org)"/"$(repo)"/pull/"$1"
 }
 
 function git_keymap_or {
 	open https://"$(domain)"/"$(org)"/"${*:-$(repo)}"
+}
+
+function git_keymap_ng {
+	pbpaste | gh gist create --web
+}
+
+function git_keymap_np {
+	gp && gh pr create --fill && gh pr view --web
 }
