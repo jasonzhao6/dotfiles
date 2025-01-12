@@ -21,12 +21,14 @@ function args_history_init {
 	[[ -z $ARGS_HISTORY_MAX ]] && args_history_reset
 }
 
+ARGS_HISTORY_TAIL_NOT_SET=-1
+
 function args_history_reset {
 	ARGS_HISTORY=()
 	ARGS_HISTORY_MAX=100
 	ARGS_HISTORY_INDEX=$ARGS_HISTORY_MAX # The first element will be at index 1
 	ARGS_HISTORY_HEAD=$ARGS_HISTORY_INDEX
-	ARGS_HISTORY_TAIL=-1
+	ARGS_HISTORY_TAIL=$ARGS_HISTORY_TAIL_NOT_SET
 	ARGS_HISTORY_UNDO_EXCEEDED=0
 	ARGS_HISTORY_REDO_EXCEEDED=0
 }
@@ -46,7 +48,7 @@ function args_history_push {
 	[[ $ARGS_HISTORY_TAIL -eq 0 ]] && ARGS_HISTORY_TAIL=1
 
 	# If `tail` has not be set yet, set it to `index`
-	[[ $ARGS_HISTORY_TAIL -eq -1 ]] && ARGS_HISTORY_TAIL=$ARGS_HISTORY_INDEX
+	[[ $ARGS_HISTORY_TAIL -eq $ARGS_HISTORY_TAIL_NOT_SET ]] && ARGS_HISTORY_TAIL=$ARGS_HISTORY_INDEX
 }
 
 function args_history_current {
@@ -61,7 +63,9 @@ function args_history_undo {
 	# To undo, move only `index` backward, up to `tail`, inclusive
 	local args_history_prev; args_history_prev=$(args_history_decrement "$ARGS_HISTORY_INDEX")
 
-	if [[ $ARGS_HISTORY_INDEX -ne $ARGS_HISTORY_TAIL ]]; then
+	if [[ $ARGS_HISTORY_INDEX -ne $ARGS_HISTORY_TAIL ]] &&
+		[[ $ARGS_HISTORY_TAIL -ne $ARGS_HISTORY_TAIL_NOT_SET ]]; then
+
 		ARGS_HISTORY_INDEX=$args_history_prev
 	else
 		ARGS_HISTORY_UNDO_EXCEEDED=1

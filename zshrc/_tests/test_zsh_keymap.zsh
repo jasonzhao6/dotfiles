@@ -123,7 +123,7 @@ function test__zsh_keymap_w {
 
 function test__zsh_keymap_w__when_program_is_an_alias {
 	assert "$(
-		zsh_keymap_w zw | strip_right
+		zsh_keymap_w zw
 	)" "$(
 		cat <<-eof
 

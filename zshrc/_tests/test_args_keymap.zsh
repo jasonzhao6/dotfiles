@@ -651,6 +651,18 @@ function test__args_keymap_q__with_multiple_substitutions {
 	)"
 }; run_with_filter test__args_keymap_q__with_multiple_substitutions
 
+function test__args_keymap_r__when_undoing_empty_history {
+	assert "$(
+		args_keymap_hc
+		args_keymap_r
+	)" "$(
+		cat <<-eof
+
+			$(red_bar 'Reached the end of redo history')
+		eof
+	)"
+}; run_with_filter test__args_keymap_r__when_undoing_empty_history
+
 function test__args_keymap_r__when_redoing_x2 {
 	assert "$(
 		seq 1 2 | args_keymap_s > /dev/null
@@ -827,6 +839,18 @@ function test__args_keymap_u {
 		eof
 	)"
 }; run_with_filter test__args_keymap_u
+
+function test__args_keymap_u__when_undoing_empty_history {
+	assert "$(
+		args_keymap_hc
+		args_keymap_u
+	)" "$(
+		cat <<-eof
+
+			$(red_bar 'Reached the end of undo history')
+		eof
+	)"
+}; run_with_filter test__args_keymap_u__when_undoing_empty_history
 
 function test__args_keymap_u__when_undoing_d_with_headers {
 	assert "$(

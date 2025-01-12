@@ -13,7 +13,8 @@ function args_plain {
 }
 
 function args_list {
-	args_history_current | nl
+	# Strip any trailing whitespace added by `nl`
+	args_history_current | nl | strip_right
 }
 
 function args_list_plain {
