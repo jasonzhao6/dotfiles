@@ -1,6 +1,6 @@
 function test__zsh_keymap_a {
 	assert "$(
-		local count; count=$(za | wc -l)
+		local count; count=$(zsh_keymap_a | wc -l)
 		local min_count; min_count=$(grep --count '^\talias ' "$ZSHRC_DIR"/colors.zsh)
 
 		[[ $count -ge $min_count ]] && echo 1
@@ -9,7 +9,7 @@ function test__zsh_keymap_a {
 
 function test__zsh_keymap_a__when_counting_greps {
 	assert "$(
-		local count; count=$(za grep | wc -l)
+		local count; count=$(zsh_keymap_a grep | wc -l)
 		local actual_count; actual_count=$(grep --count '^\talias.*grep' "$ZSHRC_DIR"/colors.zsh)
 
 		[[ $count -eq actual_count ]] && echo 1
@@ -18,13 +18,13 @@ function test__zsh_keymap_a__when_counting_greps {
 
 function test__zsh_keymap_f {
 	assert "$(
-		[[ $(zf | wc -l) -gt 10 ]] && echo 1
+		[[ $(zsh_keymap_f | wc -l) -gt 10 ]] && echo 1
 	)" '1'
 }; run_with_filter test__zsh_keymap_f
 
 function test__zsh_keymap_f__when_counting_._functions {
 	assert "$(
-		local count; count=$(zf '^\.\.' | wc -l)
+		local count; count=$(zsh_keymap_f '^\.\.' | wc -l)
 		local actual_count; actual_count=$(egrep --count '^function \.+ {' "$ZSHRC_DIR"/cd.zsh)
 
 		[[ $count -eq actual_count ]] && echo 1

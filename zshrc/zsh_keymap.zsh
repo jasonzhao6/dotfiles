@@ -37,12 +37,16 @@ function zsh_keymap {
 #
 
 function zsh_keymap_a {
-	alias | contain "$1"
+	local filters=("$@")
+
+	alias | args_keymap_s "${filters[@]}"
 }
 
 function zsh_keymap_f {
+	local filters=("$@")
+
 	# Identify functions by the ` () {` suffix, then trim it
-	typeset -f | grep ' () {$' | contain "$1" | trim 0 5
+	typeset -f | grep ' () {$' | trim 0 5 | args_keymap_s "${filters[@]}"
 }
 
 function zsh_keymap_h {
