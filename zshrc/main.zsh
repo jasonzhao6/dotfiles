@@ -29,7 +29,6 @@ source "$ZSHRC_DIR/open_keymap.zsh"
 source "$ZSHRC_DIR/zsh_keymap.zsh"
 
 # Load non-keymaps
-source "$ZSHRC_DIR/git.zsh"
 source "$ZSHRC_DIR/kubectl.zsh"
 source "$ZSHRC_DIR/terraform.zsh"
 source "$ZSHRC_DIR/util.zsh"

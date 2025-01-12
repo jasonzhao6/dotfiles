@@ -41,6 +41,10 @@ GIT_KEYMAP=(
 	"$GIT_ALIAS${KEYMAP_DOT}r <match>* # Filter logs"
 	"$GIT_ALIAS${KEYMAP_DOT}rr # List first parent logs"
 	"$GIT_ALIAS${KEYMAP_DOT}rr <match>* # Filter first parent logs"
+	''
+	"$GIT_ALIAS${KEYMAP_DOT}P # Pull"
+	"$GIT_ALIAS${KEYMAP_DOT}p # Push"
+	"$GIT_ALIAS${KEYMAP_DOT}f # Force push"
 )
 
 keymap_init $GIT_NAMESPACE $GIT_ALIAS "${GIT_KEYMAP[@]}"
@@ -101,6 +105,10 @@ function git_keymap_e {
 	git commit --allow-empty -m 're-run: Empty commit to trigger build'
 }
 
+function git_keymap_f {
+	git push --force
+}
+
 function git_keymap_g {
 	git checkout main || git checkout master
 	git pull
@@ -130,6 +138,14 @@ function git_keymap_m {
 function git_keymap_n {
 	git_keymap_m
 	git checkout -b "$@"
+}
+
+function git_keymap_p {
+	git push
+}
+
+function git_keymap_P {
+	git pull
 }
 
 function git_keymap_r {
