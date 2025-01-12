@@ -14,9 +14,9 @@ ZSHRC_UNDER_PROFILING= # When profiling, set to 1; otherwise, set to <empty>
 source "$ZSHRC_DIR/colors.zsh"; color
 
 # Load helpers
+source "$ZSHRC_DIR/_utils.zsh" # Load general utils first
 source "$ZSHRC_DIR/_keymap.zsh"
 source "$ZSHRC_DIR/_reserved_keywords.zsh"
-source "$ZSHRC_DIR/_utils.zsh"
 
 # Load keymaps
 source "$ZSHRC_DIR/args_keymap.zsh"

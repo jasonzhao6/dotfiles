@@ -1,5 +1,6 @@
 KEYMAP_COLOR='cyan_fg'
 KEYMAP_PROMPT=$($KEYMAP_COLOR '  $')
+KEYMAP_PROMPT_BLANK=$(printf "%$(size_of "$KEYMAP_PROMPT")s")
 KEYMAP_ALIAS='_PLACEHOLDER_'
 KEYMAP_DOT='·'
 KEYMAP_DOT_POINTER='^'
@@ -241,12 +242,18 @@ function keymap_print_entry {
 	local entry=$1
 	local command_size=$2
 
+	local prompt=$KEYMAP_PROMPT
 	local command="${entry% \#*}"
+
+	# If `entry` starts with `#`, clear `prompt` and `command`
+	[[ $entry = \#* ]] && prompt=$KEYMAP_PROMPT_BLANK && command=
+
+	# If `entry` has `#`, extract `comment`
 	local comment; [[ $entry = *\#* ]] && comment="# ${entry#*\# }"
 
 	# Print with color
-	if [[ -n $command ]]; then
-		printf "%s %-*s %s\n" "$KEYMAP_PROMPT" "$command_size" "$command" "$(gray_fg "$comment")"
+	if [[ -n $command || -n $comment ]]; then
+		printf "%s %-*s %s\n" "$prompt" "$command_size" "$command" "$(gray_fg "$comment")"
 
 	# Allow empty line as separators between different sections of a keymap
 	else

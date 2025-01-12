@@ -7,7 +7,8 @@ ARGS_KEYMAP=(
 	"$ARGS_ALIAS·so # Save as args & soft-select the 1st column"
 	"$ARGS_ALIAS·so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
 	''
-	'1-20 <command ~~?> # Use args 1 through 20 by number'
+	'# (Namespace-less)'
+	'<1-20> <command ~~?> # Use args 1 through 20'
 	'0 <command ~~?> # Use the last arg'
 	''
 	"$ARGS_ALIAS·o <command ~~?> # Use a random arg"
