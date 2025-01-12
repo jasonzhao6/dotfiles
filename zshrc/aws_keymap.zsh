@@ -17,7 +17,7 @@ function aws_keymap {
 # Key mappings (Alphabetized)
 #
 
-# To be overwritten by `$ZSH_SECRETS`
+# To be overwritten by `$ZSHRC_SECRETS`
 AWS_OPAL=(
 	'non-secret-placeholder-1 url-1'
 	'non-secret-placeholder-2 url-2'

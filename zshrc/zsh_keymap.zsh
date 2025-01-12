@@ -104,7 +104,7 @@ function zsh_keymap_P {
 }
 
 function zsh_keymap_s {
-	mate "$ZSH_SECRETS"
+	mate "$ZSHRC_SECRETS"
 }
 
 function zsh_keymap_t {
@@ -115,22 +115,22 @@ function zsh_keymap_w {
 	which "$1" | args_keymap_s
 }
 
-ZSH_SECRETS_DIR="$HOME/Downloads/_Archive/zsh/.zshrc.secrets"
-ZSH_SECRETS_LATEST="$ZSH_SECRETS_DIR/latest.txt"
+ZSHRC_SECRETS_DIR="$HOME/Downloads/_Archive/zsh/.zshrc.secrets"
+ZSHRC_SECRETS_LATEST="$ZSHRC_SECRETS_DIR/latest.txt"
 
 function zsh_keymap_z {
 	source ~/.zshrc
 
-	# Whenever `ZSH_SECRETS` changes, take a snapshot
-	if [[ -f $ZSH_SECRETS ]]; then
+	# Whenever `ZSHRC_SECRETS` changes, take a snapshot
+	if [[ -f $ZSHRC_SECRETS ]]; then
 		# Create a copy if there is not one already
-		[[ ! -f $ZSH_SECRETS_LATEST ]] && cp "$ZSH_SECRETS" "$ZSH_SECRETS_LATEST"
+		[[ ! -f $ZSHRC_SECRETS_LATEST ]] && cp "$ZSHRC_SECRETS" "$ZSHRC_SECRETS_LATEST"
 
 		# Do nothing if the copy is already the latest
-		if cmp -s "$ZSH_SECRETS" "$ZSH_SECRETS_LATEST"; then return; fi
+		if cmp -s "$ZSHRC_SECRETS" "$ZSHRC_SECRETS_LATEST"; then return; fi
 
 		# Otherwise, update the copy and take a snapshot
-		cp "$ZSH_SECRETS" "$ZSH_SECRETS_LATEST"
-		cp "$ZSH_SECRETS" "$ZSH_SECRETS_DIR/$(date +'%y.%m.%d').txt"
+		cp "$ZSHRC_SECRETS" "$ZSHRC_SECRETS_LATEST"
+		cp "$ZSHRC_SECRETS" "$ZSHRC_SECRETS_DIR/$(date +'%y.%m.%d').txt"
 	fi
 }

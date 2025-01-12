@@ -27,7 +27,7 @@ function git_keymap_oc {
 	open https://"$(domain)"/"$(org)"/"$(repo)"/commit/"$1"
 }
 
-# To be overwritten by `$ZSH_SECRETS`
+# To be overwritten by `$ZSHRC_SECRETS`
 GIST='https://gist.git_keymaphub.com'
 
 function git_keymap_og {

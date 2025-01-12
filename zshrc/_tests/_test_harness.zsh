@@ -31,7 +31,7 @@ function assert {
 }
 
 function run_with_filter {
-	[[ -z $test_filter || $* == *$test_filter* ]] && "$@"
+	[[ -z $ZSHRC_TEST_NAME_FILTER || $* == *$ZSHRC_TEST_NAME_FILTER* ]] && "$@"
 }
 
 function print_summary {

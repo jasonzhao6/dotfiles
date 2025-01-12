@@ -1,14 +1,14 @@
 export DOTFILES_DIR="$HOME/gh/jasonzhao6/dotfiles"
 export ZSHRC_DIR="$DOTFILES_DIR/zshrc"
-export ZSH_SECRETS="$HOME/.zshrc.secrets"
+export ZSHRC_SECRETS="$HOME/.zshrc.secrets"
 
-ZSH_PROFILE_LOAD_TIME= # When to profiling, set to <empty>
+ZSHRC_UNDER_PROFILING= # When profiling, set to 1; otherwise, set to <empty>
 
-# Profile load time: Start
-[[ -z $ZSHRC_UNDER_TEST && -n $ZSH_PROFILE_LOAD_TIME ]] && zmodload zsh/zprof
+# Profile loading time: Start
+[[ -z $ZSHRC_UNDER_TEST && -n $ZSHRC_UNDER_PROFILING ]] && zmodload zsh/zprof
 
-# Track load time: Start
-[[ -z $ZSHRC_UNDER_TEST ]] && ZSHRC_START=$(gdate +%s.%2N)
+# Track loading time: Start
+[[ -z $ZSHRC_UNDER_TEST ]] && ZSHRC_LOAD_TIME_START=$(gdate +%s.%2N)
 
 # Set color aliases early so they can expand in subsequent function definitions
 source "$ZSHRC_DIR/colors.zsh"; color
@@ -38,11 +38,11 @@ source "$ZSHRC_DIR/zsh_arrow_keys.zsh"
 source "$ZSHRC_DIR/zsh_history.zsh"
 source "$ZSHRC_DIR/zsh_prompt.zsh"
 
-# Overwrite placeholders with secret values from `ZSH_SECRETS`
-[[ -z $ZSHRC_UNDER_TEST && -f $ZSH_SECRETS ]] && source "$ZSH_SECRETS"
+# Overwrite placeholders with secret values from `ZSHRC_SECRETS`
+[[ -z $ZSHRC_UNDER_TEST && -f $ZSHRC_SECRETS ]] && source "$ZSHRC_SECRETS"
 
-# Track load time: Finish
-[[ -z $ZSHRC_UNDER_TEST ]] && gray_fg "\n\`.zshrc\` loaded in $(echo "$(gdate +%s.%2N) - $ZSHRC_START" | bc) seconds"
+# Track loading time: Finish
+[[ -z $ZSHRC_UNDER_TEST ]] && gray_fg "\n\`.zshrc\` loaded in $(echo "$(gdate +%s.%2N) - $ZSHRC_LOAD_TIME_START" | bc) seconds"
 
-# Profile load time: Finish
-[[ -z $ZSHRC_UNDER_TEST && -n $ZSH_PROFILE_LOAD_TIME ]] && echo && zprof
+# Profile loading time: Finish
+[[ -z $ZSHRC_UNDER_TEST && -n $ZSHRC_UNDER_PROFILING ]] && echo && zprof
