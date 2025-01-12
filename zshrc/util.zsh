@@ -93,4 +93,3 @@ function dd_is_terminal_output { [[ $(pbpaste | compact | strip | sed -n '$p') =
 function dd_dump_file { echo "$DD_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt"; }
 function dd_taint_pasteboard { printf "$(pbpaste)\n\n(Dumped to '%s')" "$DD" | pbcopy; }
 function dd_clear_terminal { [[ $DD_CLEAR_TERMINAL -eq 1 ]] && clear; }
-# helper for `oo`
