@@ -12,6 +12,10 @@ AWS_KEYMAP=(
 	''
 	"$AWS_ALIAS·e <prefix> # EC2 search"
 	"$AWS_ALIAS·a <prefix> # ASG search"
+	''
+	"$AWS_ALIAS·s # SSM start session with \`sudo -i\`"
+	"$AWS_ALIAS·sc # SSM start session with command"
+	"$AWS_ALIAS·sm # SSM start session"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
@@ -27,13 +31,13 @@ function aws_keymap {
 source "$ZSHRC_DIR/aws_helpers.zsh"
 
 function aws_keymap_a {
-	local prefix="$1"
+	local prefix=$1
 
 	ec2_args "Name=tag:aws:autoscaling:groupName, Values=$prefix*"
 }
 
 function aws_keymap_e {
-	local prefix="$1"
+	local prefix=$1
 
 	ec2_args "Name=tag:Name, Values=$prefix*"
 }
@@ -69,4 +73,28 @@ function aws_keymap_q2 {
 
 function aws_keymap_qo {
 	mq2 --logout
+}
+
+function aws_keymap_s { # (e.g `ssm <instance-id>`, or `0 ssm` to use the last entry from `args`)
+	local id=$1
+
+	aws ssm start-session \
+		--document-name 'AWS-StartInteractiveCommand' \
+		--parameters '{"command": ["sudo -i"]}' \
+		--target "$(ec2_id "$id")"
+}
+
+function aws_keymap_sc { # (e.g `ssm-run date <instance-id>`, or `each ssm-run date` to iterate through `args`)
+	local command=${(j: :)@[1,-2]}
+	local id="$*[-1]"
+
+	aws ssm start-session \
+		--document-name 'AWS-StartNonInteractiveCommand' \
+		--parameters "{\"command\": [\"$command\"]}" \
+		--target "$(ec2_id "$id")" |
+			pgrep --multiline --ignore-case --invert-match "(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
+}
+
+function aws_keymap_sm {
+	aws ssm start-session --target "$(ec2_id "$@")"
 }
