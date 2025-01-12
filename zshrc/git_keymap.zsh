@@ -16,6 +16,13 @@ GIT_KEYMAP=(
 	"$GIT_ALIAS·ce # Create an empty commit"
 	"$GIT_ALIAS·cp # Cherry pick a commit"
 	"$GIT_ALIAS·cf # Fix up a commit"
+	''
+	"$GIT_ALIAS·r <number> # Rebase the last <number> commits"
+	"$GIT_ALIAS·r # Rebase with the latest main"
+	"$GIT_ALIAS·rm # Rebase with the latest master"
+	"$GIT_ALIAS·ru # Rebase with the latest upstream"
+	"$GIT_ALIAS·ra # Rebase abort"
+	"$GIT_ALIAS·rc # Rebase continue"
 )
 
 keymap_init $GIT_NAMESPACE $GIT_ALIAS "${GIT_KEYMAP[@]}"
@@ -106,4 +113,43 @@ function git_keymap_m {
 function git_keymap_n {
 	git_keymap_m
 	git checkout -b "$@"
+}
+
+# TODO split into multiple keys
+function git_keymap_r {
+	local gxx_remote; gxx_remote=origin
+	local gxx_branch; gxx_branch=main
+	local gxx_head_num
+
+	for var in "$@"; do
+		case $var in
+			u) gxx_remote=upstream;;
+			m) gxx_branch=master;;
+			*) gxx_head_num=$var;;
+		esac
+	done
+
+	if [[ -n $gxx_head_num ]]; then
+		# The `+ 1` is to count the `fixup!` commit itself
+		git rebase --interactive --autosquash HEAD~$((gxx_head_num + 1))
+	else
+		git fetch "$gxx_remote" "$gxx_branch" && git rebase --interactive --autosquash "$gxx_remote/$gxx_branch"
+	fi
+}
+
+function git_keymap_ra {
+	git rebase --abort
+}
+
+function git_keymap_rc {
+	git add --all
+	git rebase --continue
+}
+
+function git_keymap_rm {
+	git_keymap_r m
+}
+
+function git_keymap_ru {
+	git_keymap_r u
 }
