@@ -153,13 +153,15 @@ function insert_hash {
 	'
 }
 
-function size_of_column {
-	local column=${1:-0}
+function size {
+	# Defaults to `0`, which is all columns
+	local column_index=${1:-0}
 
-	awk '
+	# Apply `bw` so that color codes are not counted
+	bw | awk '
 		{
-			if (length($'"$column"') > max_len) {
-				max_len = length($'"$column"')
+			if (length($'"$column_index"') > max_len) {
+				max_len = length($'"$column_index"')
 			}
 		}
 		END {

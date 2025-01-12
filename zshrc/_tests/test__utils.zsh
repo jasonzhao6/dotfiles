@@ -250,18 +250,18 @@ function test__insert_hash {
 )"
 }; run_with_filter test__insert_hash
 
-function test__size_of_column {
-	assert "$(echo "$test__ls_dash_l" | size_of_column)" '64'
-}; run_with_filter test__size_of_column
+function test__size {
+	assert "$(echo "$test__ls_dash_l" | size)" '64'
+}; run_with_filter test__size
 
-function test__size_of_column__third_column {
-	assert "$(echo "$test__ls_dash_l" | size_of_column 2)" '1'
-}; run_with_filter test__size_of_column__third_column
+function test__size__third_column {
+	assert "$(echo "$test__ls_dash_l" | size 2)" '1'
+}; run_with_filter test__size__third_column
 
-function test__size_of_column__variable_width_column {
+function test__size__variable_width_column {
 	# shellcheck disable=SC2086
-	assert "$(echo $test__ls_dash_l | size_of_column 5)" '5'
-}; run_with_filter test__size_of_column__variable_width_column
+	assert "$(echo $test__ls_dash_l | size 5)" '5'
+}; run_with_filter test__size__variable_width_column
 
 function test__keys {
 	local input; input=$(
