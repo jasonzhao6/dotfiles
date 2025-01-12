@@ -4,13 +4,14 @@ AWS_ALIAS='s'
 AWS_KEYMAP=(
 	"$AWS_ALIAS·o # List Opal groups"
 	"$AWS_ALIAS·o <match> # Filter Opal groups"
-
+	''
 	"$AWS_ALIAS·q1 # Use mq01"
 	"$AWS_ALIAS·q2 # Use mq02"
 	"$AWS_ALIAS·q # MQ restore"
 	"$AWS_ALIAS·qo # MQ logout"
 	''
 	"$AWS_ALIAS·e <prefix> # EC2 search"
+	"$AWS_ALIAS·a <prefix> # ASG search"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
@@ -24,6 +25,12 @@ function aws_keymap {
 #
 
 source "$ZSHRC_DIR/aws_helpers.zsh"
+
+function aws_keymap_a {
+	local prefix="$1"
+
+	ec2_args "Name=tag:aws:autoscaling:groupName, Values=$prefix*"
+}
 
 function aws_keymap_e {
 	local prefix="$1"

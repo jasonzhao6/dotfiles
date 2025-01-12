@@ -11,8 +11,6 @@ function e1 { echo_eval 'export AWS_DEFAULT_REGION=us-east-1'; }
 function e2 { echo_eval 'export AWS_DEFAULT_REGION=us-east-2'; }
 function w1 { echo_eval 'export AWS_DEFAULT_REGION=us-west-1'; }
 function w2 { echo_eval 'export AWS_DEFAULT_REGION=us-west-2'; }
-# find [ec2] / [asg] instances by name tag prefix
-function asg { ec2_args "Name=tag:aws:autoscaling:groupName, Values=$**"; }
 # open [ec2] / [asg] page by resource id
 function oec2 { oecc "$@"; }
 function oecc { open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$(ec2_id "$@")"; }
