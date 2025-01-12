@@ -1,3 +1,8 @@
+#	"$AWS_ALIAS·re # Use us-east-1 region"
+#	"$AWS_ALIAS·re2 # Use us-east-2 region"
+#	"$AWS_ALIAS·rw2 # Use us-west-2 region"
+#	"$AWS_ALIAS·rc # Use eu-central-1 region"
+
 ### AWS
 # select region
 export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}

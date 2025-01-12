@@ -12,6 +12,7 @@ RESERVED[ac]=0
 RESERVED[ar]=0
 RESERVED[as]=0
 RESERVED[at]=0
+RESERVED[sa]=0
 
 # This list was copied from https://zsh.sourceforge.io/Doc/Release/Shell-Grammar.html#Reserved-Words
 RESERVED[case]=1
@@ -1538,7 +1539,6 @@ RESERVED[rvim]=1
 RESERVED[rwbypid.d]=1
 RESERVED[rwbytype.d]=1
 RESERVED[rwsnoop]=1
-RESERVED[sa]=1
 RESERVED[sample]=1
 RESERVED[sampleproc]=1
 RESERVED[say]=1
