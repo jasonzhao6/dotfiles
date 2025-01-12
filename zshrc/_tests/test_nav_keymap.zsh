@@ -77,3 +77,11 @@ function test__nav_keymap_n__with_filters {
 		eof
 	)"
 }; run_with_filter test__nav_keymap_n__with_filters
+
+function test__nav_keymap_v__with_dir {
+	assert "$(nav_keymap_v ~/Documents 2>&1; pwd)" "$HOME/Documents"
+}; run_with_filter test__nav_keymap_v__with_dir
+
+function test__nav_keymap_v__with_file {
+	assert "$(nav_keymap_v ~/Documents/.zshrc 2>&1; pwd)" "$HOME/Documents"
+}; run_with_filter test__nav_keymap_v__with_file

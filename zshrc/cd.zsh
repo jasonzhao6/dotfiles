@@ -9,19 +9,6 @@ function ........ { cd ../../../../../../..; }
 function ......... { cd ../../../../../../../..; }
 function .......... { cd ../../../../../../../../..; }
 
-# If it's a file path in pasteboard, go to its parent folder
-# If it's a folder path in pasteboard, go to that folder
-function cd- {
-	# Note: Do not use `local path`- It will overwrite $PATH in subshell
-	local target_path; target_path=$(paste_when_empty "$@")
-
-	if [[ -d $target_path ]]; then
-		cd "$target_path" || return
-	else
-		cd ${${target_path}%/*} || return
-	fi
-}
-
 # Shortcuts to mac folders
 function cdl { cd ~/Downloads || true; }
 function cdm { cd ~/Documents || true; }

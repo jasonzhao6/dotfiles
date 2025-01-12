@@ -97,14 +97,6 @@ function test__.......... {
 	)" '/tmp/_..........'
 }; run_with_filter test__..........
 
-function test__cd-__with_dir {
-	assert "$(cd- ~/Documents 2>&1; pwd)" "$HOME/Documents"
-}; run_with_filter test__cd-__with_dir
-
-function test__cd-__with_file {
-	assert "$(cd- ~/Documents/.zshrc 2>&1; pwd)" "$HOME/Documents"
-}; run_with_filter test__cd-__with_file
-
 function test__cdl {
 	assert "$(cdl; pwd)" "$HOME/Downloads"
 }; run_with_filter test__cdl
