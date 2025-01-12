@@ -36,6 +36,11 @@ GIT_KEYMAP=(
 	"$GIT_ALIAS${KEYMAP_DOT}a <index> # Git apply stash by index"
 	"$GIT_ALIAS${KEYMAP_DOT}l # Git stash list"
 	"$GIT_ALIAS${KEYMAP_DOT}sc # Git stash clear"
+	''
+	"$GIT_ALIAS${KEYMAP_DOT}r # List logs"
+	"$GIT_ALIAS${KEYMAP_DOT}r <match>* # Filter logs"
+	"$GIT_ALIAS${KEYMAP_DOT}rr # List first parent logs"
+	"$GIT_ALIAS${KEYMAP_DOT}rr <match>* # Filter first parent logs"
 )
 
 keymap_init $GIT_NAMESPACE $GIT_ALIAS "${GIT_KEYMAP[@]}"
@@ -131,6 +136,21 @@ function git_keymap_p {
 	local sha=$1
 
 	git cherry-pick "$sha"
+}
+
+function git_keymap_r {
+	local matches=$*
+
+	local greps; greps="--grep='${matches// /' --grep='}'"
+	local command; command="git log $GIT_KEYMAP_FIRST_PARENT ${matches:+--all} $greps"
+	command+=" --all-match --extended-regexp --regexp-ignore-case"
+	command+=" --pretty=format:\"%C(yellow)%h %C(magenta)%as %C(green)'%s' %C(cyan)%an\""
+
+	eval "$command"
+}
+
+function git_keymap_rr {
+	GIT_KEYMAP_FIRST_PARENT=--first-parent gr "$@"
 }
 
 function git_keymap_s {
