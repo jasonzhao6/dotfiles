@@ -35,12 +35,3 @@ function ec2_name_to_id {
 		--query 'Reservations[].Instances[].InstanceId' \
 		--output text
 }
-
-function ec2_id_to_name {
-	local id=$1
-
-	aws ec2 describe-instances \
-		--filters "Name=instance-id, Values=$id" \
-		--query 'Reservations[].Instances[].Tags[?Key==`Name`].Value' \
-		--output text
-}
