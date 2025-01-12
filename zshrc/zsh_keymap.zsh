@@ -55,10 +55,6 @@ function zsh_keymap_h {
 	cut -c 16- "$HISTFILE" | egrep --ignore-case "$pattern" | sort --unique | args_keymap_s
 }
 
-function zsh_keymap_hc {
-	rm "$HISTFILE"
-}
-
 function zsh_keymap_h0 {
 	unset -f zshaddhistory
 }
@@ -69,6 +65,10 @@ function zsh_keymap_h1 {
 
 function zsh_keymap_h2 {
 	function zshaddhistory { return 2; }
+}
+
+function zsh_keymap_hc {
+	rm "$HISTFILE"
 }
 
 function zsh_keymap_hm {

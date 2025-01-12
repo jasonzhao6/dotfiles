@@ -31,7 +31,7 @@ function verify_test_invocations {
 		grep "^$prefix" "$test_file" | bw | sed -e "s/$prefix //" -e 's/ {.*//'
 	)
 
-	# Compare definitions and invocations
+	# Compare definitions and invocations; note that `diff` returns nothing if the files are identical
 	local tests_compared
 	if [[ $test_definitions == "$test_invocations" ]]; then
 		tests_compared="$test_definitions"
@@ -40,12 +40,12 @@ function verify_test_invocations {
 	fi
 
 	# Verify all tests defined are also invoked
-	while IFS= read -r test; do
+	while IFS= read -r diff; do
 		# shellcheck disable=SC2076
-		if [[ $test =~ '^ ?test__' ]]; then
+		if [[ $diff =~ '^ ?test__' ]]; then
 			pass
-		elif [[ $test =~ '^[-+]test__' ]]; then
-			fail "'$(echo "$test" | trim 1)' does not match"
+		elif [[ $diff =~ '^[-+]test__' ]]; then
+			fail "'$(echo "$diff" | trim 1)' does not match"
 		fi
 	done <<< "$tests_compared"
 }

@@ -2,6 +2,7 @@ export ZSHRC_TESTS_DIR="$ZSHRC_DIR/_tests"
 
 source "$ZSHRC_DIR"/_tests/__test_harness.zsh
 source "$ZSHRC_DIR"/_tests/_run_all_test_cases.zsh
+source "$ZSHRC_DIR"/_tests/_verify_keymap_ordering.zsh
 source "$ZSHRC_DIR"/_tests/_verify_test_invocations.zsh
 source "$ZSHRC_DIR"/_tests/_verify_test_ordering.zsh
 
@@ -15,19 +16,24 @@ ZSHRC_TESTS_NAME_FILTER=$([[ -z $ZSHRC_TESTS_SECTION_FILTER && -n $1 ]] && echo 
 # Source test subjects and general utils
 ZSHRC_UNDER_TESTING=1 source ~/.zshrc
 
+
+ZSHRC_TESTS_SECTION_NUMBER=1
 # shellcheck disable=SC2031
-if [[ $ZSHRC_TESTS_SECTION_FILTER -eq 1 || -z $ZSHRC_TESTS_SECTION_FILTER ]]; then
-	run_all_test_cases_section 1
+if [[ $ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER ]]; then
+	run_all_test_cases_section $ZSHRC_TESTS_SECTION_NUMBER
 fi
 
-if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq 2 || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	verify_test_invocations_section 2
+ZSHRC_TESTS_SECTION_NUMBER=2
+if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
+	verify_test_invocations_section $ZSHRC_TESTS_SECTION_NUMBER
 fi
 
-if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq 3 || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	verify_test_ordering_section 3
+ZSHRC_TESTS_SECTION_NUMBER=3
+if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
+	verify_test_ordering_section $ZSHRC_TESTS_SECTION_NUMBER
 fi
 
-#
-# 4: Verify key mapping functions in keymaps are alphabetized # TODO
-#
+ZSHRC_TESTS_SECTION_NUMBER=4
+if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
+	verify_keymap_ordering_section $ZSHRC_TESTS_SECTION_NUMBER
+fi

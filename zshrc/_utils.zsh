@@ -100,6 +100,10 @@ function contain {
 	fi
 }
 
+function downcase {
+	tr '[:upper:]' '[:lower:]'
+} # TODO add test
+
 function extract_urls {
 	pgrep --only-matching '\b(?:https?:\/\/)(?:www\.)?[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,6}(?:\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?\b'
 }

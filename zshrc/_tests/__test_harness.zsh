@@ -33,6 +33,10 @@ function find_test_files {
 	find "$ZSHRC_DIR/_tests" -name 'test_*.zsh' | sort
 }
 
+function find_keymap_files {
+	find "$ZSHRC_DIR" -maxdepth 1 -name '*_keymap.zsh' | sort
+}
+
 function pass {
 	((passes++))
 	((total++))

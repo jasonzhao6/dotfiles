@@ -39,7 +39,6 @@ function verify_test_ordering {
 
 	# Verify subject and test functions are defined in the same order
 	while IFS= read -r diff; do
-#		echo "$diff"
 		# shellcheck disable=SC2076
 		if [[ $diff =~ '^ ?function' ]]; then
 			pass
