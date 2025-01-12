@@ -9,6 +9,8 @@ GIT_KEYMAP=(
 	"$GIT_ALIAS·m # Checkout the latest \`main\`"
 	"$GIT_ALIAS·n <name> # Checkout a new branch from the latest \`main\`"
 	''
+	"$GIT_ALIAS·d # Diff"
+	''
 	"$GIT_ALIAS·np # Create a new PR, then open tab to it"
 	"$GIT_ALIAS·ng # Create a new gist, then open tab to it"
 	''
@@ -23,7 +25,7 @@ GIT_KEYMAP=(
 	"$GIT_ALIAS·no # Git org name"
 	"$GIT_ALIAS·nr # Git repo name"
 	"$GIT_ALIAS·nb # Git branch name"
-)
+) # TODO find new key than `n` for git info
 
 keymap_init $GIT_NAMESPACE $GIT_ALIAS "${GIT_KEYMAP[@]}"
 
@@ -67,6 +69,10 @@ function git_keymap_c {
 	local name=$1;
 
 	git checkout "$name"
+}
+
+function git_keymap_d {
+	git diff
 }
 
 function git_keymap_m {
