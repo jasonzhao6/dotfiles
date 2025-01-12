@@ -593,7 +593,7 @@ function test__args_keymap_n__with_multiple_substitutions_in_quotes {
 function test__args_keymap_ny {
 	assert "$(
 		echo "$test__input_short" | args_keymap_s > /dev/null
-		eee 1 $(($(args_size) * 4)) args_keymap_ny echo 2>&1 | sort | uniq
+		eee 1 $(($(args_size) * 4)) args_keymap_ny echo 2>&1 | sort --unique
 	)" "$(
 		cat <<-eof
 

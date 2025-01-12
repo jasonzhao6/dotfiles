@@ -48,7 +48,7 @@ function zsh_keymap_f {
 function zsh_keymap_h {
 	local pattern="$*"
 
-	egrep --ignore-case "$pattern" "$HISTFILE" | trim 15 | sort --unique | args_keymap_s
+	cut -c 16- "$HISTFILE" | egrep --ignore-case "$pattern" | sort --unique | args_keymap_s
 }
 
 function zsh_keymap_hc {
