@@ -111,10 +111,10 @@ function test__zsh_keymap_hc {
 
 function test__zsh_keymap_w {
 	assert "$(
-		zsh_keymap_w zsh_keymap_h0
+		zsh_keymap_w zsh_keymap_0
 	)" "$(
 		cat <<-eof
-		     1	zsh_keymap_h0 () {
+		     1	zsh_keymap_0 () {
 		     2		unset -f zshaddhistory
 		     3	}
 		eof

@@ -8,7 +8,7 @@ ZSH_KEYMAP=(
 	"$ZSH_ALIAS·z # Source"
 	"$ZSH_ALIAS·t # Test"
 	''
-	"$ZSH_ALIAS·w # Which"
+	"$ZSH_ALIAS·w # Custom \`which\`"
 	"$ZSH_ALIAS·a # List aliases"
 	"$ZSH_ALIAS·a <match>* <-mismatch>* # Filter aliases"
 	"$ZSH_ALIAS·f # List functions"
@@ -18,12 +18,13 @@ ZSH_KEYMAP=(
 	"$ZSH_ALIAS·h <match>* <-mismatch>* # Filter history"
 	"$ZSH_ALIAS·hc # Clear history"
 	"$ZSH_ALIAS·hm # Edit history file with TextMate"
-	"$ZSH_ALIAS·h1 # Do not persist history"
-	"$ZSH_ALIAS·h2 # Persist history in memory only"
-	"$ZSH_ALIAS·h0 # Persist history in memory & history file"
 	''
-	"$ZSH_ALIAS·p # Push other dotfiles from local"
-	"$ZSH_ALIAS·P # Pull other dotfiles to local"
+	"$ZSH_ALIAS·1 # No session history"
+	"$ZSH_ALIAS·2 # Session history in memory"
+	"$ZSH_ALIAS·0 # Session history in memory & file"
+	''
+	"$ZSH_ALIAS·p # Push other dotfiles"
+	"$ZSH_ALIAS·P # Pull other dotfiles"
 )
 
 keymap_init $ZSH_NAMESPACE $ZSH_ALIAS "${ZSH_KEYMAP[@]}"
@@ -35,6 +36,18 @@ function zsh_keymap {
 #
 # Key mappings (Alphabetized)
 #
+
+function zsh_keymap_0 {
+	unset -f zshaddhistory
+}
+
+function zsh_keymap_1 {
+	function zshaddhistory { return 1; }
+}
+
+function zsh_keymap_2 {
+	function zshaddhistory { return 2; }
+}
 
 function zsh_keymap_a {
 	local filters=("$@")
@@ -53,18 +66,6 @@ function zsh_keymap_h {
 	local filters=("$@")
 
 	cut -c 16- "$HISTFILE" | sort --unique | args_keymap_s "${filters[@]}"
-}
-
-function zsh_keymap_h0 {
-	unset -f zshaddhistory
-}
-
-function zsh_keymap_h1 {
-	function zshaddhistory { return 1; }
-}
-
-function zsh_keymap_h2 {
-	function zshaddhistory { return 2; }
 }
 
 function zsh_keymap_hc {
