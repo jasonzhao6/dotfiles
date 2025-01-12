@@ -29,10 +29,8 @@ function test__ellipsize {
 	)" "$COLUMNS"
 }; run_with_filter test__ellipsize
 
-function test__has_internet {
-	# Skip: Not interesting to test
-	return
-}
+# Skip: Not interesting to test
+# function test__has_internet
 
 function test__index_of__first {
 	assert "$(index_of '10 20 30 40' 10)" '1'
@@ -78,10 +76,8 @@ function test__paste_when_empty__with_two_args {
 	assert "$(paste_when_empty '111 222')" '111 222'
 }; run_with_filter test__paste_when_empty__with_two_args
 
-function test__prev_command {
-	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
-	return
-}
+# Skip: Cannot test b/c `fc -l` throws 'no such event' error
+# function test__prev_command
 
 function test__bw {
 	assert "$(echo "\e[30m\e[47m...\e[0m" | bw)" '...'

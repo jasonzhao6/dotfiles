@@ -124,9 +124,9 @@ function trim {
 	local left=$1
 	local right=$2
 
-	bw | \
+	bw |
 		# Trim left side
-		cut -c $((left + 1))- | \
+		cut -c $((left + 1))- |
 		# Trim right side
 		{ [[ -z $right ]] && cat || rev | cut -c $((right + 1))- | rev; }
 }

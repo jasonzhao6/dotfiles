@@ -35,10 +35,8 @@ function test__d__with_protocol_and_path {
 	)"
 }; run_with_filter test__d__with_protocol_and_path
 
-function test__f__for_gh {
-	# Skip: Cannot test b/c requires querying github
-	return
-}
+# Skip: Cannot test b/c requires querying github
+# function test__f__for_gh
 
 function test__f__for_tf {
 	assert "$(
@@ -145,20 +143,14 @@ function test__ll__with_filters {
 	)"
 }; run_with_filter test__ll__with_filters
 
-function test__bb {
-	# Skip: Not interesting to test
-	return
-}
+# Skip: Not interesting to test
+# function test__bb
 
-function test__cc {
-	# Skip: Cannot test b/c `fc -l` throws 'no such event' error
-	return
-}
+# Skip: Cannot test b/c `fc -l` throws 'no such event' error
+# function test__cc
 
-function test__dd {
-	# Skip: Not testing b/c requires network call
-	return
-}
+# Skip: Not testing b/c requires network call
+# function test__dd
 
 function test__dd {
 	assert "$(
@@ -366,10 +358,8 @@ function test__eee__with_math {
 	)"
 }; run_with_filter test__eee__with_math
 
-function test__ff {
-	# Skip: Not interesting to test
-	return
-}
+# Skip: Not interesting to test
+# function test__ff
 
 function test__hh {
 	local old; old=$(
@@ -403,30 +393,20 @@ function test__hh {
 	)"
 }; run_with_filter test__hh
 
-function test__ii {
-	# Skip: Not interesting to test
-	return
-}
+# Skip: Not interesting to test
+# function test__ii
 
-function test__mm {
-	# Skip: Not interesting to test
-	return
-}
+# Skip: Not interesting to test
+# function test__mm
 
-function test__oo {
-	# Skip: Not interesting to test
-	return
-}
+# Skip: Not interesting to test
+# function test__oo
 
-function test__pp {
-	# Skip: Not interesting b/c it has its own specs
-	return
-}
+# Skip: Not interesting b/c it has its own specs
+# function test__pp
 
-function test__tt {
-	# Skip: Not interesting to test
-	return
-}
+# Skip: Not interesting to test
+# function test__tt
 
 function test__uu {
 	local old; old=$(
@@ -478,20 +458,14 @@ function test__xx {
 	)"
 }; run_with_filter test__xx
 
-function test__bif {
-	# Skip: Not testing b/c requires network call
-	return
-}
+# Skip: Not testing b/c requires network call
+# function test__bif
 
-function test__flush {
-	# Skip: Not testing b/c requires network call
-	return
-}
+# Skip: Not testing b/c requires network call
+# function test__flush
 
-function test__jcurl {
-	# Skip: Not interesting to test
-	return
-}
+# Skip: Not interesting to test
+# function test__jcurl
 
 function test__ren {
 	assert "$(

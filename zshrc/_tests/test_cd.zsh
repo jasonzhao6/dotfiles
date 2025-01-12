@@ -125,10 +125,8 @@ function test__cdd {
 	assert "$(cdd; pwd)" "$DOTFILES_DIR"
 }; run_with_filter test__cdd
 
-function test__cde {
-	# Skip: Not testing b/c function has other side effects
-	return
-}
+# Skip: Not testing b/c function has other side effects
+# function test__cde
 
 function test__cdg {
 	assert "$(cdg; pwd)" "$HOME/gh"

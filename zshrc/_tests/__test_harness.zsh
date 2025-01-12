@@ -10,7 +10,7 @@ function assert {
 	local expected=$2
 
 	# shellcheck disable=SC2154
-	[[ $output == "$expected" ]] && pass || fail "'${funcstack[2]}'"
+	[[ $output == "$expected" ]] && pass || fail "'${funcstack[2]}'" "$output" "$expected"
 }
 
 function run_with_filter {
@@ -41,13 +41,17 @@ function pass {
 
 function fail {
 	local name=$1
+	local output=$2
+	local expected=$3
 
 	failed+="\n$(red_bg fail): $name"
 	((total++))
 	echo -n f
 
-	debug+="\n\n$(red_bg debug): $name\n"
-	debug+=$(diff -u <(echo "$expected") <(echo "$output") | sed '/--- /d; /+++ /d; /@@ /d')
+	if [[ -n $output && -n $expected ]]; then
+		debug+="\n\n$(red_bg debug): $name\n"
+		debug+=$(diff -u <(echo "$expected") <(echo "$output") | sed '/--- /d; /+++ /d; /@@ /d')
+	fi
 }
 
 # Emulate `grep` color codes

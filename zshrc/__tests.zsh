@@ -2,6 +2,7 @@ export ZSHRC_TESTS_DIR="$ZSHRC_DIR/_tests"
 
 source "$ZSHRC_DIR"/_tests/__test_harness.zsh
 source "$ZSHRC_DIR"/_tests/_run_all_test_cases.zsh
+source "$ZSHRC_DIR"/_tests/_verify_test_invocations.zsh
 source "$ZSHRC_DIR"/_tests/_verify_test_ordering.zsh
 
 # Allow filtering test section by number (1-5)
@@ -19,16 +20,8 @@ if [[ $ZSHRC_TESTS_SECTION_FILTER -eq 1 || -z $ZSHRC_TESTS_SECTION_FILTER ]]; th
 	run_all_test_cases_section 1
 fi
 
-#
-# 2: Verify all tests defined are getting invoked
-#
-
 if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq 2 || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	echo
-	echo
-	echo '2: Verify all tests defined are getting invoked'
-
-	ruby "$ZSHRC_DIR"/_tests/verify_test_invocations.rb
+	verify_test_invocations_section 2
 fi
 
 if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq 3 || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
