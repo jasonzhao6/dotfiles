@@ -37,7 +37,7 @@ function keymap_invoke {
 	local key=$1; [[ -n $key ]] && shift
 	local args=("$@")
 
-	# If a `key` was not specified, abort and print usage
+	# If a `key` was not specified, print usage
 	[[ -z $key ]] && keymap_help "$namespace" "$alias" "${keymap_entries[@]}" && return
 
 	# Look for the specified `key`
@@ -46,9 +46,10 @@ function keymap_invoke {
 		[[ $entry == "$alias$KEYMAP_DOT$key"* ]] && found=1 && break
 	done
 
-	# If not found, print usage
+	# If not found, print error
 	if [[ -z $found ]]; then
-		keymap_help "$namespace" "$alias" "${keymap_entries[@]}"
+		echo
+		red_bar "\`$key\` does not exist in \`$namespace\`"
 		return
 
 	# If found, invoke it with the specified `args`
