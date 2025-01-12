@@ -10,7 +10,7 @@ function ec2_args {
 			args_keymap_so
 }
 
-function ec2_id {
+function ec2_get_id {
 	if [[ "$1" =~ ^(i-)?[a-z0-9]{17}$ ]]; then
 		[[ "$1" =~ ^i-.*$ ]] && echo "$1" || echo i-"$1"
 	else
@@ -33,5 +33,14 @@ function ec2_name_to_id {
 	aws ec2 describe-instances \
 		--filters "Name=tag:Name, Values=$name" \
 		--query 'Reservations[].Instances[].InstanceId' \
+		--output text
+}
+
+function ec2_id_to_name {
+	local id=$1
+
+	aws ec2 describe-instances \
+		--filters "Name=instance-id, Values=$id" \
+		--query 'Reservations[].Instances[].Tags[?Key==`Name`].Value' \
 		--output text
 }

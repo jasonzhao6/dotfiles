@@ -81,7 +81,7 @@ function aws_keymap_s { # (e.g `ssm <instance-id>`, or `0 ssm` to use the last e
 	aws ssm start-session \
 		--document-name 'AWS-StartInteractiveCommand' \
 		--parameters '{"command": ["sudo -i"]}' \
-		--target "$(ec2_id "$id")"
+		--target "$(ec2_get_id "$id")"
 }
 
 function aws_keymap_sc { # (e.g `ssm-run date <instance-id>`, or `each ssm-run date` to iterate through `args`)
@@ -91,10 +91,10 @@ function aws_keymap_sc { # (e.g `ssm-run date <instance-id>`, or `each ssm-run d
 	aws ssm start-session \
 		--document-name 'AWS-StartNonInteractiveCommand' \
 		--parameters "{\"command\": [\"$command\"]}" \
-		--target "$(ec2_id "$id")" |
+		--target "$(ec2_get_id "$id")" |
 			pgrep --multiline --ignore-case --invert-match "(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
 }
 
 function aws_keymap_sm {
-	aws ssm start-session --target "$(ec2_id "$@")"
+	aws ssm start-session --target "$(ec2_get_id "$@")"
 }

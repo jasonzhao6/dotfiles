@@ -13,7 +13,7 @@ function w1 { echo_eval 'export AWS_DEFAULT_REGION=us-west-1'; }
 function w2 { echo_eval 'export AWS_DEFAULT_REGION=us-west-2'; }
 # open [ec2] / [asg] page by resource id
 function oec2 { oecc "$@"; }
-function oecc { open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$(ec2_id "$@")"; }
+function oecc { open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$(ec2_get_id "$@")"; }
 function oasg { open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$*"; }
 # use [ssm] to ssh into ec2 by instance id, private ip, or name tag
 # [p]arameter [s]tore [g]et
@@ -24,4 +24,3 @@ function smd { aws secretsmanager delete-secret --secret-id "$@" --force-delete-
 # [decode] sts message
 function decode { aws sts decode-authorization-message --encoded-message "$@" --output text | jq .; }
 # helpers
-function id_name { aws ec2 describe-instances --filters "Name=instance-id, Values=$*" --query 'Reservations[].Instances[].Tags[?Key==`Name`].Value' --output text; }
