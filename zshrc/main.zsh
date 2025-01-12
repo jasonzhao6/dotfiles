@@ -21,7 +21,7 @@ source "$ZSHRC_DIR/_utils.zsh"
 # Load keymaps
 source "$ZSHRC_DIR/args_keymap.zsh"
 source "$ZSHRC_DIR/aws_keymap.zsh"
-source "$ZSHRC_DIR/git_keymap.zsh"
+source "$ZSHRC_DIR/github_keymap.zsh"
 source "$ZSHRC_DIR/main_keymap.zsh"
 source "$ZSHRC_DIR/nav_keymap.zsh"
 source "$ZSHRC_DIR/open_keymap.zsh"

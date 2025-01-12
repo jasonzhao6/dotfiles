@@ -1,4 +1,4 @@
-GIT_NAMESPACE='git_keymap'
+GIT_NAMESPACE='github_keymap'
 GIT_ALIAS='h'
 
 GIT_KEYMAP=(
@@ -35,7 +35,7 @@ GIT_KEYMAP=(
 
 keymap_init $GIT_NAMESPACE $GIT_ALIAS "${GIT_KEYMAP[@]}"
 
-function git_keymap {
+function github_keymap {
 	keymap_invoke $GIT_NAMESPACE $GIT_ALIAS ${#GIT_KEYMAP} "${GIT_KEYMAP[@]}" "$@"
 }
 
@@ -45,7 +45,7 @@ function git_keymap {
 
 export EDITOR='mate --wait'
 
-function git_keymap_b {
+function github_keymap_b {
 	local branches; branches=$(git branch)
 	local merged; merged=$(gb_merged)
 
@@ -56,105 +56,105 @@ function git_keymap_b {
 	echo "$branches" | args_keymap_s
 }
 
-function git_keymap_bb {
+function github_keymap_bb {
 	gb_merged | xargs git branch --delete
 	git remote prune origin
 	echo
-	git_keymap_b
+	github_keymap_b
 }
 
-function git_keymap_bd {
+function github_keymap_bd {
 	local name=$1
 
 	git branch --delete --force "$name"
 	git push origin --delete "$name"
-	git_keymap_b
+	github_keymap_b
 }
 
-function git_keymap_c {
+function github_keymap_c {
 	local name=$1;
 
 	git checkout "$name"
 }
 
-function git_keymap_ca {
+function github_keymap_ca {
 	git add --all
 	git commit --amend --no-edit
 }
 
-function git_keymap_ce {
+function github_keymap_ce {
 	git commit --allow-empty -m 're-run: Empty commit to trigger build'
 }
 
-function git_keymap_cf {
+function github_keymap_cf {
 	local sha=$1
 
 	git add --all; git commit --fixup "$sha"
 }
 
-function git_keymap_cn {
+function github_keymap_cn {
 	git add --all
 	git commit
 }
 
-function git_keymap_cp {
+function github_keymap_cp {
 	local sha=$1
 
 	git cherry-pick "$sha"
 }
 
-function git_keymap_cr {
+function github_keymap_cr {
 	git add --all
 	git commit --amend
 }
 
-function git_keymap_d {
+function github_keymap_d {
 	git diff
 }
 
-function git_keymap_m {
+function github_keymap_m {
 	git checkout main || git checkout master
 	git pull
 	git status
 }
 
-function git_keymap_n {
-	git_keymap_m
+function github_keymap_n {
+	github_keymap_m
 	git checkout -b "$@"
 }
 
-function git_keymap_nb {
+function github_keymap_nb {
 	git rev-parse --abbrev-ref HEAD
 }
 
-function git_keymap_nd {
+function github_keymap_nd {
 	git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/'
 }
 
-function git_keymap_ng {
+function github_keymap_ng {
 	pbpaste | gh gist create --web
 }
 
-function git_keymap_no {
+function github_keymap_no {
 	git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*/\1/'
 }
 
-function git_keymap_np {
+function github_keymap_np {
 	gp && gh pr create --fill && gh pr view --web
 }
 
-function git_keymap_nr {
+function github_keymap_nr {
 	git rev-parse --show-toplevel | xargs basename
 }
 
-function git_keymap_oc {
-	open https://"$(git_keymap_nd)"/"$(git_keymap_no)"/"$(git_keymap_nr)"/commit/"$1"
+function github_keymap_oc {
+	open https://"$(github_keymap_nd)"/"$(github_keymap_no)"/"$(github_keymap_nr)"/commit/"$1"
 }
 
-function git_keymap_op {
-	open https://"$(git_keymap_nd)"/"$(git_keymap_no)"/"$(git_keymap_nr)"/pull/"$1"
+function github_keymap_op {
+	open https://"$(github_keymap_nd)"/"$(github_keymap_no)"/"$(github_keymap_nr)"/pull/"$1"
 }
 
-function git_keymap_or {
-	open https://"$(git_keymap_nd)"/"$(git_keymap_no)"/"${*:-$(git_keymap_nr)}"
+function github_keymap_or {
+	open https://"$(github_keymap_nd)"/"$(github_keymap_no)"/"${*:-$(github_keymap_nr)}"
 }
