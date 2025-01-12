@@ -37,6 +37,22 @@ function test__nav_keymap_a__with_filters {
 	)"
 }; run_with_filter test__nav_keymap_a__with_filters
 
+function test__nav_keymap_dl {
+	assert "$(nav_keymap_dl; pwd)" "$HOME/Downloads"
+}; run_with_filter test__nav_keymap_dl
+
+function test__nav_keymap_dm {
+	assert "$(nav_keymap_dm; pwd)" "$HOME/Documents"
+}; run_with_filter test__nav_keymap_dm
+
+function test__nav_keymap_dt {
+	assert "$(nav_keymap_dt; pwd)" "$HOME/Desktop"
+}; run_with_filter test__nav_keymap_dt
+
+function test__nav_keymap_h {
+	assert "$(nav_keymap_h; pwd)" "$HOME/gh"
+}; run_with_filter test__nav_keymap_h
+
 function test__nav_keymap_n {
 	assert "$(
 		rm -rf /tmp/test__nav_keymap_n
@@ -77,6 +93,10 @@ function test__nav_keymap_n__with_filters {
 		eof
 	)"
 }; run_with_filter test__nav_keymap_n__with_filters
+
+function test__nav_keymap_s {
+	assert "$(nav_keymap_s; pwd)" "$HOME/gh/scratch"
+}; run_with_filter test__nav_keymap_s
 
 function test__nav_keymap_u {
 	assert "$(

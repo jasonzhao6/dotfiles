@@ -2,15 +2,20 @@ NAV_NAMESPACE='nav_keymap'
 NAV_ALIAS='n'
 
 NAV_KEYMAP=(
-	"$NAV_ALIAS <directory> # Go to directory"
-	"$NAV_ALIAS·v # Go to directory of path in pasteboard"
-	''
 	"$NAV_ALIAS·n <matches>* -<mismatches>* # List directories & files"
 	"$NAV_ALIAS·d <matches>* -<mismatches>* # List directories"
 	"$NAV_ALIAS·f <matches>* -<mismatches>* # List files"
 	"$NAV_ALIAS·a <matches>* -<mismatches>* # List hidden directories & files"
 	"$NAV_ALIAS·ad <matches>* -<mismatches>* # List hidden directories"
 	"$NAV_ALIAS·af <matches>* -<mismatches>* # List hidden files"
+	''
+	"$NAV_ALIAS <directory> # Go to directory"
+	"$NAV_ALIAS·v # Go to directory in pasteboard"
+	"$NAV_ALIAS·h # Go to github"
+	"$NAV_ALIAS·s # Go to scratch"
+	"$NAV_ALIAS·dl # Go to Downloads"
+	"$NAV_ALIAS·dm # Go to Documents"
+	"$NAV_ALIAS·dt # Go to Desktop"
 	''
 	"$NAV_ALIAS·u # Go up one directory"
 	"$NAV_ALIAS·uu # Go up two directories"
@@ -64,6 +69,18 @@ function nav_keymap_d {
 	ls -ld -- */ | awk '{print $9}' | args_keymap_s "${filters[@]}"
 }
 
+function nav_keymap_dl {
+	cd ~/Downloads || true
+}
+
+function nav_keymap_dm {
+	cd ~/Documents || true
+}
+
+function nav_keymap_dt {
+	cd ~/Desktop || true
+}
+
 # TODO add test
 function nav_keymap_f {
 	local filters=("$@")
@@ -72,11 +89,19 @@ function nav_keymap_f {
 	ls -lp | grep -v '/' | awk '{print $9}' | args_keymap_s "${filters[@]}"
 }
 
+function nav_keymap_h {
+	cd ~/gh || true
+}
+
 # shellcheck disable=SC2120
 function nav_keymap_n {
 	local filters=("$@")
 
 	ls -l | awk '{print $9}' | args_keymap_s "${filters[@]}"
+}
+
+function nav_keymap_s {
+	cd ~/gh/scratch || true
 }
 
 function nav_keymap_u {
