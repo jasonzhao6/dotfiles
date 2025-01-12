@@ -9,6 +9,8 @@ AWS_KEYMAP=(
 	"$AWS_ALIAS·a2 # Use mq02"
 	"$AWS_ALIAS·a0 # MQ logout"
 	"$AWS_ALIAS·a # MQ restore"
+	''
+	"$AWS_ALIAS·e <prefix> # EC2 search"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
@@ -20,6 +22,8 @@ function aws_keymap {
 #
 # Key mappings (Alphabetized)
 #
+
+source "$ZSHRC_DIR/aws_helpers.zsh"
 
 for aws_keymap_mq2 in "$HOME/.config/zsh/config.d/"*.zsh; do
 	source "${aws_keymap_mq2}"
@@ -39,6 +43,12 @@ function aws_keymap_a1 {
 
 function aws_keymap_a2 {
 	mq2 --mq02
+}
+
+function aws_keymap_e {
+	local prefix="$1"
+
+	ec2_args "Name=tag:Name, Values=$prefix*"
 }
 
 # To be overwritten by `$ZSHRC_SECRETS`

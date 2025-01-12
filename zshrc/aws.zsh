@@ -12,8 +12,6 @@ function e2 { echo_eval 'export AWS_DEFAULT_REGION=us-east-2'; }
 function w1 { echo_eval 'export AWS_DEFAULT_REGION=us-west-1'; }
 function w2 { echo_eval 'export AWS_DEFAULT_REGION=us-west-2'; }
 # find [ec2] / [asg] instances by name tag prefix
-function ec2 { ecc "$@"; }
-function ecc { ec2_args "Name=tag:Name, Values=$**"; }
 function asg { ec2_args "Name=tag:aws:autoscaling:groupName, Values=$**"; }
 # open [ec2] / [asg] page by resource id
 function oec2 { oecc "$@"; }
@@ -42,8 +40,6 @@ function smd { aws secretsmanager delete-secret --secret-id "$@" --force-delete-
 # [decode] sts message
 function decode { aws sts decode-authorization-message --encoded-message "$@" --output text | jq .; }
 # helpers
-function ec2_args { aws ec2 describe-instances --filters "$@" 'Name=instance-state-name, Values=running' --query "$(ec2_query)" --output text | sort --key=3 | sed 's/+00:00\t/Z  /g' | s; }
-function ec2_query { echo 'Reservations[].Instances[].[PrivateIpAddress, LaunchTime, Tags[?Key==`Name` || Key==`aws:autoscaling:groupName`].Value|[0]]'; }
 function ec2_id { [[ "$1" =~ ^(i-)?[a-z0-9]{17}$ ]] && { [[ "$1" =~ ^i-.*$ ]] && echo "$1" || echo i-"$1"; } || { [[ "$1" =~ ^[0-9\.]+$ ]] && ip_id "$1" || name_id "$1"; }; }
 function id_name { aws ec2 describe-instances --filters "Name=instance-id, Values=$*" --query 'Reservations[].Instances[].Tags[?Key==`Name`].Value' --output text; }
 function ip_id { aws ec2 describe-instances --filters "Name=private-ip-address, Values=$*" --query 'Reservations[].Instances[].InstanceId' --output text; }
