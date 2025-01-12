@@ -10,6 +10,11 @@ AWS_KEYMAP=(
 	"$AWS_ALIAS·q # MQ restore"
 	"$AWS_ALIAS·qo # MQ logout"
 	''
+	"$AWS_ALIAS·1 # Use us-east-1 region"
+	"$AWS_ALIAS·2 # Use us-east-2 region"
+	"$AWS_ALIAS·w # Use us-west-2 region"
+	"$AWS_ALIAS·c # Use eu-central-1 region"
+	''
 	"$AWS_ALIAS·e <prefix> # EC2 search"
 	"$AWS_ALIAS·a <prefix> # ASG search"
 	"$AWS_ALIAS·s # SSM start session with \`sudo -i\`"
@@ -36,10 +41,24 @@ function aws_keymap {
 
 source "$ZSHRC_DIR/aws_helpers.zsh"
 
+export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
+
+function aws_keymap_1 {
+	echo_eval 'export AWS_DEFAULT_REGION=us-east-1'
+}
+
+function aws_keymap_2 {
+	echo_eval 'export AWS_DEFAULT_REGION=us-east-2'
+}
+
 function aws_keymap_a {
 	local prefix=$1
 
 	ec2_args "Name=tag:aws:autoscaling:groupName, Values=$prefix*"
+}
+
+function aws_keymap_c {
+	echo_eval 'export AWS_DEFAULT_REGION=eu-central-1'
 }
 
 function aws_keymap_e {
@@ -169,4 +188,8 @@ function aws_keymap_t {
 	local message=$*
 
 	aws sts decode-authorization-message --encoded-message "$message" --output text | jq .
+}
+
+function aws_keymap_w {
+	echo_eval 'export AWS_DEFAULT_REGION=us-west-2'
 }

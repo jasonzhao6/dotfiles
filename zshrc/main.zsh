@@ -28,7 +28,6 @@ source "$ZSHRC_DIR/open_keymap.zsh"
 source "$ZSHRC_DIR/zsh_keymap.zsh"
 
 # Load non-keymaps
-source "$ZSHRC_DIR/aws.zsh"
 source "$ZSHRC_DIR/git.zsh"
 source "$ZSHRC_DIR/git_info.zsh"
 source "$ZSHRC_DIR/kubectl.zsh"
