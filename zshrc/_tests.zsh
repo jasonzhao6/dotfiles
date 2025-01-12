@@ -10,6 +10,8 @@ ZSHRC_TEST_SECTION_FILTER=$([[ $1 -ge 1 && $1 -le 5 ]] && echo "$1")
 # shellcheck disable=SC2030
 ZSHRC_TEST_NAME_FILTER=$([[ -z $ZSHRC_TEST_SECTION_FILTER && -n $1 ]] && echo "$1")
 
+# Source test subjects and general utils
+ZSHRC_UNDER_TEST=1 source ~/.zshrc
 
 #
 # 1: Run all test cases
@@ -17,7 +19,6 @@ ZSHRC_TEST_NAME_FILTER=$([[ -z $ZSHRC_TEST_SECTION_FILTER && -n $1 ]] && echo "$
 
 # shellcheck disable=SC2031
 if [[ $ZSHRC_TEST_SECTION_FILTER -eq 1 || -z $ZSHRC_TEST_SECTION_FILTER ]]; then
-	ZSHRC_UNDER_TEST=1 source ~/.zshrc
 
 	echo
 	if [[ -z $ZSHRC_TEST_NAME_FILTER ]]; then
@@ -48,27 +49,22 @@ if [[ ($ZSHRC_TEST_SECTION_FILTER -eq 2 || -z $ZSHRC_TEST_SECTION_FILTER) && -z 
 fi
 
 #
-# 3: Verify tests are defined in the same order as their definitions
+# 3: Verify subjects and tests are defined in the same order
 #
 
 if [[ ($ZSHRC_TEST_SECTION_FILTER -eq 3 || -z $ZSHRC_TEST_SECTION_FILTER) && -z $ZSHRC_TEST_NAME_FILTER ]]; then
 	echo
 	echo
-	echo '3: Verify tests are defined in the same order as their definitions'
+	echo '3: Verify subjects and tests are defined in the same order'
 
 	init
 
 	for test_file in $(find_test_files); do
 		subject_file="${test_file/_tests\/test_}"
-
-		if [[ -f $subject_file ]]; then
-			verify_ordering "$subject_file" "$test_file"
-		else
-			verify_ordering "$ZSHRC_DIR"/main.zsh "$test_file"
-		fi
+		verify_ordering "$subject_file" "$test_file"
 	done
 
-	print_summary 'tests matched the function ordering'
+	print_summary 'subjects have tests, and the tests are defined in the same order as their subjects'
 fi
 
 #
