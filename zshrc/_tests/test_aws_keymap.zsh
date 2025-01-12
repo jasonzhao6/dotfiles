@@ -3,18 +3,19 @@ function test__aws_keymap_o {
 		aws_keymap_o
 	)" "$(
 		cat <<-eof
-		     1	non-secret-placeholder-1  url-1
-		     2	non-secret-placeholder-2  url-2
+		     1	non-secret-placeholder-1   url-1
+		     2	non-secret-placeholder-2   url-2
+		     3	non-secret-placeholder-20  url-20
 		eof
 	)"
 }; run_with_filter test__aws_keymap_o
 
 function test__aws_keymap_o__when_filtering_for_2 {
 	assert "$(
-		aws_keymap_o 2
+		aws_keymap_o -0 2
 	)" "$(
 		cat <<-eof
-		     1	non-secret-placeholder-$(grep_color 2)  url-$(grep_color 2)
+		     1	non-secret-placeholder-$(grep_color 2)   url-$(grep_color 2)
 		eof
 	)"
 }; run_with_filter test__aws_keymap_o__when_filtering_for_2

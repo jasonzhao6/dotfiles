@@ -21,8 +21,11 @@ function aws_keymap {
 AWS_OPAL=(
 	'non-secret-placeholder-1 url-1'
 	'non-secret-placeholder-2 url-2'
+	'non-secret-placeholder-20 url-20'
 )
 
 function aws_keymap_o {
-	print -l "${AWS_OPAL[@]}" | sort | column -t | contain "$1" | args_keymap_s
+	local filters=("$@")
+
+	print -l "${AWS_OPAL[@]}" | sort | column -t | args_keymap_s "${filters[@]}"
 }
