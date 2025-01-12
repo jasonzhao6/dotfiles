@@ -17,6 +17,10 @@ AWS_KEYMAP=(
 	"$AWS_ALIAS·sm # SSM start session"
 	"$AWS_ALIAS·oe <ec2 id> # Open new tab to the specified EC2 instance"
 	"$AWS_ALIAS·oa <asg id> # Open new tab to the specified ASG group"
+	''
+	"$AWS_ALIAS·mg <name> # Secret Manager get"
+	"$AWS_ALIAS·md <name> # Secret Manager delete"
+	"$AWS_ALIAS·pg <name> # Parameter Store get"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
@@ -43,6 +47,40 @@ function aws_keymap_e {
 	ec2_args "Name=tag:Name, Values=$prefix*"
 }
 
+function aws_keymap_md {
+	local name=$1
+
+	aws secretsmanager delete-secret \
+		--secret-id "$name" \
+		--force-delete-without-recovery
+}
+
+function aws_keymap_mg {
+	local name=$1
+	local version=$2
+
+	local secret
+	if [[ -z "$version" ]]; then
+		secret=$(
+			aws secretsmanager get-secret-value \
+				--secret-id "$name" \
+				--query SecretString \
+				--output text
+		)
+	else
+		secret=$(
+			aws secretsmanager get-secret-value \
+				--secret-id "$name" \
+				--version-id "$version" \
+				--query SecretString \
+				--output text
+		)
+	fi
+
+	# If it's json, prettify with `jq`
+	[[ "$secret" == \{*\} ]] && echo "$secret" | jq || echo "$secret"
+}
+
 # To be overwritten by `$ZSHRC_SECRETS`
 AWS_OPAL=(
 	'non-secret-placeholder-1 url-1'
@@ -60,15 +98,30 @@ for aws_keymap_mq2 in "$HOME/.config/zsh/config.d/"*.zsh; do
 	source "${aws_keymap_mq2}"
 done; unset aws_keymap_mq2
 
+function aws_keymap_oa {
+	local id=$*
+
+	open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$id"
+}
+
 function aws_keymap_oe {
 	local id; id=$(ec2_get_id "$@")
 
 	open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$id"
 }
-function aws_keymap_oa {
-	local id=$*
 
-	open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$id"
+function aws_keymap_pg {
+	local name=$1
+
+	local parameter; parameter=$(
+		aws ssm get-parameter \
+			--name "$name"	\
+			--query Parameter.Value \
+			--output text
+	)
+
+	# If it's json, prettify with `jq`
+	[[ $parameter == \{*\} ]] && echo "$parameter" | jq || echo "$parameter"
 }
 
 function aws_keymap_q {
