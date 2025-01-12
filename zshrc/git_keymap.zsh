@@ -2,6 +2,10 @@ GIT_NAMESPACE='git_keymap'
 GIT_ALIAS='h'
 
 GIT_KEYMAP=(
+	"$GIT_ALIAS·b # List branches"
+	"$GIT_ALIAS·bb # Delete merged branches"
+	"$GIT_ALIAS·bd <name> # Delete branch by name"
+	''
 	"$GIT_ALIAS·np # Create a new PR, then open tab to it"
 	"$GIT_ALIAS·ng # Create a new gist, then open tab to it"
 	''
@@ -27,6 +31,34 @@ function git_keymap {
 #
 # Key mappings (Alphabetized)
 #
+
+export EDITOR='mate --wait'
+
+function git_keymap_b {
+	local branches; branches=$(git branch)
+	local merged; merged=$(gb_merged)
+
+	if [[ -n $merged ]]; then
+		branches+="\n----------------\n$merged"
+	fi
+
+	echo "$branches" | args_keymap_s
+}
+
+function git_keymap_bb {
+	gb_merged | xargs git branch --delete
+	git remote prune origin
+	echo
+	git_keymap_b
+}
+
+function git_keymap_bd {
+	local name=$1
+
+	git branch --delete --force "$name"
+	git push origin --delete "$name"
+	git_keymap_b
+}
 
 function git_keymap_nb {
 	git rev-parse --abbrev-ref HEAD

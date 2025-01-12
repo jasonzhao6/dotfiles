@@ -1,17 +1,4 @@
-### [G]it
-# Config
-export EDITOR='mate --wait'
-function g0 { git config --global "$@" false; }
-function g1 { git config --global "$@" true; }
-# Remo[t]e
-function gt { git remote "$@"; }
-function gta { git remote add "$1" "$2"; }
-function gtr { git remote remove "$@"; }
-function gtv { git remote --verbose; }
 # [B]ranch
-function gb { local merged; merged=$(gb_merged); [[ -n $merged ]] && merged="\n----------------\n$merged"; echo "$(git branch)$merged" | args_keymap_s; }
-function gbb { gb_merged | xargs git branch --delete; git remote prune origin; echo; gb; }
-function gbd { git branch --delete --force "$@"; git push origin --delete "$@"; gb; }
 # [G]it checkout
 function g { git checkout "$@"; }
 function gg { git checkout main || git checkout master; git pull; git status; }
