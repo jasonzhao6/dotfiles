@@ -4,27 +4,27 @@ source "$ZSHRC_DIR"/_tests/_test_harness.zsh
 source "$ZSHRC_DIR"/_tests/_test_helpers.zsh
 
 # Filter sections by number (1-5)
-ZSHRC_TEST_SECTION_FILTER=$([[ $1 -ge 1 && $1 -le 5 ]] && echo "$1")
+ZSHRC_TESTS_SECTION_FILTER=$([[ $1 -ge 1 && $1 -le 5 ]] && echo "$1")
 
 # Filter tests by substring match
 # shellcheck disable=SC2030
-ZSHRC_TEST_NAME_FILTER=$([[ -z $ZSHRC_TEST_SECTION_FILTER && -n $1 ]] && echo "$1")
+ZSHRC_TESTS_NAME_FILTER=$([[ -z $ZSHRC_TESTS_SECTION_FILTER && -n $1 ]] && echo "$1")
 
 # Source test subjects and general utils
-ZSHRC_UNDER_TEST=1 source ~/.zshrc
+ZSHRC_UNDER_TESTING=1 source ~/.zshrc
 
 #
 # 1: Run all test cases
 #
 
 # shellcheck disable=SC2031
-if [[ $ZSHRC_TEST_SECTION_FILTER -eq 1 || -z $ZSHRC_TEST_SECTION_FILTER ]]; then
+if [[ $ZSHRC_TESTS_SECTION_FILTER -eq 1 || -z $ZSHRC_TESTS_SECTION_FILTER ]]; then
 
 	echo
-	if [[ -z $ZSHRC_TEST_NAME_FILTER ]]; then
+	if [[ -z $ZSHRC_TESTS_NAME_FILTER ]]; then
 		echo '1: Run all test cases'
 	else
-		echo "1: Run test cases matching \`*$ZSHRC_TEST_NAME_FILTER*\`"
+		echo "1: Run test cases matching \`*$ZSHRC_TESTS_NAME_FILTER*\`"
 	fi
 
 	pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
@@ -40,7 +40,7 @@ fi
 # 2: Verify all tests defined are getting invoked
 #
 
-if [[ ($ZSHRC_TEST_SECTION_FILTER -eq 2 || -z $ZSHRC_TEST_SECTION_FILTER) && -z $ZSHRC_TEST_NAME_FILTER ]]; then
+if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq 2 || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
 	echo
 	echo
 	echo '2: Verify all tests defined are getting invoked'
@@ -52,7 +52,7 @@ fi
 # 3: Verify subjects and tests are defined in the same order
 #
 
-if [[ ($ZSHRC_TEST_SECTION_FILTER -eq 3 || -z $ZSHRC_TEST_SECTION_FILTER) && -z $ZSHRC_TEST_NAME_FILTER ]]; then
+if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq 3 || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
 	echo
 	echo
 	echo '3: Verify subjects and tests are defined in the same order'
