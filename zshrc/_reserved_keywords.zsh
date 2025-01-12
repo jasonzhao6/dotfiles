@@ -14,6 +14,7 @@ RESERVED[as]=0
 RESERVED[at]=0
 RESERVED[gc]=0
 RESERVED[gcp]=0
+RESERVED[grm]=0
 RESERVED[sa]=0
 
 # This list was copied from https://zsh.sourceforge.io/Doc/Release/Shell-Grammar.html#Reserved-Words
@@ -600,7 +601,6 @@ RESERVED[greadlink]=1
 RESERVED[grealpath]=1
 RESERVED[grep]=1
 RESERVED[gresource]=1
-RESERVED[grm]=1
 RESERVED[grmdir]=1
 RESERVED[groonga]=1
 RESERVED[groups]=1

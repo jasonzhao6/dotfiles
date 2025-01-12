@@ -9,7 +9,8 @@ GIT_KEYMAP=(
 	"$GIT_ALIAS·m # Checkout the latest \`main\`"
 	"$GIT_ALIAS·n <name> # Create a new branch from the latest \`main\`"
 	''
-	"$GIT_ALIAS·d # Diff"
+	"$GIT_ALIAS·d # Git diff"
+	"$GIT_ALIAS·t # Git status"
 	"$GIT_ALIAS·cn # Create a new commit"
 	"$GIT_ALIAS·ca # Amend the previous commit"
 	"$GIT_ALIAS·cr # Reword the previous commit"
@@ -23,6 +24,13 @@ GIT_KEYMAP=(
 	"$GIT_ALIAS·ru # Rebase with the latest upstream"
 	"$GIT_ALIAS·ra # Rebase abort"
 	"$GIT_ALIAS·rc # Rebase continue"
+	''
+	"$GIT_ALIAS·s # Git stash"
+	"$GIT_ALIAS·s <message> # Git stash with message"
+	"$GIT_ALIAS·a # Git apply the last stash"
+	"$GIT_ALIAS·a <index> # Git apply stash by index"
+	"$GIT_ALIAS·l # Git stash list"
+	"$GIT_ALIAS·sc # Git stash clear"
 )
 
 keymap_init $GIT_NAMESPACE $GIT_ALIAS "${GIT_KEYMAP[@]}"
@@ -37,9 +45,15 @@ function git_keymap {
 
 export EDITOR='mate --wait'
 
+function git_keymap_a {
+	local index=${1:-0}
+
+	git stash apply "stash@{$index}"
+}
+
 function git_keymap_b {
 	local branches; branches=$(git branch)
-	local merged; merged=$(gb_merged)
+	local merged; merged=$(git_merged)
 
 	if [[ -n $merged ]]; then
 		branches+="\n----------------\n$merged"
@@ -49,7 +63,7 @@ function git_keymap_b {
 }
 
 function git_keymap_bb {
-	gb_merged | xargs git branch --delete
+	git_merged | xargs git branch --delete
 	git remote prune origin
 	echo
 	git_keymap_b
@@ -104,6 +118,10 @@ function git_keymap_d {
 	git diff
 }
 
+function git_keymap_l {
+	git stash list --pretty=format:'%C(yellow)%gd %C(magenta)%as %C(green)%s'
+}
+
 function git_keymap_m {
 	git checkout main || git checkout master
 	git pull
@@ -152,4 +170,19 @@ function git_keymap_rm {
 
 function git_keymap_ru {
 	git_keymap_r u
+}
+
+function git_keymap_s {
+	local message="$*"
+
+	git add --all
+	git stash save "$message"
+}
+
+function git_keymap_sc {
+	git stash clear
+}
+
+function git_keymap_t {
+	git status
 }
