@@ -4,7 +4,10 @@ GIT_ALIAS='h'
 GIT_KEYMAP=(
 	"$GIT_ALIAS·b # List branches"
 	"$GIT_ALIAS·bb # Delete merged branches"
-	"$GIT_ALIAS·bd <name> # Delete branch by name"
+	"$GIT_ALIAS·bd <name> # Delete a branch by name"
+	"$GIT_ALIAS·c <name> # Checkout a branch by name"
+	"$GIT_ALIAS·m # Checkout the latest \`main\`"
+	"$GIT_ALIAS·n <name> # Checkout a new branch from the latest \`main\`"
 	''
 	"$GIT_ALIAS·np # Create a new PR, then open tab to it"
 	"$GIT_ALIAS·ng # Create a new gist, then open tab to it"
@@ -58,6 +61,23 @@ function git_keymap_bd {
 	git branch --delete --force "$name"
 	git push origin --delete "$name"
 	git_keymap_b
+}
+
+function git_keymap_c {
+	local name=$1;
+
+	git checkout "$name"
+}
+
+function git_keymap_m {
+	git checkout main || git checkout master
+	git pull
+	git status
+}
+
+function git_keymap_n {
+	git_keymap_m
+	git checkout -b "$@"
 }
 
 function git_keymap_nb {

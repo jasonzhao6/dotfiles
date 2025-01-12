@@ -1,8 +1,5 @@
 # [B]ranch
 # [G]it checkout
-function g { git checkout "$@"; }
-function gg { git checkout main || git checkout master; git pull; git status; }
-function gn { gg; git checkout -b "$@"; }
 # Git [d]iff / status
 function gd { git diff; }
 function gq { git status; }
