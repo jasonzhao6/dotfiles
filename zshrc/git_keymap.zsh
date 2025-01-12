@@ -7,9 +7,14 @@ GIT_KEYMAP=(
 	"$GIT_ALIAS·bd <name> # Delete a branch by name"
 	"$GIT_ALIAS·c <name> # Checkout a branch by name"
 	"$GIT_ALIAS·m # Checkout the latest \`main\`"
-	"$GIT_ALIAS·n <name> # Checkout a new branch from the latest \`main\`"
+	"$GIT_ALIAS·n <name> # Create a new branch from the latest \`main\`"
 	''
 	"$GIT_ALIAS·d # Diff"
+	"$GIT_ALIAS·cn # Create a new commit"
+	"$GIT_ALIAS·ca # Amend the previous commit"
+	"$GIT_ALIAS·cr # Reword the previous commit"
+	"$GIT_ALIAS·ce # Create an empty commit"
+	"$GIT_ALIAS·cp # Cherry pick a commit"
 	''
 	"$GIT_ALIAS·np # Create a new PR, then open tab to it"
 	"$GIT_ALIAS·ng # Create a new gist, then open tab to it"
@@ -69,6 +74,29 @@ function git_keymap_c {
 	local name=$1;
 
 	git checkout "$name"
+}
+
+function git_keymap_ca {
+	git add --all
+	git commit --amend --no-edit
+}
+
+function git_keymap_ce {
+	git commit --allow-empty -m 're-run: Empty commit to trigger build'
+}
+
+function git_keymap_cn {
+	git add --all
+	git commit
+}
+
+function git_keymap_cp {
+	git cherry-pick "$@"
+}
+
+function git_keymap_cr {
+	git add --all
+	git commit --amend
 }
 
 function git_keymap_d {

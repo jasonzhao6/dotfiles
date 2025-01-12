@@ -1,14 +1,8 @@
 # [B]ranch
 # [G]it checkout
 # Git [d]iff / status
-function gd { git diff; }
 function gq { git status; }
 # Commit
-function ge { git commit --allow-empty -m 're-run: Empty commit to trigger build'; }
-function gm { git add --all; git commit --amend --no-edit; }
-function gw { git add --all; git commit --amend; }
-function gv { git add --all; git commit; }
-function gi { git cherry-pick "$@"; }
 # [P]ull / [p]ush
 function gP { git pull "$@"; }
 function gp { git push; }
