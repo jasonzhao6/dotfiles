@@ -313,14 +313,6 @@ function test__hh {
 	)"
 }; # run_with_filter test__hh
 
-# Skip: Not interesting to test
-# function test__ii
-
-# Skip: Not interesting to test
-# function test__mm
-
-# Skip: Not interesting to test
-# function test__oo
 
 # Skip: Not interesting b/c it has its own specs
 # function test__pp

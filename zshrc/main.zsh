@@ -25,7 +25,7 @@ source "$ZSHRC_DIR/git_keymap.zsh"
 source "$ZSHRC_DIR/github_keymap.zsh"
 source "$ZSHRC_DIR/main_keymap.zsh"
 source "$ZSHRC_DIR/nav_keymap.zsh"
-source "$ZSHRC_DIR/open_keymap.zsh"
+source "$ZSHRC_DIR/other_keymap.zsh"
 source "$ZSHRC_DIR/zsh_keymap.zsh"
 
 # Load non-keymaps
