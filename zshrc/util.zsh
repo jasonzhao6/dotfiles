@@ -10,10 +10,6 @@ function f {
 	[[ -n "$1" ]] && f_pre "$@" | sort | args_keymap_s
 }
 
-function bb {
-	pmset sleepnow
-}
-
 function cc {
 	eval "$(prev_command)" | bw | ruby -e 'puts STDIN.read.strip' | pbcopy
 }
@@ -38,20 +34,12 @@ function eee {
 	for i in $(seq "$1" "$2"); do echo; echo_eval ${${@:3}//~~/$i}; done
 }
 
-function ff {
-	caffeinate
-}
-
 function hh {
 	diff --side-by-side --suppress-common-lines "$1" "$2"
 }
 
 function pp {
 	ruby ~/gh/jasonzhao6/sql_formatter.rb/run.rb "$@"
-}
-
-function tt {
-	~/gh/tt/tt.rb "$@"
 }
 
 function uu {
@@ -64,10 +52,6 @@ function xx {
 
 function yy {
 	YY=$(prev_command); echo -n "$YY" | pbcopy
-}
-
-function bif {
-	brew install --formula "$@"
 }
 
 function flush {

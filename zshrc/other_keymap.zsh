@@ -2,8 +2,8 @@ OTHER_NAMESPACE='other_keymap'
 OTHER_ALIAS='o'
 
 OTHER_KEYMAP=(
-	"$OTHER_ALIAS <path> # Open the specified path in Finder"
-	"$OTHER_ALIAS <urls> # Open urls from a string"
+	"$OTHER_ALIAS <path> # Delegate to \`${OTHER_ALIAS}o <path>\`"
+	"$OTHER_ALIAS <urls> # Delegate to \`${OTHER_ALIAS}o <urls>\`"
 	''
 	"$OTHER_ALIAS${KEYMAP_DOT}i # Open the current path in IntelliJ IDEA"
 	"$OTHER_ALIAS${KEYMAP_DOT}i <path> # Open the specified path in IntelliJ IDEA"
@@ -12,6 +12,12 @@ OTHER_KEYMAP=(
 	"$OTHER_ALIAS${KEYMAP_DOT}o # Open the current path in Finder"
 	"$OTHER_ALIAS${KEYMAP_DOT}o <path> # Open the specified path in Finder"
 	"$OTHER_ALIAS${KEYMAP_DOT}o <urls> # Open urls from a string"
+	''
+	"$OTHER_ALIAS${KEYMAP_DOT}s # Sleep"
+	"$OTHER_ALIAS${KEYMAP_DOT}a # Stay awake"
+	"$OTHER_ALIAS${KEYMAP_DOT}t # Tomato timer"
+	''
+#	"$OTHER_ALIAS${KEYMAP_DOT}s # Sleep"
 )
 
 keymap_init $OTHER_NAMESPACE $OTHER_ALIAS "${OTHER_KEYMAP[@]}"
@@ -27,6 +33,10 @@ function other_keymap {
 #
 # Key mappings (Alphabetized)
 #
+
+function other_keymap_a {
+	caffeinate
+}
 
 function other_keymap_i {
 	local target_path=${*:-.}
@@ -62,4 +72,12 @@ function other_keymap_o {
 
 	# If we didn't open anything, return exit code `1`
 	return 1
+}
+
+function other_keymap_s {
+	pmset sleepnow
+}
+
+function other_keymap_t {
+	~/gh/tt/tt.rb "$@"
 }

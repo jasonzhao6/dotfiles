@@ -36,7 +36,7 @@ function test__d__with_protocol_and_path {
 }; run_with_filter test__d__with_protocol_and_path
 
 # Skip: Cannot test b/c requires querying github
-# function test__f__for_gh
+# function other_keymap_f__for_gh
 
 function test__f__for_tf {
 	assert "$(
@@ -63,14 +63,11 @@ function test__f__for_tf {
 	)"
 }; run_with_filter test__f__for_tf
 
-# Skip: Not interesting to test
-# function test__bb
-
 # Skip: Cannot test b/c `fc -l` throws 'no such event' error
-# function test__cc
+# function other_keymap_cc
 
 # Skip: Not testing b/c requires network call
-# function test__dd
+# function other_keymap_dd
 
 function test__dd {
 	assert "$(
@@ -278,9 +275,6 @@ function test__eee__with_math {
 	)"
 }; run_with_filter test__eee__with_math
 
-# Skip: Not interesting to test
-# function test__ff
-
 function test__hh {
 	local old; old=$(
 		cat <<-eof
@@ -315,10 +309,7 @@ function test__hh {
 
 
 # Skip: Not interesting b/c it has its own specs
-# function test__pp
-
-# Skip: Not interesting to test
-# function test__tt
+# function other_keymap_pp
 
 function test__uu {
 	local old; old=$(
@@ -371,13 +362,13 @@ function test__xx {
 }; run_with_filter test__xx
 
 # Skip: Not testing b/c requires network call
-# function test__bif
+# function other_keymap_bif
 
 # Skip: Not testing b/c requires network call
-# function test__flush
+# function other_keymap_flush
 
 # Skip: Not interesting to test
-# function test__jcurl
+# function other_keymap_jcurl
 
 function test__ren {
 	assert "$(
