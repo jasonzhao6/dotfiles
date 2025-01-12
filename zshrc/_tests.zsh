@@ -10,8 +10,6 @@ ZSHRC_TEST_SECTION_FILTER=$([[ $1 -ge 1 && $1 -le 5 ]] && echo "$1")
 # shellcheck disable=SC2030
 ZSHRC_TEST_NAME_FILTER=$([[ -z $ZSHRC_TEST_SECTION_FILTER && -n $1 ]] && echo "$1")
 
-# Source .zshrc for multiple sections
-ZSHRC_UNDER_TEST=1 source ~/.zshrc
 
 #
 # 1: Run all test cases
@@ -19,8 +17,9 @@ ZSHRC_UNDER_TEST=1 source ~/.zshrc
 
 # shellcheck disable=SC2031
 if [[ $ZSHRC_TEST_SECTION_FILTER -eq 1 || -z $ZSHRC_TEST_SECTION_FILTER ]]; then
-	echo
+	ZSHRC_UNDER_TEST=1 source ~/.zshrc
 
+	echo
 	if [[ -z $ZSHRC_TEST_NAME_FILTER ]]; then
 		echo '1: Run all test cases'
 	else
@@ -30,7 +29,7 @@ if [[ $ZSHRC_TEST_SECTION_FILTER -eq 1 || -z $ZSHRC_TEST_SECTION_FILTER ]]; then
 	pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
 
 	init
-	for test in $(find_tests); do source "$test"; done
+	for test in $(find_test_files); do source "$test"; done
 	print_summary 'tests passed'
 
 	echo "$pasteboard" | pbcopy # Restore saved pasteboard value
@@ -59,13 +58,13 @@ if [[ ($ZSHRC_TEST_SECTION_FILTER -eq 3 || -z $ZSHRC_TEST_SECTION_FILTER) && -z 
 
 	init
 
-	for test in $(find_tests); do
-		test_target="${test/_tests\/test_}"
+	for test_file in $(find_test_files); do
+		subject_file="${test_file/_tests\/test_}"
 
-		if [[ -f $test_target ]]; then
-			verify_ordering "$test_target" "$test"
+		if [[ -f $subject_file ]]; then
+			verify_ordering "$subject_file" "$test_file"
 		else
-			verify_ordering "$ZSHRC_DIR"/main.zsh "$test"
+			verify_ordering "$ZSHRC_DIR"/main.zsh "$test_file"
 		fi
 	done
 

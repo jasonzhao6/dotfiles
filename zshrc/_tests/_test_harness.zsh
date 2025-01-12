@@ -5,23 +5,6 @@ function init {
 	debug=''
 }
 
-function pass {
-	((passes++))
-	((total++))
-	echo -n .
-}
-
-function fail {
-	local name=$1
-
-	failed+="\n$(red_bg fail): $name"
-	((total++))
-	echo -n f
-
-	debug+="\n\n$(red_bg debug): $name\n"
-	debug+=$(diff -u <(echo "$expected") <(echo "$output") | sed '/--- /d; /+++ /d; /@@ /d')
-}
-
 function assert {
 	local output=$1
 	local expected=$2
@@ -41,3 +24,32 @@ function print_summary {
 	echo "($passes/$total $message)"
 	[[ $passes -ne $total ]] && echo "$failed" "$debug"
 }
+
+#
+# Helpers
+#
+
+function find_test_files {
+	find "$ZSHRC_DIR/_tests" -name 'test_*.zsh' | sort
+}
+
+function pass {
+	((passes++))
+	((total++))
+	echo -n .
+}
+
+function fail {
+	local name=$1
+
+	failed+="\n$(red_bg fail): $name"
+	((total++))
+	echo -n f
+
+	debug+="\n\n$(red_bg debug): $name\n"
+	debug+=$(diff -u <(echo "$expected") <(echo "$output") | sed '/--- /d; /+++ /d; /@@ /d')
+}
+
+# Emulate `grep` color codes
+function grep_color { echo "\e[1;32m\e[K$*\e[m\e[K"; }
+function pgrep_color { echo "\e[1;32m$*\e[00m"; }
