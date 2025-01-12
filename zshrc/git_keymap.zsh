@@ -15,6 +15,7 @@ GIT_KEYMAP=(
 	"$GIT_ALIAS·cr # Reword the previous commit"
 	"$GIT_ALIAS·ce # Create an empty commit"
 	"$GIT_ALIAS·cp # Cherry pick a commit"
+	"$GIT_ALIAS·cf # Fix up a commit"
 	''
 	"$GIT_ALIAS·np # Create a new PR, then open tab to it"
 	"$GIT_ALIAS·ng # Create a new gist, then open tab to it"
@@ -85,13 +86,21 @@ function git_keymap_ce {
 	git commit --allow-empty -m 're-run: Empty commit to trigger build'
 }
 
+function git_keymap_cf {
+	local sha=$1
+
+	git add --all; git commit --fixup "$sha"
+}
+
 function git_keymap_cn {
 	git add --all
 	git commit
 }
 
 function git_keymap_cp {
-	git cherry-pick "$@"
+	local sha=$1
+
+	git cherry-pick "$sha"
 }
 
 function git_keymap_cr {

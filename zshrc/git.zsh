@@ -13,7 +13,6 @@ function ga { git stash apply "stash@{${1:-0}}"; }
 function gl { git stash list --pretty=format:'%C(yellow)%gd %C(magenta)%as %C(green)%s'; }
 function gc { git stash clear; }
 # Rebase
-function gx { git add --all; git commit --fixup "$@"; }
 function gxx { gxx_rebase "$@"; }
 # Resolve conflict
 function gxa { git rebase --abort; }
