@@ -15,8 +15,8 @@ GIT_KEYMAP=(
 	"$GIT_ALIAS${KEYMAP_DOT}e # Create an empty commit"
 	"$GIT_ALIAS${KEYMAP_DOT}m # Amend the previous commit"
 	"$GIT_ALIAS${KEYMAP_DOT}w # Reword the previous commit"
-	"$GIT_ALIAS${KEYMAP_DOT}p # Cherry pick a commit"
-	"$GIT_ALIAS${KEYMAP_DOT}f # Fix up a commit"
+	"$GIT_ALIAS${KEYMAP_DOT}y # Cherry pick a commit"
+	"$GIT_ALIAS${KEYMAP_DOT}i # Fix up a commit"
 	''
 	"$GIT_ALIAS${KEYMAP_DOT}x <number> # Rebase the last <number> commits"
 	"$GIT_ALIAS${KEYMAP_DOT}x # Rebase with the latest main"
@@ -101,16 +101,16 @@ function git_keymap_e {
 	git commit --allow-empty -m 're-run: Empty commit to trigger build'
 }
 
-function git_keymap_f {
-	local sha=$1
-
-	git add --all; git commit --fixup "$sha"
-}
-
 function git_keymap_g {
 	git checkout main || git checkout master
 	git pull
 	git status
+}
+
+function git_keymap_i {
+	local sha=$1
+
+	git add --all; git commit --fixup "$sha"
 }
 
 function git_keymap_j {
@@ -130,12 +130,6 @@ function git_keymap_m {
 function git_keymap_n {
 	git_keymap_m
 	git checkout -b "$@"
-}
-
-function git_keymap_p {
-	local sha=$1
-
-	git cherry-pick "$sha"
 }
 
 function git_keymap_r {
@@ -216,6 +210,12 @@ function git_keymap_xm {
 
 function git_keymap_xu {
 	git_keymap_r u
+}
+
+function git_keymap_y {
+	local sha=$1
+
+	git cherry-pick "$sha"
 }
 
 function git_keymap_z {
