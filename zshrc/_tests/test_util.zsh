@@ -311,7 +311,7 @@ function test__hh {
 			                                                                >       New Line
 		eof
 	)"
-}; run_with_filter test__hh
+}; # run_with_filter test__hh
 
 # Skip: Not interesting to test
 # function test__ii

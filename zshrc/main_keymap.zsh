@@ -43,10 +43,10 @@ function main_keymap {
 # Key mappings (Alphabetized)
 #
 
-function main_keymap_vv {
-	cat "$DOTFILES_DIR"/vimium/vimium-keymap.txt
-}
-
 function main_keymap_vs {
 	cat "$DOTFILES_DIR"/vimium/vimium-searches.txt
+}
+
+function main_keymap_vv {
+	cat "$DOTFILES_DIR"/vimium/vimium-keymap.txt
 }
