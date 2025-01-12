@@ -10,7 +10,7 @@ ARGS_KEYMAP=(
 	'1-20 <command> ~~? # Use args 1 through 20 by number'
 	'0 <command> ~~? # Use the last arg'
 	''
-	"$ARGS_ALIAS·ny <command> ~~? # Use any random arg"
+	"$ARGS_ALIAS·o <command> ~~? # Use a random arg"
 	"$ARGS_ALIAS·n <number> <command> ~~? # Use an arg by number"
 	"$ARGS_ALIAS·q <start> <finish> <command> ~~? # Use args within a sequence"
 	"$ARGS_ALIAS·e <command> ~~? # Use each arg in series"
@@ -164,7 +164,7 @@ function args_keymap_n {
 	fi
 }
 
-function args_keymap_ny {
+function args_keymap_o {
 	local command=$*
 
 	args_keymap_n $((RANDOM % $(args_size) + 1)) "$command"

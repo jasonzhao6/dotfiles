@@ -590,21 +590,21 @@ function test__args_keymap_n__with_multiple_substitutions_in_quotes {
 	)"
 }; run_with_filter test__args_keymap_n__with_multiple_substitutions_in_quotes
 
-function test__args_keymap_ny {
+function test__args_keymap_o {
 	assert "$(
 		echo "$test__input_short" | args_keymap_s > /dev/null
-		eee 1 $(($(args_size) * 4)) args_keymap_ny echo 2>&1 | sort --unique
+		eee 1 $(($(args_size) * 4)) args_keymap_o echo 2>&1 | sort --unique
 	)" "$(
 		cat <<-eof
 
-			args_keymap_ny echo
+			args_keymap_o echo
 			echo terraform-application-region-shared-1
 			echo terraform-application-region-shared-2
 			terraform-application-region-shared-1
 			terraform-application-region-shared-2
 		eof
 	)"
-}; run_with_filter test__args_keymap_ny
+}; run_with_filter test__args_keymap_o
 
 function test__args_keymap_p {
 	assert "$(
