@@ -112,7 +112,22 @@ function zsh_keymap_t {
 }
 
 function zsh_keymap_w {
-	which "$1" | args_keymap_s
+	local program=$1
+
+	local definition; definition=$(which "$program")
+
+	# If `program` in an alias, follow it
+	local is_alias=': aliased to ([a-zA-Z0-9_]+)$'
+	if [[ $definition =~ $is_alias ]]; then
+		echo
+		gray_fg "$definition"
+		echo
+
+		# shellcheck disable=SC2154 # `match` is defined by `=~`
+		definition=$(which "${match[1]}")
+	fi
+
+	echo "$definition" | args_keymap_s
 }
 
 ZSHRC_SECRETS_DIR="$HOME/Downloads/_Archive/zsh/.zshrc.secrets"

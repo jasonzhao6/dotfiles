@@ -111,15 +111,41 @@ function test__zsh_keymap_hc {
 
 function test__zsh_keymap_w {
 	assert "$(
-		zsh_keymap_w zsh_keymap_w
+		zsh_keymap_w zsh_keymap_h0
 	)" "$(
 		cat <<-eof
-		     1	zsh_keymap_w () {
-		     2		which "\$1" | args_keymap_s
+		     1	zsh_keymap_h0 () {
+		     2		unset -f zshaddhistory
 		     3	}
 		eof
 	)"
 }; run_with_filter test__zsh_keymap_w
+
+function test__zsh_keymap_w__when_program_is_an_alias {
+	assert "$(
+		zsh_keymap_w zw | strip_right
+	)" "$(
+		cat <<-eof
+
+		$(gray_fg 'zw: aliased to zsh_keymap_w')
+
+		     1	zsh_keymap_w () {
+		     2		local program=\$1
+		     3		local definition
+		     4		definition=\$(which "\$program")
+		     5		local is_alias=': aliased to ([a-zA-Z0-9_]+)$'
+		     6		if [[ \$definition =~ \$is_alias ]]
+		     7		then
+		     8			echo
+		     9			gray_fg "\$definition"
+		    10			echo
+		    11			definition=\$(which "\${match[1]}")
+		    12		fi
+		    13		echo "\$definition" | args_keymap_s
+		    14	}
+		eof
+	)"
+}; run_with_filter test__zsh_keymap_w__when_program_is_an_alias
 
 function test__zsh_keymap_z__when_args_history_is_not_initialized {
 	args_history_init
