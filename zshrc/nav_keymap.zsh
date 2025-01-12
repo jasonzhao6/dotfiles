@@ -13,6 +13,7 @@ NAV_KEYMAP=(
 	"$NAV_ALIAS·v # Go to directory in pasteboard"
 	"$NAV_ALIAS·h # Go to github"
 	"$NAV_ALIAS·s # Go to scratch"
+	"$NAV_ALIAS·dd # Go to dotfiles"
 	"$NAV_ALIAS·dl # Go to Downloads"
 	"$NAV_ALIAS·dm # Go to Documents"
 	"$NAV_ALIAS·dt # Go to Desktop"
@@ -69,16 +70,24 @@ function nav_keymap_d {
 	ls -ld -- */ | awk '{print $9}' | args_keymap_s "${filters[@]}"
 }
 
+function nav_keymap_dd {
+	cd ~/gh/jasonzhao6/dotfiles || true
+	nav_keymap_n
+}
+
 function nav_keymap_dl {
 	cd ~/Downloads || true
+	nav_keymap_n
 }
 
 function nav_keymap_dm {
 	cd ~/Documents || true
+	nav_keymap_n
 }
 
 function nav_keymap_dt {
 	cd ~/Desktop || true
+	nav_keymap_n
 }
 
 # TODO add test
@@ -91,6 +100,7 @@ function nav_keymap_f {
 
 function nav_keymap_h {
 	cd ~/gh || true
+	nav_keymap_n
 }
 
 # shellcheck disable=SC2120
@@ -102,18 +112,22 @@ function nav_keymap_n {
 
 function nav_keymap_s {
 	cd ~/gh/scratch || true
+	nav_keymap_n
 }
 
 function nav_keymap_u {
 	cd ..
+	nav_keymap_n
 }
 
 function nav_keymap_uu {
 	cd ../..
+	nav_keymap_n
 }
 
 function nav_keymap_uuu {
 	cd ../../..
+	nav_keymap_n
 }
 
 function nav_keymap_v {
@@ -128,4 +142,6 @@ function nav_keymap_v {
 	else
 		cd ${${target_path}%/*} || return
 	fi
+
+	nav_keymap_n
 }
