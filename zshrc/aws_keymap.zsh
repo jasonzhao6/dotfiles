@@ -5,15 +5,15 @@ AWS_KEYMAP=(
 	"$AWS_ALIAS${KEYMAP_DOT}o # List Opal groups"
 	"$AWS_ALIAS${KEYMAP_DOT}o <match> # Filter Opal groups"
 	''
-	"$AWS_ALIAS${KEYMAP_DOT}q1 # Use mq01"
-	"$AWS_ALIAS${KEYMAP_DOT}q2 # Use mq02"
+	"$AWS_ALIAS${KEYMAP_DOT}0 # MQ logout"
+	"$AWS_ALIAS${KEYMAP_DOT}1 # MQ login to 01"
+	"$AWS_ALIAS${KEYMAP_DOT}2 # MQ login to 02"
 	"$AWS_ALIAS${KEYMAP_DOT}q # MQ restore"
-	"$AWS_ALIAS${KEYMAP_DOT}qo # MQ logout"
 	''
-	"$AWS_ALIAS${KEYMAP_DOT}1 # Use us-east-1 region"
-	"$AWS_ALIAS${KEYMAP_DOT}2 # Use us-east-2 region"
-	"$AWS_ALIAS${KEYMAP_DOT}w # Use us-west-2 region"
-	"$AWS_ALIAS${KEYMAP_DOT}c # Use eu-central-1 region"
+	"$AWS_ALIAS${KEYMAP_DOT}e1 # Use us-east-1 region"
+	"$AWS_ALIAS${KEYMAP_DOT}e2 # Use us-east-2 region"
+	"$AWS_ALIAS${KEYMAP_DOT}w2 # Use us-west-2 region"
+	"$AWS_ALIAS${KEYMAP_DOT}c1 # Use eu-central-1 region"
 	''
 	"$AWS_ALIAS${KEYMAP_DOT}e <prefix> # EC2 search"
 	"$AWS_ALIAS${KEYMAP_DOT}a <prefix> # ASG search"
@@ -23,10 +23,10 @@ AWS_KEYMAP=(
 	"$AWS_ALIAS${KEYMAP_DOT}oe <ec2 id> # Open new tab to the specified EC2 instance"
 	"$AWS_ALIAS${KEYMAP_DOT}oa <asg id> # Open new tab to the specified ASG group"
 	''
-	"$AWS_ALIAS${KEYMAP_DOT}mg <name> # Secret Manager get"
+	"$AWS_ALIAS${KEYMAP_DOT}m <name> # Secret Manager get"
 	"$AWS_ALIAS${KEYMAP_DOT}md <name> # Secret Manager delete"
-	"$AWS_ALIAS${KEYMAP_DOT}pg <name> # Parameter Store get"
-	"$AWS_ALIAS${KEYMAP_DOT}t <name> # STS decode"
+	"$AWS_ALIAS${KEYMAP_DOT}p <name> # Parameter Store get"
+	"$AWS_ALIAS${KEYMAP_DOT}t <message> # STS decode"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
@@ -43,12 +43,16 @@ source "$ZSHRC_DIR/aws_helpers.zsh"
 
 export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
 
+function aws_keymap_0 {
+	mq2 --logout
+}
+
 function aws_keymap_1 {
-	echo_eval 'export AWS_DEFAULT_REGION=us-east-1'
+	mq2 --mq01
 }
 
 function aws_keymap_2 {
-	echo_eval 'export AWS_DEFAULT_REGION=us-east-2'
+	mq2 --mq02
 }
 
 function aws_keymap_a {
@@ -57,7 +61,7 @@ function aws_keymap_a {
 	ec2_args "Name=tag:aws:autoscaling:groupName, Values=$prefix*"
 }
 
-function aws_keymap_c {
+function aws_keymap_c1 {
 	echo_eval 'export AWS_DEFAULT_REGION=eu-central-1'
 }
 
@@ -67,15 +71,15 @@ function aws_keymap_e {
 	ec2_args "Name=tag:Name, Values=$prefix*"
 }
 
-function aws_keymap_md {
-	local name=$1
-
-	aws secretsmanager delete-secret \
-		--secret-id "$name" \
-		--force-delete-without-recovery
+function aws_keymap_e1 {
+	echo_eval 'export AWS_DEFAULT_REGION=us-east-1'
 }
 
-function aws_keymap_mg {
+function aws_keymap_e2 {
+	echo_eval 'export AWS_DEFAULT_REGION=us-east-2'
+}
+
+function aws_keymap_m {
 	local name=$1
 	local version=$2
 
@@ -99,6 +103,14 @@ function aws_keymap_mg {
 
 	# If it's json, prettify with `jq`
 	[[ "$secret" == \{*\} ]] && echo "$secret" | jq || echo "$secret"
+}
+
+function aws_keymap_md {
+	local name=$1
+
+	aws secretsmanager delete-secret \
+		--secret-id "$name" \
+		--force-delete-without-recovery
 }
 
 # To be overwritten by `$ZSHRC_SECRETS`
@@ -130,7 +142,7 @@ function aws_keymap_oe {
 	open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$id"
 }
 
-function aws_keymap_pg {
+function aws_keymap_p {
 	local name=$1
 
 	local parameter; parameter=$(
@@ -146,18 +158,6 @@ function aws_keymap_pg {
 
 function aws_keymap_q {
 	mq2 --restore
-}
-
-function aws_keymap_q1 {
-	mq2 --mq01
-}
-
-function aws_keymap_q2 {
-	mq2 --mq02
-}
-
-function aws_keymap_qo {
-	mq2 --logout
 }
 
 function aws_keymap_s { # (e.g `ssm <instance-id>`, or `0 ssm` to use the last entry from `args`)
@@ -190,6 +190,6 @@ function aws_keymap_t {
 	aws sts decode-authorization-message --encoded-message "$message" --output text | jq .
 }
 
-function aws_keymap_w {
+function aws_keymap_w2 {
 	echo_eval 'export AWS_DEFAULT_REGION=us-west-2'
 }
