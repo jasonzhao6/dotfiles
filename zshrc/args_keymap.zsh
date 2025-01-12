@@ -2,40 +2,39 @@ ARGS_NAMESPACE='args_keymap'
 ARGS_ALIAS='a'
 
 ARGS_KEYMAP=(
-	"$ARGS_ALIAS·s # Save as args"
-	"$ARGS_ALIAS·s <match>* <-mismatch>* # Save as args & filter"
-	"$ARGS_ALIAS·so # Save as args & soft-select the 1st column"
-	"$ARGS_ALIAS·so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
+	"$ARGS_ALIAS${KEYMAP_DOT}s # Save as args"
+	"$ARGS_ALIAS${KEYMAP_DOT}s <match>* <-mismatch>* # Save as args & filter"
+	"$ARGS_ALIAS${KEYMAP_DOT}so # Save as args & soft-select the 1st column"
+	"$ARGS_ALIAS${KEYMAP_DOT}so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
 	''
-	'# (Namespace-less)'
-	'<1-20> <command ~~?> # Use args 1 through 20'
-	'0 <command ~~?> # Use the last arg'
+	'<1-20> <command> # Use args 1 through 20'
+	'0 <command> # Use the last arg'
 	''
-	"$ARGS_ALIAS·o <command ~~?> # Use a random arg"
-	"$ARGS_ALIAS·n <number> <command ~~?> # Use an arg by number"
-	"$ARGS_ALIAS·q <start> <finish> <command ~~?> # Use args within a sequence"
-	"$ARGS_ALIAS·e <command ~~?> # Use each arg in series"
-	"$ARGS_ALIAS·l <command ~~?> # Use all args in parallel"
-	"$ARGS_ALIAS·m <command ~~?> # Map args, e.g \`seq 1 10 | args_keymap_s; am echo '\$((~~ * 10))'\`"
+	"$ARGS_ALIAS${KEYMAP_DOT}o <command> # Use a random arg"
+	"$ARGS_ALIAS${KEYMAP_DOT}n <number> <command> # Use an arg by number"
+	"$ARGS_ALIAS${KEYMAP_DOT}q <start> <finish> <command> # Use args within a sequence"
+	"$ARGS_ALIAS${KEYMAP_DOT}e <command> # Use each arg in series"
+	"$ARGS_ALIAS${KEYMAP_DOT}l <command> # Use all args in parallel"
+	"$ARGS_ALIAS${KEYMAP_DOT}m <command> # Map args, e.g \`${ARGS_ALIAS}m echo '\$((~~ * 10))'\`"
 	''
-	"$ARGS_ALIAS·a # List all args"
-	"$ARGS_ALIAS·a <match>* <-mismatch>* # Filter args"
-	"$ARGS_ALIAS·d # Delimit columns based on the bottom row"
-	"$ARGS_ALIAS·d <letter> # Select a column based on the bottom row"
-	"$ARGS_ALIAS·t # Delimit columns based on the top row"
-	"$ARGS_ALIAS·t <letter> # Select a column based on the top row"
-	"$ARGS_ALIAS·z # Select the last column based on the bottom row"
+	"$ARGS_ALIAS${KEYMAP_DOT}a # List args"
+	"$ARGS_ALIAS${KEYMAP_DOT}a <match>* <-mismatch>* # Filter args"
+	"$ARGS_ALIAS${KEYMAP_DOT}d # Delimit columns (use bottom row)"
+	"$ARGS_ALIAS${KEYMAP_DOT}d <letter> # Select a column (use bottom row)"
+	"$ARGS_ALIAS${KEYMAP_DOT}t # Delimit columns (use top row)"
+	"$ARGS_ALIAS${KEYMAP_DOT}t <letter> # Select a column (use top row)"
+	"$ARGS_ALIAS${KEYMAP_DOT}z # Select the last column (use bottom row)"
 	''
-	"$ARGS_ALIAS·u # Undo \"Filter args\" or \"Select column\""
-	"$ARGS_ALIAS·r # Redo \"Filter args\" or \"Select column\""
-	"$ARGS_ALIAS·h # List all history entries"
-	"$ARGS_ALIAS·h <index> # Select a history entry by index"
-	"$ARGS_ALIAS·hc # Reset history"
+	"$ARGS_ALIAS${KEYMAP_DOT}u # Undo \"Filter args\" or \"Select a column\""
+	"$ARGS_ALIAS${KEYMAP_DOT}r # Redo \"Filter args\" or \"Select a column\""
+	"$ARGS_ALIAS${KEYMAP_DOT}h # List history entries"
+	"$ARGS_ALIAS${KEYMAP_DOT}h <index> # Select an entry by index"
+	"$ARGS_ALIAS${KEYMAP_DOT}hc # Clear history entries"
 	''
-	"$ARGS_ALIAS·c # Copy all args into pasteboard"
-	"$ARGS_ALIAS·c <number> # Copy an arg by number into pasteboard"
-	"$ARGS_ALIAS·y # Yank all args to put into a different tab"
-	"$ARGS_ALIAS·p # In a different tab, put args"
+	"$ARGS_ALIAS${KEYMAP_DOT}c # Copy args"
+	"$ARGS_ALIAS${KEYMAP_DOT}c <number> # Copy an arg by number"
+	"$ARGS_ALIAS${KEYMAP_DOT}y # Yank args"
+	"$ARGS_ALIAS${KEYMAP_DOT}p # Put args (in a different tab)"
 )
 
 keymap_init $ARGS_NAMESPACE $ARGS_ALIAS "${ARGS_KEYMAP[@]}"

@@ -27,7 +27,7 @@ MAIN_KEYMAP+=( # TODO create these keymaps
 #	"$MAIN_ALIAS m # Show TextMate keymap"
 #	"$MAIN_ALIAS n # Show Notion keymap"
 #	"$MAIN_ALIAS t # Show Terminal keymap"
-	"$MAIN_ALIAS·vv # Show Vimium / Vimari keymap"
+	"$MAIN_ALIAS${KEYMAP_DOT}vv # Show Vimium / Vimari keymap"
 #	''
 #	"$MAIN_ALIAS k # Show Kinesis keymap"
 )

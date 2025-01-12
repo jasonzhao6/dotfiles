@@ -3,7 +3,7 @@
 #
 
 OPEN_KEYMAP=(
-	'o·'
+	'o$KEYMAP_DOT'
 )
 
 function o {

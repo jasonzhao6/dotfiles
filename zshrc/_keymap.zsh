@@ -2,7 +2,7 @@ KEYMAP_COLOR='cyan_fg'
 KEYMAP_PROMPT=$($KEYMAP_COLOR '  $')
 KEYMAP_PROMPT_BLANK=$(printf "%$(size_of "$KEYMAP_PROMPT")s")
 KEYMAP_ALIAS='_PLACEHOLDER_'
-KEYMAP_DOT='·'
+KEYMAP_DOT='.'
 KEYMAP_DOT_POINTER='^'
 
 KEYMAP_USAGE=(
@@ -62,11 +62,11 @@ function keymap_invoke {
 #
 
 # ```
-# o·c       # Open the latest commit
-# o·c <sha> # Open the specified commit  <--  Joint duplicate, likely intended
+# hc       # Open tab to the latest commit
+# hc <sha> # Open tab to the specified commit  <--  Joint duplicate, likely intentional
 #
-# o·a       # Do something
-# o·c       # Do something else          <--  Disjoint duplicate, likely unintended
+# ha       # Do something
+# hc       # Do something else                 <--  Disjoint duplicate, likely a mistake
 # ```
 function keymap_error_on_disjoint_dupes {
 	local entries=("$@")
@@ -166,9 +166,12 @@ function keymap_get_max_command_size {
 	local entries=("$@")
 
 	local max_command_size=0
+	local command_size
 
 	for entry in "${entries[@]}"; do
-		local command_size="${#entry% \#*}"
+		# If `entry` starts with `#`, there is no command
+		[[ $entry = \#* ]] && command_size=0 || command_size="${#entry% \#*}"
+
 		[[ $command_size -gt $max_command_size ]] && max_command_size=$command_size
 	done
 
@@ -243,12 +246,14 @@ function keymap_print_entry {
 	local command_size=$2
 
 	local prompt=$KEYMAP_PROMPT
-	local command="${entry% \#*}"
 
-	# If `entry` starts with `#`, clear `prompt` and `command`
-	[[ $entry = \#* ]] && prompt=$KEYMAP_PROMPT_BLANK && command=
+	# If `entry` starts with `#`, there is no command
+	local command; [[ $entry = \#* ]] || command="${entry% \#*}"
 
-	# If `entry` has `#`, extract `comment`
+	# If `command` is blank, make `prompt` blank too
+	[[ -z $command ]] && prompt=$KEYMAP_PROMPT_BLANK
+
+	# If `entry` contains `#`, extract `comment`
 	local comment; [[ $entry = *\#* ]] && comment="# ${entry#*\# }"
 
 	# Print with color

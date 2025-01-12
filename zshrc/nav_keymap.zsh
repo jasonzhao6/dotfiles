@@ -2,25 +2,25 @@ NAV_NAMESPACE='nav_keymap'
 NAV_ALIAS='n'
 
 NAV_KEYMAP=(
-	"$NAV_ALIAS·n <match>* <-mismatch>* # List directories & files"
-	"$NAV_ALIAS·d <match>* <-mismatch>* # List directories"
-	"$NAV_ALIAS·f <match>* <-mismatch>* # List files"
-	"$NAV_ALIAS·a <match>* <-mismatch>* # List hidden directories & files"
-	"$NAV_ALIAS·ad <match>* <-mismatch>* # List hidden directories"
-	"$NAV_ALIAS·af <match>* <-mismatch>* # List hidden files"
+	"$NAV_ALIAS${KEYMAP_DOT}n <match>* <-mismatch>* # List directories & files"
+	"$NAV_ALIAS${KEYMAP_DOT}d <match>* <-mismatch>* # List directories"
+	"$NAV_ALIAS${KEYMAP_DOT}f <match>* <-mismatch>* # List files"
+	"$NAV_ALIAS${KEYMAP_DOT}a <match>* <-mismatch>* # List hidden directories & files"
+	"$NAV_ALIAS${KEYMAP_DOT}ad <match>* <-mismatch>* # List hidden directories"
+	"$NAV_ALIAS${KEYMAP_DOT}af <match>* <-mismatch>* # List hidden files"
 	''
 	"$NAV_ALIAS <directory> # Go to directory"
-	"$NAV_ALIAS·v # Go to directory in pasteboard"
-	"$NAV_ALIAS·h # Go to github"
-	"$NAV_ALIAS·s # Go to scratch"
-	"$NAV_ALIAS·dd # Go to dotfiles"
-	"$NAV_ALIAS·dl # Go to Downloads"
-	"$NAV_ALIAS·dm # Go to Documents"
-	"$NAV_ALIAS·dt # Go to Desktop"
+	"$NAV_ALIAS${KEYMAP_DOT}v # Go to directory in pasteboard"
+	"$NAV_ALIAS${KEYMAP_DOT}h # Go to github"
+	"$NAV_ALIAS${KEYMAP_DOT}s # Go to scratch"
+	"$NAV_ALIAS${KEYMAP_DOT}dd # Go to dotfiles"
+	"$NAV_ALIAS${KEYMAP_DOT}dl # Go to Downloads"
+	"$NAV_ALIAS${KEYMAP_DOT}dm # Go to Documents"
+	"$NAV_ALIAS${KEYMAP_DOT}dt # Go to Desktop"
 	''
-	"$NAV_ALIAS·u # Go up one directory"
-	"$NAV_ALIAS·uu # Go up two directories"
-	"$NAV_ALIAS·uuu # Go up three directories"
+	"$NAV_ALIAS${KEYMAP_DOT}u # Go up one directory"
+	"$NAV_ALIAS${KEYMAP_DOT}uu # Go up two directories"
+	"$NAV_ALIAS${KEYMAP_DOT}uuu # Go up three directories"
 )
 
 keymap_init $NAV_NAMESPACE $NAV_ALIAS "${NAV_KEYMAP[@]}"

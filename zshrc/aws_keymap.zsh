@@ -2,31 +2,31 @@ AWS_NAMESPACE='aws_keymap'
 AWS_ALIAS='s'
 
 AWS_KEYMAP=(
-	"$AWS_ALIAS·o # List Opal groups"
-	"$AWS_ALIAS·o <match> # Filter Opal groups"
+	"$AWS_ALIAS${KEYMAP_DOT}o # List Opal groups"
+	"$AWS_ALIAS${KEYMAP_DOT}o <match> # Filter Opal groups"
 	''
-	"$AWS_ALIAS·q1 # Use mq01"
-	"$AWS_ALIAS·q2 # Use mq02"
-	"$AWS_ALIAS·q # MQ restore"
-	"$AWS_ALIAS·qo # MQ logout"
+	"$AWS_ALIAS${KEYMAP_DOT}q1 # Use mq01"
+	"$AWS_ALIAS${KEYMAP_DOT}q2 # Use mq02"
+	"$AWS_ALIAS${KEYMAP_DOT}q # MQ restore"
+	"$AWS_ALIAS${KEYMAP_DOT}qo # MQ logout"
 	''
-	"$AWS_ALIAS·1 # Use us-east-1 region"
-	"$AWS_ALIAS·2 # Use us-east-2 region"
-	"$AWS_ALIAS·w # Use us-west-2 region"
-	"$AWS_ALIAS·c # Use eu-central-1 region"
+	"$AWS_ALIAS${KEYMAP_DOT}1 # Use us-east-1 region"
+	"$AWS_ALIAS${KEYMAP_DOT}2 # Use us-east-2 region"
+	"$AWS_ALIAS${KEYMAP_DOT}w # Use us-west-2 region"
+	"$AWS_ALIAS${KEYMAP_DOT}c # Use eu-central-1 region"
 	''
-	"$AWS_ALIAS·e <prefix> # EC2 search"
-	"$AWS_ALIAS·a <prefix> # ASG search"
-	"$AWS_ALIAS·s # SSM start session with \`sudo -i\`"
-	"$AWS_ALIAS·sc # SSM start session with command"
-	"$AWS_ALIAS·sm # SSM start session"
-	"$AWS_ALIAS·oe <ec2 id> # Open new tab to the specified EC2 instance"
-	"$AWS_ALIAS·oa <asg id> # Open new tab to the specified ASG group"
+	"$AWS_ALIAS${KEYMAP_DOT}e <prefix> # EC2 search"
+	"$AWS_ALIAS${KEYMAP_DOT}a <prefix> # ASG search"
+	"$AWS_ALIAS${KEYMAP_DOT}s # SSM start session with \`sudo -i\`"
+	"$AWS_ALIAS${KEYMAP_DOT}sc # SSM start session with command"
+	"$AWS_ALIAS${KEYMAP_DOT}sm # SSM start session"
+	"$AWS_ALIAS${KEYMAP_DOT}oe <ec2 id> # Open new tab to the specified EC2 instance"
+	"$AWS_ALIAS${KEYMAP_DOT}oa <asg id> # Open new tab to the specified ASG group"
 	''
-	"$AWS_ALIAS·mg <name> # Secret Manager get"
-	"$AWS_ALIAS·md <name> # Secret Manager delete"
-	"$AWS_ALIAS·pg <name> # Parameter Store get"
-	"$AWS_ALIAS·t <name> # STS decode"
+	"$AWS_ALIAS${KEYMAP_DOT}mg <name> # Secret Manager get"
+	"$AWS_ALIAS${KEYMAP_DOT}md <name> # Secret Manager delete"
+	"$AWS_ALIAS${KEYMAP_DOT}pg <name> # Parameter Store get"
+	"$AWS_ALIAS${KEYMAP_DOT}t <name> # STS decode"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
