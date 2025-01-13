@@ -13,11 +13,16 @@ KUBECTL_KEYMAP=(
 	"$KUBECTL_ALIAS${KEYMAP_DOT}e <command> # Exec a command"
 	"$KUBECTL_ALIAS${KEYMAP_DOT}g <resource type> # Get resources"
 	"$KUBECTL_ALIAS${KEYMAP_DOT}k <resource type> # Get resources as args"
-	"$KUBECTL_ALIAS${KEYMAP_DOT}d <description> # Describe resource(s)"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}d <command> # Describe resource(s)"
 	''
 	"$KUBECTL_ALIAS${KEYMAP_DOT}b <pod> # Exec into bash"
 	"$KUBECTL_ALIAS${KEYMAP_DOT}c <pod> # Exec a command"
 	"$KUBECTL_ALIAS${KEYMAP_DOT}l <pod> # Show logs"
+	''
+	"$KUBECTL_ALIAS${KEYMAP_DOT}j <command> # Get resource as json"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}jj <command> # Cat cached copy of json"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}y <command> # Get resource as yaml"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}yy <command> # Cat cached copy of yaml"
 )
 
 keymap_init $KUBECTL_NAMESPACE $KUBECTL_ALIAS "${KUBECTL_KEYMAP[@]}"
@@ -44,9 +49,9 @@ function kubectl_keymap_c {
 }
 
 function kubectl_keymap_d {
-	local description=("$@")
+	local command=("$@")
 
-	kubectl describe "${description[@]}"
+	kubectl describe "${command[@]}"
 }
 
 function kubectl_keymap_e {
@@ -59,6 +64,16 @@ function kubectl_keymap_g {
 	local resource="$1"
 
 	kubectl get "$resource"
+}
+
+function kubectl_keymap_j {
+	local command=("$@")
+
+	[[ -n $command ]] && kubectl get "${command[@]}" -o json > ~/Documents/k8.json | jq
+}
+
+function kubectl_keymap_jj {
+	cat ~/Documents/k8.json
 }
 
 function kubectl_keymap_k {
@@ -100,4 +115,14 @@ function kubectl_keymap_x {
 	local resource="$1"
 
 	kubectl explain "$resource"
+}
+
+function kubectl_keymap_y {
+	local command=("$@")
+
+	[[ -n $1 ]] && kubectl get "${command[@]}" -o yaml > ~/Documents/k8.yaml | cat
+}
+
+function kubectl_keymap_yy {
+	cat ~/Documents/k8.yaml
 }
