@@ -126,6 +126,9 @@ function test__other_keymap_du {
 	)"
 }; run_with_filter test__other_keymap_du
 
+# Skip: Not testing b/c requires network call
+# function other_keymap_f
+
 # Skip: Not interesting to test
 # function other_keymap_i
 

@@ -90,6 +90,11 @@ function other_keymap_du {
 	diff --unified "$file_1" "$file_2"
 }
 
+function other_keymap_f {
+	sudo dscacheutil -flushcache
+	sudo killall -HUP mDNSResponder
+}
+
 function other_keymap_i {
 	local target_path=${*:-.}
 

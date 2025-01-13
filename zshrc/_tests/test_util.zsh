@@ -245,9 +245,6 @@ function test__eee__with_math {
 # Skip: Not testing b/c requires network call
 # function other_keymap_bif
 
-# Skip: Not testing b/c requires network call
-# function other_keymap_flush
-
 # Skip: Not interesting to test
 # function other_keymap_jcurl
 

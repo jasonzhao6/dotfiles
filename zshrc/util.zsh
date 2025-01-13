@@ -30,10 +30,6 @@ function pp {
 	ruby ~/gh/jasonzhao6/sql_formatter.rb/run.rb "$@"
 }
 
-function flush {
-	sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
-}
-
 function jcurl {
 	curl --silent "$1" | jq | { [[ -z "$2" ]] && cat || grep -A"${3:-0}" -B"${3:-0}" "$2"; }
 }
