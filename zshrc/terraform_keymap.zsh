@@ -24,6 +24,7 @@ TERRAFORM_KEYMAP=(
 	''
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}f # Format"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}n # Console"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}h # Scratch"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}c # Clean"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}cc # Clean & clear plugin cache"
 	''
@@ -67,6 +68,20 @@ function terraform_keymap_f {
 }
 function terraform_keymap_g {
 	terraform show -bw tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web
+}
+
+function terraform_keymap_h {
+	local var=$1
+
+	pushd ~/gh/scratch/tf-debug > /dev/null || return
+
+	if [[ -z $var ]]; then
+		terraform console
+	else
+		echo "local.$var" | terraform console
+	fi
+
+	popd > /dev/null || return
 }
 
 function terraform_keymap_i {

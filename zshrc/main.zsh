@@ -32,7 +32,6 @@ source "$ZSHRC_DIR/zsh_keymap.zsh"
 
 # Load non-keymaps
 source "$ZSHRC_DIR/kubectl.zsh"
-source "$ZSHRC_DIR/terraform.zsh"
 source "$ZSHRC_DIR/zsh_arrow_keys.zsh"
 source "$ZSHRC_DIR/zsh_history.zsh"
 source "$ZSHRC_DIR/zsh_prompt.zsh"
