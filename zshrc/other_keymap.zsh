@@ -5,11 +5,11 @@ OTHER_KEYMAP=(
 	"$OTHER_ALIAS <path> # Delegate to \`${OTHER_ALIAS}o <path>\`"
 	"$OTHER_ALIAS <urls> # Delegate to \`${OTHER_ALIAS}o <urls>\`"
 	''
-	"$OTHER_ALIAS${KEYMAP_DOT}i # Open the current path in IntelliJ IDEA"
+	"$OTHER_ALIAS${KEYMAP_DOT}i # Open the current directory in IntelliJ IDEA"
 	"$OTHER_ALIAS${KEYMAP_DOT}i <path> # Open the specified path in IntelliJ IDEA"
-	"$OTHER_ALIAS${KEYMAP_DOT}m # Open the current path in TextMate"
+	"$OTHER_ALIAS${KEYMAP_DOT}m # Open the current directory in TextMate"
 	"$OTHER_ALIAS${KEYMAP_DOT}m <path> # Open the specified path in TextMate"
-	"$OTHER_ALIAS${KEYMAP_DOT}o # Open the current path in Finder"
+	"$OTHER_ALIAS${KEYMAP_DOT}o # Open the current directory in Finder"
 	"$OTHER_ALIAS${KEYMAP_DOT}o <path> # Open the specified path in Finder"
 	"$OTHER_ALIAS${KEYMAP_DOT}o <urls> # Open urls from a string"
 	''
@@ -24,6 +24,7 @@ OTHER_KEYMAP=(
 	"$OTHER_ALIAS${KEYMAP_DOT}d <domain> # DNS dig"
 	"$OTHER_ALIAS${KEYMAP_DOT}f # DNS flush"
 	"$OTHER_ALIAS${KEYMAP_DOT}q <start> <finish> <command ~~> # Run a sequence of commands"
+	"$OTHER_ALIAS${KEYMAP_DOT}r <before> <after> # Rename files in the current directory"
 	''
 	"$OTHER_ALIAS${KEYMAP_DOT}s # Sleep"
 	"$OTHER_ALIAS${KEYMAP_DOT}a # Stay awake"
@@ -147,6 +148,17 @@ function other_keymap_q {
 	for number in $(seq "$start" "$finish"); do
 		echo
 		echo_eval "${command//~~/$number}"
+	done
+}
+
+function other_keymap_r {
+	local before=$1
+	local after=$2
+
+	[[ -z $before || -z $after ]] && return
+
+	for file in *"$before"*; do
+		mv "$file" "${file//$before/$after}"
 	done
 }
 

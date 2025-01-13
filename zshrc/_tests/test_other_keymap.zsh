@@ -204,6 +204,24 @@ function test__other_keymap_q__with_math {
 	)"
 }; run_with_filter test__other_keymap_q__with_math
 
+function test__other_keymap_r {
+	assert "$(
+		rm -rf /tmp/test__other_keymap_r
+		mkdir /tmp/test__other_keymap_r
+		cd /tmp/test__other_keymap_r || return
+		touch 1.log 2.log 3.txt
+		other_keymap_r log txt
+		ls
+		rm -rf /tmp/test__other_keymap_r
+	)" "$(
+		cat <<-eof
+			1.txt
+			2.txt
+			3.txt
+		eof
+	)"
+}; run_with_filter test__other_keymap_r
+
 # Skip: Not interesting to test
 # function other_keymap_s
 

@@ -142,21 +142,3 @@ function test__ddc {
 
 # Skip: Not interesting to test
 # function other_keymap_jcurl
-
-function test__ren {
-	assert "$(
-		rm -rf /tmp/test__ren
-		mkdir /tmp/test__ren
-		cd /tmp/test__ren || return
-		touch 1.log 2.log 3.txt
-		ren log txt
-		ls
-		rm -rf /tmp/test__ren
-	)" "$(
-		cat <<-eof
-			1.txt
-			2.txt
-			3.txt
-		eof
-	)"
-}; run_with_filter test__ren

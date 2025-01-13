@@ -26,10 +26,6 @@ function jcurl {
 	curl --silent "$1" | jq | { [[ -z "$2" ]] && cat || grep -A"${3:-0}" -B"${3:-0}" "$2"; }
 }
 
-function ren {
-	for file in *"$1"*; do mv "$file" "${file//$1/$2}"; done
-}
-
 # helper for `f`
 function f_pre {
 	[[ "$1" == gh ]] && gh repo list "$(org)" --no-archived --limit 1000 --json name | jq -r '.[].name'
