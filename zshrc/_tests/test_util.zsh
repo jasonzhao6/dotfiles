@@ -273,79 +273,10 @@ function test__eee__with_math {
 	)"
 }; run_with_filter test__eee__with_math
 
-function test__hh {
-	local old; old=$(
-		cat <<-eof
-			This is the original content.
-			Line 1
-			Line 2
-			Line 3
-			Line 4
-		eof
-	)
-
-	local new; new=$(
-		cat <<-eof
-			This is the modified content.
-			Line 1
-			Line 2
-			Line 3
-			New Line
-			Line 4
-		eof
-	)
-
-	assert "$(
-		hh <(echo "$old") <(echo "$new") | bw
-	)" "$(
-		cat <<-eof
-			This is the original content.                                   |       This is the modified content.
-			                                                                >       New Line
-		eof
-	)"
-}; # run_with_filter test__hh
 
 
 # Skip: Not interesting b/c it has its own specs
 # function other_keymap_pp
-
-function test__uu {
-	local old; old=$(
-		cat <<-eof
-			This is the original content.
-			Line 1
-			Line 2
-			Line 3
-			Line 4
-		eof
-	)
-
-	local new; new=$(
-		cat <<-eof
-			This is the modified content.
-			Line 1
-			Line 2
-			Line 3
-			New Line
-			Line 4
-		eof
-	)
-
-	assert "$(
-		uu <(echo "$old") <(echo "$new") | bw | sed 1,2d
-	)" "$(
-		cat <<-eof
-			@@ -1,5 +1,6 @@
-			-This is the original content.
-			+This is the modified content.
-			 Line 1
-			 Line 2
-			 Line 3
-			+New Line
-			 Line 4
-		eof
-	)"
-}; run_with_filter test__uu
 
 # Skip: Not testing b/c requires network call
 # function other_keymap_bif

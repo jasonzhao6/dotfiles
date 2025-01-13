@@ -19,6 +19,9 @@ OTHER_KEYMAP=(
 	"$OTHER_ALIAS${KEYMAP_DOT}pp # Alias for \`pbpaste\`"
 	"$OTHER_ALIAS${KEYMAP_DOT}b # Bash history search bindings"
 	''
+	"$OTHER_ALIAS${KEYMAP_DOT}du <file 1> <file 2> # Unified diff"
+	"$OTHER_ALIAS${KEYMAP_DOT}ds <file 1> <file 2> # Side-by-side diff"
+	''
 	"$OTHER_ALIAS${KEYMAP_DOT}s # Sleep"
 	"$OTHER_ALIAS${KEYMAP_DOT}a # Stay awake"
 	"$OTHER_ALIAS${KEYMAP_DOT}t # Tomato timer"
@@ -54,6 +57,20 @@ function other_keymap_c {
 
 function other_keymap_cc {
 	echo -n "$(prev_command)" | pbcopy
+}
+
+function other_keymap_ds {
+	local file_1=$1
+	local file_2=$2
+
+	diff --side-by-side --suppress-common-lines "$file_1" "$file_2"
+}
+
+function other_keymap_du {
+	local file_1=$1
+	local file_2=$2
+
+	diff --unified "$file_1" "$file_2"
 }
 
 function other_keymap_i {
