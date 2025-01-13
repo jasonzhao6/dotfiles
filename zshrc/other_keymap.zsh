@@ -25,7 +25,9 @@ OTHER_KEYMAP=(
 	"$OTHER_ALIAS${KEYMAP_DOT}du <file 1> <file 2> # Unified diff"
 	"$OTHER_ALIAS${KEYMAP_DOT}ds <file 1> <file 2> # Side-by-side diff"
 	"$OTHER_ALIAS${KEYMAP_DOT}d <domain> # DNS dig"
-	"$OTHER_ALIAS${KEYMAP_DOT}f # DNS flush"
+	"$OTHER_ALIAS${KEYMAP_DOT}df # DNS flush"
+	"$OTHER_ALIAS${KEYMAP_DOT}f # Format sql query"
+	"$OTHER_ALIAS${KEYMAP_DOT}f '<sql>' # Format sql query"
 	"$OTHER_ALIAS${KEYMAP_DOT}j <url> <match> <num lines> # Curl a json endpoint"
 	"$OTHER_ALIAS${KEYMAP_DOT}q <start> <finish> <~~> # Run a sequence of commands"
 	"$OTHER_ALIAS${KEYMAP_DOT}r <before> <after> # Rename files in the current directory"
@@ -81,6 +83,11 @@ function other_keymap_d {
 	fi
 }
 
+function other_keymap_df {
+	sudo dscacheutil -flushcache
+	sudo killall -HUP mDNSResponder
+}
+
 function other_keymap_ds {
 	local file_1=$1
 	local file_2=$2
@@ -96,8 +103,10 @@ function other_keymap_du {
 }
 
 function other_keymap_f {
-	sudo dscacheutil -flushcache
-	sudo killall -HUP mDNSResponder
+	local sql=$*
+
+	# shellcheck disable=SC2086 # Empty quotes break Ruby's `gets` method
+	ruby ~/gh/jasonzhao6/sql_formatter.rb/run.rb $sql
 }
 
 function other_keymap_i {
@@ -127,7 +136,7 @@ function other_keymap_k {
 
 	# If pasteboard contains terminal output looking text, archive it
 	if [[ $(pbpaste | compact | strip | sed -n '$p') == \$* ]]; then
-		local filename="$OTHER_KEYMAP_K_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt"
+		local filename; filename="$OTHER_KEYMAP_K_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt"
 
 		pbpaste > "$filename"
 
