@@ -2,9 +2,6 @@
 # [F]ormat a file / folder
 
 # Non-prod shortcut
-function terraform_keymap_aa {
-	terraform_keymap_init "$@" && terraform apply -auto-approve
-}
 
 
 #
@@ -12,12 +9,14 @@ function terraform_keymap_aa {
 #
 
 function terraform_keymap_ {
+	local var=$1
+
 	pushd ~/gh/scratch/tf-debug > /dev/null || return
 
-	if [[ -z $1 ]]; then
+	if [[ -z $var ]]; then
 		terraform console
 	else
-		echo "local.$1" | terraform console
+		echo "local.$var" | terraform console
 	fi
 
 	popd > /dev/null || return

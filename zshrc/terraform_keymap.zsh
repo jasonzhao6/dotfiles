@@ -23,11 +23,11 @@ TERRAFORM_KEYMAP=(
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}rm <name> # Remove state"
 	''
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}f # Format"
-	''
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}n # Console"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}c # Clean"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}cc # Clean & clear plugin cache"
 	''
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}qa # Apply & auto-approve"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}todo # Find manifests"
 )
 
@@ -107,6 +107,10 @@ function terraform_keymap_p {
 	local option=$1
 
 	terraform_keymap_init "$option" && terraform plan -out=tfplan
+}
+
+function terraform_keymap_qa {
+	terraform apply -auto-approve
 }
 
 function terraform_keymap_rm {
