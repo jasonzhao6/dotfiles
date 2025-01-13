@@ -1,14 +1,15 @@
-export DOTFILES_DIR="$HOME/gh/jasonzhao6/dotfiles"
-export ZSHRC_DIR="$DOTFILES_DIR/zshrc"
-export ZSHRC_SECRETS="$HOME/.zshrc.secrets"
-
-ZSHRC_UNDER_PROFILING= # When profiling, set to 1; otherwise, set to <empty>
+# When profiling, set to 1; otherwise, set to <empty>
+ZSHRC_UNDER_PROFILING=
 
 # Profile loading time: Start
 [[ -z $ZSHRC_UNDER_TESTING && -n $ZSHRC_UNDER_PROFILING ]] && zmodload zsh/zprof
 
 # Track loading time: Start
 [[ -z $ZSHRC_UNDER_TESTING ]] && ZSHRC_LOAD_TIME_START=$(gdate +%s.%2N)
+
+export DOTFILES_DIR="$HOME/gh/jasonzhao6/dotfiles"
+export ZSHRC_DIR="$DOTFILES_DIR/zshrc"
+export ZSHRC_SECRETS="$HOME/.zshrc.secrets"
 
 # Set color aliases early so they can expand in subsequent function definitions
 source "$ZSHRC_DIR/colors.zsh"; color
