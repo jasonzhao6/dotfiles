@@ -3,7 +3,7 @@ NAV_ALIAS='n'
 
 NAV_KEYMAP=(
 	"$NAV_ALIAS <directory> # Go to directory"
-	"$NAV_ALIAS${KEYMAP_DOT}v # Go to directory in pasteboard"
+	"$NAV_ALIAS${KEYMAP_DOT}o # Go to directory in pasteboard"
 	"$NAV_ALIAS${KEYMAP_DOT}h # Go to github"
 	"$NAV_ALIAS${KEYMAP_DOT}s # Go to scratch"
 	"$NAV_ALIAS${KEYMAP_DOT}dd # Go to dotfiles"
@@ -110,6 +110,22 @@ function nav_keymap_n {
 	ls | args_keymap_s "${filters[@]}"
 }
 
+function nav_keymap_o {
+	# Note: Do not use `local path`- It will overwrite $PATH in subshell
+	local target_path; target_path=$(paste_when_empty "$@")
+
+	# If it's a folder path, go to that folder
+	if [[ -d $target_path ]]; then
+		cd "$target_path" || return
+
+	# If it's a file path, go to its parent folder
+	else
+		cd ${${target_path}%/*} || return
+	fi
+
+	nav_keymap_n
+}
+
 function nav_keymap_s {
 	cd ~/gh/scratch || true
 	nav_keymap_n
@@ -127,21 +143,5 @@ function nav_keymap_uu {
 
 function nav_keymap_uuu {
 	cd ../../..
-	nav_keymap_n
-}
-
-function nav_keymap_v {
-	# Note: Do not use `local path`- It will overwrite $PATH in subshell
-	local target_path; target_path=$(paste_when_empty "$@")
-
-	# If it's a folder path, go to that folder
-	if [[ -d $target_path ]]; then
-		cd "$target_path" || return
-
-	# If it's a file path, go to its parent folder
-	else
-		cd ${${target_path}%/*} || return
-	fi
-
 	nav_keymap_n
 }

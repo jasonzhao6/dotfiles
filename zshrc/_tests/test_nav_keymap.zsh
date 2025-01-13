@@ -98,6 +98,14 @@ function test__nav_keymap_n__with_filters {
 	)"
 }; run_with_filter test__nav_keymap_n__with_filters
 
+function test__nav_keymap_o__with_dir {
+	assert "$(nav_keymap_o ~/Documents > /dev/null; pwd)" "$HOME/Documents"
+}; run_with_filter test__nav_keymap_o__with_dir
+
+function test__nav_keymap_o__with_file {
+	assert "$(nav_keymap_o ~/Documents/.zshrc > /dev/null; pwd)" "$HOME/Documents"
+}; run_with_filter test__nav_keymap_o__with_file
+
 function test__nav_keymap_s {
 	assert "$(nav_keymap_s > /dev/null; pwd)" "$HOME/gh/scratch"
 }; run_with_filter test__nav_keymap_s
@@ -134,11 +142,3 @@ function test__nav_keymap_uuu {
 		rm -rf /tmp/_nav_keymap_uuu
 	)" '/tmp/_nav_keymap_uuu'
 }; run_with_filter test__nav_keymap_uuu
-
-function test__nav_keymap_v__with_dir {
-	assert "$(nav_keymap_v ~/Documents > /dev/null; pwd)" "$HOME/Documents"
-}; run_with_filter test__nav_keymap_v__with_dir
-
-function test__nav_keymap_v__with_file {
-	assert "$(nav_keymap_v ~/Documents/.zshrc > /dev/null; pwd)" "$HOME/Documents"
-}; run_with_filter test__nav_keymap_v__with_file
