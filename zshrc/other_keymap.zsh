@@ -19,8 +19,8 @@ OTHER_KEYMAP=(
 	"$OTHER_ALIAS${KEYMAP_DOT}kk # Show archived terminal outputs"
 	"$OTHER_ALIAS${KEYMAP_DOT}kc # Clear archived terminal outputs"
 	"$OTHER_ALIAS${KEYMAP_DOT}b # Copy bash history bindings"
-	"$OTHER_ALIAS${KEYMAP_DOT}p # Alias for \`pbcopy\`"
-	"$OTHER_ALIAS${KEYMAP_DOT}pp # Alias for \`pbpaste\`"
+	"$OTHER_ALIAS${KEYMAP_DOT}y # Alias for \`pbcopy\`"
+	"$OTHER_ALIAS${KEYMAP_DOT}p # Alias for \`pbpaste\`"
 	''
 	"$OTHER_ALIAS${KEYMAP_DOT}du <file 1> <file 2> # Unified diff"
 	"$OTHER_ALIAS${KEYMAP_DOT}ds <file 1> <file 2> # Side-by-side diff"
@@ -188,10 +188,6 @@ function other_keymap_o {
 }
 
 function other_keymap_p {
-	pbcopy
-}
-
-function other_keymap_pp {
 	pbpaste
 }
 
@@ -223,4 +219,8 @@ function other_keymap_s {
 
 function other_keymap_t {
 	~/gh/tt/tt.rb "$@"
+}
+
+function other_keymap_y {
+	pbcopy
 }
