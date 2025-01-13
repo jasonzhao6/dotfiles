@@ -42,10 +42,10 @@ function kubectl_keymap_b {
 }
 
 function kubectl_keymap_c {
-	local command="${@[1,-2]}"
-	local pod="${@[-1]}"
+	local command=("${@[1,-2]}")
+	local pod="${*[-1]}"
 
-	kubectl exec "$pod" -- "$command"
+	kubectl exec "$pod" -- "${command[@]}"
 }
 
 function kubectl_keymap_d {
@@ -69,7 +69,7 @@ function kubectl_keymap_g {
 function kubectl_keymap_j {
 	local command=("$@")
 
-	[[ -n $command ]] && kubectl get "${command[@]}" -o json | tee ~/Documents/k8.json | jq
+	[[ -n ${command[*]} ]] && kubectl get "${command[@]}" -o json | tee ~/Documents/k8.json | jq
 }
 
 function kubectl_keymap_jj {
@@ -120,7 +120,7 @@ function kubectl_keymap_x {
 function kubectl_keymap_y {
 	local command=("$@")
 
-	[[ -n $1 ]] && kubectl get "${command[@]}" -o yaml | tee ~/Documents/k8.yaml | cat
+	[[ -n ${command[*]} ]] && kubectl get "${command[@]}" -o yaml | tee ~/Documents/k8.yaml | cat
 }
 
 function kubectl_keymap_yy {
