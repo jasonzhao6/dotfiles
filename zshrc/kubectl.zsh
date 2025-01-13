@@ -1,28 +1,6 @@
 # Set [n]ame[s]pace
-function kubectl_keymap_ns {
-	kubectl config set-context --current --namespace "$@"
-}
 
 # General
-function kubectl_keymap_ {
-	kubectl "$@"
-}
-
-function kubectl_keymap_d {
-	kubectl describe "$@"
-}
-
-function kubectl_keymap_e {
-	kubectl exec "$@"
-}
-
-function kubectl_keymap_g {
-	kubectl get "$@"
-}
-
-function kubectl_keymap_k {
-	kubectl get "$@" | s
-}
 
 # Pod shortcuts
 function kubectl_keymap_b {
