@@ -18,18 +18,18 @@ MAIN_KEYMAP=(); while IFS='' read -r line; do MAIN_KEYMAP+=("$line"); done < <(
 MAIN_KEYMAP+=( # TODO create these keymaps
 	''
 #	"$MAIN_ALIAS${KEYMAP_DOT}s # Show system default keymap"
-	''
+#	''
 #	"$MAIN_ALIAS${KEYMAP_DOT}i # Show IntelliJ \`cmd\` keymap"
 #	"$MAIN_ALIAS${KEYMAP_DOT}ic # Show IntelliJ \`ctrl\` keymap"
 #	"$MAIN_ALIAS${KEYMAP_DOT}ia # Show IntelliJ \`alt\` keymap"
 #	"$MAIN_ALIAS${KEYMAP_DOT}if # Show IntelliJ \`fn\` keymap"
-	''
+#	''
 #	"$MAIN_ALIAS${KEYMAP_DOT}m # Show TextMate keymap"
 #	"$MAIN_ALIAS${KEYMAP_DOT}n # Show Notion keymap"
 #	"$MAIN_ALIAS${KEYMAP_DOT}t # Show Terminal keymap"
 	"$MAIN_ALIAS${KEYMAP_DOT}vv # Show Vimium / Vimari keymap"
 	"$MAIN_ALIAS${KEYMAP_DOT}vs # Show Vimium search keymap"
-	''
+#	''
 #	"$MAIN_ALIAS${KEYMAP_DOT}k # Show Kinesis keymap"
 )
 
