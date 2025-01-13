@@ -1,24 +1,3 @@
-# Post `tfi` (In case of init error, append ` i|iu|ir|im` to retry)
-function terraform_keymap_p {
-	terraform_keymap_pre "$@" && terraform plan -out=tfplan
-}
-
-function terraform_keymap_l {
-	terraform_keymap_pre "$@" && terraform state list | sed "s/.*/'&'/" | args_keymap_s
-}
-
-function terraform_keymap_o {
-	terraform_keymap_pre "$@" && terraform output
-}
-
-function terraform_keymap_n {
-	terraform_keymap_pre "$@" && terraform console
-}
-
-function terraform_keymap_v {
-	terraform_keymap_pre "$@" && terraform validate
-}
-
 # Post `tfp`
 function terraform_keymap_a {
 	terraform apply
@@ -73,7 +52,7 @@ function terraform_keymap_cc {
 
 # Non-prod shortcut
 function terraform_keymap_aa {
-	terraform_keymap_pre "$@" && terraform apply -auto-approve
+	terraform_keymap_init "$@" && terraform apply -auto-approve
 }
 
 
