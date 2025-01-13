@@ -2,6 +2,8 @@ TERRAFORM_NAMESPACE='terraform_keymap'
 TERRAFORM_ALIAS='t'
 
 TERRAFORM_KEYMAP=(
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}e # Find manifests"
+	''
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}i # Init"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}iu # Init & upgrade"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}ir # Init & reconfigure"
@@ -23,13 +25,11 @@ TERRAFORM_KEYMAP=(
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}rm <name> # Remove state"
 	''
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}f # Format"
-	"$TERRAFORM_ALIAS${KEYMAP_DOT}n # Console"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}h # Scratch"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}n # Console"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}c # Clean"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}cc # Clean & clear plugin cache"
-	''
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}qa # Apply & auto-approve"
-	"$TERRAFORM_ALIAS${KEYMAP_DOT}todo # Find manifests"
 )
 
 keymap_init $TERRAFORM_NAMESPACE $TERRAFORM_ALIAS "${TERRAFORM_KEYMAP[@]}"
@@ -59,6 +59,14 @@ function terraform_keymap_cc {
 
 function terraform_keymap_d {
 	terraform destroy
+}
+
+function terraform_keymap_e {
+	find ~+ -name main.tf |
+		grep --invert-match '\.terraform' |
+		sed "s|$HOME|~|g" |
+		trim 0 8 |
+		args_keymap_s
 }
 
 function terraform_keymap_f {
@@ -144,14 +152,6 @@ function terraform_keymap_t {
 	local state=$1
 
 	terraform taint "$state"
-}
-
-function terraform_keymap_todo {
-	find ~+ -name main.tf |
-		grep --invert-match '\.terraform' |
-		sed "s|$HOME|~|g" |
-		trim 0 8 |
-		args_keymap_s
 }
 
 function terraform_keymap_u {

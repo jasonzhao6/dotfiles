@@ -1,4 +1,4 @@
-function test__terraform_keymap_todo {
+function test__terraform_keymap_e {
 	assert "$(
 		local home=$HOME
 		local pwd=$PWD
@@ -10,7 +10,7 @@ function test__terraform_keymap_todo {
 		touch $HOME/project/module/.terraform/main.tf
 
 		cd $HOME || return
-		terraform_keymap_todo
+		terraform_keymap_e
 
 		rm -rf $HOME
 		HOME=$home
@@ -21,4 +21,4 @@ function test__terraform_keymap_todo {
 		     2	~/project/module
 		eof
 	)"
-}; run_with_filter test__terraform_keymap_todo
+}; run_with_filter test__terraform_keymap_e
