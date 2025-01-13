@@ -2,18 +2,22 @@ KUBECTL_NAMESPACE='kubectl_keymap'
 KUBECTL_ALIAS='k'
 
 KUBECTL_KEYMAP=(
-	"$KUBECTL_ALIAS${KEYMAP_DOT}s # Save resources table"
-	"$KUBECTL_ALIAS${KEYMAP_DOT}r # List resources"
-	"$KUBECTL_ALIAS${KEYMAP_DOT}r <match>* <-mismatch>* # Filter resources"
-	"$KUBECTL_ALIAS${KEYMAP_DOT}x <resource> # Explain a resource"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}s # Save resource types data"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}r # List resource types"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}r <match>* <-mismatch>* # Filter resource types"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}x <resource type> # Explain a resource type"
 	''
 	"$KUBECTL_ALIAS${KEYMAP_DOT}n <name> # Set namespace"
 	''
 	"$KUBECTL_ALIAS${KEYMAP_DOT}u <command> # Alias for \`kubectl\`"
-	"$KUBECTL_ALIAS${KEYMAP_DOT}e <command> # Exec"
-	"$KUBECTL_ALIAS${KEYMAP_DOT}g <resource> # Get"
-	"$KUBECTL_ALIAS${KEYMAP_DOT}k <resource> # Get as args"
-	"$KUBECTL_ALIAS${KEYMAP_DOT}d <resource> # Describe"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}e <command> # Exec a command"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}g <resource type> # Get resources"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}k <resource type> # Get resources as args"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}d <description> # Describe resource(s)"
+	''
+	"$KUBECTL_ALIAS${KEYMAP_DOT}b <pod> # Exec into bash"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}c <pod> # Exec a command"
+	"$KUBECTL_ALIAS${KEYMAP_DOT}l <pod> # Show logs"
 )
 
 keymap_init $KUBECTL_NAMESPACE $KUBECTL_ALIAS "${KUBECTL_KEYMAP[@]}"
@@ -26,10 +30,23 @@ function kubectl_keymap {
 # Key mappings (Alphabetized)
 #
 
-function kubectl_keymap_d {
-	local resource="$1"
+function kubectl_keymap_b {
+	local pod="$1"
 
-	kubectl describe "$resource"
+	kubectl exec -it "$pod" -- bash
+}
+
+function kubectl_keymap_c {
+	local command="${@[1,-2]}"
+	local pod="${@[-1]}"
+
+	kubectl exec "$pod" -- "$command"
+}
+
+function kubectl_keymap_d {
+	local description=("$@")
+
+	kubectl describe "${description[@]}"
 }
 
 function kubectl_keymap_e {
@@ -47,7 +64,13 @@ function kubectl_keymap_g {
 function kubectl_keymap_k {
 	local resource="$1"
 
-	kubectl get "$resource" | s
+	kubectl get "$resource" | args_keymap_so
+}
+
+function kubectl_keymap_l {
+	local pod="$1"
+
+	kubectl logs "$pod"
 }
 
 function kubectl_keymap_n {

@@ -3,17 +3,6 @@
 # General
 
 # Pod shortcuts
-function kubectl_keymap_b {
-	kubectl exec -it "$@" -- bash
-}
-
-function kubectl_keymap_c {
-	kubectl exec "${@[-1]}" -- "${@[1,-2]}"
-}
-
-function kubectl_keymap_l {
-	kubectl logs "$@"
-}
 
 function kubectl_keymap_p {
 	kubectl port-forward "$@"
