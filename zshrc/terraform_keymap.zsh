@@ -13,6 +13,12 @@ TERRAFORM_KEYMAP=(
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}n (i,iu,ir,im)? # Console"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}v (i,iu,ir,im)? # Validate"
 	''
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}a # Apply"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}d # Destroy"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}g # Plan -> gist"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}z # Unlock"
+
+	''
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}todo # Find manifests"
 )
 
@@ -28,6 +34,18 @@ function terraform_keymap {
 #
 
 source "$ZSHRC_DIR/terraform_helpers.zsh"
+
+function terraform_keymap_a {
+	terraform apply
+}
+
+function terraform_keymap_d {
+	terraform destroy
+}
+
+function terraform_keymap_g {
+	terraform show -bw tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web
+}
 
 function terraform_keymap_i {
 	mkdir -p ~/.terraform.cache; terraform init
@@ -81,4 +99,10 @@ function terraform_keymap_v {
 	local option=$1
 
 	terraform_keymap_init "$option" && terraform validate
+}
+
+function terraform_keymap_z {
+	local id=$1
+
+	terraform force-unlock "$id"
 }

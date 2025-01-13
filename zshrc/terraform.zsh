@@ -1,20 +1,4 @@
 # Post `tfp`
-function terraform_keymap_a {
-	terraform apply
-}
-
-function terraform_keymap_d {
-	terraform destroy
-}
-
-function terraform_keymap_g {
-	terraform show -bw tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web
-}
-
-function terraform_keymap_z {
-	terraform force-unlock "$@"
-}
-
 # Post `tfl`
 function terraform_keymap_s {
 	terraform state show "$@"
