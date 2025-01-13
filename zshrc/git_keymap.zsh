@@ -191,25 +191,26 @@ function git_keymap_w {
 	git commit --amend
 }
 
-# TODO split into multiple keys
 function git_keymap_x {
-	local gxx_remote; gxx_remote=origin
-	local gxx_branch; gxx_branch=main
-	local gxx_head_num
+	local option=$1
 
-	for var in "$@"; do
+	local remote; remote=origin
+	local branch; branch=main
+	local head_num
+
+	for var in $option; do
 		case $var in
-			u) gxx_remote=upstream;;
-			m) gxx_branch=master;;
-			*) gxx_head_num=$var;;
+			u) remote=upstream;;
+			m) branch=master;;
+			*) head_num=$var;;
 		esac
 	done
 
-	if [[ -n $gxx_head_num ]]; then
+	if [[ -n $head_num ]]; then
 		# The `+ 1` is to count the `fixup!` commit itself
-		git rebase --interactive --autosquash HEAD~$((gxx_head_num + 1))
+		git rebase --interactive --autosquash HEAD~$((head_num + 1))
 	else
-		git fetch "$gxx_remote" "$gxx_branch" && git rebase --interactive --autosquash "$gxx_remote/$gxx_branch"
+		git fetch "$remote" "$branch" && git rebase --interactive --autosquash "$remote/$branch"
 	fi
 }
 
@@ -223,11 +224,11 @@ function git_keymap_xc {
 }
 
 function git_keymap_xm {
-	git_keymap_r m
+	git_keymap_x m
 }
 
 function git_keymap_xu {
-	git_keymap_r u
+	git_keymap_x u
 }
 
 function git_keymap_y {
