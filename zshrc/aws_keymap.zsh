@@ -43,6 +43,10 @@ export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
 
 source "$ZSHRC_DIR/aws_helpers.zsh"
 
+for aws_keymap_mq2 in "$HOME/.config/zsh/config.d/"*.zsh; do
+	source "${aws_keymap_mq2}"
+done; unset aws_keymap_mq2
+
 function aws_keymap_0 {
 	mq2 --logout
 }
@@ -125,10 +129,6 @@ function aws_keymap_o {
 
 	print -l "${AWS_OPAL[@]}" | sort | column -t | args_keymap_s "${filters[@]}"
 }
-
-for aws_keymap_mq2 in "$HOME/.config/zsh/config.d/"*.zsh; do
-	source "${aws_keymap_mq2}"
-done; unset aws_keymap_mq2
 
 function aws_keymap_oa {
 	local id=$*

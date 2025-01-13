@@ -1,43 +1,87 @@
-### [T]erra[f]orm
-# Config
-function tf0 { echo_eval 'export TF_LOG='; }
-function tf1 { echo_eval 'export TF_LOG=DEBUG'; }
-# [I]nit
-# shellcheck disable=SC2120
-function tfi { mkdir -p ~/.terraform.cache; terraform init "$@"; }
-function tfiu { terraform init -upgrade; }
-function tfir { terraform init -reconfigure; }
-function tfim { terraform init -migrate-state; }
 # Post `tfi` (In case of init error, append ` i|iu|ir|im` to retry)
-function tfp { tf_pre "$@" && terraform plan -out=tfplan; }
-function tfl { tf_pre "$@" && terraform state list | sed "s/.*/'&'/" | args_keymap_s; }
-function tfo { tf_pre "$@" && terraform output; }
-function tfn { tf_pre "$@" && terraform console; }
-function tfv { tf_pre "$@" && terraform validate; }
+function terraform_keymap_p {
+	terraform_keymap_pre "$@" && terraform plan -out=tfplan
+}
+
+function terraform_keymap_l {
+	terraform_keymap_pre "$@" && terraform state list | sed "s/.*/'&'/" | args_keymap_s
+}
+
+function terraform_keymap_o {
+	terraform_keymap_pre "$@" && terraform output
+}
+
+function terraform_keymap_n {
+	terraform_keymap_pre "$@" && terraform console
+}
+
+function terraform_keymap_v {
+	terraform_keymap_pre "$@" && terraform validate
+}
+
 # Post `tfp`
-function tfa { terraform apply; }
-function tfd { terraform destroy; }
-function tfg { terraform show -bw tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web; }
-function tfz { terraform force-unlock "$@"; }
+function terraform_keymap_a {
+	terraform apply
+}
+
+function terraform_keymap_d {
+	terraform destroy
+}
+
+function terraform_keymap_g {
+	terraform show -bw tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web
+}
+
+function terraform_keymap_z {
+	terraform force-unlock "$@"
+}
+
 # Post `tfl`
-function tfs { terraform state show "$@"; }
-function tft { terraform taint "$@"; }
-function tfu { terraform untaint "$@"; }
-function tfm { terraform state mv "$1" "$2"; }
-function tfr { terraform state rm "$@"; }
+function terraform_keymap_s {
+	terraform state show "$@"
+}
+
+function terraform_keymap_t {
+	terraform taint "$@"
+}
+
+function terraform_keymap_u {
+	terraform untaint "$@"
+}
+
+function terraform_keymap_m {
+	terraform state mv "$1" "$2"
+}
+
+function terraform_keymap_r {
+	terraform state rm "$@"
+}
+
 # [F]ormat a file / folder
-function tff { terraform fmt -recursive "$@"; }
+function terraform_keymap_f {
+	terraform fmt -recursive "$@"
+}
+
 # [C]lear cache
-function tfc { rm -rf tfplan .terraform ~/.terraform.d; }
-function tfcc { rm -rf tfplan .terraform ~/.terraform.d ~/.terraform.cache; }
+function terraform_keymap_c {
+	rm -rf tfplan .terraform ~/.terraform.d
+}
+
+function terraform_keymap_cc {
+	rm -rf tfplan .terraform ~/.terraform.d ~/.terraform.cache
+}
+
 # Non-prod shortcut
-function tfaa { tf_pre "$@" && terraform apply -auto-approve; }
+function terraform_keymap_aa {
+	terraform_keymap_pre "$@" && terraform apply -auto-approve
+}
+
 
 #
 # Helpers
 #
 
-function tf {
+function terraform_keymap_ {
 	pushd ~/gh/scratch/tf-debug > /dev/null || return
 
 	if [[ -z $1 ]]; then
@@ -47,18 +91,4 @@ function tf {
 	fi
 
 	popd > /dev/null || return
-}
-
-function tf_pre {
-    [[ -z $1 ]] && return
-
-    for var in "$@"; do
-        case $var in
-            e) tfe;;
-            i) tfi;;
-            iu) tfiu;;
-            ir) tfir;;
-            im) tfim;;
-        esac
-    done
 }
