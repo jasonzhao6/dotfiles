@@ -17,7 +17,12 @@ TERRAFORM_KEYMAP=(
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}d # Destroy"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}g # Plan -> gist"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}z # Unlock"
-
+	''
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}s <name> # Show state"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}t <name> # Taint state"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}u <name> # Untaint state"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}m <before> <after> # Move state"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}rm <name> # Remove state"
 	''
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}todo # Find manifests"
 )
@@ -69,6 +74,10 @@ function terraform_keymap_l {
 	terraform_keymap_init "$option" && terraform state list | sed "s/.*/'&'/" | args_keymap_s
 }
 
+function terraform_keymap_m {
+	terraform state mv "$1" "$2"
+}
+
 function terraform_keymap_n {
 	local option=$1
 
@@ -87,12 +96,28 @@ function terraform_keymap_p {
 	terraform_keymap_init "$option" && terraform plan -out=tfplan
 }
 
+function terraform_keymap_rm {
+	terraform state rm "$@"
+}
+
+function terraform_keymap_s {
+	terraform state show "$@"
+}
+
+function terraform_keymap_t {
+	terraform taint "$@"
+}
+
 function terraform_keymap_todo {
 	find ~+ -name main.tf |
 		grep --invert-match '\.terraform' |
 		sed "s|$HOME|~|g" |
 		trim 0 8 |
 		args_keymap_s
+}
+
+function terraform_keymap_u {
+	terraform untaint "$@"
 }
 
 function terraform_keymap_v {
