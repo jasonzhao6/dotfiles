@@ -1,8 +1,4 @@
-# Skip: Not interesting to test
-# function other_keymap_a
-
-function test__other_keymap_b {
-	assert "$(
+function test__other_keymap_b {	assert "$(
 		other_keymap_b
 		pbpaste
 	)" "$(
@@ -13,14 +9,7 @@ function test__other_keymap_b {
 	)"
 }; run_with_filter test__other_keymap_b
 
-# Skip: Cannot test b/c `fc -l` throws 'no such event' error
-# function other_keymap_c
-
-# Skip: Cannot test b/c `fc -l` throws 'no such event' error
-# function other_keymap_cc
-
-function test__other_keymap_d {
-	assert "$(
+function test__other_keymap_d {	assert "$(
 		ZSHRC_UNDER_TESTING=1 other_keymap_d www.google.com
 	)" "$(
 		cat <<-eof
@@ -56,11 +45,7 @@ function test__other_keymap_d__with_protocol_and_path {
 	)"
 }; run_with_filter test__other_keymap_d__with_protocol_and_path
 
-# Skip: Not testing b/c requires network call
-# function other_keymap_df
-
-function test__other_keymap_ds {
-	local old; old=$(
+function test__other_keymap_ds {	local old; old=$(
 		cat <<-eof
 			This is the original content.
 			Line 1
@@ -129,14 +114,7 @@ function test__other_keymap_du {
 	)"
 }; run_with_filter test__other_keymap_du
 
-# Skip: Not interesting to test
-# function other_keymap_i
-
-# Skip: Not testing b/c requires network call
-# function other_keymap_j
-
-function test__other_keymap_k {
-	assert "$(
+function test__other_keymap_k {	assert "$(
 		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
 		rm -rf $OTHER_KEYMAP_K_DIR
 
@@ -232,20 +210,7 @@ function test__other_keymap_kk {
 	assert "$(other_keymap_kk; pwd)" "$OTHER_KEYMAP_K_DIR"
 }; run_with_filter test__other_keymap_kk
 
-# Skip: Not interesting to test
-# function other_keymap_m
-
-# Skip: Not interesting to test
-# function other_keymap_o
-
-# Skip: Not interesting to test
-# function other_keymap_p
-
-# Skip: Not interesting to test
-# function other_keymap_pp
-
-function test__other_keymap_q {
-	assert "$(
+function test__other_keymap_q {	assert "$(
 		other_keymap_q 3 4 echo ~~ 2>&1
 	)" "$(
 		cat <<-eof
@@ -321,9 +286,3 @@ function test__other_keymap_r {
 		eof
 	)"
 }; run_with_filter test__other_keymap_r
-
-# Skip: Not interesting to test
-# function other_keymap_s
-
-# Skip: Not interesting to test
-# function other_keymap_t

@@ -26,12 +26,12 @@ source "$ZSHRC_DIR/github_keymap.zsh"
 source "$ZSHRC_DIR/main_keymap.zsh"
 source "$ZSHRC_DIR/nav_keymap.zsh" # Has extended `<namespace>` function
 source "$ZSHRC_DIR/other_keymap.zsh" # Has extended `<namespace>` function
+source "$ZSHRC_DIR/terraform_keymap.zsh"
 source "$ZSHRC_DIR/zsh_keymap.zsh"
 
 # Load non-keymaps
 source "$ZSHRC_DIR/kubectl.zsh"
 source "$ZSHRC_DIR/terraform.zsh"
-source "$ZSHRC_DIR/util.zsh"
 source "$ZSHRC_DIR/zsh_arrow_keys.zsh"
 source "$ZSHRC_DIR/zsh_history.zsh"
 source "$ZSHRC_DIR/zsh_prompt.zsh"

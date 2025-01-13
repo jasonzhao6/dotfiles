@@ -29,9 +29,6 @@ function test__ellipsize {
 	)" "$COLUMNS"
 }; run_with_filter test__ellipsize
 
-# Skip: Not interesting to test
-# function test__has_internet
-
 function test__index_of__first {
 	assert "$(index_of '10 20 30 40' 10)" '1'
 }; run_with_filter test__index_of__first
@@ -75,9 +72,6 @@ function test__paste_when_empty__with_one_arg {
 function test__paste_when_empty__with_two_args {
 	assert "$(paste_when_empty '111 222')" '111 222'
 }; run_with_filter test__paste_when_empty__with_two_args
-
-# Skip: Cannot test b/c `fc -l` throws 'no such event' error
-# function test__prev_command
 
 function test__size_of {
 	assert "$(size_of "$test__ls_dash_l")" '64'
