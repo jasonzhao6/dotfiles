@@ -21,7 +21,7 @@ function test__other_keymap_b {
 
 function test__other_keymap_d {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1 od www.google.com
+		ZSHRC_UNDER_TESTING=1 other_keymap_d www.google.com
 	)" "$(
 		cat <<-eof
 		     1	test output for
@@ -31,12 +31,12 @@ function test__other_keymap_d {
 }; run_with_filter test__other_keymap_d
 
 function test__other_keymap_d__without_input {
-	assert "$(ZSHRC_UNDER_TESTING=1 od)" ''
+	assert "$(ZSHRC_UNDER_TESTING=1 other_keymap_d)" ''
 }; run_with_filter test__other_keymap_d__without_input
 
 function test__other_keymap_d__with_protocol {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1 od https://www.google.com
+		ZSHRC_UNDER_TESTING=1 other_keymap_d https://www.google.com
 	)" "$(
 		cat <<-eof
 		     1	test output for
@@ -47,7 +47,7 @@ function test__other_keymap_d__with_protocol {
 
 function test__other_keymap_d__with_protocol_and_path {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1 od https://www.google.com/path/to/page
+		ZSHRC_UNDER_TESTING=1 other_keymap_d https://www.google.com/path/to/page
 	)" "$(
 		cat <<-eof
 		     1	test output for
@@ -134,6 +134,103 @@ function test__other_keymap_du {
 
 # Skip: Not testing b/c requires network call
 # function other_keymap_j
+
+function test__other_keymap_k {
+	assert "$(
+		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
+		rm -rf $OTHER_KEYMAP_K_DIR
+
+		echo '$' | pbcopy
+		ZSHRC_UNDER_TESTING=1 other_keymap_k
+		ls -l $OTHER_KEYMAP_K_DIR | wc -l
+		cat $OTHER_KEYMAP_K_DIR/*
+
+		other_keymap_k_reset
+		rm -rf $OTHER_KEYMAP_K_DIR
+	)" "$(
+		cat <<-eof
+			       2
+			$
+		eof
+	)"
+}; run_with_filter test__other_keymap_k
+
+function test__other_keymap_k__when_dumping_same_pasteboard_twice {
+	assert "$(
+		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
+		rm -rf $OTHER_KEYMAP_K_DIR
+
+		echo '$' | pbcopy
+		ZSHRC_UNDER_TESTING=1 other_keymap_k
+		ZSHRC_UNDER_TESTING=1 other_keymap_k
+		ls -l $OTHER_KEYMAP_K_DIR | wc -l
+		cat $OTHER_KEYMAP_K_DIR/*
+
+		other_keymap_k_reset
+		rm -rf $OTHER_KEYMAP_K_DIR
+	)" "$(
+		cat <<-eof
+			       2
+			$
+		eof
+	)"
+}; run_with_filter test__other_keymap_k__when_dumping_same_pasteboard_twice
+
+function test__other_keymap_k__when_dumping_two_different_pasteboards {
+	assert "$(
+		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
+		rm -rf $OTHER_KEYMAP_K_DIR
+
+		printf "pasteboard 1\n$\n" | pbcopy
+		ZSHRC_UNDER_TESTING=1 other_keymap_k
+		printf "pasteboard 2\n$\n" | pbcopy
+		ZSHRC_UNDER_TESTING=1 other_keymap_k
+		ls -l $OTHER_KEYMAP_K_DIR | wc -l
+		cat $OTHER_KEYMAP_K_DIR/*
+
+		other_keymap_k_reset
+		rm -rf $OTHER_KEYMAP_K_DIR
+	)" "$(
+		cat <<-eof
+			       3
+			pasteboard 1
+			$
+			pasteboard 2
+			$
+		eof
+	)"
+}; run_with_filter test__other_keymap_k__when_dumping_two_different_pasteboards
+
+function test__other_keymap_k__when_not_terminal_output {
+	assert "$(
+		# shellcheck disable=SC2030
+		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
+		rm -rf $OTHER_KEYMAP_K_DIR
+
+		echo 'not terminal output' | pbcopy
+		ZSHRC_UNDER_TESTING=1 other_keymap_k
+		ls -l $OTHER_KEYMAP_K_DIR | wc -l
+
+		other_keymap_k_reset
+	)" '       1'
+}; run_with_filter test__other_keymap_k__when_not_terminal_output
+
+function test__other_keymap_kc {
+	assert "$(
+		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
+		mkdir -p $OTHER_KEYMAP_K_DIR
+
+		other_keymap_kc
+		[[ -e $OTHER_KEYMAP_K_DIR ]] && echo present || echo absent
+
+		other_keymap_k_reset
+	)" 'absent'
+}; run_with_filter test__other_keymap_kc
+
+function test__other_keymap_kk {
+	# shellcheck disable=SC2031
+	assert "$(other_keymap_kk; pwd)" "$OTHER_KEYMAP_K_DIR"
+}; run_with_filter test__other_keymap_kk
 
 # Skip: Not interesting to test
 # function other_keymap_m

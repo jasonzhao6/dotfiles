@@ -39,9 +39,9 @@ function aws_keymap {
 # Key mappings (Alphabetized)
 #
 
-source "$ZSHRC_DIR/aws_helpers.zsh"
-
 export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
+
+source "$ZSHRC_DIR/aws_helpers.zsh"
 
 function aws_keymap_0 {
 	mq2 --logout

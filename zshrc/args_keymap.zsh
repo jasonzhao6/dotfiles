@@ -47,10 +47,6 @@ function args_keymap {
 # Key mappings (Alphabetized)
 #
 
-source "$ZSHRC_DIR/args_helpers.zsh"
-source "$ZSHRC_DIR/args_history.zsh"; args_history_init
-source "$ZSHRC_DIR/args_shortcuts.zsh"
-
 # Constants
 ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd column'
 ARGS_YANK_FILE="$HOME/.zshrc.args"
@@ -59,6 +55,10 @@ ARGS_YANK_FILE="$HOME/.zshrc.args"
 # shellcheck disable=SC2034
 ARGS_PUSHED=
 ARGS_USED_TOP_ROW=
+
+source "$ZSHRC_DIR/args_helpers.zsh"
+source "$ZSHRC_DIR/args_history.zsh"; args_history_init
+source "$ZSHRC_DIR/args_shortcuts.zsh"
 
 # shellcheck disable=SC2120
 function args_keymap_a {

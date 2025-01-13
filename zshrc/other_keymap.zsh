@@ -15,9 +15,12 @@ OTHER_KEYMAP=(
 	''
 	"$OTHER_ALIAS${KEYMAP_DOT}c # Copy the last output"
 	"$OTHER_ALIAS${KEYMAP_DOT}cc # Copy the last command"
+	"$OTHER_ALIAS${KEYMAP_DOT}k # Clear the terminal"
+	"$OTHER_ALIAS${KEYMAP_DOT}kk # Show archived terminal outputs"
+	"$OTHER_ALIAS${KEYMAP_DOT}kc # Clear archived terminal outputs"
+	"$OTHER_ALIAS${KEYMAP_DOT}b # Copy bash history bindings"
 	"$OTHER_ALIAS${KEYMAP_DOT}p # Alias for \`pbcopy\`"
 	"$OTHER_ALIAS${KEYMAP_DOT}pp # Alias for \`pbpaste\`"
-	"$OTHER_ALIAS${KEYMAP_DOT}b # Bash history search bindings"
 	''
 	"$OTHER_ALIAS${KEYMAP_DOT}du <file 1> <file 2> # Unified diff"
 	"$OTHER_ALIAS${KEYMAP_DOT}ds <file 1> <file 2> # Side-by-side diff"
@@ -45,6 +48,8 @@ function other_keymap {
 #
 # Key mappings (Alphabetized)
 #
+
+source "$ZSHRC_DIR/other_helpers.zsh"
 
 function other_keymap_a {
 	caffeinate
@@ -115,6 +120,32 @@ function other_keymap_j {
 			grep --ignore-case -A"$num_lines" -B"$num_lines" "$match"
 		fi
 	}
+}
+
+function other_keymap_k {
+	mkdir -p "$OTHER_KEYMAP_K_DIR"
+
+	# If pasteboard contains terminal output looking text, archive it
+	if [[ $(pbpaste | compact | strip | sed -n '$p') == \$* ]]; then
+		local filename="$OTHER_KEYMAP_K_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt"
+
+		pbpaste > "$filename"
+
+		# Taint the pasteboard, so that it doesn't get dumped again
+		printf "%s\n\n(Dumped to '%s')" "$(pbpaste)" "$filename" | pbcopy
+	fi
+
+	[[ -z $ZSHRC_UNDER_TESTING ]] && clear
+}
+
+function other_keymap_kc {
+	rm -rf "$OTHER_KEYMAP_K_DIR"
+}
+
+function other_keymap_kk {
+	mkdir -p "$OTHER_KEYMAP_K_DIR"
+	cd "$OTHER_KEYMAP_K_DIR" || return
+	nav_keymap_n
 }
 
 function other_keymap_m {

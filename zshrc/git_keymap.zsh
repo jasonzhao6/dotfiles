@@ -59,6 +59,8 @@ function git_keymap {
 
 export EDITOR='mate --wait'
 
+source "$ZSHRC_DIR/git_helpers.zsh"
+
 function git_keymap_a {
 	local index=${1:-0}
 

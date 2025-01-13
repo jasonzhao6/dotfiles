@@ -17,7 +17,6 @@ ZSHRC_TESTS_NAME_FILTER=$([[ -z $ZSHRC_TESTS_SECTION_FILTER && -n $1 ]] && echo 
 # Source test subjects and general utils
 ZSHRC_UNDER_TESTING=1 source ~/.zshrc
 
-
 ZSHRC_TESTS_SECTION_NUMBER=1
 # shellcheck disable=SC2031
 if [[ $ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER ]]; then
