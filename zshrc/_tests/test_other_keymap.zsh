@@ -144,6 +144,66 @@ function test__other_keymap_du {
 # Skip: Not interesting to test
 # function other_keymap_pp
 
+function test__other_keymap_q {
+	assert "$(
+		other_keymap_q 3 4 echo ~~ 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo 3
+			3
+
+			echo 4
+			4
+		eof
+	)"
+}; run_with_filter test__other_keymap_q
+
+function test__other_keymap_q__with_multiple_substitutions {
+	assert "$(
+		other_keymap_q 3 4 echo ~~ and ~~ again 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo 3 and 3 again
+			3 and 3 again
+
+			echo 4 and 4 again
+			4 and 4 again
+		eof
+	)"
+}; run_with_filter test__other_keymap_q__with_multiple_substitutions
+
+function test__other_keymap_q__with_multiple_substitutions_in_quotes {
+	assert "$(
+		other_keymap_q 3 4 'echo ~~ and ~~ again' 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo 3 and 3 again
+			3 and 3 again
+
+			echo 4 and 4 again
+			4 and 4 again
+		eof
+	)"
+}; run_with_filter test__other_keymap_q__with_multiple_substitutions_in_quotes
+
+function test__other_keymap_q__with_math {
+	assert "$(
+		other_keymap_q 3 4 echo ~~ and '$((~~ + 10))' too 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo 3 and \$((3 + 10)) too
+			3 and 13 too
+
+			echo 4 and \$((4 + 10)) too
+			4 and 14 too
+		eof
+	)"
+}; run_with_filter test__other_keymap_q__with_math
+
 # Skip: Not interesting to test
 # function other_keymap_s
 

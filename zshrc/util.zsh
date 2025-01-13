@@ -18,14 +18,6 @@ function ddc {
 	rm -rf "$DD_DUMP_DIR"
 }
 
-function ee {
-	for i in $(seq "$1" "$2"); do echo ${${@:3}//~~/$i}; done
-}
-
-function eee {
-	for i in $(seq "$1" "$2"); do echo; echo_eval ${${@:3}//~~/$i}; done
-}
-
 function pp {
 	ruby ~/gh/jasonzhao6/sql_formatter.rb/run.rb "$@"
 }

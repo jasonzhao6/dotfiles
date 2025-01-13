@@ -21,9 +21,9 @@ OTHER_KEYMAP=(
 	''
 	"$OTHER_ALIAS${KEYMAP_DOT}du <file 1> <file 2> # Unified diff"
 	"$OTHER_ALIAS${KEYMAP_DOT}ds <file 1> <file 2> # Side-by-side diff"
-	''
 	"$OTHER_ALIAS${KEYMAP_DOT}d <domain> # DNS dig"
 	"$OTHER_ALIAS${KEYMAP_DOT}f # DNS flush"
+	"$OTHER_ALIAS${KEYMAP_DOT}q <start> <finish> <command ~~> # Run a sequence of commands"
 	''
 	"$OTHER_ALIAS${KEYMAP_DOT}s # Sleep"
 	"$OTHER_ALIAS${KEYMAP_DOT}a # Stay awake"
@@ -137,6 +137,17 @@ function other_keymap_p {
 
 function other_keymap_pp {
 	pbpaste
+}
+
+function other_keymap_q {
+	local start=$1; shift
+	local finish=$1; shift # `end` is a reserved keyword
+	local command=$*
+
+	for number in $(seq "$start" "$finish"); do
+		echo
+		echo_eval "${command//~~/$number}"
+	done
 }
 
 function other_keymap_s {
