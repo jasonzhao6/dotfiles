@@ -45,14 +45,14 @@ function nav_keymap {
 function nav_keymap_a {
 	local filters=("$@")
 
-	ls -ld .* | awk '{print $9}' | args_keymap_s "${filters[@]}"
+	ls -d .* | args_keymap_s "${filters[@]}"
 }
 
 # TODO add test
 function nav_keymap_ad {
 	local filters=("$@")
 
-	ls -ld .*/ | awk '{print $9}' | args_keymap_s "${filters[@]}"
+	ls -d .*/ | args_keymap_s "${filters[@]}"
 }
 
 # TODO add test
@@ -60,14 +60,14 @@ function nav_keymap_af {
 	local filters=("$@")
 
 	# shellcheck disable=SC2010
-	ls -lpd .* | grep -v '/' | awk '{print $9}' | args_keymap_s "${filters[@]}"
+	ls -pd .* | grep -v '/' | args_keymap_s "${filters[@]}"
 }
 
 # TODO add test
 function nav_keymap_d {
 	local filters=("$@")
 
-	ls -ld -- */ | awk '{print $9}' | args_keymap_s "${filters[@]}"
+	ls -d -- */ | args_keymap_s "${filters[@]}"
 }
 
 function nav_keymap_dd {
@@ -95,7 +95,7 @@ function nav_keymap_f {
 	local filters=("$@")
 
 	# shellcheck disable=SC2010
-	ls -lp | grep -v '/' | awk '{print $9}' | args_keymap_s "${filters[@]}"
+	ls -p | grep -v '/' | args_keymap_s "${filters[@]}"
 }
 
 function nav_keymap_h {
@@ -107,7 +107,7 @@ function nav_keymap_h {
 function nav_keymap_n {
 	local filters=("$@")
 
-	ls -l | awk '{print $9}' | args_keymap_s "${filters[@]}"
+	ls | args_keymap_s "${filters[@]}"
 }
 
 function nav_keymap_s {
