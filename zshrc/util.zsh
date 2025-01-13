@@ -10,10 +10,6 @@ function f {
 	[[ -n "$1" ]] && f_pre "$@" | sort | args_keymap_s
 }
 
-function cc {
-	eval "$(prev_command)" | bw | ruby -e 'puts STDIN.read.strip' | pbcopy
-}
-
 function dd {
 	mkdir -p "$DD_DUMP_DIR"; dd_is_terminal_output && { DD=$(dd_dump_file); pbpaste > "$DD"; dd_taint_pasteboard; dd_clear_terminal; } || dd_clear_terminal
 }
@@ -44,14 +40,6 @@ function pp {
 
 function uu {
 	diff --unified "$1" "$2"
-}
-
-function xx {
-	printf "bind '\"\\\e[A\": history-search-backward'\nbind '\"\\\e[B\": history-search-forward'" | pbcopy
-}
-
-function yy {
-	YY=$(prev_command); echo -n "$YY" | pbcopy
 }
 
 function flush {

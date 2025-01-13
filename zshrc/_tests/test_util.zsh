@@ -63,8 +63,6 @@ function test__f__for_tf {
 	)"
 }; run_with_filter test__f__for_tf
 
-# Skip: Cannot test b/c `fc -l` throws 'no such event' error
-# function other_keymap_cc
 
 # Skip: Not testing b/c requires network call
 # function other_keymap_dd
@@ -348,18 +346,6 @@ function test__uu {
 		eof
 	)"
 }; run_with_filter test__uu
-
-function test__xx {
-	assert "$(
-		xx
-		pbpaste
-	)" "$(
-		cat <<-eof
-			bind '"\e[A": history-search-backward'
-			bind '"\e[B": history-search-forward'
-		eof
-	)"
-}; run_with_filter test__xx
 
 # Skip: Not testing b/c requires network call
 # function other_keymap_bif

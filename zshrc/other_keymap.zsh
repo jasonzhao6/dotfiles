@@ -13,6 +13,12 @@ OTHER_KEYMAP=(
 	"$OTHER_ALIAS${KEYMAP_DOT}o <path> # Open the specified path in Finder"
 	"$OTHER_ALIAS${KEYMAP_DOT}o <urls> # Open urls from a string"
 	''
+	"$OTHER_ALIAS${KEYMAP_DOT}c # Copy the last output"
+	"$OTHER_ALIAS${KEYMAP_DOT}cc # Copy the last command"
+	"$OTHER_ALIAS${KEYMAP_DOT}p # Alias for \`pbcopy\`"
+	"$OTHER_ALIAS${KEYMAP_DOT}pp # Alias for \`pbpaste\`"
+	"$OTHER_ALIAS${KEYMAP_DOT}b # Bash history search bindings"
+	''
 	"$OTHER_ALIAS${KEYMAP_DOT}s # Sleep"
 	"$OTHER_ALIAS${KEYMAP_DOT}a # Stay awake"
 	"$OTHER_ALIAS${KEYMAP_DOT}t # Tomato timer"
@@ -36,6 +42,18 @@ function other_keymap {
 
 function other_keymap_a {
 	caffeinate
+}
+
+function other_keymap_b {
+	printf "bind '\"\\\e[A\": history-search-backward'\nbind '\"\\\e[B\": history-search-forward'" | pbcopy
+}
+
+function other_keymap_c {
+	eval "$(prev_command)" | bw | ruby -e 'puts STDIN.read.strip' | pbcopy
+}
+
+function other_keymap_cc {
+	echo -n "$(prev_command)" | pbcopy
 }
 
 function other_keymap_i {
@@ -72,6 +90,14 @@ function other_keymap_o {
 
 	# If we didn't open anything, return exit code `1`
 	return 1
+}
+
+function other_keymap_p {
+	pbcopy
+}
+
+function other_keymap_pp {
+	pbpaste
 }
 
 function other_keymap_s {
