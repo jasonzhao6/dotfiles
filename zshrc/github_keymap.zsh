@@ -12,6 +12,8 @@ GITHUB_KEYMAP=(
 	"$GITHUB_ALIAS${KEYMAP_DOT}c # Open the latest commit"
 	"$GITHUB_ALIAS${KEYMAP_DOT}c <sha> # Open the specified commit"
 	''
+	"$GITHUB_ALIAS${KEYMAP_DOT}l # List repos"
+	''
 	"$GITHUB_ALIAS${KEYMAP_DOT}d # Domain name"
 	"$GITHUB_ALIAS${KEYMAP_DOT}o # Org name"
 	"$GITHUB_ALIAS${KEYMAP_DOT}r # Repo name"
@@ -46,6 +48,12 @@ function github_keymap_g {
 
 function github_keymap_h {
 	open https://"$(github_keymap_d)"/"$(github_keymap_o)"/"${*:-$(github_keymap_r)}"
+}
+
+function github_keymap_l {
+	gh repo list "$(github_keymap_o)" --no-archived --limit 1000 --json name |
+		jq -r '.[].name' |
+		args_keymap_s
 }
 
 function github_keymap_n {

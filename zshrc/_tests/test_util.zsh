@@ -1,7 +1,3 @@
-
-# Skip: Cannot test b/c requires querying github
-# function other_keymap_f__for_gh
-
 function test__f__for_tf {
 	assert "$(
 		local home=$HOME
@@ -26,18 +22,3 @@ function test__f__for_tf {
 		eof
 	)"
 }; run_with_filter test__f__for_tf
-
-
-# Skip: Not testing b/c requires network call
-# function other_keymap_other_keymap_k
-
-
-
-# Skip: Not interesting b/c it has its own specs
-# function other_keymap_pp
-
-# Skip: Not testing b/c requires network call
-# function other_keymap_bif
-
-# Skip: Not interesting to test
-# function other_keymap_jcurl
