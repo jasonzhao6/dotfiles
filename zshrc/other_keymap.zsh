@@ -23,14 +23,13 @@ OTHER_KEYMAP=(
 	"$OTHER_ALIAS${KEYMAP_DOT}ds <file 1> <file 2> # Side-by-side diff"
 	"$OTHER_ALIAS${KEYMAP_DOT}d <domain> # DNS dig"
 	"$OTHER_ALIAS${KEYMAP_DOT}f # DNS flush"
-	"$OTHER_ALIAS${KEYMAP_DOT}q <start> <finish> <command ~~> # Run a sequence of commands"
+	"$OTHER_ALIAS${KEYMAP_DOT}j <url> <match> <num lines> # Curl a json endpoint"
+	"$OTHER_ALIAS${KEYMAP_DOT}q <start> <finish> <~~> # Run a sequence of commands"
 	"$OTHER_ALIAS${KEYMAP_DOT}r <before> <after> # Rename files in the current directory"
 	''
 	"$OTHER_ALIAS${KEYMAP_DOT}s # Sleep"
 	"$OTHER_ALIAS${KEYMAP_DOT}a # Stay awake"
 	"$OTHER_ALIAS${KEYMAP_DOT}t # Tomato timer"
-	''
-#	"$OTHER_ALIAS${KEYMAP_DOT}s # Sleep"
 )
 
 keymap_init $OTHER_NAMESPACE $OTHER_ALIAS "${OTHER_KEYMAP[@]}"
@@ -100,6 +99,22 @@ function other_keymap_i {
 	local target_path=${*:-.}
 
 	open -na 'IntelliJ IDEA CE.app' --args "$target_path"
+}
+
+function other_keymap_j {
+	local url=$1
+	local match=$2
+	local num_lines=${3:-0}
+
+	[[ -z $url ]] && return
+
+	curl --silent "$url" | jq | {
+		if [[ -z "$match" ]]; then
+			cat
+		else
+			grep --ignore-case -A"$num_lines" -B"$num_lines" "$match"
+		fi
+	}
 }
 
 function other_keymap_m {

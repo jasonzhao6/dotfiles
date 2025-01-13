@@ -132,6 +132,9 @@ function test__other_keymap_du {
 # Skip: Not interesting to test
 # function other_keymap_i
 
+# Skip: Not testing b/c requires network call
+# function other_keymap_j
+
 # Skip: Not interesting to test
 # function other_keymap_m
 

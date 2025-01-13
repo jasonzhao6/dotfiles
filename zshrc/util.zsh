@@ -22,10 +22,6 @@ function pp {
 	ruby ~/gh/jasonzhao6/sql_formatter.rb/run.rb "$@"
 }
 
-function jcurl {
-	curl --silent "$1" | jq | { [[ -z "$2" ]] && cat || grep -A"${3:-0}" -B"${3:-0}" "$2"; }
-}
-
 # helper for `f`
 function f_pre {
 	[[ "$1" == gh ]] && gh repo list "$(org)" --no-archived --limit 1000 --json name | jq -r '.[].name'
