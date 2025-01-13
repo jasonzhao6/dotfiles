@@ -1,17 +1,5 @@
 # Post `tfl`
 # [F]ormat a file / folder
-function terraform_keymap_f {
-	terraform fmt -recursive "$@"
-}
-
-# [C]lear cache
-function terraform_keymap_c {
-	rm -rf tfplan .terraform ~/.terraform.d
-}
-
-function terraform_keymap_cc {
-	rm -rf tfplan .terraform ~/.terraform.d ~/.terraform.cache
-}
 
 # Non-prod shortcut
 function terraform_keymap_aa {

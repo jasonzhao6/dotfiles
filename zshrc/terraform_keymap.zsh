@@ -7,22 +7,26 @@ TERRAFORM_KEYMAP=(
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}ir # Init & reconfigure"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}im # Init & migrate state"
 	''
-	"$TERRAFORM_ALIAS${KEYMAP_DOT}p (i,iu,ir,im)? # Plan"
-	"$TERRAFORM_ALIAS${KEYMAP_DOT}l (i,iu,ir,im)? # List states"
-	"$TERRAFORM_ALIAS${KEYMAP_DOT}o (i,iu,ir,im)? # Show output"
-	"$TERRAFORM_ALIAS${KEYMAP_DOT}n (i,iu,ir,im)? # Console"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}v (i,iu,ir,im)? # Validate"
-	''
-	"$TERRAFORM_ALIAS${KEYMAP_DOT}a # Apply"
-	"$TERRAFORM_ALIAS${KEYMAP_DOT}d # Destroy"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}p (i,iu,ir,im)? # Plan"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}g # Plan -> gist"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}z # Unlock"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}a # Apply"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}d # Destroy"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}o # Show output"
 	''
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}l (i,iu,ir,im)? # List states"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}s <name> # Show state"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}t <name> # Taint state"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}u <name> # Untaint state"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}m <before> <after> # Move state"
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}rm <name> # Remove state"
+	''
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}f # Format"
+	''
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}n # Console"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}c # Clean"
+	"$TERRAFORM_ALIAS${KEYMAP_DOT}cc # Clean & clear plugin cache"
 	''
 	"$TERRAFORM_ALIAS${KEYMAP_DOT}todo # Find manifests"
 )
@@ -44,10 +48,23 @@ function terraform_keymap_a {
 	terraform apply
 }
 
+function terraform_keymap_c {
+	rm -rf tfplan .terraform ~/.terraform.d
+}
+
+function terraform_keymap_cc {
+	rm -rf tfplan .terraform ~/.terraform.d ~/.terraform.cache
+}
+
 function terraform_keymap_d {
 	terraform destroy
 }
 
+function terraform_keymap_f {
+	local target_path=${1:-.}
+
+	terraform fmt -recursive "$target_path"
+}
 function terraform_keymap_g {
 	terraform show -bw tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web
 }
@@ -79,15 +96,11 @@ function terraform_keymap_m {
 }
 
 function terraform_keymap_n {
-	local option=$1
-
-	terraform_keymap_init "$option" && terraform console
+	terraform console
 }
 
 function terraform_keymap_o {
-	local option=$1
-
-	terraform_keymap_init "$option" && terraform output
+	terraform output
 }
 
 function terraform_keymap_p {
@@ -97,15 +110,21 @@ function terraform_keymap_p {
 }
 
 function terraform_keymap_rm {
-	terraform state rm "$@"
+	local state=$1
+
+	terraform state rm "$state"
 }
 
 function terraform_keymap_s {
-	terraform state show "$@"
+	local state=$1
+
+	terraform state show "$state"
 }
 
 function terraform_keymap_t {
-	terraform taint "$@"
+	local state=$1
+
+	terraform taint "$state"
 }
 
 function terraform_keymap_todo {
@@ -117,7 +136,9 @@ function terraform_keymap_todo {
 }
 
 function terraform_keymap_u {
-	terraform untaint "$@"
+	local state=$1
+
+	terraform untaint "$state"
 }
 
 function terraform_keymap_v {
