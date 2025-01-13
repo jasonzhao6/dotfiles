@@ -19,6 +19,43 @@ function test__other_keymap_b {
 # Skip: Cannot test b/c `fc -l` throws 'no such event' error
 # function other_keymap_cc
 
+function test__other_keymap_d {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1 od www.google.com
+	)" "$(
+		cat <<-eof
+		     1	test output for
+		     2	www.google.com
+		eof
+	)"
+}; run_with_filter test__other_keymap_d
+
+function test__other_keymap_d__without_input {
+	assert "$(ZSHRC_UNDER_TESTING=1 od)" ''
+}; run_with_filter test__other_keymap_d__without_input
+
+function test__other_keymap_d__with_protocol {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1 od https://www.google.com
+	)" "$(
+		cat <<-eof
+		     1	test output for
+		     2	www.google.com
+		eof
+	)"
+}; run_with_filter test__other_keymap_d__with_protocol
+
+function test__other_keymap_d__with_protocol_and_path {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1 od https://www.google.com/path/to/page
+	)" "$(
+		cat <<-eof
+		     1	test output for
+		     2	www.google.com
+		eof
+	)"
+}; run_with_filter test__other_keymap_d__with_protocol_and_path
+
 function test__other_keymap_ds {
 	local old; old=$(
 		cat <<-eof

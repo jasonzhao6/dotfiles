@@ -2,10 +2,6 @@
 # singles (they save into `args`)
 
 
-function d {
-	[[ -n "$1" ]] && { D=${${${@}#*://}%%/*}; [[ -z $ZSHRC_UNDER_TESTING ]] && dig +short $D | args_keymap_s || printf "test output for\n%s" "$D" | args_keymap_s; }
-}
-
 function f {
 	[[ -n "$1" ]] && f_pre "$@" | sort | args_keymap_s
 }

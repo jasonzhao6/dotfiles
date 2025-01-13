@@ -1,39 +1,3 @@
-function test__d {
-	assert "$(
-		ZSHRC_UNDER_TESTING=1 d www.google.com
-	)" "$(
-		cat <<-eof
-		     1	test output for
-		     2	www.google.com
-		eof
-	)"
-}; run_with_filter test__d
-
-function test__d__without_input {
-	assert "$(ZSHRC_UNDER_TESTING=1 d)" ''
-}; run_with_filter test__d__without_input
-
-function test__d__with_protocol {
-	assert "$(
-		ZSHRC_UNDER_TESTING=1 d https://www.google.com
-	)" "$(
-		cat <<-eof
-		     1	test output for
-		     2	www.google.com
-		eof
-	)"
-}; run_with_filter test__d__with_protocol
-
-function test__d__with_protocol_and_path {
-	assert "$(
-		ZSHRC_UNDER_TESTING=1 d https://www.google.com/path/to/page
-	)" "$(
-		cat <<-eof
-		     1	test output for
-		     2	www.google.com
-		eof
-	)"
-}; run_with_filter test__d__with_protocol_and_path
 
 # Skip: Cannot test b/c requires querying github
 # function other_keymap_f__for_gh

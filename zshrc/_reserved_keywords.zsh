@@ -15,6 +15,7 @@ RESERVED[at]=0
 RESERVED[gc]=0
 RESERVED[gcp]=0
 RESERVED[grm]=0
+RESERVED[od]=0
 RESERVED[sa]=0
 
 # This list was copied from https://zsh.sourceforge.io/Doc/Release/Shell-Grammar.html#Reserved-Words
@@ -1056,7 +1057,6 @@ RESERVED[nvram]=1
 RESERVED[objdump]=1
 RESERVED[ocspcheck]=1
 RESERVED[ocspd]=1
-RESERVED[od]=1
 RESERVED[odutil]=1
 RESERVED[open]=1
 RESERVED[opendiff]=1

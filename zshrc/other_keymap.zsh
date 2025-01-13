@@ -22,6 +22,9 @@ OTHER_KEYMAP=(
 	"$OTHER_ALIAS${KEYMAP_DOT}du <file 1> <file 2> # Unified diff"
 	"$OTHER_ALIAS${KEYMAP_DOT}ds <file 1> <file 2> # Side-by-side diff"
 	''
+	"$OTHER_ALIAS${KEYMAP_DOT}d <domain> # DNS dig"
+	"$OTHER_ALIAS${KEYMAP_DOT}f # DNS flush"
+	''
 	"$OTHER_ALIAS${KEYMAP_DOT}s # Sleep"
 	"$OTHER_ALIAS${KEYMAP_DOT}a # Stay awake"
 	"$OTHER_ALIAS${KEYMAP_DOT}t # Tomato timer"
@@ -57,6 +60,20 @@ function other_keymap_c {
 
 function other_keymap_cc {
 	echo -n "$(prev_command)" | pbcopy
+}
+
+function other_keymap_d {
+	local domain=$*
+	[[ -z "$1" ]] && return
+
+	# Strip protocol and path
+	domain=${${${domain}#*://}%%/*}
+
+	if [[ -z $ZSHRC_UNDER_TESTING ]]; then
+		dig +short $domain | args_keymap_s
+	else
+		printf "test output for\n%s" "$domain" | args_keymap_s
+	fi
 }
 
 function other_keymap_ds {
