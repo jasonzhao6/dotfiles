@@ -49,7 +49,7 @@ function keymap_invoke {
 	# If not found, print error
 	if [[ -z $found ]]; then
 		echo
-		red_bar "\`$key\` does not exist in \`$namespace\`"
+		red_bar "A \`$key\` key does not exist in \`$namespace\`"
 		return
 
 	# If found, invoke it with the specified `args`
