@@ -104,7 +104,7 @@ function args_select_column {
 
 function args_save {
 	# Get the piped input; if there is not any, abort
-	local new_args; new_args=$(cat - | head -1000 | compact)
+	local new_args; new_args=$(head -1000 | compact)
 	[[ -z "$new_args" ]] && return
 
 	# If specified, insert `#` after the first column to soft-select it

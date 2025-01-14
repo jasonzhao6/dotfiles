@@ -244,7 +244,7 @@ function args_keymap_y {
 }
 
 function args_keymap_z {
-	local columns=$(args_columns 0 | strip_right)
+	local columns; columns=$(args_columns 0 | strip_right)
 	local last_column=${columns: -1}
 
 	args_select_column 0 "$last_column"
