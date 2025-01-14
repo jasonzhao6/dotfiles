@@ -1,7 +1,8 @@
--: https://golinks.io/%s Go Links
+o: https://golinks.io/%s Go Links
 
-as: https://us-east-1.console.aws.amazon.com/secretsmanager/listsecrets?region=us-east-1&search=all%3Dtransaction-engine%26all%3D%s AWS Secrets Manager
-ae: https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running;search=%s AWS EC2
+se: https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running;search=%s AWS EC2
+sl: https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#LoadBalancers:search=%s AWS Load Balancers
+sm: https://us-east-1.console.aws.amazon.com/secretsmanager/listsecrets?region=us-east-1&search=all%3Dtransaction-engine%26all%3D%s AWS Secrets Manager
 
 c: https://marqeta.atlassian.net/wiki/search?text=%s Confluence
 w: https://marqeta.atlassian.net/wiki/search?text=%s Confluence
@@ -21,9 +22,6 @@ gg: https://mail.google.com/mail/u/0/#search/%s Google Gmail
 gi: https://www.google.com/search?q=%s&udm=2 Google Images
 gm: https://www.google.com/maps?q=%s Google Maps
 
-g: https://github.marqeta.com/search?q=%s&type=code Github
-gr: https://github.marqeta.com/orgs/transaction-engine/repositories?q=%s Github Repos
-gt: https://github.marqeta.com/search?q=org%3Atransaction-engine+%s&type=code Github TENGF
 h: https://github.marqeta.com/search?q=%s&type=code Github
 hr: https://github.marqeta.com/orgs/transaction-engine/repositories?q=%s Github Repos
 ht: https://github.marqeta.com/search?q=org%3Atransaction-engine+%s&type=code Github TENGF

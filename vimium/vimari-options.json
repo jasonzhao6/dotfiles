@@ -12,26 +12,25 @@
   "bindings": {
     "hintToggle": "a",
     "newTabHintToggle": ";",
+    "openTab": "o",
 
-    "closeTab": "c",
-    "reload": "r",
-
-    "goToFirstInput": "d",
     "scrollUpHalfPage": "h",
     "scrollDownHalfPage": "t",
-    "tabBack": "n",
-    "tabForward": "s",
-    "openTab": "-",
-
     "goToPageTop": "m",
     "goToPageBottom": "w",
-    "goBack": "v",
-    "goForward": "z",
-
+    "scrollUp": "up",
+    "scrollDown": "down",
     "scrollLeft": "'",
     "scrollRight": ",",
 
-    "scrollUp": "up",
-    "scrollDown": "down",
-  },
+    "closeTab": "c",
+    "duplicateTab": "d",
+    "reload": "r",
+    "tabBack": "n",
+    "tabForward": "s",
+    "goBack": "v",
+    "goForward": "z",
+
+    "goToFirstInput": "u",
+  }
 }
