@@ -46,6 +46,15 @@ function main_keymap {
 # Key mappings (Alphabetized)
 #
 
+# TODO add test
+function main_keymap_k {
+	local key=$1
+
+	pgrep "[$]{[A-Z]+_DOT}$key\w*" "$ZSHRC_DIR"/*_keymap.zsh | trim_column | bw | while IFS= read -r line; do
+		keymap_print_entry "$(eval "echo $line")" 40
+	done
+}
+
 function main_keymap_vs {
 	cat "$DOTFILES_DIR"/vimium/vimium-searches.txt
 }

@@ -177,6 +177,14 @@ function size {
 	'
 }
 
+# TODO add test
+# shellcheck disable=SC2120 # `column_index` is passed in outside of this file
+function trim_column {
+	local column_index=${1:-1}
+
+	awk -v index="$column_index" '{$index=""; print $0}'
+}
+
 #
 # `|` Utils after json
 #
