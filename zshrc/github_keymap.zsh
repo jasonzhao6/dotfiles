@@ -34,16 +34,18 @@ function github_keymap {
 # Key mappings (Alphabetized)
 #
 
+source "$ZSHRC_DIR/github_helpers.zsh"
+
 function github_keymap_b {
 	git rev-parse --abbrev-ref HEAD
 }
 
 function github_keymap_c {
-	open https://"$(github_keymap_d)"/"$(github_keymap_o)"/"$(github_keymap_r)"/commit/"$1"
+	open https://"$(github_keymap_d)"/"$(github_keymap_o)"/"$(github_keymap_re)"/commit/"$1"
 }
 
 function github_keymap_d {
-	git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/'
+	github_keymap_url | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/'
 }
 
 function github_keymap_g {
@@ -51,27 +53,51 @@ function github_keymap_g {
 }
 
 function github_keymap_h {
-	open https://"$(github_keymap_d)"/"$(github_keymap_o)"/"${*:-$(github_keymap_r)}"
+	local repo=${*:-$(github_keymap_re 2> /dev/null)}
+
+	local domain; domain="$(github_keymap_domain)"
+	local org; org="$(github_keymap_org)"
+	open https://"$domain"/"$org"/"$repo"
 }
 
-function github_keymap_l {
-	gh repo list "$(github_keymap_o)" --no-archived --limit 1000 --json name |
-		jq -r '.[].name' |
-		args_keymap_s
-}
-
-function github_keymap_n {
+function github_keymap_j {
 	gp && gh pr create --fill && gh pr view --web
 }
 
+function github_keymap_n {
+	local repo=$1
+
+	# TODO Stop aliasing org when setting up next dev env
+	org="${org//$GITHUB_SOURCE_ORG/$GITHUB_TARGET_ORG}"
+
+	local org; org="$(github_keymap_org)"
+	cd ~/gh/"$org"/"$repo" && nav_keymap_n || true
+}
+
 function github_keymap_o {
-	git remote get-url origin | sed 's/.*[:/]\([^/]*\)\/.*/\1/'
+	github_keymap_url | sed 's/.*[:/]\([^/]*\)\/.*/\1/'
 }
 
 function github_keymap_p {
-	open https://"$(github_keymap_d)"/"$(github_keymap_o)"/"$(github_keymap_r)"/pull/"$1"
+	open https://"$(github_keymap_d)"/"$(github_keymap_o)"/"$(github_keymap_re)"/pull/"$1"
 }
 
 function github_keymap_r {
+	local filters=("$@")
+
+	local org; org="$(github_keymap_org)"
+	args_keymap_s "${filters[@]}" < ~/Documents/github."$org".txt
+}
+
+function github_keymap_re {
 	git rev-parse --show-toplevel | xargs basename
+}
+
+function github_keymap_s {
+	# Save a copy for cached lookup
+	local org; org="$(github_keymap_org)"
+	gh repo list "$org" --no-archived --limit 1000 --json name |
+		jq -r '.[].name' |
+		tee ~/Documents/github."$org".txt |
+		args_keymap_s
 }

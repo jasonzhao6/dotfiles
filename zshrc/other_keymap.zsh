@@ -53,18 +53,17 @@ function other_keymap {
 # Key mappings (Alphabetized)
 #
 
+OTHER_KEYMAP_DIFF_DEFAULT_FILE_1="$HOME/Downloads/1.txt"
+OTHER_KEYMAP_DIFF_DEFAULT_FILE_2="$HOME/Downloads/2.txt"
+
 source "$ZSHRC_DIR/other_helpers.zsh"
 
 function other_keymap_a {
 	caffeinate
 }
 
-function other_keymap_b {
-	printf "bind '\"\\\e[A\": history-search-backward'\nbind '\"\\\e[B\": history-search-forward'" | pbcopy
-}
-
 function other_keymap_c {
-	eval "$(prev_command)" | bw | ruby -e 'puts STDIN.read.strip' | pbcopy
+	echo -n "$(eval "$(prev_command)" | bw | ruby -e 'puts STDIN.read.strip')" | pbcopy
 }
 
 function other_keymap_cc {
@@ -72,11 +71,11 @@ function other_keymap_cc {
 }
 
 function other_keymap_d {
-	local domain=$*
+	local url=$*
 	[[ -z "$1" ]] && return
 
 	# Strip protocol and path
-	domain=${${${domain}#*://}%%/*}
+	local domain=${${${url}#*://}%%/*}
 
 	if [[ -z $ZSHRC_UNDER_TESTING ]]; then
 		dig +short $domain | args_keymap_s
@@ -90,18 +89,11 @@ function other_keymap_df {
 	sudo killall -HUP mDNSResponder
 }
 
-function other_keymap_ds {
-	local file_1=$1
-	local file_2=$2
+function other_keymap_e {
+	local file_1=${1:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_1}
+	local file_2=${2:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_2}
 
 	diff --side-by-side --suppress-common-lines "$file_1" "$file_2"
-}
-
-function other_keymap_du {
-	local file_1=$1
-	local file_2=$2
-
-	diff --unified "$file_1" "$file_2"
 }
 
 function other_keymap_f {
@@ -109,6 +101,10 @@ function other_keymap_f {
 
 	# shellcheck disable=SC2086 # Empty quotes break Ruby's `gets` method
 	ruby ~/gh/jasonzhao6/sql_formatter.rb/run.rb $sql
+}
+
+function other_keymap_h {
+	printf "bind '\"\\\e[A\": history-search-backward'\nbind '\"\\\e[B\": history-search-forward'" | pbcopy
 }
 
 function other_keymap_i {
@@ -155,14 +151,17 @@ function other_keymap_kc {
 
 function other_keymap_kk {
 	mkdir -p "$OTHER_KEYMAP_K_DIR"
-	cd "$OTHER_KEYMAP_K_DIR" || return
-	nav_keymap_n
+	cd "$OTHER_KEYMAP_K_DIR" && nav_keymap_n || return
 }
 
 function other_keymap_m {
 	local target_path=${*:-.}
 
 	mate "$target_path"
+}
+
+function other_keymap_n {
+	~/gh/tt/tt.rb "$@"
 }
 
 function other_keymap_o {
@@ -219,8 +218,20 @@ function other_keymap_s {
 	pmset sleepnow
 }
 
+# TODO add test
 function other_keymap_t {
-	~/gh/tt/tt.rb "$@"
+	local command=$*
+
+	local start_time; start_time=$(gdate +%s.%2N)
+	eval "$command"
+	gray_fg "\nCommand executed in $(echo "$(gdate +%s.%2N) - $start_time" | bc) seconds"
+}
+
+function other_keymap_u {
+	local file_1=${1:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_1}
+	local file_2=${2:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_2}
+
+	diff --unified "$file_1" "$file_2"
 }
 
 function other_keymap_y {

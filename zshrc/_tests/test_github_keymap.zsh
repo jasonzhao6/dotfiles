@@ -10,6 +10,6 @@ function test__github_keymap_o {
 	assert "$(nav_keymap_s > /dev/null; github_keymap_o)" 'jasonzhao6'
 }; run_with_filter test__github_keymap_o
 
-function test__github_keymap_r {
-	assert "$(nav_keymap_s > /dev/null; github_keymap_r)" 'scratch'
-}; run_with_filter test__github_keymap_r
+function test__github_keymap_re {
+	assert "$(nav_keymap_s > /dev/null; github_keymap_re)" 'scratch'
+}; run_with_filter test__github_keymap_re

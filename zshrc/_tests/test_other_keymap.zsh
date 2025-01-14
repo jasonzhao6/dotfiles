@@ -1,14 +1,3 @@
-function test__other_keymap_b {	assert "$(
-		other_keymap_b
-		pbpaste
-	)" "$(
-		cat <<-eof
-			bind '"\e[A": history-search-backward'
-			bind '"\e[B": history-search-forward'
-		eof
-	)"
-}; run_with_filter test__other_keymap_b
-
 function test__other_keymap_d {	assert "$(
 		ZSHRC_UNDER_TESTING=1 other_keymap_d www.google.com
 	)" "$(
@@ -45,7 +34,7 @@ function test__other_keymap_d__with_protocol_and_path {
 	)"
 }; run_with_filter test__other_keymap_d__with_protocol_and_path
 
-function test__other_keymap_ds {	local old; old=$(
+function test__other_keymap_e {	local old; old=$(
 		cat <<-eof
 			This is the original content.
 			Line 1
@@ -67,52 +56,25 @@ function test__other_keymap_ds {	local old; old=$(
 	)
 
 	assert "$(
-		other_keymap_ds <(echo "$old") <(echo "$new") | bw
+		other_keymap_e <(echo "$old") <(echo "$new") | bw
 	)" "$(
 		cat <<-eof
 			This is the original content.                                   |       This is the modified content.
 			                                                                >       New Line
 		eof
 	)"
-}; run_with_filter test__other_keymap_ds
+}; run_with_filter test__other_keymap_e
 
-function test__other_keymap_du {
-	local old; old=$(
-		cat <<-eof
-			This is the original content.
-			Line 1
-			Line 2
-			Line 3
-			Line 4
-		eof
-	)
-
-	local new; new=$(
-		cat <<-eof
-			This is the modified content.
-			Line 1
-			Line 2
-			Line 3
-			New Line
-			Line 4
-		eof
-	)
-
-	assert "$(
-		other_keymap_du <(echo "$old") <(echo "$new") | bw | sed 1,2d
+function test__other_keymap_h {	assert "$(
+		other_keymap_h
+		pbpaste
 	)" "$(
 		cat <<-eof
-			@@ -1,5 +1,6 @@
-			-This is the original content.
-			+This is the modified content.
-			 Line 1
-			 Line 2
-			 Line 3
-			+New Line
-			 Line 4
+			bind '"\e[A": history-search-backward'
+			bind '"\e[B": history-search-forward'
 		eof
 	)"
-}; run_with_filter test__other_keymap_du
+}; run_with_filter test__other_keymap_h
 
 function test__other_keymap_k {	assert "$(
 		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
@@ -207,7 +169,15 @@ function test__other_keymap_kc {
 
 function test__other_keymap_kk {
 	# shellcheck disable=SC2031
-	assert "$(other_keymap_kk; pwd)" "$OTHER_KEYMAP_K_DIR"
+	assert "$(
+		other_keymap_kk
+		pwd
+	)" "$(
+		cat <<-eof
+
+			$OTHER_KEYMAP_K_DIR
+		eof
+	)"
 }; run_with_filter test__other_keymap_kk
 
 function test__other_keymap_q {	assert "$(
@@ -286,3 +256,41 @@ function test__other_keymap_r {
 		eof
 	)"
 }; run_with_filter test__other_keymap_r
+
+function test__other_keymap_u {
+	local old; old=$(
+		cat <<-eof
+			This is the original content.
+			Line 1
+			Line 2
+			Line 3
+			Line 4
+		eof
+	)
+
+	local new; new=$(
+		cat <<-eof
+			This is the modified content.
+			Line 1
+			Line 2
+			Line 3
+			New Line
+			Line 4
+		eof
+	)
+
+	assert "$(
+		other_keymap_u <(echo "$old") <(echo "$new") | bw | sed 1,2d
+	)" "$(
+		cat <<-eof
+			@@ -1,5 +1,6 @@
+			-This is the original content.
+			+This is the modified content.
+			 Line 1
+			 Line 2
+			 Line 3
+			+New Line
+			 Line 4
+		eof
+	)"
+}; run_with_filter test__other_keymap_u

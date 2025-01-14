@@ -66,6 +66,12 @@ function aws_keymap_a {
 	ec2_args "Name=tag:aws:autoscaling:groupName, Values=$prefix*"
 }
 
+function aws_keymap_aa {
+	local id=$*
+
+	open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$id"
+}
+
 function aws_keymap_c1 {
 	echo_eval 'export AWS_DEFAULT_REGION=eu-central-1'
 }
@@ -82,6 +88,12 @@ function aws_keymap_e1 {
 
 function aws_keymap_e2 {
 	echo_eval 'export AWS_DEFAULT_REGION=us-east-2'
+}
+
+function aws_keymap_ee {
+	local id; id=$(ec2_get_id "$@")
+
+	open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$id"
 }
 
 function aws_keymap_m {
@@ -129,18 +141,6 @@ function aws_keymap_o {
 	local filters=("$@")
 
 	print -l "${AWS_OPAL[@]}" | sort | column -t | args_keymap_s "${filters[@]}"
-}
-
-function aws_keymap_oa {
-	local id=$*
-
-	open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$id"
-}
-
-function aws_keymap_oe {
-	local id; id=$(ec2_get_id "$@")
-
-	open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$id"
 }
 
 function aws_keymap_p {

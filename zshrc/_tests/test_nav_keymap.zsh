@@ -37,9 +37,9 @@ function test__nav_keymap_a__with_filters {
 	)"
 }; run_with_filter test__nav_keymap_a__with_filters
 
-function test__nav_keymap_dd {
-	assert "$(nav_keymap_dd > /dev/null; pwd)" "$HOME/gh/jasonzhao6/dotfiles"
-}; run_with_filter test__nav_keymap_dd
+function test__nav_keymap_d {
+	assert "$(nav_keymap_d > /dev/null; pwd)" "$HOME/gh/jasonzhao6/dotfiles"
+}; run_with_filter test__nav_keymap_d
 
 function test__nav_keymap_dl {
 	assert "$(nav_keymap_dl > /dev/null; pwd)" "$HOME/Downloads"
@@ -70,6 +70,7 @@ function test__nav_keymap_n {
 		rm -rf /tmp/test__nav_keymap_n
 	)" "$(
 		cat <<-eof
+
 		     1	1
 		     2	1.log
 		     3	2
@@ -93,22 +94,23 @@ function test__nav_keymap_n__with_filters {
 		rm -rf /tmp/test__nav_keymap_n
 	)" "$(
 		cat <<-eof
+
 		     1	2.log
 		eof
 	)"
 }; run_with_filter test__nav_keymap_n__with_filters
 
-function test__nav_keymap_o__with_dir {
-	assert "$(nav_keymap_o ~/Documents > /dev/null; pwd)" "$HOME/Documents"
-}; run_with_filter test__nav_keymap_o__with_dir
-
-function test__nav_keymap_o__with_file {
-	assert "$(nav_keymap_o ~/Documents/.zshrc > /dev/null; pwd)" "$HOME/Documents"
-}; run_with_filter test__nav_keymap_o__with_file
-
 function test__nav_keymap_s {
 	assert "$(nav_keymap_s > /dev/null; pwd)" "$HOME/gh/scratch"
 }; run_with_filter test__nav_keymap_s
+
+function test__nav_keymap_t__with_dir {
+	assert "$(nav_keymap_t ~/Documents > /dev/null; pwd)" "$HOME/Documents"
+}; run_with_filter test__nav_keymap_t__with_dir
+
+function test__nav_keymap_t__with_file {
+	assert "$(nav_keymap_t ~/Documents/.zshrc > /dev/null; pwd)" "$HOME/Documents"
+}; run_with_filter test__nav_keymap_t__with_file
 
 function test__nav_keymap_u {
 	assert "$(

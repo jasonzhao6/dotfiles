@@ -31,8 +31,7 @@ function nav_keymap {
 
 	# TODO add test
 	if [[ -d "$directory" ]]; then
-		cd "$directory" || return
-		nav_keymap_n
+		cd "$directory" && nav_keymap_n || return
 		return
 	fi
 
@@ -50,14 +49,7 @@ function nav_keymap_a {
 }
 
 # TODO add test
-function nav_keymap_ad {
-	local filters=("$@")
-
-	ls -d .*/ | args_keymap_s "${filters[@]}"
-}
-
-# TODO add test
-function nav_keymap_af {
+function nav_keymap_ae {
 	local filters=("$@")
 
 	# shellcheck disable=SC2010
@@ -65,34 +57,30 @@ function nav_keymap_af {
 }
 
 # TODO add test
-function nav_keymap_d {
+function nav_keymap_ao {
 	local filters=("$@")
 
-	ls -d -- */ | args_keymap_s "${filters[@]}"
+	ls -d .*/ | args_keymap_s "${filters[@]}"
 }
 
-function nav_keymap_dd {
-	cd ~/gh/jasonzhao6/dotfiles || true
-	nav_keymap_n
+function nav_keymap_d {
+	cd ~/gh/jasonzhao6/dotfiles && nav_keymap_n || true
 }
 
 function nav_keymap_dl {
-	cd ~/Downloads || true
-	nav_keymap_n
+	cd ~/Downloads && nav_keymap_n || true
 }
 
 function nav_keymap_dm {
-	cd ~/Documents || true
-	nav_keymap_n
+	cd ~/Documents && nav_keymap_n || true
 }
 
 function nav_keymap_dt {
-	cd ~/Desktop || true
-	nav_keymap_n
+	cd ~/Desktop && nav_keymap_n || true
 }
 
 # TODO add test
-function nav_keymap_f {
+function nav_keymap_e {
 	local filters=("$@")
 
 	# shellcheck disable=SC2010
@@ -100,36 +88,39 @@ function nav_keymap_f {
 }
 
 function nav_keymap_h {
-	cd ~/gh || true
-	nav_keymap_n
+	cd ~/gh && nav_keymap_n || true
 }
 
 # shellcheck disable=SC2120
 function nav_keymap_n {
 	local filters=("$@")
 
+	echo
 	ls | args_keymap_s "${filters[@]}"
 }
 
+# TODO add test
 function nav_keymap_o {
-	# Note: Do not use `local path`- It will overwrite $PATH in subshell
-	local target_path; target_path=$(paste_when_empty "$@")
+	local filters=("$@")
 
-	# If it's a folder path, go to that folder
-	if [[ -d $target_path ]]; then
-		cd "$target_path" || return
-
-	# If it's a file path, go to its parent folder
-	else
-		cd ${${target_path}%/*} || return
-	fi
-
-	nav_keymap_n
+	ls -d -- */ | args_keymap_s "${filters[@]}"
 }
 
 function nav_keymap_s {
-	cd ~/gh/scratch || true
-	nav_keymap_n
+	cd ~/gh/scratch && nav_keymap_n || true
+}
+
+function nav_keymap_t {
+	# Note: Do not use `local path`- It will overwrite $PATH in subshell
+	local target_path; target_path=$(paste_when_empty "$@")
+
+	# If it's not a folder path, go to its parent folder
+	if [[ ! -d $target_path ]]; then
+		target_path=${${target_path}%/*}
+	fi
+
+	# Go to folder
+	cd $target_path && nav_keymap_n || true
 }
 
 function nav_keymap_u {

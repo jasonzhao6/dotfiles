@@ -80,24 +80,26 @@ function git_keymap_b {
 }
 
 function git_keymap_bb {
-	git_merged | xargs git branch --delete
-	git remote prune origin
+	git_merged | xargs -I {} zsh -c 'git branch --delete {}; git push --delete origin {}'
+
 	echo
 	git_keymap_b
 }
 
 function git_keymap_bd {
-	local name=$1
+	local branch=$1
 
-	git branch --delete --force "$name"
-	git push origin --delete "$name"
+	git branch --delete --force "$branch"
+	git push --delete origin "$branch"
+
+	echo
 	git_keymap_b
 }
 
 function git_keymap_c {
-	local name=$1;
+	local branch=$1;
 
-	git checkout "$name"
+	git checkout "$branch"
 }
 
 function git_keymap_d {
@@ -113,7 +115,7 @@ function git_keymap_f {
 }
 
 function git_keymap_g {
-	git checkout main || git checkout master
+	git checkout main 2> /dev/null || git checkout master
 	git pull
 	git status
 }
@@ -133,13 +135,17 @@ function git_keymap_l {
 	git stash list --pretty=format:'%C(yellow)%gd %C(magenta)%as %C(green)%s'
 }
 
+function git_keymap_lc {
+	git stash clear
+}
+
 function git_keymap_m {
 	git add --all
 	git commit --amend --no-edit
 }
 
 function git_keymap_n {
-	git_keymap_m
+	git_keymap_g
 	git checkout -b "$@"
 }
 
@@ -171,10 +177,6 @@ function git_keymap_s {
 
 	git add --all
 	git stash save "$message"
-}
-
-function git_keymap_sc {
-	git stash clear
 }
 
 function git_keymap_t {
