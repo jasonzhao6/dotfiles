@@ -1,5 +1,6 @@
 MAIN_NAMESPACE='main_keymap'
 MAIN_ALIAS='m'
+MAIN_DOT="${MAIN_ALIAS}${KEYMAP_DOT}"
 
 # Find keymap scripts
 MAIN_KEYMAP=(); while IFS='' read -r line; do MAIN_KEYMAP+=("$line"); done < <(
@@ -17,20 +18,22 @@ MAIN_KEYMAP=(); while IFS='' read -r line; do MAIN_KEYMAP+=("$line"); done < <(
 # Append keymap snapshots
 MAIN_KEYMAP+=( # TODO create these keymaps
 	''
-#	"$MAIN_ALIAS${KEYMAP_DOT}s # Show system default keymap"
+#	"${MAIN_DOT}s # Show system default keymap"
 #	''
-#	"$MAIN_ALIAS${KEYMAP_DOT}i # Show IntelliJ \`cmd\` keymap"
-#	"$MAIN_ALIAS${KEYMAP_DOT}ic # Show IntelliJ \`ctrl\` keymap"
-#	"$MAIN_ALIAS${KEYMAP_DOT}ia # Show IntelliJ \`alt\` keymap"
-#	"$MAIN_ALIAS${KEYMAP_DOT}if # Show IntelliJ \`fn\` keymap"
+#	"${MAIN_DOT}i # Show IntelliJ \`cmd\` keymap"
+#	"${MAIN_DOT}ic # Show IntelliJ \`ctrl\` keymap"
+#	"${MAIN_DOT}ia # Show IntelliJ \`alt\` keymap"
+#	"${MAIN_DOT}if # Show IntelliJ \`fn\` keymap"
 #	''
-#	"$MAIN_ALIAS${KEYMAP_DOT}m # Show TextMate keymap"
-#	"$MAIN_ALIAS${KEYMAP_DOT}n # Show Notion keymap"
-#	"$MAIN_ALIAS${KEYMAP_DOT}t # Show Terminal keymap"
-	"$MAIN_ALIAS${KEYMAP_DOT}vv # Show Vimium / Vimari keymap"
-	"$MAIN_ALIAS${KEYMAP_DOT}vs # Show Vimium search keymap"
+	"${MAIN_DOT}k <key> # List keymap entries"
+	''
+#	"${MAIN_DOT}m # Show TextMate keymap"
+#	"${MAIN_DOT}n # Show Notion keymap"
+#	"${MAIN_DOT}t # Show Terminal keymap"
+	"${MAIN_DOT}vv # Show Vimium / Vimari keymap"
+	"${MAIN_DOT}vs # Show Vimium search keymap"
 #	''
-#	"$MAIN_ALIAS${KEYMAP_DOT}k # Show Kinesis keymap"
+#	"${MAIN_DOT}k # Show Kinesis keymap"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"

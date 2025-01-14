@@ -1,30 +1,31 @@
 ZSH_NAMESPACE='zsh_keymap'
 ZSH_ALIAS='z'
+ZSH_DOT="${ZSH_ALIAS}${KEYMAP_DOT}"
 
 ZSH_KEYMAP=(
-	"$ZSH_ALIAS${KEYMAP_DOT}i # Edit with IntelliJ"
-	"$ZSH_ALIAS${KEYMAP_DOT}m # Edit with TextMate"
-	"$ZSH_ALIAS${KEYMAP_DOT}s # Edit secrets"
-	"$ZSH_ALIAS${KEYMAP_DOT}z # Source"
-	"$ZSH_ALIAS${KEYMAP_DOT}t # Test"
+	"${ZSH_DOT}i # Edit with IntelliJ"
+	"${ZSH_DOT}m # Edit with TextMate"
+	"${ZSH_DOT}s # Edit secrets"
+	"${ZSH_DOT}z # Source"
+	"${ZSH_DOT}t # Test"
 	''
-	"$ZSH_ALIAS${KEYMAP_DOT}w # Custom \`which\`"
-	"$ZSH_ALIAS${KEYMAP_DOT}a # List aliases"
-	"$ZSH_ALIAS${KEYMAP_DOT}a <match>* <-mismatch>* # Filter aliases"
-	"$ZSH_ALIAS${KEYMAP_DOT}f # List functions"
-	"$ZSH_ALIAS${KEYMAP_DOT}f <match>* <-mismatch>* # Filter functions"
+	"${ZSH_DOT}w # Custom \`which\`"
+	"${ZSH_DOT}a # List aliases"
+	"${ZSH_DOT}a <match>* <-mismatch>* # Filter aliases"
+	"${ZSH_DOT}f # List functions"
+	"${ZSH_DOT}f <match>* <-mismatch>* # Filter functions"
 	''
-	"$ZSH_ALIAS${KEYMAP_DOT}h # List history"
-	"$ZSH_ALIAS${KEYMAP_DOT}h <match>* <-mismatch>* # Filter history"
-	"$ZSH_ALIAS${KEYMAP_DOT}hc # Clear history"
-	"$ZSH_ALIAS${KEYMAP_DOT}hm # Edit history file with TextMate"
+	"${ZSH_DOT}h # List history"
+	"${ZSH_DOT}h <match>* <-mismatch>* # Filter history"
+	"${ZSH_DOT}hc # Clear history"
+	"${ZSH_DOT}hm # Edit history file with TextMate"
 	''
-	"$ZSH_ALIAS${KEYMAP_DOT}1 # No session history"
-	"$ZSH_ALIAS${KEYMAP_DOT}2 # Session history in memory"
-	"$ZSH_ALIAS${KEYMAP_DOT}0 # Session history in memory & file"
+	"${ZSH_DOT}1 # No session history"
+	"${ZSH_DOT}2 # Session history in memory"
+	"${ZSH_DOT}0 # Session history in memory & file"
 	''
-	"$ZSH_ALIAS${KEYMAP_DOT}p # Push other dotfiles"
-	"$ZSH_ALIAS${KEYMAP_DOT}P # Pull other dotfiles"
+	"${ZSH_DOT}p # Push other dotfiles"
+	"${ZSH_DOT}P # Pull other dotfiles"
 )
 
 keymap_init $ZSH_NAMESPACE $ZSH_ALIAS "${ZSH_KEYMAP[@]}"

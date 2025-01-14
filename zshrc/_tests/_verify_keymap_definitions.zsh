@@ -27,7 +27,7 @@ function verify_keymap_definitions {
 		# Ignore comment lines
 		grep --invert-match '^#' "$keymap_file" |
 			# Extract keymap keys
-			pgrep --only-matching "(?<={KEYMAP_DOT})\w+(?=\s)" | bw | sort --unique
+			pgrep --only-matching "(?<=_DOT})\w+(?=\s)" | bw | sort --unique
 	)
 
 	# Generate all expected mapping functions

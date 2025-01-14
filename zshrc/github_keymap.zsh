@@ -1,23 +1,27 @@
 GITHUB_NAMESPACE='github_keymap'
 GITHUB_ALIAS='h'
+GITHUB_DOT="${GITHUB_ALIAS}${KEYMAP_DOT}"
 
 GITHUB_KEYMAP=(
-	"$GITHUB_ALIAS${KEYMAP_DOT}n # Create a new PR, then open it"
-	"$GITHUB_ALIAS${KEYMAP_DOT}g # Create a new gist, then open it"
+	"${GITHUB_DOT}j # Create a new PR, then open it"
+	"${GITHUB_DOT}g # Create a new gist, then open it"
 	''
-	"$GITHUB_ALIAS${KEYMAP_DOT}h # Open the current repo"
-	"$GITHUB_ALIAS${KEYMAP_DOT}h <repo> # Open the specified repo"
-	"$GITHUB_ALIAS${KEYMAP_DOT}p # Open the latest PRs"
-	"$GITHUB_ALIAS${KEYMAP_DOT}p <pr> # Open the specified PR"
-	"$GITHUB_ALIAS${KEYMAP_DOT}c # Open the latest commit"
-	"$GITHUB_ALIAS${KEYMAP_DOT}c <sha> # Open the specified commit"
+	"${GITHUB_DOT}h # Open the current repo"
+	"${GITHUB_DOT}h <repo> # Open the specified repo"
+	"${GITHUB_DOT}p # Open the latest PRs"
+	"${GITHUB_DOT}p <pr> # Open the specified PR"
+	"${GITHUB_DOT}c # Open the latest commit"
+	"${GITHUB_DOT}c <sha> # Open the specified commit"
 	''
-	"$GITHUB_ALIAS${KEYMAP_DOT}l # List repos"
+	"${GITHUB_DOT}s # Save repos data"
+	"${GITHUB_DOT}r # List repos"
+	"${GITHUB_DOT}r <match>* <-mismatch>* # Filter repos"
+	"${GITHUB_DOT}n # Navigate to repo directory"
 	''
-	"$GITHUB_ALIAS${KEYMAP_DOT}d # Domain name"
-	"$GITHUB_ALIAS${KEYMAP_DOT}o # Org name"
-	"$GITHUB_ALIAS${KEYMAP_DOT}r # Repo name"
-	"$GITHUB_ALIAS${KEYMAP_DOT}b # Branch name"
+	"${GITHUB_DOT}d # Domain name"
+	"${GITHUB_DOT}o # Org name"
+	"${GITHUB_DOT}re # Repo name"
+	"${GITHUB_DOT}b # Branch name"
 )
 
 keymap_init $GITHUB_NAMESPACE $GITHUB_ALIAS "${GITHUB_KEYMAP[@]}"
