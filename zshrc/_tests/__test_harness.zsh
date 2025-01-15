@@ -14,7 +14,9 @@ function assert {
 }
 
 function run_with_filter {
-	[[ -z $ZSHRC_TESTS_NAME_FILTER || $* == *$ZSHRC_TESTS_NAME_FILTER* ]] && "$@"
+	local test_name=$1
+
+	[[ -z $ZSHRC_TESTS_NAME_FILTER || $test_name == *$ZSHRC_TESTS_NAME_FILTER* ]] && $test_name
 }
 
 function print_summary {

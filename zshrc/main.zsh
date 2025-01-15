@@ -7,9 +7,9 @@ ZSHRC_UNDER_PROFILING=
 # Track the load time: Start
 [[ -z $ZSHRC_UNDER_TESTING ]] && ZSHRC_LOAD_TIME_START=$(gdate +%s.%2N)
 
-export DOTFILES_DIR="$HOME/gh/jasonzhao6/dotfiles"
-export ZSHRC_DIR="$DOTFILES_DIR/zshrc"
-export ZSHRC_SECRETS="$HOME/.zshrc.secrets"
+DOTFILES_DIR="$HOME/gh/jasonzhao6/dotfiles"
+ZSHRC_DIR="$DOTFILES_DIR/zshrc"
+ZSHRC_SECRETS="$HOME/.zshrc.secrets"
 
 # Set color aliases early so they can expand in subsequent function definitions
 source "$ZSHRC_DIR/colors.zsh"; color
