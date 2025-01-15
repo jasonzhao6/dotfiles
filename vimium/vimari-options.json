@@ -24,13 +24,13 @@
     "scrollRight": ",",
 
     "closeTab": "c",
-    "duplicateTab": "d",
+    "duplicateTab": "u",
     "reload": "r",
     "tabBack": "n",
     "tabForward": "s",
     "goBack": "v",
     "goForward": "z",
 
-    "goToFirstInput": "u",
+    "goToFirstInput": "e",
   }
 }

@@ -16,15 +16,15 @@ map ' scrollLeft
 map , scrollRight
 
 map c removeTab
-map d duplicateTab
+map u duplicateTab
 map r reload
 map n previousTab
 map s nextTab
 map v goBack
 map z goForward
 
-map u focusInput
-map i enterInsertMode
+map e focusInput
+map - enterInsertMode
 
 # Vimium extras
 map q Vomnibar.activateBookmarksInNewTab
