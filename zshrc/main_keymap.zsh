@@ -25,7 +25,9 @@ MAIN_KEYMAP+=( # TODO create these keymaps
 #	"${MAIN_DOT}ia # Show IntelliJ \`alt\` keymap"
 #	"${MAIN_DOT}if # Show IntelliJ \`fn\` keymap"
 #	''
-	"${MAIN_DOT}k <key> # List keymap entries"
+	"${MAIN_DOT}k # List keymap entries"
+	"${MAIN_DOT}k <key> # Filter keymap entries"
+	"${MAIN_DOT}k <namespace> <key> # Filter keymap entries"
 	''
 #	"${MAIN_DOT}m # Show TextMate keymap"
 #	"${MAIN_DOT}n # Show Notion keymap"
@@ -33,7 +35,7 @@ MAIN_KEYMAP+=( # TODO create these keymaps
 	"${MAIN_DOT}vv # Show Vimium / Vimari keymap"
 	"${MAIN_DOT}vs # Show Vimium search keymap"
 #	''
-#	"${MAIN_DOT}k # Show Kinesis keymap"
+#	"${MAIN_DOT}ki # Show Kinesis keymap"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
@@ -46,12 +48,29 @@ function main_keymap {
 # Key mappings (Alphabetized)
 #
 
-# TODO add test
 function main_keymap_k {
-	local key=$1
+	local namespace
+	local key
 
-	pgrep "[$]{[A-Z]+_DOT}$key\w*" "$ZSHRC_DIR"/*_keymap.zsh | trim_column | bw | while IFS= read -r line; do
-		keymap_print_entry "$(eval "echo $line")" 40
+	if [[ -z $2 ]]; then
+		key=$1
+	else
+		namespace=$1
+		key=$2
+	fi
+
+	local formatted_line
+	pgrep "[$]{[A-Z]+_DOT}$key\w*" "$ZSHRC_DIR"/*_keymap.zsh |
+		trim_column |
+		bw | # In order for `keymap_print_entry` to align comments
+		while IFS= read -r line; do
+
+		formatted_line=$(keymap_print_entry "$(eval "echo $line")" 40)
+
+		# shellcheck disable=SC2076
+		if [[ -z $namespace || $formatted_line =~ " $namespace\.$key" ]]; then
+			echo "$formatted_line"
+		fi
 	done
 }
 

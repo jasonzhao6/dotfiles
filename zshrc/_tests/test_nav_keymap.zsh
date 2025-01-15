@@ -1,3 +1,37 @@
+function test__nav_keymap {
+	assert "$(
+		local show_this_help; show_this_help=$(nav_keymap | grep help | bw)
+
+		# shellcheck disable=SC2076
+		[[ $show_this_help =~ "^  \\$ $NAV_ALIAS +# Show this help$" ]] && echo 1
+	)" '1'
+}; run_with_filter test__nav_keymap
+
+function test__nav_keymap__when_specifying_a_directory_instead_of_key {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap__when_specifying_a_directory_instead_of_key
+		mkdir /tmp/test__nav_keymap__when_specifying_a_directory_instead_of_key
+		cd /tmp/test__nav_keymap__when_specifying_a_directory_instead_of_key || return
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		cd /tmp
+		nav_keymap test__nav_keymap__when_specifying_a_directory_instead_of_key | bw
+		rm -rf /tmp/test__nav_keymap__when_specifying_a_directory_instead_of_key
+	)" "$(
+		cat <<-eof
+
+		     1	1
+		     2	1.log
+		     3	2
+		     4	2.log
+		     5	3
+		     6	3.txt
+		eof
+	)"
+}; run_with_filter test__nav_keymap__when_specifying_a_directory_instead_of_key
+
 function test__nav_keymap_a {
 	assert "$(
 		rm -rf /tmp/test__nav_keymap_a

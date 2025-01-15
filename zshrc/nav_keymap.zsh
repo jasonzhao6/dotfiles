@@ -29,7 +29,6 @@ keymap_init $NAV_NAMESPACE $NAV_ALIAS "${NAV_KEYMAP[@]}"
 function nav_keymap {
 	directory="$1"
 
-	# TODO add test
 	if [[ -d "$directory" ]]; then
 		cd "$directory" && nav_keymap_n || return
 		return

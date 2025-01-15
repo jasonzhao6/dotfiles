@@ -56,6 +56,15 @@ test__input_with_tabs=$(
 
 test__input_with_comments=$test__input_with_tabs
 
+function test__args_keymap {
+	assert "$(
+		local show_this_help; show_this_help=$(args_keymap | grep help | bw)
+
+		# shellcheck disable=SC2076
+		[[ $show_this_help =~ "^  \\$ $ARGS_ALIAS +# Show this help$" ]] && echo 1
+	)" '1'
+}; run_with_filter test__args_keymap
+
 function test__args_keymap_a {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null

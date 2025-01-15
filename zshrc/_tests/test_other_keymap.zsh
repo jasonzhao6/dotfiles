@@ -1,3 +1,12 @@
+function test__other_keymap {
+	assert "$(
+		local show_this_help; show_this_help=$(other_keymap | grep help | bw)
+
+		# shellcheck disable=SC2076
+		[[ $show_this_help =~ "^  \\$ $OTHER_ALIAS +# Show this help$" ]] && echo 1
+	)" '1'
+}; run_with_filter test__other_keymap
+
 function test__other_keymap_d {	assert "$(
 		ZSHRC_UNDER_TESTING=1 other_keymap_d www.google.com
 	)" "$(

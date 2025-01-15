@@ -1,3 +1,12 @@
+function test__zsh_keymap {
+	assert "$(
+		local show_this_help; show_this_help=$(zsh_keymap | grep help | bw)
+
+		# shellcheck disable=SC2076
+		[[ $show_this_help =~ "^  \\$ $ZSH_ALIAS +# Show this help$" ]] && echo 1
+	)" '1'
+}; run_with_filter test__zsh_keymap
+
 function test__zsh_keymap_a {
 	assert "$(
 		local count; count=$(zsh_keymap_a | wc -l)

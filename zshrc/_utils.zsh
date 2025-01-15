@@ -5,11 +5,11 @@
 function caller {
 	# shellcheck disable=SC2154
 	echo "${funcstack[3]}"
-} # TODO add test
+}
 
 function callee {
 	echo "${funcstack[2]}"
-} # TODO add test
+}
 
 function echo_eval {
 	local command=$*
@@ -36,7 +36,7 @@ function epoch {
 	else
 		gdate +%s.%"${decimals}"N
 	fi
-} # TODO add test
+}
 
 function has_internet {
 	curl -s --max-time 1 http://www.google.com &> /dev/null
@@ -108,7 +108,7 @@ function contain {
 
 function downcase {
 	tr '[:upper:]' '[:lower:]'
-} # TODO add test
+}
 
 function extract_urls {
 	pgrep --only-matching '\b(?:https?:\/\/)(?:www\.)?[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,6}(?:\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?\b'
@@ -139,6 +139,10 @@ function trim {
 		cut -c $((left + 1))- |
 		# Trim right side
 		{ [[ -z $right ]] && cat || rev | cut -c $((right + 1))- | rev; }
+}
+
+function upcase {
+	tr '[:lower:]' '[:upper:]'
 }
 
 #
@@ -177,7 +181,6 @@ function size {
 	'
 }
 
-# TODO add test
 # shellcheck disable=SC2120 # `column_index` is passed in outside of this file
 function trim_column {
 	local column_index=${1:-1}

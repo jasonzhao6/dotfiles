@@ -12,6 +12,14 @@ test__ls_dash_l=$(
 	eof
 )
 
+function test__caller {
+	assert "$(caller)" 'run_with_filter'
+}; run_with_filter test__caller
+
+function test__callee {
+	assert "$(callee)" 'test__callee'
+}; run_with_filter test__callee
+
 function test__echo_eval {
 	assert "$(
 		echo_eval echo 123 2>&1
@@ -28,6 +36,29 @@ function test__ellipsize {
 		ellipsize "$(printf "%.0sX" {1..1000})" | bw | wc -c | awk '{print $1}'
 	)" "$COLUMNS"
 }; run_with_filter test__ellipsize
+
+function test__epoch {
+	assert "$(
+		local created_at='1736873597'
+		local a_century_later; a_century_later=$((created_at + 60 * 60 * 24 * 365 * 100))
+		[[ $(epoch) -gt $created_at && $(epoch) -lt $a_century_later ]] && echo 1
+	)" '1'
+}; run_with_filter test__epoch
+
+function test__epoch__when_specifying_0_decimal {
+	assert "$(
+		# shellcheck disable=SC2076
+		[[ ! $(epoch) =~ '\.' ]] && echo 1
+	)" '1'
+}; run_with_filter test__epoch__when_specifying_0_decimal
+
+function test__epoch__when_specifying_1_decimal {
+	assert "${#$(epoch 1)#*.}" '1'
+}; run_with_filter test__epoch__when_specifying_1_decimal
+
+function test__epoch__when_specifying_3_decimal {
+	assert "${#$(epoch 3)#*.}" '3'
+}; run_with_filter test__epoch__when_specifying_3_decimal
 
 function test__index_of__first {
 	assert "$(index_of '10 20 30 40' 10)" '1'
@@ -143,6 +174,10 @@ function test__contain__when_arg_is_empty {
 	)"
 }; run_with_filter test__contain__when_arg_is_empty
 
+function test__downcase {
+	assert "$(echo 'HELLO world FoO BaR' | downcase)" 'hello world foo bar'
+}; run_with_filter test__downcase
+
 function test__extract_urls {
 	local url='http://example.com'
 	assert "$(echo $url | extract_urls)" "$(pgrep_color "$url")"
@@ -229,6 +264,10 @@ function test__trim__with_two_args {
 	assert "$(echo 1234567890 | trim 3 2)" '45678'
 }; run_with_filter test__trim__with_two_args
 
+function test__upcase {
+	assert "$(echo 'HELLO world FoO BaR' | upcase)" 'HELLO WORLD FOO BAR'
+}; run_with_filter test__upcase
+
 function test__insert_hash {
 	assert "$(
 		# shellcheck disable=SC2086
@@ -261,6 +300,42 @@ function test__size__variable_width_column {
 	assert "$(echo $test__ls_dash_l | size 5)" '5'
 }; run_with_filter test__size__variable_width_column
 
+function test__trim_column {
+	assert "$(
+		echo "$test__ls_dash_l" | trim_column
+	)" "$(
+		cat <<-eof
+			 9 yzhao staff 288 Dec 29 21:58 al-archive
+			 1 yzhao staff 228 Dec 30 00:12 colordiffrc.txt
+			 1 yzhao staff 135 Dec 30 00:12 gitignore.txt
+			 1 yzhao staff 44 Dec 30 00:12 terraformrc.txt
+			 1 yzhao staff 871 Dec 30 00:12 tm_properties.txt
+			 6 yzhao staff 192 Dec 29 21:58 vimium
+			 7 yzhao staff 224 Dec 30 00:14 _tests
+			 1 yzhao staff 2208 Dec 30 00:12 _tests.zsh
+			 1 yzhao staff 23929 Dec 30 00:12 zshrc.txt
+		eof
+	)"
+}; run_with_filter test__trim_column
+
+function test__trim_column__when_specifying_the_3rd_column {
+	assert "$(
+		echo "$test__ls_dash_l" | trim_column 3
+	)" "$(
+		cat <<-eof
+			drwxr-xr-x 9  staff 288 Dec 29 21:58 al-archive
+			-rw-r--r-- 1  staff 228 Dec 30 00:12 colordiffrc.txt
+			-rw-r--r--@ 1  staff 135 Dec 30 00:12 gitignore.txt
+			-rw-r--r--@ 1  staff 44 Dec 30 00:12 terraformrc.txt
+			-rw-r--r--@ 1  staff 871 Dec 30 00:12 tm_properties.txt
+			drwxr-xr-x 6  staff 192 Dec 29 21:58 vimium
+			drwxr-xr-x 7  staff 224 Dec 30 00:14 _tests
+			-rwxr-xr-x@ 1  staff 2208 Dec 30 00:12 _tests.zsh
+			-rw-r--r--@ 1  staff 23929 Dec 30 00:12 zshrc.txt
+		eof
+	)"
+}; run_with_filter test__trim_column__when_specifying_the_3rd_column
+
 function test__keys {
 	local input; input=$(
 		cat <<-eof
@@ -274,7 +349,6 @@ function test__keys {
 
 	assert "$(
 		echo "$input" | keys
-#which keys
 	)" "$(
 		cat <<-eof
 		     1	key1
