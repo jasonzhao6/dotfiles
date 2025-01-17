@@ -16,8 +16,8 @@ AWS_KEYMAP=(
 	"${AWS_DOT}w2 # Use us-west-2 region"
 	"${AWS_DOT}c1 # Use eu-central-1 region"
 	''
-	"${AWS_DOT}e <prefix> # EC2 search"
-	"${AWS_DOT}a <prefix> # ASG search"
+	"${AWS_DOT}e <name> # EC2 search"
+	"${AWS_DOT}a <name> # ASG search"
 	"${AWS_DOT}ee <ec2 id> # Open new tab to an EC2 instance"
 	"${AWS_DOT}aa <asg id> # Open new tab to an ASG group"
 	"${AWS_DOT}s # SSM start session with \`sudo -i\`"
@@ -26,8 +26,11 @@ AWS_KEYMAP=(
 	''
 	"${AWS_DOT}m <name> # Secret Manager get"
 	"${AWS_DOT}md <name> # Secret Manager delete"
-	"${AWS_DOT}p <name> # Parameter Store get"
+	"${AWS_DOT}ps <name> # Parameter Store get"
 	"${AWS_DOT}t <message> # STS decode"
+	''
+	"${AWS_DOT}p <name> # Code Pipeline search"
+	"${AWS_DOT}pp <name> # Code Pipeline get latest status"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
@@ -61,9 +64,9 @@ function aws_keymap_2 {
 }
 
 function aws_keymap_a {
-	local prefix=$1
+	local name=$1
 
-	ec2_args "Name=tag:aws:autoscaling:groupName, Values=$prefix*"
+	ec2_args "Name=tag:aws:autoscaling:groupName, Values=*$name*"
 }
 
 function aws_keymap_aa {
@@ -77,9 +80,9 @@ function aws_keymap_c1 {
 }
 
 function aws_keymap_e {
-	local prefix=$1
+	local name=$1
 
-	ec2_args "Name=tag:Name, Values=$prefix*"
+	ec2_args "Name=tag:Name, Values=*$name*"
 }
 
 function aws_keymap_e1 {
@@ -144,6 +147,18 @@ function aws_keymap_o {
 }
 
 function aws_keymap_p {
+	local name=$1
+
+	aws codepipeline list-pipelines --query "pipelines[?contains(name, '$name')].[name]" --output text | as "$name"
+}
+
+function aws_keymap_pp {
+	local name=$1
+
+	aws codepipeline get-pipeline-state --name "$name" --query "[pipelineName, stageStates[-1].actionStates[-1].latestExecution.status, stageStates[-1].actionStates[-1].latestExecution.lastStatusChange]" --output text
+}
+
+function aws_keymap_ps {
 	local name=$1
 
 	local parameter; parameter=$(

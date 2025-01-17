@@ -1,8 +1,8 @@
 function ec2_args {
-	local prefix="$1"
+	local name="$1"
 
 	aws ec2 describe-instances \
-		--filters "$prefix" 'Name=instance-state-name, Values=running' \
+		--filters "$name" 'Name=instance-state-name, Values=running' \
 		--query 'Reservations[].Instances[].[PrivateIpAddress, LaunchTime, Tags[?Key==`Name` || Key==`aws:autoscaling:groupName`].Value|[0]]' \
 		--output text |
 			sort --key=3 |
