@@ -20,11 +20,12 @@ ARGS_KEYMAP=(
 	''
 	"${ARGS_DOT}a # List args"
 	"${ARGS_DOT}a <match>* <-mismatch>* # Filter args"
-	"${ARGS_DOT}d # Delimit columns (use bottom row)"
-	"${ARGS_DOT}d <letter> # Select a column (use bottom row)"
-	"${ARGS_DOT}t # Delimit columns (use top row)"
-	"${ARGS_DOT}t <letter> # Select a column (use top row)"
-	"${ARGS_DOT}z # Select the last column (use bottom row)"
+	"${ARGS_DOT}t # Tabulate columns"
+	"${ARGS_DOT}w # Delimit columns based on the top row"
+	"${ARGS_DOT}w <letter> # Select a column based on the top row"
+	"${ARGS_DOT}v # Delimit columns based on the bottom row"
+	"${ARGS_DOT}v <letter> # Select a column based on the bottom row"
+	"${ARGS_DOT}z # Select the last column based on the bottom row"
 	''
 	"${ARGS_DOT}u # Undo \"Filter args\" or \"Select a column\""
 	"${ARGS_DOT}r # Redo \"Filter args\" or \"Select a column\""
@@ -83,12 +84,6 @@ function args_keymap_c {
 	else
 		echo -n "$string" | pbcopy
 	fi
-}
-
-function args_keymap_d {
-	local index=$1
-
-	args_select_column 0 "$index"
 }
 
 function args_keymap_e {
@@ -218,10 +213,9 @@ function args_keymap_so {
 	as "$ARGS_SOFT_SELECT" "${filters[@]}"
 }
 
+# TODO add test
 function args_keymap_t {
-	local index=$1
-
-	args_select_column 1 "$index"
+	args_history_current | column -t | as
 }
 
 function args_keymap_u {
@@ -237,6 +231,18 @@ function args_keymap_u {
 	if [[ -n $ARGS_USED_TOP_ROW && ${#column_size_before} -lt ${#column_size_after} ]]; then
 		args_columns_bar "$ARGS_USED_TOP_ROW"
 	fi
+}
+
+function args_keymap_v {
+	local index=$1
+
+	args_select_column 0 "$index"
+}
+
+function args_keymap_w {
+	local index=$1
+
+	args_select_column 1 "$index"
 }
 
 function args_keymap_y {

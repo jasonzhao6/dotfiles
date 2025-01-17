@@ -17,7 +17,7 @@ function keymap_init {
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
-	# If `keymap_entries` contains disjoint duplicate `key`s, abort
+	# If keymap contains disjoint duplicate `key`s, abort
 	keymap_error_on_disjoint_dupes "${keymap_entries[@]}" || return
 
 	# Alias the `<namespace>` function to `<alias>`

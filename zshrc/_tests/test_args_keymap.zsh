@@ -154,155 +154,6 @@ function test__args_keymap_c__with_two_args {
 	assert "$(args_keymap_c '123 321'; pbpaste)" '123 321'
 }; run_with_filter test__args_keymap_c__with_two_args
 
-function test__args_keymap_d {
-	assert "$(
-		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
-		args_keymap_d
-	)" "$(
-		cat <<-eof
-		     1	10.0.0.1	# 2023-06-21T20:25:00+00:00	webhook-asg
-		     2	10.0.0.2	# 2023-06-21T20:25:00+00:00	webhook-asg
-		     3	10.0.0.3	# 2023-06-21T20:24:59+00:00	webhook-asg
-			$(green_bar '      a               b c                             d        ')
-		eof
-	)"
-}; run_with_filter test__args_keymap_d
-
-function test__args_keymap_d__when_selecting_first {
-	assert "$(
-		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
-		args_keymap_d a
-	)" "$(
-		cat <<-eof
-		     1	10.0.0.1
-		     2	10.0.0.2
-		     3	10.0.0.3
-		eof
-	)"
-}; run_with_filter test__args_keymap_d__when_selecting_first
-
-function test__args_keymap_d__when_selecting_third {
-	assert "$(
-		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
-		args_keymap_d c
-	)" "$(
-		cat <<-eof
-		     1	2023-06-21T20:25:00+00:00
-		     2	2023-06-21T20:25:00+00:00
-		     3	2023-06-21T20:24:59+00:00
-		eof
-	)"
-}; run_with_filter test__args_keymap_d__when_selecting_third
-
-function test__args_keymap_d__when_selecting_last {
-	assert "$(
-		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
-		args_keymap_d d
-	)" "$(
-		cat <<-eof
-		     1	webhook-asg
-		     2	webhook-asg
-		     3	webhook-asg
-		eof
-	)"
-}; run_with_filter test__args_keymap_d__when_selecting_last
-
-function test__args_keymap_d__when_selecting_with_color {
-	assert "$(
-		echo "$test__input_with_tabs" | grep 00 | args_keymap_s > /dev/null
-		args_keymap_d d
-	)" "$(
-		cat <<-eof
-		     1	webhook-asg
-		     2	webhook-asg
-		     3	webhook-asg
-		eof
-	)"
-}; run_with_filter test__args_keymap_d__when_selecting_with_color
-
-function test__args_keymap_d__when_selecting_out_of_bound {
-	assert "$(
-		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
-		args_keymap_d z
-	)" "$(
-		cat <<-eof
-		     1	10.0.0.1        # 2023-06-21T20:25:00+00:00     webhook-asg
-		     2	10.0.0.2        # 2023-06-21T20:25:00+00:00     webhook-asg
-		     3	10.0.0.3        # 2023-06-21T20:24:59+00:00     webhook-asg
-			$(green_bar '      a               b c                             d        ')
-		eof
-	)"
-}; run_with_filter test__args_keymap_d__when_selecting_out_of_bound
-
-function test__args_keymap_d__with_kubectl_get_pods_output {
-	local input; input=$(
-		cat <<-eof
-			pod-1           1/1     Running     1 (15h ago)        15h
-			pod-2           1/1     Running     0                  7d14h
-			pod-3           1/1     Running     312 (8d ago)       43d
-			pod-4           1/1     Running     0                  14h
-		eof
-	)
-
-	assert "$(
-		echo "$input" | args_keymap_s > /dev/null
-		args_keymap_d e
-	)" "$(
-		cat <<-eof
-		     1	15h
-		     2	7d14h
-		     3	43d
-		     4	14h
-		eof
-	)"
-}; run_with_filter test__args_keymap_d__with_kubectl_get_pods_output
-
-function test__args_keymap_d__with_one_column {
-	assert "$(
-		echo "$test__input" | args_keymap_s > /dev/null
-		args_keymap_d a
-	)" "$(
-		cat <<-eof
-		     1	terraform-application-region-shared-1
-		     2	terraform-application-region-shared-2
-		     3	terraform-application-region-shared-3
-		     4	terraform-application-region-program-A
-		     5	terraform-application-region-program-B
-		eof
-	)"
-}; run_with_filter test__args_keymap_d__with_one_column
-
-function test__args_keymap_d__with_whitespace {
-	assert "$(
-		echo "$test__input_with_whitespace" | args_keymap_s > /dev/null
-		args_keymap_d a
-	)" "$(
-		cat <<-eof
-		     1	  terraform-application-region-shared-1
-		     2	terraform-application-region-shared-2
-		     3	  terraform-application-region-shared-3
-		     4	terraform-application-region-program-A
-		eof
-	)"
-}; run_with_filter test__args_keymap_d__with_whitespace
-
-function test__args_keymap_d__with_headers {
-	assert "$(
-		echo "$test__input_with_headers" | args_keymap_s > /dev/null
-		args_keymap_d
-	)" "$(
-		cat <<-eof
-		     1	MANIFEST                                COMMENT
-		     2	terraform-application-region-shared-1   hello world
-		     3	terraform-application-region-shared-2   foo bar
-		     4	terraform-application-region-shared-3   sup
-		     5	terraform-application-region-program-A  how are you
-		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bar '      a                                       b      c   d       e   f    g')
-		eof
-	)"
-}; run_with_filter test__args_keymap_d__with_headers
-
 function test__args_keymap_e {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null
@@ -801,38 +652,6 @@ function test__args_keymap_so__with_filters {
 	)"
 }; run_with_filter test__args_keymap_so__with_filters
 
-function test__args_keymap_t {
-	assert "$(
-		echo "$test__input_with_headers" | args_keymap_s > /dev/null
-		args_keymap_t
-	)" "$(
-		cat <<-eof
-		     1	MANIFEST                                COMMENT
-		     2	terraform-application-region-shared-1   hello world
-		     3	terraform-application-region-shared-2   foo bar
-		     4	terraform-application-region-shared-3   sup
-		     5	terraform-application-region-program-A  how are you
-		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bar '      a                                       b    ')
-		eof
-	)"
-}; run_with_filter test__args_keymap_t
-
-function test__args_keymap_t__with_one_column {
-	assert "$(
-		echo "$test__input" | args_keymap_s > /dev/null
-		args_keymap_t a
-	)" "$(
-		cat <<-eof
-		     1	terraform-application-region-shared-1
-		     2	terraform-application-region-shared-2
-		     3	terraform-application-region-shared-3
-		     4	terraform-application-region-program-A
-		     5	terraform-application-region-program-B
-		eof
-	)"
-}; run_with_filter test__args_keymap_t__with_one_column
-
 function test__args_keymap_u {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null
@@ -864,7 +683,7 @@ function test__args_keymap_u__when_undoing_empty_history {
 function test__args_keymap_u__when_undoing_d_with_headers {
 	assert "$(
 		echo "$test__input_with_headers" | args_keymap_s > /dev/null
-		args_keymap_d a > /dev/null
+		args_keymap_v a > /dev/null
 		args_keymap_u
 	)" "$(
 		cat <<-eof
@@ -882,7 +701,7 @@ function test__args_keymap_u__when_undoing_d_with_headers {
 function test__args_keymap_u__when_undoing_t_with_headers {
 	assert "$(
 		echo "$test__input_with_headers" | args_keymap_s > /dev/null
-		args_keymap_t a > /dev/null
+		args_keymap_w a > /dev/null
 		args_keymap_u
 	)" "$(
 		cat <<-eof
@@ -900,9 +719,9 @@ function test__args_keymap_u__when_undoing_t_with_headers {
 function test__args_keymap_u__when_undoing_t_then_requesting_n {
 	assert "$(
 		echo "$test__input_with_headers" | args_keymap_s > /dev/null
-		args_keymap_t a > /dev/null
+		args_keymap_w a > /dev/null
 		args_keymap_u > /dev/null
-		args_keymap_d
+		args_keymap_v
 	)" "$(
 		cat <<-eof
 		     1	MANIFEST                                COMMENT
@@ -919,7 +738,7 @@ function test__args_keymap_u__when_undoing_t_then_requesting_n {
 function test__args_keymap_u__when_undoing_t_with_headers_top_heavy {
 	assert "$(
 		echo "$test__input_with_headers_top_heavy" | args_keymap_s > /dev/null
-		args_keymap_t a > /dev/null
+		args_keymap_w a > /dev/null
 		args_keymap_u
 	)" "$(
 		cat <<-eof
@@ -937,7 +756,7 @@ function test__args_keymap_u__when_undoing_t_with_headers_top_heavy {
 function test__args_keymap_u__when_undoing_ss_that_could_look_like_nn {
 	assert "$(
 		echo "$test__input_with_headers" | args_keymap_s > /dev/null
-		args_keymap_t > /dev/null
+		args_keymap_w > /dev/null
 		echo "$test__input_with_headers_top_heavy" | args_keymap_s > /dev/null
 		args_keymap_u
 	)" "$(
@@ -1042,6 +861,187 @@ function test__args_keymap_u__when_undoing_then_redoing_then_undoing_again_with_
 		eof
 	)"
 }; run_with_filter test__args_keymap_u__when_undoing_then_redoing_then_undoing_again_with_color
+
+function test__args_keymap_v {
+	assert "$(
+		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
+		args_keymap_v
+	)" "$(
+		cat <<-eof
+		     1	10.0.0.1	# 2023-06-21T20:25:00+00:00	webhook-asg
+		     2	10.0.0.2	# 2023-06-21T20:25:00+00:00	webhook-asg
+		     3	10.0.0.3	# 2023-06-21T20:24:59+00:00	webhook-asg
+			$(green_bar '      a               b c                             d        ')
+		eof
+	)"
+}; run_with_filter test__args_keymap_v
+
+function test__args_keymap_v__when_selecting_first {
+	assert "$(
+		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
+		args_keymap_v a
+	)" "$(
+		cat <<-eof
+		     1	10.0.0.1
+		     2	10.0.0.2
+		     3	10.0.0.3
+		eof
+	)"
+}; run_with_filter test__args_keymap_v__when_selecting_first
+
+function test__args_keymap_v__when_selecting_third {
+	assert "$(
+		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
+		args_keymap_v c
+	)" "$(
+		cat <<-eof
+		     1	2023-06-21T20:25:00+00:00
+		     2	2023-06-21T20:25:00+00:00
+		     3	2023-06-21T20:24:59+00:00
+		eof
+	)"
+}; run_with_filter test__args_keymap_v__when_selecting_third
+
+function test__args_keymap_v__when_selecting_last {
+	assert "$(
+		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
+		args_keymap_v d
+	)" "$(
+		cat <<-eof
+		     1	webhook-asg
+		     2	webhook-asg
+		     3	webhook-asg
+		eof
+	)"
+}; run_with_filter test__args_keymap_v__when_selecting_last
+
+function test__args_keymap_v__when_selecting_with_color {
+	assert "$(
+		echo "$test__input_with_tabs" | grep 00 | args_keymap_s > /dev/null
+		args_keymap_v d
+	)" "$(
+		cat <<-eof
+		     1	webhook-asg
+		     2	webhook-asg
+		     3	webhook-asg
+		eof
+	)"
+}; run_with_filter test__args_keymap_v__when_selecting_with_color
+
+function test__args_keymap_v__when_selecting_out_of_bound {
+	assert "$(
+		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
+		args_keymap_v z
+	)" "$(
+		cat <<-eof
+		     1	10.0.0.1        # 2023-06-21T20:25:00+00:00     webhook-asg
+		     2	10.0.0.2        # 2023-06-21T20:25:00+00:00     webhook-asg
+		     3	10.0.0.3        # 2023-06-21T20:24:59+00:00     webhook-asg
+			$(green_bar '      a               b c                             d        ')
+		eof
+	)"
+}; run_with_filter test__args_keymap_v__when_selecting_out_of_bound
+
+function test__args_keymap_v__with_kubectl_get_pods_output {
+	local input; input=$(
+		cat <<-eof
+			pod-1           1/1     Running     1 (15h ago)        15h
+			pod-2           1/1     Running     0                  7d14h
+			pod-3           1/1     Running     312 (8d ago)       43d
+			pod-4           1/1     Running     0                  14h
+		eof
+	)
+
+	assert "$(
+		echo "$input" | args_keymap_s > /dev/null
+		args_keymap_v e
+	)" "$(
+		cat <<-eof
+		     1	15h
+		     2	7d14h
+		     3	43d
+		     4	14h
+		eof
+	)"
+}; run_with_filter test__args_keymap_v__with_kubectl_get_pods_output
+
+function test__args_keymap_v__with_one_column {
+	assert "$(
+		echo "$test__input" | args_keymap_s > /dev/null
+		args_keymap_v a
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-shared-1
+		     2	terraform-application-region-shared-2
+		     3	terraform-application-region-shared-3
+		     4	terraform-application-region-program-A
+		     5	terraform-application-region-program-B
+		eof
+	)"
+}; run_with_filter test__args_keymap_v__with_one_column
+
+function test__args_keymap_v__with_whitespace {
+	assert "$(
+		echo "$test__input_with_whitespace" | args_keymap_s > /dev/null
+		args_keymap_v a
+	)" "$(
+		cat <<-eof
+		     1	  terraform-application-region-shared-1
+		     2	terraform-application-region-shared-2
+		     3	  terraform-application-region-shared-3
+		     4	terraform-application-region-program-A
+		eof
+	)"
+}; run_with_filter test__args_keymap_v__with_whitespace
+
+function test__args_keymap_v__with_headers {
+	assert "$(
+		echo "$test__input_with_headers" | args_keymap_s > /dev/null
+		args_keymap_v
+	)" "$(
+		cat <<-eof
+		     1	MANIFEST                                COMMENT
+		     2	terraform-application-region-shared-1   hello world
+		     3	terraform-application-region-shared-2   foo bar
+		     4	terraform-application-region-shared-3   sup
+		     5	terraform-application-region-program-A  how are you
+		     6	terraform-application-region-program-B  select via headers for this one
+			$(green_bar '      a                                       b      c   d       e   f    g')
+		eof
+	)"
+}; run_with_filter test__args_keymap_v__with_headers
+
+function test__args_keymap_w {
+	assert "$(
+		echo "$test__input_with_headers" | args_keymap_s > /dev/null
+		args_keymap_w
+	)" "$(
+		cat <<-eof
+		     1	MANIFEST                                COMMENT
+		     2	terraform-application-region-shared-1   hello world
+		     3	terraform-application-region-shared-2   foo bar
+		     4	terraform-application-region-shared-3   sup
+		     5	terraform-application-region-program-A  how are you
+		     6	terraform-application-region-program-B  select via headers for this one
+			$(green_bar '      a                                       b    ')
+		eof
+	)"
+}; run_with_filter test__args_keymap_w
+
+function test__args_keymap_w__with_one_column {
+	assert "$(
+		echo "$test__input" | args_keymap_s > /dev/null
+		args_keymap_w a
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-shared-1
+		     2	terraform-application-region-shared-2
+		     3	terraform-application-region-shared-3
+		     4	terraform-application-region-program-A
+		     5	terraform-application-region-program-B
+		eof
+	)"
+}; run_with_filter test__args_keymap_w__with_one_column
 
 function test__args_keymap_y {
 	assert "$(
