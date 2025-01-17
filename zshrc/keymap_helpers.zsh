@@ -1,14 +1,15 @@
 KEYMAP_COLOR='cyan_fg'
 KEYMAP_PROMPT=$($KEYMAP_COLOR '  $')
 KEYMAP_ALIAS='_PLACEHOLDER_'
+KEYMAP_DASH='-'
 KEYMAP_DOT='.'
 KEYMAP_DOT_POINTER='^'
 
 KEYMAP_USAGE=(
-	"$KEYMAP_ALIAS # Show this help"
+	"${KEYMAP_ALIAS} # Show this help"
 	''
-	"$KEYMAP_ALIAS$KEYMAP_DOT<key> # Invoke <key>"
-	"$KEYMAP_ALIAS$KEYMAP_DOT<key> <arg> # Invoke <key> with <arg>"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # Invoke <key>"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <arg> # Invoke <key> with <arg>"
 )
 
 function keymap_init {
@@ -21,6 +22,9 @@ function keymap_init {
 
 	# Alias the `<namespace>` function to `<alias>`
 	keymap_set_alias "$alias" "$namespace"
+
+	# If keyboard shortcuts, there is function to alias
+	keymap_is_keyboard_shortcut "$namespace" && return
 
 	# Alias the `<namespace>_<key>` functions to `<alias><key>`
 	while IFS= read -r key; do
@@ -122,15 +126,6 @@ function keymap_help {
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
-	# Interpolate `alias` into keymap usage
-	local keymap_usage=()
-	for entry in "${KEYMAP_USAGE[@]}"; do
-		keymap_usage+=("${entry/$KEYMAP_ALIAS/$alias}")
-	done
-
-	local max_command_size
-	max_command_size=$(keymap_get_max_command_size "${keymap_usage[@]}" "${keymap_entries[@]}")
-
 	echo
 	echo Name
 	echo
@@ -138,15 +133,29 @@ function keymap_help {
 	$KEYMAP_COLOR "  $namespace"
 	keymap_print "$namespace" "$alias" "${keymap_entries[@]}"
 
-	echo
-	echo Usage
-	echo
+	# If keyboard shortcuts, skip printing command line usage
+	local max_command_size
+	local keymap_usage=()
+	if keymap_is_keyboard_shortcut "$namespace"; then
+		max_command_size=$(keymap_get_max_command_size "${keymap_entries[@]}")
+	else
+		max_command_size=$(keymap_get_max_command_size "${keymap_usage[@]}" "${keymap_entries[@]}")
 
-	for entry in "${keymap_usage[@]}"; do
-		keymap_print_entry "$entry" "$max_command_size"
-	done
+		echo
+		echo Usage
+		echo
 
-	keymap_annotate_the_dot "$alias" "$max_command_size"
+		# Interpolate `alias` into `KEYMAP_USAGE`
+		for entry in "${KEYMAP_USAGE[@]}"; do
+			keymap_usage+=("${entry/$KEYMAP_ALIAS/$alias}")
+		done
+
+		for entry in "${keymap_usage[@]}"; do
+			keymap_print_entry "$entry" "$max_command_size"
+		done
+
+		keymap_annotate_the_dot "$alias" "$max_command_size"
+	fi
 
 	echo
 	echo Keymap
@@ -170,7 +179,7 @@ function keymap_get_max_command_size {
 
 	for entry in "${entries[@]}"; do
 		# If `entry` starts with `#`, there is no command
-		[[ $entry = \#* ]] && command_size=0 || command_size="${#entry% \#*}"
+		[[ $entry == \#* ]] && command_size=0 || command_size="${#entry% \#*}"
 
 		[[ $command_size -gt $max_command_size ]] && max_command_size=$command_size
 	done
@@ -194,7 +203,11 @@ function keymap_print {
 	typeset -A current_keymap_keys
 	local key_initial
 	while IFS= read -r key; do
-		key_initial=${key:0:1}
+		if keymap_is_keyboard_shortcut "${keymap_entries[1]}"; then
+			key_initial=${key: -1}
+		else
+			key_initial=${key:0:1}
+		fi
 
 		current_keymap_keys[$key_initial]=$((current_keymap_keys[$key_initial] + 1))
 	done <<< "$(keymap_extract_uniq_keys "${#alias}" "${keymap_entries[@]}")"
@@ -245,15 +258,15 @@ function keymap_print_entry {
 	local entry=$1
 	local command_size=$2
 
-	# If `entry` starts with `cmd | ctrl | alt | shift`, make `prompt` blank
-	local prompt=$KEYMAP_PROMPT
-	[[ $entry = cmd* || $entry = ctrl* || $entry = alt* || $entry = shift* ]] && prompt=' '
-
 	# If `entry` does not start `#`, extract `command`
 	local command; [[ $entry != \#* ]] && command="${entry% \#*}"
 
 	# If `entry` contains `#`, extract `comment`
-	local comment; [[ $entry = *\#* ]] && comment="# ${entry#*\# }"
+	local comment; [[ $entry == *\#* ]] && comment="# ${entry#*\# }"
+
+	# If keyboard shortcuts, make `prompt` blank
+	local prompt=$KEYMAP_PROMPT
+	keymap_is_keyboard_shortcut "$command" && prompt=' '
 
 	# Print with color
 	if [[ -n $command || -n $comment ]]; then
@@ -269,10 +282,11 @@ function keymap_extract_uniq_keys {
 	local alias_size=$1; shift
 	local keymap_entries=("$@")
 
+	# `+ 2` to account for `KEYMAP_DOT` and 1-based indexing
 	local cut_start=$((alias_size + 2))
 
 	for entry in "${keymap_entries[@]}"; do
-		[[ $entry == *$KEYMAP_DOT* ]] && echo "$entry"
+		[[ $entry == *$KEYMAP_DOT* || $entry == *$KEYMAP_DASH* ]] && echo "$entry"
 	done | awk '{print $1}' | cut -c $cut_start- | uniq
 }
 
@@ -296,4 +310,10 @@ function keymap_annotate_the_dot {
 		"$((command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
 		'' \
 		"$(gray_fg "# The $KEYMAP_DOT represents an optional space")"
+}
+
+function keymap_is_keyboard_shortcut {
+	local string=$1
+
+	[[ $string == *cmd* || $string == *ctrl* || $string == *alt* ]]
 }

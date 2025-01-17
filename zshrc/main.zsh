@@ -26,6 +26,7 @@ source "$ZSHRC_DIR/args_keymap.zsh" # Overwrote `<namespace>` to invoke `args_ke
 source "$ZSHRC_DIR/aws_keymap.zsh"
 source "$ZSHRC_DIR/git_keymap.zsh" # Overwrote `<namespace>` to invoke `git_keymap_c` TODO g -> gc
 source "$ZSHRC_DIR/github_keymap.zsh" # Overwrote `<namespace>` to invoke `github_keymap_h` TODO h -> hh
+source "$ZSHRC_DIR/intellij_cmd_keymap.zsh"
 source "$ZSHRC_DIR/kubectl_keymap.zsh"
 source "$ZSHRC_DIR/main_keymap.zsh"
 source "$ZSHRC_DIR/nav_keymap.zsh" # Overwrote `<namespace>` to invoke `nav_keymap_n`

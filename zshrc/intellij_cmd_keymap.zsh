@@ -1,0 +1,14 @@
+INTELLIJ_CMD_NAMESPACE='intellij_cmd_keymap'
+INTELLIJ_CMD_ALIAS='i'
+
+INTELLIJ_CMD_KEYMAP=(
+	"cmd${KEYMAP_DASH}c # Copy"
+	"cmd${KEYMAP_DASH}v # Paste"
+)
+
+keymap_init $INTELLIJ_CMD_NAMESPACE $INTELLIJ_CMD_ALIAS "${INTELLIJ_CMD_KEYMAP[@]}"
+
+function intellij_cmd_keymap {
+	keymap_invoke $INTELLIJ_CMD_NAMESPACE $INTELLIJ_CMD_ALIAS \
+		${#INTELLIJ_CMD_KEYMAP} "${INTELLIJ_CMD_KEYMAP[@]}" "$@"
+}

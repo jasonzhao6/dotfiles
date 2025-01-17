@@ -33,7 +33,7 @@ function verify_keymap_definitions {
 	# Generate all expected mapping functions
 	local expected_functions; expected_functions=$(
 		# shellcheck disable=SC2001 # We are editing a multiline string
-		echo "$keymap_keys" | sed "s/^/function ${namespace}_/"
+		[[ -n $keymap_keys ]] && echo "$keymap_keys" | sed "s/^/function ${namespace}_/"
 	)
 
 	# Find all actual mapping functions
