@@ -20,10 +20,10 @@ function test__main_keymap_k__when_specifying_a_namespace_and_key {
 		main_keymap_k m k | bw
 	)" "$(
 		cat <<-eof
-		  $ m.k                                      # List keymap entries
-		  $ m.k <key>                                # Filter keymap entries
-		  $ m.k <namespace> <key>                    # Filter keymap entries
 		  $ m.ki                                     # Show Kinesis keymap
+		  $ m.k                                      # List keymap entries
+		  $ m.k <key>                                # Filter across namespaces
+		  $ m.k <namespace> <key>                    # Filter in the specified namespace
 		eof
 	)"
 }; run_with_filter test__main_keymap_k__when_specifying_a_namespace_and_key

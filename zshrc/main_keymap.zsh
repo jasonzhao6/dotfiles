@@ -2,20 +2,13 @@ MAIN_NAMESPACE='main_keymap'
 MAIN_ALIAS='m'
 MAIN_DOT="${MAIN_ALIAS}${KEYMAP_DOT}"
 
-# Find keymap scripts
-MAIN_KEYMAP=(); while IFS='' read -r line; do MAIN_KEYMAP+=("$line"); done < <(
-	find "$ZSHRC_DIR" -maxdepth 1 -name '*_keymap.zsh' | sort | while IFS= read -r file; do
-		current_namespace=$(pgrep --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$file")
+MAIN_KEYMAP=()
 
-		# Exclude `_keymap.zsh` helpers via the fact that it doesn't have a namespace
-		[[ -z $current_namespace ]] && continue
+# Find zsh keymaps (These mappings invoke zsh functions)
+source "$ZSHRC_DIR/main_helpers.zsh"
+while IFS='' read -r line; do MAIN_KEYMAP+=("$line"); done < <(main_keymap_find_all)
 
-		current_alias=$(pgrep --only-matching "(?<=_ALIAS=')\w+(?=')" "$file")
-		echo "$current_alias # Show \`$current_namespace\`" | bw
-	done
-)
-
-# Append keymap snapshots
+# Append non-zsh keymaps (These mappings are for reference only)
 MAIN_KEYMAP+=( # TODO create these keymaps
 	''
 #	"${MAIN_DOT}s # Show system default keymap"
@@ -25,11 +18,7 @@ MAIN_KEYMAP+=( # TODO create these keymaps
 #	"${MAIN_DOT}ia # Show IntelliJ \`alt\` keymap"
 #	"${MAIN_DOT}if # Show IntelliJ \`fn\` keymap"
 #	''
-	"${MAIN_DOT}k # List keymap entries"
-	"${MAIN_DOT}k <key> # Filter keymap entries"
-	"${MAIN_DOT}k <namespace> <key> # Filter keymap entries"
-	''
-#	"${MAIN_DOT}m # Show TextMate keymap"
+	"${MAIN_DOT}m # Show TextMate keymap"
 #	"${MAIN_DOT}n # Show Notion keymap"
 #	"${MAIN_DOT}t # Show Terminal keymap"
 	"${MAIN_DOT}vv # Show Vimium / Vimari keymap"
@@ -38,11 +27,25 @@ MAIN_KEYMAP+=( # TODO create these keymaps
 #	"${MAIN_DOT}ki # Show Kinesis keymap"
 )
 
+# Append mappings for this keymaps
+MAIN_KEYMAP+=(
+	''
+	"${MAIN_DOT}k # List keymap entries"
+	"${MAIN_DOT}k <key> # Filter across namespaces"
+	"${MAIN_DOT}k <namespace> <key> # Filter in the specified namespace"
+)
+
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
 
 function main_keymap {
 	keymap_invoke $MAIN_NAMESPACE $MAIN_ALIAS ${#MAIN_KEYMAP} "${MAIN_KEYMAP[@]}" "$@"
 }
+
+#
+# Source non-zsh keymaps and validate them
+#
+
+
 
 #
 # Key mappings (Alphabetized)
@@ -72,6 +75,15 @@ function main_keymap_k {
 			echo "$formatted_line"
 		fi
 	done
+}
+
+source "$ZSHRC_DIR/main_keymap.textmate.zsh"
+
+function main_keymap_m {
+	# If keymap contains disjoint duplicate `key`s, abort
+	keymap_error_on_disjoint_dupes "${TEXTMATE_KEYMAP[@]}" || return
+
+	echo $TEXTMATE_KEYMAP
 }
 
 function main_keymap_vs {
