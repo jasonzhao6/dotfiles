@@ -157,7 +157,7 @@ function keymap_help {
 	$KEYMAP_COLOR "  $namespace"
 	keymap_print "$namespace" "$alias" "${keymap_entries[@]}"
 
-	# If keyboard shortcuts, there is no command line usage
+	# If it's a keymap of keyboard shortcuts, skip printing command line usage
 	local max_command_size
 	local keymap_usage=()
 	if ! keymap_invokes_functions "$namespace"; then
@@ -175,7 +175,7 @@ function keymap_help {
 		done
 
 		for entry in "${keymap_usage[@]}"; do
-			keymap_print_entry "$entry" "$max_command_size"
+			keymap_print_entry "$entry" "$max_command_size" "$namespace"
 		done
 
 		keymap_annotate_the_dot "$alias" "$max_command_size"
@@ -186,7 +186,7 @@ function keymap_help {
 	echo
 
 	for entry in "${keymap_entries[@]}"; do
-		keymap_print_entry "$entry" "$max_command_size"
+		keymap_print_entry "$entry" "$max_command_size" "$namespace"
 	done
 }
 
@@ -202,7 +202,7 @@ function keymap_get_max_command_size {
 	local command_size
 
 	for entry in "${entries[@]}"; do
-		# If `entry` starts with `#`, there is no command
+		# If `entry` starts with `#`, this enry does not have any command
 		[[ $entry == \#* ]] && command_size=0 || command_size="${#entry% \#*}"
 
 		[[ $command_size -gt $max_command_size ]] && max_command_size=$command_size
@@ -286,6 +286,7 @@ function keymap_print {
 function keymap_print_entry {
 	local entry=$1
 	local command_size=$2
+	local namespace=$3
 
 	# If `entry` does not start `#`, extract `command`
 	local command; [[ $entry != \#* ]] && command="${entry% \#*}"
@@ -293,9 +294,9 @@ function keymap_print_entry {
 	# If `entry` contains `#`, extract `comment`
 	local comment; [[ $entry == *\#* ]] && comment="# ${entry#*\# }"
 
-	# If keyboard shortcuts, this is no command line `prompt`
+	# If it's a keymap of keyboard shortcuts, this is no command line `prompt`
 	local prompt=$KEYMAP_PROMPT
-	keymap_invokes_functions "$command" || prompt=' '
+	(keymap_invokes_functions "$command" && keymap_invokes_functions "$namespace") || prompt=' '
 
 	# Print with color
 	if [[ -n $command || -n $comment ]]; then
