@@ -1,6 +1,5 @@
 KEYMAP_COLOR='cyan_fg'
 KEYMAP_PROMPT=$($KEYMAP_COLOR '  $')
-KEYMAP_PROMPT_BLANK=$(printf "%$(size_of "$KEYMAP_PROMPT")s")
 KEYMAP_ALIAS='_PLACEHOLDER_'
 KEYMAP_DOT='.'
 KEYMAP_DOT_POINTER='^'
@@ -129,23 +128,18 @@ function keymap_help {
 		keymap_usage+=("${entry/$KEYMAP_ALIAS/$alias}")
 	done
 
-	# Get the max command size in order to align comments across commands, e.g
-	#   ```
-	#   $ <key>       # comment 1
-	#   $ <key> <arg> # comment 2
-	#   ```
 	local max_command_size
 	max_command_size=$(keymap_get_max_command_size "${keymap_usage[@]}" "${keymap_entries[@]}")
 
 	echo
-	echo 'Name'
+	echo Name
 	echo
 
 	$KEYMAP_COLOR "  $namespace"
 	keymap_print "$namespace" "$alias" "${keymap_entries[@]}"
 
 	echo
-	echo 'Usage'
+	echo Usage
 	echo
 
 	for entry in "${keymap_usage[@]}"; do
@@ -155,7 +149,7 @@ function keymap_help {
 	keymap_annotate_the_dot "$alias" "$max_command_size"
 
 	echo
-	echo 'Keymap'
+	echo Keymap
 	echo
 
 	for entry in "${keymap_entries[@]}"; do
@@ -163,6 +157,11 @@ function keymap_help {
 	done
 }
 
+# Get the max command size in order to align comments across commands, e.g
+#   ```
+#   $ <key>       # comment 1
+#   $ <key> <arg> # comment 2
+#   ```
 function keymap_get_max_command_size {
 	local entries=("$@")
 
@@ -246,13 +245,12 @@ function keymap_print_entry {
 	local entry=$1
 	local command_size=$2
 
+	# If `entry` starts with `cmd | ctrl | alt | shift`, make `prompt` blank
 	local prompt=$KEYMAP_PROMPT
+	[[ $entry = cmd* || $entry = ctrl* || $entry = alt* || $entry = shift* ]] && prompt=' '
 
-	# If `entry` starts with `#`, there is no command
-	local command; [[ $entry = \#* ]] || command="${entry% \#*}"
-
-	# If `command` is blank, make `prompt` blank too
-	[[ -z $command ]] && prompt=$KEYMAP_PROMPT_BLANK
+	# If `entry` does not start `#`, extract `command`
+	local command; [[ $entry != \#* ]] && command="${entry% \#*}"
 
 	# If `entry` contains `#`, extract `comment`
 	local comment; [[ $entry = *\#* ]] && comment="# ${entry#*\# }"

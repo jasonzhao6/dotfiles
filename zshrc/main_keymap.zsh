@@ -32,7 +32,7 @@ MAIN_KEYMAP+=(
 	''
 	"${MAIN_DOT}k # List keymap entries"
 	"${MAIN_DOT}k <key> # Filter across namespaces"
-	"${MAIN_DOT}k <namespace> <key> # Filter in the specified namespace"
+	"${MAIN_DOT}k <namespace> <key> # Filter a specific namespace"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
@@ -80,10 +80,7 @@ function main_keymap_k {
 source "$ZSHRC_DIR/main_keymap.textmate.zsh"
 
 function main_keymap_m {
-	# If keymap contains disjoint duplicate `key`s, abort
-	keymap_error_on_disjoint_dupes "${TEXTMATE_KEYMAP[@]}" || return
-
-	echo $TEXTMATE_KEYMAP
+	main_keymap_print_keyboard_shortcuts 'TextMate' "${TEXTMATE_KEYMAP[@]}"
 }
 
 function main_keymap_vs {
