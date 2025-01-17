@@ -56,18 +56,21 @@ function main_keymap_k {
 		key=$2
 	fi
 
-	local formatted_line
-	pgrep "[$]{[A-Z]+_DOT}$key\w* " "$ZSHRC_DIR"/*_keymap.zsh |
-		trim_column |
-		bw | # In order for `keymap_print_entry` to align comments
-		while IFS= read -r line; do
-
-		formatted_line=$(keymap_print_entry "$(eval "echo $line")" 40)
+	local lines=()
+	while IFS= read -r line; do
+		line=$(eval "echo $line")
 
 		# shellcheck disable=SC2076
-		if [[ -z $alias || $formatted_line =~ "${alias}\\${KEYMAP_DOT}${key}" ]]; then
-			echo "$formatted_line"
+		if [[ -z $alias || $line =~ "${alias}\\${KEYMAP_DOT}${key}" ]]; then
+			lines+=("$line")
 		fi
+	done <<< "$(pgrep "[$]{[A-Z]+_DOT}$key\w* " "$ZSHRC_DIR"/*_keymap.zsh | trim_column | bw)"
+
+	local max_command_size
+	max_command_size=$(keymap_get_max_command_size "${lines[@]}")
+
+	for entry in "${lines[@]}"; do
+		keymap_print_entry "$entry" "$max_command_size"
 	done
 }
 
