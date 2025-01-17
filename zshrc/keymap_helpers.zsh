@@ -18,7 +18,7 @@ function keymap_init {
 	local keymap_entries=("$@")
 
 	# If keymap contains disjoint duplicate `key`s, abort
-	keymap_error_on_disjoint_dupes "${keymap_entries[@]}" || return
+	keymap_has_disjoint_dupes "${keymap_entries[@]}" && return
 
 	# Alias the `<namespace>` function to `<alias>`
 	keymap_set_alias "$alias" "$namespace"
@@ -71,7 +71,7 @@ function keymap_invoke {
 # ha       # Do something
 # hc       # Do something else                 <--  Disjoint duplicate, likely a mistake
 # ```
-function keymap_error_on_disjoint_dupes {
+function keymap_has_disjoint_dupes {
 	local entries=("$@")
 	local last_entry
 	local has_disjoint_dupes
@@ -102,7 +102,7 @@ function keymap_error_on_disjoint_dupes {
 		fi
 	done
 
-	[[ -n $has_disjoint_dupes ]] && return 1 || return 0
+	[[ -n $has_disjoint_dupes ]] && return 0 || return 1
 }
 
 function keymap_set_alias {
