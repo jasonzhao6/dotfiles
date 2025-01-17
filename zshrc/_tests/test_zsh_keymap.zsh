@@ -35,7 +35,7 @@ function test__zsh_keymap_f__when_counting_0_ending_functions {
 	assert "$(
 		local count; count=$(zsh_keymap_f '0$' | wc -l)
 
-		# `3`: `10, 20, 0` from `args_shortcuts.zsh`
+		# `3`: `10, 20, 0` from `args_numbers.zsh`
 		[[ $count -ge 3 ]] && echo 1
 	)" '1'
 }; run_with_filter test__zsh_keymap_f__when_counting_0_ending_functions

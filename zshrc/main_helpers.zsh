@@ -17,7 +17,7 @@ function main_keymap_print_keyboard_shortcuts {
 	max_command_size=$(keymap_get_max_command_size "${keymap_entries[@]}")
 
 	echo
-	echo "$keymap_name" Keyboard Shortcuts
+	echo "$keymap_name"
 	echo
 
 	for entry in "${keymap_entries[@]}"; do

@@ -8,8 +8,8 @@ ARGS_KEYMAP=(
 	"${ARGS_DOT}so # Save as args & soft-select the 1st column"
 	"${ARGS_DOT}so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
 	''
-	'<1-100> <command> # Shortcut: Use args 1 through 100'
-	'0 <command> # Shortcut: Use the last arg'
+	'<1-100> <command> # Use args 1 through 100'
+	'0 <command> # Use the last arg'
 	''
 	"${ARGS_DOT}o <command> # Use a random arg"
 	"${ARGS_DOT}n <number> <command> # Use an arg by number"
@@ -60,7 +60,7 @@ ARGS_USED_TOP_ROW=
 
 source "$ZSHRC_DIR/args_helpers.zsh"
 source "$ZSHRC_DIR/args_history.zsh"; args_history_init
-source "$ZSHRC_DIR/args_shortcuts.zsh"
+source "$ZSHRC_DIR/args_numbers.zsh"
 
 # shellcheck disable=SC2120
 function args_keymap_a {

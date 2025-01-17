@@ -23,7 +23,7 @@ function keymap_init {
 	# Alias the `<namespace>` function to `<alias>`
 	keymap_set_alias "$alias" "$namespace"
 
-	# If keyboard shortcuts, there is function to alias
+	# If keyboard shortcuts, there is no key mapping functions to alias
 	keymap_is_keyboard_shortcut "$namespace" && return
 
 	# Alias the `<namespace>_<key>` functions to `<alias><key>`
@@ -133,7 +133,7 @@ function keymap_help {
 	$KEYMAP_COLOR "  $namespace"
 	keymap_print "$namespace" "$alias" "${keymap_entries[@]}"
 
-	# If keyboard shortcuts, skip printing command line usage
+	# If keyboard shortcuts, there is no command line usage
 	local max_command_size
 	local keymap_usage=()
 	if keymap_is_keyboard_shortcut "$namespace"; then
@@ -264,7 +264,7 @@ function keymap_print_entry {
 	# If `entry` contains `#`, extract `comment`
 	local comment; [[ $entry == *\#* ]] && comment="# ${entry#*\# }"
 
-	# If keyboard shortcuts, make `prompt` blank
+	# If keyboard shortcuts, this is no command line `prompt`
 	local prompt=$KEYMAP_PROMPT
 	keymap_is_keyboard_shortcut "$command" && prompt=' '
 

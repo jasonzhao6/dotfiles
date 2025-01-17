@@ -3,8 +3,8 @@ OTHER_ALIAS='o'
 OTHER_DOT="${OTHER_ALIAS}${KEYMAP_DOT}"
 
 OTHER_KEYMAP=(
-	"${OTHER_ALIAS} <path> # Shortcut: Delegate to \`${OTHER_ALIAS}o <path>\`"
-	"${OTHER_ALIAS} <urls> # Shortcut: Delegate to \`${OTHER_ALIAS}o <urls>\`"
+	"${OTHER_ALIAS} <path> # Delegate to \`${OTHER_ALIAS}o <path>\`"
+	"${OTHER_ALIAS} <urls> # Delegate to \`${OTHER_ALIAS}o <urls>\`"
 	''
 	"${OTHER_DOT}i # Open the current directory in IntelliJ IDEA"
 	"${OTHER_DOT}i <path> # Open the specified path in IntelliJ IDEA"
