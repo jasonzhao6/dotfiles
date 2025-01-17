@@ -7,23 +7,22 @@ function test__main_keymap {
 	)" '1'
 }; run_with_filter test__main_keymap
 
-function test__main_keymap_k {
-	assert "$([[ $(main_keymap_k | wc -l) -gt 200 ]] && echo 1)" '1'
-}; run_with_filter test__main_keymap_k
+function test__main_keymap_w {
+	assert "$([[ $(main_keymap_w | wc -l) -gt 200 ]] && echo 1)" '1'
+}; run_with_filter test__main_keymap_w
 
-function test__main_keymap_k__when_specifying_a_key {
-	assert "$([[ $(main_keymap_k k | wc -l) -gt 3 ]] && echo 1)" '1'
-}; run_with_filter test__main_keymap_k__when_specifying_a_key
+function test__main_keymap_w__when_specifying_a_key {
+	assert "$([[ $(main_keymap_w k | wc -l) -gt 3 ]] && echo 1)" '1'
+}; run_with_filter test__main_keymap_w__when_specifying_a_key
 
-function test__main_keymap_k__when_specifying_a_namespace_and_key {
+function test__main_keymap_w__when_specifying_a_namespace_and_key {
 	assert "$(
-		main_keymap_k m k | bw
+		main_keymap_w m w | bw
 	)" "$(
 		cat <<-eof
-		  $ m.ki              # Show Kinesis keymap
-		  $ m.k               # List keymap entries
-		  $ m.k <key>         # Filter keymap entries
-		  $ m.k <alias> <key> # Filter keymap entries given an alias
+		  $ m.w               # List keymap entries
+		  $ m.w <key>         # Filter keymap entries
+		  $ m.w <alias> <key> # Filter keymap entries given an alias
 		eof
 	)"
-}; run_with_filter test__main_keymap_k__when_specifying_a_namespace_and_key
+}; run_with_filter test__main_keymap_w__when_specifying_a_namespace_and_key

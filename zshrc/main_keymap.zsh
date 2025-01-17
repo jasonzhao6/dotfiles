@@ -30,9 +30,9 @@ MAIN_KEYMAP+=( # TODO create these keymaps
 # Append mappings for this keymaps
 MAIN_KEYMAP+=(
 	''
-	"${MAIN_DOT}k # List keymap entries"
-	"${MAIN_DOT}k <key> # Filter keymap entries"
-	"${MAIN_DOT}k <alias> <key> # Filter keymap entries given an alias"
+	"${MAIN_DOT}w # List keymap entries"
+	"${MAIN_DOT}w <key> # Filter keymap entries"
+	"${MAIN_DOT}w <alias> <key> # Filter keymap entries given an alias"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
@@ -45,7 +45,21 @@ function main_keymap {
 # Key mappings (Alphabetized)
 #
 
-function main_keymap_k {
+source "$ZSHRC_DIR/main_keymap.textmate.zsh"
+
+function main_keymap_m {
+	main_keymap_print_keyboard_shortcuts 'TextMate' "${TEXTMATE_KEYMAP[@]}"
+}
+
+function main_keymap_vs {
+	cat "$DOTFILES_DIR"/vimium/vimium-searches.txt
+}
+
+function main_keymap_vv {
+	cat "$DOTFILES_DIR"/vimium/vimium-keymap.txt
+}
+
+function main_keymap_w {
 	local alias
 	local key
 
@@ -72,18 +86,4 @@ function main_keymap_k {
 	for entry in "${lines[@]}"; do
 		keymap_print_entry "$entry" "$max_command_size"
 	done
-}
-
-source "$ZSHRC_DIR/main_keymap.textmate.zsh"
-
-function main_keymap_m {
-	main_keymap_print_keyboard_shortcuts 'TextMate' "${TEXTMATE_KEYMAP[@]}"
-}
-
-function main_keymap_vs {
-	cat "$DOTFILES_DIR"/vimium/vimium-searches.txt
-}
-
-function main_keymap_vv {
-	cat "$DOTFILES_DIR"/vimium/vimium-keymap.txt
 }
