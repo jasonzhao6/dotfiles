@@ -223,32 +223,37 @@ function keymap_print {
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
-	# For the current keymap, count the number of keys per key initial
-	typeset -A current_keymap_keys
+	typeset -A namespace_aliases
+	typeset -A keymap_initials
 	local key_initial
-	while IFS= read -r key; do
-		if keymap_invokes_functions "${keymap_entries[1]}"; then
-			key_initial=${key:0:1}
+
+	# Identify the key initial for each entry
+	# - If it follows a `KEYMAP_DOT`, it's a key mapping- use the first character after `KEYMAP_DOT`
+	# - If it follows a `KEYMAP_DASH`, it's a keyboard shortcut- use the last character
+	# - If it's a key mapping to other keymaps, capture it separately
+	# - Otherwise, use the first character
+	for entry in "${keymap_entries[@]}"; do
+		first_token=${${(z)entry}[1]}
+		key_initial=
+
+		if [[ $first_token == *$KEYMAP_DOT* ]]; then
+			key_initial=${${first_token#*$KEYMAP_DOT}:0:1}
+		elif [[ $first_token == *$KEYMAP_DASH* ]]; then
+			key_initial=${first_token: -1}
+		elif [[ $namespace == 'main_keymap' ]]; then
+			namespace_aliases[$first_token]=1
 		else
-			key_initial=${key: -1}
+			key_initial=$first_token
 		fi
 
-		current_keymap_keys[$key_initial]=$((current_keymap_keys[$key_initial] + 1))
-	done <<< "$(keymap_extract_uniq_keys "${#alias}" "${keymap_entries[@]}")"
-
-	# If this is the `main_keymap`, catalog the aliases to other keymap namespaces
-	typeset -A namespace_aliases
-	if [[ $namespace == 'main_keymap' ]]; then
-		while IFS= read -r alias; do
-			namespace_aliases[$alias]=1
-		done <<< "$(keymap_extract_namespace_aliases "${keymap_entries[@]}")"
-	fi
+		[[ -n $key_initial ]] && keymap_initials[$key_initial]=$((keymap_initials[$key_initial] + 1))
+	done
 
 	# Print a map of key initials
-	# - Print keys to other keymaps as yellow
-	# - Print used keys with a single mapping as white
-	# - Print used keys with multiple mappings as white with a `+` suffix
-	# - Print unused keys as gray
+	# - If a key maps to other keymaps, print with `[]` in keymap theme color
+	# - If a key maps to multiple mapping functions, print with `[]`
+	# - If a key maps to one mapping function, print with `<>`
+	# - If a key is unused, print in gray
 	local row_input
 	local row_output
 	for i in {1..3}; do
@@ -261,9 +266,9 @@ function keymap_print {
 				row_output+='    '
 			elif [[ -n ${namespace_aliases[$char]} ]]; then
 				row_output+=" $($KEYMAP_COLOR "[$char]")"
-			elif [[ -z ${current_keymap_keys[$char]} ]]; then
+			elif [[ -z ${keymap_initials[$char]} ]]; then
 				row_output+="  $(gray_fg "$char") "
-			elif [[ ${current_keymap_keys[$char]} -eq 1 ]]; then
+			elif [[ ${keymap_initials[$char]} -eq 1 ]]; then
 				row_output+=" <$char>"
 			else
 				row_output+=" [$char]"
@@ -274,8 +279,8 @@ function keymap_print {
 
 	# Print keymap legend
 	echo
-	gray_fg '   <> indicates key has one mapping function'
-	gray_fg '   [] indicates key has multiple mapping function'
+	gray_fg '   <> indicates key initial has one mapping function'
+	gray_fg '   [] indicates key initial has multiple mapping functions'
 }
 
 function keymap_print_entry {
@@ -300,26 +305,6 @@ function keymap_print_entry {
 	else
 		echo
 	fi
-}
-
-function keymap_extract_uniq_keys {
-	local alias_size=$1; shift
-	local keymap_entries=("$@")
-
-	# `+ 2` to account for `KEYMAP_DOT` and 1-based indexing
-	local cut_start=$((alias_size + 2))
-
-	for entry in "${keymap_entries[@]}"; do
-		[[ $entry == *$KEYMAP_DOT* || $entry == *$KEYMAP_DASH* ]] && echo "$entry"
-	done | awk '{print $1}' | cut -c $cut_start- | uniq
-}
-
-function keymap_extract_namespace_aliases {
-	local keymap_entries=("$@")
-
-	for entry in "${keymap_entries[@]}"; do
-		[[ $entry != *$KEYMAP_DOT* ]] && echo "$entry"
-	done | awk '{print $1}'
 }
 
 function keymap_annotate_the_dot {
