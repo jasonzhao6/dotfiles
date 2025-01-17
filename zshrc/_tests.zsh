@@ -9,7 +9,7 @@ ZSHRC_TESTS_NAME_FILTER=$([[ -z $ZSHRC_TESTS_SECTION_FILTER && -n $1 ]] && echo 
 ZSHRC_UNDER_TESTING=1 source ~/.zshrc
 
 # Source test harness
-source "$ZSHRC_DIR"/_tests/__test_harness.zsh
+source "$ZSHRC_DIR"/_tests/_test_harness.zsh
 
 #
 # Test sections

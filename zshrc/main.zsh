@@ -1,23 +1,25 @@
 # When profiling, set to 1; otherwise, set to <empty>
 ZSHRC_UNDER_PROFILING=
 
-# Profile the load time: Start
+# Profile `.zshrc` load time: Start
 [[ -z $ZSHRC_UNDER_TESTING && -n $ZSHRC_UNDER_PROFILING ]] && zmodload zsh/zprof
 
-# Track the load time: Start
+# Track `.zshrc` load time: Start
 [[ -z $ZSHRC_UNDER_TESTING ]] && ZSHRC_LOAD_TIME_START=$(gdate +%s.%2N)
 
 DOTFILES_DIR="$HOME/gh/jasonzhao6/dotfiles"
 ZSHRC_DIR="$DOTFILES_DIR/zshrc"
 ZSHRC_SECRETS="$HOME/.zshrc.secrets"
 
-# Set color aliases early so they can expand in subsequent function definitions
+# Set color aliases early so that they can expand in function definitions
 source "$ZSHRC_DIR/colors.zsh"; color
 
-# Load helpers
-source "$ZSHRC_DIR/_utils.zsh" # Load general utils first
-source "$ZSHRC_DIR/_keymap.zsh"
-source "$ZSHRC_DIR/_reserved_keywords.zsh"
+# Load general utils early so that they can be used in function definitions
+source "$ZSHRC_DIR/utils.zsh"
+
+# Load keymap helpers
+source "$ZSHRC_DIR/keymap_helpers.zsh"
+source "$ZSHRC_DIR/reserved_keywords.zsh"
 
 # Load keymaps
 source "$ZSHRC_DIR/args_keymap.zsh" # Overwrote `<namespace>` to invoke `args_keymap_a` TODO | a; if not key, filter
@@ -39,8 +41,8 @@ source "$ZSHRC_DIR/zsh_prompt.zsh"
 # Source secrets
 [[ -z $ZSHRC_UNDER_TESTING && -f $ZSHRC_SECRETS ]] && source "$ZSHRC_SECRETS"
 
-# Track the load time: Finish
+# Track `.zshrc` load time: Finish
 [[ -z $ZSHRC_UNDER_TESTING ]] && gray_fg "\n\`.zshrc\` loaded in $(echo "$(gdate +%s.%2N) - $ZSHRC_LOAD_TIME_START" | bc) seconds"
 
-# Profile the load time: Finish
+# Profile `.zshrc` load time: Finish
 [[ -z $ZSHRC_UNDER_TESTING && -n $ZSHRC_UNDER_PROFILING ]] && echo && zprof
