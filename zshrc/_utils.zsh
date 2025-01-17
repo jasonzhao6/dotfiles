@@ -185,7 +185,13 @@ function size {
 function trim_column {
 	local column_index=${1:-1}
 
-	awk -v index="$column_index" '{$index=""; print $0}'
+	awk -v column_index="$column_index" '{
+		for (i = 1; i <= NF; i++) {
+			if (i != column_index) {
+				printf "%s%s", $i, (i == NF ? ORS : OFS)
+			}
+		}
+	}' OFS=" " ORS="\n"
 }
 
 #

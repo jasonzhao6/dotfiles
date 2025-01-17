@@ -305,15 +305,15 @@ function test__trim_column {
 		echo "$test__ls_dash_l" | trim_column
 	)" "$(
 		cat <<-eof
-			 9 yzhao staff 288 Dec 29 21:58 al-archive
-			 1 yzhao staff 228 Dec 30 00:12 colordiffrc.txt
-			 1 yzhao staff 135 Dec 30 00:12 gitignore.txt
-			 1 yzhao staff 44 Dec 30 00:12 terraformrc.txt
-			 1 yzhao staff 871 Dec 30 00:12 tm_properties.txt
-			 6 yzhao staff 192 Dec 29 21:58 vimium
-			 7 yzhao staff 224 Dec 30 00:14 _tests
-			 1 yzhao staff 2208 Dec 30 00:12 _tests.zsh
-			 1 yzhao staff 23929 Dec 30 00:12 zshrc.txt
+			9 yzhao staff 288 Dec 29 21:58 al-archive
+			1 yzhao staff 228 Dec 30 00:12 colordiffrc.txt
+			1 yzhao staff 135 Dec 30 00:12 gitignore.txt
+			1 yzhao staff 44 Dec 30 00:12 terraformrc.txt
+			1 yzhao staff 871 Dec 30 00:12 tm_properties.txt
+			6 yzhao staff 192 Dec 29 21:58 vimium
+			7 yzhao staff 224 Dec 30 00:14 _tests
+			1 yzhao staff 2208 Dec 30 00:12 _tests.zsh
+			1 yzhao staff 23929 Dec 30 00:12 zshrc.txt
 		eof
 	)"
 }; run_with_filter test__trim_column
@@ -323,15 +323,15 @@ function test__trim_column__when_specifying_the_3rd_column {
 		echo "$test__ls_dash_l" | trim_column 3
 	)" "$(
 		cat <<-eof
-			drwxr-xr-x 9  staff 288 Dec 29 21:58 al-archive
-			-rw-r--r-- 1  staff 228 Dec 30 00:12 colordiffrc.txt
-			-rw-r--r--@ 1  staff 135 Dec 30 00:12 gitignore.txt
-			-rw-r--r--@ 1  staff 44 Dec 30 00:12 terraformrc.txt
-			-rw-r--r--@ 1  staff 871 Dec 30 00:12 tm_properties.txt
-			drwxr-xr-x 6  staff 192 Dec 29 21:58 vimium
-			drwxr-xr-x 7  staff 224 Dec 30 00:14 _tests
-			-rwxr-xr-x@ 1  staff 2208 Dec 30 00:12 _tests.zsh
-			-rw-r--r--@ 1  staff 23929 Dec 30 00:12 zshrc.txt
+			drwxr-xr-x 9 staff 288 Dec 29 21:58 al-archive
+			-rw-r--r-- 1 staff 228 Dec 30 00:12 colordiffrc.txt
+			-rw-r--r--@ 1 staff 135 Dec 30 00:12 gitignore.txt
+			-rw-r--r--@ 1 staff 44 Dec 30 00:12 terraformrc.txt
+			-rw-r--r--@ 1 staff 871 Dec 30 00:12 tm_properties.txt
+			drwxr-xr-x 6 staff 192 Dec 29 21:58 vimium
+			drwxr-xr-x 7 staff 224 Dec 30 00:14 _tests
+			-rwxr-xr-x@ 1 staff 2208 Dec 30 00:12 _tests.zsh
+			-rw-r--r--@ 1 staff 23929 Dec 30 00:12 zshrc.txt
 		eof
 	)"
 }; run_with_filter test__trim_column__when_specifying_the_3rd_column
