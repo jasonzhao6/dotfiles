@@ -32,6 +32,7 @@ source "$ZSHRC_DIR/main_keymap.zsh"
 source "$ZSHRC_DIR/nav_keymap.zsh" # Overwrote `<namespace>` to invoke `nav_keymap_n`
 source "$ZSHRC_DIR/other_keymap.zsh" # Overwrote `<namespace>` to invoke `other_keymap_o`
 source "$ZSHRC_DIR/terraform_keymap.zsh"
+source "$ZSHRC_DIR/vimium_keymap.zsh"
 source "$ZSHRC_DIR/zsh_keymap.zsh"
 
 # Load zsh configs

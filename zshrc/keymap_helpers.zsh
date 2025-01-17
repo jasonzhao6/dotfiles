@@ -23,13 +23,12 @@ function keymap_init {
 	# Alias the `<namespace>` function to `<alias>`
 	keymap_set_alias "$alias" "$namespace"
 
-	# If keyboard shortcuts, there is no key mapping functions to alias
-	keymap_is_keyboard_shortcut "$namespace" && return
-
-	# Alias the `<namespace>_<key>` functions to `<alias><key>`
-	while IFS= read -r key; do
-		keymap_set_alias "$alias$key" "${namespace}_$key"
-	done <<< "$(keymap_extract_uniq_keys "${#alias}" "${keymap_entries[@]}")"
+	# If keymap invokes functions, alias `<namespace>_<key>` as `<alias><key>`
+	if keymap_invokes_functions "$namespace"; then
+		while IFS= read -r key; do
+			keymap_set_alias "$alias$key" "${namespace}_$key"
+		done <<< "$(keymap_extract_uniq_keys "${#alias}" "${keymap_entries[@]}")"
+	fi
 }
 
 function keymap_invoke {
@@ -136,7 +135,7 @@ function keymap_help {
 	# If keyboard shortcuts, there is no command line usage
 	local max_command_size
 	local keymap_usage=()
-	if keymap_is_keyboard_shortcut "$namespace"; then
+	if ! keymap_invokes_functions "$namespace"; then
 		max_command_size=$(keymap_get_max_command_size "${keymap_entries[@]}")
 	else
 		max_command_size=$(keymap_get_max_command_size "${keymap_usage[@]}" "${keymap_entries[@]}")
@@ -203,21 +202,21 @@ function keymap_print {
 	typeset -A current_keymap_keys
 	local key_initial
 	while IFS= read -r key; do
-		if keymap_is_keyboard_shortcut "${keymap_entries[1]}"; then
-			key_initial=${key: -1}
-		else
+		if keymap_invokes_functions "${keymap_entries[1]}"; then
 			key_initial=${key:0:1}
+		else
+			key_initial=${key: -1}
 		fi
 
 		current_keymap_keys[$key_initial]=$((current_keymap_keys[$key_initial] + 1))
 	done <<< "$(keymap_extract_uniq_keys "${#alias}" "${keymap_entries[@]}")"
 
-	# If this is the `main_keymap`, catalog the keys to other keymaps
-	typeset -A main_keymap_keys
+	# If this is the `main_keymap`, catalog the aliases to other keymap namespaces
+	typeset -A namespace_aliases
 	if [[ $namespace == 'main_keymap' ]]; then
-		while IFS= read -r key; do
-			main_keymap_keys[$key]=1
-		done <<< "$(keymap_extract_namespace_keys "${keymap_entries[@]}")"
+		while IFS= read -r alias; do
+			namespace_aliases[$alias]=1
+		done <<< "$(keymap_extract_namespace_aliases "${keymap_entries[@]}")"
 	fi
 
 	# Print a map of key initials
@@ -235,7 +234,7 @@ function keymap_print {
 		for char in ${(P)row_input}; do
 			if [[ $char == '_' ]]; then
 				row_output+='    '
-			elif [[ -n ${main_keymap_keys[$char]} ]]; then
+			elif [[ -n ${namespace_aliases[$char]} ]]; then
 				row_output+=" $($KEYMAP_COLOR "[$char]")"
 			elif [[ -z ${current_keymap_keys[$char]} ]]; then
 				row_output+="  $(gray_fg "$char") "
@@ -266,7 +265,7 @@ function keymap_print_entry {
 
 	# If keyboard shortcuts, this is no command line `prompt`
 	local prompt=$KEYMAP_PROMPT
-	keymap_is_keyboard_shortcut "$command" && prompt=' '
+	keymap_invokes_functions "$command" || prompt=' '
 
 	# Print with color
 	if [[ -n $command || -n $comment ]]; then
@@ -290,7 +289,7 @@ function keymap_extract_uniq_keys {
 	done | awk '{print $1}' | cut -c $cut_start- | uniq
 }
 
-function keymap_extract_namespace_keys {
+function keymap_extract_namespace_aliases {
 	local keymap_entries=("$@")
 
 	for entry in "${keymap_entries[@]}"; do
@@ -312,8 +311,8 @@ function keymap_annotate_the_dot {
 		"$(gray_fg "# The $KEYMAP_DOT represents an optional space")"
 }
 
-function keymap_is_keyboard_shortcut {
+function keymap_invokes_functions {
 	local string=$1
 
-	[[ $string == *cmd* || $string == *ctrl* || $string == *alt* ]]
+	[[ $string != *cmd* && $string != *ctrl* && $string != *alt* && $string != *vimium* ]]
 }
