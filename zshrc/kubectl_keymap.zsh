@@ -79,9 +79,10 @@ function kubectl_keymap_jj {
 }
 
 function kubectl_keymap_k {
-	local resource="$1"
+	local resource="$1"; shift
+	local filters=("$@")
 
-	kubectl get "$resource" | args_keymap_so
+	kubectl get "$resource" | args_keymap_so "${filters[@]}"
 }
 
 function kubectl_keymap_l {
