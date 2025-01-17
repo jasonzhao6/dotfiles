@@ -23,11 +23,9 @@ function keymap_init {
 	# Alias the `<namespace>` function to `<alias>`
 	keymap_set_alias "$alias" "$namespace"
 
-	# If keymap invokes functions, alias `<namespace>_<key>` as `<alias><key>`
+	# If keymap invokes functions, set function aliases
 	if keymap_invokes_functions "$namespace"; then
-		while IFS= read -r key; do
-			keymap_set_alias "$alias$key" "${namespace}_$key"
-		done <<< "$(keymap_extract_uniq_keys "${#alias}" "${keymap_entries[@]}")"
+		keymap_set_aliases "$alias" "$namespace" "${keymap_entries[@]}"
 	fi
 }
 
@@ -73,9 +71,9 @@ function keymap_invoke {
 # ```
 function keymap_has_disjoint_dupes {
 	local entries=("$@")
+
 	local last_entry
 	local has_disjoint_dupes
-
 	typeset -A seen
 
 	for entry in "${entries[@]}"; do
@@ -118,6 +116,33 @@ function keymap_set_alias {
 
 	# shellcheck disable=SC2086,SC2139
 	alias $key="$value"
+}
+
+function keymap_set_aliases {
+	local alias=$1; shift
+	local namespace=$1; shift
+	local keymap_entries=("$@")
+
+	local first_token
+	local key
+	typeset -A seen
+
+	for entry in "${keymap_entries[@]}"; do
+		first_token="${${(z)entry}[1]}"
+
+		# Set alias only for `key`s preceded by `KEYMAP_DOT`s
+		[[ $first_token != *$KEYMAP_DOT* ]] && continue
+
+		# Extract `key` from `entry`
+		key="${first_token#*$KEYMAP_DOT}"
+
+		# If we have not seen this `key`, alias it
+		if [[ -z ${seen[$key]} ]]; then
+			seen[$key]=1
+
+			keymap_set_alias "${alias}${key}" "${namespace}_${key}"
+		fi
+	done
 }
 
 function keymap_help {
