@@ -31,8 +31,8 @@ MAIN_KEYMAP+=( # TODO create these keymaps
 MAIN_KEYMAP+=(
 	''
 	"${MAIN_DOT}k # List keymap entries"
-	"${MAIN_DOT}k <key> # Filter across namespaces"
-	"${MAIN_DOT}k <namespace> <key> # Filter a specific namespace"
+	"${MAIN_DOT}k <key> # Filter keymap entries"
+	"${MAIN_DOT}k <alias> <key> # Filter keymap entries given an alias"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
@@ -42,28 +42,22 @@ function main_keymap {
 }
 
 #
-# Source non-zsh keymaps and validate them
-#
-
-
-
-#
 # Key mappings (Alphabetized)
 #
 
 function main_keymap_k {
-	local namespace
+	local alias
 	local key
 
 	if [[ -z $2 ]]; then
 		key=$1
 	else
-		namespace=$1
+		alias=$1
 		key=$2
 	fi
 
 	local formatted_line
-	pgrep "[$]{[A-Z]+_DOT}$key\w*" "$ZSHRC_DIR"/*_keymap.zsh |
+	pgrep "[$]{[A-Z]+_DOT}$key\w* " "$ZSHRC_DIR"/*_keymap.zsh |
 		trim_column |
 		bw | # In order for `keymap_print_entry` to align comments
 		while IFS= read -r line; do
@@ -71,7 +65,7 @@ function main_keymap_k {
 		formatted_line=$(keymap_print_entry "$(eval "echo $line")" 40)
 
 		# shellcheck disable=SC2076
-		if [[ -z $namespace || $formatted_line =~ " $namespace\.$key" ]]; then
+		if [[ -z $alias || $formatted_line =~ "${alias}\\${KEYMAP_DOT}${key}" ]]; then
 			echo "$formatted_line"
 		fi
 	done
