@@ -12,10 +12,10 @@ GIT_KEYMAP=(
 	''
 	"${GIT_DOT}d # Git diff"
 	"${GIT_DOT}t # Git status"
-	"${GIT_DOT}j # Create a new commit"
-	"${GIT_DOT}e # Create an empty commit"
+	"${GIT_DOT}e # Create a new commit"
 	"${GIT_DOT}m # Amend the previous commit"
 	"${GIT_DOT}w # Reword the previous commit"
+	"${GIT_DOT}v # Create an empty commit"
 	"${GIT_DOT}y # Cherry pick a commit"
 	"${GIT_DOT}i # Fix up a commit"
 	''
@@ -107,7 +107,8 @@ function git_keymap_d {
 }
 
 function git_keymap_e {
-	git commit --allow-empty -m 're-run: Empty commit to trigger build'
+	git add --all
+	git commit
 }
 
 function git_keymap_f {
@@ -124,11 +125,6 @@ function git_keymap_i {
 	local sha=$1
 
 	git add --all; git commit --fixup "$sha"
-}
-
-function git_keymap_j {
-	git add --all
-	git commit
 }
 
 function git_keymap_l {
@@ -187,6 +183,10 @@ function git_keymap_u {
 	local number=$1
 
 	git reset --soft HEAD~"$number"
+}
+
+function git_keymap_v {
+	git commit --allow-empty -m 're-run: Empty commit to trigger build'
 }
 
 function git_keymap_w {

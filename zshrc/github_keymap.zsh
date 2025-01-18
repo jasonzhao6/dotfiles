@@ -3,8 +3,8 @@ GITHUB_ALIAS='h'
 GITHUB_DOT="${GITHUB_ALIAS}${KEYMAP_DOT}"
 
 GITHUB_KEYMAP=(
-	"${GITHUB_DOT}j # Create a new PR, then open it"
-	"${GITHUB_DOT}g # Create a new gist, then open it"
+	"${GITHUB_DOT}e # Create a new PR, then open it"
+	"${GITHUB_DOT}t # Create a new gist, then open it"
 	''
 	"${GITHUB_DOT}h # Open the current repo"
 	"${GITHUB_DOT}h <repo> # Open the specified repo"
@@ -48,8 +48,8 @@ function github_keymap_d {
 	github_keymap_url | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/'
 }
 
-function github_keymap_g {
-	pbpaste | gh gist create --web
+function github_keymap_e {
+	gp && gh pr create --fill && gh pr view --web
 }
 
 function github_keymap_h {
@@ -58,10 +58,6 @@ function github_keymap_h {
 	local domain; domain="$(github_keymap_domain)"
 	local org; org="$(github_keymap_org)"
 	open https://"$domain"/"$org"/"$repo"
-}
-
-function github_keymap_j {
-	gp && gh pr create --fill && gh pr view --web
 }
 
 function github_keymap_n {
@@ -100,4 +96,8 @@ function github_keymap_s {
 		jq -r '.[].name' |
 		tee ~/Documents/github."$org".txt |
 		args_keymap_s
+}
+
+function github_keymap_t {
+	pbpaste | gh gist create --web
 }
