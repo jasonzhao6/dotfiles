@@ -28,7 +28,17 @@ KUBECTL_KEYMAP=(
 
 keymap_init $KUBECTL_NAMESPACE $KUBECTL_ALIAS "${KUBECTL_KEYMAP[@]}"
 
+source "$ZSHRC_DIR/kubectl_commands.zsh"
+
 function kubectl_keymap {
+	# If first arg is a `kubectl` command, pass it through
+	for command in "${KUBECTL_COMMANDS[@]}"; do
+		if [[ $command == $1 ]]; then
+			kubectl "$@"
+			return
+		fi
+	done
+
 	keymap_invoke $KUBECTL_NAMESPACE $KUBECTL_ALIAS ${#KUBECTL_KEYMAP} "${KUBECTL_KEYMAP[@]}" "$@"
 }
 
