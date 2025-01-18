@@ -63,13 +63,17 @@ function main_keymap_w {
 	local alias
 	local key
 
+	# Handle `<key>` arg
 	if [[ -z $2 ]]; then
 		key=$1
+
+	# Handle `<alias> <key>` args
 	else
 		alias=$1
 		key=$2
 	fi
 
+	# Find all matching keymap entries
 	local lines=()
 	while IFS= read -r line; do
 		line=$(eval "echo $line")
@@ -80,9 +84,8 @@ function main_keymap_w {
 		fi
 	done <<< "$(pgrep "[$]{[A-Z]+_DOT}$key\w* " "$ZSHRC_DIR"/*_keymap.zsh | trim_column | bw)"
 
-	local max_command_size
-	max_command_size=$(keymap_get_max_command_size "${lines[@]}")
-
+	# Pretty print keymap entries
+	local max_command_size; max_command_size=$(keymap_get_max_command_size "${lines[@]}")
 	for entry in "${lines[@]}"; do
 		keymap_print_entry "$entry" "$max_command_size"
 	done
