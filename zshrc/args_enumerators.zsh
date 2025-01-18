@@ -1,12 +1,18 @@
+ALL_FILE="$HOME/Documents/all.txt"
+
 function all {
 	local command=$*
 
+	rm -f "$ALL_FILE"
+
 	for number in $(seq 1 "$(args_size)"); do
-		echo
-		args_keymap_n "$number" "$command" &
+		args_keymap_n "$number" "$command" >> "$ALL_FILE" 2> /dev/null &
 	done
 
-	wait
+	wait > /dev/null
+
+	echo
+	cat "$ALL_FILE"
 }
 
 function each {

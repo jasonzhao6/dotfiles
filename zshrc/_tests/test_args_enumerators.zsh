@@ -21,11 +21,9 @@ function test__all {
 
 	assert "$(
 		printf '0.01\n0.03\n0.05' | args_keymap_s > /dev/null
-		all test__all__sleep_and_echo 2>/dev/null
+		all test__all__sleep_and_echo 2> /dev/null
 	)" "$(
 		cat <<-eof
-
-
 
 			0.01
 			0.03
