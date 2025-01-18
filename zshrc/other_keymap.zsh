@@ -17,6 +17,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}c # Copy the last output"
 	"${OTHER_DOT}cc # Copy the last command"
 	"${OTHER_DOT}h # Copy history bindings"
+	"${OTHER_DOT}b # Copy bastion aliases"
 	"${OTHER_DOT}y # Alias for \`pbcopy\`"
 	"${OTHER_DOT}p # Alias for \`pbpaste\`"
 	"${OTHER_DOT}k # Clear the terminal"
@@ -60,6 +61,19 @@ source "$ZSHRC_DIR/other_helpers.zsh"
 
 function other_keymap_a {
 	caffeinate
+}
+
+function other_keymap_b {
+	cat <<-eof | pbcopy
+		bind '"\e[A": history-search-backward'
+		bind '"\e[B": history-search-forward'
+
+		alias k='kubectl'
+		alias kg='kubectl get'
+
+		kubectl config set-context --current --namespace=transaction-engine
+		aws eks update-kubeconfig --region us-east-1 --name mkprod-useast1-1
+	eof
 }
 
 function other_keymap_c {
