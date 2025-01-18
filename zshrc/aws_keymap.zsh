@@ -24,9 +24,10 @@ AWS_KEYMAP=(
 	"${AWS_DOT}sc # SSM start session with command"
 	"${AWS_DOT}sm # SSM start session"
 	''
-	"${AWS_DOT}m <name> # Secret Manager get"
+	"${AWS_DOT}m <name> # Secret Manager get the latest"
+	"${AWS_DOT}m <name> <version> # Secret Manager get by version"
 	"${AWS_DOT}md <name> # Secret Manager delete"
-	"${AWS_DOT}ps <name> # Parameter Store get"
+	"${AWS_DOT}ps <name> # Parameter Store get the latest"
 	"${AWS_DOT}t <message> # STS decode"
 	''
 	"${AWS_DOT}p <name> # Code Pipeline search"
