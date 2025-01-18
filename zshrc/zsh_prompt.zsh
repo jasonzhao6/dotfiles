@@ -14,7 +14,7 @@ setopt PROMPT_SUBST
 # shellcheck disable=SC2034
 PROMPT=\
 $'\n'\
-'%{%F{yellow}%}% ${${PWD/#$HOME/~}/\~\/gh\//@}'\
+'%{%F{yellow}%}% ${${PWD/#$HOME/~}/\~\/github\//@}'\
 '%{%F{cyan}%}% $(branch_info)'\
 '%{%F{green}%}% $(sts_info)'\
 '%{%F{magenta}%}% $(region_info)'\

@@ -82,7 +82,7 @@ function terraform_keymap_g {
 function terraform_keymap_h {
 	local var=$1
 
-	pushd ~/gh/scratch/tf-debug > /dev/null || return
+	pushd ~/github/jasonzhao6/scratch/tf-debug > /dev/null || return
 
 	if [[ -z $var ]]; then
 		terraform console

@@ -67,7 +67,7 @@ function github_keymap_n {
 	org="${org//$GITHUB_SOURCE_ORG/$GITHUB_TARGET_ORG}"
 
 	local org; org="$(github_keymap_org)"
-	cd ~/gh/"$org"/"$repo" && nav_keymap_n || true
+	cd ~/github/"$org"/"$repo" && nav_keymap_n || true
 }
 
 function github_keymap_o {

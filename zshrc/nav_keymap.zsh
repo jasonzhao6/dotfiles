@@ -62,7 +62,7 @@ function nav_keymap_ao {
 }
 
 function nav_keymap_d {
-	cd ~/gh/jasonzhao6/dotfiles && nav_keymap_n || true
+	cd ~/github/jasonzhao6/dotfiles && nav_keymap_n || true
 }
 
 function nav_keymap_dl {
@@ -85,7 +85,7 @@ function nav_keymap_e {
 }
 
 function nav_keymap_h {
-	cd ~/gh && nav_keymap_n || true
+	cd ~/github && nav_keymap_n || true
 }
 
 # shellcheck disable=SC2120
@@ -103,7 +103,7 @@ function nav_keymap_o {
 }
 
 function nav_keymap_s {
-	cd ~/gh/scratch && nav_keymap_n || true
+	cd ~/github/jasonzhao6/scratch && nav_keymap_n || true
 }
 
 function nav_keymap_t {

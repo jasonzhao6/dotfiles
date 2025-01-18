@@ -141,7 +141,7 @@ function test__nav_keymap_ao__with_filters {
 }; run_with_filter test__nav_keymap_ao__with_filters
 
 function test__nav_keymap_d {
-	assert "$(nav_keymap_d > /dev/null; pwd)" "$HOME/gh/jasonzhao6/dotfiles"
+	assert "$(nav_keymap_d > /dev/null; pwd)" "$HOME/github/jasonzhao6/dotfiles"
 }; run_with_filter test__nav_keymap_d
 
 function test__nav_keymap_dl {
@@ -195,7 +195,7 @@ function test__nav_keymap_e__with_filters {
 }; run_with_filter test__nav_keymap_e__with_filters
 
 function test__nav_keymap_h {
-	assert "$(nav_keymap_h > /dev/null; pwd)" "$HOME/gh"
+	assert "$(nav_keymap_h > /dev/null; pwd)" "$HOME/github"
 }; run_with_filter test__nav_keymap_h
 
 function test__nav_keymap_n {
@@ -281,7 +281,7 @@ function test__nav_keymap_o__with_filters {
 }; run_with_filter test__nav_keymap_o__with_filters
 
 function test__nav_keymap_s {
-	assert "$(nav_keymap_s > /dev/null; pwd)" "$HOME/gh/scratch"
+	assert "$(nav_keymap_s > /dev/null; pwd)" "$HOME/github/jasonzhao6/scratch"
 }; run_with_filter test__nav_keymap_s
 
 function test__nav_keymap_t__with_dir {
