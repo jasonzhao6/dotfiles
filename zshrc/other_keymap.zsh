@@ -108,7 +108,10 @@ function other_keymap_f {
 }
 
 function other_keymap_h {
-	printf "bind '\"\\\e[A\": history-search-backward'\nbind '\"\\\e[B\": history-search-forward'" | pbcopy
+	cat <<-eof | pbcopy
+		bind '"\e[A": history-search-backward'
+		bind '"\e[B": history-search-forward'
+	eof
 }
 
 function other_keymap_i {
