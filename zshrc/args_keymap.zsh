@@ -8,15 +8,15 @@ ARGS_KEYMAP=(
 	"${ARGS_DOT}so # Save as args & soft-select the 1st column"
 	"${ARGS_DOT}so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
 	''
-	'<1-100> <command> # Use args 1 through 100'
+	'<1-100> <command> # Use an arg'
 	'0 <command> # Use the last arg'
+	"each <command> # Use each arg in series"
+	"all <command> # Use all args in parallel"
+	"map <command> # Map args, e.g \`${ARGS_ALIAS}m echo '\$((~~ * 10))'\`"
 	''
 	"${ARGS_DOT}o <command> # Use a random arg"
 	"${ARGS_DOT}n <number> <command> # Use an arg by number"
-	"${ARGS_DOT}q <start> <finish> <command> # Use args within a sequence"
-	"${ARGS_DOT}e <command> # Use each arg in series"
-	"${ARGS_DOT}l <command> # Use all args in parallel"
-	"${ARGS_DOT}m <command> # Map args, e.g \`${ARGS_ALIAS}m echo '\$((~~ * 10))'\`"
+	"${ARGS_DOT}e <start> <finish> <command> # Use args within a sequence"
 	''
 	"${ARGS_DOT}a # List args"
 	"${ARGS_DOT}a <match>* <-mismatch>* # Filter args"
@@ -58,6 +58,7 @@ ARGS_YANK_FILE="$HOME/.zshrc.args"
 ARGS_PUSHED=
 ARGS_USED_TOP_ROW=
 
+source "$ZSHRC_DIR/args_enumerators.zsh"
 source "$ZSHRC_DIR/args_helpers.zsh"
 source "$ZSHRC_DIR/args_history.zsh"; args_history_init
 source "$ZSHRC_DIR/args_numbers.zsh"
@@ -87,9 +88,11 @@ function args_keymap_c {
 }
 
 function args_keymap_e {
+	local start=$1; shift
+	local finish=$1; shift # `end` is a reserved keyword
 	local command=$*
 
-	for number in $(seq 1 "$(args_size)"); do
+	for number in $(seq "$start" "$finish"); do
 		echo
 		args_keymap_n "$number" "$command"
 	done
@@ -117,34 +120,6 @@ function args_keymap_hc {
 	args_history_reset
 }
 
-function args_keymap_l {
-	local command=$*
-
-	for number in $(seq 1 "$(args_size)"); do
-		echo
-		args_keymap_n "$number" "$command" &
-	done
-
-	wait
-}
-
-function args_keymap_m {
-	local command=$*
-
-	local map=''
-	local arg
-
-	for number in $(seq 1 "$(args_size)"); do
-		echo
-		arg=$(args_keymap_n "$number" "$command")
-		map+="$arg\n"
-		echo "$arg"
-	done
-
-	echo
-	echo "$map" | args_keymap_s
-}
-
 function args_keymap_n {
 	local number=$1; shift
 	local command=$*
@@ -168,17 +143,6 @@ function args_keymap_o {
 
 function args_keymap_p {
 	echo "$(<"$ARGS_YANK_FILE")" | args_keymap_s
-}
-
-function args_keymap_q {
-	local start=$1; shift
-	local finish=$1; shift # `end` is a reserved keyword
-	local command=$*
-
-	for number in $(seq "$start" "$finish"); do
-		echo
-		args_keymap_n "$number" "$command"
-	done
 }
 
 function args_keymap_r {

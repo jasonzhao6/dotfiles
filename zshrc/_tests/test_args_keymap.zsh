@@ -54,8 +54,6 @@ test__input_with_tabs=$(
 	eof
 )
 
-test__input_with_comments=$test__input_with_tabs
-
 function test__args_keymap {
 	assert "$(
 		local show_this_help; show_this_help=$(args_keymap | grep help | bw)
@@ -157,46 +155,34 @@ function test__args_keymap_c__with_two_args {
 function test__args_keymap_e {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null
-	args_keymap_e echo 2>&1
+		args_keymap_e 3 4 echo 2>&1
 	)" "$(
 		cat <<-eof
-
-			echo terraform-application-region-shared-1
-			terraform-application-region-shared-1
-
-			echo terraform-application-region-shared-2
-			terraform-application-region-shared-2
 
 			echo terraform-application-region-shared-3
 			terraform-application-region-shared-3
 
 			echo terraform-application-region-program-A
 			terraform-application-region-program-A
-
-			echo terraform-application-region-program-B
-			terraform-application-region-program-B
 		eof
 	)"
 }; run_with_filter test__args_keymap_e
 
-function test__args_keymap_e__with_comments {
+function test__args_keymap_e__with_multiple_substitutions {
 	assert "$(
-		echo "$test__input_with_comments" | args_keymap_s > /dev/null
-	args_keymap_e echo 2>&1
+		echo "$test__input" | args_keymap_s > /dev/null
+		args_keymap_e 3 4 echo ~~ and ~~ again 2>&1
 	)" "$(
 		cat <<-eof
 
-			echo 10.0.0.1
-			10.0.0.1
+			echo terraform-application-region-shared-3 and terraform-application-region-shared-3 again
+			terraform-application-region-shared-3 and terraform-application-region-shared-3 again
 
-			echo 10.0.0.2
-			10.0.0.2
-
-			echo 10.0.0.3
-			10.0.0.3
+			echo terraform-application-region-program-A and terraform-application-region-program-A again
+			terraform-application-region-program-A and terraform-application-region-program-A again
 		eof
 	)"
-}; run_with_filter test__args_keymap_e__with_comments
+}; run_with_filter test__args_keymap_e__with_multiple_substitutions
 
 function test__args_keymap_h {
 	assert "$(
@@ -310,86 +296,6 @@ function test__args_keymap_h__when_selecting_tail_index {
 	)"
 }; run_with_filter test__args_keymap_h__when_selecting_tail_index
 
-function test__args_keymap_l {
-	function test__args_keymap_l__sleep_and_echo { sleep "$@"; echo "$@"; }
-
-	assert "$(
-		printf '0.01\n0.03\n0.05' | args_keymap_s > /dev/null
-		args_keymap_l test__args_keymap_l__sleep_and_echo 2>/dev/null
-	)" "$(
-		cat <<-eof
-
-
-
-			0.01
-			0.03
-			0.05
-		eof
-	)"
-}; run_with_filter test__args_keymap_l
-
-function test__args_keymap_m {
-	assert "$(
-		echo "$test__input" | args_keymap_s > /dev/null
-		args_keymap_m 'echo -n pre-; echo' 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo -n pre-; echo terraform-application-region-shared-1
-			pre-terraform-application-region-shared-1
-
-			echo -n pre-; echo terraform-application-region-shared-2
-			pre-terraform-application-region-shared-2
-
-			echo -n pre-; echo terraform-application-region-shared-3
-			pre-terraform-application-region-shared-3
-
-			echo -n pre-; echo terraform-application-region-program-A
-			pre-terraform-application-region-program-A
-
-			echo -n pre-; echo terraform-application-region-program-B
-			pre-terraform-application-region-program-B
-
-		     1	pre-terraform-application-region-shared-1
-		     2	pre-terraform-application-region-shared-2
-		     3	pre-terraform-application-region-shared-3
-		     4	pre-terraform-application-region-program-A
-		     5	pre-terraform-application-region-program-B
-		eof
-	)"
-}; run_with_filter test__args_keymap_m
-
-function test__args_keymap_m__with_math {
-	assert "$(
-		seq 1 5 | args_keymap_s > /dev/null
-		args_keymap_m echo ~~ doubles to '$((~~ * 10))' 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo 1 doubles to \$((1 * 10))
-			1 doubles to 10
-
-			echo 2 doubles to \$((2 * 10))
-			2 doubles to 20
-
-			echo 3 doubles to \$((3 * 10))
-			3 doubles to 30
-
-			echo 4 doubles to \$((4 * 10))
-			4 doubles to 40
-
-			echo 5 doubles to \$((5 * 10))
-			5 doubles to 50
-
-			     1	1 doubles to 10
-			     2	2 doubles to 20
-			     3	3 doubles to 30
-			     4	4 doubles to 40
-			     5	5 doubles to 50
-		eof
-	)"
-}; run_with_filter test__args_keymap_m__with_math
-
 function test__args_keymap_n {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null
@@ -478,38 +384,6 @@ function test__args_keymap_p {
 		eof
 	)"
 }; run_with_filter test__args_keymap_p
-
-function test__args_keymap_q {
-	assert "$(
-		echo "$test__input" | args_keymap_s > /dev/null
-		args_keymap_q 3 4 echo 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo terraform-application-region-shared-3
-			terraform-application-region-shared-3
-
-			echo terraform-application-region-program-A
-			terraform-application-region-program-A
-		eof
-	)"
-}; run_with_filter test__args_keymap_q
-
-function test__args_keymap_q__with_multiple_substitutions {
-	assert "$(
-		echo "$test__input" | args_keymap_s > /dev/null
-		args_keymap_q 3 4 echo ~~ and ~~ again 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo terraform-application-region-shared-3 and terraform-application-region-shared-3 again
-			terraform-application-region-shared-3 and terraform-application-region-shared-3 again
-
-			echo terraform-application-region-program-A and terraform-application-region-program-A again
-			terraform-application-region-program-A and terraform-application-region-program-A again
-		eof
-	)"
-}; run_with_filter test__args_keymap_q__with_multiple_substitutions
 
 function test__args_keymap_r__when_undoing_empty_history {
 	assert "$(
