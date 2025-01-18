@@ -1,3 +1,16 @@
+# When profiling, set to 1; otherwise, set to <empty>
+ZSHRC_TESTS_UNDER_PROFILING=
+
+# Profile `.zshrc` testing time: Start
+[[ -n $ZSHRC_TESTS_UNDER_PROFILING ]] && zmodload zsh/zprof
+
+# Track `.zshrc` testing time: Start
+ZSHRC_TESTS_START_TIME=$(gdate +%s.%2N)
+
+#
+# Test setup
+#
+
 # Allow filtering test sections by number (1-5)
 ZSHRC_TESTS_SECTION_FILTER=$([[ $1 -ge 1 && $1 -le 5 ]] && echo "$1")
 
@@ -12,7 +25,7 @@ ZSHRC_UNDER_TESTING=1 source ~/.zshrc
 source "$ZSHRC_DIR"/_tests/_test_harness.zsh
 
 #
-# Test sections
+# Test sections: Start
 #
 
 ZSHRC_TESTS_SECTION_NUMBER=1
@@ -45,3 +58,13 @@ if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_
 	source "$ZSHRC_DIR"/_tests/_verify_keymap_ordering.zsh
 	verify_keymap_ordering_section $ZSHRC_TESTS_SECTION_NUMBER
 fi
+
+#
+# Test sections: Finish ^
+#
+
+# Track `.zshrc` testing time: Finish
+gray_fg "\n\`.zshrc\` tests ran in $(echo "$(gdate +%s.%2N) - $ZSHRC_TESTS_START_TIME" | bc) seconds"
+
+# Profile `.zshrc` testing time: Finish
+[[ -n $ZSHRC_TESTS_UNDER_PROFILING ]] && echo && zprof
