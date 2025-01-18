@@ -26,10 +26,10 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}d <url> # DNS dig"
 	"${OTHER_DOT}df # DNS flush"
 	"${OTHER_DOT}u <file 1> <file 2> # Unified diff"
-	"${OTHER_DOT}e <file 1> <file 2> # Side-by-side diff"
+	"${OTHER_DOT}uu <file 1> <file 2> # Side-by-side diff"
 	"${OTHER_DOT}j <url> <match> <num lines> # Curl a json endpoint"
 	"${OTHER_DOT}t <command> # Command execution timer"
-	"${OTHER_DOT}q <start> <finish> <~~> # Run a sequence of commands"
+	"${OTHER_DOT}e <start> <finish> <~~> # Run a sequence of commands"
 	"${OTHER_DOT}f # Format sql query from stdin"
 	"${OTHER_DOT}f '<sql>' # Format sql query from cli arg"
 	"${OTHER_DOT}r <before> <after> # Rename files in the current directory"
@@ -90,10 +90,14 @@ function other_keymap_df {
 }
 
 function other_keymap_e {
-	local file_1=${1:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_1}
-	local file_2=${2:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_2}
+	local start=$1; shift
+	local finish=$1; shift # `end` is a reserved keyword
+	local command=$*
 
-	diff --side-by-side --suppress-common-lines "$file_1" "$file_2"
+	for number in $(seq "$start" "$finish"); do
+		echo
+		echo_eval "${command//~~/$number}"
+	done
 }
 
 function other_keymap_f {
@@ -192,17 +196,6 @@ function other_keymap_p {
 	pbpaste
 }
 
-function other_keymap_q {
-	local start=$1; shift
-	local finish=$1; shift # `end` is a reserved keyword
-	local command=$*
-
-	for number in $(seq "$start" "$finish"); do
-		echo
-		echo_eval "${command//~~/$number}"
-	done
-}
-
 function other_keymap_r {
 	local before=$1
 	local after=$2
@@ -231,6 +224,13 @@ function other_keymap_u {
 	local file_2=${2:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_2}
 
 	diff --unified "$file_1" "$file_2"
+}
+
+function other_keymap_uu {
+	local file_1=${1:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_1}
+	local file_2=${2:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_2}
+
+	diff --side-by-side --suppress-common-lines "$file_1" "$file_2"
 }
 
 function other_keymap_y {

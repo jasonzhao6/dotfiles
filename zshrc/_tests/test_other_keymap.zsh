@@ -43,36 +43,64 @@ function test__other_keymap_d__with_protocol_and_path {
 	)"
 }; run_with_filter test__other_keymap_d__with_protocol_and_path
 
-function test__other_keymap_e {	local old; old=$(
-		cat <<-eof
-			This is the original content.
-			Line 1
-			Line 2
-			Line 3
-			Line 4
-		eof
-	)
-
-	local new; new=$(
-		cat <<-eof
-			This is the modified content.
-			Line 1
-			Line 2
-			Line 3
-			New Line
-			Line 4
-		eof
-	)
-
-	assert "$(
-		other_keymap_e <(echo "$old") <(echo "$new") | bw
+function test__other_keymap_e {	assert "$(
+		other_keymap_e 3 4 echo ~~ 2>&1
 	)" "$(
 		cat <<-eof
-			This is the original content.                                   |       This is the modified content.
-			                                                                >       New Line
+
+			echo 3
+			3
+
+			echo 4
+			4
 		eof
 	)"
 }; run_with_filter test__other_keymap_e
+
+function test__other_keymap_e__with_multiple_substitutions {
+	assert "$(
+		other_keymap_e 3 4 echo ~~ and ~~ again 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo 3 and 3 again
+			3 and 3 again
+
+			echo 4 and 4 again
+			4 and 4 again
+		eof
+	)"
+}; run_with_filter test__other_keymap_e__with_multiple_substitutions
+
+function test__other_keymap_e__with_multiple_substitutions_in_quotes {
+	assert "$(
+		other_keymap_e 3 4 'echo ~~ and ~~ again' 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo 3 and 3 again
+			3 and 3 again
+
+			echo 4 and 4 again
+			4 and 4 again
+		eof
+	)"
+}; run_with_filter test__other_keymap_e__with_multiple_substitutions_in_quotes
+
+function test__other_keymap_e__with_math {
+	assert "$(
+		other_keymap_e 3 4 echo ~~ and '$((~~ + 10))' too 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo 3 and \$((3 + 10)) too
+			3 and 13 too
+
+			echo 4 and \$((4 + 10)) too
+			4 and 14 too
+		eof
+	)"
+}; run_with_filter test__other_keymap_e__with_math
 
 function test__other_keymap_h {	assert "$(
 		other_keymap_h
@@ -190,65 +218,6 @@ function test__other_keymap_kk {
 	)"
 }; run_with_filter test__other_keymap_kk
 
-function test__other_keymap_q {	assert "$(
-		other_keymap_q 3 4 echo ~~ 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo 3
-			3
-
-			echo 4
-			4
-		eof
-	)"
-}; run_with_filter test__other_keymap_q
-
-function test__other_keymap_q__with_multiple_substitutions {
-	assert "$(
-		other_keymap_q 3 4 echo ~~ and ~~ again 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo 3 and 3 again
-			3 and 3 again
-
-			echo 4 and 4 again
-			4 and 4 again
-		eof
-	)"
-}; run_with_filter test__other_keymap_q__with_multiple_substitutions
-
-function test__other_keymap_q__with_multiple_substitutions_in_quotes {
-	assert "$(
-		other_keymap_q 3 4 'echo ~~ and ~~ again' 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo 3 and 3 again
-			3 and 3 again
-
-			echo 4 and 4 again
-			4 and 4 again
-		eof
-	)"
-}; run_with_filter test__other_keymap_q__with_multiple_substitutions_in_quotes
-
-function test__other_keymap_q__with_math {
-	assert "$(
-		other_keymap_q 3 4 echo ~~ and '$((~~ + 10))' too 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo 3 and \$((3 + 10)) too
-			3 and 13 too
-
-			echo 4 and \$((4 + 10)) too
-			4 and 14 too
-		eof
-	)"
-}; run_with_filter test__other_keymap_q__with_math
-
 function test__other_keymap_r {
 	assert "$(
 		rm -rf /tmp/test__other_keymap_r
@@ -320,3 +289,34 @@ function test__other_keymap_u {
 		eof
 	)"
 }; run_with_filter test__other_keymap_u
+
+function test__other_keymap_uu {	local old; old=$(
+		cat <<-eof
+			This is the original content.
+			Line 1
+			Line 2
+			Line 3
+			Line 4
+		eof
+	)
+
+	local new; new=$(
+		cat <<-eof
+			This is the modified content.
+			Line 1
+			Line 2
+			Line 3
+			New Line
+			Line 4
+		eof
+	)
+
+	assert "$(
+		other_keymap_uu <(echo "$old") <(echo "$new") | bw
+	)" "$(
+		cat <<-eof
+			This is the original content.                                   |       This is the modified content.
+			                                                                >       New Line
+		eof
+	)"
+}; run_with_filter test__other_keymap_uu
