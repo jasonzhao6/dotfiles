@@ -4,9 +4,12 @@ MAIN_DOT="${MAIN_ALIAS}${KEYMAP_DOT}"
 
 MAIN_KEYMAP=()
 
-# Find zsh keymaps (These mappings invoke zsh functions)
+# Append zsh keymaps (These mappings invoke zsh functions)
 source "$ZSHRC_DIR/main_helpers.zsh"
-while IFS='' read -r line; do MAIN_KEYMAP+=("$line"); done < <(main_keymap_find_all)
+while IFS='' read -r line; do
+	# TODO sepparate zsh vs non-zsh keymaps
+	MAIN_KEYMAP+=("$line")
+done < <(main_keymap_find_all)
 
 # Append non-zsh keymaps (These mappings are for reference only)
 MAIN_KEYMAP+=( # TODO create these keymaps
