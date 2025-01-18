@@ -144,18 +144,6 @@ function test__nav_keymap_d {
 	assert "$(nav_keymap_d > /dev/null; pwd)" "$HOME/github/jasonzhao6/dotfiles"
 }; run_with_filter test__nav_keymap_d
 
-function test__nav_keymap_dl {
-	assert "$(nav_keymap_dl > /dev/null; pwd)" "$HOME/Downloads"
-}; run_with_filter test__nav_keymap_dl
-
-function test__nav_keymap_dm {
-	assert "$(nav_keymap_dm > /dev/null; pwd)" "$HOME/Documents"
-}; run_with_filter test__nav_keymap_dm
-
-function test__nav_keymap_dt {
-	assert "$(nav_keymap_dt > /dev/null; pwd)" "$HOME/Desktop"
-}; run_with_filter test__nav_keymap_dt
-
 function test__nav_keymap_e {
 	assert "$(
 		rm -rf /tmp/test__nav_keymap_e
@@ -240,6 +228,18 @@ function test__nav_keymap_n__with_filters {
 		eof
 	)"
 }; run_with_filter test__nav_keymap_n__with_filters
+
+function test__nav_keymap_nl {
+	assert "$(nav_keymap_nl > /dev/null; pwd)" "$HOME/Downloads"
+}; run_with_filter test__nav_keymap_nl
+
+function test__nav_keymap_nm {
+	assert "$(nav_keymap_nm > /dev/null; pwd)" "$HOME/Documents"
+}; run_with_filter test__nav_keymap_nm
+
+function test__nav_keymap_nt {
+	assert "$(nav_keymap_nt > /dev/null; pwd)" "$HOME/Desktop"
+}; run_with_filter test__nav_keymap_nt
 
 function test__nav_keymap_o {
 	assert "$(
