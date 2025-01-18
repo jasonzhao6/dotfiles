@@ -104,25 +104,19 @@ function aws_keymap_m {
 	local name=$1
 	local version=$2
 
-	local secret
-	if [[ -z "$version" ]]; then
-		secret=$(
-			aws secretsmanager get-secret-value \
-				--secret-id "$name" \
-				--query SecretString \
-				--output text
-		)
-	else
-		secret=$(
-			aws secretsmanager get-secret-value \
-				--secret-id "$name" \
-				--version-id "$version" \
-				--query SecretString \
-				--output text
-		)
-	fi
+	# If `version` is specified, get by version
+	local version_args; [[ -n "$version" ]] && version_args=(--version-id "$version")
 
-	# If it's json, prettify with `jq`
+	# Get secret
+	local secret; secret=$(
+		aws secretsmanager get-secret-value \
+			--secret-id "$name" \
+			"${version_args[@]}" \
+			--query SecretString \
+			--output text
+	)
+
+	# If output contains json, prettify with `jq`
 	[[ "$secret" == \{*\} ]] && echo "$secret" | jq || echo "$secret"
 }
 
