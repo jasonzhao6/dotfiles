@@ -1,7 +1,18 @@
-function main_keymap_find_all {
+function main_keymap_find_keymaps_by_type {
+	local type=$1 # Valid values: `[zsh, non-zsh]`
+
+	local is_zsh_keymap
+	local current_namespace
 	local current_alias
 
 	find "$ZSHRC_DIR" -maxdepth 1 -name '*_keymap.zsh' | sort | while IFS= read -r file; do
+		# Zsh keymaps have a `_DOT` variable used by key mappings
+		is_zsh_keymap=$(pgrep --only-matching "[A-Z]+_DOT=\"" "$file")
+
+		# Print only keymaps of the specified `type`
+		[[ -z $is_zsh_keymap && $type == 'zsh' ]] && continue
+		[[ -n $is_zsh_keymap && $type == 'non-zsh' ]] && continue
+
 		current_namespace=$(pgrep --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$file")
 		current_alias=$(pgrep --only-matching "(?<=_ALIAS=')\w+(?=')" "$file")
 
@@ -9,7 +20,7 @@ function main_keymap_find_all {
 	done
 }
 
-function main_keymap_print_keyboard_shortcuts {
+function main_keymap_print_default_shortcuts {
 	local keymap_name=$1; shift
 	local keymap_entries=("$@")
 

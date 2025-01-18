@@ -4,34 +4,23 @@ MAIN_DOT="${MAIN_ALIAS}${KEYMAP_DOT}"
 
 MAIN_KEYMAP=()
 
-# Append zsh keymaps (These mappings invoke zsh functions)
 source "$ZSHRC_DIR/main_helpers.zsh"
+
+# Find and append zsh keymaps (These mappings invoke zsh functions)
 while IFS='' read -r line; do
-	# TODO sepparate zsh vs non-zsh keymaps
 	MAIN_KEYMAP+=("$line")
-done < <(main_keymap_find_all)
+done < <(main_keymap_find_keymaps_by_type 'zsh')
 
-# Append non-zsh keymaps (These mappings are for reference only)
-MAIN_KEYMAP+=( # TODO create these keymaps
-	''
-#	"${MAIN_DOT}s # Show system default keymap"
-#	''
-#	"${MAIN_DOT}i # Show IntelliJ \`cmd\` keymap"
-#	"${MAIN_DOT}ic # Show IntelliJ \`ctrl\` keymap"
-#	"${MAIN_DOT}ia # Show IntelliJ \`alt\` keymap"
-#	"${MAIN_DOT}if # Show IntelliJ \`fn\` keymap"
-#	''
-	"${MAIN_DOT}m # Show TextMate keymap"
-#	"${MAIN_DOT}n # Show Notion keymap"
-#	"${MAIN_DOT}t # Show Terminal keymap"
-	"${MAIN_DOT}vv # Show Vimium / Vimari keymap"
-	"${MAIN_DOT}vs # Show Vimium search keymap"
-#	''
-#	"${MAIN_DOT}ki # Show Kinesis keymap"
-)
+# Find and append non-zsh keymaps (These mappings are for reference only)
+MAIN_KEYMAP+=('')
+while IFS='' read -r line; do
+	MAIN_KEYMAP+=("$line")
+done < <(main_keymap_find_keymaps_by_type 'non-zsh')
 
-# Append mappings for this keymaps
+# Append static entries
 MAIN_KEYMAP+=(
+	''
+	"${MAIN_DOT}m # Show TextMate default shortcuts"
 	''
 	"${MAIN_DOT}w # List keymap entries"
 	"${MAIN_DOT}w <key> # Filter keymap entries"
@@ -51,15 +40,7 @@ function main_keymap {
 source "$ZSHRC_DIR/main_keymap.textmate.zsh"
 
 function main_keymap_m {
-	main_keymap_print_keyboard_shortcuts 'TextMate' "${TEXTMATE_KEYMAP[@]}"
-}
-
-function main_keymap_vs {
-	cat "$DOTFILES_DIR"/vimium/vimium-searches.txt
-}
-
-function main_keymap_vv {
-	cat "$DOTFILES_DIR"/vimium/vimium-keymap.txt
+	main_keymap_print_default_shortcuts 'TextMate' "${TEXTMATE_KEYMAP[@]}"
 }
 
 function main_keymap_w {
