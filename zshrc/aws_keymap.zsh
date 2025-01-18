@@ -9,7 +9,7 @@ AWS_KEYMAP=(
 	"${AWS_DOT}0 # MQ logout"
 	"${AWS_DOT}1 # MQ login to 01"
 	"${AWS_DOT}2 # MQ login to 02"
-	"${AWS_DOT}q # MQ restore"
+	"${AWS_DOT}- # MQ restore"
 	''
 	"${AWS_DOT}e1 # Use us-east-1 region"
 	"${AWS_DOT}e2 # Use us-east-2 region"
@@ -51,6 +51,10 @@ source "$ZSHRC_DIR/aws_helpers.zsh"
 for aws_keymap_mq2 in "$HOME/.config/zsh/config.d/"*.zsh; do
 	source "${aws_keymap_mq2}"
 done; unset aws_keymap_mq2
+
+function aws_keymap_- {
+	mq2 --restore
+}
 
 function aws_keymap_0 {
 	mq2 --logout
@@ -165,10 +169,6 @@ function aws_keymap_ps {
 
 	# If it's json, prettify with `jq`
 	[[ $parameter == \{*\} ]] && echo "$parameter" | jq || echo "$parameter"
-}
-
-function aws_keymap_q {
-	mq2 --restore
 }
 
 function aws_keymap_s { # (e.g `ssm <instance-id>`, or `0 ssm` to use the last entry from `args`)
