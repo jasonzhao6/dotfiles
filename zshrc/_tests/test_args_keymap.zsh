@@ -652,6 +652,26 @@ function test__args_keymap_so__with_filters {
 	)"
 }; run_with_filter test__args_keymap_so__with_filters
 
+function test__args_keymap_t {
+	local input; input=$(
+		cat <<-eof
+			aa-us-east-1	Succeeded	2025-01-16T15:15:40.292000-08:00
+			bb-us-east-1	Failed	2025-01-16T15:14:38.132000-08:00
+			cc-us-east-1	Failed	2025-01-16T15:14:34.400000-08:00
+		eof
+	)
+	assert "$(
+		echo "$input" | args_keymap_s > /dev/null
+		args_keymap_t
+	)" "$(
+		cat <<-eof
+	     1	aa-us-east-1  Succeeded  2025-01-16T15:15:40.292000-08:00
+	     2	bb-us-east-1  Failed     2025-01-16T15:14:38.132000-08:00
+	     3	cc-us-east-1  Failed     2025-01-16T15:14:34.400000-08:00
+		eof
+	)"
+}; run_with_filter test__args_keymap_t
+
 function test__args_keymap_u {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null

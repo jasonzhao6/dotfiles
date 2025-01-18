@@ -71,6 +71,75 @@ function test__nav_keymap_a__with_filters {
 	)"
 }; run_with_filter test__nav_keymap_a__with_filters
 
+function test__nav_keymap_ae {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_ae
+		mkdir /tmp/test__nav_keymap_ae
+		cd /tmp/test__nav_keymap_ae || return
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		nav_keymap_ae | bw
+		rm -rf /tmp/test__nav_keymap_ae
+	)" "$(
+		cat <<-eof
+		     1	.2.hidden
+		     2	.3.hidden
+		eof
+	)"
+}; run_with_filter test__nav_keymap_ae
+
+function test__nav_keymap_ae__with_filters {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_ae
+		mkdir /tmp/test__nav_keymap_ae
+		cd /tmp/test__nav_keymap_ae || return
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		nav_keymap_ae -3 hidden | bw
+		rm -rf /tmp/test__nav_keymap_ae
+	)" "$(
+		cat <<-eof
+		     1	.2.hidden
+		eof
+	)"
+}; run_with_filter test__nav_keymap_ae__with_filters
+
+function test__nav_keymap_ao {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_ao
+		mkdir /tmp/test__nav_keymap_ao
+		cd /tmp/test__nav_keymap_ao || return
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		nav_keymap_ao | bw
+		rm -rf /tmp/test__nav_keymap_ao
+	)" "$(
+		cat <<-eof
+		     1	.1.hidden/
+		eof
+	)"
+}; run_with_filter test__nav_keymap_ao
+
+function test__nav_keymap_ao__with_filters {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_ao
+		mkdir /tmp/test__nav_keymap_ao
+		cd /tmp/test__nav_keymap_ao || return
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		nav_keymap_ao -1 hidden | bw
+		rm -rf /tmp/test__nav_keymap_ao
+	)" ''
+}; run_with_filter test__nav_keymap_ao__with_filters
+
 function test__nav_keymap_d {
 	assert "$(nav_keymap_d > /dev/null; pwd)" "$HOME/gh/jasonzhao6/dotfiles"
 }; run_with_filter test__nav_keymap_d
@@ -86,6 +155,44 @@ function test__nav_keymap_dm {
 function test__nav_keymap_dt {
 	assert "$(nav_keymap_dt > /dev/null; pwd)" "$HOME/Desktop"
 }; run_with_filter test__nav_keymap_dt
+
+function test__nav_keymap_e {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_e
+		mkdir /tmp/test__nav_keymap_e
+		cd /tmp/test__nav_keymap_e || return
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		nav_keymap_e | bw
+		rm -rf /tmp/test__nav_keymap_e
+	)" "$(
+		cat <<-eof
+		     1	1.log
+		     2	2.log
+		     3	3.txt
+		eof
+	)"
+}; run_with_filter test__nav_keymap_e
+
+function test__nav_keymap_e__with_filters {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_e
+		mkdir /tmp/test__nav_keymap_e
+		cd /tmp/test__nav_keymap_e || return
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		nav_keymap_e -1 log | bw
+		rm -rf /tmp/test__nav_keymap_e
+	)" "$(
+		cat <<-eof
+		     1	2.log
+		eof
+	)"
+}; run_with_filter test__nav_keymap_e__with_filters
 
 function test__nav_keymap_h {
 	assert "$(nav_keymap_h > /dev/null; pwd)" "$HOME/gh"
@@ -133,6 +240,45 @@ function test__nav_keymap_n__with_filters {
 		eof
 	)"
 }; run_with_filter test__nav_keymap_n__with_filters
+
+function test__nav_keymap_o {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_o
+		mkdir /tmp/test__nav_keymap_o
+		cd /tmp/test__nav_keymap_o || return
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		nav_keymap_o | bw
+		rm -rf /tmp/test__nav_keymap_o
+	)" "$(
+		cat <<-eof
+		     1	1/
+		     2	2/
+		     3	3/
+		eof
+	)"
+}; run_with_filter test__nav_keymap_o
+
+function test__nav_keymap_o__with_filters {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_o
+		mkdir /tmp/test__nav_keymap_o
+		cd /tmp/test__nav_keymap_o || return
+		mkdir 1 2 3
+		mkdir .1.hidden
+		touch 1.log 2.log 3.txt
+		touch .2.hidden .3.hidden
+		nav_keymap_o -1 | bw
+		rm -rf /tmp/test__nav_keymap_o
+	)" "$(
+		cat <<-eof
+		     1	2/
+		     2	3/
+		eof
+	)"
+}; run_with_filter test__nav_keymap_o__with_filters
 
 function test__nav_keymap_s {
 	assert "$(nav_keymap_s > /dev/null; pwd)" "$HOME/gh/scratch"

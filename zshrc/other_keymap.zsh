@@ -218,7 +218,6 @@ function other_keymap_s {
 	pmset sleepnow
 }
 
-# TODO add test
 function other_keymap_t {
 	local command=$*
 

@@ -166,6 +166,7 @@ function test__other_keymap_k__when_not_terminal_output {
 
 function test__other_keymap_kc {
 	assert "$(
+		# shellcheck disable=SC2030
 		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
 		mkdir -p $OTHER_KEYMAP_K_DIR
 
@@ -265,6 +266,22 @@ function test__other_keymap_r {
 		eof
 	)"
 }; run_with_filter test__other_keymap_r
+
+function test__other_keymap_t {
+	assert "$(
+		local output; output=$(other_keymap_t | bw)
+		# shellcheck disable=SC2076
+		[[ $output =~ 'Command executed in .0[0-9] seconds$' ]] && echo 1 || echo 2
+	)" '1'
+}; run_with_filter test__other_keymap_t
+
+function test__other_keymap_t__when_sleeping {
+	assert "$(
+		local output; output=$(other_keymap_t sleep 0.1| bw)
+		# shellcheck disable=SC2076
+		[[ $output =~ 'Command executed in .1[0-9] seconds$' ]] && echo 1 || echo 2
+	)" '1'
+}; run_with_filter test__other_keymap_t__when_sleeping
 
 function test__other_keymap_u {
 	local old; old=$(

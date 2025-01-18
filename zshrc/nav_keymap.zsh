@@ -48,7 +48,6 @@ function nav_keymap_a {
 	ls -d .* | args_keymap_s "${filters[@]}"
 }
 
-# TODO add test
 function nav_keymap_ae {
 	local filters=("$@")
 
@@ -56,7 +55,6 @@ function nav_keymap_ae {
 	ls -pd .* | grep -v '/' | args_keymap_s "${filters[@]}"
 }
 
-# TODO add test
 function nav_keymap_ao {
 	local filters=("$@")
 
@@ -79,7 +77,6 @@ function nav_keymap_dt {
 	cd ~/Desktop && nav_keymap_n || true
 }
 
-# TODO add test
 function nav_keymap_e {
 	local filters=("$@")
 
@@ -99,7 +96,6 @@ function nav_keymap_n {
 	ls | args_keymap_s "${filters[@]}"
 }
 
-# TODO add test
 function nav_keymap_o {
 	local filters=("$@")
 

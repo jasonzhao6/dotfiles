@@ -213,7 +213,6 @@ function args_keymap_so {
 	as "$ARGS_SOFT_SELECT" "${filters[@]}"
 }
 
-# TODO add test
 function args_keymap_t {
 	args_history_current | column -t | as
 }
