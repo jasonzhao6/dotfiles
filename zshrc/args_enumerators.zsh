@@ -1,4 +1,4 @@
-ALL_FILE="$HOME/Documents/all.txt"
+ALL_FILE="$HOME/Documents/args.all.txt"
 
 function all {
 	local command=$*

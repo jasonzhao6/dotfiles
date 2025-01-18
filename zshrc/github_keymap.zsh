@@ -82,7 +82,7 @@ function github_keymap_r {
 	local filters=("$@")
 
 	local org; org="$(github_keymap_org)"
-	args_keymap_s "${filters[@]}" < ~/Documents/github."$org".txt
+	args_keymap_s "${filters[@]}" < ~/Documents/github.repos."$org".txt
 }
 
 function github_keymap_re {
@@ -94,7 +94,7 @@ function github_keymap_s {
 	local org; org="$(github_keymap_org)"
 	gh repo list "$org" --no-archived --limit 1000 --json name |
 		jq -r '.[].name' |
-		tee ~/Documents/github."$org".txt |
+		tee ~/Documents/github.repos."$org".txt |
 		args_keymap_s
 }
 

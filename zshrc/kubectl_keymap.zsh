@@ -81,11 +81,11 @@ function kubectl_keymap_j {
 	local command=("$@")
 
 	# Save a copy in case original command is not deterministic b/c it references an arg number
-	[[ -n ${command[*]} ]] && kubectl get "${command[@]}" -o json | tee ~/Documents/k8.json | jq
+	[[ -n ${command[*]} ]] && kubectl get "${command[@]}" -o json | tee ~/Documents/k8.get.json | jq
 }
 
 function kubectl_keymap_jj {
-	cat ~/Documents/k8.json
+	cat ~/Documents/k8.get.json
 }
 
 function kubectl_keymap_k {
@@ -110,12 +110,12 @@ function kubectl_keymap_n {
 function kubectl_keymap_r {
 	local filters=("$@")
 
-	args_keymap_s "${filters[@]}" < ~/Documents/k8.txt
+	args_keymap_s "${filters[@]}" < ~/Documents/k8.api-resources.txt
 }
 
 function kubectl_keymap_s {
 	# Save a copy for offline lookup
-	kubectl api-resources > ~/Documents/k8.txt
+	kubectl api-resources > ~/Documents/k8.api-resources.txt
 }
 
 function kubectl_keymap_u {
@@ -134,9 +134,9 @@ function kubectl_keymap_y {
 	local command=("$@")
 
 	# Save a copy in case original command is not deterministic b/c it references an arg number
-	[[ -n ${command[*]} ]] && kubectl get "${command[@]}" -o yaml | tee ~/Documents/k8.yaml | cat
+	[[ -n ${command[*]} ]] && kubectl get "${command[@]}" -o yaml | tee ~/Documents/k8.get.yaml | cat
 }
 
 function kubectl_keymap_yy {
-	cat ~/Documents/k8.yaml
+	cat ~/Documents/k8.get.yaml
 }
