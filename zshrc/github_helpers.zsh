@@ -1,6 +1,7 @@
 GITHUB_DEFAULT_DOMAIN='github.com'
 GITHUB_DEFAULT_ORG='jasonzhao6'
 
+# Wrap `github_keymap_d` with `GITHUB_DEFAULT_DOMAIN` from `ZSHRC_SECRETS`
 function github_keymap_domain {
 	local domain
 	domain="$(github_keymap_d 2> /dev/null)"
@@ -9,6 +10,7 @@ function github_keymap_domain {
 	echo "$domain"
 }
 
+# Wrap `github_keymap_o` with `GITHUB_DEFAULT_ORG` from `ZSHRC_SECRETS`
 function github_keymap_org {
 	local org
 	org="$(github_keymap_o 2> /dev/null)"

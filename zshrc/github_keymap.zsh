@@ -41,7 +41,7 @@ function github_keymap_b {
 }
 
 function github_keymap_c {
-	open https://"$(github_keymap_d)"/"$(github_keymap_o)"/"$(github_keymap_re)"/commit/"$1"
+	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_re)"/commit/"$1"
 }
 
 function github_keymap_d {
@@ -55,19 +55,13 @@ function github_keymap_e {
 function github_keymap_h {
 	local repo=${*:-$(github_keymap_re 2> /dev/null)}
 
-	local domain; domain="$(github_keymap_domain)"
-	local org; org="$(github_keymap_org)"
-	open https://"$domain"/"$org"/"$repo"
+	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$repo"
 }
 
 function github_keymap_n {
 	local repo=$1
 
-	# TODO Stop aliasing org when setting up next dev env
-	org="${org//$GITHUB_SOURCE_ORG/$GITHUB_TARGET_ORG}"
-
-	local org; org="$(github_keymap_org)"
-	cd ~/github/"$org"/"$repo" && nav_keymap_n || true
+	cd ~/github/"$(github_keymap_org)"/"$repo" && nav_keymap_n || true
 }
 
 function github_keymap_o {
@@ -75,14 +69,13 @@ function github_keymap_o {
 }
 
 function github_keymap_p {
-	open https://"$(github_keymap_d)"/"$(github_keymap_o)"/"$(github_keymap_re)"/pull/"$1"
+	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_re)"/pull/"$1"
 }
 
 function github_keymap_r {
 	local filters=("$@")
 
-	local org; org="$(github_keymap_org)"
-	args_keymap_s "${filters[@]}" < ~/Documents/github.repos."$org".txt
+	args_keymap_s "${filters[@]}" < ~/Documents/github.repos."$(github_keymap_org)".txt
 }
 
 function github_keymap_re {
