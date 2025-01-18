@@ -6,10 +6,10 @@ function all {
 	rm -f "$ALL_FILE"
 
 	for number in $(seq 1 "$(args_size)"); do
-		args_keymap_n "$number" "$command" >> "$ALL_FILE" 2> /dev/null &
+		args_keymap_n "$number" "$command" >> "$ALL_FILE" &
 	done
 
-	wait > /dev/null
+	wait
 
 	echo
 	cat "$ALL_FILE"
