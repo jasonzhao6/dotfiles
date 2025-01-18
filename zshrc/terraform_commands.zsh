@@ -1,0 +1,31 @@
+# Extracted from `terraform -help`
+
+TERRAFORM_COMMANDS=(
+	-chdir=DIR
+	-help
+	-version
+	apply
+	console
+	destroy
+	fmt
+	force-unlock
+	get
+	graph
+	import
+	init
+	login
+	logout
+	metadata
+	output
+	plan
+	providers
+	refresh
+	show
+	state
+	taint
+	test
+	untaint
+	validate
+	version
+	workspace
+)

@@ -35,7 +35,17 @@ TERRAFORM_KEYMAP=(
 
 keymap_init $TERRAFORM_NAMESPACE $TERRAFORM_ALIAS "${TERRAFORM_KEYMAP[@]}"
 
+source "$ZSHRC_DIR/terraform_commands.zsh"
+
 function terraform_keymap {
+	# If first arg is a `terraform` command, pass it through
+	for command in "${TERRAFORM_COMMANDS[@]}"; do
+		if [[ $command == $1 ]]; then
+			terraform "$@"
+			return
+		fi
+	done
+
 	keymap_invoke $TERRAFORM_NAMESPACE $TERRAFORM_ALIAS \
 		${#TERRAFORM_KEYMAP} "${TERRAFORM_KEYMAP[@]}" "$@"
 }
