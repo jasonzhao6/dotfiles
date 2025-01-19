@@ -8,8 +8,8 @@ KEYMAP_DOT_POINTER='^'
 KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS} # Show this help"
 	''
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # Invoke <key>"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <arg> # Invoke <key> with <arg>"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # Invoke <key> mapping"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <arg> # Invoke <key> mapping with <arg>"
 	''
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}- # List key mappings"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}- <match>* <-mismatch>* # Filter key mappings"
@@ -165,16 +165,16 @@ function keymap_print_help {
 	if ! keymap_invokes_functions "$namespace"; then
 		max_command_size=$(keymap_get_max_command_size "${keymap_entries[@]}")
 	else
+		# Interpolate `alias` into `KEYMAP_USAGE`
+		for entry in "${KEYMAP_USAGE[@]}"; do
+			keymap_usage+=("${entry/$KEYMAP_ALIAS/$alias}")
+		done
+
 		max_command_size=$(keymap_get_max_command_size "${keymap_usage[@]}" "${keymap_entries[@]}")
 
 		echo
 		echo Usage
 		echo
-
-		# Interpolate `alias` into `KEYMAP_USAGE`
-		for entry in "${KEYMAP_USAGE[@]}"; do
-			keymap_usage+=("${entry/$KEYMAP_ALIAS/$alias}")
-		done
 
 		for entry in "${keymap_usage[@]}"; do
 			keymap_print_entry "$entry" "$max_command_size" "$namespace"
