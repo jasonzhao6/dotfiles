@@ -14,6 +14,8 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}o <path> # Open the specified path in Finder"
 	"${OTHER_DOT}o <urls> # Open urls from a string"
 	''
+	"${OTHER_DOT}1 # Save the last output to \`1.txt\`"
+	"${OTHER_DOT}2 # Save the last output to \`2.txt\`"
 	"${OTHER_DOT}c # Copy the last output"
 	"${OTHER_DOT}cc # Copy the last command"
 	"${OTHER_DOT}h # Copy history bindings"
@@ -54,10 +56,18 @@ function other_keymap {
 # Key mappings (Alphabetized)
 #
 
-OTHER_KEYMAP_DIFF_DEFAULT_FILE_1="$HOME/Downloads/1.txt"
-OTHER_KEYMAP_DIFF_DEFAULT_FILE_2="$HOME/Downloads/2.txt"
+OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$HOME/Downloads/1.txt"
+OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$HOME/Downloads/2.txt"
 
 source "$ZSHRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
+
+function other_keymap_1 {
+	eval "$(prev_command)" > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
+}
+
+function other_keymap_2 {
+	eval "$(prev_command)" > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+}
 
 function other_keymap_a {
 	caffeinate
@@ -237,15 +247,15 @@ function other_keymap_t {
 }
 
 function other_keymap_u {
-	local file_1=${1:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_1}
-	local file_2=${2:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_2}
+	local file_1=${1:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1}
+	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
 
 	diff --unified "$file_1" "$file_2"
 }
 
 function other_keymap_uu {
-	local file_1=${1:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_1}
-	local file_2=${2:-$OTHER_KEYMAP_DIFF_DEFAULT_FILE_2}
+	local file_1=${1:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1}
+	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
 
 	diff --side-by-side --suppress-common-lines "$file_1" "$file_2"
 }
