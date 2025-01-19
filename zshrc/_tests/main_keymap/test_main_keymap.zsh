@@ -20,7 +20,7 @@ function test__main_keymap_w__when_specifying_a_namespace_and_key {
 		main_keymap_w m w | bw
 	)" "$(
 		cat <<-eof
-		
+
 		  $ m.w               # List keymap entries
 		  $ m.w <key>         # Filter keymap entries by <key>
 		  $ m.w <alias> <key> # Filter keymap entries by <alias> and <key>

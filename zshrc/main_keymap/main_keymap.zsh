@@ -85,7 +85,7 @@ function main_keymap_w {
 		if [[ -z $alias || $line =~ "${alias}\\${KEYMAP_DOT}${key}" ]]; then
 			entries+=("$line")
 		fi
-	done <<< "$(pgrep "[$]{[A-Z]+_DOT}$key(\w|-)* " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)"
+	done <<< "$(pgrep "\"[$]{[A-Z]+_DOT}$key.* " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)"
 	# TODO add test for -
 
 	keymap_print_entries "${entries[@]}"

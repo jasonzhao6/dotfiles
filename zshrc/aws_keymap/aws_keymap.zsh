@@ -9,7 +9,7 @@ AWS_KEYMAP=(
 	"${AWS_DOT}0 # MQ logout"
 	"${AWS_DOT}1 # MQ login to 01"
 	"${AWS_DOT}2 # MQ login to 02"
-	"${AWS_DOT}- # MQ restore"
+	"${AWS_DOT}, # MQ restore"
 	''
 	"${AWS_DOT}e1 # Use us-east-1 region"
 	"${AWS_DOT}e2 # Use us-east-2 region"
@@ -52,7 +52,8 @@ for aws_keymap_mq2 in "$HOME/.config/zsh/config.d/"*.zsh; do
 	source "${aws_keymap_mq2}"
 done; unset aws_keymap_mq2
 
-function aws_keymap_- {
+# shellcheck disable=SC1064,SC1072,SC1073 # Allow `,` in function name
+function aws_keymap_, {
 	mq2 --restore
 }
 
