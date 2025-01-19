@@ -5,7 +5,7 @@ function main_keymap_find_keymaps_by_type {
 	local current_namespace
 	local current_alias
 
-	find "$ZSHRC_DIR" -maxdepth 1 -name '*_keymap.zsh' | sort | while IFS= read -r file; do
+	find_keymap_files | while IFS= read -r file; do
 		# Zsh keymaps have a `_DOT` variable used by key mappings
 		is_zsh_keymap=$(pgrep --only-matching "[A-Z]+_DOT=\"" "$file")
 

@@ -35,10 +35,6 @@ function find_test_files {
 	find "$ZSHRC_DIR/_tests" -name 'test_*.zsh' | sort
 }
 
-function find_keymap_files {
-	find "$ZSHRC_DIR" -name '*_keymap.zsh' | grep --invert-match test | sort
-}
-
 function pass {
 	((passes++))
 	((total++))

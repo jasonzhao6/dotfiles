@@ -12,6 +12,10 @@ KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <arg> # Invoke <key> with <arg>"
 )
 
+function find_keymap_files {
+	find "$ZSHRC_DIR" -name '*_keymap.zsh' | grep --invert-match test | sort
+}
+
 function keymap_init {
 	local namespace=$1; shift
 	local alias=$1; shift
