@@ -7,8 +7,9 @@ function verify_test_ordering_section {
 
 	init
 
+	local subject_file
 	for test_file in $(find_test_files); do
-		subject_file="${test_file/_tests\/test_}"
+		subject_file="${${test_file/_tests\/}/test_}"
 		verify_test_ordering "$subject_file" "$test_file"
 	done
 

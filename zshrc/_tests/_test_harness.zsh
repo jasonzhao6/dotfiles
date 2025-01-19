@@ -36,7 +36,7 @@ function find_test_files {
 }
 
 function find_keymap_files {
-	find "$ZSHRC_DIR" -maxdepth 1 -name '*_keymap.zsh' | sort
+	find "$ZSHRC_DIR" -name '*_keymap.zsh' | grep --invert-match test | sort
 }
 
 function pass {
