@@ -3,8 +3,8 @@ ZSH_ALIAS='z'
 ZSH_DOT="${ZSH_ALIAS}${KEYMAP_DOT}"
 
 ZSH_KEYMAP=(
-	"${ZSH_DOT}i # Edit with IntelliJ"
-	"${ZSH_DOT}m # Edit with TextMate"
+	"${ZSH_DOT}i # Edit in IntelliJ"
+	"${ZSH_DOT}m # Edit in TextMate"
 	"${ZSH_DOT}s # Edit secrets"
 	"${ZSH_DOT}z # Source"
 	"${ZSH_DOT}t # Test"
@@ -18,7 +18,7 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}h # List history"
 	"${ZSH_DOT}h <match>* <-mismatch>* # Filter history"
 	"${ZSH_DOT}hc # Clear history"
-	"${ZSH_DOT}hm # Edit history file with TextMate"
+	"${ZSH_DOT}hm # Edit history file in TextMate"
 	''
 	"${ZSH_DOT}1 # No session history"
 	"${ZSH_DOT}2 # Session history in memory"

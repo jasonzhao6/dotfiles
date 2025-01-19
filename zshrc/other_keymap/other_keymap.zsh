@@ -14,6 +14,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}o <path> # Open the specified path in Finder"
 	"${OTHER_DOT}o <urls> # Open urls from a string"
 	''
+	"${OTHER_DOT}- # Open \`1.txt\` and \`1.txt\` in TextMate"
 	"${OTHER_DOT}1 # Save the last output to \`1.txt\`"
 	"${OTHER_DOT}2 # Save the last output to \`2.txt\`"
 	"${OTHER_DOT}c # Copy the last output"
@@ -60,6 +61,10 @@ OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$HOME/Downloads/1.txt"
 OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$HOME/Downloads/2.txt"
 
 source "$ZSHRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
+
+function other_keymap_- {
+	mate "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1" "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+}
 
 function other_keymap_1 {
 	eval "$(prev_command)" > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
