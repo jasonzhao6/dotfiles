@@ -178,7 +178,7 @@ function args_keymap_so {
 }
 
 function args_keymap_t {
-	args_history_current | column -t | as
+	args_history_current | column -t | args_keymap_s
 }
 
 function args_keymap_u {

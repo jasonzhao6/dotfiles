@@ -1,3 +1,5 @@
+# TODO break up long lines
+
 AWS_NAMESPACE='aws_keymap'
 AWS_ALIAS='s'
 AWS_DOT="${AWS_ALIAS}${KEYMAP_DOT}"
@@ -149,7 +151,7 @@ function aws_keymap_o {
 function aws_keymap_p {
 	local name=$1
 
-	aws codepipeline list-pipelines --query "pipelines[?contains(name, '$name')].[name]" --output text | as "$name"
+	aws codepipeline list-pipelines --query "pipelines[?contains(name, '$name')].[name]" --output text | args_keymap_s "$name"
 }
 
 function aws_keymap_pp {

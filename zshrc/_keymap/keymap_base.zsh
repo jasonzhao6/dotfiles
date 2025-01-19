@@ -17,13 +17,12 @@ function keymap_init {
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
-	# If keymap contains disjoint duplicate `key`s, abort
 	keymap_has_disjoint_dupes "${keymap_entries[@]}" && return
 
-	# Alias the `<namespace>` function to `<alias>`
 	keymap_set_alias "$alias" "$namespace"
 
-	# If keymap invokes functions, set function aliases
+	keymap_set_alias "$alias-" "keymap_filter_entries $namespace"
+
 	if keymap_invokes_functions "$namespace"; then
 		keymap_set_aliases "$alias" "$namespace" "${keymap_entries[@]}"
 	fi
