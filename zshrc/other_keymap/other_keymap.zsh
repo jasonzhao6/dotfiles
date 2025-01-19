@@ -67,11 +67,11 @@ function other_keymap_- {
 }
 
 function other_keymap_1 {
-	eval "$(prev_command)" > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
+	eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
 }
 
 function other_keymap_2 {
-	eval "$(prev_command)" > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+	eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 }
 
 function other_keymap_a {

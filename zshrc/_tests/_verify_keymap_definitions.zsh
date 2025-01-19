@@ -7,7 +7,7 @@ function verify_keymap_definitions_section {
 
 	init
 
-	for keymap_file in $(find_keymap_files); do
+	for keymap_file in $(keymap_files); do
 		verify_keymap_definitions "$keymap_file"
 	done
 

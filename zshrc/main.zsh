@@ -18,8 +18,9 @@ source "$ZSHRC_DIR/colors.zsh"; color
 source "$ZSHRC_DIR/utils.zsh"
 
 # Load keymap helpers
-source "$ZSHRC_DIR/_keymap/keymap_helpers.zsh"
-source "$ZSHRC_DIR/_keymap/reserved_keywords.zsh"
+source "$ZSHRC_DIR/_keymap/keymap_base.zsh"
+source "$ZSHRC_DIR/_keymap/keymap_utils.zsh"
+source "$ZSHRC_DIR/_keymap/is_reserved.zsh"
 
 # Load zsh keymaps (These mappings invoke zsh functions)
 source "$ZSHRC_DIR/args_keymap/args_keymap.zsh" # Overwrote `<namespace>` to invoke `args_keymap_a` TODO | a; if not key, filter

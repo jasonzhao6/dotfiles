@@ -12,10 +12,6 @@ KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <arg> # Invoke <key> with <arg>"
 )
 
-function find_keymap_files {
-	find "$ZSHRC_DIR" -name '*_keymap.zsh' | grep --invert-match test | sort
-}
-
 function keymap_init {
 	local namespace=$1; shift
 	local alias=$1; shift
@@ -159,7 +155,7 @@ function keymap_help {
 	echo
 
 	$KEYMAP_COLOR "  $namespace"
-	keymap_print "$namespace" "$alias" "${keymap_entries[@]}"
+	keymap_print_map "$namespace" "$alias" "${keymap_entries[@]}"
 
 	# If it's a keymap of keyboard shortcuts, skip printing command line usage
 	local max_command_size
@@ -222,7 +218,7 @@ KEYMAP_PRINT_ROW_2=(a o e u i \| d h t n s)
 # shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
 KEYMAP_PRINT_ROW_3=(_ q j k x \| b m w v z)
 
-function keymap_print {
+function keymap_print_map {
 	local namespace=$1; shift
 	local alias=$1; shift
 	local keymap_entries=("$@")

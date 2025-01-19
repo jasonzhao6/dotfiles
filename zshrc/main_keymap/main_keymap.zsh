@@ -22,9 +22,12 @@ MAIN_KEYMAP+=(
 	''
 	"${MAIN_DOT}m # Show TextMate default shortcuts"
 	''
+	"${MAIN_DOT}r # List keymap entries"
+	"${MAIN_DOT}r <description> # Filter keymap entries by <description>"
+	''
 	"${MAIN_DOT}w # List keymap entries"
-	"${MAIN_DOT}w <key> # Filter keymap entries"
-	"${MAIN_DOT}w <alias> <key> # Filter keymap entries given an alias"
+	"${MAIN_DOT}w <key> # Filter keymap entries by <key>"
+	"${MAIN_DOT}w <alias> <key> # Filter keymap entries by <alias> and <key>"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
@@ -43,6 +46,22 @@ function main_keymap_m {
 	main_keymap_print_default_shortcuts 'TextMate' "${TEXTMATE_KEYMAP[@]}"
 }
 
+# TODO add test
+function main_keymap_r {
+	local description=$1
+
+	# Find all matching keymap entries
+	local entries=()
+	while IFS= read -r line; do
+		entries+=("$(eval "echo $line")")
+	done <<< "$(
+		pgrep -i "[$]{[A-Z]+_DOT}.* # .*$description" "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw
+	)"
+	# Note: ^ Spelling out `--ignore-case` here somehow breaks IntelliJ IDEA's syntax highlighting
+
+	keymap_print_entries "${entries[@]}"
+}
+
 function main_keymap_w {
 	local alias
 	local key
@@ -58,19 +77,16 @@ function main_keymap_w {
 	fi
 
 	# Find all matching keymap entries
-	local lines=()
+	local entries=()
 	while IFS= read -r line; do
 		line=$(eval "echo $line")
 
 		# shellcheck disable=SC2076
 		if [[ -z $alias || $line =~ "${alias}\\${KEYMAP_DOT}${key}" ]]; then
-			lines+=("$line")
+			entries+=("$line")
 		fi
-	done <<< "$(pgrep "[$]{[A-Z]+_DOT}$key\w* " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)"
+	done <<< "$(pgrep "[$]{[A-Z]+_DOT}$key(\w|-)* " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)"
+	# TODO add test for -
 
-	# Pretty print keymap entries
-	local max_command_size; max_command_size=$(keymap_get_max_command_size "${lines[@]}")
-	for entry in "${lines[@]}"; do
-		keymap_print_entry "$entry" "$max_command_size"
-	done
+	keymap_print_entries "${entries[@]}"
 }
