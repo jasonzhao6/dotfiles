@@ -58,10 +58,10 @@ ARGS_YANK_FILE="$HOME/.zshrc.args"
 ARGS_PUSHED=
 ARGS_USED_TOP_ROW=
 
-source "$ZSHRC_DIR/args_keymap/args_enumerators.zsh"
-source "$ZSHRC_DIR/args_keymap/args_helpers.zsh"
-source "$ZSHRC_DIR/args_keymap/args_history.zsh"; args_history_init
-source "$ZSHRC_DIR/args_keymap/args_numbers.zsh"
+source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_enumerators.zsh"
+source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_helpers.zsh"
+source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_history.zsh"; args_history_init
+source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_numbers.zsh"
 
 # shellcheck disable=SC2120
 function args_keymap_a {

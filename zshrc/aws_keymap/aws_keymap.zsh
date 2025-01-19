@@ -46,7 +46,7 @@ function aws_keymap {
 
 export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
 
-source "$ZSHRC_DIR/aws_helpers.zsh"
+source "$ZSHRC_DIR/$AWS_NAMESPACE/aws_helpers.zsh"
 
 for aws_keymap_mq2 in "$HOME/.config/zsh/config.d/"*.zsh; do
 	source "${aws_keymap_mq2}"

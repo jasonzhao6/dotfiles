@@ -18,24 +18,24 @@ source "$ZSHRC_DIR/colors.zsh"; color
 source "$ZSHRC_DIR/utils.zsh"
 
 # Load keymap helpers
-source "$ZSHRC_DIR/keymap_helpers.zsh"
-source "$ZSHRC_DIR/reserved_keywords.zsh"
+source "$ZSHRC_DIR/_keymap/keymap_helpers.zsh"
+source "$ZSHRC_DIR/_keymap/reserved_keywords.zsh"
 
 # Load zsh keymaps (These mappings invoke zsh functions)
 source "$ZSHRC_DIR/args_keymap/args_keymap.zsh" # Overwrote `<namespace>` to invoke `args_keymap_a` TODO | a; if not key, filter
-source "$ZSHRC_DIR/aws_keymap.zsh"
-source "$ZSHRC_DIR/git_keymap.zsh" # Overwrote `<namespace>` to invoke `git_keymap_c` TODO g -> gc
-source "$ZSHRC_DIR/github_keymap.zsh" # Overwrote `<namespace>` to invoke `github_keymap_h` TODO h -> hh
-source "$ZSHRC_DIR/kubectl_keymap.zsh"
-source "$ZSHRC_DIR/main_keymap.zsh"
-source "$ZSHRC_DIR/nav_keymap.zsh" # Overwrote `<namespace>` to invoke `nav_keymap_n`
-source "$ZSHRC_DIR/other_keymap.zsh" # Overwrote `<namespace>` to invoke `other_keymap_o`
-source "$ZSHRC_DIR/terraform_keymap.zsh"
-source "$ZSHRC_DIR/zsh_keymap.zsh"
+source "$ZSHRC_DIR/aws_keymap/aws_keymap.zsh"
+source "$ZSHRC_DIR/git_keymap/git_keymap.zsh" # Overwrote `<namespace>` to invoke `git_keymap_c` TODO g -> gc
+source "$ZSHRC_DIR/github_keymap/github_keymap.zsh" # Overwrote `<namespace>` to invoke `github_keymap_h` TODO h -> hh
+source "$ZSHRC_DIR/kubectl_keymap/kubectl_keymap.zsh"
+source "$ZSHRC_DIR/main_keymap/main_keymap.zsh"
+source "$ZSHRC_DIR/nav_keymap/nav_keymap.zsh" # Overwrote `<namespace>` to invoke `nav_keymap_n`
+source "$ZSHRC_DIR/other_keymap/other_keymap.zsh" # Overwrote `<namespace>` to invoke `other_keymap_o`
+source "$ZSHRC_DIR/terraform_keymap/terraform_keymap.zsh"
+source "$ZSHRC_DIR/zsh_keymap/zsh_keymap.zsh"
 
 # Load non-zsh keymaps (These mappings are for reference only)
-source "$ZSHRC_DIR/intellij_cmd_keymap.zsh"
-source "$ZSHRC_DIR/vimium_keymap.zsh"
+source "$ZSHRC_DIR/intellij_keymaps/intellij_cmd_keymap.zsh"
+source "$ZSHRC_DIR/vimium_keymaps/vimium_keymap.zsh"
 
 # Load zsh configs
 source "$ZSHRC_DIR/zsh_arrow_keys.zsh"

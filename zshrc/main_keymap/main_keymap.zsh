@@ -4,7 +4,7 @@ MAIN_DOT="${MAIN_ALIAS}${KEYMAP_DOT}"
 
 MAIN_KEYMAP=()
 
-source "$ZSHRC_DIR/main_helpers.zsh"
+source "$ZSHRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
 
 # Find and append zsh keymaps (These mappings invoke zsh functions)
 while IFS='' read -r line; do
@@ -37,7 +37,7 @@ function main_keymap {
 # Key mappings (Alphabetized)
 #
 
-source "$ZSHRC_DIR/main_keymap.textmate.zsh"
+source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.textmate.zsh"
 
 function main_keymap_m {
 	main_keymap_print_default_shortcuts 'TextMate' "${TEXTMATE_KEYMAP[@]}"
@@ -66,7 +66,7 @@ function main_keymap_w {
 		if [[ -z $alias || $line =~ "${alias}\\${KEYMAP_DOT}${key}" ]]; then
 			lines+=("$line")
 		fi
-	done <<< "$(pgrep "[$]{[A-Z]+_DOT}$key\w* " "$ZSHRC_DIR"/*_keymap.zsh | trim_column | bw)"
+	done <<< "$(pgrep "[$]{[A-Z]+_DOT}$key\w* " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)"
 
 	# Pretty print keymap entries
 	local max_command_size; max_command_size=$(keymap_get_max_command_size "${lines[@]}")

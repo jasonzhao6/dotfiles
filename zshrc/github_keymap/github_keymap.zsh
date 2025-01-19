@@ -34,7 +34,7 @@ function github_keymap {
 # Key mappings (Alphabetized)
 #
 
-source "$ZSHRC_DIR/github_helpers.zsh"
+source "$ZSHRC_DIR/$GITHUB_NAMESPACE/github_helpers.zsh"
 
 function github_keymap_b {
 	git rev-parse --abbrev-ref HEAD

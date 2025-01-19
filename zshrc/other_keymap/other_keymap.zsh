@@ -57,7 +57,7 @@ function other_keymap {
 OTHER_KEYMAP_DIFF_DEFAULT_FILE_1="$HOME/Downloads/1.txt"
 OTHER_KEYMAP_DIFF_DEFAULT_FILE_2="$HOME/Downloads/2.txt"
 
-source "$ZSHRC_DIR/other_helpers.zsh"
+source "$ZSHRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
 
 function other_keymap_a {
 	caffeinate

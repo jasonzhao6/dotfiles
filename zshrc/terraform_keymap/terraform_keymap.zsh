@@ -35,7 +35,7 @@ TERRAFORM_KEYMAP=(
 
 keymap_init $TERRAFORM_NAMESPACE $TERRAFORM_ALIAS "${TERRAFORM_KEYMAP[@]}"
 
-source "$ZSHRC_DIR/terraform_commands.zsh"
+source "$ZSHRC_DIR/$TERRAFORM_NAMESPACE/terraform_commands.zsh"
 
 function terraform_keymap {
 	# If first arg is a `terraform` command, pass it through
@@ -54,7 +54,7 @@ function terraform_keymap {
 # Key mappings (Alphabetized)
 #
 
-source "$ZSHRC_DIR/terraform_helpers.zsh"
+source "$ZSHRC_DIR/$TERRAFORM_NAMESPACE/terraform_helpers.zsh"
 
 function terraform_keymap_a {
 	terraform apply
