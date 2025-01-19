@@ -11,8 +11,8 @@ KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # Invoke <key> mapping"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <arg> # Invoke <key> mapping with <arg>"
 	''
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}- # List key mappings"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}- <match>* <-mismatch>* # Filter key mappings"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}- # List key mappings in this namespace"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}- <match>* <-mismatch>* # Filter key mappings in this namespace"
 )
 
 function keymap_init {
@@ -41,6 +41,9 @@ function keymap_invoke {
 
 	# If a `key` was not specified, print usage
 	[[ -z $key ]] && keymap_print_help "$namespace" "$alias" "${keymap_entries[@]}" && return
+
+	# Every keymap has an implicit `-` key set up by `keymap_init`
+	[[ $key == '-' ]] && eval "$alias- ${args[*]}" && return
 
 	# Look for the specified `key`
 	local found
@@ -195,7 +198,7 @@ function keymap_print_help {
 # shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
 KEYMAP_PRINT_ROW_1=(1 2 3 4 5 \| 6 7 8 9 0)
 # shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
-KEYMAP_PRINT_ROW_2=(_ , _ p y \| f g c r l)
+KEYMAP_PRINT_ROW_2=(_ ',' _ p y \| f g c r l)
 # shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
 KEYMAP_PRINT_ROW_3=(a o e u i \| d h t n s)
 # shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
@@ -262,8 +265,8 @@ function keymap_print_map {
 
 	# Print keymap legend
 	echo
-	gray_fg '   <> indicates key initial has one mapping function'
-	gray_fg '   [] indicates key initial has multiple mapping functions'
+	gray_fg '   `<>` marks key initials with one mapping'
+	gray_fg '   `[]` marks key initials with multiple mappings'
 }
 
 function keymap_print_entry {
@@ -323,7 +326,7 @@ function keymap_annotate_the_dot {
 		"$(gray_fg "$KEYMAP_DOT_POINTER")" \
 		"$((command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
 		'' \
-		"$(gray_fg "# The $KEYMAP_DOT represents an optional space")"
+		"$(gray_fg "# \`$KEYMAP_DOT\` means optional space, e.g invoke \`m-\` or \`m -\`")"
 }
 
 function keymap_invokes_functions {
