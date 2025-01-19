@@ -17,11 +17,6 @@ function verify_keymap_ordering_section {
 function verify_keymap_ordering {
 	local keymap_file=$1
 
-	current_namespace=$(pgrep --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$keymap_file")
-
-	# Exclude `_keymap.zsh` helpers via the fact that it doesn't have a namespace
-	[[ -z $current_namespace ]] && return
-
 	# Find all key mapping functions
 	local mapping_functions; mapping_functions=$(
 		grep '^function' "$keymap_file" | bw | sed 's/ {.*//' | downcase

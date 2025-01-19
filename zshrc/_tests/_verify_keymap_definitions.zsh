@@ -19,9 +19,6 @@ function verify_keymap_definitions {
 
 	namespace=$(pgrep --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$keymap_file" | bw)
 
-	# Exclude `_keymap.zsh` helpers via the fact that it doesn't have a namespace
-	[[ -z $namespace ]] && return
-
 	# Find all keymap keys
 	local keymap_keys; keymap_keys=$(
 		# Ignore comment lines
