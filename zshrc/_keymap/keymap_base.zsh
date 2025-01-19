@@ -38,7 +38,7 @@ function keymap_invoke {
 	local args=("$@")
 
 	# If a `key` was not specified, print usage
-	[[ -z $key ]] && keymap_help "$namespace" "$alias" "${keymap_entries[@]}" && return
+	[[ -z $key ]] && keymap_print_help "$namespace" "$alias" "${keymap_entries[@]}" && return
 
 	# Look for the specified `key`
 	local found
@@ -145,7 +145,7 @@ function keymap_set_aliases {
 	done
 }
 
-function keymap_help {
+function keymap_print_help {
 	local namespace=$1; shift
 	local alias=$1; shift
 	local keymap_entries=("$@")
@@ -188,27 +188,6 @@ function keymap_help {
 	for entry in "${keymap_entries[@]}"; do
 		keymap_print_entry "$entry" "$max_command_size" "$namespace"
 	done
-}
-
-# Get the max command size in order to align comments across commands, e.g
-#   ```
-#   $ <key>       # comment 1
-#   $ <key> <arg> # comment 2
-#   ```
-function keymap_get_max_command_size {
-	local entries=("$@")
-
-	local max_command_size=0
-	local command_size
-
-	for entry in "${entries[@]}"; do
-		# If `entry` starts with `#`, this enry does not have any command
-		[[ $entry == \#* ]] && command_size=0 || command_size="${#entry% \#*}"
-
-		[[ $command_size -gt $max_command_size ]] && max_command_size=$command_size
-	done
-
-	echo "$max_command_size"
 }
 
 # shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
@@ -306,6 +285,27 @@ function keymap_print_entry {
 	else
 		echo
 	fi
+}
+
+# Get the max command size in order to align comments across commands, e.g
+#   ```
+#   $ <key>       # comment 1
+#   $ <key> <arg> # comment 2
+#   ```
+function keymap_get_max_command_size {
+	local entries=("$@")
+
+	local max_command_size=0
+	local command_size
+
+	for entry in "${entries[@]}"; do
+		# If `entry` starts with `#`, this enry does not have any command
+		[[ $entry == \#* ]] && command_size=0 || command_size="${#entry% \#*}"
+
+		[[ $command_size -gt $max_command_size ]] && max_command_size=$command_size
+	done
+
+	echo "$max_command_size"
 }
 
 function keymap_annotate_the_dot {

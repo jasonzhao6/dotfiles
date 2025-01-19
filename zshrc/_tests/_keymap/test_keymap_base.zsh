@@ -1,5 +1,5 @@
 # TODO add tests after `_keymap` behavior stabilizes
 
-function test__keymap_help {
+function test__keymap_print_help {
 	assert 'placeholder' 'placeholder'
-}; run_with_filter test__keymap_help
+}; run_with_filter test__keymap_print_help
