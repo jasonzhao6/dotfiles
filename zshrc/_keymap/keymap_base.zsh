@@ -190,11 +190,13 @@ function keymap_print_help {
 }
 
 # shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
-KEYMAP_PRINT_ROW_1=(_ _ _ p y \| f g c r l)
+KEYMAP_PRINT_ROW_1=(1 2 3 4 5 \| 6 7 8 9 0)
 # shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
-KEYMAP_PRINT_ROW_2=(a o e u i \| d h t n s)
+KEYMAP_PRINT_ROW_2=(_ , _ p y \| f g c r l)
 # shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
-KEYMAP_PRINT_ROW_3=(_ q j k x \| b m w v z)
+KEYMAP_PRINT_ROW_3=(a o e u i \| d h t n s)
+# shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
+KEYMAP_PRINT_ROW_4=(_ q j k x \| b m w v z)
 
 function keymap_print_map {
 	local namespace=$1; shift
@@ -234,7 +236,7 @@ function keymap_print_map {
 	# - If a key is unused, print in gray
 	local row_input
 	local row_output
-	for i in {1..3}; do
+	for i in {1..4}; do
 		# shellcheck disable=SC2034 # Use via `${(P)row_input}`
 		row_input=KEYMAP_PRINT_ROW_${i}
 		row_output+="\n "
