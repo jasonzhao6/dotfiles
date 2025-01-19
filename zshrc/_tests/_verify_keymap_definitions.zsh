@@ -24,7 +24,7 @@ function verify_keymap_definitions {
 		# Ignore comment lines
 		grep --invert-match '^#' "$keymap_file" |
 			# Extract keymap keys
-			pgrep --only-matching "(?<=_DOT})\w+(?=\s)" | bw | sort --unique
+			pgrep --only-matching "(?<=_DOT})(\w|-)+(?=\s)" | bw | sort --unique
 	)
 
 	# Generate all expected mapping functions
@@ -35,7 +35,7 @@ function verify_keymap_definitions {
 
 	# Find all actual mapping functions
 	local actual_functions; actual_functions=$(
-		pgrep --only-matching "^function \w+(?= {)" "$keymap_file" | bw | sort --unique
+		pgrep --only-matching "^function (\w|-)+(?= {)" "$keymap_file" | bw | sort --unique
 	)
 
 	# Compare keys and mapping functions; note that `diff` returns nothing if the files are identical
