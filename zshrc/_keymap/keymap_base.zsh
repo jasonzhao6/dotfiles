@@ -10,6 +10,9 @@ KEYMAP_USAGE=(
 	''
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # Invoke <key>"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <arg> # Invoke <key> with <arg>"
+	''
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}- # List key mappings"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}- <match>* <-mismatch>* # Filter key mappings"
 )
 
 function keymap_init {
