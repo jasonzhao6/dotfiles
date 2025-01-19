@@ -265,8 +265,8 @@ function keymap_print_map {
 
 	# Print keymap legend
 	echo
-	gray_fg '   `<>` marks key initials with one mapping'
-	gray_fg '   `[]` marks key initials with multiple mappings'
+	gray_fg '   `<>` key initials have singular mappings'
+	gray_fg '   `[]` key initials have multiple mappings'
 }
 
 function keymap_print_entry {
@@ -326,7 +326,13 @@ function keymap_annotate_the_dot {
 		"$(gray_fg "$KEYMAP_DOT_POINTER")" \
 		"$((command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
 		'' \
-		"$(gray_fg "# \`$KEYMAP_DOT\` means optional space, e.g invoke \`m-\` or \`m -\`")"
+		"$(gray_fg "# The \`$KEYMAP_DOT\` represents an optional space")"
+	printf "%-*s %-*s %s\n" \
+		$(($(echo -n "$KEYMAP_PROMPT" | bw | wc -c) + ${#alias})) \
+		'' \
+		"$((command_size - ${#alias}))" \
+		'' \
+		"$(gray_fg "# E.g To invoke \`a${KEYMAP_DOT}b\`, use either \`ab\` or \`a b\`")"
 }
 
 function keymap_invokes_functions {
