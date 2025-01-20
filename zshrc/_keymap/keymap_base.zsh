@@ -328,7 +328,7 @@ function keymap_annotate_the_dot {
 		"$(gray_fg "$KEYMAP_DOT_POINTER")" \
 		"$((command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
 		'' \
-		"$(gray_fg "# The \`$KEYMAP_DOT\` represents an optional space")"
+		"$(gray_fg "# \`$KEYMAP_DOT\` represents an optional space character")"
 	printf "%-*s %-*s %s\n" \
 		$(($(echo -n "$KEYMAP_PROMPT" | bw | wc -c) + ${#alias})) \
 		'' \

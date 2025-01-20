@@ -1,6 +1,5 @@
 typeset -A RESERVED
 
-# TODO add test
 function is_reserved {
 	local keyword=$1
 
