@@ -240,6 +240,29 @@ function test__hex {
 	)"
 }; run_with_filter test__hex
 
+function test__ruby_strip {
+	assert "$(echo '    111 222   ' | ruby_strip)" '111 222'
+}; run_with_filter test__ruby_strip
+
+function test__ruby_strip__with_multiple_lines {
+	local input; input=$(
+		cat <<-eof
+
+
+			foo 23
+			foo 34
+
+		eof
+	)
+
+	assert "$(echo "$input" | ruby_strip)" "$(
+		cat <<-eof
+			foo 23
+			foo 34
+		eof
+	)"
+}; run_with_filter test__ruby_strip__with_multiple_lines
+
 function test__strip {
 	assert "$(echo '    111 222   ' | strip)" '111 222'
 }; run_with_filter test__strip

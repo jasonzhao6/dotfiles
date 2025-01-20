@@ -118,6 +118,13 @@ function hex {
 	hexdump -C
 }
 
+# Strips leading and trailing whitespace
+# And strips leading and trailing empty lines from multiline output
+function ruby_strip {
+	ruby -e 'puts STDIN.read.strip'
+}
+
+# Strips leading and trailing whitespace
 function strip {
 	strip_left | strip_right
 }

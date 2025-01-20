@@ -93,7 +93,7 @@ function other_keymap_b {
 }
 
 function other_keymap_c {
-	echo -n "$(eval "$(prev_command)" | bw | ruby -e 'puts STDIN.read.strip')" | pbcopy
+	echo -n "$(eval "$(prev_command)" | bw | ruby_strip)" | pbcopy
 }
 
 function other_keymap_cc {
