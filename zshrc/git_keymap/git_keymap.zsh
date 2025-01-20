@@ -18,6 +18,7 @@ GIT_KEYMAP=(
 	"${GIT_DOT}v # Create an empty commit"
 	"${GIT_DOT}y # Cherry pick a commit"
 	"${GIT_DOT}i # Fix up a commit"
+	"${GIT_DOT}ii # List the last 20 commits"
 	''
 	"${GIT_DOT}x <number> # Rebase the last <number> commits"
 	"${GIT_DOT}x # Rebase with the latest main"
@@ -125,6 +126,10 @@ function git_keymap_i {
 	local sha=$1
 
 	git add --all; git commit --fixup "$sha"
+}
+
+function git_keymap_ii {
+	gr | head -20 | args_keymap_so
 }
 
 function git_keymap_l {
