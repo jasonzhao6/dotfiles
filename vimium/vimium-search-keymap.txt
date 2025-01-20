@@ -1,0 +1,38 @@
+c: https://marqeta.atlassian.net/wiki/search?text=%s Confluence
+
+da: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=prod Datadog APM Prod
+daa: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=qa Datadog APM QA
+ddl: https://app.datadoghq.com/dashboard/lists?q=%s Datadog Dashboard Lists
+di: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aprod%2Cservice%3A%s-ccapi Datadog Infrastructure Prod
+dii: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aqa%2Cservice%3A%s-ccapi Datadog Infrastructure QA
+dl: https://app.datadoghq.com/logs?query=%s Datadog Logs
+dmm: https://app.datadoghq.com/monitors/manage?q=%s%20tag%3A%22owner%3Atransaction-engine%22 Datadog Manage Monitors
+dms: https://app.datadoghq.com/metric/summary?filter=%s Datadog Metrics Summary
+
+gc: https://calendar.google.com/calendar/u/0/r/search?q=%s Google Calendar
+gd: https://drive.google.com/drive/search?q=%s Google Drive
+gg: https://mail.google.com/mail/u/0/#search/%s Google Gmail
+gi: https://www.google.com/search?q=%s&udm=2 Google Images
+gm: https://www.google.com/maps?q=%s Google Maps
+
+h: https://github.marqeta.com/search?q=%s&type=code Github Search
+hh: https://github.marqeta.com/search?q=org%3Atransaction-engine+%s&type=code Github Search (TENGF)
+hr: https://github.marqeta.com/orgs/transaction-engine/repositories?q=%s Github Repos
+
+j: https://marqeta.atlassian.net/issues/%s Jira Ticket
+jj: https://marqeta.atlassian.net/browse/TENGF-%s Jira Ticket (TENGF)
+jc: https://marqeta.atlassian.net/issues/CHANGE-%s Jira Ticket (CHANGE)
+ji: https://marqeta.atlassian.net/issues/INCI-%s Jira Ticket (INCI)
+js: https://marqeta.atlassian.net/jira/software/c/projects/TENGF/boards/1033?search=%s Jira Sprint
+jb: https://marqeta.atlassian.net/jira/software/c/projects/TENGF/boards/1033/backlog?text=%s Jira Backlog
+
+o: https://golinks.io/%s Go Links
+
+se: https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running;search=%s AWS EC2
+sl: https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#LoadBalancers:search=%s AWS Load Balancers
+sm: https://us-east-1.console.aws.amazon.com/secretsmanager/listsecrets?region=us-east-1&search=all%3Dtransaction-engine%26all%3D%s AWS Secrets Manager
+
+t: https://e.ggtimer.com/%s0m E.ggtimer (10m)
+tt: https://e.ggtimer.com/%sm E.ggtimer (1m)
+
+y: https://www.yelp.com/search?find_desc=%s Yelp

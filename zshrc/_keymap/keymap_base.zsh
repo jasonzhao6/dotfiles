@@ -229,7 +229,7 @@ function keymap_print_map {
 		elif [[ $namespace == 'main_keymap' ]]; then
 			namespace_aliases[$first_token]=1
 		else
-			key_initial=$first_token
+			key_initial=${first_token:0:1}
 		fi
 
 		[[ -n $key_initial ]] && keymap_initials[$key_initial]=$((keymap_initials[$key_initial] + 1))

@@ -37,6 +37,7 @@ source "$ZSHRC_DIR/zsh_keymap/zsh_keymap.zsh"
 # Load non-zsh keymaps (These mappings are for reference only)
 source "$ZSHRC_DIR/intellij_keymaps/intellij_cmd_keymap.zsh"
 source "$ZSHRC_DIR/vimium_keymaps/vimium_keymap.zsh"
+source "$ZSHRC_DIR/vimium_keymaps/vimium_search_keymap.zsh"
 
 # Load zsh configs
 source "$ZSHRC_DIR/zsh_arrow_keys.zsh"
