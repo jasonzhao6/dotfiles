@@ -1,5 +1,3 @@
-# TODO break up long lines
-
 AWS_NAMESPACE='aws_keymap'
 AWS_ALIAS='s'
 AWS_DOT="${AWS_ALIAS}${KEYMAP_DOT}"
@@ -47,6 +45,7 @@ function aws_keymap {
 #
 
 export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
+AWS_URL="https://$AWS_DEFAULT_REGION.console.aws.amazon.com"
 
 source "$ZSHRC_DIR/$AWS_NAMESPACE/aws_helpers.zsh"
 
@@ -80,7 +79,7 @@ function aws_keymap_a {
 function aws_keymap_aa {
 	local id=$*
 
-	open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$id"
+	open "$AWS_URL/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$id"
 }
 
 function aws_keymap_c1 {
@@ -104,7 +103,7 @@ function aws_keymap_e2 {
 function aws_keymap_ee {
 	local id; id=$(ec2_get_id "$@")
 
-	open "https://$AWS_DEFAULT_REGION.console.aws.amazon.com/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$id"
+	open "$AWS_URL/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$id"
 }
 
 function aws_keymap_m {
@@ -151,13 +150,22 @@ function aws_keymap_o {
 function aws_keymap_p {
 	local name=$1
 
-	aws codepipeline list-pipelines --query "pipelines[?contains(name, '$name')].[name]" --output text | args_keymap_s "$name"
+	aws codepipeline list-pipelines \
+		--query "pipelines[?contains(name, '$name')].[name]" \
+		--output text |
+		args_keymap_s "$name"
 }
+
+AWS_KEYMAP_PP_STATUS='stageStates[-1].actionStates[-1].latestExecution.status'
+AWS_KEYMAP_PP_TIMESTAMP='stageStates[-1].actionStates[-1].latestExecution.lastStatusChange'
 
 function aws_keymap_pp {
 	local name=$1
 
-	aws codepipeline get-pipeline-state --name "$name" --query "[pipelineName, stageStates[-1].actionStates[-1].latestExecution.status, stageStates[-1].actionStates[-1].latestExecution.lastStatusChange]" --output text
+	aws codepipeline get-pipeline-state \
+		--name "$name" \
+		--query "[pipelineName, $AWS_KEYMAP_PP_STATUS, $AWS_KEYMAP_PP_TIMESTAMP]" \
+		--output text
 }
 
 function aws_keymap_ps {
@@ -174,7 +182,7 @@ function aws_keymap_ps {
 	[[ $parameter == \{*\} ]] && echo "$parameter" | jq || echo "$parameter"
 }
 
-function aws_keymap_s { # (e.g `ssm <instance-id>`, or `0 ssm` to use the last entry from `args`)
+function aws_keymap_s {
 	local id=$1
 
 	aws ssm start-session \
@@ -183,7 +191,9 @@ function aws_keymap_s { # (e.g `ssm <instance-id>`, or `0 ssm` to use the last e
 		--target "$(ec2_get_id "$id")"
 }
 
-function aws_keymap_sc { # (e.g `ssm-run date <instance-id>`, or `each ssm-run date` to iterate through `args`)
+AWS_KEYMAP_SC_REGEX="(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
+
+function aws_keymap_sc {
 	local command=${(j: :)@[1,-2]}
 	local id="$*[-1]"
 
@@ -191,7 +201,7 @@ function aws_keymap_sc { # (e.g `ssm-run date <instance-id>`, or `each ssm-run d
 		--document-name 'AWS-StartNonInteractiveCommand' \
 		--parameters "{\"command\": [\"$command\"]}" \
 		--target "$(ec2_get_id "$id")" |
-			pgrep --multiline --ignore-case --invert-match "(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
+			pgrep --multiline --ignore-case --invert-match $AWS_KEYMAP_SC_REGEX
 }
 
 function aws_keymap_sm {
