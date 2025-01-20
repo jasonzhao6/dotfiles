@@ -1,39 +1,35 @@
-# Clean slate
 unmapAll
 
-# Vimari mirror
 map a LinkHints.activateMode
 map ; LinkHints.activateModeToOpenInNewTab
 map o Vomnibar.activateInNewTab
+map q Vomnibar.activateBookmarksInNewTab
+map e focusInput
 
 map h scrollPageUp
 map t scrollPageDown
+map H goPrevious
+map T goNext
 map m scrollToTop
 map w scrollToBottom
+
 map <up> scrollUp
 map <down> scrollDown
-map ' scrollLeft
-map , scrollRight
+map <left> scrollLeft
+map <right> scrollRight
 
-map c removeTab
-map u duplicateTab
-map r reload
 map n previousTab
 map s nextTab
+map N moveTabLeft
+map S moveTabRight
 map v goBack
 map z goForward
 
-map e focusInput
-map - enterInsertMode
-
-# Vimium extras
-map q Vomnibar.activateBookmarksInNewTab
-
-map H goPrevious
-map T goNext
-map N moveTabLeft
-map S moveTabRight
-
+map c removeTab
 map C closeTabsOnRight
+map r reload
+map u duplicateTab
 map p openCopiedUrlInNewTab
 map y copyCurrentUrl
+
+map - enterInsertMode

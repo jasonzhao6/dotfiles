@@ -13,24 +13,25 @@
     "hintToggle": "a",
     "newTabHintToggle": ";",
     "openTab": "o",
+    "goToFirstInput": "e",
 
     "scrollUpHalfPage": "h",
     "scrollDownHalfPage": "t",
     "goToPageTop": "m",
     "goToPageBottom": "w",
+
     "scrollUp": "up",
     "scrollDown": "down",
-    "scrollLeft": "'",
-    "scrollRight": ",",
+    "scrollLeft": "left",
+    "scrollRight": "right",
 
-    "closeTab": "c",
-    "duplicateTab": "u",
-    "reload": "r",
     "tabBack": "n",
     "tabForward": "s",
     "goBack": "v",
     "goForward": "z",
 
-    "goToFirstInput": "e",
+    "closeTab": "c",
+    "reload": "r",
+    "duplicateTab": "u",
   }
 }

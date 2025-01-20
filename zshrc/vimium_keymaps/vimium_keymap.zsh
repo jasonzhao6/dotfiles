@@ -1,10 +1,8 @@
 VIMIUM_NAMESPACE='vimium_keymap'
 VIMIUM_ALIAS='v'
 
-VIMIUM_KEYMAP=(
-	'c # removeTab'
-	'u # duplicateTab'
-)
+source "$ZSHRC_DIR/${VIMIUM_NAMESPACE}s/vimium_helpers.zsh"
+vimium_keymap_init 'VIMIUM_KEYMAP'
 
 keymap_init $VIMIUM_NAMESPACE $VIMIUM_ALIAS "${VIMIUM_KEYMAP[@]}"
 
