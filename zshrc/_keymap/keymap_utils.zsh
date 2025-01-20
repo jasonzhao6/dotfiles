@@ -20,7 +20,7 @@ function keymap_filter_entries {
 	)
 
 	echo
-	echo "$output" | bw | args_keymap_s "${filters[@]}"
+	echo "$output" | args_keymap_s "${filters[@]}"
 }
 
 function keymap_print_entries {
