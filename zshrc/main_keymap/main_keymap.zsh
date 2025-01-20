@@ -86,7 +86,6 @@ function main_keymap_w {
 			entries+=("$line")
 		fi
 	done < <(pgrep "\"[$]{[A-Z]+_DOT}$key.* " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
-	# TODO add test for -
 
 	keymap_print_entries "${entries[@]}"
 }

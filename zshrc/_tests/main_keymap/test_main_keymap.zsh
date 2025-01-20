@@ -27,3 +27,14 @@ function test__main_keymap_w__when_specifying_a_namespace_and_key {
 		eof
 	)"
 }; run_with_filter test__main_keymap_w__when_specifying_a_namespace_and_key
+
+function test__main_keymap_w__when_specifying_a_namespace_and_special_char {
+	assert "$(
+		main_keymap_w o , | bw
+	)" "$(
+		cat <<-eof
+
+		  $ o., # Open \`1.txt\` and \`1.txt\` in TextMate
+		eof
+	)"
+}; run_with_filter test__main_keymap_w__when_specifying_a_namespace_and_special_char
