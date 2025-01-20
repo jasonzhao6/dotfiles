@@ -28,8 +28,8 @@ NAV_KEYMAP=(
 keymap_init $NAV_NAMESPACE $NAV_ALIAS "${NAV_KEYMAP[@]}"
 
 function nav_keymap {
-	directory="$1"
-
+	# If the first arg is a directory, go to it
+	local directory="$1"
 	if [[ -d "$directory" ]]; then
 		cd "$directory" && nav_keymap_n || return
 		return

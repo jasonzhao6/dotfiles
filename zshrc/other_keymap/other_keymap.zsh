@@ -46,9 +46,9 @@ OTHER_KEYMAP=(
 keymap_init $OTHER_NAMESPACE $OTHER_ALIAS "${OTHER_KEYMAP[@]}"
 
 function other_keymap {
-	local target=$*
-
-	[[ -n $target ]] && other_keymap_o "$target" && return
+	# If the input is an open-able, open it
+	local input=$*
+	[[ -n $input ]] && other_keymap_o "$input" && return
 
 	keymap_invoke $OTHER_NAMESPACE $OTHER_ALIAS ${#OTHER_KEYMAP} "${OTHER_KEYMAP[@]}" "$@"
 }

@@ -1,6 +1,7 @@
 VIMIUM_NAMESPACE='vimium_keymap'
 VIMIUM_ALIAS='v'
 
+# Populate `VIMIUM_KEYMAP` from Vimium config file
 source "$ZSHRC_DIR/${VIMIUM_NAMESPACE}s/vimium_helpers.zsh"
 vimium_keymap_init 'VIMIUM_KEYMAP'
 

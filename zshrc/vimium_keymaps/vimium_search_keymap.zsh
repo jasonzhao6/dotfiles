@@ -1,6 +1,7 @@
 VIMIUM_SEARCH_NAMESPACE='vimium_search_keymap'
 VIMIUM_SEARCH_ALIAS='vv'
 
+# Populate `VIMIUM_SEARCH_KEYMAP` from Vimium config file
 source "$ZSHRC_DIR/${VIMIUM_NAMESPACE}s/vimium_helpers.zsh"
 vimium_search_keymap_init 'VIMIUM_SEARCH_KEYMAP'
 

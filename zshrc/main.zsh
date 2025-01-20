@@ -23,14 +23,14 @@ source "$ZSHRC_DIR/_keymap/keymap_utils.zsh"
 source "$ZSHRC_DIR/_keymap/is_reserved.zsh"
 
 # Load zsh keymaps (These mappings invoke zsh functions)
-source "$ZSHRC_DIR/args_keymap/args_keymap.zsh" # Overwrote `<namespace>` to invoke `args_keymap_a` TODO | a; if not key, filter
+source "$ZSHRC_DIR/args_keymap/args_keymap.zsh" # Overload `<namespace>` to invoke `args_keymap_a` TODO | a; if not key, filter
 source "$ZSHRC_DIR/aws_keymap/aws_keymap.zsh"
-source "$ZSHRC_DIR/git_keymap/git_keymap.zsh" # Overwrote `<namespace>` to invoke `git_keymap_c` TODO g -> gc
-source "$ZSHRC_DIR/github_keymap/github_keymap.zsh" # Overwrote `<namespace>` to invoke `github_keymap_h` TODO h -> hh
+source "$ZSHRC_DIR/git_keymap/git_keymap.zsh" # Overload `<namespace>` to invoke `git_keymap_c` TODO g -> gc
+source "$ZSHRC_DIR/github_keymap/github_keymap.zsh"
 source "$ZSHRC_DIR/kubectl_keymap/kubectl_keymap.zsh"
 source "$ZSHRC_DIR/main_keymap/main_keymap.zsh"
-source "$ZSHRC_DIR/nav_keymap/nav_keymap.zsh" # Overwrote `<namespace>` to invoke `nav_keymap_n`
-source "$ZSHRC_DIR/other_keymap/other_keymap.zsh" # Overwrote `<namespace>` to invoke `other_keymap_o`
+source "$ZSHRC_DIR/nav_keymap/nav_keymap.zsh"
+source "$ZSHRC_DIR/other_keymap/other_keymap.zsh"
 source "$ZSHRC_DIR/terraform_keymap/terraform_keymap.zsh"
 source "$ZSHRC_DIR/zsh_keymap/zsh_keymap.zsh"
 
