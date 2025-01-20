@@ -152,6 +152,25 @@ function test__args_keymap_c__with_two_args {
 	assert "$(args_keymap_c '123 321'; pbpaste)" '123 321'
 }; run_with_filter test__args_keymap_c__with_two_args
 
+function test__args_keymap_d {
+	local input; input=$(
+		cat <<-eof
+			Succeeded
+			Failed
+			Failed
+		eof
+	)
+	assert "$(
+		echo "$input" | args_keymap_s > /dev/null
+		args_keymap_d
+	)" "$(
+		cat <<-eof
+	     1	Succeeded
+	     2	Failed
+		eof
+	)"
+}; run_with_filter test__args_keymap_d
+
 function test__args_keymap_e {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null
