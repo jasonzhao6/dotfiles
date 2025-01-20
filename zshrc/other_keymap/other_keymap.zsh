@@ -218,7 +218,7 @@ function other_keymap_o {
 
 		has_urls=1
 		open "$url"
-	done <<< "$(echo "$target" | extract_urls | bw)"
+	done < <(echo "$target" | extract_urls | bw)
 	[[ -n $has_urls ]] && return
 
 	# If we didn't open anything, return exit code `1`

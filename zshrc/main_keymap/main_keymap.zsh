@@ -7,13 +7,13 @@ MAIN_KEYMAP=()
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
 
 # Find and append zsh keymaps (These mappings invoke zsh functions)
-while IFS='' read -r line; do
+while IFS= read -r line; do
 	MAIN_KEYMAP+=("$line")
 done < <(main_keymap_find_keymaps_by_type 'zsh')
 
 # Find and append non-zsh keymaps (These mappings are for reference only)
 MAIN_KEYMAP+=('')
-while IFS='' read -r line; do
+while IFS= read -r line; do
 	MAIN_KEYMAP+=("$line")
 done < <(main_keymap_find_keymaps_by_type 'non-zsh')
 
@@ -54,9 +54,9 @@ function main_keymap_r {
 	local entries=()
 	while IFS= read -r line; do
 		entries+=("$(eval "echo $line")")
-	done <<< "$(
+	done < <(
 		pgrep -i "[$]{[A-Z]+_DOT}.* # .*$description" "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw
-	)"
+	)
 	# Note: ^ Spelling out `--ignore-case` here somehow breaks IntelliJ IDEA's syntax highlighting
 
 	keymap_print_entries "${entries[@]}"
@@ -85,7 +85,7 @@ function main_keymap_w {
 		if [[ -z $alias || $line =~ "${alias}\\${KEYMAP_DOT}${key}" ]]; then
 			entries+=("$line")
 		fi
-	done <<< "$(pgrep "\"[$]{[A-Z]+_DOT}$key.* " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)"
+	done < <(pgrep "\"[$]{[A-Z]+_DOT}$key.* " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
 	# TODO add test for -
 
 	keymap_print_entries "${entries[@]}"
