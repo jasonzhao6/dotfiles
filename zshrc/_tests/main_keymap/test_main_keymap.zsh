@@ -7,6 +7,26 @@ function test__main_keymap {
 	)" '1'
 }; run_with_filter test__main_keymap
 
+function test__main_keymap_r {
+	assert "$([[ $(main_keymap_r | wc -l) -gt 200 ]] && echo 1)" '1'
+}; run_with_filter test__main_keymap_r
+
+function test__main_keymap_r__when_not_specifying_any_arg {
+	assert "$( diff <(main_keymap_r) <(main_keymap_w) && echo 1)" '1'
+}; run_with_filter test__main_keymap_r__when_not_specifying_any_arg
+
+function test__main_keymap_r__when_specifying_a_description {
+	assert "$(
+		main_keymap_r list all | bw
+	)" "$(
+		cat <<-eof
+
+		  $ m.r # List all keymap entries
+		  $ m.w # List all keymap entries
+		eof
+	)"
+}; run_with_filter test__main_keymap_r__when_specifying_a_description
+
 function test__main_keymap_w {
 	assert "$([[ $(main_keymap_w | wc -l) -gt 200 ]] && echo 1)" '1'
 }; run_with_filter test__main_keymap_w

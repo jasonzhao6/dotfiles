@@ -46,9 +46,8 @@ function main_keymap_m {
 	main_keymap_print_default_shortcuts 'TextMate' "${TEXTMATE_KEYMAP[@]}"
 }
 
-# TODO add test
 function main_keymap_r {
-	local description=$1
+	local description=$*
 
 	# Find all matching keymap entries
 	local entries=()
