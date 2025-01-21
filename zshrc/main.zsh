@@ -25,7 +25,7 @@ source "$ZSHRC_DIR/_keymap/is_reserved.zsh"
 # Load zsh keymaps (These mappings invoke zsh functions)
 source "$ZSHRC_DIR/args_keymap/args_keymap.zsh" # Overload `<namespace>` to invoke `args_keymap_a` TODO | a; if not key, filter
 source "$ZSHRC_DIR/aws_keymap/aws_keymap.zsh"
-source "$ZSHRC_DIR/git_keymap/git_keymap.zsh" # Overload `<namespace>` to invoke `git_keymap_c` TODO g -> gc
+source "$ZSHRC_DIR/git_keymap/git_keymap.zsh"
 source "$ZSHRC_DIR/github_keymap/github_keymap.zsh"
 source "$ZSHRC_DIR/kubectl_keymap/kubectl_keymap.zsh"
 source "$ZSHRC_DIR/main_keymap/main_keymap.zsh"

@@ -52,6 +52,13 @@ GIT_KEYMAP=(
 keymap_init $GIT_NAMESPACE $GIT_ALIAS "${GIT_KEYMAP[@]}"
 
 function git_keymap {
+	# If the first arg is a branch in the current repo, delegate to `git_keymap_c`
+	local branch=$1
+	if egrep --quiet "^(\*| ) $branch$" <(git branch); then
+		git_keymap_c "$branch"
+		return
+	fi
+
 	keymap_invoke $GIT_NAMESPACE $GIT_ALIAS ${#GIT_KEYMAP} "${GIT_KEYMAP[@]}" "$@"
 }
 
