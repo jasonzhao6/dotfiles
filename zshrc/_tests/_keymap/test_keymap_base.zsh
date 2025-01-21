@@ -123,12 +123,12 @@ function test__keymap_invoke__when_invoking_- {
 	assert "$(test_keymap -)" "$(
 		cat <<-eof
 
-		     1	  $ test__.a                 # First
-		     2	  $ test__.aa                # First related
-		     3	  $ test__.b                 # Second
-		     4	  $ test__.c                 # Third without args
-		     5	  $ test__.c <arg 1> <arg 2> # Third with args
-		     6	  $ test__.d
+		     1	$ test__.a                 # First
+		     2	$ test__.aa                # First related
+		     3	$ test__.b                 # Second
+		     4	$ test__.c                 # Third without args
+		     5	$ test__.c <arg 1> <arg 2> # Third with args
+		     6	$ test__.d
 		eof
 	)"
 }; run_with_filter test__keymap_invoke__when_invoking_-
