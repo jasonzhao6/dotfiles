@@ -11,33 +11,35 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}m # Open the current directory in TextMate"
 	"${OTHER_DOT}m <path> # Open the specified path in TextMate"
 	''
+	"${OTHER_DOT}cc # Copy the last command"
+	"${OTHER_DOT}c # Copy the last output"
 	"${OTHER_DOT}1 # Save the last output to \`1.txt\`"
 	"${OTHER_DOT}2 # Save the last output to \`2.txt\`"
 	"${OTHER_DOT}, # Open \`1.txt\` and \`2.txt\` in TextMate"
-	"${OTHER_DOT}c # Copy the last output"
-	"${OTHER_DOT}cc # Copy the last command"
-	"${OTHER_DOT}h # Copy history bindings"
-	"${OTHER_DOT}b # Copy bastion aliases"
+	"${OTHER_DOT}u <file 1> <file 2> # Unified diff"
+	"${OTHER_DOT}uu <file 1> <file 2> # Side-by-side diff"
+	''
 	"${OTHER_DOT}y # Alias for \`pbcopy\`"
 	"${OTHER_DOT}p # Alias for \`pbpaste\`"
+	"${OTHER_DOT}h # Copy history bindings"
+	"${OTHER_DOT}hh # Copy history bindings & bastion aliases"
+	''
 	"${OTHER_DOT}k # Clear the terminal"
 	"${OTHER_DOT}kk # Show archived terminal outputs"
 	"${OTHER_DOT}kc # Clear archived terminal outputs"
 	''
-	"${OTHER_DOT}d <url> # DNS dig"
-	"${OTHER_DOT}df # DNS flush"
-	"${OTHER_DOT}u <file 1> <file 2> # Unified diff"
-	"${OTHER_DOT}uu <file 1> <file 2> # Side-by-side diff"
-	"${OTHER_DOT}j <url> <match> <num lines> # Curl a json endpoint"
-	"${OTHER_DOT}t <command> # Command execution timer"
-	"${OTHER_DOT}e <start> <finish> <~~> # Run a sequence of commands"
-	"${OTHER_DOT}f # Format sql query from stdin"
-	"${OTHER_DOT}f '<sql>' # Format sql query from cli arg"
-	"${OTHER_DOT}r <before> <after> # Rename files in the current directory"
-	''
 	"${OTHER_DOT}s # Sleep"
 	"${OTHER_DOT}a # Stay awake"
 	"${OTHER_DOT}n # Stay on task"
+	''
+	"${OTHER_DOT}d <url> # DNS dig"
+	"${OTHER_DOT}df # DNS flush"
+	"${OTHER_DOT}e <start> <finish> <~~> # Run a sequence of commands"
+	"${OTHER_DOT}f # Format sql query from stdin"
+	"${OTHER_DOT}f '<sql>' # Format sql query from cli arg"
+	"${OTHER_DOT}j <url> <match> <num lines> # Curl a json endpoint"
+	"${OTHER_DOT}r <before> <after> # Rename files in the current directory"
+	"${OTHER_DOT}t <command> # Time command execution"
 )
 
 keymap_init $OTHER_NAMESPACE $OTHER_ALIAS "${OTHER_KEYMAP[@]}"
@@ -74,19 +76,6 @@ function other_keymap_2 {
 
 function other_keymap_a {
 	caffeinate
-}
-
-function other_keymap_b {
-	cat <<-eof | pbcopy
-		bind '"\e[A": history-search-backward'
-		bind '"\e[B": history-search-forward'
-
-		alias k='kubectl'
-		alias kg='kubectl get'
-
-		kubectl config set-context --current --namespace=transaction-engine
-		aws eks update-kubeconfig --region us-east-1 --name mkprod-useast1-1
-	eof
 }
 
 function other_keymap_c {
@@ -138,6 +127,19 @@ function other_keymap_h {
 	cat <<-eof | pbcopy
 		bind '"\e[A": history-search-backward'
 		bind '"\e[B": history-search-forward'
+	eof
+}
+
+function other_keymap_hh {
+	cat <<-eof | pbcopy
+		bind '"\e[A": history-search-backward'
+		bind '"\e[B": history-search-forward'
+
+		alias k='kubectl'
+		alias kg='kubectl get'
+
+		kubectl config set-context --current --namespace=transaction-engine
+		aws eks update-kubeconfig --region us-east-1 --name mkprod-useast1-1
 	eof
 }
 
