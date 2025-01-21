@@ -15,10 +15,10 @@ function test__github_keymap_d {
 	assert "$(nav_keymap_s > /dev/null; github_keymap_d)" 'github.com'
 }; run_with_filter test__github_keymap_d
 
-function test__github_keymap_o {
-	assert "$(nav_keymap_s > /dev/null; github_keymap_o)" 'jasonzhao6'
-}; run_with_filter test__github_keymap_o
+function test__github_keymap_oo {
+	assert "$(nav_keymap_s > /dev/null; github_keymap_oo)" 'jasonzhao6'
+}; run_with_filter test__github_keymap_oo
 
-function test__github_keymap_re {
-	assert "$(nav_keymap_s > /dev/null; github_keymap_re)" 'scratch'
-}; run_with_filter test__github_keymap_re
+function test__github_keymap_rr {
+	assert "$(nav_keymap_s > /dev/null; github_keymap_rr)" 'scratch'
+}; run_with_filter test__github_keymap_rr

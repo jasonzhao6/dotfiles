@@ -3,24 +3,24 @@ GITHUB_ALIAS='h'
 GITHUB_DOT="${GITHUB_ALIAS}${KEYMAP_DOT}"
 
 GITHUB_KEYMAP=(
-	"${GITHUB_DOT}e # Create a new PR, then open it"
-	"${GITHUB_DOT}t # Create a new gist, then open it"
+	"${GITHUB_DOT}n # Create a new PR, then open it"
+	"${GITHUB_DOT}g # Create a new gist, then open it"
 	''
 	"${GITHUB_DOT}s # Save a copy of repos"
 	"${GITHUB_DOT}r # List repos"
 	"${GITHUB_DOT}r <match>* <-mismatch>* # Filter repos"
-	"${GITHUB_DOT}n # Navigate to repo directory"
 	''
-	"${GITHUB_DOT}h # Open the current repo"
-	"${GITHUB_DOT}h <repo> # Open the specified repo (Shortcut: \`$GITHUB_ALIAS\`)"
+	"${GITHUB_DOT}h <repo> # Navigate to the specified repo"
+	"${GITHUB_DOT}o # Open the current repo"
+	"${GITHUB_DOT}o <repo> # Open the specified repo (Shortcut: \`$GITHUB_ALIAS\`)"
 	"${GITHUB_DOT}p # Open the latest PRs"
 	"${GITHUB_DOT}p <pr> # Open the specified PR"
 	"${GITHUB_DOT}c # Open the latest commit"
 	"${GITHUB_DOT}c <sha> # Open the specified commit"
 	''
 	"${GITHUB_DOT}d # Domain name"
-	"${GITHUB_DOT}o # Org name"
-	"${GITHUB_DOT}re # Repo name"
+	"${GITHUB_DOT}oo # Org name"
+	"${GITHUB_DOT}rr # Repo name"
 	"${GITHUB_DOT}b # Branch name"
 )
 
@@ -30,7 +30,7 @@ function github_keymap {
 	# If the first arg is a repo in the current org, delegate to `github_keymap_h`
 	local repo=$1
 	if grep --quiet "^$repo$" ~/Documents/github.repos."$(github_keymap_org)".txt; then
-		github_keymap_h "$repo"
+		github_keymap_o "$repo"
 		return
 	fi
 
@@ -48,35 +48,39 @@ function github_keymap_b {
 }
 
 function github_keymap_c {
-	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_re)"/commit/"$1"
+	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_rr)"/commit/"$1"
 }
 
 function github_keymap_d {
 	github_keymap_url | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/'
 }
 
-function github_keymap_e {
-	gp && gh pr create --fill && gh pr view --web
+function github_keymap_g {
+	pbpaste | gh gist create --web
 }
 
 function github_keymap_h {
-	local repo=${*:-$(github_keymap_re 2> /dev/null)}
-
-	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$repo"
-}
-
-function github_keymap_n {
 	local repo=$1
 
 	cd ~/github/"$(github_keymap_org)"/"$repo" && nav_keymap_n || true
 }
 
+function github_keymap_n {
+	gp && gh pr create --fill && gh pr view --web
+}
+
 function github_keymap_o {
+	local repo=${*:-$(github_keymap_rr 2> /dev/null)}
+
+	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$repo"
+}
+
+function github_keymap_oo {
 	github_keymap_url | sed 's/.*[:/]\([^/]*\)\/.*/\1/'
 }
 
 function github_keymap_p {
-	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_re)"/pull/"$1"
+	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_rr)"/pull/"$1"
 }
 
 function github_keymap_r {
@@ -85,7 +89,7 @@ function github_keymap_r {
 	args_keymap_s "${filters[@]}" < ~/Documents/github.repos."$(github_keymap_org)".txt
 }
 
-function github_keymap_re {
+function github_keymap_rr {
 	git rev-parse --show-toplevel | xargs basename
 }
 
@@ -96,8 +100,4 @@ function github_keymap_s {
 		jq -r '.[].name' |
 		tee ~/Documents/github.repos."$org".txt |
 		args_keymap_s
-}
-
-function github_keymap_t {
-	pbpaste | gh gist create --web
 }

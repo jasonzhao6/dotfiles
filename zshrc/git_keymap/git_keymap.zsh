@@ -3,7 +3,7 @@ GIT_ALIAS='g'
 GIT_DOT="${GIT_ALIAS}${KEYMAP_DOT}"
 
 GIT_KEYMAP=(
-	"${GIT_DOT}c <branch> # Checkout an existing branch (Shortcut: \`$GIT_ALIAS\`)"
+	"${GIT_DOT}k <branch> # Checkout an existing branch (Shortcut: \`$GIT_ALIAS\`)"
 	"${GIT_DOT}n <branch> # Checkout a new branch"
 	"${GIT_DOT}g # Checkout the latest \`main\`"
 	"${GIT_DOT}b # List branches"
@@ -12,10 +12,10 @@ GIT_KEYMAP=(
 	''
 	"${GIT_DOT}d # Git diff"
 	"${GIT_DOT}t # Git status"
-	"${GIT_DOT}e # Create a new commit"
+	"${GIT_DOT}c # Create a new commit"
 	"${GIT_DOT}m # Amend the previous commit"
 	"${GIT_DOT}w # Reword the previous commit"
-	"${GIT_DOT}v # Create an empty commit"
+	"${GIT_DOT}e # Create an empty commit"
 	"${GIT_DOT}y # Cherry pick a commit"
 	"${GIT_DOT}i # Fix up a commit"
 	"${GIT_DOT}ii # List the last 20 commits"
@@ -52,10 +52,10 @@ GIT_KEYMAP=(
 keymap_init $GIT_NAMESPACE $GIT_ALIAS "${GIT_KEYMAP[@]}"
 
 function git_keymap {
-	# If the first arg is a branch in the current repo, delegate to `git_keymap_c`
+	# If the first arg is a branch in the current repo, delegate to `git_keymap_k`
 	local branch=$1
 	if egrep --quiet "^(\*| ) $branch$" <(git branch); then
-		git_keymap_c "$branch"
+		git_keymap_k "$branch"
 		return
 	fi
 
@@ -105,9 +105,8 @@ function git_keymap_bd {
 }
 
 function git_keymap_c {
-	local branch=$1;
-
-	git checkout "$branch"
+	git add --all
+	git commit
 }
 
 function git_keymap_d {
@@ -115,8 +114,7 @@ function git_keymap_d {
 }
 
 function git_keymap_e {
-	git add --all
-	git commit
+	git commit --allow-empty -m 're-run: Empty commit to trigger build'
 }
 
 function git_keymap_f {
@@ -137,6 +135,12 @@ function git_keymap_i {
 
 function git_keymap_ii {
 	gr | head -20 | args_keymap_so
+}
+
+function git_keymap_k {
+	local branch=$1;
+
+	git checkout "$branch"
 }
 
 function git_keymap_l {
@@ -195,10 +199,6 @@ function git_keymap_u {
 	local number=$1
 
 	git reset --soft HEAD~"$number"
-}
-
-function git_keymap_v {
-	git commit --allow-empty -m 're-run: Empty commit to trigger build'
 }
 
 function git_keymap_w {

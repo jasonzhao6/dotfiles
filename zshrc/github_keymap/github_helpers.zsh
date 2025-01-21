@@ -13,7 +13,7 @@ function github_keymap_domain {
 # Wrap `github_keymap_o` with `GITHUB_DEFAULT_ORG` from `ZSHRC_SECRETS`
 function github_keymap_org {
 	local org
-	org="$(github_keymap_o 2> /dev/null)"
+	org="$(github_keymap_oo 2> /dev/null)"
 	org="${org:-$GITHUB_DEFAULT_ORG}"
 
 	echo "$org"
