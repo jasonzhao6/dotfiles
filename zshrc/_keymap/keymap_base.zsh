@@ -24,7 +24,7 @@ function keymap_init {
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
-	keymap_has_disjoint_dupes "${keymap_entries[@]}" && return
+	keymap_has_disjoint_dups "${keymap_entries[@]}" && return
 
 	keymap_set_alias "$alias" "$namespace"
 
@@ -71,11 +71,11 @@ function keymap_invoke {
 # ha       # Do something
 # hc       # Do something else                 <--  Disjoint duplicate, likely a mistake
 # ```
-function keymap_has_disjoint_dupes {
+function keymap_has_disjoint_dups {
 	local entries=("$@")
 
 	local last_entry
-	local has_disjoint_dupes
+	local has_disjoint_dups
 	typeset -A seen
 
 	for entry in "${entries[@]}"; do
@@ -94,15 +94,15 @@ function keymap_has_disjoint_dupes {
 		if [[ -z ${seen[$alias_dot_key]} ]]; then
 			seen[$alias_dot_key]=$entry
 
-		# Otherwise, report on disjoint dupes
+		# Otherwise, report on disjoint dups
 		else
 			echo
 			red_bar "\`$alias_dot_key\` has duplicate key mappings"
-			has_disjoint_dupes=1
+			has_disjoint_dups=1
 		fi
 	done
 
-	[[ -n $has_disjoint_dupes ]] && return 0 || return 1
+	[[ -n $has_disjoint_dups ]] && return 0 || return 1
 }
 
 function keymap_set_alias {
