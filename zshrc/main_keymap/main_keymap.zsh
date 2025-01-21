@@ -23,11 +23,11 @@ MAIN_KEYMAP+=(
 	"${MAIN_DOT}m # Show TextMate default shortcuts"
 	''
 	"${MAIN_DOT}r # List all keymap entries"
-	"${MAIN_DOT}r <description> # Filter all keymap entries by <description>"
+	"${MAIN_DOT}r <description> # Filter all keymap entries by description"
 	''
 	"${MAIN_DOT}w # List all keymap entries"
-	"${MAIN_DOT}w <key> # Filter all keymap entries by <key>"
-	"${MAIN_DOT}w <alias> <key> # Filter all keymap entries by <alias> and <key>"
+	"${MAIN_DOT}w <key> # Filter all keymap entries by key"
+	"${MAIN_DOT}w <alias> <key> # Filter all keymap entries by alias and key"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"

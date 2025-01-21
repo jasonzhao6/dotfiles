@@ -42,8 +42,8 @@ function test__main_keymap_w__when_specifying_a_namespace_and_key {
 		cat <<-eof
 
 		  $ m.w               # List all keymap entries
-		  $ m.w <key>         # Filter all keymap entries by <key>
-		  $ m.w <alias> <key> # Filter all keymap entries by <alias> and <key>
+		  $ m.w <key>         # Filter all keymap entries by key
+		  $ m.w <alias> <key> # Filter all keymap entries by alias and key
 		eof
 	)"
 }; run_with_filter test__main_keymap_w__when_specifying_a_namespace_and_key

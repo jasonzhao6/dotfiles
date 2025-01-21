@@ -20,7 +20,7 @@ GIT_KEYMAP=(
 	"${GIT_DOT}i # Fix up a commit"
 	"${GIT_DOT}ii # List the last 20 commits"
 	''
-	"${GIT_DOT}x <number> # Rebase the last <number> commits"
+	"${GIT_DOT}x <number> # Rebase the last N commits"
 	"${GIT_DOT}x # Rebase with the latest main"
 	"${GIT_DOT}xm # Rebase with the latest master"
 	"${GIT_DOT}xu # Rebase with the latest upstream"
@@ -28,9 +28,9 @@ GIT_KEYMAP=(
 	"${GIT_DOT}xa # Rebase abort"
 	''
 	"${GIT_DOT}u # Undo the last commit"
-	"${GIT_DOT}u <number> # Undo the last <number> commits"
+	"${GIT_DOT}u <number> # Undo the last N commits"
 	"${GIT_DOT}z # Discard uncommitted changes"
-	"${GIT_DOT}z <number> # Discard uncommitted changes & the last <number> commits"
+	"${GIT_DOT}z <number> # Discard uncommitted changes & the last N commits"
 	''
 	"${GIT_DOT}s # Git stash"
 	"${GIT_DOT}s <message> # Git stash with message"
