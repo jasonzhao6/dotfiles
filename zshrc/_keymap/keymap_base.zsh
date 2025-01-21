@@ -1,3 +1,7 @@
+#
+# The files contains the main keymap functions, `keymap_init, keymap_invoke`, and their helpers
+#
+
 KEYMAP_COLOR='cyan_fg'
 KEYMAP_PROMPT=$($KEYMAP_COLOR '  $')
 KEYMAP_ALIAS='_PLACEHOLDER_'
@@ -45,21 +49,14 @@ function keymap_invoke {
 	# Every keymap has an implicit `-` key set up by `keymap_init`
 	[[ $key == '-' ]] && eval "$alias- ${args[*]}" && return
 
-	# Look for the specified `key`
-	local found
-	for entry in "${keymap_entries[@]}"; do
-		[[ $entry == "$alias$KEYMAP_DOT$key"* ]] && found=1 && break
-	done
+	# If found, invoke it with the specified `args`
+	if keymap_is_key_mapped "$alias" "$key" "${keymap_entries[@]}"; then
+		"${namespace}_${key}" "${args[@]}"
 
 	# If not found, print error
-	if [[ -z $found ]]; then
+	else
 		echo
 		red_bar "\`$key\` key does not exist in \`$namespace\`"
-		return
-
-	# If found, invoke it with the specified `args`
-	else
-		"${namespace}_${key}" "${args[@]}"
 	fi
 }
 
@@ -341,4 +338,16 @@ function keymap_invokes_functions {
 	local string=$1
 
 	[[ $string != *cmd* && $string != *ctrl* && $string != *alt* && $string != *vimium* ]]
+}
+
+function keymap_is_key_mapped {
+	local alias=$1; shift
+	local key=$1; shift
+	local keymap_entries=("$@")
+
+	for entry in "${keymap_entries[@]}"; do
+		[[ $entry == "$alias$KEYMAP_DOT$key"* ]] && return 0
+	done
+
+	return 1
 }

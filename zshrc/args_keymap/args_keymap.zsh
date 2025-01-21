@@ -43,6 +43,20 @@ ARGS_KEYMAP=(
 keymap_init $ARGS_NAMESPACE $ARGS_ALIAS "${ARGS_KEYMAP[@]}"
 
 function args_keymap {
+	# When invoked as standalone command
+	if [[ -t 0 ]]; then
+		# If the first arg is not a `key`, filter args
+		if ! keymap_is_key_mapped "$ARGS_ALIAS" "$1" "${ARGS_KEYMAP[@]}"; then
+			args_keymap_a "$@"
+			return
+		fi
+
+	# When invoked after a pipe `|`, save args
+	else
+		args_save "$is_soft_select" "$@"
+		return
+	fi
+
 	keymap_invoke $ARGS_NAMESPACE $ARGS_ALIAS ${#ARGS_KEYMAP} "${ARGS_KEYMAP[@]}" "$@"
 }
 
@@ -172,7 +186,6 @@ function args_keymap_s {
 	else
 		args_save "$is_soft_select" "${filters[@]}"
 	fi
-
 }
 
 function args_keymap_so {

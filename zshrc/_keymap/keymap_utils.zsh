@@ -1,5 +1,5 @@
 #
-# One-off functions used outside fo `keymap_bash.zsh`
+# This file contains one-off functions not used by `keymap_init, keymap_invoke`
 #
 
 function keymap_files {

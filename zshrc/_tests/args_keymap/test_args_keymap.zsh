@@ -63,6 +63,44 @@ function test__args_keymap {
 	)" '1'
 }; run_with_filter test__args_keymap
 
+function test__args_keymap__with_two_args_including_negation {
+	assert "$(
+		echo "$test__input" | args_keymap_s > /dev/null
+		args_keymap -2 shared
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-$(grep_color shared)-1
+		     2	terraform-application-region-$(grep_color shared)-3
+		eof
+	)"
+}; run_with_filter test__args_keymap__with_two_args_including_negation
+
+function test__args_keymap__after_pipe {
+	assert "$(
+		echo "$test__input_with_headers" | args_keymap
+	)" "$(
+		cat <<-eof
+		     1	MANIFEST                                COMMENT
+		     2	terraform-application-region-shared-1   hello world
+		     3	terraform-application-region-shared-2   foo bar
+		     4	terraform-application-region-shared-3   sup
+		     5	terraform-application-region-program-A  how are you
+		     6	terraform-application-region-program-B  select via headers for this one
+		eof
+	)"
+}; run_with_filter test__args_keymap__after_pipe
+
+function test__args_keymap__after_pipe_with_filters {
+	assert "$(
+		echo "$test__input_with_headers" | args_keymap -1 shared
+	)" "$(
+		cat <<-eof
+		     1	terraform-application-region-$(grep_color shared)-2   foo bar
+		     2	terraform-application-region-$(grep_color shared)-3   sup
+		eof
+	)"
+}; run_with_filter test__args_keymap__after_pipe_with_filters
+
 function test__args_keymap_a {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null
