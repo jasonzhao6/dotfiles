@@ -27,7 +27,7 @@ function verify_test_ordering {
 
 	# Find all test functions
 	local test_functions; test_functions=$(
-		grep '^function' "$test_file" | bw | sed -e 's/test__//' -e 's/__.*//' -e 's/ {.*//' | uniq
+		grep '^function test__' "$test_file" | bw | sed -e 's/test__//' -e 's/__.*//' -e 's/ {.*//' | uniq
 	)
 
 	# Compare subject and test functions; note that `diff` returns nothing if the files are identical

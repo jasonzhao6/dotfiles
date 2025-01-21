@@ -210,6 +210,7 @@ function keymap_print_map {
 
 	typeset -A namespace_aliases
 	typeset -A keymap_initials
+	local first_token
 	local key_initial
 
 	# Identify the key initial for each entry
@@ -218,8 +219,11 @@ function keymap_print_map {
 	# - If it's a key mapping to other keymaps, capture it separately
 	# - Otherwise, use the first character
 	for entry in "${keymap_entries[@]}"; do
-		first_token=${${(z)entry}[1]}
-		key_initial=
+		if [[ $entry == *\#* ]]; then
+			first_token=${${(z)entry}[1]}
+		else
+			first_token=$entry
+		fi
 
 		if [[ $first_token == *$KEYMAP_DOT* ]]; then
 			key_initial=${${first_token#*$KEYMAP_DOT}:0:1}
