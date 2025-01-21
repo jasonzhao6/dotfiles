@@ -3,12 +3,12 @@ GIT_ALIAS='g'
 GIT_DOT="${GIT_ALIAS}${KEYMAP_DOT}"
 
 GIT_KEYMAP=(
+	"${GIT_DOT}c <branch> # Checkout an existing branch (Shortcut: \`$GIT_ALIAS\`)"
+	"${GIT_DOT}n <branch> # Checkout a new branch"
 	"${GIT_DOT}g # Checkout the latest \`main\`"
 	"${GIT_DOT}b # List branches"
 	"${GIT_DOT}bb # Delete merged branches"
-	"${GIT_DOT}bd <name> # Delete a branch by name"
-	"${GIT_DOT}c <name> # Checkout a branch by name"
-	"${GIT_DOT}n <name> # Create a new branch by name"
+	"${GIT_DOT}bd <branch> # Delete the specified branch"
 	''
 	"${GIT_DOT}d # Git diff"
 	"${GIT_DOT}t # Git status"

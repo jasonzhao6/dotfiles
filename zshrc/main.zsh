@@ -23,7 +23,6 @@ source "$ZSHRC_DIR/_keymap/keymap_utils.zsh"
 source "$ZSHRC_DIR/_keymap/is_reserved.zsh"
 
 # Load zsh keymaps (These mappings invoke zsh functions)
-# TODO add overloaded args to keymaps
 source "$ZSHRC_DIR/args_keymap/args_keymap.zsh"
 source "$ZSHRC_DIR/aws_keymap/aws_keymap.zsh"
 source "$ZSHRC_DIR/git_keymap/git_keymap.zsh"

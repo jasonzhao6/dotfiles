@@ -54,7 +54,7 @@ function test__main_keymap_w__when_specifying_a_namespace_and_special_char {
 	)" "$(
 		cat <<-eof
 
-		  $ o., # Open \`1.txt\` and \`1.txt\` in TextMate
+		  $ o., # Open \`1.txt\` and \`2.txt\` in TextMate
 		eof
 	)"
 }; run_with_filter test__main_keymap_w__when_specifying_a_namespace_and_special_char

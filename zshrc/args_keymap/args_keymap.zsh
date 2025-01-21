@@ -19,7 +19,7 @@ ARGS_KEYMAP=(
 	"${ARGS_DOT}e <start> <finish> <command> # Use args within a sequence"
 	''
 	"${ARGS_DOT}a # List args"
-	"${ARGS_DOT}a <match>* <-mismatch>* # Filter args"
+	"${ARGS_DOT}a <match>* <-mismatch>* # Filter args (Shortcut: \`$ARGS_ALIAS\`)"
 	"${ARGS_DOT}d # Dedupe args"
 	"${ARGS_DOT}t # Tabulate columns"
 	"${ARGS_DOT}w # Delimit columns based on the top row"

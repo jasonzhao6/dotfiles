@@ -3,6 +3,8 @@ TERRAFORM_ALIAS='t'
 TERRAFORM_DOT="${TERRAFORM_ALIAS}${KEYMAP_DOT}"
 
 TERRAFORM_KEYMAP=(
+	"${TERRAFORM_ALIAS} <terraform command>"
+	''
 	"${TERRAFORM_DOT}e # Find manifests"
 	''
 	"${TERRAFORM_DOT}i # Init"
@@ -18,7 +20,7 @@ TERRAFORM_KEYMAP=(
 	"${TERRAFORM_DOT}d # Destroy"
 	"${TERRAFORM_DOT}o # Show output"
 	''
-	"${TERRAFORM_DOT}l (i,iu,ir,im)? # List states"
+	"${TERRAFORM_DOT}l # List states"
 	"${TERRAFORM_DOT}s <name> # Show state"
 	"${TERRAFORM_DOT}t <name> # Taint state"
 	"${TERRAFORM_DOT}u <name> # Untaint state"
@@ -122,7 +124,7 @@ function terraform_keymap_iu {
 function terraform_keymap_l {
 	local option=$1
 
-	terraform_keymap_init "$option" && terraform state list | sed "s/.*/'&'/" | args_keymap_s
+	terraform state list | sed "s/.*/'&'/" | args_keymap_s
 }
 
 function terraform_keymap_m {

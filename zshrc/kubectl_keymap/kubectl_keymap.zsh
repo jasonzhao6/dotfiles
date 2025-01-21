@@ -3,7 +3,9 @@ KUBECTL_ALIAS='k'
 KUBECTL_DOT="${KUBECTL_ALIAS}${KEYMAP_DOT}"
 
 KUBECTL_KEYMAP=(
-	"${KUBECTL_DOT}s # Save resource types data"
+	"${KUBECTL_ALIAS} <kubectl command>"
+	''
+	"${KUBECTL_DOT}s # Save a copy of resource types"
 	"${KUBECTL_DOT}r # List resource types"
 	"${KUBECTL_DOT}r <match>* <-mismatch>* # Filter resource types"
 	"${KUBECTL_DOT}x <resource type> # Explain a resource type"
@@ -20,10 +22,10 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}c <pod> # Exec a command"
 	"${KUBECTL_DOT}l <pod> # Show logs"
 	''
-	"${KUBECTL_DOT}j <command> # Get resource as json"
-	"${KUBECTL_DOT}jj <command> # Cat cached copy of json"
-	"${KUBECTL_DOT}y <command> # Get resource as yaml"
-	"${KUBECTL_DOT}yy <command> # Cat cached copy of yaml"
+	"${KUBECTL_DOT}j <command> # Get resource as json & save a copy"
+	"${KUBECTL_DOT}jj <command> # Get the copy of json"
+	"${KUBECTL_DOT}y <command> # Get resource as yaml & save a copy"
+	"${KUBECTL_DOT}yy <command> # Get the copy of yaml"
 )
 
 keymap_init $KUBECTL_NAMESPACE $KUBECTL_ALIAS "${KUBECTL_KEYMAP[@]}"

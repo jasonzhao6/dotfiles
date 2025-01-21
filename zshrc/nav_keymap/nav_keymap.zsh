@@ -4,7 +4,6 @@ NAV_DOT="${NAV_ALIAS}${KEYMAP_DOT}"
 
 NAV_KEYMAP=(
 	"${NAV_ALIAS} <directory> # Go to directory"
-	''
 	"${NAV_DOT}t # Go to directory in pasteboard"
 	"${NAV_DOT}h # Go to github"
 	"${NAV_DOT}s # Go to scratch"
