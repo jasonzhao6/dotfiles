@@ -78,11 +78,11 @@ function zsh_keymap_hm {
 }
 
 function zsh_keymap_i {
-	open -na 'IntelliJ IDEA CE.app' --args "$ZSHRC_DIR"
+	open -na 'IntelliJ IDEA CE.app' --args "$DOTFILES_DIR"
 }
 
 function zsh_keymap_m {
-	mate "$ZSHRC_DIR"
+	mate "$DOTFILES_DIR"
 }
 
 ZSH_OTHER_DOTFILES=(
