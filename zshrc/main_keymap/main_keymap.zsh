@@ -22,6 +22,7 @@ MAIN_KEYMAP+=(
 	''
 	"${MAIN_DOT}g # Show Gmail default shortcuts"
 	"${MAIN_DOT}m # Show TextMate default shortcuts"
+	"${MAIN_DOT}n # Show Notion default shortcuts"
 	"${MAIN_DOT}o # Show OS X default shortcuts"
 	"${MAIN_DOT}s # Show Slack default shortcuts"
 	"${MAIN_DOT}t # Show Terminal default shortcuts"
@@ -56,6 +57,18 @@ function main_keymap_m {
 	main_keymap_print_default_shortcuts 'TextMate' "${TEXTMATE_KEYMAP[@]}"
 }
 
+source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.notion.zsh"
+keymap_set_alias "${MAIN_ALIAS}n-" "keymap_filter_entries NOTION_KEYMAP"
+function main_keymap_n {
+	main_keymap_print_default_shortcuts 'Notion' "${NOTION_KEYMAP[@]}"
+}
+
+source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.mac_os.zsh"
+keymap_set_alias "${MAIN_ALIAS}o-" "keymap_filter_entries MAC_OS_KEYMAP"
+function main_keymap_o {
+	main_keymap_print_default_shortcuts 'macOS' "${MAC_OS_KEYMAP[@]}"
+}
+
 function main_keymap_r {
 	local description=$*
 
@@ -75,12 +88,6 @@ source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.slack.zsh"
 keymap_set_alias "${MAIN_ALIAS}s-" "keymap_filter_entries SLACK_KEYMAP"
 function main_keymap_s {
 	main_keymap_print_default_shortcuts 'Slack' "${SLACK_KEYMAP[@]}"
-}
-
-source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.mac_os.zsh"
-keymap_set_alias "${MAIN_ALIAS}o-" "keymap_filter_entries MAC_OS_KEYMAP"
-function main_keymap_o {
-	main_keymap_print_default_shortcuts 'macOS' "${MAC_OS_KEYMAP[@]}"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.terminal.zsh"
