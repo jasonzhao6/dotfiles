@@ -15,7 +15,7 @@ function keymap_filter_entries {
 
 	local output; output=$(
 		for entry in "${entries[@]}"; do
-			keymap_print_entry "$entry" "$max_command_size"
+			keymap_print_entry '(zsh keymaps)' "$entry" "$max_command_size"
 		done
 	)
 
@@ -30,6 +30,6 @@ function keymap_print_entries {
 
 	echo
 	for entry in "${entries[@]}"; do
-		keymap_print_entry "$entry" "$max_command_size"
+		keymap_print_entry '(zsh keymaps)' "$entry" "$max_command_size"
 	done
 }

@@ -1,8 +1,10 @@
-function vimium_keymap_init {
+function vimium_keymap_extract {
 	local keymap_name=$1
 
-	eval "$keymap_name=()"
+	# Open keymap array
+	local extracted="$keymap_name=(\n"
 
+	# Populate keymap array
 	local seen_first_map
 	while IFS= read -r line; do
 		# Skip lines until we see the first `map`
@@ -13,30 +15,17 @@ function vimium_keymap_init {
 		# e.g `map a LinkHints.activateMode` -> `a # LinkHints.activateMode`
 		if [[ $line == map* ]]; then
 			fields=("${=line}")
-			eval "$keymap_name+=('${fields[2]} # ${fields[3]}')"
+			extracted+="\t'${fields[2]} # ${fields[3]}'\n"
 
 		# Preserve empty lines as keymap section separators
 		else
-			eval "$keymap_name+=('')"
+			extracted+="\t''\n"
 		fi
 	done < "$DOTFILES_DIR"/vimium/vimium-keymap.txt
-}
 
-function vimium_search_keymap_init {
-	local keymap_name=$1
+	# Close keymap array
+	extracted+=')'
 
-	eval "$keymap_name=()"
-
-	while IFS= read -r line; do
-		# Convert `line` to keymap format
-		# e.g `o: https://golinks.io/%s Go Links` -> `o # Go Links`
-		if [[ $line == [a-z]* ]]; then
-			fields=("${=line}")
-			eval "$keymap_name+=('${fields[1]//:} # ${fields[3, -1]}')"
-
-		# Preserve empty lines as keymap section separators
-		else
-			eval "$keymap_name+=('')"
-		fi
-	done < "$DOTFILES_DIR"/vimium/vimium-search-keymap.txt
+	# Refresh extracted keymap
+	echo $extracted > "$VIMIUM_EXTRACTED_KEYMAP"
 }

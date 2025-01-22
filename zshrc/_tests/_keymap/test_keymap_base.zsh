@@ -44,7 +44,7 @@ function test__keymap_init__it_sets_key_alias {
 	)" "${TEST_ALIAS}b: aliased to ${TEST_NAMESPACE}_b"
 }; run_with_filter test__keymap_init__it_sets_key_alias
 
-function test__keymap_init__with_join_duplicates {
+function test__keymap_init__with_joint_duplicates {
 	local join_dups=(
 		"${TEST_DOT}a # First"
 		"${TEST_DOT}a # First"
@@ -56,7 +56,7 @@ function test__keymap_init__with_join_duplicates {
 	assert "$(
 		keymap_init $TEST_NAMESPACE $TEST_ALIAS "${join_dups[@]}"
 	)" ''
-}; run_with_filter test__keymap_init__with_join_duplicates
+}; run_with_filter test__keymap_init__with_joint_duplicates
 
 function test__keymap_init__with_disjoint_duplicates {
 	local join_dups=(
@@ -72,10 +72,33 @@ function test__keymap_init__with_disjoint_duplicates {
 	)" "$(
 		cat <<-eof
 
-			$(red_bar "\`$TEST_ALIAS.a\` has duplicate key mappings")
+			$(red_bar "\`$TEST_NAMESPACE\` has duplicate \`$TEST_ALIAS.a\` entries")
 		eof
 	)"
 }; run_with_filter test__keymap_init__with_disjoint_duplicates
+
+function test__keymap_init__still_sets_some_aliases_with_disjoint_duplicates {
+	local join_dups=(
+		"${TEST_DOT}a # First"
+		''
+		"${TEST_DOT}a # First"
+		"${TEST_DOT}b # Second"
+		"${TEST_DOT}c # Third"
+	)
+
+	assert "$(
+		keymap_init $TEST_NAMESPACE $TEST_ALIAS "${join_dups[@]}" > /dev/null
+		which $TEST_ALIAS
+		which $TEST_ALIAS-
+		which ${TEST_ALIAS}b
+	)" "$(
+		cat <<-eof
+			test__: aliased to test_keymap
+			test__-: aliased to keymap_filter_entries test_keymap
+			test__b not found
+		eof
+	)"
+}; run_with_filter test__keymap_init__still_sets_some_aliases_with_disjoint_duplicates
 
 function test__keymap_invoke {
 	assert "$(test_keymap | bw | strip_right)" "$(

@@ -24,14 +24,14 @@ function keymap_init {
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
-	keymap_has_disjoint_dups "${keymap_entries[@]}" && return
-
 	keymap_set_alias "$alias" "$namespace"
 
 	keymap_set_alias "$alias-" "keymap_filter_entries $namespace"
 
+	keymap_has_disjoint_dups "$namespace" "${keymap_entries[@]}" && return
+
 	if keymap_invokes_functions "$namespace"; then
-		keymap_set_aliases "$alias" "$namespace" "${keymap_entries[@]}"
+		keymap_set_dot_aliases "$alias" "$namespace" "${keymap_entries[@]}"
 	fi
 }
 
@@ -72,6 +72,7 @@ function keymap_invoke {
 # hc       # Do something else                 <--  Disjoint duplicate, likely a mistake
 # ```
 function keymap_has_disjoint_dups {
+	local namespace=$1; shift
 	local entries=("$@")
 
 	local last_entry
@@ -97,7 +98,7 @@ function keymap_has_disjoint_dups {
 		# Otherwise, report on disjoint dups
 		else
 			echo
-			red_bar "\`$alias_dot_key\` has duplicate key mappings"
+			red_bar "\`$namespace\` has duplicate \`$alias_dot_key\` entries"
 			has_disjoint_dups=1
 		fi
 	done
@@ -120,7 +121,7 @@ function keymap_set_alias {
 	alias $key="$value"
 }
 
-function keymap_set_aliases {
+function keymap_set_dot_aliases {
 	local alias=$1; shift
 	local namespace=$1; shift
 	local keymap_entries=("$@")
@@ -138,7 +139,7 @@ function keymap_set_aliases {
 		# Extract `key` from `entry`
 		key="${first_token#*$KEYMAP_DOT}"
 
-		# If we have not seen this `key`, alias it
+		# Alias each `key` once
 		if [[ -z ${seen[$key]} ]]; then
 			seen[$key]=1
 
@@ -177,7 +178,7 @@ function keymap_print_help {
 		echo
 
 		for entry in "${keymap_usage[@]}"; do
-			keymap_print_entry "$entry" "$max_command_size" "$namespace"
+			keymap_print_entry "$namespace" "$entry" "$max_command_size"
 		done
 
 		keymap_annotate_the_dot "$alias" "$max_command_size"
@@ -188,7 +189,7 @@ function keymap_print_help {
 	echo
 
 	for entry in "${keymap_entries[@]}"; do
-		keymap_print_entry "$entry" "$max_command_size" "$namespace"
+		keymap_print_entry "$namespace" "$entry" "$max_command_size"
 	done
 }
 
@@ -273,9 +274,9 @@ function keymap_print_map {
 }
 
 function keymap_print_entry {
-	local entry=$1
-	local command_size=$2
-	local namespace=$3
+	local namespace=$1
+	local entry=$2
+	local command_size=$3
 
 	# If `entry` does not start `#`, extract `command`
 	local command; [[ $entry != \#* ]] && command="${entry% \#*}"
@@ -285,7 +286,7 @@ function keymap_print_entry {
 
 	# If it's a keymap of keyboard shortcuts, this is no command line `prompt`
 	local prompt=$KEYMAP_PROMPT
-	(keymap_invokes_functions "$command" && keymap_invokes_functions "$namespace") || prompt=' '
+	keymap_invokes_functions "$namespace" || prompt=' '
 
 	# Print with color
 	if [[ -n $command || -n $comment ]]; then
@@ -339,9 +340,13 @@ function keymap_annotate_the_dot {
 }
 
 function keymap_invokes_functions {
-	local string=$1
+	local namespace=$1
 
-	[[ $string != *cmd* && $string != *ctrl* && $string != *alt* && $string != *vimium* ]]
+	[[
+		$namespace != *TextMate* &&
+			$namespace != *intellij* &&
+			$namespace != *vimium*
+	]]
 }
 
 function keymap_is_key_mapped {

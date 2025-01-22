@@ -32,6 +32,6 @@ function main_keymap_print_default_shortcuts {
 	echo
 
 	for entry in "${keymap_entries[@]}"; do
-		keymap_print_entry "$entry" "$max_command_size"
+		keymap_print_entry "$keymap_name" "$entry" "$max_command_size"
 	done
 }

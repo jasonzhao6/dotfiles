@@ -17,12 +17,12 @@ function test__main_keymap_r__when_not_specifying_any_arg {
 
 function test__main_keymap_r__when_specifying_a_description {
 	assert "$(
-		main_keymap_r list all | bw
+		main_keymap_r list zsh | bw
 	)" "$(
 		cat <<-eof
 
-		  $ m.r # List all keymap entries
-		  $ m.w # List all keymap entries
+		  $ m.r # List zsh keymap entries
+		  $ m.w # List zsh keymap entries
 		eof
 	)"
 }; run_with_filter test__main_keymap_r__when_specifying_a_description
@@ -41,9 +41,9 @@ function test__main_keymap_w__when_specifying_a_namespace_and_key {
 	)" "$(
 		cat <<-eof
 
-		  $ m.w               # List all keymap entries
-		  $ m.w <key>         # Filter all keymap entries by key
-		  $ m.w <alias> <key> # Filter all keymap entries by alias and key
+		  $ m.w               # List zsh keymap entries
+		  $ m.w <key>         # Filter zsh keymap entries by key
+		  $ m.w <alias> <key> # Filter zsh keymap entries by alias and key
 		eof
 	)"
 }; run_with_filter test__main_keymap_w__when_specifying_a_namespace_and_key

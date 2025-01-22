@@ -22,12 +22,12 @@ MAIN_KEYMAP+=(
 	''
 	"${MAIN_DOT}m # Show TextMate default shortcuts"
 	''
-	"${MAIN_DOT}r # List all keymap entries"
-	"${MAIN_DOT}r <description> # Filter all keymap entries by description"
+	"${MAIN_DOT}r # List zsh keymap entries"
+	"${MAIN_DOT}r <description> # Filter zsh keymap entries by description"
 	''
-	"${MAIN_DOT}w # List all keymap entries"
-	"${MAIN_DOT}w <key> # Filter all keymap entries by key"
-	"${MAIN_DOT}w <alias> <key> # Filter all keymap entries by alias and key"
+	"${MAIN_DOT}w # List zsh keymap entries"
+	"${MAIN_DOT}w <key> # Filter zsh keymap entries by key"
+	"${MAIN_DOT}w <alias> <key> # Filter zsh keymap entries by alias and key"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
@@ -41,6 +41,8 @@ function main_keymap {
 #
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.textmate.zsh"
+
+keymap_set_alias "${MAIN_ALIAS}m-" "keymap_filter_entries TEXTMATE_KEYMAP"
 
 function main_keymap_m {
 	main_keymap_print_default_shortcuts 'TextMate' "${TEXTMATE_KEYMAP[@]}"
@@ -84,7 +86,9 @@ function main_keymap_w {
 		if [[ -z $alias || $line =~ "${alias}\\${KEYMAP_DOT}${key}" ]]; then
 			entries+=("$line")
 		fi
-	done < <(pgrep "\"[$]{[A-Z]+_DOT}$key.* " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
+	done < <(
+		pgrep "\"[$]{[A-Z]+_DOT}$key.* " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw
+	)
 
 	keymap_print_entries "${entries[@]}"
 }
