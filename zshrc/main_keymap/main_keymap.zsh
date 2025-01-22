@@ -23,6 +23,7 @@ MAIN_KEYMAP+=(
 	"${MAIN_DOT}g # Show Gmail default shortcuts"
 	"${MAIN_DOT}m # Show TextMate default shortcuts"
 	"${MAIN_DOT}s # Show Slack default shortcuts"
+	"${MAIN_DOT}t # Show Terminal default shortcuts"
 	''
 	"${MAIN_DOT}r # List zsh keymap entries"
 	"${MAIN_DOT}r <description> # Filter zsh keymap entries by description"
@@ -73,6 +74,12 @@ source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.slack.zsh"
 keymap_set_alias "${MAIN_ALIAS}s-" "keymap_filter_entries SLACK_KEYMAP"
 function main_keymap_s {
 	main_keymap_print_default_shortcuts 'Slack' "${SLACK_KEYMAP[@]}"
+}
+
+source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.terminal.zsh"
+keymap_set_alias "${MAIN_ALIAS}t-" "keymap_filter_entries TERMINAL_KEYMAP"
+function main_keymap_t {
+	main_keymap_print_default_shortcuts 'Terminal' "${TERMINAL_KEYMAP[@]}"
 }
 
 function main_keymap_w {
