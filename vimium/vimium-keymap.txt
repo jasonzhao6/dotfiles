@@ -4,7 +4,7 @@ map a LinkHints.activateMode
 map ; LinkHints.activateModeToOpenInNewTab
 map o Vomnibar.activateInNewTab
 map q Vomnibar.activateBookmarksInNewTab
-map e focusInput
+map i enterInsertMode
 
 map h scrollPageUp
 map t scrollPageDown
@@ -28,8 +28,8 @@ map z goForward
 map c removeTab
 map C closeTabsOnRight
 map r reload
-map u duplicateTab
+map d duplicateTab
 map p openCopiedUrlInNewTab
 map y copyCurrentUrl
 
-map - enterInsertMode
+map - focusInput

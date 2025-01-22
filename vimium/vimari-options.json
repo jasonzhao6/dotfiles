@@ -13,7 +13,6 @@
     "hintToggle": "a",
     "newTabHintToggle": ";",
     "openTab": "o",
-    "goToFirstInput": "e",
 
     "scrollUpHalfPage": "h",
     "scrollDownHalfPage": "t",
@@ -32,6 +31,8 @@
 
     "closeTab": "c",
     "reload": "r",
-    "duplicateTab": "u",
+    "duplicateTab": "d",
+
+    "goToFirstInput": "-",
   }
 }
