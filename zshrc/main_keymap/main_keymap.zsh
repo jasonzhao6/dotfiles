@@ -22,6 +22,7 @@ MAIN_KEYMAP+=(
 	''
 	"${MAIN_DOT}g # Show Gmail default shortcuts"
 	"${MAIN_DOT}m # Show TextMate default shortcuts"
+	"${MAIN_DOT}s # Show Slack default shortcuts"
 	''
 	"${MAIN_DOT}r # List zsh keymap entries"
 	"${MAIN_DOT}r <description> # Filter zsh keymap entries by description"
@@ -66,6 +67,12 @@ function main_keymap_r {
 	# Note: ^ Spelling out `--ignore-case` here somehow breaks IntelliJ IDEA's syntax highlighting
 
 	keymap_print_entries "${entries[@]}"
+}
+
+source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.slack.zsh"
+keymap_set_alias "${MAIN_ALIAS}s-" "keymap_filter_entries SLACK_KEYMAP"
+function main_keymap_s {
+	main_keymap_print_default_shortcuts 'Slack' "${SLACK_KEYMAP[@]}"
 }
 
 function main_keymap_w {
