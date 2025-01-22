@@ -4,8 +4,6 @@ SLACK_KEYMAP=(
 	'ctrl-1 # Home'
 	'ctrl-3 # Activity (cmd-shift-m)'
 	'ctrl-4 # Later'
-	'cmd-[ # Back in history'
-	'cmd-] # Forward in history'
 	''
 	'alt-shift-up # Go to unread channel above'
 	'alt-shift-down # Go to unread channel below'
