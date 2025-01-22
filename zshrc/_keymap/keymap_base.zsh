@@ -343,9 +343,18 @@ function keymap_invokes_functions {
 	local namespace=$1
 
 	[[
-		$namespace != *TextMate* &&
-			$namespace != *intellij* &&
-			$namespace != *vimium*
+		$namespace == *_zsh_keymaps_* ||
+			$namespace == *args_keymap* ||
+			$namespace == *aws_keymap* ||
+			$namespace == *git_keymap* ||
+			$namespace == *github_keymap* ||
+			$namespace == *kubectl_keymap* ||
+			$namespace == *main_keymap* ||
+			$namespace == *nav_keymap* ||
+			$namespace == *other_keymap* ||
+			$namespace == *terraform_keymap* ||
+			$namespace == *zsh_keymap* ||
+			$namespace == *test_keymap*
 	]]
 }
 

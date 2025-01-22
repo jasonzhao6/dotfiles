@@ -15,6 +15,7 @@ RESERVED[at]=0
 RESERVED[gc]=0
 RESERVED[gcp]=0
 RESERVED[grm]=0
+RESERVED[mg]=0
 RESERVED[od]=0
 RESERVED[sa]=0
 
@@ -943,7 +944,6 @@ RESERVED[mdls]=1
 RESERVED[mdutil]=1
 RESERVED[mecab]=1
 RESERVED[mesg]=1
-RESERVED[mg]=1
 RESERVED[mgrtopbm]=1
 RESERVED[mib2c]=1
 RESERVED[mibcopy.py]=1

@@ -20,6 +20,7 @@ done < <(main_keymap_find_keymaps_by_type 'non-zsh')
 # Append static entries
 MAIN_KEYMAP+=(
 	''
+	"${MAIN_DOT}g # Show Gmail default shortcuts"
 	"${MAIN_DOT}m # Show TextMate default shortcuts"
 	''
 	"${MAIN_DOT}r # List zsh keymap entries"
@@ -40,10 +41,14 @@ function main_keymap {
 # Key mappings (Alphabetized)
 #
 
+source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.gmail.zsh"
+keymap_set_alias "${MAIN_ALIAS}g-" "keymap_filter_entries GMAIL_KEYMAP"
+function main_keymap_g {
+	main_keymap_print_default_shortcuts 'Gmail' "${GMAIL_KEYMAP[@]}"
+}
+
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.textmate.zsh"
-
 keymap_set_alias "${MAIN_ALIAS}m-" "keymap_filter_entries TEXTMATE_KEYMAP"
-
 function main_keymap_m {
 	main_keymap_print_default_shortcuts 'TextMate' "${TEXTMATE_KEYMAP[@]}"
 }
