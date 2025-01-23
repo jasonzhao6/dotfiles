@@ -241,7 +241,9 @@ function keymap_print_map {
 
 		# Some keys such as `[` cannot be used as zsh hash key without escaping
 		# To avoid conditionals, escape all key initials
-		[[ -n $key_initial ]] && keymap_initials["\\$key_initial"]=$((keymap_initials["\\$key_initial"] + 1))
+		if [[ -n $key_initial ]]; then
+			keymap_initials["\\$key_initial"]=$((keymap_initials["\\$key_initial"] + 1))
+		fi
 	done
 
 	# Print a map of key initials
