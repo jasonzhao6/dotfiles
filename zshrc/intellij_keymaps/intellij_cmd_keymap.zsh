@@ -19,7 +19,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"^ cmd-- # Collapse all"
 	"^ cmd-+ # Expand all"
 	''
-	"cmd-<1-8> # Select tabs #1-8 (Convention)"
+	"cmd-[1-8] # Select tabs #1-8 (Convention)"
 	"cmd-9 # Select last tab (Convention)"
 	''
 	"cmd-alt-1 # Collapse all (TextMate)"
@@ -33,20 +33,20 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-alt-/ # Expand all (Kinesis keyboard)"
 	''
 	"cmd-a # Select all (Default)"
-	"cmd-shift-<up> # Move caret to text start with selection (Convention)"
-	"cmd-shift-<down> # Move caret to text end with selection (Convention)"
+	"cmd-shift-[up] # Move caret to text start with selection (Convention)"
+	"cmd-shift-[down] # Move caret to text end with selection (Convention)"
 	''
-	"cmd-ctrl-<up> # Move line up (TextMate)"
-	"cmd-ctrl-<down> # Move line down (TextMate)"
-	"cmd-ctrl-shift-<up> # Move statement up"
-	"cmd-ctrl-shift-<down> # Move statement down"
+	"cmd-ctrl-[up] # Move line up (TextMate)"
+	"cmd-ctrl-[down] # Move line down (TextMate)"
+	"cmd-ctrl-shift-[up] # Move statement up"
+	"cmd-ctrl-shift-[down] # Move statement down"
 	"cmd-[ # Indent left (Default)"
 	"cmd-] # Indent right (Default)"
 	"cmd-/ # Line comment (Convention)"
 	"cmd-shift-/ # Block comment"
 	''
-	"cmd-<esc> # Cyclic expand word (TextMate)"
-	"cmd-shift-<esc> # Cyclic expand word backward (TextMate)"
+	"cmd-[esc] # Cyclic expand word (TextMate)"
+	"cmd-shift-[esc] # Cyclic expand word backward (TextMate)"
 	"cmd-y # Git blame (TextMate)"
 	"cmd-shift-y # Resolve conflict"
 )
