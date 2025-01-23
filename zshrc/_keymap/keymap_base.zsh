@@ -228,10 +228,11 @@ function keymap_print_map {
 			first_token=$entry
 		fi
 
-		if [[ $first_token == *$KEYMAP_DOT* ]]; then
-			key_initial=${${first_token#*$KEYMAP_DOT}:0:1}
-		elif [[ $first_token == *$KEYMAP_DASH* ]]; then
+		# Check `KEYMAP_DASH` before `KEYMAP_DOT` to account for keyboard shortcuts like `cmd-.`
+		if [[ $first_token == *$KEYMAP_DASH* ]]; then
 			key_initial=${first_token: -1}
+		elif [[ $first_token == *$KEYMAP_DOT* ]]; then
+			key_initial=${${first_token#*$KEYMAP_DOT}:0:1}
 		elif [[ $namespace == 'main_keymap' ]]; then
 			namespace_aliases[$first_token]=1
 		else
