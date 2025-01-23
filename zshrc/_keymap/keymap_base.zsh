@@ -238,7 +238,9 @@ function keymap_print_map {
 			key_initial=${first_token:0:1}
 		fi
 
-		[[ -n $key_initial ]] && keymap_initials[$key_initial]=$((keymap_initials[$key_initial] + 1))
+		# Some keys such as `[` cannot be used as zsh hash key without escaping
+		# To avoid conditionals, escape all key initials
+		[[ -n $key_initial ]] && keymap_initials["\\$key_initial"]=$((keymap_initials["\\$key_initial"] + 1))
 	done
 
 	# Print a map of key initials
@@ -258,9 +260,9 @@ function keymap_print_map {
 				row_output+='    '
 			elif [[ -n ${namespace_aliases[$char]} ]]; then
 				row_output+=" $($KEYMAP_COLOR "[$char]")"
-			elif [[ -z ${keymap_initials[$char]} ]]; then
+			elif [[ -z ${keymap_initials["\\$char"]} ]]; then
 				row_output+="  $(gray_fg "$char") "
-			elif [[ ${keymap_initials[$char]} -eq 1 ]]; then
+			elif [[ ${keymap_initials["\\$char"]} -eq 1 ]]; then
 				row_output+=" <$char>"
 			else
 				row_output+=" [$char]"
