@@ -10,20 +10,26 @@ INTELLIJ_CMD_NAMESPACE='intellij_cmd_keymap'
 INTELLIJ_CMD_ALIAS='i'
 
 INTELLIJ_CMD_KEYMAP=(
+	"cmd-n # Create new (Default)"
+	"cmd-shift-n # Show scratch files"
+	"cmd-alt-n # New scratch file (TextMate)"
+	''
+	"cmd-t # Go to file (TextMate)"
+	"cmd-shift-t # File structure (TextMate)"
+	"cmd-u # Go to Declaration or Usages"
+	"cmd-shift-u # Find usages"
+	"cmd-i # Go to implementation"
+	"cmd-shift-c # Copy absolute path"
+	"cmd-ctrl-c # Copy path from repository root"
+	"cmd-. # Select file in project view (TextMate's \`cmd-ctrl-r\`)"
+	''
 	"cmd-\' # Project drawer (Toggle left panel)" # The extraneous `\` is to make `${(z)}` happy
 	"^cmd-1 # Project files"
 	"^cmd-- # Collapse all"
 	"^cmd-+ # Expand all"
 	"cmd-\; # Find (Toggle bottom panel)" # The extraneous `\` is to make `${(z)}` happy
 	"cmd-shift-\; # Terminal (Default)" # The extraneous `\` is to make `${(z)}` happy
-	''
-	"cmd-n # Create new (Default)"
-	"cmd-shift-n # Show scratch files"
-	"cmd-alt-n # New scratch file (TextMate)"
-	''
-	"cmd-= # Increase font size in all editors (Convention)"
-	"cmd-- # Decrease font size in all editors (Convention)"
-	"cmd-0 # Reset font size to 14 (Disabled)"
+	"shift-<esc> # Hide all tool windows (Default)"
 	''
 	"cmd-[1-8] # Select tabs #1-8 (Convention)"
 	"cmd-9 # Select last tab (Convention)"
@@ -35,19 +41,8 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-alt-5 # Expand all to level 4"
 	"cmd-alt-6 # Expand all to level 5"
 	"cmd-alt-0 # Expand all"
-	"cmd-alt-\\\` # Expand all (Mac keyboard)" # The extraneous `\` is to make `${(z)}` happy
-	"cmd-alt-/ # Expand all (Kinesis keyboard)"
-	''
-	"cmd-t # Go to file (TextMate)"
-	"cmd-shift-t # File structure (TextMate)"
-	"cmd-u # Go to Declaration or Usages"
-	"cmd-shift-u # Find usages"
-	"cmd-i # Go to implementation"
-	"cmd-k # Find action"
-	''
-	"cmd-shift-c # Copy absolute path"
-	"cmd-ctrl-c # Copy path from repository root"
-	"cmd-. # Select file in project view (TextMate's \`cmd-ctrl-r\`)"
+	"cmd-alt-\\\` # Expand all (For Mac keyboard)" # The extraneous `\` is to make `${(z)}` happy
+	"cmd-alt-/ # Expand all (For Kinesis keyboard)"
 	''
 	"cmd-a # Select all (Default)"
 	"cmd-shift-[up] # Move caret to text start with selection (Convention)"
@@ -62,24 +57,22 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-ctrl-f # Replace"
 	"cmd-shift-f # Find in files (TextMate)"
 	"cmd-ctrl-shift-f # Replace in files"
-	"^alt-shift-[enter] # Replace all"
-	"^alt-a # Replace all"
-	''
+	"^alt-shift-[enter] # Replace all (\`alt-a\`)"
 	"cmd-e # Next occurrence of the word at caret (Convention)"
 	"cmd-shift-e # Previous occurrence of the word at caret (Convention)"
 	"cmd-g # Find next (Default)"
 	"cmd-shift-g # Find previous (Default)"
 	''
 	"cmd-d # Duplicate entire lines"
-	"cmd-shift-d # Delete line (\`ctrl-d\`)"
+	"ctrl-d # Delete line (From \`intellij_cmd_keymap\`)"
 	"cmd-ctrl-[up] # Move line up (TextMate)"
 	"cmd-ctrl-[down] # Move line down (TextMate)"
 	"cmd-ctrl-shift-[up] # Move statement up"
 	"cmd-ctrl-shift-[down] # Move statement down"
-	"cmd-/ # Line comment (Convention)"
-	"cmd-shift-/ # Block comment"
 	"cmd-[ # Indent left (Default)"
 	"cmd-] # Indent right (Default)"
+	"cmd-/ # Line comment (Convention)"
+	"cmd-shift-/ # Block comment"
 	"cmd-j # Join lines"
 	''
 	"cmd-b # Extend selection"
@@ -88,6 +81,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-l # Go to line"
 	"cmd-shift-l # Extend line selection (TextMate)"
 	''
+	"cmd-alt-w # Soft-wrap (TextMate)"
 	"cmd-[esc] # Cyclic expand word (TextMate)"
 	"cmd-shift-[esc] # Cyclic expand word backward (TextMate)"
 	''
@@ -97,17 +91,22 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-ctrl-shift-r # Stop"
 	"cmd-y # Git blame (TextMate)"
 	"cmd-shift-y # Resolve conflict"
+	"cmd-k # Find action"
 	''
+	"cmd-= # Increase font size in all editors (Convention)"
+	"cmd-- # Decrease font size in all editors (Convention)"
+	"cmd-0 # Reset font size to 14 (Disabled)"
 	"cmd-o # Manage projects (Convention)"
 	"cmd-, # Preferences (Convention)"
 	"cmd-h # Hide window (Default)"
 	"cmd-m # Minimize window (Default)"
+	"cmd-s # Save (Implicit)"
+	"cmd-q # Quit (Default)"
+	''
 	"cmd-w # Close active tab (Default)"
 	"cmd-ctrl-w # Close other tabs (TextMate)"
 	"cmd-ctrl-alt-w # Close all tabs (TextMate)"
 	"cmd-shift-w # Close project (TextMate)"
-	"cmd-s # Save (Default)"
-	"cmd-q # Quit (Default)"
 )
 
 keymap_init $INTELLIJ_CMD_NAMESPACE $INTELLIJ_CMD_ALIAS "${INTELLIJ_CMD_KEYMAP[@]}"
