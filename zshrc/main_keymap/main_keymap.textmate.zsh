@@ -7,7 +7,7 @@ TEXTMATE_KEYMAP=(
 	'^cmd-[left] # Go back'
 	'^cmd-[right] # Go forward'
 	'^cmd-[up] # Go up'
-	'^cmd-[down] # Go into/open (cmd-o)'
+	'^cmd-[down] # Go into/open (`cmd-o`)'
 	'^cmd-alt-i # Toggle invisible files'
 	'^<enter] # Rename'
 	''

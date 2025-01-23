@@ -2,7 +2,7 @@
 SLACK_KEYMAP=(
 	'cmd-shift-d # Show / hide sidebar in Home'
 	'ctrl-1 # Home'
-	'ctrl-3 # Activity (cmd-shift-m)'
+	'ctrl-3 # Activity (`cmd-shift-m`)'
 	'ctrl-4 # Later'
 	''
 	'alt-shift-[up] # Go to unread channel above'
@@ -17,7 +17,7 @@ SLACK_KEYMAP=(
 	'cmd-[up] # Edit last message'
 	'e # Edit'
 	'[del] # Delete'
-	'r # React (cmd-shift-\)'
+	'r # React (`cmd-shift-\`)'
 	'a # Save / remove from Later'
 	'u # Mark unread'
 	''
