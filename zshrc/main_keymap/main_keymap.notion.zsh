@@ -1,7 +1,7 @@
 # shellcheck disable=SC2034 # Used by `main_keymap.zsh`
 NOTION_KEYMAP=(
 	'cmd+alt+3 # Turn into heading 3'
-	'cmd+alt+4 # Turn into a todo list ([])'
+	'cmd+alt+4 # Turn into a to-do list ([])'
 	'cmd+alt+5 # Turn into a bullet list (-/*)'
 	'cmd+alt+6 # Turn into a numbered list (1.)'
 	'cmd+alt+7 # Turn into a toggle list (>)'

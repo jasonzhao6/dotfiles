@@ -24,8 +24,7 @@ OTHER_KEYMAP=(
 	''
 	"${OTHER_DOT}y # Alias for \`pbcopy\`"
 	"${OTHER_DOT}p # Alias for \`pbpaste\`"
-	"${OTHER_DOT}h # Copy history bindings"
-	"${OTHER_DOT}hh # Copy history bindings & bastion aliases"
+	"${OTHER_DOT}h # Copy history bindings (secret: \`ohh\`)"
 	''
 	"${OTHER_DOT}k # Clear the terminal"
 	"${OTHER_DOT}kk # Show archived terminal outputs"
@@ -135,19 +134,6 @@ function other_keymap_h {
 	cat <<-eof | pbcopy
 		bind '"\e[A": history-search-backward'
 		bind '"\e[B": history-search-forward'
-	eof
-}
-
-function other_keymap_hh {
-	cat <<-eof | pbcopy
-		bind '"\e[A": history-search-backward'
-		bind '"\e[B": history-search-forward'
-
-		alias k='kubectl'
-		alias kg='kubectl get'
-
-		kubectl config set-context --current --namespace=transaction-engine
-		aws eks update-kubeconfig --region us-east-1 --name mkprod-useast1-1
 	eof
 }
 

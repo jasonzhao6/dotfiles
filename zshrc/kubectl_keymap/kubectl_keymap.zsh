@@ -9,10 +9,11 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}r # List resource types"
 	"${KUBECTL_DOT}r <match>* <-mismatch>* # Filter resource types"
 	"${KUBECTL_DOT}x <resource type> # Explain a resource type"
+	"${KUBECTL_DOT}h <yaml file> # Render Helm template locally"
 	''
 	"${KUBECTL_DOT}n <name> # Set namespace"
+	"${KUBECTL_DOT}nn # Set namespace (secrets: \`ke1, ke2, kw2\`)"
 	''
-	"${KUBECTL_DOT}u <command> # Alias for \`kubectl\`"
 	"${KUBECTL_DOT}e <command> # Exec a command"
 	"${KUBECTL_DOT}g <resource type> # Get resources"
 	"${KUBECTL_DOT}k <resource type> # Get resources as args"
@@ -79,6 +80,12 @@ function kubectl_keymap_g {
 	kubectl get "$resource"
 }
 
+function kubectl_keymap_h {
+	local yaml_file="$1"
+
+	helm template -f "$yaml_file" .
+}
+
 function kubectl_keymap_j {
 	local command=("$@")
 
@@ -109,6 +116,10 @@ function kubectl_keymap_n {
 	kubectl config set-context --current --namespace "$namespace"
 }
 
+function kubectl_keymap_nn {
+	kubectl config set-context --current --namespace transaction-engine
+}
+
 function kubectl_keymap_r {
 	local filters=("$@")
 
@@ -118,12 +129,6 @@ function kubectl_keymap_r {
 function kubectl_keymap_s {
 	# Save a copy for offline lookup
 	kubectl api-resources > ~/Documents/k8.api-resources.txt
-}
-
-function kubectl_keymap_u {
-	local command=("$@")
-
-	kubectl "${command[@]}"
 }
 
 function kubectl_keymap_x {
