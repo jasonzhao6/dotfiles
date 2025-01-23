@@ -193,15 +193,17 @@ function keymap_print_help {
 	done
 }
 
+# Zsh keymaps should avoid these chars
+# - `'` b/c it begins a new quote in zsh
+# - `.` b/c it's already used as `KEYMAP_DOT`
+# - `;` b/c it begins a new command in zsh
+#
 # shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
 {
-	KEYMAP_PRINT_ROW_1=(1 2 3 4 5 \| 6 7 8 9 0)
-	# Avoid `'` b/c it begins a new quote in `zsh`
-	# Avoid `.` b/c it's already used as `KEYMAP_DOT`
-	KEYMAP_PRINT_ROW_2=(_ ',' _ p y \| f g c r l)
-	KEYMAP_PRINT_ROW_3=(a o e u i \| d h t n s)
-	# Avoid `;` b/c it begins a new command in `zsh`
-	KEYMAP_PRINT_ROW_4=(_ q j k x \| b m w v z)
+	KEYMAP_PRINT_ROW_1=('`' '1' '2' '3' '4' '5' '|' '6' '7' '8' '9' '0' '[' ']')
+	KEYMAP_PRINT_ROW_2=(' ' "'" ',' '.' 'p' 'y' '|' 'f' 'g' 'c' 'r' 'l' '/' '=')
+	KEYMAP_PRINT_ROW_3=(' ' 'a' 'o' 'e' 'u' 'i' '|' 'd' 'h' 't' 'n' 's' '-')
+	KEYMAP_PRINT_ROW_4=(' ' ';' 'q' 'j' 'k' 'x' '|' 'b' 'm' 'w' 'v' 'z')
 }
 
 function keymap_print_map {

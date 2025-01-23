@@ -108,10 +108,10 @@ function test__keymap_invoke {
 
 			  test_keymap
 
-			   1   2   3   4   5   |   6   7   8   9   0
-			       ,       p   y   |   f   g  [c]  r   l
-			  [a]  o   e   u   i   |  <d>  h   t   n   s
-			       q   j   k   x   |  <b>  m   w   v   z
+			   \`   1   2   3   4   5   |   6   7   8   9   0   [   ]
+			       '   ,   .   p   y   |   f   g  [c]  r   l   /   =
+			      [a]  o   e   u   i   |  <d>  h   t   n   s   -
+			       ;   q   j   k   x   |  <b>  m   w   v   z
 
 			   \`<>\` key initials have singular mappings
 			   \`[]\` key initials have multiple mappings
