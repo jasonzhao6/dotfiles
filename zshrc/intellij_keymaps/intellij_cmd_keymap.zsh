@@ -2,12 +2,17 @@
 # - `cmd` is primary
 # - `cmd-shift` is secondary
 # - `cmd-alt` is tertiary with left half of keymap
+# - `cmd-alt-shift` is quaternary with left half of keymap
 # - `cmd-ctrl` is tertiary with right half of keymap
+# - `cmd-ctrl-shift` is Quaternary with right half of keymap
 
 INTELLIJ_CMD_NAMESPACE='intellij_cmd_keymap'
 INTELLIJ_CMD_ALIAS='i'
 
 INTELLIJ_CMD_KEYMAP=(
+	"cmd-o # Manage projects (Convention)"
+	"cmd-q # Quit (Default)"
+	''
 	"cmd-= # Increase font size in all editors (Convention)"
 	"cmd-- # Decrease font size in all editors (Convention)"
 	"cmd-0 # Reset font size to 14 (Disabled)"
@@ -15,9 +20,16 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-, # Preferences (Convention)"
 	"cmd-p # Select file in project view (TextMate's \`cmd-ctrl-r\`)"
 	"cmd-\' # Project drawer (Toggle left panel)" # The extraneous `\` is to make `${(z)}` happy
-	"^ cmd-1 # Project files"
-	"^ cmd-- # Collapse all"
-	"^ cmd-+ # Expand all"
+	"^cmd-1 # Project files"
+	"^cmd-- # Collapse all"
+	"^cmd-+ # Expand all"
+	"cmd-;' # Find (Toggle bottom panel)"
+	"cmd-shift-;' # Terminal (Default)"
+	''
+	"cmd-k # Find action"
+	"cmd-u # Go to Declaration or Usages"
+	"cmd-shift-u # Find usages"
+	"cmd-i # Go to implementation"
 	''
 	"cmd-[1-8] # Select tabs #1-8 (Convention)"
 	"cmd-9 # Select last tab (Convention)"
@@ -33,8 +45,19 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-alt-/ # Expand all (Kinesis keyboard)"
 	''
 	"cmd-a # Select all (Default)"
+	"cmd-x # Cut (Default)"
 	"cmd-shift-[up] # Move caret to text start with selection (Convention)"
 	"cmd-shift-[down] # Move caret to text end with selection (Convention)"
+	''
+	"cmd-f # Find (Default)"
+	"cmd-ctrl-f # Replace"
+	"cmd-shift-f # Find in files (TextMate)"
+	"cmd-ctrl-shift-f # Replace in files"
+	"^alt-shift-[enter] # Replace all"
+	"^alt-a # Replace all"
+	''
+	"cmd-e # Next occurrence of the word at caret (Convention)"
+	"cmd-shift-e # Previous occurrence of the word at caret (Convention)"
 	''
 	"cmd-ctrl-[up] # Move line up (TextMate)"
 	"cmd-ctrl-[down] # Move line down (TextMate)"
@@ -44,6 +67,8 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-] # Indent right (Default)"
 	"cmd-/ # Line comment (Convention)"
 	"cmd-shift-/ # Block comment"
+	''
+	"cmd-j # Join lines"
 	''
 	"cmd-[esc] # Cyclic expand word (TextMate)"
 	"cmd-shift-[esc] # Cyclic expand word backward (TextMate)"
