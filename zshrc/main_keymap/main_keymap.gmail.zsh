@@ -1,6 +1,6 @@
 # shellcheck disable=SC2034 # Used by `main_keymap.zsh`
 GMAIL_KEYMAP=(
-	'<enter> # Open conversation'
+	'{enter} # Open conversation'
 	'e # Archive'
 	'R # Reply'
 	'A # Reply all'
