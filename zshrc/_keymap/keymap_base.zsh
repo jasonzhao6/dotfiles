@@ -286,7 +286,8 @@ function keymap_print_entry {
 	local command_size=$3
 
 	# If `entry` does not start `#`, extract `command`
-	local command; [[ $entry != \#* ]] && command="${entry% \#*}"
+	# TODO add test
+	local command; [[ $entry != \#* ]] && command="${entry%% \#*}"
 
 	# If `entry` contains `#`, extract `comment`
 	local comment; [[ $entry == *\#* ]] && comment="# ${entry#*\# }"
