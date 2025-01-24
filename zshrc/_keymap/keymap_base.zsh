@@ -265,7 +265,6 @@ function keymap_print_map {
 		for char in ${(P)row_input}; do
 			escaped_initial="$KEYMAP_ESCAPE$char"
 
-			# TODO add test
 			# The `\` char doesn't work without an extra layer of escaping
 			[[ $char == "$KEYMAP_ESCAPE" ]] && escaped_initial="$KEYMAP_ESCAPE\\"
 
@@ -296,7 +295,6 @@ function keymap_print_entry {
 	local command_size=$3
 
 	# If `entry` does not start `#`, extract `command`
-	# TODO add test
 	local command; [[ $entry != \#* ]] && command="${entry%% \#*}"
 
 	# If `entry` contains `#`, extract `comment`
@@ -307,7 +305,6 @@ function keymap_print_entry {
 	keymap_invokes_functions "$namespace" || prompt=' '
 
 	# If command is a non-zsh keymap that contains `\` escape char, do not print it
-	# TODO add test
 	command=${command/-\\/-}
 
 	# Print with color

@@ -10,6 +10,10 @@ TEST_KEYMAP=(
 	"${TEST_DOT}c # Third without args"
 	"${TEST_DOT}c [arg 1] [arg 2] # Third with args"
 	"${TEST_DOT}d"
+	''
+	"[1-9] # #1-9"
+	"cmd-\` # Backtick"
+	"cmd-$KEYMAP_ESCAPE # Escape escape"
 )
 
 keymap_init $TEST_NAMESPACE $TEST_ALIAS "${join_dups[@]}"
@@ -108,8 +112,8 @@ function test__keymap_invoke {
 
 			  test_keymap
 
-			   \`   1   2   3   4   5   |   6   7   8   9   0   [   ]
-			       '   ,   .   p   y   |   f   g  (c)  r   l   /   =   \\
+			   \`   1   2   3   4   5   |   6   7   8   9   0   [  <]>
+			       '   ,   .   p   y   |   f   g  (c)  r   l   /   =  <\>
 			      (a)  o   e   u   i   |  <d>  h   t   n   s   -
 			       ;   q   j   k   x   |  <b>  m   w   v   z
 
@@ -138,6 +142,10 @@ function test__keymap_invoke {
 			  $ test__.c                       # Third without args
 			  $ test__.c [arg 1] [arg 2]       # Third with args
 			  $ test__.d
+
+			  $ [1-9]                          # #1-9
+			  $ cmd-\`                          # Backtick
+			  $ cmd-\                          # Escape escape
 		eof
 	)"
 }; run_with_filter test__keymap_invoke
@@ -152,6 +160,9 @@ function test__keymap_invoke__when_invoking_- {
 		     4	$ test__.c                 # Third without args
 		     5	$ test__.c [arg 1] [arg 2] # Third with args
 		     6	$ test__.d
+		     7	$ [1-9]                    # #1-9
+		     8	$ cmd-\`                    # Backtick
+		     9	$ cmd-\                    # Escape escape
 		eof
 	)"
 }; run_with_filter test__keymap_invoke__when_invoking_-
