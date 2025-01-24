@@ -23,12 +23,12 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-ctrl-c # Copy path from repository root"
 	"cmd-. # Select file in project view (TextMate's \`cmd-ctrl-r\`)"
 	''
-	"cmd-\' # Project drawer (Toggle left panel)" # The extraneous `\` is to make `${(z)}` happy
+	"cmd-\' # Project drawer (Toggle left panel)" # The extra `\` is to make `${${(z)...}[1]}` happy
 	"^cmd-1 # Project files"
 	"^cmd-- # Collapse all"
 	"^cmd-+ # Expand all"
-	"cmd-\; # Find (Toggle bottom panel)" # The extraneous `\` is to make `${(z)}` happy
-	"cmd-shift-\; # Terminal (Default)" # The extraneous `\` is to make `${(z)}` happy
+	"cmd-\; # Find (Toggle bottom panel)" # The extra `\` is to make `${${(z)...}[1]}` happy
+	"cmd-shift-\; # Terminal (Default)" # The extra `\` is to make `${${(z)...}[1]}` happy
 	"shift-<esc> # Hide all tool windows (Default)"
 	''
 	"cmd-[1-8] # Select tabs #1-8 (Convention)"
@@ -41,7 +41,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-alt-5 # Expand all to level 4"
 	"cmd-alt-6 # Expand all to level 5"
 	"cmd-alt-0 # Expand all"
-	"cmd-alt-\\\` # Expand all (For Mac keyboard)" # The extraneous `\` is to make `${(z)}` happy
+	"cmd-alt-\` # Expand all (For Mac keyboard)" # The extra `\` is to make `${${(z)...}[1]}` happy
 	"cmd-alt-/ # Expand all (For Kinesis keyboard)"
 	''
 	"cmd-a # Select all (Default)"
@@ -64,7 +64,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-shift-g # Find previous (Default)"
 	''
 	"cmd-d # Duplicate entire lines"
-	"ctrl-d # Delete line (From \`intellij_cmd_keymap\`)"
+	"ctrl-d # Delete line (From \`intellij_ctrl_keymap\`)"
 	"cmd-ctrl-[up] # Move line up (TextMate)"
 	"cmd-ctrl-[down] # Move line down (TextMate)"
 	"cmd-ctrl-shift-[up] # Move statement up"

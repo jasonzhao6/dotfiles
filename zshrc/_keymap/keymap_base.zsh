@@ -8,6 +8,7 @@ KEYMAP_ALIAS='_PLACEHOLDER_'
 KEYMAP_DASH='-'
 KEYMAP_DOT='.'
 KEYMAP_DOT_POINTER='^'
+KEYMAP_ESCAPE="\\\\" # Escape twice to avoid special chars like `\n`
 
 KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS} # Show this help"
@@ -201,7 +202,7 @@ function keymap_print_help {
 # shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
 {
 	KEYMAP_PRINT_ROW_1=('`' '1' '2' '3' '4' '5' '|' '6' '7' '8' '9' '0' '[' ']')
-	KEYMAP_PRINT_ROW_2=(' ' "'" ',' '.' 'p' 'y' '|' 'f' 'g' 'c' 'r' 'l' '/' '=')
+	KEYMAP_PRINT_ROW_2=(' ' "'" ',' '.' 'p' 'y' '|' 'f' 'g' 'c' 'r' 'l' '/' '=' "$KEYMAP_ESCAPE")
 	KEYMAP_PRINT_ROW_3=(' ' 'a' 'o' 'e' 'u' 'i' '|' 'd' 'h' 't' 'n' 's' '-')
 	KEYMAP_PRINT_ROW_4=(' ' ';' 'q' 'j' 'k' 'x' '|' 'b' 'm' 'w' 'v' 'z')
 }
@@ -215,6 +216,7 @@ function keymap_print_map {
 	typeset -A keymap_initials
 	local first_token
 	local key_initial
+	local escaped_initial
 
 	# Identify the key initial for each entry
 	# - If it follows a `KEYMAP_DOT`, it's a key mapping- use the first character after `KEYMAP_DOT`
@@ -239,10 +241,12 @@ function keymap_print_map {
 			key_initial=${first_token:0:1}
 		fi
 
-		# Some keys such as `[` cannot be used as zsh hash key without escaping
-		# To avoid conditionals, escape all key initials
 		if [[ -n $key_initial ]]; then
-			keymap_initials["\\$key_initial"]=$((keymap_initials["\\$key_initial"] + 1))
+			# Some keys such as `[` can only be used as a hash key when escaped
+			# It doesn't hurt to escape all key initials, so doing that to avoid conditional handling
+			escaped_initial="$KEYMAP_ESCAPE$key_initial"
+
+			keymap_initials["$escaped_initial"]=$((${keymap_initials["$escaped_initial"]} + 1))
 		fi
 	done
 
@@ -259,13 +263,19 @@ function keymap_print_map {
 		row_output+="\n "
 
 		for char in ${(P)row_input}; do
+			escaped_initial="$KEYMAP_ESCAPE$char"
+
+			# TODO add test
+			# The `\` char doesn't work without an extra layer of escaping
+			[[ $char == "$KEYMAP_ESCAPE" ]] && escaped_initial="$KEYMAP_ESCAPE\\"
+
 			if [[ $char == '_' ]]; then
 				row_output+='    '
 			elif [[ -n ${namespace_aliases[$char]} ]]; then
 				row_output+=" $($KEYMAP_COLOR "[$char]")"
-			elif [[ -z ${keymap_initials["\\$char"]} ]]; then
+			elif [[ -z ${keymap_initials["$escaped_initial"]} ]]; then
 				row_output+="  $(gray_fg "$char") "
-			elif [[ ${keymap_initials["\\$char"]} -eq 1 ]]; then
+			elif [[ ${keymap_initials["$escaped_initial"]} -eq 1 ]]; then
 				row_output+=" <$char>"
 			else
 				row_output+=" [$char]"
@@ -292,9 +302,13 @@ function keymap_print_entry {
 	# If `entry` contains `#`, extract `comment`
 	local comment; [[ $entry == *\#* ]] && comment="# ${entry#*\# }"
 
-	# If it's a keymap of keyboard shortcuts, this is no command line `prompt`
+	# If it's a zsh keymap, print `prompt`; otherwise, if it's non-zsh keymap, do not
 	local prompt=$KEYMAP_PROMPT
 	keymap_invokes_functions "$namespace" || prompt=' '
+
+	# If command is a non-zsh keymap that contains `\` escape char, do not print it
+	# TODO add test
+	command=${command/-\\/-}
 
 	# Print with color
 	if [[ -n $command || -n $comment ]]; then
