@@ -23,7 +23,7 @@ MAIN_KEYMAP+=(
 	"${MAIN_DOT}g # Show Gmail default shortcuts"
 	"${MAIN_DOT}m # Show TextMate default shortcuts"
 	"${MAIN_DOT}n # Show Notion default shortcuts"
-	"${MAIN_DOT}o # Show OS X default shortcuts"
+	"${MAIN_DOT}o # Show macOS default shortcuts"
 	"${MAIN_DOT}s # Show Slack default shortcuts"
 	"${MAIN_DOT}t # Show Terminal default shortcuts"
 	''
