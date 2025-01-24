@@ -509,7 +509,7 @@ function test__args_keymap_r__when_redoing_beyond_new_head {
 }; run_with_filter test__args_keymap_r__when_redoing_beyond_new_head
 
 function test__args_keymap_s {
-	# Can test `<command> | args_keymap_s`, but not `<command>; as`
+	# Can test `[command] | args_keymap_s`, but not `[command]; as`
 	# The latter requires an interactive shell
 	assert "$(
 		echo "$test__input_with_headers" | args_keymap_s
@@ -526,7 +526,7 @@ function test__args_keymap_s {
 }; run_with_filter test__args_keymap_s
 
 function test__args_keymap_s__with_filters {
-	# Can test `<command> | args_keymap_s`, but not `<command>; as`
+	# Can test `[command] | args_keymap_s`, but not `[command]; as`
 	# The latter requires an interactive shell
 	assert "$(
 		echo "$test__input_with_headers" | args_keymap_s -1 shared
@@ -539,7 +539,7 @@ function test__args_keymap_s__with_filters {
 }; run_with_filter test__args_keymap_s__with_filters
 
 function test__args_keymap_s__with_whitespace {
-	# Can test `<command> | args_keymap_s`, but not `<command>; as`
+	# Can test `[command] | args_keymap_s`, but not `[command]; as`
 	# The latter requires an interactive shell
 	assert "$(
 		echo "$test__input_with_whitespace" | args_keymap_s

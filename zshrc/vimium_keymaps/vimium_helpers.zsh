@@ -15,6 +15,11 @@ function vimium_keymap_extract {
 		# e.g `map a LinkHints.activateMode` -> `a # LinkHints.activateMode`
 		if [[ $line == map* ]]; then
 			fields=("${=line}")
+
+			# Replace `<>` with `[]` for consistency with all other keymap entries
+			fields[2]=${fields[2]/</[}
+			fields[2]=${fields[2]/>/]}
+
 			extracted+="\t'${fields[2]} # ${fields[3]}'\n"
 
 		# Preserve empty lines as keymap section separators

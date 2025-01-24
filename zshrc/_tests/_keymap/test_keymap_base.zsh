@@ -8,7 +8,7 @@ TEST_KEYMAP=(
 	''
 	"${TEST_DOT}b # Second"
 	"${TEST_DOT}c # Third without args"
-	"${TEST_DOT}c <arg 1> <arg 2> # Third with args"
+	"${TEST_DOT}c [arg 1] [arg 2] # Third with args"
 	"${TEST_DOT}d"
 )
 
@@ -113,18 +113,18 @@ function test__keymap_invoke {
 			      {a}  o   e   u   i   |  <d>  h   t   n   s   -
 			       ;   q   j   k   x   |  <b>  m   w   v   z
 
-			   \`<>\` key initials have singular mappings
+			   \`<>\` key initials have one mapping
 			   \`{}\` key initials have multiple mappings
 
 			Usage
 
 			  $ test__                         # Show this help
 
-			  $ test__.<key>                   # Invoke <key> mapping
-			  $ test__.<key> <arg>             # Invoke <key> mapping with <arg>
+			  $ test__.[key]                   # Invoke [key] mapping
+			  $ test__.[key] [arg]             # Invoke [key] mapping with [arg]
 
 			  $ test__.-                       # List key mappings in this namespace
-			  $ test__.- <match>* <-mismatch>* # Filter key mappings in this namespace
+			  $ test__.- [match]* [-mismatch]* # Filter key mappings in this namespace
 
 			          ^                        # \`.\` represents an optional space character
 			                                   # E.g To invoke \`a.b\`, use either \`ab\` or \`a b\`
@@ -136,7 +136,7 @@ function test__keymap_invoke {
 
 			  $ test__.b                       # Second
 			  $ test__.c                       # Third without args
-			  $ test__.c <arg 1> <arg 2>       # Third with args
+			  $ test__.c [arg 1] [arg 2]       # Third with args
 			  $ test__.d
 		eof
 	)"
@@ -150,7 +150,7 @@ function test__keymap_invoke__when_invoking_- {
 		     2	$ test__.aa                # First related
 		     3	$ test__.b                 # Second
 		     4	$ test__.c                 # Third without args
-		     5	$ test__.c <arg 1> <arg 2> # Third with args
+		     5	$ test__.c [arg 1] [arg 2] # Third with args
 		     6	$ test__.d
 		eof
 	)"

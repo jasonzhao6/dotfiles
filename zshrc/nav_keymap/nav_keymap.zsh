@@ -3,7 +3,7 @@ NAV_ALIAS='n'
 NAV_DOT="${NAV_ALIAS}${KEYMAP_DOT}"
 
 NAV_KEYMAP=(
-	"${NAV_ALIAS} <directory> # Go to directory"
+	"${NAV_ALIAS} [directory] # Go to directory"
 	"${NAV_DOT}t # Go to directory in pasteboard"
 	"${NAV_DOT}h # Go to github"
 	"${NAV_DOT}s # Go to scratch"
@@ -12,12 +12,12 @@ NAV_KEYMAP=(
 	"${NAV_DOT}nm # Go to Documents"
 	"${NAV_DOT}nt # Go to Desktop"
 	''
-	"${NAV_DOT}n <match>* <-mismatch>* # List directories & files"
-	"${NAV_DOT}o <match>* <-mismatch>* # List directories"
-	"${NAV_DOT}e <match>* <-mismatch>* # List files"
-	"${NAV_DOT}a <match>* <-mismatch>* # List hidden directories & files"
-	"${NAV_DOT}ao <match>* <-mismatch>* # List hidden directories"
-	"${NAV_DOT}ae <match>* <-mismatch>* # List hidden files"
+	"${NAV_DOT}n [match]* [-mismatch]* # List directories & files"
+	"${NAV_DOT}o [match]* [-mismatch]* # List directories"
+	"${NAV_DOT}e [match]* [-mismatch]* # List files"
+	"${NAV_DOT}a [match]* [-mismatch]* # List hidden directories & files"
+	"${NAV_DOT}ao [match]* [-mismatch]* # List hidden directories"
+	"${NAV_DOT}ae [match]* [-mismatch]* # List hidden files"
 	''
 	"${NAV_DOT}u # Go up one directory"
 	"${NAV_DOT}uu # Go up two directories"

@@ -13,11 +13,11 @@ KEYMAP_ESCAPE="\\\\" # Escape twice to avoid special chars like `\n`
 KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS} # Show this help"
 	''
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # Invoke <key> mapping"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <arg> # Invoke <key> mapping with <arg>"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}[key] # Invoke [key] mapping"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}[key] [arg] # Invoke [key] mapping with [arg]"
 	''
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}- # List key mappings in this namespace"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}- <match>* <-mismatch>* # Filter key mappings in this namespace"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}- [match]* [-mismatch]* # Filter key mappings in this namespace"
 )
 
 function keymap_init {
@@ -67,7 +67,7 @@ function keymap_invoke {
 
 # ```
 # hc       # Open tab to the latest commit
-# hc <sha> # Open tab to the specified commit  <--  Joint duplicate, likely intentional
+# hc [sha] # Open tab to the specified commit  <--  Joint duplicate, likely intentional
 #
 # ha       # Do something
 # hc       # Do something else                 <--  Disjoint duplicate, likely a mistake
@@ -286,7 +286,7 @@ function keymap_print_map {
 
 	# Print keymap legend
 	echo
-	gray_fg '   `<>` key initials have singular mappings'
+	gray_fg '   `<>` key initials have one mapping'
 	gray_fg '   `{}` key initials have multiple mappings'
 }
 
@@ -322,8 +322,8 @@ function keymap_print_entry {
 
 # Get the max command size in order to align comments across commands, e.g
 #   ```
-#   $ <key>       # comment 1
-#   $ <key> <arg> # comment 2
+#   $ [key]       # comment 1
+#   $ [key] [arg] # comment 2
 #   ```
 function keymap_get_max_command_size {
 	local entries=("$@")

@@ -3,7 +3,7 @@ TERRAFORM_ALIAS='t'
 TERRAFORM_DOT="${TERRAFORM_ALIAS}${KEYMAP_DOT}"
 
 TERRAFORM_KEYMAP=(
-	"${TERRAFORM_ALIAS} <terraform command>"
+	"${TERRAFORM_ALIAS} [terraform command]"
 	''
 	"${TERRAFORM_DOT}e # Find manifests"
 	''
@@ -12,8 +12,8 @@ TERRAFORM_KEYMAP=(
 	"${TERRAFORM_DOT}ir # Init & reconfigure"
 	"${TERRAFORM_DOT}im # Init & migrate state"
 	''
-	"${TERRAFORM_DOT}v (i,iu,ir,im)? # Validate"
-	"${TERRAFORM_DOT}p (i,iu,ir,im)? # Plan"
+	"${TERRAFORM_DOT}v [i,iu,ir,im]? # Validate"
+	"${TERRAFORM_DOT}p [i,iu,ir,im]? # Plan"
 	"${TERRAFORM_DOT}g # Plan -> gist"
 	"${TERRAFORM_DOT}z # Unlock"
 	"${TERRAFORM_DOT}a # Apply"
@@ -21,11 +21,11 @@ TERRAFORM_KEYMAP=(
 	"${TERRAFORM_DOT}o # Show output"
 	''
 	"${TERRAFORM_DOT}l # List states"
-	"${TERRAFORM_DOT}s <name> # Show state"
-	"${TERRAFORM_DOT}t <name> # Taint state"
-	"${TERRAFORM_DOT}u <name> # Untaint state"
-	"${TERRAFORM_DOT}m <before> <after> # Move state"
-	"${TERRAFORM_DOT}rm <name> # Remove state"
+	"${TERRAFORM_DOT}s [name] # Show state"
+	"${TERRAFORM_DOT}t [name] # Taint state"
+	"${TERRAFORM_DOT}u [name] # Untaint state"
+	"${TERRAFORM_DOT}m [before] [after] # Move state"
+	"${TERRAFORM_DOT}rm [name] # Remove state"
 	''
 	"${TERRAFORM_DOT}f # Format"
 	"${TERRAFORM_DOT}h # Scratch"

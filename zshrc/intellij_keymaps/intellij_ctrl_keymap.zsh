@@ -14,8 +14,8 @@ INTELLIJ_CTRL_KEYMAP=(
 	"ctrl-shift-$KEYMAP_ESCAPE # Copilot disable completions"
 	"ctrl-[ # Copilot show previous completions"
 	"ctrl-] # Copilot show next completions"
-	"ctrl-{enter} # Copilot apply next word"
-	"ctrl-shift-{enter} # Copilot apply next line" # TODO use {} b/c they are not on keymap
+	"ctrl-[enter] # Copilot apply next word"
+	"ctrl-shift-[enter] # Copilot apply next line"
 	''
 	"ctrl-c # Close tabs to the right"
 	"ctrl-shift-c # Close tabs to the left"
@@ -40,8 +40,8 @@ INTELLIJ_CTRL_KEYMAP=(
 	"ctrl-shift-n # Previous highlighted error"
 	"ctrl-s # Show context actions"
 	''
-	"ctrl-b # Toggle line breakpoint (Default: \`cmd-{f8}\`)"
-	"ctrl-shift-b # View breakpoints (Default: \`cmd-shift-{f8}\`)"
+	"ctrl-b # Toggle line breakpoint (Default: \`cmd-[f8]\`)"
+	"ctrl-shift-b # View breakpoints (Default: \`cmd-shift-[f8]\`)"
 )
 
 keymap_init $INTELLIJ_CTRL_NAMESPACE $INTELLIJ_CTRL_ALIAS "${INTELLIJ_CTRL_KEYMAP[@]}"

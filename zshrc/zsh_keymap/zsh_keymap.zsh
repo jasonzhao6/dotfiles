@@ -11,12 +11,12 @@ ZSH_KEYMAP=(
 	''
 	"${ZSH_DOT}w # Custom \`which\`"
 	"${ZSH_DOT}a # List aliases"
-	"${ZSH_DOT}a <match>* <-mismatch>* # Filter aliases"
+	"${ZSH_DOT}a [match]* [-mismatch]* # Filter aliases"
 	"${ZSH_DOT}f # List functions"
-	"${ZSH_DOT}f <match>* <-mismatch>* # Filter functions"
+	"${ZSH_DOT}f [match]* [-mismatch]* # Filter functions"
 	''
 	"${ZSH_DOT}h # List history"
-	"${ZSH_DOT}h <match>* <-mismatch>* # Filter history"
+	"${ZSH_DOT}h [match]* [-mismatch]* # Filter history"
 	"${ZSH_DOT}hc # Clear history"
 	"${ZSH_DOT}hm # Edit history file in TextMate"
 	''

@@ -4,38 +4,38 @@ ARGS_DOT="${ARGS_ALIAS}${KEYMAP_DOT}"
 
 ARGS_KEYMAP=(
 	"${ARGS_DOT}s # Save as args"
-	"${ARGS_DOT}s <match>* <-mismatch>* # Save as args & filter"
+	"${ARGS_DOT}s [match]* [-mismatch]* # Save as args & filter"
 	"${ARGS_DOT}so # Save as args & soft-select the 1st column"
-	"${ARGS_DOT}so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
+	"${ARGS_DOT}so [match]* [-mismatch]* # Save as args & soft-select the 1st column & filter"
 	''
-	'<1-100> <command> # Use an arg'
-	'0 <command> # Use the last arg'
-	"each <command> # Use each arg in series"
-	"all <command> # Use all args in parallel"
-	"map <command> # Map args, e.g \`${ARGS_ALIAS}m echo '\$((~~ * 10))'\`"
+	'[1-100] [command] # Use an arg'
+	'0 [command] # Use the last arg'
+	"each [command] # Use each arg in series"
+	"all [command] # Use all args in parallel"
+	"map [command] # Map args, e.g \`${ARGS_ALIAS}m echo '\$((~~ * 10))'\`"
 	''
-	"${ARGS_DOT}o <command> # Use a random arg"
-	"${ARGS_DOT}n <number> <command> # Use an arg by number"
-	"${ARGS_DOT}e <start> <finish> <command> # Use args within a sequence"
+	"${ARGS_DOT}o [command] # Use a random arg"
+	"${ARGS_DOT}n [number] [command] # Use an arg by number"
+	"${ARGS_DOT}e [start] [finish] [command] # Use args within a sequence"
 	''
 	"${ARGS_DOT}a # List args"
-	"${ARGS_DOT}a <match>* <-mismatch>* # Filter args (Shortcut: \`$ARGS_ALIAS\`)"
+	"${ARGS_DOT}a [match]* [-mismatch]* # Filter args (Shortcut: \`$ARGS_ALIAS\`)"
 	"${ARGS_DOT}d # Dedupe args"
 	"${ARGS_DOT}t # Tabulate columns"
 	"${ARGS_DOT}w # Delimit columns based on the top row"
-	"${ARGS_DOT}w <letter> # Select a column based on the top row"
+	"${ARGS_DOT}w [letter] # Select a column based on the top row"
 	"${ARGS_DOT}v # Delimit columns based on the bottom row"
-	"${ARGS_DOT}v <letter> # Select a column based on the bottom row"
+	"${ARGS_DOT}v [letter] # Select a column based on the bottom row"
 	"${ARGS_DOT}z # Select the last column based on the bottom row"
 	''
 	"${ARGS_DOT}u # Undo \"Filter args\" or \"Select a column\""
 	"${ARGS_DOT}r # Redo \"Filter args\" or \"Select a column\""
 	"${ARGS_DOT}h # List history entries"
-	"${ARGS_DOT}h <index> # Select an entry by index"
+	"${ARGS_DOT}h [index] # Select an entry by index"
 	"${ARGS_DOT}hc # Clear history entries"
 	''
 	"${ARGS_DOT}c # Copy args"
-	"${ARGS_DOT}c <number> # Copy an arg by number"
+	"${ARGS_DOT}c [number] # Copy an arg by number"
 	"${ARGS_DOT}y # Yank args"
 	"${ARGS_DOT}p # Put args (in a different tab)"
 )
@@ -171,8 +171,8 @@ function args_keymap_r {
 
 # shellcheck disable=SC2120
 function args_keymap_s {
-	# Users see the interface of this mapping as `s <match>* <-mismatch>*`
-	# Only `so` know this interface as `s <is_soft_select> <match>* <-mismatch>*`
+	# Users see the interface of this mapping as `s [match]* [-mismatch]*`
+	# Only `so` know this interface as `s [is_soft_select] [match]* [-mismatch]*`
 	local is_soft_select=$1
 	[[ $is_soft_select == "$ARGS_SOFT_SELECT" ]] && shift || is_soft_select=0
 

@@ -3,30 +3,30 @@ KUBECTL_ALIAS='k'
 KUBECTL_DOT="${KUBECTL_ALIAS}${KEYMAP_DOT}"
 
 KUBECTL_KEYMAP=(
-	"${KUBECTL_ALIAS} <kubectl command>"
+	"${KUBECTL_ALIAS} [kubectl command]"
 	''
 	"${KUBECTL_DOT}s # Save a copy of resource types"
 	"${KUBECTL_DOT}r # List resource types"
-	"${KUBECTL_DOT}r <match>* <-mismatch>* # Filter resource types"
-	"${KUBECTL_DOT}x <resource type> # Explain a resource type"
-	"${KUBECTL_DOT}h <yaml file> # Render Helm template locally"
+	"${KUBECTL_DOT}r [match]* [-mismatch]* # Filter resource types"
+	"${KUBECTL_DOT}x [resource type] # Explain a resource type"
+	"${KUBECTL_DOT}h [yaml file] # Render Helm template locally"
 	''
-	"${KUBECTL_DOT}n <name> # Set namespace"
+	"${KUBECTL_DOT}n [name] # Set namespace"
 	"${KUBECTL_DOT}nn # Set namespace (secrets: \`ke1, ke2, kw2\`)"
 	''
-	"${KUBECTL_DOT}e <command> # Exec a command"
-	"${KUBECTL_DOT}g <resource type> # Get resources"
-	"${KUBECTL_DOT}k <resource type> # Get resources as args"
-	"${KUBECTL_DOT}d <command> # Describe resource(s)"
+	"${KUBECTL_DOT}e [command] # Exec a command"
+	"${KUBECTL_DOT}g [resource type] # Get resources"
+	"${KUBECTL_DOT}k [resource type] # Get resources as args"
+	"${KUBECTL_DOT}d [command] # Describe resource(s)"
 	''
-	"${KUBECTL_DOT}b <pod> # Exec into bash"
-	"${KUBECTL_DOT}c <pod> # Exec a command"
-	"${KUBECTL_DOT}l <pod> # Show logs"
+	"${KUBECTL_DOT}b [pod] # Exec into bash"
+	"${KUBECTL_DOT}c [pod] # Exec a command"
+	"${KUBECTL_DOT}l [pod] # Show logs"
 	''
-	"${KUBECTL_DOT}j <command> # Get resource as json & save a copy"
-	"${KUBECTL_DOT}jj <command> # Get the copy of json"
-	"${KUBECTL_DOT}y <command> # Get resource as yaml & save a copy"
-	"${KUBECTL_DOT}yy <command> # Get the copy of yaml"
+	"${KUBECTL_DOT}j [command] # Get resource as json & save a copy"
+	"${KUBECTL_DOT}jj [command] # Get the copy of json"
+	"${KUBECTL_DOT}y [command] # Get resource as yaml & save a copy"
+	"${KUBECTL_DOT}yy [command] # Get the copy of yaml"
 )
 
 keymap_init $KUBECTL_NAMESPACE $KUBECTL_ALIAS "${KUBECTL_KEYMAP[@]}"
