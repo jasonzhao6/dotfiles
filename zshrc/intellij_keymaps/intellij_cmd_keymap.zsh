@@ -75,7 +75,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-shift-/ # Block comment"
 	"cmd-j # Join lines"
 	''
-	"cmd-b # Extend selection"
+	"cmd-b # Extend selection (TextMate's \`cmd-shift-b\`)""
 	"cmd-shift-b # Shrink selection"
 	"cmd-ctrl-b # Move caret to matching brace"
 	"cmd-l # Go to line"
@@ -88,10 +88,11 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-r # Run"
 	"cmd-shift-r # Debug"
 	"cmd-ctrl-r # Run with coverage"
-	"cmd-ctrl-shift-r # Stop"
+	"cmd-ctrl-shift-r # Attach to process"
 	"cmd-y # Git blame (TextMate)"
 	"cmd-shift-y # Resolve conflict"
 	"cmd-k # Find action"
+	"shift-shift # Find all"
 	''
 	"cmd-= # Increase font size in all editors (Convention)"
 	"cmd-- # Decrease font size in all editors (Convention)"

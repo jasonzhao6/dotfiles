@@ -39,6 +39,9 @@ INTELLIJ_CTRL_KEYMAP=(
 	"ctrl-n # Next highlighted error"
 	"ctrl-shift-n # Previous highlighted error"
 	"ctrl-s # Show context actions"
+	''
+	"ctrl-b # Toggle line breakpoint (Default: \`cmd-<f8>\`)"
+	"ctrl-shift-b # View breakpoints (Default: \`cmd-shift-<f8>\`)"
 )
 
 keymap_init $INTELLIJ_CTRL_NAMESPACE $INTELLIJ_CTRL_ALIAS "${INTELLIJ_CTRL_KEYMAP[@]}"
