@@ -54,8 +54,8 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-shift-z # Redo (Default)"
 	''
 	"cmd-f # Find (Default)"
-	"cmd-ctrl-f # Replace"
 	"cmd-shift-f # Find in files (TextMate)"
+	"cmd-ctrl-f # Replace"
 	"cmd-ctrl-shift-f # Replace in files"
 	"^alt-shift-[enter] # Replace all (\`alt-a\`)"
 	"cmd-e # Next occurrence of the word at caret (Convention)"
@@ -75,7 +75,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-shift-/ # Block comment"
 	"cmd-j # Join lines"
 	''
-	"cmd-b # Extend selection (TextMate's \`cmd-shift-b\`)""
+	"cmd-b # Extend selection (TextMate's \`cmd-shift-b\`)"
 	"cmd-shift-b # Shrink selection"
 	"cmd-ctrl-b # Move caret to matching brace"
 	"cmd-l # Go to line"
