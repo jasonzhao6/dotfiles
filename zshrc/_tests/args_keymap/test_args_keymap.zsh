@@ -195,6 +195,8 @@ function test__args_keymap_d {
 		cat <<-eof
 			Succeeded
 			Failed
+			Succeeded
+			Failed
 			Failed
 		eof
 	)
@@ -203,8 +205,8 @@ function test__args_keymap_d {
 		args_keymap_d
 	)" "$(
 		cat <<-eof
-	     1	Succeeded
-	     2	Failed
+	     1	Failed
+	     2	Succeeded
 		eof
 	)"
 }; run_with_filter test__args_keymap_d

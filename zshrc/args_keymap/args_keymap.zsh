@@ -20,7 +20,7 @@ ARGS_KEYMAP=(
 	''
 	"${ARGS_DOT}a # List args"
 	"${ARGS_DOT}a [match]* [-mismatch]* # Filter args (Shortcut: \`$ARGS_ALIAS\`)"
-	"${ARGS_DOT}d # Dedupe args"
+	"${ARGS_DOT}d # Sort and dedupe args"
 	"${ARGS_DOT}t # Tabulate columns"
 	"${ARGS_DOT}w # Delimit columns based on the top row"
 	"${ARGS_DOT}w [letter] # Select a column based on the top row"
@@ -103,7 +103,7 @@ function args_keymap_c {
 }
 
 function args_keymap_d {
-	args_history_current | uniq | args_keymap_s
+	args_history_current | sort --unique | args_keymap_s
 }
 function args_keymap_e {
 	local start=$1; shift
