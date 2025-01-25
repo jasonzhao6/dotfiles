@@ -224,6 +224,11 @@ function keymap_print_map {
 	# - If it's a key mapping to other keymaps, capture it separately
 	# - Otherwise, use the first character
 	for entry in "${keymap_entries[@]}"; do
+		# Reset; otherwise, an empty line will increment the previous initial
+		first_token=
+		key_initial=
+		escaped_initial=
+
 		if [[ $entry == *\#* ]]; then
 			first_token=${${(z)entry}[1]}
 		else
