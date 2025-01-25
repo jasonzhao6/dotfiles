@@ -7,7 +7,7 @@ function test__terraform_keymap {
 	)" '1'
 }; run_with_filter test__terraform_keymap
 
-function test__terraform_keymap_e {
+function test__terraform_keymap_w {
 	assert "$(
 		local home=$HOME
 		local pwd=$PWD
@@ -19,7 +19,7 @@ function test__terraform_keymap_e {
 		touch $HOME/project/module/.terraform/main.tf
 
 		cd $HOME || return
-		terraform_keymap_e
+		terraform_keymap_w
 
 		rm -rf $HOME
 		HOME=$home
@@ -30,4 +30,4 @@ function test__terraform_keymap_e {
 		     2	~/project/module
 		eof
 	)"
-}; run_with_filter test__terraform_keymap_e
+}; run_with_filter test__terraform_keymap_w

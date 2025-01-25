@@ -5,15 +5,15 @@ TERRAFORM_DOT="${TERRAFORM_ALIAS}${KEYMAP_DOT}"
 TERRAFORM_KEYMAP=(
 	"${TERRAFORM_ALIAS} [terraform command]"
 	''
-	"${TERRAFORM_DOT}e # Find manifests"
+	"${TERRAFORM_DOT}w # Find manifests"
 	''
 	"${TERRAFORM_DOT}i # Init"
 	"${TERRAFORM_DOT}iu # Init & upgrade"
 	"${TERRAFORM_DOT}ir # Init & reconfigure"
 	"${TERRAFORM_DOT}im # Init & migrate state"
 	''
-	"${TERRAFORM_DOT}v [i,iu,ir,im]? # Validate"
-	"${TERRAFORM_DOT}p [i,iu,ir,im]? # Plan"
+	"${TERRAFORM_DOT}v [e,i,iu,ir,im]? # Validate (secret: \`e\`)"
+	"${TERRAFORM_DOT}p [e,i,iu,ir,im]? # Plan"
 	"${TERRAFORM_DOT}g # Plan -> gist"
 	"${TERRAFORM_DOT}z # Unlock"
 	"${TERRAFORM_DOT}a # Apply"
@@ -72,14 +72,6 @@ function terraform_keymap_cc {
 
 function terraform_keymap_d {
 	terraform destroy
-}
-
-function terraform_keymap_e {
-	find ~+ -name main.tf |
-		grep --invert-match '\.terraform' |
-		sed "s|$HOME|~|g" |
-		trim 0 8 |
-		args_keymap_s
 }
 
 function terraform_keymap_f {
@@ -177,6 +169,14 @@ function terraform_keymap_v {
 	local option=$1
 
 	terraform_keymap_init "$option" && terraform validate
+}
+
+function terraform_keymap_w {
+	find ~+ -name main.tf |
+		grep --invert-match '\.terraform' |
+		sed "s|$HOME|~|g" |
+		trim 0 8 |
+		args_keymap_s
 }
 
 function terraform_keymap_z {
