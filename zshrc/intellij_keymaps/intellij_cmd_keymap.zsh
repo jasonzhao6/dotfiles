@@ -54,7 +54,12 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-shift-z # Redo (Default)"
 	''
 	"cmd-f # Find (Default)"
+	"^ctrl-alt-e # Search in selection"
 	"cmd-shift-f # Find in files (TextMate)"
+	"^ctrl-alt-x # Toggle regex"
+	"^ctrl-alt-c # Toggle ignore case"
+	"^ctrl-alt-b # Toggle word boundary"
+	"^ctrl-alt-f # Toggle comment/string filters"
 	"cmd-ctrl-f # Replace"
 	"cmd-ctrl-shift-f # Replace in files"
 	"^alt-shift-[enter] # Replace all (\`alt-a\`)"
@@ -63,7 +68,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-g # Find next (Default)"
 	"cmd-shift-g # Find previous (Default)"
 	''
-	"cmd-d # Duplicate entire lines"
+	"cmd-d # Duplicate line or selection"
 	"ctrl-d # Delete line (From \`intellij_ctrl_keymap\`)"
 	"cmd-ctrl-[up] # Move line up (TextMate)"
 	"cmd-ctrl-[down] # Move line down (TextMate)"

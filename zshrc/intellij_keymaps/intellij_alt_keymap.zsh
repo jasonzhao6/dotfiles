@@ -8,6 +8,7 @@ INTELLIJ_ALT_ALIAS='ia'
 # Not that `alt-e/u/i` do not work for some reason
 INTELLIJ_ALT_KEYMAP=(
 	"alt-a # Sort lines (TextMate: \`[f5]\`)"
+	"alt-shift-a # Reverse lines"
 	''
 	"alt-o # Open on GitHub"
 	"alt-shift-o # Overwrite remote"
