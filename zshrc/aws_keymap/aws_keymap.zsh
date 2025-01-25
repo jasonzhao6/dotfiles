@@ -6,10 +6,12 @@ AWS_KEYMAP=(
 	"${AWS_DOT}o # List Opal groups"
 	"${AWS_DOT}o [match] # Filter Opal groups"
 	''
-	"${AWS_DOT}0 # MQ logout"
 	"${AWS_DOT}1 # MQ login to 01"
 	"${AWS_DOT}2 # MQ login to 02"
 	"${AWS_DOT}, # MQ restore"
+	"${AWS_DOT}0 # MQ logout"
+	"${AWS_DOT}11 # MQ logout, then login to 01"
+	"${AWS_DOT}22 # MQ logout, then login to 02"
 	''
 	"${AWS_DOT}e1 # Use us-east-1 region"
 	"${AWS_DOT}e2 # Use us-east-2 region"
@@ -66,7 +68,17 @@ function aws_keymap_1 {
 	mq2 --mq01
 }
 
+function aws_keymap_11 {
+	mq2 --logout
+	mq2 --mq01
+}
+
 function aws_keymap_2 {
+	mq2 --mq02
+}
+
+function aws_keymap_22 {
+	mq2 --logout
 	mq2 --mq02
 }
 
