@@ -20,7 +20,7 @@ function main_keymap_find_keymaps_by_type {
 	done
 }
 
-function main_keymap_print_default_shortcuts {
+function main_keymap_print_keyboard_shortcuts {
 	local keymap_name=$1; shift
 	local keymap_entries=("$@")
 
@@ -28,7 +28,7 @@ function main_keymap_print_default_shortcuts {
 	max_command_size=$(keymap_get_max_command_size "${keymap_entries[@]}")
 
 	echo
-	echo "$keymap_name" shortcuts
+	echo "$keymap_name"
 	echo
 
 	for entry in "${keymap_entries[@]}"; do
