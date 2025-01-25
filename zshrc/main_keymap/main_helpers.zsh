@@ -24,6 +24,7 @@ function main_keymap_print_keyboard_shortcuts {
 	local keymap_name=$1; shift
 	local keymap_entries=("$@")
 
+	local is_zsh_keymap=0
 	local max_command_size
 	max_command_size=$(keymap_get_max_command_size "${keymap_entries[@]}")
 
@@ -32,6 +33,6 @@ function main_keymap_print_keyboard_shortcuts {
 	echo
 
 	for entry in "${keymap_entries[@]}"; do
-		keymap_print_entry "$keymap_name" "$entry" "$max_command_size"
+		keymap_print_entry "$keymap_name" "$entry" "$is_zsh_keymap" "$max_command_size"
 	done
 }

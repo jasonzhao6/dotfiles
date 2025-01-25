@@ -167,6 +167,47 @@ function test__keymap_invoke__when_invoking_- {
 	)"
 }; run_with_filter test__keymap_invoke__when_invoking_-
 
+function test__keymap_invoke__when_invoking_-_with_filters {
+	assert "$(test_keymap - -a -c)" "$(
+		cat <<-eof
+
+		     1	$ test__.d
+		     2	$ [1-9]                    # #1-9
+		eof
+	)"
+}; run_with_filter test__keymap_invoke__when_invoking_-_with_filters
+
+function test__keymap_invoke__when_invoking_-_on_a_non_zsh_keymap {
+	assert "$(mg-)" "$(
+		cat <<-eof
+
+	     1	{enter} # Open conversation
+	     2	e       # Archive
+	     3	R       # Reply
+	     4	A       # Reply all
+	     5	F       # Forward
+	     6	!       # Report as spam
+	     7	u       # Back to threadlist
+	     8	j       # Older conversation
+	     9	k       # Newer conversation
+	    10	x       # Select conversation
+	    11	I       # Mark as read
+	    12	U       # Mark as unread
+		eof
+	)"
+}; run_with_filter test__keymap_invoke__when_invoking_-_on_a_non_zsh_keymap
+
+function test__keymap_invoke__when_invoking_-_on_a_non_zsh_keymap_with_filters {
+	assert "$(mg- -sel conver | bw)" "$(
+		cat <<-eof
+
+	     1	{enter} # Open conversation
+	     2	j       # Older conversation
+	     3	k       # Newer conversation
+		eof
+	)"
+}; run_with_filter test__keymap_invoke__when_invoking_-_on_a_non_zsh_keymap_with_filters
+
 function test__keymap_invoke__when_invoking_b {
 	assert "$(test_keymap b)" 'Second'
 }; run_with_filter test__keymap_invoke__when_invoking_b

@@ -11,11 +11,12 @@ function keymap_filter_entries {
 	local filters=("$@")
 
 	local entries=("${(P)$(echo "$namespace" | upcase)[@]}")
+	local is_zsh_keymap; keymap_has_dot_alias "${entries[@]}" && is_zsh_keymap=1
 	local max_command_size; max_command_size=$(keymap_get_max_command_size "${entries[@]}")
 
 	local output; output=$(
 		for entry in "${entries[@]}"; do
-			keymap_print_entry '_zsh_keymaps_' "$entry" "$max_command_size"
+			keymap_print_entry '_zsh_keymaps_' "$entry" "$is_zsh_keymap" "$max_command_size"
 		done
 	)
 
@@ -26,10 +27,11 @@ function keymap_filter_entries {
 function keymap_print_entries {
 	local entries=("$@")
 
+	local is_zsh_keymap=1
 	local max_command_size; max_command_size=$(keymap_get_max_command_size "${entries[@]}")
 
 	echo
 	for entry in "${entries[@]}"; do
-		keymap_print_entry '_zsh_keymaps_' "$entry" "$max_command_size"
+		keymap_print_entry '_zsh_keymaps_' "$entry" "$is_zsh_keymap" "$max_command_size"
 	done
 }

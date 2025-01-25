@@ -31,7 +31,7 @@ function keymap_init {
 
 	keymap_has_disjoint_dups "$namespace" "${keymap_entries[@]}" && return
 
-	if keymap_invokes_functions "$namespace"; then
+	if keymap_has_dot_alias "${keymap_entries[@]}"; then
 		keymap_set_dot_aliases "$alias" "$namespace" "${keymap_entries[@]}"
 	fi
 }
@@ -154,6 +154,8 @@ function keymap_print_help {
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
+	local is_zsh_keymap; keymap_has_dot_alias "${keymap_entries[@]}" && is_zsh_keymap=1
+
 	echo
 	echo Name
 	echo
@@ -161,10 +163,10 @@ function keymap_print_help {
 	$KEYMAP_COLOR "  $namespace"
 	keymap_print_map "$namespace" "$alias" "${keymap_entries[@]}"
 
-	# If it's a keymap of keyboard shortcuts, skip printing command line usage
+	# If it's a non-zsh keymap, skip printing command line usage
 	local max_command_size
 	local keymap_usage=()
-	if ! keymap_invokes_functions "$namespace"; then
+	if [[ $is_zsh_keymap -ne 1 ]]; then
 		max_command_size=$(keymap_get_max_command_size "${keymap_entries[@]}")
 	else
 		# Interpolate `alias` into `KEYMAP_USAGE`
@@ -179,7 +181,7 @@ function keymap_print_help {
 		echo
 
 		for entry in "${keymap_usage[@]}"; do
-			keymap_print_entry "$namespace" "$entry" "$max_command_size"
+			keymap_print_entry "$namespace" "$entry" "$is_zsh_keymap" "$max_command_size"
 		done
 
 		keymap_annotate_the_dot "$alias" "$max_command_size"
@@ -190,7 +192,7 @@ function keymap_print_help {
 	echo
 
 	for entry in "${keymap_entries[@]}"; do
-		keymap_print_entry "$namespace" "$entry" "$max_command_size"
+		keymap_print_entry "$namespace" "$entry" "$is_zsh_keymap" "$max_command_size"
 	done
 }
 
@@ -297,7 +299,8 @@ function keymap_print_map {
 function keymap_print_entry {
 	local namespace=$1
 	local entry=$2
-	local command_size=$3
+	local is_zsh_keymap=$3
+	local command_size=$4
 
 	# If `entry` does not start `#`, extract `command`
 	local command; [[ $entry != \#* ]] && command="${entry%% \#*}"
@@ -305,9 +308,9 @@ function keymap_print_entry {
 	# If `entry` contains `#`, extract `comment`
 	local comment; [[ $entry == *\#* ]] && comment="# ${entry#*\# }"
 
-	# If it's a zsh keymap, print `prompt`; otherwise, if it's non-zsh keymap, do not
+	# If it's a zsh keymap, print `prompt`; otherwise, do not
 	local prompt=$KEYMAP_PROMPT
-	keymap_invokes_functions "$namespace" || prompt=' '
+	[[ $is_zsh_keymap -ne 1 ]] && prompt=' '
 
 	# If command is a non-zsh keymap that contains `\` escape char, do not print it
 	command=${command/-\\/-}
@@ -363,23 +366,15 @@ function keymap_annotate_the_dot {
 		"$(gray_fg "# E.g To invoke \`a${KEYMAP_DOT}b\`, use either \`ab\` or \`a b\`")"
 }
 
-function keymap_invokes_functions {
-	local namespace=$1
+function keymap_has_dot_alias {
+	local entries=("$@")
 
-	[[
-		$namespace == *_zsh_keymaps_* ||
-			$namespace == *args_keymap* ||
-			$namespace == *aws_keymap* ||
-			$namespace == *git_keymap* ||
-			$namespace == *github_keymap* ||
-			$namespace == *kubectl_keymap* ||
-			$namespace == *main_keymap* ||
-			$namespace == *nav_keymap* ||
-			$namespace == *other_keymap* ||
-			$namespace == *terraform_keymap* ||
-			$namespace == *zsh_keymap* ||
-			$namespace == *test_keymap*
-	]]
+	for entry in "${entries[@]}"; do
+		# shellcheck disable=SC2076
+		[[ $entry =~ ".+\\$KEYMAP_DOT.+ # .+" ]] && return 0
+	done
+
+	return 1
 }
 
 function keymap_is_key_mapped {
