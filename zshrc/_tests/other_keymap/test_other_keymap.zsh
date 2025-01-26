@@ -102,17 +102,6 @@ function test__other_keymap_e__with_math {
 	)"
 }; run_with_filter test__other_keymap_e__with_math
 
-function test__other_keymap_h {	assert "$(
-		other_keymap_h
-		pbpaste
-	)" "$(
-		cat <<-eof
-			bind '"\e[A": history-search-backward'
-			bind '"\e[B": history-search-forward'
-		eof
-	)"
-}; run_with_filter test__other_keymap_h
-
 function test__other_keymap_k {	assert "$(
 		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
 		rm -rf $OTHER_KEYMAP_K_DIR

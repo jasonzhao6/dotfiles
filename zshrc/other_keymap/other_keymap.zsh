@@ -24,7 +24,6 @@ OTHER_KEYMAP=(
 	''
 	"${OTHER_DOT}y # Alias for \`pbcopy\`"
 	"${OTHER_DOT}p # Alias for \`pbpaste\`"
-	"${OTHER_DOT}h # Copy history bindings (secret: \`ohh\`)"
 	''
 	"${OTHER_DOT}k # Clear the terminal"
 	"${OTHER_DOT}kk # Show archived terminal outputs"
@@ -128,13 +127,6 @@ function other_keymap_f {
 
 	# shellcheck disable=SC2086 # Empty quotes break Ruby's `gets` method
 	ruby ~/github/jasonzhao6/sql_formatter.rb/run.rb $sql
-}
-
-function other_keymap_h {
-	cat <<-eof | pbcopy
-		bind '"\e[A": history-search-backward'
-		bind '"\e[B": history-search-forward'
-	eof
 }
 
 function other_keymap_i {

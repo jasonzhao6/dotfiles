@@ -25,6 +25,7 @@ AWS_KEYMAP=(
 	"${AWS_DOT}s # SSM start session with \`sudo -i\`"
 	"${AWS_DOT}sc # SSM start session with command"
 	"${AWS_DOT}sm # SSM start session"
+	"${AWS_DOT}z # Copy history bindings"
 	''
 	"${AWS_DOT}m {name} # Secret Manager get the latest"
 	"${AWS_DOT}m {name} {version} # Secret Manager get by version"
@@ -228,4 +229,14 @@ function aws_keymap_t {
 
 function aws_keymap_w2 {
 	echo_eval 'export AWS_DEFAULT_REGION=us-west-2'
+}
+
+function aws_keymap_z {
+	cat <<-eof | pbcopy
+		bind '"\e[A": history-search-backward'
+		bind '"\e[B": history-search-forward'
+	eof
+
+	echo
+	echo 'History bindings copied to pasteboard'
 }
