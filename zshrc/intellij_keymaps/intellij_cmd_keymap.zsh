@@ -9,6 +9,7 @@
 INTELLIJ_CMD_NAMESPACE='intellij_cmd_keymap'
 INTELLIJ_CMD_ALIAS='i'
 
+# Note that `[' ` ;]` require escaping to make `${${(z)...}[1]}` happy
 INTELLIJ_CMD_KEYMAP=(
 	"cmd-n # Create new (Default)"
 	"cmd-shift-n # Show scratch files"
@@ -23,12 +24,12 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-ctrl-c # Copy path from repository root"
 	"cmd-. # Select file in project view (TextMate's \`cmd-ctrl-r\`)"
 	''
-	"cmd-\' # Project drawer (Toggle left panel)" # The extra `\` is to make `${${(z)...}[1]}` happy
+	"cmd-\' # Project drawer (Toggle left panel)"
 	"^cmd-1 # Project files"
 	"^cmd-- # Collapse all"
 	"^cmd-+ # Expand all"
-	"cmd-\; # Find (Toggle bottom panel)" # The extra `\` is to make `${${(z)...}[1]}` happy
-	"cmd-shift-\; # Terminal (Default)" # The extra `\` is to make `${${(z)...}[1]}` happy
+	"cmd-\; # Find (Toggle bottom panel)"
+	"cmd-shift-\; # Terminal (Default)"
 	"shift-[esc] # hide all tool windows (default)"
 	''
 	"cmd-[1-8] # select tabs #1-8 (convention)"
@@ -41,7 +42,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-alt-5 # Expand all to level 4"
 	"cmd-alt-6 # Expand all to level 5"
 	"cmd-alt-0 # Expand all"
-	"cmd-alt-\` # Expand all (For Mac keyboard)" # The extra `\` is to make `${${(z)...}[1]}` happy
+	"cmd-alt-\` # Expand all (For Mac keyboard)"
 	"cmd-alt-/ # Expand all (For Kinesis keyboard)"
 	''
 	"cmd-a # Select all (Default)"

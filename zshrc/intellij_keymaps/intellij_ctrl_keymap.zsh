@@ -22,9 +22,11 @@ INTELLIJ_CTRL_KEYMAP=(
 	"ctrl-r # Rename variable in file / file in project"
 	"ctrl-shift-r # Rename file"
 	''
+	"ctrl-d # Delete line (Also in \`intellij_cmd_keymap\`)"
 	"ctrl-f # Reformat file"
 	"ctrl-g # Toggle case"
-	"ctrl-d # Delete line (Also in \`intellij_cmd_keymap\`)"
+	"ctrl-b # To tabs"
+	"ctrl-shift-b # To spaces"
 	''
 	"ctrl-w # Add selection for next occurrence (TextMate)"
 	"ctrl-shift-w # Unselect occurrence"
@@ -39,9 +41,6 @@ INTELLIJ_CTRL_KEYMAP=(
 	"ctrl-n # Next highlighted error"
 	"ctrl-shift-n # Previous highlighted error"
 	"ctrl-s # Show context actions"
-	''
-	"ctrl-b # Toggle line breakpoint (Default: \`cmd-[f8]\`)"
-	"ctrl-shift-b # View breakpoints (Default: \`cmd-shift-[f8]\`)"
 )
 
 keymap_init $INTELLIJ_CTRL_NAMESPACE $INTELLIJ_CTRL_ALIAS "${INTELLIJ_CTRL_KEYMAP[@]}"
