@@ -1,4 +1,4 @@
-typeset -A RESERVED
+declare -A RESERVED
 
 function is_reserved {
 	local keyword=$1

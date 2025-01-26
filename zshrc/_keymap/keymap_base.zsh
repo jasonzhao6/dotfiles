@@ -79,7 +79,7 @@ function keymap_has_disjoint_dups {
 
 	local last_entry
 	local has_disjoint_dups
-	typeset -A seen
+	declare -A seen
 
 	for entry in "${entries[@]}"; do
 		alias_dot_key="${${(z)entry}[1]}"
@@ -130,7 +130,7 @@ function keymap_set_dot_aliases {
 
 	local first_token
 	local key
-	typeset -A seen
+	declare -A seen
 
 	for entry in "${keymap_entries[@]}"; do
 		first_token="${${(z)entry}[1]}"
@@ -215,8 +215,8 @@ function keymap_print_map {
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
-	typeset -A namespace_aliases
-	typeset -A keymap_initials
+	declare -A namespace_aliases
+	declare -A keymap_initials
 	local first_token
 	local key_initial
 	local escaped_initial
