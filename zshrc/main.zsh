@@ -22,9 +22,13 @@ source "$ZSHRC_DIR/_keymap/keymap_base.zsh"
 source "$ZSHRC_DIR/_keymap/keymap_utils.zsh"
 source "$ZSHRC_DIR/_keymap/is_reserved.zsh"
 
+# The "zsh keymaps" and "non-zsh keymaps" lists below could be generated
+# But having them listed explicitly makes debugging individual keymap easier
+
 # Load zsh keymaps (These mappings invoke zsh functions)
 source "$ZSHRC_DIR/args_keymap/args_keymap.zsh"
 source "$ZSHRC_DIR/aws_keymap/aws_keymap.zsh"
+source "$ZSHRC_DIR/docker_keymap/docker_keymap.zsh"
 source "$ZSHRC_DIR/git_keymap/git_keymap.zsh"
 source "$ZSHRC_DIR/github_keymap/github_keymap.zsh"
 source "$ZSHRC_DIR/kubectl_keymap/kubectl_keymap.zsh"

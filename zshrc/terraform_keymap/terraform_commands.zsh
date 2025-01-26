@@ -1,23 +1,22 @@
 # Extracted from `terraform -help`
 
 TERRAFORM_COMMANDS=(
-	-chdir=DIR
-	-help
-	-version
+	init
+	validate
+	plan
 	apply
-	console
 	destroy
+
+	console
 	fmt
 	force-unlock
 	get
 	graph
 	import
-	init
 	login
 	logout
 	metadata
 	output
-	plan
 	providers
 	refresh
 	show
@@ -25,7 +24,12 @@ TERRAFORM_COMMANDS=(
 	taint
 	test
 	untaint
-	validate
 	version
 	workspace
+
+	-chdir
+	-help
+	-version
+
+	--help
 )

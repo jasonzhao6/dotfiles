@@ -1,0 +1,89 @@
+# Extracted from `docker -help`
+
+DOCKER_COMMANDS=(
+	run
+	exec
+	ps
+	build
+	pull
+	push
+	images
+	login
+	logout
+	search
+	version
+	info
+
+	ai
+	builder
+	buildx
+	compose
+	container
+	context
+	debug
+	desktop
+	dev
+	extension
+	feedback
+	image
+	init
+	manifest
+	network
+	plugin
+	sbom
+	scout
+	system
+	trust
+	volume
+
+	swarm
+
+	attach
+	commit
+	cp
+	create
+	diff
+	events
+	export
+	history
+	import
+	inspect
+	kill
+	load
+	logs
+	pause
+	port
+	rename
+	restart
+	rm
+	rmi
+	save
+	start
+	stats
+	stop
+	tag
+	top
+	unpause
+	update
+	wait
+
+	--config
+	--context
+	--debug
+	--host
+	--log-level
+	--tls
+	--tlscacert
+	--tlscert
+	--tlskey
+	--tlsverify
+	--version
+
+	-c
+	-D
+	-H
+	-l
+	-v
+
+	--help
+)

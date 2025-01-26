@@ -1,46 +1,55 @@
 # Extracted from `kubectl --help`
 
 KUBECTL_COMMANDS=(
-	annotate
-	api
-	api
-	apply
-	attach
-	auth
-	autoscale
-	certificate
-	cluster
-	completion
-	config
-	cordon
-	cp
 	create
-	debug
-	delete
-	describe
-	diff
-	drain
-	edit
-	events
-	exec
-	explain
 	expose
-	get
-	kustomize
-	label
-	logs
-	patch
-	plugin
-	port
-	proxy
-	replace
-	rollout
 	run
-	scale
 	set
-	taint
+
+	explain
+	get
+	edit
+	delete
+
+	rollout
+	scale
+	autoscale
+
+	certificate
+	cluster-info
 	top
+	cordon
 	uncordon
-	version
+	drain
+	taint
+
+	describe
+	logs
+	attach
+	exec
+	port-forward
+	proxy
+	cp
+	auth
+	debug
+	events
+
+	diff
+	apply
+	patch
+	replace
 	wait
+	kustomize
+
+	label
+	annotate
+	completion
+
+	api-resources
+	api-versions
+	config
+	plugin
+	version
+
+	--help
 )
