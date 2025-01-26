@@ -12,7 +12,9 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}h {yaml file} # Render Helm template locally"
 	''
 	"${KUBECTL_DOT}n {name} # Set namespace"
-	"${KUBECTL_DOT}nn # Set namespace (secrets: \`ke1, ke2, kw2\`)"
+	"${KUBECTL_DOT}e1 # Set namespace and use us-east-1 region"
+	"${KUBECTL_DOT}e2 # Set namespace and use us-east-2 region"
+	"${KUBECTL_DOT}w2 # Set namespace and and us-west-2 region"
 	''
 	"${KUBECTL_DOT}e {command} # Exec a command"
 	"${KUBECTL_DOT}g {resource type} # Get resources"
@@ -27,6 +29,8 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}jj {command} # Get the copy of json"
 	"${KUBECTL_DOT}y {command} # Get resource as yaml & save a copy"
 	"${KUBECTL_DOT}yy {command} # Get the copy of yaml"
+	''
+	"${KUBECTL_DOT}z # Copy history bindings and \`kubectl\` helpers"
 )
 
 keymap_init $KUBECTL_NAMESPACE $KUBECTL_ALIAS "${KUBECTL_KEYMAP[@]}"
@@ -74,6 +78,16 @@ function kubectl_keymap_e {
 	kubectl exec "${command[@]}"
 }
 
+function kubectl_keymap_e1 {
+	# To be overwritten by `ZSHRC_SECRETS`
+	return
+}
+
+function kubectl_keymap_e2 {
+	# To be overwritten by `ZSHRC_SECRETS`
+	return
+}
+
 function kubectl_keymap_g {
 	local resource="$1"
 
@@ -116,10 +130,6 @@ function kubectl_keymap_n {
 	kubectl config set-context --current --namespace "$namespace"
 }
 
-function kubectl_keymap_nn {
-	kubectl config set-context --current --namespace transaction-engine
-}
-
 function kubectl_keymap_r {
 	local filters=("$@")
 
@@ -129,6 +139,11 @@ function kubectl_keymap_r {
 function kubectl_keymap_s {
 	# Save a copy for offline lookup
 	kubectl api-resources > ~/Documents/k8.api-resources.txt
+}
+
+function kubectl_keymap_w2 {
+	# To be overwritten by `ZSHRC_SECRETS`
+	return
 }
 
 function kubectl_keymap_x {
@@ -146,4 +161,9 @@ function kubectl_keymap_y {
 
 function kubectl_keymap_yy {
 	cat ~/Documents/k8.get.yaml
+}
+
+function kubectl_keymap_z {
+	# To be overwritten by `ZSHRC_SECRETS`
+	return
 }

@@ -11,9 +11,10 @@ TERRAFORM_KEYMAP=(
 	"${TERRAFORM_DOT}iu # Init & upgrade"
 	"${TERRAFORM_DOT}ir # Init & reconfigure"
 	"${TERRAFORM_DOT}im # Init & migrate state"
+	"${TERRAFORM_DOT}e # Load secret env vars"
 	''
-	"${TERRAFORM_DOT}v {e,i,iu,ir,im}? # Validate (secret: \`e\`)"
-	"${TERRAFORM_DOT}p {e,i,iu,ir,im}? # Plan"
+	"${TERRAFORM_DOT}v {i,iu,ir,im,e}? # Validate"
+	"${TERRAFORM_DOT}p {i,iu,ir,im,e}? # Plan"
 	"${TERRAFORM_DOT}g # Plan -> gist"
 	"${TERRAFORM_DOT}z # Unlock"
 	"${TERRAFORM_DOT}a # Apply"
@@ -42,7 +43,7 @@ source "$ZSHRC_DIR/$TERRAFORM_NAMESPACE/terraform_commands.zsh"
 function terraform_keymap {
 	# If the first arg is a `terraform` command, pass it through
 	for command in "${TERRAFORM_COMMANDS[@]}"; do
-		if [[ $command == $1 ]]; then
+		if [[ $command == "$1" ]]; then
 			terraform "$@"
 			return
 		fi
@@ -72,6 +73,11 @@ function terraform_keymap_cc {
 
 function terraform_keymap_d {
 	terraform destroy
+}
+
+function terraform_keymap_e {
+	# To be overwritten by `ZSHRC_SECRETS`
+	return
 }
 
 function terraform_keymap_f {
