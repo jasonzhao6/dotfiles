@@ -6,11 +6,11 @@ MAIN_KEYMAP=(
 	"${MAIN_DOT}a # List all keymaps"
 	''
 	"${MAIN_DOT}r # List zsh keymap entries"
-	"${MAIN_DOT}r [description] # Filter zsh keymap entries by description"
+	"${MAIN_DOT}r {description} # Filter zsh keymap entries by description"
 	''
 	"${MAIN_DOT}w # List zsh keymap entries"
-	"${MAIN_DOT}w [key] # Filter zsh keymap entries by key"
-	"${MAIN_DOT}w [alias] [key] # Filter zsh keymap entries by alias and key"
+	"${MAIN_DOT}w {key} # Filter zsh keymap entries by key"
+	"${MAIN_DOT}w {alias} {key} # Filter zsh keymap entries by alias and key"
 	''
 	"${MAIN_DOT}g # Show Gmail keyboard shortcuts"
 	"${MAIN_DOT}m # Show TextMate keyboard shortcuts"
@@ -111,7 +111,7 @@ function main_keymap_w {
 	if [[ -z $2 ]]; then
 		key=$1
 
-	# Handle `[alias] [key]` args
+	# Handle `{alias} {key}` args
 	else
 		alias=$1
 		key=$2

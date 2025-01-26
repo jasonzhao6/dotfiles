@@ -8,15 +8,15 @@ GITHUB_KEYMAP=(
 	''
 	"${GITHUB_DOT}s # Save a copy of repos"
 	"${GITHUB_DOT}r # List repos"
-	"${GITHUB_DOT}r [match]* [-mismatch]* # Filter repos"
+	"${GITHUB_DOT}r {match}* {-mismatch}* # Filter repos"
 	''
-	"${GITHUB_DOT}h [repo] # Navigate to the specified repo"
+	"${GITHUB_DOT}h {repo} # Navigate to the specified repo"
 	"${GITHUB_DOT}o # Open the current repo"
-	"${GITHUB_DOT}o [repo] # Open the specified repo (Shortcut: \`$GITHUB_ALIAS\`)"
+	"${GITHUB_DOT}o {repo} # Open the specified repo (Shortcut: \`$GITHUB_ALIAS\`)"
 	"${GITHUB_DOT}p # Open the latest PRs"
-	"${GITHUB_DOT}p [pr] # Open the specified PR"
+	"${GITHUB_DOT}p {pr} # Open the specified PR"
 	"${GITHUB_DOT}c # Open the latest commit"
-	"${GITHUB_DOT}c [sha] # Open the specified commit"
+	"${GITHUB_DOT}c {sha} # Open the specified commit"
 	''
 	"${GITHUB_DOT}d # Domain name"
 	"${GITHUB_DOT}oo # Org name"

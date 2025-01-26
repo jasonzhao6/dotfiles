@@ -3,12 +3,12 @@ GIT_ALIAS='g'
 GIT_DOT="${GIT_ALIAS}${KEYMAP_DOT}"
 
 GIT_KEYMAP=(
-	"${GIT_DOT}k [branch] # Checkout an existing branch (Shortcut: \`$GIT_ALIAS\`)"
-	"${GIT_DOT}n [branch] # Checkout a new branch"
+	"${GIT_DOT}k {branch} # Checkout an existing branch (Shortcut: \`$GIT_ALIAS\`)"
+	"${GIT_DOT}n {branch} # Checkout a new branch"
 	"${GIT_DOT}g # Checkout the latest \`main\`"
 	"${GIT_DOT}b # List branches"
 	"${GIT_DOT}bb # Delete merged branches"
-	"${GIT_DOT}bd [branch] # Delete the specified branch"
+	"${GIT_DOT}bd {branch} # Delete the specified branch"
 	''
 	"${GIT_DOT}d # Git diff"
 	"${GIT_DOT}t # Git status"
@@ -20,7 +20,7 @@ GIT_KEYMAP=(
 	"${GIT_DOT}i # Fix up a commit"
 	"${GIT_DOT}ii # List the last 20 commits"
 	''
-	"${GIT_DOT}x [number] # Rebase the last N commits"
+	"${GIT_DOT}x {number} # Rebase the last N commits"
 	"${GIT_DOT}x # Rebase with the latest main"
 	"${GIT_DOT}xm # Rebase with the latest master"
 	"${GIT_DOT}xu # Rebase with the latest upstream"
@@ -28,21 +28,21 @@ GIT_KEYMAP=(
 	"${GIT_DOT}xa # Rebase abort"
 	''
 	"${GIT_DOT}u # Undo the last commit"
-	"${GIT_DOT}u [number] # Undo the last N commits"
+	"${GIT_DOT}u {number} # Undo the last N commits"
 	"${GIT_DOT}z # Discard uncommitted changes"
-	"${GIT_DOT}z [number] # Discard uncommitted changes & the last N commits"
+	"${GIT_DOT}z {number} # Discard uncommitted changes & the last N commits"
 	''
 	"${GIT_DOT}s # Git stash"
-	"${GIT_DOT}s [message] # Git stash with message"
+	"${GIT_DOT}s {message} # Git stash with message"
 	"${GIT_DOT}a # Apply the last stash"
-	"${GIT_DOT}a [index] # Apply stash by index"
+	"${GIT_DOT}a {index} # Apply stash by index"
 	"${GIT_DOT}l # List the stash"
 	"${GIT_DOT}lc # Clear the stash"
 	''
 	"${GIT_DOT}r # List logs"
-	"${GIT_DOT}r [match]* # Filter logs"
+	"${GIT_DOT}r {match}* # Filter logs"
 	"${GIT_DOT}rr # List first parent logs"
-	"${GIT_DOT}rr [match]* # Filter first parent logs"
+	"${GIT_DOT}rr {match}* # Filter first parent logs"
 	''
 	"${GIT_DOT}P # Pull"
 	"${GIT_DOT}p # Push"

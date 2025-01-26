@@ -4,12 +4,12 @@ OTHER_DOT="${OTHER_ALIAS}${KEYMAP_DOT}"
 
 OTHER_KEYMAP=(
 	"${OTHER_DOT}o # Open the current directory in Finder"
-	"${OTHER_DOT}o [path] # Open the specified path in Finder (Shortcut: \`$OTHER_ALIAS\`)"
-	"${OTHER_DOT}o [urls] # Open urls from a string (Shortcut: \`$OTHER_ALIAS\`)"
+	"${OTHER_DOT}o {path} # Open the specified path in Finder (Shortcut: \`$OTHER_ALIAS\`)"
+	"${OTHER_DOT}o {urls} # Open urls from a string (Shortcut: \`$OTHER_ALIAS\`)"
 	"${OTHER_DOT}i # Open the current directory in IntelliJ IDEA"
-	"${OTHER_DOT}i [path] # Open the specified path in IntelliJ IDEA"
+	"${OTHER_DOT}i {path} # Open the specified path in IntelliJ IDEA"
 	"${OTHER_DOT}m # Open the current directory in TextMate"
-	"${OTHER_DOT}m [path] # Open the specified path in TextMate"
+	"${OTHER_DOT}m {path} # Open the specified path in TextMate"
 	''
 	"${OTHER_DOT}cc # Copy the last command"
 	"${OTHER_DOT}c # Copy the last output"
@@ -19,8 +19,8 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}o2 # Save pasteboard value to \`2.txt\`"
 	"${OTHER_DOT}, # Open \`1.txt\` and \`2.txt\` in TextMate"
 	"${OTHER_DOT}0 # Empty \`1.txt\` and \`2.txt\`"
-	"${OTHER_DOT}u [file 1] [file 2] # Unified diff"
-	"${OTHER_DOT}uu [file 1] [file 2] # Side-by-side diff"
+	"${OTHER_DOT}u {file 1} {file 2} # Unified diff"
+	"${OTHER_DOT}uu {file 1} {file 2} # Side-by-side diff"
 	''
 	"${OTHER_DOT}y # Alias for \`pbcopy\`"
 	"${OTHER_DOT}p # Alias for \`pbpaste\`"
@@ -34,14 +34,14 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}a # Stay awake"
 	"${OTHER_DOT}n # Stay on task"
 	''
-	"${OTHER_DOT}d [url] # DNS dig"
+	"${OTHER_DOT}d {url} # DNS dig"
 	"${OTHER_DOT}df # DNS flush"
-	"${OTHER_DOT}e [start] [finish] [~~] # Run a sequence of commands"
+	"${OTHER_DOT}e {start} {finish} {~~} # Run a sequence of commands"
 	"${OTHER_DOT}f # Format sql query from stdin"
-	"${OTHER_DOT}f '[sql]' # Format sql query from cli arg"
-	"${OTHER_DOT}j [url] [match] [num lines] # Curl a json endpoint"
-	"${OTHER_DOT}r [before] [after] # Rename files in the current directory"
-	"${OTHER_DOT}t [command] # Time command execution"
+	"${OTHER_DOT}f '{sql}' # Format sql query from cli arg"
+	"${OTHER_DOT}j {url} {match} {num lines} # Curl a json endpoint"
+	"${OTHER_DOT}r {before} {after} # Rename files in the current directory"
+	"${OTHER_DOT}t {command} # Time command execution"
 )
 
 keymap_init $OTHER_NAMESPACE $OTHER_ALIAS "${OTHER_KEYMAP[@]}"

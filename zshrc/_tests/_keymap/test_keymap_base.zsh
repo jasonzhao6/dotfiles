@@ -8,10 +8,10 @@ TEST_KEYMAP=(
 	''
 	"${TEST_DOT}b # Second"
 	"${TEST_DOT}c # Third without args"
-	"${TEST_DOT}c [arg 1] [arg 2] # Third with args"
+	"${TEST_DOT}c {arg 1} {arg 2} # Third with args"
 	"${TEST_DOT}d"
 	''
-	"[1-9] # #1-9"
+	"{1-9} # #1-9"
 	"cmd-\` # Backtick"
 	"cmd-$KEYMAP_ESCAPE # Escape escape"
 )
@@ -112,7 +112,7 @@ function test__keymap_invoke {
 
 			  test_keymap
 
-			   \`   1   2   3   4   5   |   6   7   8   9   0   [  <]>
+			   \`   1   2   3   4   5   |   6   7   8   9   0   [   ]
 			       '   ,   .   p   y   |   f   g  (c)  r   l   /   =  <\>
 			      (a)  o   e   u   i   |  <d>  h   t   n   s   -
 			       ;   q   j   k   x   |  <b>  m   w   v   z
@@ -124,11 +124,11 @@ function test__keymap_invoke {
 
 			  $ test__                         # Show this help
 
-			  $ test__.[key]                   # Invoke [key] mapping
-			  $ test__.[key] [arg]             # Invoke [key] mapping with [arg]
+			  $ test__.{key}                   # Invoke {key} mapping
+			  $ test__.{key} {arg}             # Invoke {key} mapping with {arg}
 
 			  $ test__.-                       # List key mappings in this namespace
-			  $ test__.- [match]* [-mismatch]* # Filter key mappings in this namespace
+			  $ test__.- {match}* {-mismatch}* # Filter key mappings in this namespace
 
 			          ^                        # \`.\` represents an optional space character
 			                                   # E.g To invoke \`a.b\`, use either \`ab\` or \`a b\`
@@ -140,10 +140,10 @@ function test__keymap_invoke {
 
 			  $ test__.b                       # Second
 			  $ test__.c                       # Third without args
-			  $ test__.c [arg 1] [arg 2]       # Third with args
+			  $ test__.c {arg 1} {arg 2}       # Third with args
 			  $ test__.d
 
-			  $ [1-9]                          # #1-9
+			  $ {1-9}                          # #1-9
 			  $ cmd-\`                          # Backtick
 			  $ cmd-\                          # Escape escape
 		eof
@@ -158,9 +158,9 @@ function test__keymap_invoke__when_invoking_- {
 		     2	$ test__.aa                # First related
 		     3	$ test__.b                 # Second
 		     4	$ test__.c                 # Third without args
-		     5	$ test__.c [arg 1] [arg 2] # Third with args
+		     5	$ test__.c {arg 1} {arg 2} # Third with args
 		     6	$ test__.d
-		     7	$ [1-9]                    # #1-9
+		     7	$ {1-9}                    # #1-9
 		     8	$ cmd-\`                    # Backtick
 		     9	$ cmd-\                    # Escape escape
 		eof
@@ -172,7 +172,7 @@ function test__keymap_invoke__when_invoking_-_with_filters {
 		cat <<-eof
 
 		     1	$ test__.d
-		     2	$ [1-9]                    # #1-9
+		     2	$ {1-9}                    # #1-9
 		eof
 	)"
 }; run_with_filter test__keymap_invoke__when_invoking_-_with_filters
