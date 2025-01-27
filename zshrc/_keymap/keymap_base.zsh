@@ -3,7 +3,7 @@
 #
 
 KEYMAP_COLOR='cyan_fg'
-KEYMAP_PROMPT=$($KEYMAP_COLOR '  $')
+KEYMAP_PROMPT=$($KEYMAP_COLOR '  $ ')
 KEYMAP_ALIAS='_PLACEHOLDER_'
 KEYMAP_DASH='-'
 KEYMAP_DOT='.'
@@ -157,17 +157,20 @@ function keymap_print_help {
 
 	local is_zsh_keymap; keymap_has_dot_alias "${keymap_entries[@]}" && is_zsh_keymap=1
 
-	# `ALL_NAMESPACE` is an exception that does not have dot aliases
+	# `ALL_NAMESPACE` is a special zsh keymap that does not have dot aliases
 	[[ $namespace == "$ALL_NAMESPACE" ]] && is_zsh_keymap=1
 
 	echo
 	echo Keymap
 	echo
 
-	$KEYMAP_COLOR "  $namespace"
+	# `ALL_NAMESPACE` is a special zsh keymap that does not have an executable name
+	[[ $namespace == "$ALL_NAMESPACE" ]] && echo -n '  ' || echo -n "$KEYMAP_PROMPT"
+
+	$KEYMAP_COLOR "$namespace"
 	keymap_print_map "$namespace" "${keymap_entries[@]}"
 
-	# If it's `ALL_NAMESPACE` or a non-zsh keymap, skip printing command line usage
+	# If it's `ALL_NAMESPACE` or a non-zsh keymap, no need to print command line usage
 	local max_command_size
 	local keymap_usage=()
 	if [[ $namespace == "$ALL_NAMESPACE" || $is_zsh_keymap -ne 1 ]]; then
@@ -312,14 +315,14 @@ function keymap_print_entry {
 
 	# If it's a zsh keymap, print `prompt`; otherwise, do not
 	local prompt=$KEYMAP_PROMPT
-	[[ $is_zsh_keymap -ne 1 ]] && prompt=' '
+	[[ $is_zsh_keymap -ne 1 ]] && prompt='  '
 
 	# If command is a non-zsh keymap that contains `\` escape char, do not print it
 	command=${command/-\\/-}
 
 	# Print with color
 	if [[ -n $command || -n $comment ]]; then
-		printf "%s %-*s %s\n" "$prompt" "$command_size" "$command" "$(gray_fg "$comment")"
+		printf "%s%-*s %s\n" "$prompt" "$command_size" "$command" "$(gray_fg "$comment")"
 
 	# Allow empty line as separators between different sections of a keymap
 	else
@@ -353,14 +356,14 @@ function keymap_annotate_the_dot {
 	local command_size=$2
 
 	echo
-	printf "%-*s %s%-*s %s\n" \
+	printf "%-*s%s%-*s %s\n" \
 		$(($(echo -n "$KEYMAP_PROMPT" | bw | wc -c) + ${#alias})) \
 		'' \
 		"$(gray_fg "$KEYMAP_DOT_POINTER")" \
 		"$((command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
 		'' \
 		"$(gray_fg "# \`$KEYMAP_DOT\` represents an optional space character")"
-	printf "%-*s %-*s %s\n" \
+	printf "%-*s%-*s %s\n" \
 		$(($(echo -n "$KEYMAP_PROMPT" | bw | wc -c) + ${#alias})) \
 		'' \
 		"$((command_size - ${#alias}))" \

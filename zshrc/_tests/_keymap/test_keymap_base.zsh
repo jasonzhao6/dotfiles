@@ -110,7 +110,7 @@ function test__keymap_invoke {
 
 			Keymap
 
-			  test_keymap
+			  $ test_keymap
 
 			  \`   1   2   3   4   5   |   6   7   8   9   0   [   ]
 			      '   ,   .   p   y   |   f   g  (c)  r   l   /   =  <\>
@@ -220,3 +220,7 @@ function test__keymap_invoke__when_invoking_non_existent_z {
 		eof
 	)"
 }; run_with_filter test__keymap_invoke__when_invoking_non_existent_z
+
+function test__keymap_invoke__when_invoking_keymap_of_keymaps {
+	assert "$(ma | grep "$ALL_NAMESPACE" | bw)" "  $ALL_NAMESPACE"
+}; run_with_filter test__keymap_invoke__when_invoking_keymap_of_keymaps

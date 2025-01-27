@@ -30,7 +30,7 @@ function main_keymap {
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
 
-ALL_NAMESPACE='All Keymaps'
+ALL_NAMESPACE='Keymap of keymaps'
 ALL_KEYMAP=()
 keymap_set_alias "${MAIN_ALIAS}a-" \
 	"main_keymap_a > /dev/null && keymap_filter_entries ALL_KEYMAP"
