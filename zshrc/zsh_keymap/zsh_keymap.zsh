@@ -9,7 +9,7 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}z # Source"
 	"${ZSH_DOT}t # Test"
 	''
-	"${ZSH_DOT}w # Custom \`which\`"
+	"${ZSH_DOT}w {alias/function} # Custom \`which\`"
 	"${ZSH_DOT}a # List aliases"
 	"${ZSH_DOT}a {match}* {-mismatch}* # Filter aliases"
 	"${ZSH_DOT}f # List functions"
@@ -114,11 +114,13 @@ function zsh_keymap_t {
 }
 
 function zsh_keymap_w {
-	local program=$1
+	local input=$1
+	[[ -z $input ]] && printf "\n(input required)\n" && return
 
-	local definition; definition=$(which "$program")
+	local definition; definition=$(which "$input")
+	[[ $definition == "$input not found" ]] && printf "\n(%s)\n" "$definition" && return
 
-	# If `program` in an alias, follow it
+	# If `input` in an alias, follow it
 	local is_alias=': aliased to ([a-zA-Z0-9_]+)$'
 	if [[ $definition =~ $is_alias ]]; then
 		echo
