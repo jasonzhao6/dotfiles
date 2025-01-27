@@ -6,6 +6,14 @@ function keymap_files {
 	find "$ZSHRC_DIR" -name '*_keymap.zsh' | grep --invert-match test | sort
 }
 
+function keymap_names {
+	grep '_KEYMAP=(' ./**/*.zsh |
+		bw |
+		grep --invert-match TEST_KEYMAP |
+		sed 's/^[^:]*://' |
+		sed 's/=($//'
+}
+
 # Used to perform per-keymap filtering, e.g `m.- {match}* {-mismatch}*`
 function keymap_filter_entries {
 	local namespace=$1; shift

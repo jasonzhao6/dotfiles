@@ -78,14 +78,7 @@ function main_keymap_o {
 function main_keymap_r {
 	local description=$*
 
-	# Find keymaps
-	local keymaps; keymaps=$(
-		grep '_KEYMAP=(' ./**/*.zsh |
-			bw |
-			grep --invert-match TEST_KEYMAP |
-			sed 's/^[^:]*://' |
-			sed 's/=($//'
-	)
+	local keymaps; keymaps=$(keymap_names)
 
 	# Declare vars used in `while` loop
 	local all_zsh_entries=()
