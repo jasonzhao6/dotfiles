@@ -127,11 +127,11 @@ function test__keymap_invoke {
 			  $ test__.{key}                   # Invoke {key} mapping
 			  $ test__.{key} {arg}             # Invoke {key} mapping with {arg}
 
-			  $ test__.-                       # List key mappings in this namespace
-			  $ test__.- {match}* {-mismatch}* # Filter key mappings in this namespace
+			  $ test__.-                       # List mappings in this namespace
+			  $ test__.- {match}* {-mismatch}* # Filter mappings in this namespace
 
-			          ^                        # \`.\` represents an optional space character
-			                                   # E.g To invoke \`a.b\`, use either \`ab\` or \`a b\`
+			          ^                        # The \`.\` is only for documentation
+			                                   # Omit it when invoking a mapping
 
 			Mappings
 

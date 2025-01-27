@@ -16,8 +16,8 @@ KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} # Invoke {key} mapping"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} {arg} # Invoke {key} mapping with {arg}"
 	''
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}- # List key mappings in this namespace"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}- {match}* {-mismatch}* # Filter key mappings in this namespace"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}- # List mappings in this namespace"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}- {match}* {-mismatch}* # Filter mappings in this namespace"
 )
 
 function keymap_init {
@@ -362,13 +362,13 @@ function keymap_annotate_the_dot {
 		"$(gray_fg "$KEYMAP_DOT_POINTER")" \
 		"$((command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
 		'' \
-		"$(gray_fg "# \`$KEYMAP_DOT\` represents an optional space character")"
+		"$(gray_fg "# The \`$KEYMAP_DOT\` is only for documentation")"
 	printf "%-*s%-*s %s\n" \
 		$(($(echo -n "$KEYMAP_PROMPT" | bw | wc -c) + ${#alias})) \
 		'' \
 		"$((command_size - ${#alias}))" \
 		'' \
-		"$(gray_fg "# E.g To invoke \`a${KEYMAP_DOT}b\`, use either \`ab\` or \`a b\`")"
+		"$(gray_fg "# Omit it when invoking a mapping")"
 }
 
 function keymap_has_dot_alias {
