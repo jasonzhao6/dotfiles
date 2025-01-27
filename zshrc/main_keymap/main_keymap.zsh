@@ -30,10 +30,10 @@ function main_keymap {
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
 
 MAIN_KEYMAP_ALL=()
-
+keymap_set_alias "${MAIN_ALIAS}a-" \
+	"main_keymap_a > /dev/null && keymap_filter_entries MAIN_KEYMAP_ALL"
 function main_keymap_a {
 	# Generate once
-	# TODO ma-
 	if [[ -z ${MAIN_KEYMAP_ALL[*]} ]]; then
 		# Find and append zsh keymaps (These mappings invoke zsh functions)
 		while IFS= read -r line; do
