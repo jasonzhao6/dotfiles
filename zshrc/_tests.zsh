@@ -1,10 +1,10 @@
 # When profiling, set to 1; otherwise, set to <empty>
 ZSHRC_TESTS_UNDER_PROFILING=
 
-# Profile `.zshrc` testing time: Start
+# Profile `.zshrc` testing time: Start here
 [[ -n $ZSHRC_TESTS_UNDER_PROFILING ]] && zmodload zsh/zprof
 
-# Track `.zshrc` testing time: Start
+# Track `.zshrc` testing time: Start here
 ZSHRC_TESTS_START_TIME=$(gdate +%s.%2N)
 
 #
@@ -25,7 +25,7 @@ ZSHRC_UNDER_TESTING=1 source ~/.zshrc
 source "$ZSHRC_DIR"/_tests/_test_harness.zsh
 
 #
-# Test sections: Start
+# Test sections: Start here
 #
 
 ZSHRC_TESTS_SECTION_NUMBER=1
@@ -60,11 +60,11 @@ if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_
 fi
 
 #
-# Test sections: Finish ^
+# Test sections: Finish here
 #
 
-# Track `.zshrc` testing time: Finish
+# Track `.zshrc` testing time: Finish here
 gray_fg "\n\`.zshrc\` tests ran in $(echo "$(gdate +%s.%2N) - $ZSHRC_TESTS_START_TIME" | bc) seconds"
 
-# Profile `.zshrc` testing time: Finish
+# Profile `.zshrc` testing time: Finish here
 [[ -n $ZSHRC_TESTS_UNDER_PROFILING ]] && echo && zprof
