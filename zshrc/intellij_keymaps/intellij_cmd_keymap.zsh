@@ -30,9 +30,9 @@ INTELLIJ_CMD_KEYMAP=(
 	"^cmd-+ # Expand all"
 	"cmd-\; # Find (Toggle bottom panel)"
 	"cmd-shift-\; # Terminal (Default)"
-	"shift-[esc] # hide all tool windows (default)"
+	"shift-[esc] # Hide all tool windows (default)"
 	''
-	"cmd-[1-8] # select tabs #1-8 (convention)"
+	"cmd-[1-8] # Select tabs #1-8 (convention)"
 	"cmd-9 # Select last tab (Convention)"
 	''
 	"cmd-alt-1 # Collapse all (TextMate)"
@@ -60,6 +60,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"^ctrl-alt-x # Toggle regex"
 	"^ctrl-alt-c # Toggle ignore case"
 	"^ctrl-alt-b # Toggle word boundary"
+	"^ctrl-alt-k # Toggle file mask"
 	"^ctrl-alt-f # Toggle comment/string filters"
 	"cmd-ctrl-f # Replace"
 	"cmd-ctrl-shift-f # Replace in files"

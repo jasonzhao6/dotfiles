@@ -36,7 +36,7 @@ MAIN_KEYMAP_ALL=()
 
 function main_keymap_a {
 	# Generate once
-	if [[ -z $MAIN_KEYMAP_ALL ]]; then
+	if [[ -z ${MAIN_KEYMAP_ALL[*]} ]]; then
 		# Find and append zsh keymaps (These mappings invoke zsh functions)
 		while IFS= read -r line; do
 			MAIN_KEYMAP_ALL+=("$line")
@@ -55,6 +55,7 @@ function main_keymap_a {
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.gmail.zsh"
 keymap_set_alias "${MAIN_ALIAS}g-" "keymap_filter_entries GMAIL_KEYMAP"
 function main_keymap_g {
+	# shellcheck disable=SC2153 # Assigned in `main_keymap.gmail.zsh`
 	main_keymap_print_keyboard_shortcuts 'Gmail' "${GMAIL_KEYMAP[@]}"
 }
 

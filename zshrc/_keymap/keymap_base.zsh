@@ -328,8 +328,8 @@ function keymap_print_entry {
 
 # Get the max command size in order to align comments across commands, e.g
 #   ```
-#   $ {key}       # comment 1
-#   $ {key} {arg} # comment 2
+#   $ {key}       # Comment 1
+#   $ {key} {arg} # Comment 2
 #   ```
 function keymap_get_max_command_size {
 	local entries=("$@")

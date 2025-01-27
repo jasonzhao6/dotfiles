@@ -1,4 +1,4 @@
-function 0 { args_keymap_n $ "$@"; } # last arg
+function 0 { args_keymap_n $ "$@"; } # Last arg
 function 1 { args_keymap_n "$0" "$@"; }
 function 2 { args_keymap_n "$0" "$@"; }
 function 3 { args_keymap_n "$0" "$@"; }

@@ -6,7 +6,7 @@ bindkey '^[[A' history-beginning-search-backward-end
 bindkey '^[[B' history-beginning-search-forward-end
 
 # Word separators (left / right)
-WORDCHARS=${WORDCHARS/\.} # exclude .
-WORDCHARS=${WORDCHARS/\/} # exclude /
-WORDCHARS=${WORDCHARS/\=} # exclude =
+WORDCHARS=${WORDCHARS/\.} # Exclude .
+WORDCHARS=${WORDCHARS/\/} # Exclude /
+WORDCHARS=${WORDCHARS/\=} # Exclude =
 WORDCHARS+='|'
