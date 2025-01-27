@@ -115,10 +115,10 @@ function zsh_keymap_t {
 
 function zsh_keymap_w {
 	local input=$1
-	[[ -z $input ]] && printf "\n(input required)\n" && return
+	[[ -z $input ]] && echo && red_bar 'input required' && return
 
 	local definition; definition=$(which "$input")
-	[[ $definition == "$input not found" ]] && printf "\n(%s)\n" "$definition" && return
+	[[ $definition == "$input not found" ]] && echo && red_bar "\`$input\` key not found" && return
 
 	# If `input` in an alias, follow it
 	local is_alias=': aliased to ([a-zA-Z0-9_]+)$'

@@ -138,7 +138,7 @@ function main_keymap_t {
 
 function main_keymap_w {
 	local key=$1
-	[[ -z $key ]] && printf "\n(input required)\n" && return
+	[[ -z $key ]] && echo && red_bar 'key required' && return
 
 	# Find zsh entries with matching `key`
 	local zsh_entries=()

@@ -58,7 +58,7 @@ function test__main_keymap_w {
 	assert "$(main_keymap_w)" "$(
 		cat <<-eof
 
-			(input required)
+			$(red_bar 'key required')
 		eof
 	)"
 }; run_with_filter test__main_keymap_w
