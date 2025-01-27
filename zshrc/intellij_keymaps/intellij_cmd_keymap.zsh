@@ -65,6 +65,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-ctrl-f # Replace"
 	"cmd-ctrl-shift-f # Replace in files"
 	"^alt-shift-[enter] # Replace all (\`alt-a\`)"
+	"^() \$1 # Replace with regex capture group"
 	"cmd-e # Next occurrence of the word at caret (Convention)"
 	"cmd-shift-e # Previous occurrence of the word at caret (Convention)"
 	"cmd-g # Find next (Default)"

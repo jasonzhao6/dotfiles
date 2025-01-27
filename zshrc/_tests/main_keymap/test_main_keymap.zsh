@@ -87,7 +87,7 @@ function test__main_keymap_w__when_specifying_a_special_char {
 		  $ d., # Login with AWS credentials
 		  $ o., # Open \`1.txt\` and \`2.txt\` in TextMate
 
-		  alt-, # Collapse (\`{f3}\`)
+		  alt-, # Collapse (\`{F3}\`)
 		  cmd-, # Preferences (Convention)
 		eof
 	)"

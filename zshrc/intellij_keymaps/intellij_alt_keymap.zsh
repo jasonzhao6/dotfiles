@@ -8,25 +8,25 @@ INTELLIJ_ALT_ALIAS='ia'
 # Note that `alt-e/u` do not work for some reason
 # Note that `[' ` ;]` require escaping to make `${${(z)...}[1]}` happy
 INTELLIJ_ALT_KEYMAP=(
-	"alt-a # Sort lines (TextMate: \`{f5}\`)"
+	"alt-a # Sort lines (TextMate: \`{F5}\`)"
 	"alt-shift-a # Reverse lines"
 	''
 	"alt-o # Open on GitHub"
 	"alt-shift-o # Overwrite remote"
 	''
-	"alt-\' # Collapse recursively (TextMate: \`{f1}\`)"
-	"alt-, # Collapse (\`{f3}\`)"
-	"alt-. # Expand (\`{f4}\`)"
-	"alt-p # Expand recursively (\`{f6}\`)"
+	"alt-\' # Collapse recursively (TextMate: \`{F1}\`)"
+	"alt-, # Collapse (\`{F3}\`)"
+	"alt-. # Expand (\`{F4}\`)"
+	"alt-p # Expand recursively (\`{F6}\`)"
 	''
-	"alt-{tab} # Toggle bookmark (\`cmd-{f2}\`)"
-	"alt-{tab} # View bookmarks (\`cmd-shift-{f2}\`)"
+	"alt-{tab} # Toggle bookmark (\`cmd-{F2}\`)"
+	"alt-{tab} # View bookmarks (\`cmd-shift-{F2}\`)"
 	"^cmd-a {del} # Delete bookmarks"
-	"alt-{esc} # Next line bookmark (TextMate: \`{f2}\`)"
-	"alt-{esc} # Previous line bookmark (\`shift-{f2}\`)"
+	"alt-{esc} # Next line bookmark (TextMate: \`{F2}\`)"
+	"alt-{esc} # Previous line bookmark (\`shift-{F2}\`)"
 	''
-	"alt-\; # Toggle line breakpoint (Default: \`cmd-{f8}\`)"
-	"alt-shift-\; # View breakpoints (Default: \`cmd-shift-{f8}\`)"
+	"alt-\; # Toggle line breakpoint (Default: \`cmd-{F8}\`)"
+	"alt-shift-\; # View breakpoints (Default: \`cmd-shift-{F8}\`)"
 	"alt-q # Step over"
 	"alt-j # Step into"
 	"alt-k # Step out"
