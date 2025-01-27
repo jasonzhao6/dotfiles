@@ -7,7 +7,7 @@ function main_keymap_find_keymaps_by_type {
 
 	keymap_files | while IFS= read -r file; do
 		# Zsh keymaps have a `_DOT` variable used by key mappings
-		is_zsh_keymap=$(pgrep --only-matching "[A-Z]+_DOT=\"" "$file")
+		is_zsh_keymap=$(egrep --only-matching "[A-Z]+_DOT=\"" "$file")
 
 		# Print only keymaps of the specified `type`
 		[[ -z $is_zsh_keymap && $type == 'zsh' ]] && continue
