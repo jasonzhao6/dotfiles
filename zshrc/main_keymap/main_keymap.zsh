@@ -89,7 +89,8 @@ function main_keymap_r {
 	)
 	# Note: ^ Spelling out `--ignore-case` here somehow breaks IntelliJ IDEA's syntax highlighting
 
-	keymap_print_entries "${entries[@]}"
+	local is_zsh_keymap=1
+	keymap_print_entries $is_zsh_keymap "${entries[@]}"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.slack.zsh"
@@ -131,5 +132,6 @@ function main_keymap_w {
 		pgrep "\"[$]{[A-Z]+_DOT}$key.* " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw
 	)
 
-	keymap_print_entries "${entries[@]}"
+	local is_zsh_keymap=1
+	keymap_print_entries $is_zsh_keymap "${entries[@]}"
 }
