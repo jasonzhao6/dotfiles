@@ -182,7 +182,7 @@ function keymap_print_help {
 		echo
 
 		for entry in "${keymap_usage[@]}"; do
-			keymap_print_entry "$namespace" "$entry" "$is_zsh_keymap" "$max_command_size"
+			keymap_print_entry "$entry" "$is_zsh_keymap" "$max_command_size"
 		done
 
 		keymap_annotate_the_dot "$alias" "$max_command_size"
@@ -193,7 +193,7 @@ function keymap_print_help {
 	echo
 
 	for entry in "${keymap_entries[@]}"; do
-		keymap_print_entry "$namespace" "$entry" "$is_zsh_keymap" "$max_command_size"
+		keymap_print_entry "$entry" "$is_zsh_keymap" "$max_command_size"
 	done
 }
 
@@ -298,10 +298,9 @@ function keymap_print_map {
 }
 
 function keymap_print_entry {
-	local namespace=$1
-	local entry=$2
-	local is_zsh_keymap=$3
-	local command_size=$4
+	local entry=$1
+	local is_zsh_keymap=$2
+	local command_size=$3
 
 	# If `entry` does not start `#`, extract `command`
 	local command; [[ $entry != \#* ]] && command="${entry%% \#*}"

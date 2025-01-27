@@ -33,6 +33,6 @@ function main_keymap_print_keyboard_shortcuts {
 	echo
 
 	for entry in "${keymap_entries[@]}"; do
-		keymap_print_entry "$keymap_name" "$entry" "$is_zsh_keymap" "$max_command_size"
+		keymap_print_entry "$entry" "$is_zsh_keymap" "$max_command_size"
 	done
 }
