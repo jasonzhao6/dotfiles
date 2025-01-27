@@ -9,12 +9,13 @@ MAIN_KEYMAP=(
 	"${MAIN_DOT}r {description} # Filter by description"
 	"${MAIN_DOT}w {key} # Filter by key"
 	''
-	"${MAIN_DOT}g # Show Gmail keyboard shortcuts"
-	"${MAIN_DOT}m # Show TextMate keyboard shortcuts"
-	"${MAIN_DOT}n # Show Notion keyboard shortcuts"
-	"${MAIN_DOT}o # Show macOS keyboard shortcuts"
-	"${MAIN_DOT}s # Show Slack keyboard shortcuts"
-	"${MAIN_DOT}t # Show Terminal keyboard shortcuts"
+	# These are default keyboard shortcuts as opposed to custom keymaps
+	"${MAIN_DOT}g # Show Gmail shortcuts"
+	"${MAIN_DOT}m # Show TextMate shortcuts"
+	"${MAIN_DOT}n # Show Notion shortcuts"
+	"${MAIN_DOT}o # Show macOS shortcuts"
+	"${MAIN_DOT}s # Show Slack shortcuts"
+	"${MAIN_DOT}t # Show Terminal shortcuts"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
