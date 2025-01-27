@@ -7,7 +7,7 @@ function keymap_files {
 }
 
 function keymap_names {
-	grep '_KEYMAP=(' ./**/*.zsh |
+	grep '_KEYMAP=(' "$ZSHRC_DIR"/**/*.zsh |
 		bw |
 		grep --invert-match TEST_KEYMAP |
 		sed 's/^[^:]*://' |
