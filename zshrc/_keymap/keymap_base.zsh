@@ -270,7 +270,7 @@ function keymap_print_map {
 	for i in {1..4}; do
 		# shellcheck disable=SC2034 # Use via `${(P)row_input}`
 		row_input=KEYMAP_PRINT_ROW_${i}
-		row_output+="\n "
+		row_output+="\n"
 
 		for char in ${(P)row_input}; do
 			escaped_initial="$KEYMAP_ESCAPE$char"
@@ -295,8 +295,8 @@ function keymap_print_map {
 
 	# Print keymap legend
 	echo
-	gray_fg '   `<>` key initials have one mapping'
-	gray_fg '   `()` key initials have multiple mappings'
+	gray_fg '  `<>` key initials have one mapping'
+	gray_fg '  `()` key initials have multiple mappings'
 }
 
 function keymap_print_entry {
