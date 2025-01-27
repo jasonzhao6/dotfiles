@@ -52,6 +52,5 @@ function magenta_bg { echo "\e[45m$*\e[0m"; }
 function cyan_bg { echo "\e[46m$*\e[0m"; }
 function white_bg { echo "\e[47m$*\e[0m"; }
 
-# Bars (Background color with 2-spaces padding on both sides)
+# Red error bar (Background color + padding on both sides)
 function red_bar { echo "\e[41m  $*  \e[0m"; }
-function green_bar { echo "\e[42m  $*  \e[0m"; }

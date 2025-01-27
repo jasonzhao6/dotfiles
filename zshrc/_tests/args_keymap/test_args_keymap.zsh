@@ -487,7 +487,7 @@ function test__args_keymap_r__when_redoing_beyond_head {
 		cat <<-eof
 		     1	3
 		     2	4
-		$(red_bar 'Reached the end of redo history')
+			$(red_bar 'Reached the end of redo history')
 		eof
 	)"
 }; run_with_filter test__args_keymap_r__when_redoing_beyond_head
@@ -505,7 +505,7 @@ function test__args_keymap_r__when_redoing_beyond_new_head {
 		cat <<-eof
 		     1	4
 		     2	5
-		$(red_bar 'Reached the end of redo history')
+			$(red_bar 'Reached the end of redo history')
 		eof
 	)"
 }; run_with_filter test__args_keymap_r__when_redoing_beyond_new_head
@@ -646,7 +646,7 @@ function test__args_keymap_u__when_undoing_d_with_headers {
 		     4	terraform-application-region-shared-3   sup
 		     5	terraform-application-region-program-A  how are you
 		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bar '      a                                       b      c   d       e   f    g')
+			$(green_bg '        a                                       b      c   d       e   f    g  ')
 		eof
 	)"
 }; run_with_filter test__args_keymap_u__when_undoing_d_with_headers
@@ -664,7 +664,7 @@ function test__args_keymap_u__when_undoing_t_with_headers {
 		     4	terraform-application-region-shared-3   sup
 		     5	terraform-application-region-program-A  how are you
 		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bar '      a                                       b    ')
+			$(green_bg '        a                                       b      ')
 		eof
 	)"
 }; run_with_filter test__args_keymap_u__when_undoing_t_with_headers
@@ -683,7 +683,7 @@ function test__args_keymap_u__when_undoing_t_then_requesting_n {
 		     4	terraform-application-region-shared-3   sup
 		     5	terraform-application-region-program-A  how are you
 		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bar '      a                                       b      c   d       e   f    g')
+			$(green_bg '        a                                       b      c   d       e   f    g  ')
 		eof
 	)"
 }; run_with_filter test__args_keymap_u__when_undoing_t_then_requesting_n
@@ -701,7 +701,7 @@ function test__args_keymap_u__when_undoing_t_with_headers_top_heavy {
 		     4	terraform-application-region-shared-3
 		     5	terraform-application-region-program-A
 		     6	terraform-application-region-program-B
-			$(green_bar '      a                                       b    ')
+			$(green_bg '        a                                       b      ')
 		eof
 	)"
 }; run_with_filter test__args_keymap_u__when_undoing_t_with_headers_top_heavy
@@ -751,7 +751,7 @@ function test__args_keymap_u__when_undoing_beyond_tail {
 		cat <<-eof
 		     1	1
 		     2	2
-		$(red_bar 'Reached the end of undo history')
+			$(red_bar 'Reached the end of undo history')
 		eof
 	)"
 }; run_with_filter test__args_keymap_u__when_undoing_beyond_tail
@@ -774,7 +774,7 @@ function test__args_keymap_u__when_pushing_beyond_head_then_undoing_beyond_tail 
 		cat <<-eof
 		     1	2
 		     2	3
-		$(red_bar 'Reached the end of undo history')
+			$(red_bar 'Reached the end of undo history')
 		eof
 	)"
 
@@ -824,7 +824,7 @@ function test__args_keymap_v {
 		     1	10.0.0.1	# 2023-06-21T20:25:00+00:00	webhook-asg
 		     2	10.0.0.2	# 2023-06-21T20:25:00+00:00	webhook-asg
 		     3	10.0.0.3	# 2023-06-21T20:24:59+00:00	webhook-asg
-			$(green_bar '      a               b c                             d        ')
+			$(green_bg '        a               b c                             d          ')
 		eof
 	)"
 }; run_with_filter test__args_keymap_v
@@ -890,7 +890,7 @@ function test__args_keymap_v__when_selecting_out_of_bound {
 		     1	10.0.0.1        # 2023-06-21T20:25:00+00:00     webhook-asg
 		     2	10.0.0.2        # 2023-06-21T20:25:00+00:00     webhook-asg
 		     3	10.0.0.3        # 2023-06-21T20:24:59+00:00     webhook-asg
-			$(green_bar '      a               b c                             d        ')
+			$(green_bg '        a               b c                             d          ')
 		eof
 	)"
 }; run_with_filter test__args_keymap_v__when_selecting_out_of_bound
@@ -959,7 +959,7 @@ function test__args_keymap_v__with_headers {
 		     4	terraform-application-region-shared-3   sup
 		     5	terraform-application-region-program-A  how are you
 		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bar '      a                                       b      c   d       e   f    g')
+			$(green_bg '        a                                       b      c   d       e   f    g  ')
 		eof
 	)"
 }; run_with_filter test__args_keymap_v__with_headers
@@ -976,7 +976,7 @@ function test__args_keymap_w {
 		     4	terraform-application-region-shared-3   sup
 		     5	terraform-application-region-program-A  how are you
 		     6	terraform-application-region-program-B  select via headers for this one
-			$(green_bar '      a                                       b    ')
+			$(green_bg '        a                                       b      ')
 		eof
 	)"
 }; run_with_filter test__args_keymap_w
