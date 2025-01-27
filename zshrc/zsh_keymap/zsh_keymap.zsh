@@ -60,7 +60,7 @@ function zsh_keymap_f {
 	local filters=("$@")
 
 	# Identify functions by the ` () {` suffix, then trim it
-	typeset -f | grep ' () {$' | trim 0 5 | args_keymap_s "${filters[@]}"
+	typeset -f | egrep '^\S+ \() {$' | trim 0 5 | args_keymap_s "${filters[@]}"
 }
 
 function zsh_keymap_h {

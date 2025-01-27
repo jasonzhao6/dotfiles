@@ -27,7 +27,7 @@ function test__zsh_keymap_a__when_counting_greps {
 
 function test__zsh_keymap_f {
 	assert "$(
-		[[ $(zsh_keymap_f | wc -l) -gt 10 ]] && echo 1
+		[[ $(zsh_keymap_f | wc -l) -gt 500 ]] && echo 1
 	)" '1'
 }; run_with_filter test__zsh_keymap_f
 
