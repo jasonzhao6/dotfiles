@@ -8,24 +8,51 @@ function test__main_keymap {
 }; run_with_filter test__main_keymap
 
 function test__main_keymap_r {
-	assert "$([[ $(main_keymap_r | wc -l) -gt 200 ]] && echo 1)" '1'
+	assert "$([[ $(main_keymap_r | wc -l) -gt 500 ]] && echo 1)" '1'
 }; run_with_filter test__main_keymap_r
-
-function test__main_keymap_r__when_not_specifying_any_arg {
-	assert "$( diff <(main_keymap_r) <(main_keymap_w) && echo 1)" '1'
-}; run_with_filter test__main_keymap_r__when_not_specifying_any_arg
 
 function test__main_keymap_r__when_specifying_a_description {
 	assert "$(
-		main_keymap_r list zsh | bw
+		main_keymap_r github | bw
 	)" "$(
 		cat <<-eof
 
-		  $ m.r # List zsh keymap entries
-		  $ m.w # List zsh keymap entries
+			  $ n.h # Go to github
+
+			  intellij_alt: alt-o # Open on GitHub
+			  vimium_search: h    # Github Search
+			  vimium_search: hh   # Github Search (TENGF)
+			  vimium_search: hr   # Github Repos
 		eof
 	)"
 }; run_with_filter test__main_keymap_r__when_specifying_a_description
+
+function test__main_keymap_r__when_specifying_a_zsh_only_description {
+	assert "$(
+		main_keymap_r seq | bw
+	)" "$(
+		cat <<-eof
+
+			  $ a.e {start} {finish} {command} # Use args within a sequence
+			  $ o.e {start} {finish} {~~}      # Run a sequence of commands
+		eof
+	)"
+}; run_with_filter test__main_keymap_r__when_specifying_a_zsh_only_description
+
+function test__main_keymap_r__when_specifying_a_non_zsh_only_description {
+	assert "$(
+		main_keymap_r goog | bw
+	)" "$(
+		cat <<-eof
+
+			  vimium_search: gc # Google Calendar
+			  vimium_search: gd # Google Drive
+			  vimium_search: gg # Google Gmail
+			  vimium_search: gi # Google Images
+			  vimium_search: gm # Google Maps
+		eof
+	)"
+}; run_with_filter test__main_keymap_r__when_specifying_a_non_zsh_only_description
 
 function test__main_keymap_w {
 	assert "$([[ $(main_keymap_w | wc -l) -gt 200 ]] && echo 1)" '1'
