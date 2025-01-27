@@ -157,17 +157,20 @@ function keymap_print_help {
 
 	local is_zsh_keymap; keymap_has_dot_alias "${keymap_entries[@]}" && is_zsh_keymap=1
 
+	# `ALL_NAMESPACE` is an exception that does not have dot aliases
+	[[ $namespace == "$ALL_NAMESPACE" ]] && is_zsh_keymap=1
+
 	echo
-	echo Name
+	echo Keymap
 	echo
 
 	$KEYMAP_COLOR "  $namespace"
-	keymap_print_map "$namespace" "$alias" "${keymap_entries[@]}"
+	keymap_print_map "$namespace" "${keymap_entries[@]}"
 
-	# If it's a non-zsh keymap, skip printing command line usage
+	# If it's `ALL_NAMESPACE` or a non-zsh keymap, skip printing command line usage
 	local max_command_size
 	local keymap_usage=()
-	if [[ $is_zsh_keymap -ne 1 ]]; then
+	if [[ $namespace == "$ALL_NAMESPACE" || $is_zsh_keymap -ne 1 ]]; then
 		max_command_size=$(keymap_get_max_command_size "${keymap_entries[@]}")
 	else
 		# Interpolate `alias` into `KEYMAP_USAGE`
@@ -189,7 +192,7 @@ function keymap_print_help {
 	fi
 
 	echo
-	echo Keymap
+	echo Mappings
 	echo
 
 	for entry in "${keymap_entries[@]}"; do
@@ -212,7 +215,6 @@ function keymap_print_help {
 
 function keymap_print_map {
 	local namespace=$1; shift
-	local alias=$1; shift
 	local keymap_entries=("$@")
 
 	declare -A namespace_aliases

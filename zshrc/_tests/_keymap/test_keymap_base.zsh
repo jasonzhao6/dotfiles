@@ -108,7 +108,7 @@ function test__keymap_invoke {
 	assert "$(test_keymap | bw | strip_right)" "$(
 		cat <<-eof
 
-			Name
+			Keymap
 
 			  test_keymap
 
@@ -133,7 +133,7 @@ function test__keymap_invoke {
 			          ^                        # \`.\` represents an optional space character
 			                                   # E.g To invoke \`a.b\`, use either \`ab\` or \`a b\`
 
-			Keymap
+			Mappings
 
 			  $ test__.a                       # First
 			  $ test__.aa                      # First related

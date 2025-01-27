@@ -3,11 +3,11 @@ MAIN_ALIAS='m'
 MAIN_DOT="${MAIN_ALIAS}${KEYMAP_DOT}"
 
 MAIN_KEYMAP=(
-	"${MAIN_DOT}a # List keymap namespaces"
+	"${MAIN_DOT}a # List all keymap namespaces"
 	''
-	"${MAIN_DOT}r # List keymap entries"
-	"${MAIN_DOT}r {description} # Filter keymap entries by description"
-	"${MAIN_DOT}w {key} # Filter keymap entries by key"
+	"${MAIN_DOT}r # List all keymap entries"
+	"${MAIN_DOT}r {description} # Filter by description"
+	"${MAIN_DOT}w {key} # Filter by key"
 	''
 	"${MAIN_DOT}g # Show Gmail keyboard shortcuts"
 	"${MAIN_DOT}m # Show TextMate keyboard shortcuts"
@@ -29,25 +29,26 @@ function main_keymap {
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
 
-MAIN_KEYMAP_ALL=()
+ALL_NAMESPACE='All Keymaps'
+ALL_KEYMAP=()
 keymap_set_alias "${MAIN_ALIAS}a-" \
-	"main_keymap_a > /dev/null && keymap_filter_entries MAIN_KEYMAP_ALL"
+	"main_keymap_a > /dev/null && keymap_filter_entries ALL_KEYMAP"
 function main_keymap_a {
 	# Generate once
-	if [[ -z ${MAIN_KEYMAP_ALL[*]} ]]; then
+	if [[ -z ${ALL_KEYMAP[*]} ]]; then
 		# Find and append zsh keymaps (These mappings invoke zsh functions)
 		while IFS= read -r line; do
-			MAIN_KEYMAP_ALL+=("$line")
+			ALL_KEYMAP+=("$line")
 		done < <(main_keymap_find_keymaps_by_type 'zsh')
 
 		# Find and append non-zsh keymaps (These mappings are used outside of zsh)
-		MAIN_KEYMAP_ALL+=('')
+		ALL_KEYMAP+=('')
 		while IFS= read -r line; do
-			MAIN_KEYMAP_ALL+=("$line")
+			ALL_KEYMAP+=("$line")
 		done < <(main_keymap_find_keymaps_by_type 'non-zsh')
 	fi
 
-	main_keymap_print_keyboard_shortcuts 'Keymaps' "${MAIN_KEYMAP_ALL[@]}"
+	keymap_print_help "$ALL_NAMESPACE" '(no-op)' "${ALL_KEYMAP[@]}"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.gmail.zsh"
