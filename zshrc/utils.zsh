@@ -95,17 +95,6 @@ function compact {
 	sed '/^$/d'
 }
 
-function contain {
-	local substring=$*
-
-	if [[ -z $substring ]]; then
-		cat
-	else
-		# Use `pgrep` to filter, then use `grep` to color
-		pgrep --ignore-case --only-matching ".*$substring.*" | bw | grep "$substring"
-	fi
-}
-
 function downcase {
 	tr '[:upper:]' '[:lower:]'
 }
