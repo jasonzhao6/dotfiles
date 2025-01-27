@@ -55,33 +55,40 @@ function test__main_keymap_r__when_specifying_a_non_zsh_only_description {
 }; run_with_filter test__main_keymap_r__when_specifying_a_non_zsh_only_description
 
 function test__main_keymap_w {
-	assert "$([[ $(main_keymap_w | wc -l) -gt 200 ]] && echo 1)" '1'
+	assert "$(main_keymap_w)" "$(
+		cat <<-eof
+
+			(input required)
+		eof
+	)"
 }; run_with_filter test__main_keymap_w
 
 function test__main_keymap_w__when_specifying_a_key {
-	assert "$([[ $(main_keymap_w k | wc -l) -gt 3 ]] && echo 1)" '1'
+	assert "$(
+		main_keymap_w q | bw
+	)" "$(
+		cat <<-eof
+
+		  $ t.qa # Apply & auto-approve
+
+		  alt-q # Step over
+		  cmd-q # Quit (Default)
+		eof
+	)"
 }; run_with_filter test__main_keymap_w__when_specifying_a_key
 
-function test__main_keymap_w__when_specifying_a_namespace_and_key {
+function test__main_keymap_w__when_specifying_a_special_char {
 	assert "$(
-		main_keymap_w m w | bw
+		main_keymap_w , | bw
 	)" "$(
 		cat <<-eof
 
-		  $ m.w               # List zsh keymap entries
-		  $ m.w {key}         # Filter zsh keymap entries by key
-		  $ m.w {alias} {key} # Filter zsh keymap entries by alias and key
-		eof
-	)"
-}; run_with_filter test__main_keymap_w__when_specifying_a_namespace_and_key
-
-function test__main_keymap_w__when_specifying_a_namespace_and_special_char {
-	assert "$(
-		main_keymap_w o , | bw
-	)" "$(
-		cat <<-eof
-
+		  $ s., # MQ restore
+		  $ d., # Login with AWS credentials
 		  $ o., # Open \`1.txt\` and \`2.txt\` in TextMate
+
+		  alt-, # Collapse (\`{f3}\`)
+		  cmd-, # Preferences (Convention)
 		eof
 	)"
-}; run_with_filter test__main_keymap_w__when_specifying_a_namespace_and_special_char
+}; run_with_filter test__main_keymap_w__when_specifying_a_special_char

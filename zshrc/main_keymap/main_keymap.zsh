@@ -3,14 +3,11 @@ MAIN_ALIAS='m'
 MAIN_DOT="${MAIN_ALIAS}${KEYMAP_DOT}"
 
 MAIN_KEYMAP=(
-	"${MAIN_DOT}a # List keymaps"
+	"${MAIN_DOT}a # List keymap namespaces"
 	''
 	"${MAIN_DOT}r # List keymap entries"
 	"${MAIN_DOT}r {description} # Filter keymap entries by description"
-	''
-	"${MAIN_DOT}w # List zsh keymap entries"
-	"${MAIN_DOT}w {key} # Filter zsh keymap entries by key"
-	"${MAIN_DOT}w {alias} {key} # Filter zsh keymap entries by alias and key"
+	"${MAIN_DOT}w {key} # Filter keymap entries by key"
 	''
 	"${MAIN_DOT}g # Show Gmail keyboard shortcuts"
 	"${MAIN_DOT}m # Show TextMate keyboard shortcuts"
@@ -36,6 +33,7 @@ MAIN_KEYMAP_ALL=()
 
 function main_keymap_a {
 	# Generate once
+	# TODO ma-
 	if [[ -z ${MAIN_KEYMAP_ALL[*]} ]]; then
 		# Find and append zsh keymaps (These mappings invoke zsh functions)
 		while IFS= read -r line; do
@@ -102,9 +100,6 @@ function main_keymap_r {
 		# Note: ^ `current_entries=("${(P)$(echo "$keymap")[@]}")` actually works
 		# But it's convoluted, and it leaves in the empty entries, which we do not want
 
-		# Unlike zsh entries, non-zsh entries do not have a leading alias to indicate namespace
-		non_zsh_namespace=$(echo "${keymap%_KEYMAP}" | downcase)
-
 		# Find keymap entries with matching description
 		setopt nocasematch
 		if keymap_has_dot_alias "${current_entries[@]}"; then
@@ -115,6 +110,9 @@ function main_keymap_r {
 				fi
 			done
 		else
+			# Unlike zsh entries, non-zsh entries lack a leading alias to indicate namespace
+			non_zsh_namespace=$(echo "${keymap%_KEYMAP}" | downcase)
+
 			for entry in "${current_entries[@]}"; do
 				# shellcheck disable=SC2076
 				if [[ -z $description || $entry =~ ".* # .*$description.*" ]]; then
@@ -125,17 +123,11 @@ function main_keymap_r {
 		unsetopt nocasematch
 	done <<< "$keymaps"
 
-	# Print zsh and non-zsh keymap entries if they exist
-	# (Avoid printing an empty line when either does not exist)
+	# Print entries
 	local is_zsh_keymap=1
-	if [[ -n ${all_zsh_entries[*]} ]]; then
-		is_zsh_keymap=1
-		keymap_print_entries $is_zsh_keymap "${all_zsh_entries[@]}"
-	fi
-	if [[ -n ${all_non_zsh_entries[*]} ]]; then
-		is_zsh_keymap=0
-		keymap_print_entries $is_zsh_keymap "${all_non_zsh_entries[@]}"
-	fi
+	keymap_print_entries $is_zsh_keymap "${all_zsh_entries[@]}"
+	is_zsh_keymap=0
+	keymap_print_entries $is_zsh_keymap "${all_non_zsh_entries[@]}"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.slack.zsh"
@@ -151,32 +143,36 @@ function main_keymap_t {
 }
 
 function main_keymap_w {
-	local alias
-	local key
+	local key=$1
+	[[ -z $key ]] && printf "\n(input required)\n" && return
 
-	# Handle `[key]` arg
-	if [[ -z $2 ]]; then
-		key=$1
-
-	# Handle `{alias} {key}` args
-	else
-		alias=$1
-		key=$2
-	fi
-
-	# Find all matching keymap entries
-	local entries=()
-	while IFS= read -r line; do
-		line=$(eval "echo $line")
+	# Find zsh entries with matching `key`
+	local zsh_entries=()
+	while IFS= read -r entry; do
+		entry=$(eval "echo $entry")
 
 		# shellcheck disable=SC2076
-		if [[ -z $alias || $line =~ "${alias}\\${KEYMAP_DOT}${key}" ]]; then
-			entries+=("$line")
+		# Intentionally not adding a trailing space to match multi-char keys
+		if [[ $entry =~ "\\${KEYMAP_DOT}${key}" ]]; then
+			zsh_entries+=("$entry")
 		fi
-	done < <(
-		pgrep "\"[$]{[A-Z]+_DOT}$key.* " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw
-	)
+	done < <(egrep "^\t\"[$]{[A-Z]+_DOT}$key" "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
 
+	# Find non-zsh entries with matching `key`
+	local non_zsh_entries=()
+	while IFS= read -r entry; do
+		entry=$(eval "echo $entry")
+
+		# shellcheck disable=SC2076
+		# Intentionally adding a trailing space to ensure it's the last stroke of a keyboard shortcut
+		if [[ $entry =~ "\\${KEYMAP_DASH}${key} " ]]; then
+			non_zsh_entries+=("$entry")
+		fi
+	done < <(egrep "^\t\".*$KEYMAP_DASH$key " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
+
+	# Print entries
 	local is_zsh_keymap=1
-	keymap_print_entries $is_zsh_keymap "${entries[@]}"
+	keymap_print_entries $is_zsh_keymap "${zsh_entries[@]}"
+	is_zsh_keymap=0
+	keymap_print_entries $is_zsh_keymap "${non_zsh_entries[@]}"
 }

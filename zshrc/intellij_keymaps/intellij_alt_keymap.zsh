@@ -15,14 +15,14 @@ INTELLIJ_ALT_KEYMAP=(
 	"alt-shift-o # Overwrite remote"
 	''
 	"alt-\' # Collapse recursively (TextMate: \`{f1}\`)"
-	"alt-, # Collapse (TextMate: \`{f3}\`)"
-	"alt-. # Expand (TextMate: \`{f4}\`)"
-	"alt-p # Expand recursively (TextMate: \`{f6}\`)"
+	"alt-, # Collapse (\`{f3}\`)"
+	"alt-. # Expand (\`{f4}\`)"
+	"alt-p # Expand recursively (\`{f6}\`)"
 	''
 	"alt-{tab} # Toggle bookmark (\`cmd-{f2}\`)"
 	"alt-{tab} # View bookmarks (\`cmd-shift-{f2}\`)"
 	"^cmd-a {del} # Delete bookmarks"
-	"alt-{esc} # Next line bookmark (\`{f2}\`)"
+	"alt-{esc} # Next line bookmark (TextMate: \`{f2}\`)"
 	"alt-{esc} # Previous line bookmark (\`shift-{f2}\`)"
 	''
 	"alt-\; # Toggle line breakpoint (Default: \`cmd-{f8}\`)"

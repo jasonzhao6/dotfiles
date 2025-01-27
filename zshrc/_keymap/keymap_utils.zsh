@@ -29,6 +29,8 @@ function keymap_print_entries {
 	local is_zsh_keymap=$1; shift
 	local entries=("$@")
 
+	[[ -z ${entries[*]} ]] && return
+
 	local max_command_size; max_command_size=$(keymap_get_max_command_size "${entries[@]}")
 
 	echo
