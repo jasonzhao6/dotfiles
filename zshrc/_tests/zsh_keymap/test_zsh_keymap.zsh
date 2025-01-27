@@ -122,7 +122,7 @@ function test__zsh_keymap_w {
 	assert "$(zsh_keymap_w)" "$(
 		cat <<-eof
 
-			$(red_bar 'input required')
+			$(red_bar 'name required')
 		eof
 	)"
 }; run_with_filter test__zsh_keymap_w
@@ -133,7 +133,7 @@ function test__zsh_keymap_w__when_program_is_not_found {
 	)" "$(
 		cat <<-eof
 
-			$(red_bar '`does_not_exist` key not found')
+			$(red_bar '`does_not_exist` not found')
 		eof
 	)"
 }; run_with_filter test__zsh_keymap_w__when_program_is_not_found
