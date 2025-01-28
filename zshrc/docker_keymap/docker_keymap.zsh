@@ -29,5 +29,5 @@ function docker_keymap {
 # shellcheck disable=SC1064,SC1072,SC1073 # Allow `,` in function name
 function docker_keymap_, {
 	aws ecr get-login-password --region us-east-1 |
-		docker login --username AWS --password-stdin $MQ_DOCKER_ECR_URL
+		docker login --username AWS --password-stdin $DOCKER_ECR_URL
 }

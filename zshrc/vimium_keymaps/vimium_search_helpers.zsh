@@ -5,6 +5,7 @@ function vimium_search_keymap_extract {
 	local extracted="$keymap_name=(\n"
 
 	# Populate keymap array
+	local fields
 	while IFS= read -r line; do
 		# Convert `line` to keymap format
 		# e.g `o: https://golinks.io/%s Go Links` -> `o # Go Links`

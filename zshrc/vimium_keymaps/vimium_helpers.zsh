@@ -6,6 +6,7 @@ function vimium_keymap_extract {
 
 	# Populate keymap array
 	local seen_first_map
+	local fields
 	while IFS= read -r line; do
 		# Skip lines until we see the first `map`
 		[[ $line == map* ]] && seen_first_map=1

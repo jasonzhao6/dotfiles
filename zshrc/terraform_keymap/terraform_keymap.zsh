@@ -75,9 +75,29 @@ function terraform_keymap_d {
 	terraform destroy
 }
 
+# To be overwritten by `ZSHRC_SECRETS`
+TERRAFORM_VARS=(
+	'var_name_1 secret_name_1'
+	'var_name_2 secret_name_2'
+)
+
 function terraform_keymap_e {
-	# To be overwritten by `ZSHRC_SECRETS`
-	return
+	local fields
+	local var_name
+	local secret_name
+
+	for var in "${TERRAFORM_VARS[@]}"; do
+		fields=("${=var}")
+		var_name="TF_VAR_${fields[1]}"
+		secret_name="${fields[2]}"
+
+		echo_eval "export $var_name=\$(aws_keymap_m $secret_name)"
+
+		# If env var was not set, exit with error
+		[[ -z ${(P)var_name} ]] && return 1
+	done
+
+	return 0
 }
 
 function terraform_keymap_f {
