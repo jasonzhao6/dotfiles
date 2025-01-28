@@ -12,12 +12,12 @@ NAV_KEYMAP=(
 	"${NAV_DOT}w # Go to Downloads"
 	"${NAV_DOT}v # Go to Desktop"
 	''
-	"${NAV_DOT}n {match}* {-mismatch}* # List directories & files"
-	"${NAV_DOT}o {match}* {-mismatch}* # List directories"
-	"${NAV_DOT}e {match}* {-mismatch}* # List files"
+	"${NAV_DOT}n {match}* {-mismatch}* # List visible directories & files"
 	"${NAV_DOT}a {match}* {-mismatch}* # List hidden directories & files"
-	"${NAV_DOT}ao {match}* {-mismatch}* # List hidden directories"
-	"${NAV_DOT}ae {match}* {-mismatch}* # List hidden files"
+	"${NAV_DOT}o {match}* {-mismatch}* # List visible directories"
+	"${NAV_DOT}oo {match}* {-mismatch}* # List hidden directories"
+	"${NAV_DOT}e {match}* {-mismatch}* # List visible files"
+	"${NAV_DOT}ee {match}* {-mismatch}* # List hidden files"
 	''
 	"${NAV_DOT}u # Go up one directory"
 	"${NAV_DOT}uu # Go up two directories"
@@ -47,19 +47,6 @@ function nav_keymap_a {
 	ls -d .* | args_keymap_s "${filters[@]}"
 }
 
-function nav_keymap_ae {
-	local filters=("$@")
-
-	# shellcheck disable=SC2010
-	ls -pd .* | grep -v '/' | args_keymap_s "${filters[@]}"
-}
-
-function nav_keymap_ao {
-	local filters=("$@")
-
-	ls -d .*/ | args_keymap_s "${filters[@]}"
-}
-
 function nav_keymap_d {
 	cd ~/github/jasonzhao6/dotfiles && nav_keymap_n || true
 }
@@ -69,6 +56,13 @@ function nav_keymap_e {
 
 	# shellcheck disable=SC2010
 	ls -p | grep -v '/' | args_keymap_s "${filters[@]}"
+}
+
+function nav_keymap_ee {
+	local filters=("$@")
+
+	# shellcheck disable=SC2010
+	ls -pd .* | grep -v '/' | args_keymap_s "${filters[@]}"
 }
 
 function nav_keymap_h {
@@ -91,6 +85,12 @@ function nav_keymap_o {
 	local filters=("$@")
 
 	ls -d -- */ | args_keymap_s "${filters[@]}"
+}
+
+function nav_keymap_oo {
+	local filters=("$@")
+
+	ls -d .*/ | args_keymap_s "${filters[@]}"
 }
 
 function nav_keymap_s {
