@@ -16,6 +16,7 @@ RESERVED[gc]=0
 RESERVED[gcp]=0
 RESERVED[grm]=0
 RESERVED[mg]=0
+RESERVED[nm]=0
 RESERVED[od]=0
 RESERVED[sa]=0
 
@@ -1038,7 +1039,6 @@ RESERVED[ngettext]=1
 RESERVED[nice]=1
 RESERVED[nl]=1
 RESERVED[nlcontrol]=1
-RESERVED[nm]=1
 RESERVED[nmedit]=1
 RESERVED[node]=1
 RESERVED[nohup]=1

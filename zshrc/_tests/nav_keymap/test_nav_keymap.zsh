@@ -186,6 +186,10 @@ function test__nav_keymap_h {
 	assert "$(nav_keymap_h > /dev/null; pwd)" "$HOME/github"
 }; run_with_filter test__nav_keymap_h
 
+function test__nav_keymap_m {
+	assert "$(nav_keymap_m > /dev/null; pwd)" "$HOME/Documents"
+}; run_with_filter test__nav_keymap_m
+
 function test__nav_keymap_n {
 	assert "$(
 		rm -rf /tmp/test__nav_keymap_n
@@ -228,18 +232,6 @@ function test__nav_keymap_n__with_filters {
 		eof
 	)"
 }; run_with_filter test__nav_keymap_n__with_filters
-
-function test__nav_keymap_nl {
-	assert "$(nav_keymap_nl > /dev/null; pwd)" "$HOME/Downloads"
-}; run_with_filter test__nav_keymap_nl
-
-function test__nav_keymap_nm {
-	assert "$(nav_keymap_nm > /dev/null; pwd)" "$HOME/Documents"
-}; run_with_filter test__nav_keymap_nm
-
-function test__nav_keymap_nt {
-	assert "$(nav_keymap_nt > /dev/null; pwd)" "$HOME/Desktop"
-}; run_with_filter test__nav_keymap_nt
 
 function test__nav_keymap_o {
 	assert "$(
@@ -324,3 +316,11 @@ function test__nav_keymap_uuu {
 		rm -rf /tmp/_nav_keymap_uuu
 	)" '/tmp/_nav_keymap_uuu'
 }; run_with_filter test__nav_keymap_uuu
+
+function test__nav_keymap_v {
+	assert "$(nav_keymap_v > /dev/null; pwd)" "$HOME/Desktop"
+}; run_with_filter test__nav_keymap_v
+
+function test__nav_keymap_w {
+	assert "$(nav_keymap_w > /dev/null; pwd)" "$HOME/Downloads"
+}; run_with_filter test__nav_keymap_w

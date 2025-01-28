@@ -8,9 +8,9 @@ NAV_KEYMAP=(
 	"${NAV_DOT}h # Go to github"
 	"${NAV_DOT}s # Go to scratch"
 	"${NAV_DOT}d # Go to dotfiles"
-	"${NAV_DOT}nl # Go to Downloads"
-	"${NAV_DOT}nm # Go to Documents"
-	"${NAV_DOT}nt # Go to Desktop"
+	"${NAV_DOT}m # Go to Documents"
+	"${NAV_DOT}w # Go to Downloads"
+	"${NAV_DOT}v # Go to Desktop"
 	''
 	"${NAV_DOT}n {match}* {-mismatch}* # List directories & files"
 	"${NAV_DOT}o {match}* {-mismatch}* # List directories"
@@ -75,24 +75,16 @@ function nav_keymap_h {
 	cd ~/github && nav_keymap_n || true
 }
 
-# shellcheck disable=SC2120
+function nav_keymap_m {
+	cd ~/Documents && nav_keymap_n || true
+}
+
+# shellcheck disable=SC2120 # `filters` is an optional arg
 function nav_keymap_n {
 	local filters=("$@")
 
 	echo
 	ls | args_keymap_s "${filters[@]}"
-}
-
-function nav_keymap_nl {
-	cd ~/Downloads && nav_keymap_n || true
-}
-
-function nav_keymap_nm {
-	cd ~/Documents && nav_keymap_n || true
-}
-
-function nav_keymap_nt {
-	cd ~/Desktop && nav_keymap_n || true
 }
 
 function nav_keymap_o {
@@ -131,4 +123,12 @@ function nav_keymap_uu {
 function nav_keymap_uuu {
 	cd ../../..
 	nav_keymap_n
+}
+
+function nav_keymap_v {
+	cd ~/Desktop && nav_keymap_n || true
+}
+
+function nav_keymap_w {
+	cd ~/Downloads && nav_keymap_n || true
 }
