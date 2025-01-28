@@ -40,7 +40,7 @@ source "$ZSHRC_DIR/$KUBECTL_NAMESPACE/kubectl_commands.zsh"
 function kubectl_keymap {
 	# If the first arg is a `kubectl` command, pass it through
 	for command in "${KUBECTL_COMMANDS[@]}"; do
-		if [[ $command == $1 ]]; then
+		if [[ $command == "$1" ]]; then
 			kubectl "$@"
 			return
 		fi
@@ -163,7 +163,38 @@ function kubectl_keymap_yy {
 	cat ~/Documents/k8.get.yaml
 }
 
+AWS_CLI_CACHE_DIR="$HOME/.aws/cli/cache"
+AWS_CLI_CACHE_JQ=$(
+	cat <<-eof | tr -d '\n'
+		.Credentials | [
+			"export AWS_ACCESS_KEY_ID='\(.AccessKeyId)'",
+			"export AWS_SECRET_ACCESS_KEY='\(.SecretAccessKey)'",
+			"export AWS_SESSION_TOKEN='\(.SessionToken)'"
+		]
+	eof
+)
+
 function kubectl_keymap_z {
-	# To be overwritten by `ZSHRC_SECRETS`
-	return
+	# `AWS_CLI_CACHE_DIR` contains cached creds for multiple roles
+	# To get only the current role, empty the cache and run a command
+	rm -rf "$AWS_CLI_CACHE_DIR"
+	aws sts get-caller-identity
+	local current_role; current_role=$(ls "$AWS_CLI_CACHE_DIR")
+
+	cat <<-eof | pbcopy
+		bind '"\e[A": history-search-backward'
+		bind '"\e[B": history-search-forward'
+
+		alias k='kubectl'
+		alias kg='kubectl get'
+		alias kd='kubectl describe'
+
+		$(jq "$AWS_CLI_CACHE_JQ" "$AWS_CLI_CACHE_DIR/$current_role" | trim_list)
+
+		aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $KUBECTL_DEFAULT_CLUSTER
+		kubectl config set-context --current --namespace=$GITHUB_DEFAULT_ORG
+	eof
+
+	echo
+	green_bar 'History bindings and `kubectl` helpers copied to pasteboard'
 }
