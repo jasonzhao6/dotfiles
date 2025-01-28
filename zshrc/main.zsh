@@ -55,10 +55,17 @@ source "$ZSHRC_DIR/zsh_prompt.zsh"
 
 # Track `.zshrc` loading time: Finish here
 if [[ -z $ZSHRC_UNDER_TESTING ]]; then
+	# If re-sourcing, also track lines-of-code (loc) and line-count (lc)
+	if [[ -n $ZSHRC_SOURCED ]]; then
+		ZSHRC_LINE_OF_CODE=$(egrep --invert-match '^\s*(#|$)' "$ZSHRC_DIR"/**/*.zsh | wc -l | strip_left)
+		ZSHRC_LINE_COUNT=$(cat "$ZSHRC_DIR"/**/*.zsh | wc -l | strip_left)
+		ZSHRC_LINE_STAT=" ($ZSHRC_LINE_OF_CODE loc, $ZSHRC_LINE_COUNT lc)"
+	fi
+	ZSHRC_SOURCED=1
+
 	ZSHRC_LOAD_TIME=$(echo "$(gdate +%s.%2N) - $ZSHRC_START_TIME" | bc)
-	ZSHRC_LINE_COUNT=$(cat "$ZSHRC_DIR"/**/*.zsh | wc -l | strip_left)
 	echo
-	gray_fg "\`.zshrc\` loaded in $ZSHRC_LOAD_TIME seconds ($ZSHRC_LINE_COUNT)"
+	gray_fg "\`.zshrc\` loaded in $ZSHRC_LOAD_TIME seconds$ZSHRC_LINE_STAT"
 fi
 
 # Profile `.zshrc` loading time: Finish here
