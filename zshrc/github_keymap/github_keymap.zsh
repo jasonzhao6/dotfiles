@@ -10,6 +10,7 @@ GITHUB_KEYMAP=(
 	"${GITHUB_DOT}r # List repos"
 	"${GITHUB_DOT}r {match}* {-mismatch}* # Filter repos"
 	''
+	"${GITHUB_DOT}h # Navigate to the current org"
 	"${GITHUB_DOT}h {repo} # Navigate to the specified repo"
 	"${GITHUB_DOT}o # Open the current repo"
 	"${GITHUB_DOT}o {repo} # Open the specified repo (Shortcut: \`$GITHUB_ALIAS\`)"
@@ -56,7 +57,14 @@ function github_keymap_d {
 }
 
 function github_keymap_g {
-	pbpaste | gh gist create --web
+	# When invoked as standalone command
+	if [[ -t 0 ]]; then
+		pbpaste | gh gist create --web
+
+	# When invoked after a pipe `|`
+	else
+		gh gist create --web
+	fi
 }
 
 function github_keymap_h {
