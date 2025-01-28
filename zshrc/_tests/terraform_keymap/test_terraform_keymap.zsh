@@ -26,8 +26,8 @@ function test__terraform_keymap_w {
 		cd "$pwd" || return
 	)" "$(
 		cat <<-eof
-		     1	~/project
-		     2	~/project/module
+		     1	project
+		     2	project/module
 		eof
 	)"
 }; run_with_filter test__terraform_keymap_w

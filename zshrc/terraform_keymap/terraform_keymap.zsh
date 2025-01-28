@@ -198,11 +198,7 @@ function terraform_keymap_v {
 }
 
 function terraform_keymap_w {
-	find ~+ -name main.tf |
-		grep --invert-match '\.terraform' |
-		sed "s|$HOME|~|g" |
-		trim 0 8 |
-		args_keymap_s
+	ls -- **/main.tf | trim 0 8 | args_keymap_s
 }
 
 function terraform_keymap_z {

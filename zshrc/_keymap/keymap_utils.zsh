@@ -3,7 +3,9 @@
 #
 
 function keymap_files {
-	find "$ZSHRC_DIR" -name '*_keymap.zsh' | grep --invert-match test | sort
+	ls "$ZSHRC_DIR"/**/*_keymap.zsh | bw | grep --invert-match _tests
+	# Note: ^ `ls "$ZSHRC_DIR"/**!(_tests)/*_keymap.zsh` works in the current shell
+	# But it isn't working in the tests subshell even with `setopt EXTENDED_GLOB`
 }
 
 function keymap_names {
