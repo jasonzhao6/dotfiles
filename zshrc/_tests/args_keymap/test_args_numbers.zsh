@@ -1,3 +1,13 @@
+test__input=$(
+	cat <<-eof
+		terraform-application-region-shared-1
+		terraform-application-region-shared-2
+		terraform-application-region-shared-3
+		terraform-application-region-program-A
+		terraform-application-region-program-B
+	eof
+)
+
 function test__0 {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null

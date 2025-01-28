@@ -32,7 +32,7 @@ function print_summary {
 #
 
 function find_test_files {
-	find "$ZSHRC_DIR/_tests" -name 'test_*.zsh' | sort
+	ls "$ZSHRC_DIR"/_tests/**/test_*.zsh | bw | sort --random-sort
 }
 
 function pass {
