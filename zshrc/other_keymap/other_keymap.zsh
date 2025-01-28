@@ -15,8 +15,8 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}c # Copy the last output"
 	"${OTHER_DOT}1 # Save the last output to \`1.txt\`"
 	"${OTHER_DOT}2 # Save the last output to \`2.txt\`"
-	"${OTHER_DOT}o1 # Save pasteboard value to \`1.txt\`"
-	"${OTHER_DOT}o2 # Save pasteboard value to \`2.txt\`"
+	"${OTHER_DOT}11 # Save pasteboard value to \`1.txt\`"
+	"${OTHER_DOT}22 # Save pasteboard value to \`2.txt\`"
 	"${OTHER_DOT}, # Open \`1.txt\` and \`2.txt\` in TextMate"
 	"${OTHER_DOT}0 # Empty \`1.txt\` and \`2.txt\`"
 	"${OTHER_DOT}u {file 1} {file 2} # Unified diff"
@@ -76,8 +76,16 @@ function other_keymap_1 {
 	eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
 }
 
+function other_keymap_11 {
+	pbpaste > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
+}
+
 function other_keymap_2 {
 	eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+}
+
+function other_keymap_22 {
+	pbpaste > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 }
 
 function other_keymap_a {
@@ -208,14 +216,6 @@ function other_keymap_o {
 
 	# If we didn't open anything, return exit code `1`
 	return 1
-}
-
-function other_keymap_o1 {
-	pbpaste > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
-}
-
-function other_keymap_o2 {
-	pbpaste > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 }
 
 function other_keymap_p {
