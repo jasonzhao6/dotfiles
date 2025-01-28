@@ -238,5 +238,5 @@ function aws_keymap_z {
 	eof
 
 	echo
-	echo 'History bindings copied to pasteboard'
+	green_bar 'History bindings copied to pasteboard'
 }
