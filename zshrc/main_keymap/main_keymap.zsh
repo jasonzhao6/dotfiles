@@ -98,32 +98,30 @@ function main_keymap_w {
 	[[ -z $key ]] && echo && red_bar 'key required' && return
 
 	# Find zsh entries with matching `key`
-	local zsh_entries=()
+	local entries=()
+	local is_zsh_keymap=1
 	while IFS= read -r entry; do
 		entry=$(eval "echo $entry")
 
 		# shellcheck disable=SC2076
 		# Intentionally not adding a trailing space to match multi-char keys
 		if [[ $entry =~ "\\${KEYMAP_DOT}${key}" ]]; then
-			zsh_entries+=("$entry")
+			entries+=("$entry")
 		fi
 	done < <(egrep "^\t\"[$]{[A-Z]+_DOT}$key" "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
+	keymap_print_entries $is_zsh_keymap "${entries[@]}"
 
 	# Find non-zsh entries with matching `key`
-	local non_zsh_entries=()
+	entries=()
+	is_zsh_keymap=0
 	while IFS= read -r entry; do
 		entry=$(eval "echo $entry")
 
 		# shellcheck disable=SC2076
 		# Intentionally adding a trailing space to ensure it's the last stroke of a keyboard shortcut
 		if [[ $entry =~ "\\${KEYMAP_DASH}${key} " ]]; then
-			non_zsh_entries+=("$entry")
+			entries+=("$entry")
 		fi
 	done < <(egrep "^\t\".*$KEYMAP_DASH$key " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
-
-	# Print entries
-	local is_zsh_keymap=1
-	keymap_print_entries $is_zsh_keymap "${zsh_entries[@]}"
-	is_zsh_keymap=0
-	keymap_print_entries $is_zsh_keymap "${non_zsh_entries[@]}"
+	keymap_print_entries $is_zsh_keymap "${entries[@]}"
 }
