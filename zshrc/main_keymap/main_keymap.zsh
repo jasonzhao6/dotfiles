@@ -36,16 +36,8 @@ keymap_set_alias "${MAIN_ALIAS}a-" "main_keymap_a > /dev/null && keymap_filter_e
 function main_keymap_a {
 	# Generate once
 	if [[ -z ${ALL_KEYMAP[*]} ]]; then
-		# Find and append zsh keymaps (These mappings invoke zsh functions)
-		while IFS= read -r line; do
-			ALL_KEYMAP+=("$line")
-		done < <(main_keymap_find_keymaps_by_type 'zsh')
-
-		# Find and append non-zsh keymaps (These mappings are used outside of zsh)
-		ALL_KEYMAP+=('')
-		while IFS= read -r line; do
-			ALL_KEYMAP+=("$line")
-		done < <(main_keymap_find_keymaps_by_type 'non-zsh')
+		main_keymap_find_keymaps_by_type
+		ALL_KEYMAP+=("${reply_zsh_keymaps[@]}" '' "${reply_non_zsh_keymaps[@]}")
 	fi
 
 	keymap_print_help "$ALL_NAMESPACE" '(no-op)' "${ALL_KEYMAP[@]}"

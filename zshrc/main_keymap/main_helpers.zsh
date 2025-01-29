@@ -1,6 +1,6 @@
 function main_keymap_find_keymaps_by_type {
-	local type=$1 # Valid values: `[zsh, non-zsh]`
-
+	reply_zsh_keymaps=()
+	reply_non_zsh_keymaps=()
 	local is_zsh_keymap
 	local current_namespace
 	local current_alias
@@ -9,14 +9,14 @@ function main_keymap_find_keymaps_by_type {
 		# Zsh keymaps have a `_DOT` variable used by key mappings
 		is_zsh_keymap=$(egrep --only-matching "[A-Z]+_DOT=\"" "$file")
 
-		# Print only keymaps of the specified `type`
-		[[ -z $is_zsh_keymap && $type == 'zsh' ]] && continue
-		[[ -n $is_zsh_keymap && $type == 'non-zsh' ]] && continue
+		current_namespace=$(pgrep --color=never --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$file")
+		current_alias=$(pgrep --color=never --only-matching "(?<=_ALIAS=')\w+(?=')" "$file")
 
-		current_namespace=$(pgrep --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$file")
-		current_alias=$(pgrep --only-matching "(?<=_ALIAS=')\w+(?=')" "$file")
-
-		echo "$current_alias # Show \`$current_namespace\`" | bw
+		if [[ -n $is_zsh_keymap ]]; then
+			reply_zsh_keymaps+=("$current_alias # Show \`$current_namespace\`")
+		else
+			reply_non_zsh_keymaps+=("$current_alias # Show \`$current_namespace\`")
+		fi
 	done
 }
 
