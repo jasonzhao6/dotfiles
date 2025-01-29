@@ -32,8 +32,7 @@ source "$ZSHRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
 
 ALL_NAMESPACE='Keymap of keymaps'
 ALL_KEYMAP=()
-keymap_set_alias "${MAIN_ALIAS}a-" \
-	"main_keymap_a > /dev/null && keymap_filter_entries ALL_KEYMAP"
+keymap_set_alias "${MAIN_ALIAS}a-" "main_keymap_a > /dev/null && keymap_filter_entries ALL_KEYMAP"
 function main_keymap_a {
 	# Generate once
 	if [[ -z ${ALL_KEYMAP[*]} ]]; then
@@ -80,49 +79,14 @@ function main_keymap_o {
 function main_keymap_r {
 	local description=$*
 
-	local keymaps; keymaps=$(keymap_names)
+	main_keymap_find_key_mappings_by_type "$description"
 
-	# Declare vars used in `while` loop
-	local all_zsh_entries=()
-	local all_non_zsh_entries=()
-	local current_entries
-	local non_zsh_namespace
-
-	# shellcheck disable=SC2034 # Used to define `current_entries`
-	while IFS= read -r keymap; do
-		# shellcheck disable=SC2206 # Adding double quote breaks array expansion
-		current_entries=(${(P)keymap})
-		# Note: ^ `current_entries=("${(P)$(echo "$keymap")[@]}")` actually works
-		# But it's convoluted, and it leaves in the empty entries, which we do not want
-
-		# Find keymap entries with matching description
-		setopt nocasematch
-		if keymap_has_dot_alias "${current_entries[@]}"; then
-			for entry in "${current_entries[@]}"; do
-				# shellcheck disable=SC2076
-				if [[ -z $description || $entry =~ ".* # .*$description.*" ]]; then
-					all_zsh_entries+=("$entry")
-				fi
-			done
-		else
-			# Unlike zsh entries, non-zsh entries lack a leading alias to indicate namespace
-			non_zsh_namespace=$(echo "${keymap%_KEYMAP}" | downcase)
-
-			for entry in "${current_entries[@]}"; do
-				# shellcheck disable=SC2076
-				if [[ -z $description || $entry =~ ".* # .*$description.*" ]]; then
-					all_non_zsh_entries+=("$non_zsh_namespace: $entry")
-				fi
-			done
-		fi
-		unsetopt nocasematch
-	done <<< "$keymaps"
-
-	# Print entries
 	local is_zsh_keymap=1
-	keymap_print_entries $is_zsh_keymap "${all_zsh_entries[@]}"
+	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
+	keymap_print_entries $is_zsh_keymap "${reply_zsh_mappings[@]}"
 	is_zsh_keymap=0
-	keymap_print_entries $is_zsh_keymap "${all_non_zsh_entries[@]}"
+	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
+	keymap_print_entries $is_zsh_keymap "${reply_non_zsh_mappings[@]}"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.slack.zsh"

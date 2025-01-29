@@ -20,6 +20,48 @@ function main_keymap_find_keymaps_by_type {
 	done
 }
 
+function main_keymap_find_key_mappings_by_type {
+	local description=$*
+
+	local keymaps; keymaps=$(keymap_names)
+
+	# Declare vars used in `while` loop
+	reply_zsh_mappings=()
+	reply_non_zsh_mappings=()
+	local entries
+	local non_zsh_namespace
+
+	# shellcheck disable=SC2034 # Used to define `entries`
+	while IFS= read -r keymap; do
+		# shellcheck disable=SC2206 # Adding double quote breaks array expansion
+		entries=(${(P)keymap})
+		# Note: ^ `entries=("${(P)$(echo "$keymap")[@]}")` actually works
+		# But it's convoluted, and it leaves in the empty entries, which we do not want
+
+		# Find keymap entries with matching description
+		setopt nocasematch
+		if keymap_has_dot_alias "${entries[@]}"; then
+			for entry in "${entries[@]}"; do
+				# shellcheck disable=SC2076
+				if [[ -z $description || $entry =~ ".* # .*$description.*" ]]; then
+					reply_zsh_mappings+=("$entry")
+				fi
+			done
+		else
+			# Unlike zsh entries, non-zsh entries lack a leading alias to indicate namespace
+			non_zsh_namespace=$(echo "${keymap%_KEYMAP}" | downcase)
+
+			for entry in "${entries[@]}"; do
+				# shellcheck disable=SC2076
+				if [[ -z $description || $entry =~ ".* # .*$description.*" ]]; then
+					reply_non_zsh_mappings+=("$non_zsh_namespace: $entry")
+				fi
+			done
+		fi
+		unsetopt nocasematch
+	done <<< "$keymaps"
+}
+
 function main_keymap_print_keyboard_shortcuts {
 	local keymap_name=$1; shift
 	local keymap_entries=("$@")
