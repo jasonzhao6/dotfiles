@@ -16,6 +16,8 @@ MAIN_KEYMAP=(
 	"${MAIN_DOT}o # Show macOS shortcuts"
 	"${MAIN_DOT}s # Show Slack shortcuts"
 	"${MAIN_DOT}t # Show Terminal shortcuts"
+	''
+	"${MAIN_DOT}, # Show stats"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
@@ -29,6 +31,24 @@ function main_keymap {
 #
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
+
+# shellcheck disable=SC1064,SC1072,SC1073 # Allow `,` in function name
+function main_keymap_, {
+	main_keymap_find_key_mappings_by_type
+
+	echo
+	echo Stats:
+
+	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
+	echo "- ${#reply_zsh_mappings} zsh mappings"
+	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
+	echo "- ${#reply_non_zsh_mappings} non-zsh mappings"
+
+	ZSHRC_LINE_OF_CODE=$(egrep --invert-match '^\s*(#|$)' "$ZSHRC_DIR"/**/*.zsh | wc -l | strip_left)
+	echo "- $ZSHRC_LINE_OF_CODE lines of code"
+	ZSHRC_LINE_COUNT=$(cat "$ZSHRC_DIR"/**/*.zsh | wc -l | strip_left)
+	echo "- $ZSHRC_LINE_COUNT lines total"
+}
 
 ALL_NAMESPACE='Keymap of keymaps'
 ALL_KEYMAP=()

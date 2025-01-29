@@ -85,6 +85,7 @@ function test__main_keymap_w__when_specifying_a_special_char {
 
 		  $ s., # MQ restore
 		  $ d., # Login with AWS credentials
+		  $ m., # Show stats
 		  $ o., # Open \`1.txt\` and \`2.txt\` in TextMate
 
 		  alt-, # Collapse (\`{F3}\`)

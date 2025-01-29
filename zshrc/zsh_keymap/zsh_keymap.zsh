@@ -110,6 +110,8 @@ function zsh_keymap_s {
 }
 
 function zsh_keymap_t {
+	main_keymap_,
+
 	zsh "$ZSHRC_DIR"/_tests.zsh "$@"
 }
 
