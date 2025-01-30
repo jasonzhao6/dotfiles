@@ -13,8 +13,10 @@ function main_keymap_find_keymaps_by_type {
 		current_alias=$(pgrep --color=never --only-matching "(?<=_ALIAS=')\w+(?=')" "$file")
 
 		if [[ -n $is_zsh_keymap ]]; then
+			# shellcheck disable=SC2030
 			reply_zsh_keymaps+=("$current_alias # Show \`$current_namespace\`")
 		else
+			# shellcheck disable=SC2030
 			reply_non_zsh_keymaps+=("$current_alias # Show \`$current_namespace\`")
 		fi
 	done
@@ -60,6 +62,35 @@ function main_keymap_find_key_mappings_by_type {
 		fi
 		unsetopt nocasematch
 	done <<< "$keymaps"
+}
+
+function main_keymap_extract {
+	local keymap_name=$1
+
+	main_keymap_find_keymaps_by_type
+
+	# Open keymap array
+	local extracted="$keymap_name=(\n"
+
+	# Populate keymap array
+
+	# shellcheck disable=SC2031
+	for keymap in "${reply_zsh_keymaps[@]}"; do
+		extracted+="\t'$keymap'\n"
+	done
+
+	extracted+="\t''\n"
+
+	# shellcheck disable=SC2031
+	for keymap in "${reply_non_zsh_keymaps[@]}"; do
+		extracted+="\t'$keymap'\n"
+	done
+
+	# Close keymap array
+	extracted+=')'
+
+	# Refresh extracted keymap
+	echo $extracted > "$ALL_KEYMAP_FILE"
 }
 
 function main_keymap_print_keyboard_shortcuts {

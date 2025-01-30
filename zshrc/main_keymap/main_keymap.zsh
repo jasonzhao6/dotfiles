@@ -53,16 +53,25 @@ function main_keymap_, {
 }
 
 ALL_NAMESPACE='Keymap of keymaps'
-ALL_KEYMAP=()
-keymap_set_alias "${MAIN_ALIAS}a-" "main_keymap_a > /dev/null && keymap_filter_entries ALL_KEYMAP"
-function main_keymap_a {
-	# Generate once
-	if [[ -z ${ALL_KEYMAP[*]} ]]; then
-		main_keymap_find_keymaps_by_type
-		ALL_KEYMAP+=("${reply_zsh_keymaps[@]}" '' "${reply_non_zsh_keymaps[@]}")
-	fi
+ALL_KEYMAP_FILE="$ZSHRC_DIR/${MAIN_NAMESPACE}/$MAIN_NAMESPACE.all.zsh"
 
+source "$ALL_KEYMAP_FILE"
+keymap_set_alias "${MAIN_ALIAS}a-" "main_keymap_a > /dev/null && keymap_filter_entries ALL_KEYMAP"
+
+function main_keymap_a {
+	# Show the cached keymap-of-keymaps right away
 	keymap_print_help "$ALL_NAMESPACE" '(no-op)' "${ALL_KEYMAP[@]}"
+
+	# Generate a new keymap-of-keymaps; if different, show a red notice
+	cp "$ALL_KEYMAP_FILE" "$ALL_KEYMAP_FILE.bak"
+	main_keymap_extract 'ALL_KEYMAP'
+	if cmp --silent "$ALL_KEYMAP_FILE" "$ALL_KEYMAP_FILE.bak"; then
+		rm "$ALL_KEYMAP_FILE.bak"
+	else
+		source "$ALL_KEYMAP_FILE"
+		echo
+		red_bar 'Keymap of keymaps updated'
+	fi
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.gmail.zsh"

@@ -148,7 +148,7 @@ function zsh_keymap_z {
 		[[ ! -f $ZSHRC_SECRETS_LATEST ]] && cp "$ZSHRC_SECRETS" "$ZSHRC_SECRETS_LATEST"
 
 		# Do nothing if the copy is already the latest
-		if cmp -s "$ZSHRC_SECRETS" "$ZSHRC_SECRETS_LATEST"; then return; fi
+		if cmp --silent "$ZSHRC_SECRETS" "$ZSHRC_SECRETS_LATEST"; then return; fi
 
 		# Otherwise, update the copy and take a snapshot
 		cp "$ZSHRC_SECRETS" "$ZSHRC_SECRETS_LATEST"
