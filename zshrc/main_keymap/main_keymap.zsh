@@ -122,12 +122,7 @@ function main_keymap_w {
 	local is_zsh_keymap=1
 	while IFS= read -r entry; do
 		entry=$(eval "echo $entry")
-
-		# shellcheck disable=SC2076
-		# Intentionally not adding a trailing space to match multi-char keys
-		if [[ $entry =~ "\\${KEYMAP_DOT}${key}" ]]; then
-			entries+=("$entry")
-		fi
+		entries+=("$entry")
 	done < <(egrep "^\t\"[$]{[A-Z]+_DOT}$key" "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
 	keymap_print_entries $is_zsh_keymap "${entries[@]}"
 
@@ -136,12 +131,7 @@ function main_keymap_w {
 	is_zsh_keymap=0
 	while IFS= read -r entry; do
 		entry=$(eval "echo $entry")
-
-		# shellcheck disable=SC2076
-		# Intentionally adding a trailing space to ensure it's the last stroke of a keyboard shortcut
-		if [[ $entry =~ "\\${KEYMAP_DASH}${key} " ]]; then
-			entries+=("$entry")
-		fi
+		entries+=("$entry")
 	done < <(egrep "^\t\".*$KEYMAP_DASH$key " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
 	keymap_print_entries $is_zsh_keymap "${entries[@]}"
 }
