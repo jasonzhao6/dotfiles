@@ -41,11 +41,13 @@ function main_keymap_, {
 
 	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
 	echo "- ${#reply_zsh_mappings} zsh mappings"
+
 	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
 	echo "- ${#reply_non_zsh_mappings} non-zsh mappings"
 
 	ZSHRC_LINE_OF_CODE=$(egrep --invert-match '^\s*(#|$)' "$ZSHRC_DIR"/**/*.zsh | wc -l | strip_left)
 	echo "- $ZSHRC_LINE_OF_CODE lines of code"
+
 	ZSHRC_LINE_COUNT=$(cat "$ZSHRC_DIR"/**/*.zsh | wc -l | strip_left)
 	echo "- $ZSHRC_LINE_COUNT lines total"
 }
@@ -96,6 +98,7 @@ function main_keymap_r {
 	local is_zsh_keymap=1
 	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
 	keymap_print_entries $is_zsh_keymap "${reply_zsh_mappings[@]}"
+
 	is_zsh_keymap=0
 	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
 	keymap_print_entries $is_zsh_keymap "${reply_non_zsh_mappings[@]}"
