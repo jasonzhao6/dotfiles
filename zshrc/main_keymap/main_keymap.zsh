@@ -64,7 +64,7 @@ function main_keymap_a {
 
 	# Generate a new keymap-of-keymaps; if different, show a red notice
 	cp "$ALL_KEYMAP_FILE" "$ALL_KEYMAP_FILE.bak"
-	main_keymap_extract 'ALL_KEYMAP'
+	main_keymap_extract_keymaps 'ALL_KEYMAP'
 	if cmp --silent "$ALL_KEYMAP_FILE" "$ALL_KEYMAP_FILE.bak"; then
 		rm "$ALL_KEYMAP_FILE.bak"
 	else
@@ -106,11 +106,11 @@ function main_keymap_r {
 
 	local is_zsh_keymap=1
 	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
-	keymap_print_entries $is_zsh_keymap "${reply_zsh_mappings[@]}"
+	main_keymap_print_key_mappings $is_zsh_keymap "${reply_zsh_mappings[@]}"
 
 	is_zsh_keymap=0
 	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
-	keymap_print_entries $is_zsh_keymap "${reply_non_zsh_mappings[@]}"
+	main_keymap_print_key_mappings $is_zsh_keymap "${reply_non_zsh_mappings[@]}"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.slack.zsh"
@@ -136,7 +136,7 @@ function main_keymap_w {
 		entry=$(eval "echo $entry")
 		entries+=("$entry")
 	done < <(egrep "^\t\"[$]{[A-Z]+_DOT}$key" "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
-	keymap_print_entries $is_zsh_keymap "${entries[@]}"
+	main_keymap_print_key_mappings $is_zsh_keymap "${entries[@]}"
 
 	# Find non-zsh entries with matching `key`
 	entries=()
@@ -145,5 +145,5 @@ function main_keymap_w {
 		entry=$(eval "echo $entry")
 		entries+=("$entry")
 	done < <(egrep "^\t\".*$KEYMAP_DASH$key " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
-	keymap_print_entries $is_zsh_keymap "${entries[@]}"
+	main_keymap_print_key_mappings $is_zsh_keymap "${entries[@]}"
 }

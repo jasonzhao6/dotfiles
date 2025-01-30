@@ -19,7 +19,6 @@ source "$ZSHRC_DIR/utils.zsh"
 
 # Load keymap helpers
 source "$ZSHRC_DIR/_keymap/keymap_base.zsh"
-source "$ZSHRC_DIR/_keymap/keymap_utils.zsh"
 source "$ZSHRC_DIR/_keymap/is_reserved.zsh"
 
 # The "zsh keymaps" and "non-zsh keymaps" lists below could be generated

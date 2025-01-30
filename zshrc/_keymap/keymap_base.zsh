@@ -1,7 +1,3 @@
-#
-# The files contains the main keymap functions, `keymap_init, keymap_invoke`, and their helpers
-#
-
 KEYMAP_COLOR='cyan_fg'
 KEYMAP_PROMPT=$($KEYMAP_COLOR '  $ ')
 KEYMAP_ALIAS='_PLACEHOLDER_'
@@ -65,6 +61,40 @@ function keymap_invoke {
 # Helpers
 #
 
+function keymap_set_alias {
+	local key=$1
+	local value=$2
+
+	# Do not overwrite reserved keywords, error instead
+	if is_reserved "$key"; then
+		echo
+		red_bar "\`$key\` is a reserved keyword"
+		return
+	fi
+
+	# shellcheck disable=SC2086,SC2139
+	alias $key="$value"
+}
+
+# Used to perform per-keymap filtering, e.g `m.- {match}* {-mismatch}*`
+function keymap_filter_entries {
+	local namespace=$1; shift
+	local filters=("$@")
+
+	local entries=("${(P)$(echo "$namespace" | upcase)[@]}")
+	local is_zsh_keymap; keymap_has_dot_alias "${entries[@]}" && is_zsh_keymap=1
+	local max_command_size; max_command_size=$(keymap_get_max_command_size "${entries[@]}")
+
+	local output; output=$(
+		for entry in "${entries[@]}"; do
+			keymap_print_entry "$entry" "$is_zsh_keymap" "$max_command_size"
+		done
+	)
+
+	echo
+	echo "$output" | bw | strip_left | args_keymap_s "${filters[@]}"
+}
+
 # Example:
 #   ```
 #   hc       # Open tab to the latest commit
@@ -108,19 +138,15 @@ function keymap_has_disjoint_dups {
 	[[ -n $has_disjoint_dups ]] && return 0 || return 1
 }
 
-function keymap_set_alias {
-	local key=$1
-	local value=$2
+function keymap_has_dot_alias {
+	local entries=("$@")
 
-	# Do not overwrite reserved keywords, error instead
-	if is_reserved "$key"; then
-		echo
-		red_bar "\`$key\` is a reserved keyword"
-		return
-	fi
+	for entry in "${entries[@]}"; do
+		# shellcheck disable=SC2076
+		[[ $entry =~ ".+\\$KEYMAP_DOT.+ # .+" ]] && return 0
+	done
 
-	# shellcheck disable=SC2086,SC2139
-	alias $key="$value"
+	return 1
 }
 
 function keymap_set_dot_aliases {
@@ -371,17 +397,6 @@ function keymap_annotate_the_dot {
 		"$(gray_fg "# Omit it when invoking a mapping")"
 }
 
-function keymap_has_dot_alias {
-	local entries=("$@")
-
-	for entry in "${entries[@]}"; do
-		# shellcheck disable=SC2076
-		[[ $entry =~ ".+\\$KEYMAP_DOT.+ # .+" ]] && return 0
-	done
-
-	return 1
-}
-
 function keymap_is_key_mapped {
 	local alias=$1; shift
 	local key=$1; shift
@@ -392,4 +407,12 @@ function keymap_is_key_mapped {
 	done
 
 	return 1
+}
+
+# Includes custom zsh and non-zsh keymaps
+# But excludes default keyboard shortcuts
+function keymap_files {
+	ls "$ZSHRC_DIR"/**/*_keymap.zsh | bw | grep --invert-match _tests
+	# Note: ^ `ls "$ZSHRC_DIR"/**!(_tests)/*_keymap.zsh` works in the current shell
+	# But it isn't working in the tests subshell even with `setopt EXTENDED_GLOB`
 }

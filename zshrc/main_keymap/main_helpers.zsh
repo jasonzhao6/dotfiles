@@ -1,3 +1,36 @@
+# Includes custom zsh and non-zsh keymaps
+# But excludes default keyboard shortcuts
+function main_keymap_extract_keymaps {
+	local keymap_name=$1
+
+	main_keymap_find_keymaps_by_type
+
+	# Open keymap array
+	local extracted="$keymap_name=(\n"
+
+	# Populate keymap array
+
+	# shellcheck disable=SC2031
+	for keymap in "${reply_zsh_keymaps[@]}"; do
+		extracted+="\t'$keymap'\n"
+	done
+
+	extracted+="\t''\n"
+
+	# shellcheck disable=SC2031
+	for keymap in "${reply_non_zsh_keymaps[@]}"; do
+		extracted+="\t'$keymap'\n"
+	done
+
+	# Close keymap array
+	extracted+=')'
+
+	# Refresh extracted keymap
+	echo $extracted > "$ALL_KEYMAP_FILE"
+}
+
+# Includes custom zsh and non-zsh keymaps
+# But excludes default keyboard shortcuts
 function main_keymap_find_keymaps_by_type {
 	reply_zsh_keymaps=()
 	reply_non_zsh_keymaps=()
@@ -22,10 +55,16 @@ function main_keymap_find_keymaps_by_type {
 	done < <(keymap_files)
 }
 
+# Includes custom zsh and non-zsh keymaps
+# Also includes default keyboard shortcuts
 function main_keymap_find_key_mappings_by_type {
 	local description=$*
 
-	local keymaps; keymaps=$(keymap_names)
+	local keymaps; keymaps=$(
+		pgrep --only-matching "^[A-Z_]+_KEYMAP(?==\($)" "$ZSHRC_DIR"/**/*_keymap*.zsh |
+			bw |
+			sed 's/^[^:]*://'
+	)
 
 	# Declare vars used in `while` loop
 	reply_zsh_mappings=()
@@ -64,33 +103,18 @@ function main_keymap_find_key_mappings_by_type {
 	done <<< "$keymaps"
 }
 
-function main_keymap_extract {
-	local keymap_name=$1
+function main_keymap_print_key_mappings {
+	local is_zsh_keymap=$1; shift
+	local entries=("$@")
 
-	main_keymap_find_keymaps_by_type
+	[[ -z ${entries[*]} ]] && return
 
-	# Open keymap array
-	local extracted="$keymap_name=(\n"
+	local max_command_size; max_command_size=$(keymap_get_max_command_size "${entries[@]}")
 
-	# Populate keymap array
-
-	# shellcheck disable=SC2031
-	for keymap in "${reply_zsh_keymaps[@]}"; do
-		extracted+="\t'$keymap'\n"
+	echo
+	for entry in "${entries[@]}"; do
+		keymap_print_entry "$entry" "$is_zsh_keymap" "$max_command_size"
 	done
-
-	extracted+="\t''\n"
-
-	# shellcheck disable=SC2031
-	for keymap in "${reply_non_zsh_keymaps[@]}"; do
-		extracted+="\t'$keymap'\n"
-	done
-
-	# Close keymap array
-	extracted+=')'
-
-	# Refresh extracted keymap
-	echo $extracted > "$ALL_KEYMAP_FILE"
 }
 
 function main_keymap_print_keyboard_shortcuts {
