@@ -5,7 +5,7 @@ function main_keymap_find_keymaps_by_type {
 	local current_namespace
 	local current_alias
 
-	keymap_files | while IFS= read -r file; do
+	while IFS= read -r file; do
 		# Zsh keymaps have a `_DOT` variable used by key mappings
 		is_zsh_keymap=$(egrep --only-matching "[A-Z]+_DOT=\"" "$file")
 
@@ -19,7 +19,7 @@ function main_keymap_find_keymaps_by_type {
 			# shellcheck disable=SC2030
 			reply_non_zsh_keymaps+=("$current_alias # Show \`$current_namespace\`")
 		fi
-	done
+	done < <(keymap_files)
 }
 
 function main_keymap_find_key_mappings_by_type {
