@@ -9,11 +9,10 @@ function keymap_files {
 }
 
 function keymap_names {
-	grep '_KEYMAP=(' "$ZSHRC_DIR"/**/*.zsh |
+	# No need to exclude `TEST_KEYMAP` b/c it's not sourced when not testing
+	pgrep --only-matching "^[A-Z_]+_KEYMAP(?==\($)" "$ZSHRC_DIR"/**/*_keymap*.zsh |
 		bw |
-		grep --invert-match TEST_KEYMAP |
-		sed 's/^[^:]*://' |
-		sed 's/=($//'
+		sed 's/^[^:]*://'
 }
 
 # Used to perform per-keymap filtering, e.g `m.- {match}* {-mismatch}*`
