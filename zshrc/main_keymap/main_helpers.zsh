@@ -1,5 +1,3 @@
-# Includes custom zsh and non-zsh keymaps
-# But excludes default keyboard shortcuts
 function main_keymap_extract_keymaps {
 	local keymap_name=$1
 
@@ -29,11 +27,10 @@ function main_keymap_extract_keymaps {
 	echo $extracted > "$ALL_KEYMAP_FILE"
 }
 
-# Includes custom zsh and non-zsh keymaps
-# But excludes default keyboard shortcuts
 function main_keymap_find_keymaps_by_type {
 	reply_zsh_keymaps=()
 	reply_non_zsh_keymaps=()
+
 	local is_zsh_keymap
 	local current_namespace
 	local current_alias
@@ -55,10 +52,10 @@ function main_keymap_find_keymaps_by_type {
 	done < <(keymap_files)
 }
 
-# Includes custom zsh and non-zsh keymaps
-# Also includes default keyboard shortcuts
 function main_keymap_find_key_mappings_by_type {
 	local description=$*
+	reply_zsh_mappings=()
+	reply_non_zsh_mappings=()
 
 	local keymaps; keymaps=$(
 		pgrep --only-matching "^[A-Z_]+_KEYMAP(?==\($)" "$ZSHRC_DIR"/**/*_keymap*.zsh |
@@ -66,9 +63,6 @@ function main_keymap_find_key_mappings_by_type {
 			sed 's/^[^:]*://'
 	)
 
-	# Declare vars used in `while` loop
-	reply_zsh_mappings=()
-	reply_non_zsh_mappings=()
 	local entries
 	local non_zsh_namespace
 

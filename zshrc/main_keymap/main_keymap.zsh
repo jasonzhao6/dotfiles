@@ -58,6 +58,8 @@ ALL_KEYMAP_FILE="$ZSHRC_DIR/${MAIN_NAMESPACE}/$MAIN_NAMESPACE.all.zsh"
 source "$ALL_KEYMAP_FILE"
 keymap_set_alias "${MAIN_ALIAS}a-" "main_keymap_a > /dev/null && keymap_filter_entries ALL_KEYMAP"
 
+# Includes custom zsh and non-zsh keymaps
+# But excludes default keyboard shortcuts
 function main_keymap_a {
 	# Show the cached keymap-of-keymaps right away
 	keymap_print_help "$ALL_NAMESPACE" '(no-op)' "${ALL_KEYMAP[@]}"
@@ -99,6 +101,8 @@ function main_keymap_o {
 	main_keymap_print_keyboard_shortcuts 'macOS' "${MAC_OS_KEYMAP[@]}"
 }
 
+# Includes custom zsh and non-zsh keymaps
+# Also includes default keyboard shortcuts
 function main_keymap_r {
 	local description=$*
 
@@ -125,6 +129,8 @@ function main_keymap_t {
 	main_keymap_print_keyboard_shortcuts 'Terminal' "${TERMINAL_KEYMAP[@]}"
 }
 
+# Includes zsh keymaps following a `KEYMAP_DOT`
+# Includes non-zsh keymaps following a `KEYMAP_DASH`
 function main_keymap_w {
 	local key=$1
 	[[ -z $key ]] && echo && red_bar 'key required' && return
