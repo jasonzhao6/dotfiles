@@ -24,6 +24,13 @@ ZSHRC_UNDER_TESTING=1 source ~/.zshrc
 # Source test harness
 source "$ZSHRC_DIR"/_tests/_test_harness.zsh
 
+# Track code stats
+echo # Print an extra `echo` since we are stripping it before tee'ing to file
+main_keymap_, | ruby_strip | tee "$ZSHRC_DIR"/_code_stats.txt | cat
+
+# Track test stats
+echo 'Test stats:' > "$ZSHRC_DIR"/_test_stats.txt
+
 #
 # Test sections: Start here
 #

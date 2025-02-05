@@ -110,10 +110,6 @@ function zsh_keymap_s {
 }
 
 function zsh_keymap_t {
-	# Print extra `echo` since we are stripping the original one before `tee`
-	echo
-	main_keymap_, | ruby_strip | tee "$ZSHRC_DIR"/_stats.txt | cat
-
 	zsh "$ZSHRC_DIR"/_tests.zsh "$@"
 }
 

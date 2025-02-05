@@ -37,7 +37,7 @@ function main_keymap_, {
 	main_keymap_find_key_mappings_by_type
 
 	echo
-	echo Stats:
+	echo Code stats:
 
 	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
 	echo "- ${#reply_zsh_mappings} zsh mappings"

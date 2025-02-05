@@ -22,8 +22,14 @@ function run_with_filter {
 function print_summary {
 	local message=$1
 
+	message="$passes/$total $message"
+
+	# Print to test stats
+	echo "- $message" >> "$ZSHRC_DIR"/_test_stats.txt
+
+	# Print to terminal
 	echo
-	echo "($passes/$total $message)"
+	echo "($message)"
 	[[ $passes -ne $total ]] && echo "$failed" "$debug"
 }
 
