@@ -17,8 +17,9 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}w2 # Set namespace and and us-west-2 region"
 	''
 	"${KUBECTL_DOT}e {command} # Exec a command"
-	"${KUBECTL_DOT}g {resource type} # Get resources"
-	"${KUBECTL_DOT}k {resource type} # Get resources as args"
+	"${KUBECTL_DOT}g {command} # Get resources"
+	"${KUBECTL_DOT}gg {command} # Get resources with \`-o wide\`"
+	"${KUBECTL_DOT}k {resource type} {match}* {-mismatch}* # Get resources as args"
 	"${KUBECTL_DOT}d {command} # Describe resource(s)"
 	''
 	"${KUBECTL_DOT}b {pod} # Exec into bash"
@@ -89,9 +90,15 @@ function kubectl_keymap_e2 {
 }
 
 function kubectl_keymap_g {
-	local resource="$1"
+	local command=("$@")
 
-	kubectl get "$resource"
+	kubectl get "${command[@]}"
+}
+
+function kubectl_keymap_gg {
+	local command=("$@")
+
+	kubectl get "${command[@]}" -o wide
 }
 
 function kubectl_keymap_h {
