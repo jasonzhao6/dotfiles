@@ -21,8 +21,8 @@ function test__main_keymap_r__when_specifying_a_description {
 
 			  intellij_alt: alt-o # Open on GitHub
 			  all: h              # Show \`github_keymap\`
-			  vimium_search: h    # Github Search
-			  vimium_search: hh   # Github Search (TENGF)
+			  vimium_search: h    # Github Search (TENGF)
+			  vimium_search: hh   # Github Search
 			  vimium_search: hr   # Github Repos
 		eof
 	)"

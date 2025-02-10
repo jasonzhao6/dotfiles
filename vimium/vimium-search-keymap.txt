@@ -15,8 +15,8 @@ gg: https://mail.google.com/mail/u/0/#search/%s Google Gmail
 gi: https://www.google.com/search?q=%s&udm=2 Google Images
 gm: https://www.google.com/maps?q=%s Google Maps
 
-h: https://github.marqeta.com/search?q=%s&type=code Github Search
-hh: https://github.marqeta.com/search?q=org%3Atransaction-engine+%s&type=code Github Search (TENGF)
+h: https://github.marqeta.com/search?q=org%3Atransaction-engine+%s&type=code Github Search (TENGF)
+hh: https://github.marqeta.com/search?q=%s&type=code Github Search
 hr: https://github.marqeta.com/orgs/transaction-engine/repositories?q=%s Github Repos
 
 j: https://marqeta.atlassian.net/issues/%s Jira Ticket
