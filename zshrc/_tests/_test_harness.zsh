@@ -24,8 +24,11 @@ function print_summary {
 
 	message="$passes/$total $message"
 
-	# Print to test stats
-	echo "- $message" >> "$ZSHRC_DIR"/_test_stats.txt
+
+	# Print to test stats if running full test suite
+	if [[ -z $ZSHRC_TESTS_SECTION_FILTER && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
+		echo "- $message" >> "$ZSHRC_DIR"/_test_stats.txt
+	fi
 
 	# Print to terminal
 	echo

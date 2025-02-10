@@ -304,8 +304,8 @@ function test__other_keymap_uu {	local old; old=$(
 		other_keymap_uu <(echo "$old") <(echo "$new") | bw
 	)" "$(
 		cat <<-eof
-			This is the original content.                                   |       This is the modified content.
-			                                                                >       New Line
+			This is the original content.                                 | This is the modified content.
+			                                                              > New Line
 		eof
 	)"
 }; run_with_filter test__other_keymap_uu

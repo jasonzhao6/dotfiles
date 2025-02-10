@@ -24,19 +24,22 @@ ZSHRC_UNDER_TESTING=1 source ~/.zshrc
 # Source test harness
 source "$ZSHRC_DIR"/_tests/_test_harness.zsh
 
-# Track code stats
-echo # Print an extra `echo` since we are stripping it before tee'ing to file
-main_keymap_, | ruby_strip | tee "$ZSHRC_DIR"/_code_stats.txt | cat
+# Track code and test stats if running full test suite
+# shellcheck disable=SC2031
+if [[ -z $ZSHRC_TESTS_SECTION_FILTER && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
+	# Code stats
+	echo # Print an extra `echo` since we are stripping it before tee'ing to file
+	main_keymap_, | ruby_strip | tee "$ZSHRC_DIR"/_code_stats.txt | cat
 
-# Track test stats
-echo 'Test stats:' > "$ZSHRC_DIR"/_test_stats.txt
+	# Test stats
+	echo 'Test stats:' > "$ZSHRC_DIR"/_test_stats.txt
+fi
 
 #
 # Test sections: Start here
 #
 
 ZSHRC_TESTS_SECTION_NUMBER=1
-# shellcheck disable=SC2031
 if [[ $ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER ]]; then
 	source "$ZSHRC_DIR"/_tests/_run_all_test_cases.zsh
 	run_all_test_cases_section $ZSHRC_TESTS_SECTION_NUMBER
