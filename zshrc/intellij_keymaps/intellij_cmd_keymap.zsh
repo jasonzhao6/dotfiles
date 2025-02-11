@@ -34,6 +34,7 @@ INTELLIJ_CMD_KEYMAP=(
 	''
 	"cmd-[1-8] # Select tabs #1-8 (convention)"
 	"cmd-9 # Select last tab (Convention)"
+	"cmd-p # Keep tab open"
 	''
 	"cmd-alt-1 # Collapse all (TextMate)"
 	"cmd-alt-2 # Expand all to level 1"

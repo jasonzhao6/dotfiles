@@ -19,6 +19,7 @@ INTELLIJ_CTRL_KEYMAP=(
 	''
 	"ctrl-c # Close tabs to the right"
 	"ctrl-shift-c # Close tabs to the left"
+	"ctrl-shift-t # Reopen closed tab"
 	"ctrl-r # Rename variable in file / file in project"
 	"ctrl-shift-r # Rename file"
 	''
@@ -31,7 +32,7 @@ INTELLIJ_CTRL_KEYMAP=(
 	"ctrl-w # Add selection for next occurrence (TextMate)"
 	"ctrl-shift-w # Unselect occurrence"
 	"ctrl-v # Select all occurrences"
- 	"ctrl-h # Clone caret above"
+	"ctrl-h # Clone caret above"
 	"ctrl-t # Clone caret below"
 	"ctrl-m # Multi-column selection mode"
 	''
