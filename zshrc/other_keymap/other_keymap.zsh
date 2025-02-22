@@ -57,8 +57,8 @@ function other_keymap {
 # Key mappings (Alphabetized)
 #
 
-OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$HOME/Downloads/1.txt"
-OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$HOME/Downloads/2.txt"
+OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$HOME/Documents/1.txt"
+OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$HOME/Documents/2.txt"
 
 source "$ZSHRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
 
