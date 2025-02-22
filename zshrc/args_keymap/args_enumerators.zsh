@@ -5,6 +5,8 @@ function all {
 
 	rm -f "$ALL_FILE"
 
+	# Collect arg outputs in `ALL_FILE` to print at the end
+	# Otherwise, arg outputs are interleaved with `&` outputs
 	for number in $(seq 1 "$(args_size)"); do
 		args_keymap_n "$number" "$command" >> "$ALL_FILE" &
 	done
