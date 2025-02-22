@@ -16,20 +16,21 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}e2 # Set namespace and use us-east-2 region"
 	"${KUBECTL_DOT}w2 # Set namespace and and us-west-2 region"
 	''
-	"${KUBECTL_DOT}e {command} # Exec a command"
-	"${KUBECTL_DOT}g {command} # Get resources"
-	"${KUBECTL_DOT}gg {command} # Get resources with \`-o wide\`"
 	"${KUBECTL_DOT}k {resource type} {match}* {-mismatch}* # Get resources as args"
-	"${KUBECTL_DOT}d {command} # Describe resource(s)"
+	"${KUBECTL_DOT}g {params} # Get resources"
+	"${KUBECTL_DOT}gg {params} # Get resources with \`-o wide\`"
+	"${KUBECTL_DOT}d {params} # Describe resource(s)"
+	"${KUBECTL_DOT}m {params} # Edit with TextMate"
 	''
+	"${KUBECTL_DOT}e {params} # Exec a command"
+	"${KUBECTL_DOT}c {command} {pod} # Exec a command on a pod"
 	"${KUBECTL_DOT}b {pod} # Exec into bash"
-	"${KUBECTL_DOT}c {pod} # Exec a command"
 	"${KUBECTL_DOT}l {pod} # Show logs"
 	''
-	"${KUBECTL_DOT}j {command} # Get resource as json & save a copy"
-	"${KUBECTL_DOT}jj {command} # Get the copy of json"
-	"${KUBECTL_DOT}y {command} # Get resource as yaml & save a copy"
-	"${KUBECTL_DOT}yy {command} # Get the copy of yaml"
+	"${KUBECTL_DOT}j {params} # Get resource as json & save a copy"
+	"${KUBECTL_DOT}jj # Get the copy of json"
+	"${KUBECTL_DOT}y {params} # Get resource as yaml & save a copy"
+	"${KUBECTL_DOT}yy # Get the copy of yaml"
 	''
 	"${KUBECTL_DOT}z # Copy history bindings and \`kubectl\` helpers"
 )
@@ -68,15 +69,15 @@ function kubectl_keymap_c {
 }
 
 function kubectl_keymap_d {
-	local command=("$@")
+	local params=("$@")
 
-	kubectl describe "${command[@]}"
+	kubectl describe "${params[@]}"
 }
 
 function kubectl_keymap_e {
-	local command=("$@")
+	local params=("$@")
 
-	kubectl exec "${command[@]}"
+	kubectl exec "${params[@]}"
 }
 
 function kubectl_keymap_e1 {
@@ -90,15 +91,15 @@ function kubectl_keymap_e2 {
 }
 
 function kubectl_keymap_g {
-	local command=("$@")
+	local params=("$@")
 
-	kubectl get "${command[@]}"
+	kubectl get "${params[@]}"
 }
 
 function kubectl_keymap_gg {
-	local command=("$@")
+	local params=("$@")
 
-	kubectl get "${command[@]}" -o wide
+	kubectl get "${params[@]}" -o wide
 }
 
 function kubectl_keymap_h {
@@ -108,10 +109,10 @@ function kubectl_keymap_h {
 }
 
 function kubectl_keymap_j {
-	local command=("$@")
+	local params=("$@")
 
-	# Save a copy in case original command is not deterministic b/c it references an arg number
-	[[ -n ${command[*]} ]] && kubectl get "${command[@]}" -o json | tee ~/Documents/k8.get.json | jq
+	# Save a copy in case original params is not deterministic b/c it references an arg number
+	[[ -n ${params[*]} ]] && kubectl get "${params[@]}" -o json | tee ~/Documents/k8.get.json | jq
 }
 
 function kubectl_keymap_jj {
@@ -131,6 +132,12 @@ function kubectl_keymap_l {
 	local pod="$1"
 
 	kubectl logs "$pod"
+}
+
+function kubectl_keymap_m {
+	local params=("$@")
+
+	kubectl edit "${params[@]}"
 }
 
 function kubectl_keymap_n {
@@ -162,10 +169,10 @@ function kubectl_keymap_x {
 }
 
 function kubectl_keymap_y {
-	local command=("$@")
+	local params=("$@")
 
-	# Save a copy in case original command is not deterministic b/c it references an arg number
-	[[ -n ${command[*]} ]] && kubectl get "${command[@]}" -o yaml | tee ~/Documents/k8.get.yaml | cat
+	# Save a copy in case original params is not deterministic b/c it references an arg number
+	[[ -n ${params[*]} ]] && kubectl get "${params[@]}" -o yaml | tee ~/Documents/k8.get.yaml | cat
 }
 
 function kubectl_keymap_yy {
