@@ -119,6 +119,8 @@ function kubectl_keymap_jj {
 }
 
 function kubectl_keymap_k {
+	[[ -z $1 ]] && return
+
 	local resource="$1"; shift
 	local filters=("$@")
 
