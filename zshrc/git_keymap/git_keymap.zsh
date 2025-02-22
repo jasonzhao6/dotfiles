@@ -31,6 +31,7 @@ GIT_KEYMAP=(
 	"${GIT_DOT}u {number} # Undo the last N commits"
 	"${GIT_DOT}z # Discard uncommitted changes"
 	"${GIT_DOT}z {number} # Discard uncommitted changes & the last N commits"
+	"${GIT_DOT}zz # Discard uncommitted changes & the last commit"
 	''
 	"${GIT_DOT}s # Git stash"
 	"${GIT_DOT}s {message} # Git stash with message"
@@ -262,4 +263,8 @@ function git_keymap_z {
 	git add --all
 	git reset --hard
 	git status
+}
+
+function git_keymap_zz {
+	git_keymap_z 1
 }
