@@ -13,4 +13,6 @@ GMAIL_KEYMAP=(
 	'x # Select conversation'
 	'I # Mark as read'
 	'U # Mark as unread'
+	''
+	'? # Show keyboard shortcuts'
 )

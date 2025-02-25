@@ -193,6 +193,7 @@ function test__keymap_invoke__when_invoking_-_on_a_non_zsh_keymap {
 	    10	x       # Select conversation
 	    11	I       # Mark as read
 	    12	U       # Mark as unread
+	    13	?       # Show keyboard shortcuts
 		eof
 	)"
 }; run_with_filter test__keymap_invoke__when_invoking_-_on_a_non_zsh_keymap
