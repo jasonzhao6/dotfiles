@@ -26,6 +26,7 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}c {command} {pod} # Exec a command on a pod"
 	"${KUBECTL_DOT}b {pod} # Exec into bash"
 	"${KUBECTL_DOT}l {pod} # Show logs"
+	"${KUBECTL_DOT}ll {pod} # Tail logs"
 	''
 	"${KUBECTL_DOT}j {params} # Get resource as json & save a copy"
 	"${KUBECTL_DOT}jj # Get the copy of json"
@@ -132,6 +133,12 @@ function kubectl_keymap_l {
 	local pod="$1"
 
 	kubectl logs "$pod"
+}
+
+function kubectl_keymap_ll {
+	local pod="$1"
+
+	kubectl logs -f "$pod"
 }
 
 function kubectl_keymap_m {
