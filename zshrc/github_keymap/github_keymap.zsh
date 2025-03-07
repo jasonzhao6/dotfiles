@@ -11,7 +11,7 @@ GITHUB_KEYMAP=(
 	"${GITHUB_DOT}r {match}* {-mismatch}* # Filter repos"
 	''
 	"${GITHUB_DOT}h # Navigate to the current org"
-	"${GITHUB_DOT}h {repo} # Navigate to the specified repo"
+	"${GITHUB_DOT}h {match}* {-mismatch}* # Navigate to the current org & filter repos"
 	"${GITHUB_DOT}o # Open the current repo"
 	"${GITHUB_DOT}o {repo} # Open the specified repo (Shortcut: \`$GITHUB_ALIAS\`)"
 	"${GITHUB_DOT}p # Open the latest PRs"
@@ -68,9 +68,9 @@ function github_keymap_g {
 }
 
 function github_keymap_h {
-	local repo=$1
+	local filters=("$@")
 
-	cd ~/github/"$(github_keymap_org)"/"$repo" && nav_keymap_n || true
+	cd ~/github/"$(github_keymap_org)" && nav_keymap_n "${filters[@]}"
 }
 
 function github_keymap_n {
