@@ -16,8 +16,7 @@ GIT_KEYMAP=(
 	"${GIT_DOT}m # Amend the previous commit"
 	"${GIT_DOT}w # Reword the previous commit"
 	"${GIT_DOT}e # Create an empty commit"
-	"${GIT_DOT}y # Cherry pick a commit"
-	"${GIT_DOT}i # Fix up a commit"
+	"${GIT_DOT}i {sha} # Fix up a commit"
 	"${GIT_DOT}ii # List the last 20 commits"
 	''
 	"${GIT_DOT}x {number} # Rebase the last N commits"
@@ -26,6 +25,10 @@ GIT_KEYMAP=(
 	"${GIT_DOT}xu # Rebase with the latest upstream"
 	"${GIT_DOT}xc # Rebase continue"
 	"${GIT_DOT}xa # Rebase abort"
+	''
+	"${GIT_DOT}y {sha} # Cherry pick a commit"
+	"${GIT_DOT}yc # Cherry pick continue"
+	"${GIT_DOT}ya # Cherry pick abort"
 	''
 	"${GIT_DOT}u # Undo the last commit"
 	"${GIT_DOT}u {number} # Undo the last N commits"
@@ -251,6 +254,15 @@ function git_keymap_y {
 	local sha=$1
 
 	git cherry-pick "$sha"
+}
+
+function git_keymap_ya {
+	git cherry-pick --abort
+}
+
+function git_keymap_yc {
+	git add --all
+	git cherry-pick --continue
 }
 
 function git_keymap_z {
