@@ -1,5 +1,5 @@
 # shellcheck disable=SC2034 # Used by `main_keymap.zsh`
-MAC_OS_KEYMAP=(
+MACOS_KEYMAP=(
 	'ctrl-{esc} # Read selected text (Custom)'
 	'ctrl-{space} # Toggle Dvorak (Custom)'
 	''

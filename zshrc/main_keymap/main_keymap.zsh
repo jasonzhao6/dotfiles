@@ -56,7 +56,6 @@ ALL_NAMESPACE='Keymap of keymaps'
 ALL_KEYMAP_FILE="$ZSHRC_DIR/${MAIN_NAMESPACE}/$MAIN_NAMESPACE.all.zsh"
 
 source "$ALL_KEYMAP_FILE"
-keymap_set_alias "${MAIN_ALIAS}a-" "main_keymap_a > /dev/null && keymap_filter_entries ALL_KEYMAP"
 
 # Includes custom zsh and non-zsh keymaps
 # But excludes default keyboard shortcuts
@@ -94,10 +93,10 @@ function main_keymap_n {
 	main_keymap_show_non_zsh_keymap 'Notion' $description
 }
 
-source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.mac_os.zsh"
-keymap_set_alias "${MAIN_ALIAS}o-" "keymap_filter_entries MAC_OS_KEYMAP"
+source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.macos.zsh"
 function main_keymap_o {
-	main_keymap_print_keyboard_shortcuts 'macOS' "${MAC_OS_KEYMAP[@]}"
+	local description=$*
+	main_keymap_show_non_zsh_keymap 'macOS' $description
 }
 
 # Includes custom zsh and non-zsh keymaps

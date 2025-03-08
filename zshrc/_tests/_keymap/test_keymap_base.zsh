@@ -34,13 +34,6 @@ function test__keymap_init__it_sets_alias {
 	)" "$TEST_ALIAS: aliased to $TEST_NAMESPACE"
 }; run_with_filter test__keymap_init__it_sets_alias
 
-function test__keymap_init__it_sets_alias- {
-	assert "$(
-		keymap_init $TEST_NAMESPACE $TEST_ALIAS "${TEST_KEYMAP[@]}"
-		which $TEST_ALIAS-
-	)" "$TEST_ALIAS-: aliased to keymap_filter_entries $TEST_NAMESPACE"
-}; run_with_filter test__keymap_init__it_sets_alias-
-
 function test__keymap_init__it_sets_key_alias {
 	assert "$(
 		keymap_init $TEST_NAMESPACE $TEST_ALIAS "${TEST_KEYMAP[@]}"
@@ -93,12 +86,10 @@ function test__keymap_init__still_sets_some_aliases_with_disjoint_duplicates {
 	assert "$(
 		keymap_init $TEST_NAMESPACE $TEST_ALIAS "${join_dups[@]}" > /dev/null
 		which $TEST_ALIAS
-		which $TEST_ALIAS-
 		which ${TEST_ALIAS}b
 	)" "$(
 		cat <<-eof
 			test__: aliased to test_keymap
-			test__-: aliased to keymap_filter_entries test_keymap
 			test__b not found
 		eof
 	)"
@@ -122,31 +113,28 @@ function test__keymap_show {
 
 			Usage
 
-			  $ test__                         # Show this help
-			  $ test__ {description}           # Filter by description
+			  $ test__                   # Show this help
+			  $ test__ {description}     # Filter by description
 
-			  $ test__.{key}                   # Invoke {key} mapping
-			  $ test__.{key} {arg}             # Invoke {key} mapping with {arg}
+			  $ test__.{key}             # Invoke {key} mapping
+			  $ test__.{key} {arg}       # Invoke {key} mapping with {arg}
 
-			  $ test__.-                       # List mappings in this namespace
-			  $ test__.- {match}* {-mismatch}* # Filter mappings in this namespace
-
-			          ^                        # The \`.\` is only for documentation
-			                                   # Omit it when invoking a mapping
+			          ^                  # The \`.\` is only for documentation
+			                             # Omit it when invoking a mapping
 
 			Mappings
 
-			  $ test__.a                       # First
-			  $ test__.aa                      # First related
+			  $ test__.a                 # First
+			  $ test__.aa                # First related
 
-			  $ test__.b                       # Second
-			  $ test__.c                       # Third without args
-			  $ test__.c {arg 1} {arg 2}       # Third with args
+			  $ test__.b                 # Second
+			  $ test__.c                 # Third without args
+			  $ test__.c {arg 1} {arg 2} # Third with args
 			  $ test__.d
 
-			  $ {1-9}                          # #1-9
-			  $ cmd-\`                          # Backtick
-			  $ cmd-\                          # Escape escape
+			  $ {1-9}                    # #1-9
+			  $ cmd-\`                    # Backtick
+			  $ cmd-\                    # Escape escape
 		eof
 	)"
 }; run_with_filter test__keymap_show

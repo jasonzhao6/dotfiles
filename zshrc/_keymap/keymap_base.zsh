@@ -12,9 +12,6 @@ KEYMAP_USAGE=(
 	''
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} # Invoke {key} mapping"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} {arg} # Invoke {key} mapping with {arg}"
-	''
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}- # List mappings in this namespace"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}- {match}* {-mismatch}* # Filter mappings in this namespace"
 )
 
 function keymap_init {
@@ -22,11 +19,9 @@ function keymap_init {
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
-	keymap_set_alias "$alias" "$namespace"
-
-	keymap_set_alias "$alias-" "keymap_filter_entries $namespace"
-
 	keymap_has_disjoint_dups "$namespace" "${keymap_entries[@]}" && return
+
+	keymap_set_alias "$alias" "$namespace"
 
 	# Terminal keymaps have dot aliases; IntelliJ/Vimium keymaps do not
 	if keymap_has_dot_alias "${keymap_entries[@]}"; then
