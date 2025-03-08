@@ -72,7 +72,14 @@ function other_keymap_0 {
 }
 
 function other_keymap_1 {
-	eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
+	# When invoked as standalone command
+	if [[ -t 0 ]]; then
+		eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
+
+	# When invoked after a pipe `|`
+	else
+		bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
+	fi
 }
 
 function other_keymap_11 {
@@ -80,7 +87,14 @@ function other_keymap_11 {
 }
 
 function other_keymap_2 {
-	eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+	# When invoked as standalone command
+	if [[ -t 0 ]]; then
+		eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+
+	# When invoked after a pipe `|`
+	else
+		bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+	fi
 }
 
 function other_keymap_22 {
