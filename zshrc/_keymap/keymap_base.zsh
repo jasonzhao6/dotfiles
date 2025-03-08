@@ -8,6 +8,7 @@ KEYMAP_ESCAPE="\\\\" # Escape twice to avoid special chars like `\n`
 
 KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS} # Show this help"
+	"${KEYMAP_ALIAS} {description} # Filter by description"
 	''
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} # Invoke {key} mapping"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} {arg} # Invoke {key} mapping with {arg}"
@@ -33,28 +34,20 @@ function keymap_init {
 	fi
 }
 
-function keymap_invoke {
+function keymap_show {
 	local namespace=$1; shift
 	local alias=$1; shift
 	local keymap_size=$1; shift
 	local keymap_entries=("${@:1:$keymap_size}"); shift "$keymap_size"
-	local key=$1; [[ -n $key ]] && shift
-	local args=("$@")
+	local description=$*
 
-	# If a `key` was not specified, print usage
-	[[ -z $key ]] && keymap_print_help "$namespace" "$alias" "${keymap_entries[@]}" && return
+	# If `description` was not specified, print usage
+	if [[ -z $description ]]; then
+		keymap_print_help "$namespace" "$alias" "${keymap_entries[@]}"
 
-	# Every keymap has an implicit `-` key set up by `keymap_init`
-	[[ $key == '-' ]] && eval "$alias- ${args[*]}" && return
-
-	# If found, invoke it with the specified `args`
-	if keymap_is_key_mapped "$alias" "$key" "${keymap_entries[@]}"; then
-		"${namespace}_${key}" "${args[@]}"
-
-	# If not found, print error
+	# Otherwise, filter mappings by `description`
 	else
-		echo
-		red_bar "\`$key\` key does not exist in \`$namespace\`"
+		keymap_filter_entries "$namespace" "$description"
 	fi
 }
 
@@ -77,23 +70,34 @@ function keymap_set_alias {
 	alias $key="$value"
 }
 
-# Used to perform per-keymap filtering, e.g `m.- {match}* {-mismatch}*`
 function keymap_filter_entries {
 	local namespace=$1; shift
-	local filters=("$@")
+	local description=$*
 
+	# Find keymap entries with matching description
 	local entries=("${(P)$(echo "$namespace" | upcase)[@]}")
-	local is_zsh_keymap; keymap_has_dot_alias "${entries[@]}" && is_zsh_keymap=1
-	local max_command_size; max_command_size=$(keymap_get_max_command_size "${entries[@]}")
+	local entries_matched=()
 
-	local output; output=$(
-		for entry in "${entries[@]}"; do
+	setopt nocasematch
+	for entry in "${entries[@]}"; do
+		if [[ $entry =~ $description ]]; then
+			entries_matched+=("$entry")
+		fi
+	done
+	unsetopt nocasematch
+
+	# Print keymap entries matched
+	echo
+	if [[ -z ${entries_matched[*]} ]]; then
+		red_bar "\`$description\` does not match any keymap description"
+  else
+		local is_zsh_keymap; keymap_has_dot_alias "${entries_matched[@]}" && is_zsh_keymap=1
+		local max_command_size; max_command_size=$(keymap_get_max_command_size "${entries_matched[@]}")
+
+		for entry in "${entries_matched[@]}"; do
 			keymap_print_entry "$entry" "$is_zsh_keymap" "$max_command_size"
 		done
-	)
-
-	echo
-	echo "$output" | bw | strip_left | args_keymap_s "${filters[@]}"
+	fi
 }
 
 # Example:

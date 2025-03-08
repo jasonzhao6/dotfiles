@@ -19,7 +19,7 @@ function docker_keymap {
 		fi
 	done
 
-	keymap_invoke $DOCKER_NAMESPACE $DOCKER_ALIAS ${#DOCKER_KEYMAP} "${DOCKER_KEYMAP[@]}" "$@"
+	keymap_show $DOCKER_NAMESPACE $DOCKER_ALIAS ${#DOCKER_KEYMAP} "${DOCKER_KEYMAP[@]}" "$@"
 }
 
 #

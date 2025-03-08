@@ -49,7 +49,7 @@ function terraform_keymap {
 		fi
 	done
 
-	keymap_invoke $TERRAFORM_NAMESPACE $TERRAFORM_ALIAS \
+	keymap_show $TERRAFORM_NAMESPACE $TERRAFORM_ALIAS \
 		${#TERRAFORM_KEYMAP} "${TERRAFORM_KEYMAP[@]}" "$@"
 }
 

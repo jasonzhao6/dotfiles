@@ -20,7 +20,7 @@ keymap_init $TEST_NAMESPACE $TEST_ALIAS "${join_dups[@]}"
 
 # shellcheck disable=SC2120 # This function can be called without arg to print help
 function test_keymap {
-	keymap_invoke $TEST_NAMESPACE $TEST_ALIAS ${#TEST_KEYMAP} "${TEST_KEYMAP[@]}" "$@"
+	keymap_show $TEST_NAMESPACE $TEST_ALIAS ${#TEST_KEYMAP} "${TEST_KEYMAP[@]}" "$@"
 }
 
 function test_keymap_b {
@@ -104,7 +104,7 @@ function test__keymap_init__still_sets_some_aliases_with_disjoint_duplicates {
 	)"
 }; run_with_filter test__keymap_init__still_sets_some_aliases_with_disjoint_duplicates
 
-function test__keymap_invoke {
+function test__keymap_show {
 	assert "$(test_keymap | bw | strip_right)" "$(
 		cat <<-eof
 
@@ -123,6 +123,7 @@ function test__keymap_invoke {
 			Usage
 
 			  $ test__                         # Show this help
+			  $ test__ {description}           # Filter by description
 
 			  $ test__.{key}                   # Invoke {key} mapping
 			  $ test__.{key} {arg}             # Invoke {key} mapping with {arg}
@@ -148,57 +149,29 @@ function test__keymap_invoke {
 			  $ cmd-\                          # Escape escape
 		eof
 	)"
-}; run_with_filter test__keymap_invoke
+}; run_with_filter test__keymap_show
 
-function test__keymap_invoke__when_invoking_- {
-	assert "$(test_keymap -)" "$(
+function test__keymap_show__with_partial_word {
+	assert "$(test_keymap fir | bw)" "$(
 		cat <<-eof
 
-		     1	$ test__.a                 # First
-		     2	$ test__.aa                # First related
-		     3	$ test__.b                 # Second
-		     4	$ test__.c                 # Third without args
-		     5	$ test__.c {arg 1} {arg 2} # Third with args
-		     6	$ test__.d
-		     7	$ {1-9}                    # #1-9
-		     8	$ cmd-\`                    # Backtick
-		     9	$ cmd-\                    # Escape escape
+		  $ test__.a  # First
+		  $ test__.aa # First related
 		eof
 	)"
-}; run_with_filter test__keymap_invoke__when_invoking_-
+}; run_with_filter test__keymap_show__with_partial_word
 
-function test__keymap_invoke__when_invoking_-_with_filters {
-	assert "$(test_keymap - -a -c)" "$(
+function test__keymap_show__with_multiple_words {
+	assert "$(test_keymap third with | bw)" "$(
 		cat <<-eof
 
-		     1	$ test__.d
-		     2	$ {1-9}                    # #1-9
+		  $ test__.c                 # Third without args
+		  $ test__.c {arg 1} {arg 2} # Third with args
 		eof
 	)"
-}; run_with_filter test__keymap_invoke__when_invoking_-_with_filters
+}; run_with_filter test__keymap_show__with_multiple_words
 
-function test__keymap_invoke__when_invoking_-_on_a_non_zsh_keymap {
-	assert "$(mg-)" "$(
-		cat <<-eof
-
-	     1	{enter} # Open conversation
-	     2	e       # Archive
-	     3	R       # Reply
-	     4	A       # Reply all
-	     5	F       # Forward
-	     6	!       # Report as spam
-	     7	u       # Back to threadlist
-	     8	j       # Older conversation
-	     9	k       # Newer conversation
-	    10	x       # Select conversation
-	    11	I       # Mark as read
-	    12	U       # Mark as unread
-	    13	?       # Show keyboard shortcuts
-		eof
-	)"
-}; run_with_filter test__keymap_invoke__when_invoking_-_on_a_non_zsh_keymap
-
-function test__keymap_invoke__when_invoking_-_on_a_non_zsh_keymap_with_filters {
+function test__keymap_show__on_a_non_zsh_keymap_with_filters {
 	assert "$(mg- -sel conver | bw)" "$(
 		cat <<-eof
 
@@ -207,21 +180,17 @@ function test__keymap_invoke__when_invoking_-_on_a_non_zsh_keymap_with_filters {
 	     3	k       # Newer conversation
 		eof
 	)"
-}; run_with_filter test__keymap_invoke__when_invoking_-_on_a_non_zsh_keymap_with_filters
+}; run_with_filter test__keymap_show__on_a_non_zsh_keymap_with_filters
 
-function test__keymap_invoke__when_invoking_b {
-	assert "$(test_keymap b)" 'Second'
-}; run_with_filter test__keymap_invoke__when_invoking_b
-
-function test__keymap_invoke__when_invoking_non_existent_z {
+function test__keymap_show__when_invoking_non_existent_z {
 	assert "$(test_keymap z)" "$(
 		cat <<-eof
 
-			$(red_bar "\`z\` key does not exist in \`$TEST_NAMESPACE\`")
+			$(red_bar "\`z\` does not match any keymap description")
 		eof
 	)"
-}; run_with_filter test__keymap_invoke__when_invoking_non_existent_z
+}; run_with_filter test__keymap_show__when_invoking_non_existent_z
 
-function test__keymap_invoke__when_invoking_keymap_of_keymaps {
+function test__keymap_show__when_invoking_keymap_of_keymaps {
 	assert "$(ma | grep "$ALL_NAMESPACE" | bw)" "  $ALL_NAMESPACE"
-}; run_with_filter test__keymap_invoke__when_invoking_keymap_of_keymaps
+}; run_with_filter test__keymap_show__when_invoking_keymap_of_keymaps

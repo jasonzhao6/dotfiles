@@ -50,7 +50,7 @@ function other_keymap {
 	local input=$*
 	[[ -n $input ]] && other_keymap_o "$input" && return
 
-	keymap_invoke $OTHER_NAMESPACE $OTHER_ALIAS ${#OTHER_KEYMAP} "${OTHER_KEYMAP[@]}" "$@"
+	keymap_show $OTHER_NAMESPACE $OTHER_ALIAS ${#OTHER_KEYMAP} "${OTHER_KEYMAP[@]}" "$@"
 }
 
 #

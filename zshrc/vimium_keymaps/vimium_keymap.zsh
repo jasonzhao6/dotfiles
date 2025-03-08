@@ -12,5 +12,5 @@ function vimium_keymap {
 	source "$VIMIUM_KEYMAP_FILE"
 	keymap_init $VIMIUM_NAMESPACE $VIMIUM_ALIAS "${VIMIUM_KEYMAP[@]}"
 
-	keymap_invoke $VIMIUM_NAMESPACE $VIMIUM_ALIAS ${#VIMIUM_KEYMAP} "${VIMIUM_KEYMAP[@]}" "$@"
+	keymap_show $VIMIUM_NAMESPACE $VIMIUM_ALIAS ${#VIMIUM_KEYMAP} "${VIMIUM_KEYMAP[@]}" "$@"
 }
