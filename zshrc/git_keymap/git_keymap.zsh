@@ -191,7 +191,7 @@ function git_keymap_rr {
 }
 
 function git_keymap_s {
-	local message="$*"
+	local message=$*
 
 	git add --all
 	git stash save "$message"

@@ -7,6 +7,41 @@ function test__main_keymap {
 	)" '1'
 }; run_with_filter test__main_keymap
 
+function test__main_keymap_g {
+	assert "$(mg | bw)" "$(
+		cat <<-eof
+
+			Gmail
+
+			  {enter} # Open conversation
+			  e       # Archive
+			  R       # Reply
+			  A       # Reply all
+			  F       # Forward
+			  !       # Report as spam
+			  u       # Back to threadlist
+
+			  j       # Older conversation
+			  k       # Newer conversation
+			  x       # Select conversation
+			  I       # Mark as read
+			  U       # Mark as unread
+
+			  ?       # Show keyboard shortcuts
+		eof
+	)"
+}; run_with_filter test__main_keymap_g
+
+function test__main_keymap_g__with_multiple_words {
+	assert "$(mg er con | bw)" "$(
+		cat <<-eof
+
+			  j # Older conversation
+			  k # Newer conversation
+		eof
+	)"
+}; run_with_filter test__main_keymap_g__with_multiple_words
+
 function test__main_keymap_r {
 	assert "$([[ $(main_keymap_r | wc -l) -gt 500 ]] && echo 1)" '1'
 }; run_with_filter test__main_keymap_r

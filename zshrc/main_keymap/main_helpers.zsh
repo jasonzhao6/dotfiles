@@ -1,7 +1,40 @@
+# shellcheck disable=SC2116 # Removing echo breaks array interpolation by name
+function main_keymap_show_non_zsh_keymap {
+	local name=$1; shift
+	local description=$*
+
+	local is_zsh_keymap=0
+	local namespace; namespace=$(echo "${name}_KEYMAP" | upcase)
+	local keymap_entries; keymap_entries=("${(P)$(echo "$namespace")[@]}")
+
+	if [[ -z $description ]]; then
+		echo
+		echo "$name"
+
+		main_keymap_print_key_mappings $is_zsh_keymap "${keymap_entries[@]}"
+	else
+		keymap_filter_entries "$namespace" "$description"
+	fi
+}
+
+function main_keymap_print_key_mappings {
+	local is_zsh_keymap=$1; shift
+	local keymap_entries=("$@")
+
+	[[ -z ${keymap_entries[*]} ]] && return
+
+	local max_command_size; max_command_size=$(keymap_get_max_command_size "${keymap_entries[@]}")
+
+	echo
+	for entry in "${keymap_entries[@]}"; do
+		keymap_print_entry "$entry" "$is_zsh_keymap" "$max_command_size"
+	done
+}
+
 function main_keymap_extract_keymaps {
 	local keymap_name=$1
 
-	main_keymap_find_keymaps_by_type
+	main_keymap_find_keys
 
 	# Open keymap array
 	local extracted="$keymap_name=(\n"
@@ -27,7 +60,7 @@ function main_keymap_extract_keymaps {
 	echo $extracted > "$ALL_KEYMAP_FILE"
 }
 
-function main_keymap_find_keymaps_by_type {
+function main_keymap_find_keys {
 	reply_zsh_keymaps=()
 	reply_non_zsh_keymaps=()
 
@@ -52,7 +85,7 @@ function main_keymap_find_keymaps_by_type {
 	done < <(keymap_files)
 }
 
-function main_keymap_find_key_mappings_by_type {
+function main_keymap_find_key_mappings {
 	local description=$*
 	reply_zsh_mappings=()
 	reply_non_zsh_mappings=()
@@ -63,67 +96,34 @@ function main_keymap_find_key_mappings_by_type {
 			sed 's/^[^:]*://'
 	)
 
-	local entries
-	local non_zsh_namespace
+	local keymap_entries
+	local non_zsh_name
 
-	# shellcheck disable=SC2034 # Used to define `entries`
+	# shellcheck disable=SC2034 # Used to define `keymap_entries`
 	while IFS= read -r keymap; do
 		# shellcheck disable=SC2206 # Adding double quote breaks array expansion
-		entries=(${(P)keymap})
-		# Note: ^ `entries=("${(P)$(echo "$keymap")[@]}")` actually works
-		# But it's convoluted, and it leaves in the empty entries, which we do not want
+		keymap_entries=(${(P)keymap})
 
-		# Find keymap entries with matching description
+		# Find keymap keymap_entries with matching description
 		setopt nocasematch
-		if keymap_has_dot_alias "${entries[@]}"; then
-			for entry in "${entries[@]}"; do
+		if keymap_has_dot_alias "${keymap_entries[@]}"; then
+			for entry in "${keymap_entries[@]}"; do
 				# shellcheck disable=SC2076
 				if [[ -z $description || $entry =~ ".* # .*$description.*" ]]; then
 					reply_zsh_mappings+=("$entry")
 				fi
 			done
 		else
-			# Unlike zsh entries, non-zsh entries lack a leading alias to indicate namespace
-			non_zsh_namespace=$(echo "${keymap%_KEYMAP}" | downcase)
+			# Unlike zsh keymap_entries, non-zsh keymap_entries lack a leading alias to indicate namespace
+			non_zsh_name=$(echo "${keymap%_KEYMAP}" | downcase)
 
-			for entry in "${entries[@]}"; do
+			for entry in "${keymap_entries[@]}"; do
 				# shellcheck disable=SC2076
 				if [[ -z $description || $entry =~ ".* # .*$description.*" ]]; then
-					reply_non_zsh_mappings+=("$non_zsh_namespace: $entry")
+					reply_non_zsh_mappings+=("$non_zsh_name: $entry")
 				fi
 			done
 		fi
 		unsetopt nocasematch
 	done <<< "$keymaps"
-}
-
-function main_keymap_print_key_mappings {
-	local is_zsh_keymap=$1; shift
-	local entries=("$@")
-
-	[[ -z ${entries[*]} ]] && return
-
-	local max_command_size; max_command_size=$(keymap_get_max_command_size "${entries[@]}")
-
-	echo
-	for entry in "${entries[@]}"; do
-		keymap_print_entry "$entry" "$is_zsh_keymap" "$max_command_size"
-	done
-}
-
-function main_keymap_print_keyboard_shortcuts {
-	local keymap_name=$1; shift
-	local keymap_entries=("$@")
-
-	local is_zsh_keymap=0
-	local max_command_size
-	max_command_size=$(keymap_get_max_command_size "${keymap_entries[@]}")
-
-	echo
-	echo "$keymap_name"
-	echo
-
-	for entry in "${keymap_entries[@]}"; do
-		keymap_print_entry "$entry" "$is_zsh_keymap" "$max_command_size"
-	done
 }

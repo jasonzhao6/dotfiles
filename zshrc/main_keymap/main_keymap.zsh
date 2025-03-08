@@ -34,15 +34,15 @@ source "$ZSHRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
 
 # shellcheck disable=SC1064,SC1072,SC1073 # Allow `,` in function name
 function main_keymap_, {
-	main_keymap_find_key_mappings_by_type
+	main_keymap_find_key_mappings
 
 	echo
 	echo Code stats:
 
-	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
+	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings`
 	echo "- ${#reply_zsh_mappings} zsh mappings"
 
-	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
+	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings`
 	echo "- ${#reply_non_zsh_mappings} non-zsh mappings"
 
 	ZSHRC_LINE_OF_CODE=$(egrep --invert-match '^\s*(#|$)' "$ZSHRC_DIR"/**/*.zsh | wc -l | strip_left)
@@ -77,22 +77,21 @@ function main_keymap_a {
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.gmail.zsh"
-keymap_set_alias "${MAIN_ALIAS}g-" "keymap_filter_entries GMAIL_KEYMAP"
 function main_keymap_g {
-	# shellcheck disable=SC2153 # Assigned in `main_keymap.gmail.zsh`
-	main_keymap_print_keyboard_shortcuts 'Gmail' "${GMAIL_KEYMAP[@]}"
+	local description=$*
+	main_keymap_show_non_zsh_keymap 'Gmail' $description
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.textmate.zsh"
-keymap_set_alias "${MAIN_ALIAS}m-" "keymap_filter_entries TEXTMATE_KEYMAP"
 function main_keymap_m {
-	main_keymap_print_keyboard_shortcuts 'TextMate' "${TEXTMATE_KEYMAP[@]}"
+	local description=$*
+	main_keymap_show_non_zsh_keymap 'TextMate' $description
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.notion.zsh"
-keymap_set_alias "${MAIN_ALIAS}n-" "keymap_filter_entries NOTION_KEYMAP"
 function main_keymap_n {
-	main_keymap_print_keyboard_shortcuts 'Notion' "${NOTION_KEYMAP[@]}"
+	local description=$*
+	main_keymap_show_non_zsh_keymap 'Notion' $description
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.mac_os.zsh"
@@ -106,27 +105,27 @@ function main_keymap_o {
 function main_keymap_r {
 	local description=$*
 
-	main_keymap_find_key_mappings_by_type "$description"
+	main_keymap_find_key_mappings "$description"
 
 	local is_zsh_keymap=1
-	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
+	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings`
 	main_keymap_print_key_mappings $is_zsh_keymap "${reply_zsh_mappings[@]}"
 
 	is_zsh_keymap=0
-	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings_by_type`
+	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings`
 	main_keymap_print_key_mappings $is_zsh_keymap "${reply_non_zsh_mappings[@]}"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.slack.zsh"
-keymap_set_alias "${MAIN_ALIAS}s-" "keymap_filter_entries SLACK_KEYMAP"
 function main_keymap_s {
-	main_keymap_print_keyboard_shortcuts 'Slack' "${SLACK_KEYMAP[@]}"
+	local description=$*
+	main_keymap_show_non_zsh_keymap 'Slack' $description
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.terminal.zsh"
-keymap_set_alias "${MAIN_ALIAS}t-" "keymap_filter_entries TERMINAL_KEYMAP"
 function main_keymap_t {
-	main_keymap_print_keyboard_shortcuts 'Terminal' "${TERMINAL_KEYMAP[@]}"
+	local description=$*
+	main_keymap_show_non_zsh_keymap 'Terminal' $description
 }
 
 # Includes zsh keymaps following a `KEYMAP_DOT`, e.g `g.x`

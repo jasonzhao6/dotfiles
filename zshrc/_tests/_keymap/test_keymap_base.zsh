@@ -171,26 +171,11 @@ function test__keymap_show__with_multiple_words {
 	)"
 }; run_with_filter test__keymap_show__with_multiple_words
 
-function test__keymap_show__on_a_non_zsh_keymap_with_filters {
-	assert "$(mg- -sel conver | bw)" "$(
-		cat <<-eof
-
-	     1	{enter} # Open conversation
-	     2	j       # Older conversation
-	     3	k       # Newer conversation
-		eof
-	)"
-}; run_with_filter test__keymap_show__on_a_non_zsh_keymap_with_filters
-
-function test__keymap_show__when_invoking_non_existent_z {
+function test__keymap_show__with_no_match {
 	assert "$(test_keymap z)" "$(
 		cat <<-eof
 
 			$(red_bar "\`z\` does not match any keymap description")
 		eof
 	)"
-}; run_with_filter test__keymap_show__when_invoking_non_existent_z
-
-function test__keymap_show__when_invoking_keymap_of_keymaps {
-	assert "$(ma | grep "$ALL_NAMESPACE" | bw)" "  $ALL_NAMESPACE"
-}; run_with_filter test__keymap_show__when_invoking_keymap_of_keymaps
+}; run_with_filter test__keymap_show__with_no_match
