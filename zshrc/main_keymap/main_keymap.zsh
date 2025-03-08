@@ -30,6 +30,7 @@ function main_keymap {
 #
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
+source "$ZSHRC_DIR/$MAIN_NAMESPACE/main_helpers.quarantine.zsh"
 
 function main_keymap_- {
 	main_keymap_find_key_mappings
@@ -43,10 +44,10 @@ function main_keymap_- {
 	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings`
 	echo "- ${#reply_non_zsh_mappings} non-zsh mappings"
 
-	ZSHRC_LINE_OF_CODE=$(egrep --invert-match '^\s*(#|$)' "$ZSHRC_DIR"/**/*.zsh | wc -l | strip_left)
-	echo "- $ZSHRC_LINE_OF_CODE lines of code"
+	ZSHRC_LINES_OF_CODE=$(main_keymap_count_lines_of_code)
+	echo "- $ZSHRC_LINES_OF_CODE lines of code"
 
-	ZSHRC_LINE_COUNT=$(cat "$ZSHRC_DIR"/**/*.zsh | wc -l | strip_left)
+	ZSHRC_LINE_COUNT=$(main_keymap_count_lines)
 	echo "- $ZSHRC_LINE_COUNT lines total"
 }
 

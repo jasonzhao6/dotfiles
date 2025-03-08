@@ -90,11 +90,7 @@ function main_keymap_find_key_mappings {
 	reply_zsh_mappings=()
 	reply_non_zsh_mappings=()
 
-	local keymaps; keymaps=$(
-		pgrep --only-matching "^[A-Z_]+_KEYMAP(?==\($)" "$ZSHRC_DIR"/**/*_keymap*.zsh |
-			bw |
-			sed 's/^[^:]*://'
-	)
+	local keymaps; keymaps=$(main_keymap_grep_keymap_names)
 
 	local keymap_entries
 	local non_zsh_name
