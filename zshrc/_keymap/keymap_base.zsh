@@ -263,6 +263,7 @@ function keymap_print_map {
 		escaped_initial=
 
 		if [[ $entry == *\#* ]]; then
+			# Bug: '`' is getting parsed as `c` somehow
 			first_token=${${(z)entry}[1]}
 		else
 			first_token=$entry
