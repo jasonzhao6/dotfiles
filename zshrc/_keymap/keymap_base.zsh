@@ -27,6 +27,7 @@ function keymap_init {
 
 	keymap_has_disjoint_dups "$namespace" "${keymap_entries[@]}" && return
 
+	# Terminal keymaps have dot aliases; IntelliJ/Vimium keymaps do not
 	if keymap_has_dot_alias "${keymap_entries[@]}"; then
 		keymap_set_dot_aliases "$alias" "$namespace" "${keymap_entries[@]}"
 	fi

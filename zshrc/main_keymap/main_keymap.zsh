@@ -129,8 +129,8 @@ function main_keymap_t {
 	main_keymap_print_keyboard_shortcuts 'Terminal' "${TERMINAL_KEYMAP[@]}"
 }
 
-# Includes zsh keymaps following a `KEYMAP_DOT`
-# Includes non-zsh keymaps following a `KEYMAP_DASH`
+# Includes zsh keymaps following a `KEYMAP_DOT`, e.g `g.x`
+# Includes non-zsh keymaps following a `KEYMAP_DASH`, e.g `alt-x`
 function main_keymap_w {
 	local key=$1
 	[[ -z $key ]] && echo && red_bar 'key required' && return
