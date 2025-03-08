@@ -8,19 +8,20 @@ ARGS_KEYMAP=(
 	"${ARGS_DOT}so # Save as args & soft-select the 1st column"
 	"${ARGS_DOT}so {match}* {-mismatch}* # Save as args & soft-select the 1st column & filter"
 	''
-	'{1-100} {command} # Use an arg'
+	"${ARGS_DOT}n {number} {command} # Use an arg by number"
+	'{1-100} {command} # Use an arg by number'
 	'0 {command} # Use the last arg'
+	"${ARGS_DOT}o {command} # Use a random arg"
+	''
 	"each {command} # Use each arg in series"
 	"all {command} # Use all args in parallel"
-	"map {command} # Map args, e.g \`${ARGS_ALIAS}m echo '\$((~~ * 10))'\`"
-	''
-	"${ARGS_DOT}o {command} # Use a random arg"
-	"${ARGS_DOT}n {number} {command} # Use an arg by number"
+	"map {command} # Map args, e.g \`map echo '\$((~~ * 10))'\`"
 	"${ARGS_DOT}e {start} {finish} {command} # Use args within a sequence"
 	''
 	"${ARGS_DOT}a # List args"
-	"${ARGS_DOT}a {match}* {-mismatch}* # Filter args (Shortcut: \`$ARGS_ALIAS\`)"
+	"${ARGS_DOT}a {match}* {-mismatch}* # Filter args"
 	"${ARGS_DOT}d # Sort and dedupe args"
+	''
 	"${ARGS_DOT}t # Tabulate columns"
 	"${ARGS_DOT}w # Delimit columns based on the top row"
 	"${ARGS_DOT}w {letter} # Select a column based on the top row"
@@ -43,20 +44,6 @@ ARGS_KEYMAP=(
 keymap_init $ARGS_NAMESPACE $ARGS_ALIAS "${ARGS_KEYMAP[@]}"
 
 function args_keymap {
-	# When invoked as standalone command
-	if [[ -t 0 ]]; then
-		# If the first arg is not a `key`, filter args
-		if ! keymap_is_key_mapped "$ARGS_ALIAS" "$1" "${ARGS_KEYMAP[@]}"; then
-			args_keymap_a "$@"
-			return
-		fi
-
-	# When invoked after a pipe `|`, save args
-	else
-		args_save "$is_soft_select" "$@"
-		return
-	fi
-
 	keymap_show $ARGS_NAMESPACE $ARGS_ALIAS ${#ARGS_KEYMAP} "${ARGS_KEYMAP[@]}" "$@"
 }
 

@@ -32,6 +32,7 @@ function main_keymap {
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
 
 # shellcheck disable=SC1064,SC1072,SC1073 # Allow `,` in function name
+# TODO breaks intellij error checking
 function main_keymap_, {
 	main_keymap_find_key_mappings
 
