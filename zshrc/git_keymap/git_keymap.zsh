@@ -16,7 +16,8 @@ GIT_KEYMAP=(
 	"${GIT_DOT}m # Amend the previous commit"
 	"${GIT_DOT}w # Reword the previous commit"
 	"${GIT_DOT}e # Create an empty commit"
-	"${GIT_DOT}i {sha} # Fix up a commit"
+	"${GIT_DOT}i # Fix up the commit in pasteboard"
+	"${GIT_DOT}i {sha} # Fix up the specified commit"
 	"${GIT_DOT}ii # List the last 20 commits"
 	''
 	"${GIT_DOT}x # Rebase with the latest main"
@@ -133,7 +134,7 @@ function git_keymap_g {
 }
 
 function git_keymap_i {
-	local sha=$1
+	local sha; sha=$(paste_when_empty "$1")
 
 	git add --all; git commit --fixup "$sha"
 }
