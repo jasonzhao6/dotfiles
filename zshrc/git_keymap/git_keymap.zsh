@@ -19,14 +19,15 @@ GIT_KEYMAP=(
 	"${GIT_DOT}i {sha} # Fix up a commit"
 	"${GIT_DOT}ii # List the last 20 commits"
 	''
-	"${GIT_DOT}x {number} # Rebase the last N commits"
 	"${GIT_DOT}x # Rebase with the latest main"
+	"${GIT_DOT}x {number} # Rebase with the last N commits"
 	"${GIT_DOT}xm # Rebase with the latest master"
 	"${GIT_DOT}xu # Rebase with the latest upstream"
 	"${GIT_DOT}xc # Rebase continue"
 	"${GIT_DOT}xa # Rebase abort"
 	''
-	"${GIT_DOT}y {sha} # Cherry pick a commit"
+	"${GIT_DOT}y # Cherry pick the commit in pasteboard"
+	"${GIT_DOT}y {sha} # Cherry pick the specified commit"
 	"${GIT_DOT}yc # Cherry pick continue"
 	"${GIT_DOT}ya # Cherry pick abort"
 	''
@@ -251,7 +252,7 @@ function git_keymap_xu {
 }
 
 function git_keymap_y {
-	local sha=$1
+	local sha; sha=$(paste_when_empty "$1")
 
 	git cherry-pick "$sha"
 }
