@@ -114,7 +114,7 @@ function test__keymap_show {
 			Usage
 
 			  $ test__                   # Show this help
-			  $ test__ {description}     # Filter key mappings
+			  $ test__ {regex}           # Filter key mappings
 
 			  $ test__.{key}             # Invoke a {key} mapping
 			  $ test__.{key} {arg}       # Invoke a {key} mapping with {arg}

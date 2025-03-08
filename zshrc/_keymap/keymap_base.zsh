@@ -8,7 +8,7 @@ KEYMAP_ESCAPE="\\\\" # Escape twice to avoid special chars like `\n`
 
 KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS} # Show this help"
-	"${KEYMAP_ALIAS} {description} # Filter key mappings"
+	"${KEYMAP_ALIAS} {regex} # Filter key mappings"
 	''
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} # Invoke a {key} mapping"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} {arg} # Invoke a {key} mapping with {arg}"
@@ -181,24 +181,23 @@ function keymap_print_help {
 	local alias=$1; shift
 	local keymap_entries=("$@")
 
-	local is_zsh_keymap; keymap_has_dot_alias "${keymap_entries[@]}" && is_zsh_keymap=1
-
-	# `ALL_NAMESPACE` is a special zsh keymap that does not have dot aliases
-	[[ $namespace == "$ALL_NAMESPACE" ]] && is_zsh_keymap=1
-
 	echo
 	echo Keymap
-	echo
 
-	# `ALL_NAMESPACE` is a special zsh keymap that does not have an executable name
-	[[ $namespace == "$ALL_NAMESPACE" ]] && echo -n '  ' || echo -n "$KEYMAP_PROMPT"
+	# If it's the `ALL_NAMESPACE` keymap, skip printing the name
+	if [[ $namespace != "$ALL_NAMESPACE" ]]; then
+		echo
+		echo -n "$KEYMAP_PROMPT"
+		$KEYMAP_COLOR "$namespace"
+	fi
 
-	$KEYMAP_COLOR "$namespace"
 	keymap_print_map "$namespace" "${keymap_entries[@]}"
 
-	# If it's `ALL_NAMESPACE` or a non-zsh keymap, no need to print command line usage
+	local is_zsh_keymap; keymap_has_dot_alias "${keymap_entries[@]}" && is_zsh_keymap=1
 	local max_command_size
 	local keymap_usage=()
+
+	# If it's the `ALL_NAMESPACE` or a non-zsh keymap, skip printing command line usage
 	if [[ $namespace == "$ALL_NAMESPACE" || $is_zsh_keymap -ne 1 ]]; then
 		max_command_size=$(keymap_get_max_command_size "${keymap_entries[@]}")
 	else
@@ -223,6 +222,9 @@ function keymap_print_help {
 	echo
 	echo Mappings
 	echo
+
+	# `ALL_NAMESPACE` is an zsh keymap even though it does not have any dot aliases
+	[[ $namespace == "$ALL_NAMESPACE" ]] && is_zsh_keymap=1
 
 	for entry in "${keymap_entries[@]}"; do
 		keymap_print_entry "$entry" "$is_zsh_keymap" "$max_command_size"
