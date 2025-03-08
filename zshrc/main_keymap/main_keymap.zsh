@@ -16,7 +16,7 @@ MAIN_KEYMAP=(
 	"${MAIN_DOT}s {regex}? # Show Slack shortcuts"
 	"${MAIN_DOT}t {regex}? # Show Terminal shortcuts"
 	''
-	"${MAIN_DOT}, # Show stats"
+	"${MAIN_DOT}- # Show stats"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
@@ -31,9 +31,7 @@ function main_keymap {
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
 
-# shellcheck disable=SC1064,SC1072,SC1073 # Allow `,` in function name
-# TODO breaks intellij error checking
-function main_keymap_, {
+function main_keymap_- {
 	main_keymap_find_key_mappings
 
 	echo
@@ -78,25 +76,25 @@ function main_keymap_a {
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.gmail.zsh"
 function main_keymap_g {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'Gmail' $description
+	main_keymap_show_non_zsh_keymap 'Gmail' "$description"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.textmate.zsh"
 function main_keymap_m {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'TextMate' $description
+	main_keymap_show_non_zsh_keymap 'TextMate' "$description"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.notion.zsh"
 function main_keymap_n {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'Notion' $description
+	main_keymap_show_non_zsh_keymap 'Notion' "$description"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.macos.zsh"
 function main_keymap_o {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'macOS' $description
+	main_keymap_show_non_zsh_keymap 'macOS' "$description"
 }
 
 # Includes custom zsh and non-zsh keymaps
@@ -118,13 +116,13 @@ function main_keymap_r {
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.slack.zsh"
 function main_keymap_s {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'Slack' $description
+	main_keymap_show_non_zsh_keymap 'Slack' "$description"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.terminal.zsh"
 function main_keymap_t {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'Terminal' $description
+	main_keymap_show_non_zsh_keymap 'Terminal' "$description"
 }
 
 # Includes zsh keymaps following a `KEYMAP_DOT`, e.g `g.x`

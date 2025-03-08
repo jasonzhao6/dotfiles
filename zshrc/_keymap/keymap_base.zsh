@@ -233,8 +233,13 @@ function keymap_print_help {
 
 # Zsh keymaps should avoid these chars
 # - `'` b/c it begins a new quote in zsh
+# - `,` b/c it breaks IntelliJ's error checking
 # - `.` b/c it's already used as `KEYMAP_DOT`
 # - `;` b/c it begins a new command in zsh
+# - `[` b/c it accesses hash key in zsh
+# - `/` b/c it navigates path in zsh
+# - `=` b/c it begins an assignment in zsh
+# - `\` b/c it begins a new line in zsh
 #
 # shellcheck disable=SC2034 # Used via `KEYMAP_PRINT_ROW_${i}`
 {

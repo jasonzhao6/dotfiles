@@ -29,7 +29,7 @@ source "$ZSHRC_DIR"/_tests/_test_harness.zsh
 if [[ -z $ZSHRC_TESTS_SECTION_FILTER && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
 	# Code stats
 	echo # Print an extra `echo` since we are stripping it before tee'ing to file
-	main_keymap_, | ruby_strip | tee "$ZSHRC_DIR"/_code_stats.txt | cat
+	main_keymap_- | ruby_strip | tee "$ZSHRC_DIR"/_code_stats.txt | cat
 
 	# Test stats
 	echo 'Test stats:' > "$ZSHRC_DIR"/_test_stats.txt

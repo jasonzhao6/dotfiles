@@ -8,7 +8,7 @@ AWS_KEYMAP=(
 	''
 	"${AWS_DOT}1 # MQ login to 01"
 	"${AWS_DOT}2 # MQ login to 02"
-	"${AWS_DOT}, # MQ restore"
+	"${AWS_DOT}- # MQ restore"
 	"${AWS_DOT}0 # MQ logout"
 	"${AWS_DOT}11 # MQ logout, then login to 01"
 	"${AWS_DOT}22 # MQ logout, then login to 02"
@@ -56,8 +56,7 @@ for aws_keymap_mq2 in "$HOME/.config/zsh/config.d/"*.zsh; do
 	source "${aws_keymap_mq2}"
 done; unset aws_keymap_mq2
 
-# shellcheck disable=SC1064,SC1072,SC1073 # Allow `,` in function name
-function aws_keymap_, {
+function aws_keymap_- {
 	mq2 --restore
 }
 
@@ -213,7 +212,7 @@ function aws_keymap_sc {
 		--document-name 'AWS-StartNonInteractiveCommand' \
 		--parameters "{\"command\": [\"$command\"]}" \
 		--target "$(ec2_get_id "$id")" |
-			pgrep --multiline --ignore-case --invert-match $AWS_KEYMAP_SC_REGEX
+			pgrep --multiline --ignore-case --invert-match "$AWS_KEYMAP_SC_REGEX"
 }
 
 function aws_keymap_sm {

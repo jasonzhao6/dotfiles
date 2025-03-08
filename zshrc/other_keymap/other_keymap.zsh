@@ -17,7 +17,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}2 # Save the last output to \`2.txt\`"
 	"${OTHER_DOT}11 # Save pasteboard value to \`1.txt\`"
 	"${OTHER_DOT}22 # Save pasteboard value to \`2.txt\`"
-	"${OTHER_DOT}, # Open \`1.txt\` and \`2.txt\` in TextMate"
+	"${OTHER_DOT}- # Open \`1.txt\` and \`2.txt\` in TextMate"
 	"${OTHER_DOT}0 # Empty \`1.txt\` and \`2.txt\`"
 	"${OTHER_DOT}u {file 1} {file 2} # Unified diff"
 	"${OTHER_DOT}uu {file 1} {file 2} # Side-by-side diff"
@@ -62,8 +62,7 @@ OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$HOME/Documents/2.txt"
 
 source "$ZSHRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
 
-# shellcheck disable=SC1064,SC1072,SC1073 # Allow `,` in function name
-function other_keymap_, {
+function other_keymap_- {
 	mate "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1" "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 }
 

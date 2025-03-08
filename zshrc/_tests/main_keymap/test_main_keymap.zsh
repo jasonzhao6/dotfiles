@@ -115,17 +115,18 @@ function test__main_keymap_w__when_specifying_a_key {
 
 function test__main_keymap_w__when_specifying_a_special_char {
 	assert "$(
-		main_keymap_w , | bw
+		main_keymap_w - | bw
 	)" "$(
 		cat <<-eof
 
-		  $ s., # MQ restore
-		  $ d., # Login with AWS credentials
-		  $ m., # Show stats
-		  $ o., # Open \`1.txt\` and \`2.txt\` in TextMate
+		  $ s.- # MQ restore
+		  $ m.- # Show stats
+		  $ o.- # Open \`1.txt\` and \`2.txt\` in TextMate
 
-		  alt-, # Collapse (\`{F3}\`)
-		  cmd-, # Preferences (Convention)
+		  ^cmd--       # Collapse all
+		  cmd--        # Decrease font size in all editors (Convention)
+		  ctrl--       # Copilot show chat
+		  ctrl-shift-- # Copilot new conversation
 		eof
 	)"
 }; run_with_filter test__main_keymap_w__when_specifying_a_special_char
