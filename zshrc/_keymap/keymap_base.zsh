@@ -110,13 +110,13 @@ function keymap_filter_entries {
 #   ```
 function keymap_has_disjoint_dups {
 	local namespace=$1; shift
-	local entries=("$@")
+	local keymap_entries=("$@")
 
 	local last_entry
 	local has_disjoint_dups
 	declare -A seen
 
-	for entry in "${entries[@]}"; do
+	for entry in "${keymap_entries[@]}"; do
 		alias_dot_key="${${(z)entry}[1]}"
 
 		# If it is the same as the last entry, allow it
@@ -144,9 +144,9 @@ function keymap_has_disjoint_dups {
 }
 
 function keymap_has_dot_alias {
-	local entries=("$@")
+	local keymap_entries=("$@")
 
-	for entry in "${entries[@]}"; do
+	for entry in "${keymap_entries[@]}"; do
 		# shellcheck disable=SC2076
 		[[ $entry =~ ".+\\$KEYMAP_DOT.+ # .+" ]] && return 0
 	done
@@ -367,12 +367,12 @@ function keymap_print_entry {
 #   $ {key} {arg} # Comment 2
 #   ```
 function keymap_get_max_command_size {
-	local entries=("$@")
+	local keymap_entries=("$@")
 
 	local max_command_size=0
 	local command_size
 
-	for entry in "${entries[@]}"; do
+	for entry in "${keymap_entries[@]}"; do
 		# If `entry` starts with `#`, this enry does not have any command
 		[[ $entry == \#* ]] && command_size=0 || command_size="${#entry% \#*}"
 

@@ -135,20 +135,20 @@ function main_keymap_w {
 	[[ -z $key ]] && echo && red_bar 'key required' && return
 
 	# Find zsh entries with matching `key`
-	local entries=()
+	local keymap_entries=()
 	local is_zsh_keymap=1
 	while IFS= read -r entry; do
 		entry=$(eval "echo $entry")
-		entries+=("$entry")
+		keymap_entries+=("$entry")
 	done < <(egrep "^\t\"[$]{[A-Z]+_DOT}$key" "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
-	main_keymap_print_key_mappings $is_zsh_keymap "${entries[@]}"
+	main_keymap_print_key_mappings $is_zsh_keymap "${keymap_entries[@]}"
 
-	# Find non-zsh entries with matching `key`
-	entries=()
+	# Find non-zsh keymap entries with matching `key`
+	keymap_entries=()
 	is_zsh_keymap=0
 	while IFS= read -r entry; do
 		entry=$(eval "echo $entry")
-		entries+=("$entry")
+		keymap_entries+=("$entry")
 	done < <(egrep "^\t\".*$KEYMAP_DASH$key " "$ZSHRC_DIR"/**/*_keymap.zsh | trim_column | bw)
-	main_keymap_print_key_mappings $is_zsh_keymap "${entries[@]}"
+	main_keymap_print_key_mappings $is_zsh_keymap "${keymap_entries[@]}"
 }
