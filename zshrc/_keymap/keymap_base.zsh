@@ -85,7 +85,7 @@ function keymap_filter_entries {
 	echo
 	if [[ -z ${entries_matched[*]} ]]; then
 		red_bar "\`$description\` does not match any description"
-  else
+	else
 		local is_zsh_keymap; keymap_has_dot_alias "${entries_matched[@]}" && is_zsh_keymap=1
 		local max_command_size; max_command_size=$(keymap_get_max_command_size "${entries_matched[@]}")
 
@@ -246,7 +246,6 @@ function keymap_print_map {
 	local namespace=$1; shift
 	local keymap_entries=("$@")
 
-	declare -A namespace_aliases
 	declare -A keymap_initials
 	local first_token
 	local key_initial
@@ -274,8 +273,6 @@ function keymap_print_map {
 			key_initial=${first_token: -1}
 		elif [[ $first_token == *$KEYMAP_DOT* ]]; then
 			key_initial=${${first_token#*$KEYMAP_DOT}:0:1}
-		elif [[ $namespace == 'main_keymap' ]]; then
-			namespace_aliases[$first_token]=1
 		else
 			key_initial=${first_token:0:1}
 		fi
@@ -307,11 +304,7 @@ function keymap_print_map {
 			# The `\` char doesn't work without an extra layer of escaping
 			[[ $char == "$KEYMAP_ESCAPE" ]] && escaped_initial="$KEYMAP_ESCAPE\\"
 
-			if [[ $char == '_' ]]; then
-				row_output+='    '
-			elif [[ -n ${namespace_aliases[$char]} ]]; then
-				row_output+=" $($KEYMAP_COLOR "($char)")"
-			elif [[ -z ${keymap_initials["$escaped_initial"]} ]]; then
+			if [[ -z ${keymap_initials["$escaped_initial"]} ]]; then
 				row_output+="  $(gray_fg "$char") "
 			elif [[ ${keymap_initials["$escaped_initial"]} -eq 1 ]]; then
 				row_output+=" <$char>"

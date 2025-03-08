@@ -1,5 +1,5 @@
 Code stats:
 - 249 zsh mappings
 - 369 non-zsh mappings
-- 7793 lines of code
-- 9490 lines total
+- 7786 lines of code
+- 9485 lines total
