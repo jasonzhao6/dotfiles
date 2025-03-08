@@ -3,7 +3,8 @@ GIT_ALIAS='g'
 GIT_DOT="${GIT_ALIAS}${KEYMAP_DOT}"
 
 GIT_KEYMAP=(
-	"${GIT_DOT}k {branch} # Checkout an existing branch (Shortcut: \`$GIT_ALIAS\`)"
+	"${GIT_ALIAS} {branch} # Checkout a local branch"
+	"${GIT_DOT}k {branch} # Checkout a remote branch"
 	"${GIT_DOT}n {branch} # Checkout a new branch"
 	"${GIT_DOT}g # Checkout the latest \`main\`"
 	"${GIT_DOT}b # List branches"

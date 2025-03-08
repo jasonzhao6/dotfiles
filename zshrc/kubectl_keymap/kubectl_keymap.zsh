@@ -5,12 +5,6 @@ KUBECTL_DOT="${KUBECTL_ALIAS}${KEYMAP_DOT}"
 KUBECTL_KEYMAP=(
 	"${KUBECTL_ALIAS} {kubectl command}"
 	''
-	"${KUBECTL_DOT}s # Save a copy of resource types"
-	"${KUBECTL_DOT}r # List resource types"
-	"${KUBECTL_DOT}r {match}* {-mismatch}* # Filter resource types"
-	"${KUBECTL_DOT}x {resource type} # Explain a resource type"
-	"${KUBECTL_DOT}h {yaml file} # Render Helm template locally"
-	''
 	"${KUBECTL_DOT}n {name} # Set namespace"
 	"${KUBECTL_DOT}e1 # Set namespace and use us-east-1 region"
 	"${KUBECTL_DOT}e2 # Set namespace and use us-east-2 region"
@@ -21,20 +15,26 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}gg {params} # Get resources with \`-o wide\`"
 	"${KUBECTL_DOT}d {params} # Describe resource(s)"
 	"${KUBECTL_DOT}m {params} # Edit with TextMate"
-	''
 	"${KUBECTL_DOT}e {params} # Exec a command"
-	"${KUBECTL_DOT}c {command} {pod} # Exec a command on a pod"
-	"${KUBECTL_DOT}b {pod} # Exec into bash"
+	''
 	"${KUBECTL_DOT}l {pod} # Show logs"
 	"${KUBECTL_DOT}ll {pod} # Tail logs"
 	"${KUBECTL_DOT}lp {pod} # Show previous logs"
+	"${KUBECTL_DOT}b {pod} # Exec into bash"
+	"${KUBECTL_DOT}c {command} {pod} # Exec a command on a pod"
+	"${KUBECTL_DOT}z # Copy history bindings and \`kubectl\` helpers"
 	''
 	"${KUBECTL_DOT}j {params} # Get resource as json & save a copy"
 	"${KUBECTL_DOT}jj # Get the copy of json"
 	"${KUBECTL_DOT}y {params} # Get resource as yaml & save a copy"
 	"${KUBECTL_DOT}yy # Get the copy of yaml"
 	''
-	"${KUBECTL_DOT}z # Copy history bindings and \`kubectl\` helpers"
+	"${KUBECTL_DOT}s # Save a copy of resource types"
+	"${KUBECTL_DOT}r # List resource types"
+	"${KUBECTL_DOT}r {match}* {-mismatch}* # Filter resource types"
+	"${KUBECTL_DOT}x {resource type} # Explain a resource type"
+	''
+	"${KUBECTL_DOT}h {yaml file} # Render Helm template locally"
 )
 
 keymap_init $KUBECTL_NAMESPACE $KUBECTL_ALIAS "${KUBECTL_KEYMAP[@]}"

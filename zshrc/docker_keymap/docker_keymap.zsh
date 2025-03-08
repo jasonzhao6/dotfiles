@@ -3,6 +3,8 @@ DOCKER_ALIAS='d'
 DOCKER_DOT="${DOCKER_ALIAS}${KEYMAP_DOT}"
 
 DOCKER_KEYMAP=(
+	"${DOCKER_ALIAS} {docker command}"
+	''
 	"${DOCKER_DOT}, # Login with AWS credentials"
 )
 

@@ -15,7 +15,7 @@ TERRAFORM_KEYMAP=(
 	''
 	"${TERRAFORM_DOT}v {i,iu,ir,im,e}? # Validate"
 	"${TERRAFORM_DOT}p {i,iu,ir,im,e}? # Plan"
-	"${TERRAFORM_DOT}g # Plan -> gist"
+	"${TERRAFORM_DOT}g # Upload gist"
 	"${TERRAFORM_DOT}z # Unlock"
 	"${TERRAFORM_DOT}a # Apply"
 	"${TERRAFORM_DOT}d # Destroy"

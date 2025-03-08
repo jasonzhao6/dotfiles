@@ -3,9 +3,9 @@ OTHER_ALIAS='o'
 OTHER_DOT="${OTHER_ALIAS}${KEYMAP_DOT}"
 
 OTHER_KEYMAP=(
+	"${OTHER_ALIAS} {url} # Open the specified url"
+	"${OTHER_ALIAS} {path} # Open the specified path in Finder"
 	"${OTHER_DOT}o # Open the current directory in Finder"
-	"${OTHER_DOT}o {path} # Open the specified path in Finder (Shortcut: \`$OTHER_ALIAS\`)"
-	"${OTHER_DOT}o {urls} # Open urls from a string (Shortcut: \`$OTHER_ALIAS\`)"
 	"${OTHER_DOT}i # Open the current directory in IntelliJ IDEA"
 	"${OTHER_DOT}i {path} # Open the specified path in IntelliJ IDEA"
 	"${OTHER_DOT}m # Open the current directory in TextMate"
@@ -46,7 +46,7 @@ OTHER_KEYMAP=(
 keymap_init $OTHER_NAMESPACE $OTHER_ALIAS "${OTHER_KEYMAP[@]}"
 
 function other_keymap {
-	# If the input is an open-able, open it
+	# If the input is open-able, open it
 	local input=$*
 	[[ -n $input ]] && other_keymap_o "$input" && return
 

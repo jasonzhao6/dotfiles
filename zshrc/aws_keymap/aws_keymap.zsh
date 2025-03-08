@@ -4,7 +4,7 @@ AWS_DOT="${AWS_ALIAS}${KEYMAP_DOT}"
 
 AWS_KEYMAP=(
 	"${AWS_DOT}o # List Opal groups"
-	"${AWS_DOT}o {match} # Filter Opal groups"
+	"${AWS_DOT}o {match}* {-mismatch}* # Filter Opal groups"
 	''
 	"${AWS_DOT}1 # MQ login to 01"
 	"${AWS_DOT}2 # MQ login to 02"
@@ -27,14 +27,14 @@ AWS_KEYMAP=(
 	"${AWS_DOT}sm # SSM start session"
 	"${AWS_DOT}z # Copy history bindings"
 	''
-	"${AWS_DOT}m {name} # Secret Manager get the latest"
+	"${AWS_DOT}m {name} # Secret Manager get the latest version"
 	"${AWS_DOT}m {name} {version} # Secret Manager get by version"
 	"${AWS_DOT}md {name} # Secret Manager delete"
-	"${AWS_DOT}ps {name} # Parameter Store get the latest"
+	"${AWS_DOT}ps {name} # Parameter Store get the latest version"
 	"${AWS_DOT}t {message} # STS decode"
 	''
 	"${AWS_DOT}p {name} # Code Pipeline search"
-	"${AWS_DOT}pp {name} # Code Pipeline get latest status"
+	"${AWS_DOT}pp {name} # Code Pipeline get the latest status"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"

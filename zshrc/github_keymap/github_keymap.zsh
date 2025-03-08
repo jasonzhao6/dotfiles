@@ -28,7 +28,7 @@ GITHUB_KEYMAP=(
 keymap_init $GITHUB_NAMESPACE $GITHUB_ALIAS "${GITHUB_KEYMAP[@]}"
 
 function github_keymap {
-	# If the first arg is a repo in the current org, delegate to `github_keymap_h`
+	# If the first arg is a repo in the current org, delegate to `github_keymap_o`
 	local repo=$1
 	if grep --quiet "^$repo$" ~/Documents/github.repos."$(github_keymap_org)".txt; then
 		github_keymap_o "$repo"
