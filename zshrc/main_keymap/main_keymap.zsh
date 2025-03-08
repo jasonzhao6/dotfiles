@@ -5,17 +5,16 @@ MAIN_DOT="${MAIN_ALIAS}${KEYMAP_DOT}"
 MAIN_KEYMAP=(
 	"${MAIN_DOT}a # List all keymap namespaces"
 	''
-	"${MAIN_DOT}r # List all keymap entries"
-	"${MAIN_DOT}r {description} # Filter by description"
+	"${MAIN_DOT}r {description}? # List all keymap entries"
 	"${MAIN_DOT}w {key} # Filter by key"
 	''
 	# These are default keyboard shortcuts as opposed to custom keymaps
-	"${MAIN_DOT}g # Show Gmail shortcuts"
-	"${MAIN_DOT}m # Show TextMate shortcuts"
-	"${MAIN_DOT}n # Show Notion shortcuts"
-	"${MAIN_DOT}o # Show macOS shortcuts"
-	"${MAIN_DOT}s # Show Slack shortcuts"
-	"${MAIN_DOT}t # Show Terminal shortcuts"
+	"${MAIN_DOT}g {description}? # Show Gmail shortcuts"
+	"${MAIN_DOT}m {description}? # Show TextMate shortcuts"
+	"${MAIN_DOT}n {description}? # Show Notion shortcuts"
+	"${MAIN_DOT}o {description}? # Show macOS shortcuts"
+	"${MAIN_DOT}s {description}? # Show Slack shortcuts"
+	"${MAIN_DOT}t {description}? # Show Terminal shortcuts"
 	''
 	"${MAIN_DOT}, # Show stats"
 )

@@ -8,10 +8,10 @@ KEYMAP_ESCAPE="\\\\" # Escape twice to avoid special chars like `\n`
 
 KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS} # Show this help"
-	"${KEYMAP_ALIAS} {description} # Filter by description"
+	"${KEYMAP_ALIAS} {description} # Filter key mappings"
 	''
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} # Invoke {key} mapping"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} {arg} # Invoke {key} mapping with {arg}"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} # Invoke a {key} mapping"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} {arg} # Invoke a {key} mapping with {arg}"
 )
 
 function keymap_init {
@@ -84,7 +84,7 @@ function keymap_filter_entries {
 	# Print keymap entries matched
 	echo
 	if [[ -z ${entries_matched[*]} ]]; then
-		red_bar "\`$description\` does not match any keymap description"
+		red_bar "\`$description\` does not match any description"
   else
 		local is_zsh_keymap; keymap_has_dot_alias "${entries_matched[@]}" && is_zsh_keymap=1
 		local max_command_size; max_command_size=$(keymap_get_max_command_size "${entries_matched[@]}")

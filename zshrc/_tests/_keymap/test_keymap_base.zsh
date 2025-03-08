@@ -114,10 +114,10 @@ function test__keymap_show {
 			Usage
 
 			  $ test__                   # Show this help
-			  $ test__ {description}     # Filter by description
+			  $ test__ {description}     # Filter key mappings
 
-			  $ test__.{key}             # Invoke {key} mapping
-			  $ test__.{key} {arg}       # Invoke {key} mapping with {arg}
+			  $ test__.{key}             # Invoke a {key} mapping
+			  $ test__.{key} {arg}       # Invoke a {key} mapping with {arg}
 
 			          ^                  # The \`.\` is only for documentation
 			                             # Omit it when invoking a mapping
@@ -163,7 +163,7 @@ function test__keymap_show__with_no_match {
 	assert "$(test_keymap z)" "$(
 		cat <<-eof
 
-			$(red_bar "\`z\` does not match any keymap description")
+			$(red_bar "\`z\` does not match any description")
 		eof
 	)"
 }; run_with_filter test__keymap_show__with_no_match
