@@ -13,6 +13,7 @@ GITHUB_KEYMAP=(
 	"${GITHUB_DOT}h # Navigate to the current org"
 	"${GITHUB_DOT}h {match}* {-mismatch}* # Navigate to the current org & filter repos"
 	"${GITHUB_DOT}t # Navigate to the current org & into repo in pasteboard"
+	"${GITHUB_DOT}tt # Copy the current repo name to pasteboard"
 	''
 	"${GITHUB_DOT}o # Open the current repo"
 	"${GITHUB_DOT}o {repo} # Open the specified repo (Shortcut: \`$GITHUB_ALIAS\`)"
@@ -142,6 +143,12 @@ function github_keymap_t {
 	fi
 
 	cd "$target_path" && nav_keymap_n
+}
+
+function github_keymap_tt {
+	local repo; repo=$(github_keymap_repo)
+
+	echo -n "$repo" | pbcopy
 }
 
 function github_keymap_url {
