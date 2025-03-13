@@ -21,10 +21,10 @@ GITHUB_KEYMAP=(
 	"${GITHUB_DOT}c # Open the latest commit"
 	"${GITHUB_DOT}c {sha} # Open the specified commit"
 	''
-	"${GITHUB_DOT}d # Domain name"
-	"${GITHUB_DOT}oo # Org name"
-	"${GITHUB_DOT}rr # Repo name"
-	"${GITHUB_DOT}b # Branch name"
+	"${GITHUB_DOT}domain # Domain name"
+	"${GITHUB_DOT}org # Org name"
+	"${GITHUB_DOT}repo # Repo name"
+	"${GITHUB_DOT}branch # Branch name"
 )
 
 keymap_init $GITHUB_NAMESPACE $GITHUB_ALIAS "${GITHUB_KEYMAP[@]}"
@@ -46,7 +46,7 @@ function github_keymap {
 
 source "$ZSHRC_DIR/$GITHUB_NAMESPACE/github_helpers.zsh"
 
-function github_keymap_b {
+function github_keymap_branch {
 	git rev-parse --abbrev-ref HEAD
 }
 
@@ -54,7 +54,7 @@ function github_keymap_c {
 	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_rr)"/commit/"$1"
 }
 
-function github_keymap_d {
+function github_keymap_domain {
 	github_keymap_url | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/'
 }
 
@@ -85,7 +85,7 @@ function github_keymap_o {
 	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$repo"
 }
 
-function github_keymap_oo {
+function github_keymap_org {
 	github_keymap_url | sed 's/.*[:/]\([^/]*\)\/.*/\1/'
 }
 
@@ -99,7 +99,7 @@ function github_keymap_r {
 	args_keymap_s "${filters[@]}" < ~/Documents/github.repos."$(github_keymap_org)".txt
 }
 
-function github_keymap_rr {
+function github_keymap_repo {
 	git rev-parse --show-toplevel | xargs basename
 }
 

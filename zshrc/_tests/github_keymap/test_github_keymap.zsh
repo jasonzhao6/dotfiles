@@ -7,18 +7,18 @@ function test__github_keymap {
 	)" '1'
 }; run_with_filter test__github_keymap
 
-function test__github_keymap_b {
-	assert "$(nav_keymap_s > /dev/null; github_keymap_b)" 'main'
-}; run_with_filter test__github_keymap_b
+function test__github_keymap_branch {
+	assert "$(nav_keymap_s > /dev/null; github_keymap_branch)" 'main'
+}; run_with_filter test__github_keymap_branch
 
-function test__github_keymap_d {
-	assert "$(nav_keymap_s > /dev/null; github_keymap_d)" 'github.com'
-}; run_with_filter test__github_keymap_d
+function test__github_keymap_domain {
+	assert "$(nav_keymap_s > /dev/null; github_keymap_domain)" 'github.com'
+}; run_with_filter test__github_keymap_domain
 
-function test__github_keymap_oo {
-	assert "$(nav_keymap_s > /dev/null; github_keymap_oo)" 'jasonzhao6'
-}; run_with_filter test__github_keymap_oo
+function test__github_keymap_org {
+	assert "$(nav_keymap_s > /dev/null; github_keymap_org)" 'jasonzhao6'
+}; run_with_filter test__github_keymap_org
 
-function test__github_keymap_rr {
-	assert "$(nav_keymap_s > /dev/null; github_keymap_rr)" 'scratch'
-}; run_with_filter test__github_keymap_rr
+function test__github_keymap_repo {
+	assert "$(nav_keymap_s > /dev/null; github_keymap_repo)" 'scratch'
+}; run_with_filter test__github_keymap_repo
