@@ -21,6 +21,7 @@ GITHUB_KEYMAP=(
 	''
 	"${GITHUB_DOT}n # Create a new PR, then open it"
 	"${GITHUB_DOT}g # Create a new gist, then open it"
+	"${GITHUB_DOT}gg # Open new tab to create a gist"
 	''
 	"${GITHUB_DOT}url # Git url"
 	"${GITHUB_DOT}domain # Domain name"
@@ -72,6 +73,10 @@ function github_keymap_g {
 	else
 		gh gist create --web
 	fi
+}
+
+function github_keymap_gg {
+	open https://"$(github_keymap_domain)"/gist
 }
 
 function github_keymap_h {
