@@ -12,6 +12,8 @@ GITHUB_KEYMAP=(
 	''
 	"${GITHUB_DOT}h # Navigate to the current org"
 	"${GITHUB_DOT}h {match}* {-mismatch}* # Navigate to the current org & filter repos"
+	"${GITHUB_DOT}t # Navigate to the current org & into repo in pasteboard"
+	''
 	"${GITHUB_DOT}o # Open the current repo"
 	"${GITHUB_DOT}o {repo} # Open the specified repo (Shortcut: \`$GITHUB_ALIAS\`)"
 	"${GITHUB_DOT}p # Open the latest PRs"
@@ -108,4 +110,27 @@ function github_keymap_s {
 		jq -r '.[].name' |
 		tee ~/Documents/github.repos."$org".txt |
 		args_keymap_s
+}
+
+function github_keymap_t {
+	local repo; repo=$(pbpaste)
+
+	# If pasteboard is empty, error
+	if [[ -z $repo ]]; then
+		echo
+		red_bar 'Empty repo name in pasteboard'
+		return
+	fi
+
+	# Note: Do not use `local path`- It will overwrite $PATH in subshell
+	local target_path; target_path=~/github/$(github_keymap_org)/$repo
+
+	# If it's not a folder path, error
+	if [[ ! -d $target_path  ]]; then
+		echo
+		red_bar 'Invalid repo name in pasteboard'
+		return
+	fi
+
+	cd "$target_path" && nav_keymap_n
 }
