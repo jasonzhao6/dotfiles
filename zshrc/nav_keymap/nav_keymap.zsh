@@ -99,10 +99,17 @@ function nav_keymap_s {
 
 function nav_keymap_t {
 	# Note: Do not use `local path`- It will overwrite $PATH in subshell
-	local target_path; target_path=$(paste_when_empty "$@")
+	local target_path; target_path=$(pbpaste)
 
-	# If it's not a folder path, go to its parent folder
-	if [[ ! -d $target_path ]]; then
+	# If it's not a file or folder path, error
+	if [[ ! -f $target_path && ! -d $target_path  ]]; then
+		echo
+		red_bar 'Invalid path in pasteboard'
+		return
+	fi
+
+	# If it's a file path, go to its parent folder
+	if [[ -f $target_path ]]; then
 		target_path=${${target_path}%/*}
 	fi
 

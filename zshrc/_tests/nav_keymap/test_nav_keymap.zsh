@@ -277,12 +277,29 @@ function test__nav_keymap_s {
 }; run_with_filter test__nav_keymap_s
 
 function test__nav_keymap_t__with_dir {
-	assert "$(nav_keymap_t ~/Documents > /dev/null; pwd)" "$HOME/Documents"
+	assert "$(
+		echo "$HOME/Documents" | pbcopy
+		nav_keymap_t > /dev/null
+		pwd
+	)" "$HOME/Documents"
 }; run_with_filter test__nav_keymap_t__with_dir
 
 function test__nav_keymap_t__with_file {
-	assert "$(nav_keymap_t ~/Documents/.zshrc > /dev/null; pwd)" "$HOME/Documents"
+	assert "$(
+		touch /tmp/test__nav_keymap_t__with_file
+		echo '/tmp/test__nav_keymap_t__with_file' | pbcopy
+		nav_keymap_t > /dev/null
+		pwd
+		rm -f /tmp/test__nav_keymap_t__with_file
+	)" '/tmp'
 }; run_with_filter test__nav_keymap_t__with_file
+
+function test__nav_keymap_t__with_invalid_path {
+	assert "$(
+		echo 'does not exist' | pbcopy
+		nav_keymap_t
+	)" "$(echo; red_bar 'Invalid path in pasteboard')"
+}; run_with_filter test__nav_keymap_t__with_invalid_path
 
 function test__nav_keymap_u {
 	assert "$(
