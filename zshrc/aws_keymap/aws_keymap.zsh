@@ -30,7 +30,7 @@ AWS_KEYMAP=(
 	"${AWS_DOT}m {name} # Secret Manager get latest version"
 	"${AWS_DOT}m {name} {version} # Secret Manager get by version"
 	"${AWS_DOT}md {name} # Secret Manager delete"
-	"${AWS_DOT}ps {name} # Parameter Store get latest version"
+	"${AWS_DOT}p {name} # Parameter Store get latest version"
 	"${AWS_DOT}t {message} # STS decode"
 	''
 	"${AWS_DOT}n {name} # SNS search"
@@ -42,8 +42,8 @@ AWS_KEYMAP=(
 	"${AWS_DOT}qr {queue url} # SQS receive message"
 	"${AWS_DOT}qp {queue url} # SQS purge"
 	''
-	"${AWS_DOT}p {name} # Code Pipeline search"
-	"${AWS_DOT}pp {name} # Code Pipeline get latest status"
+	"${AWS_DOT}c {name} # Code Pipeline search"
+	"${AWS_DOT}cc {name} # Code Pipeline get latest status"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
@@ -103,8 +103,29 @@ function aws_keymap_aa {
 	open "$AWS_URL/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$id"
 }
 
+function aws_keymap_c {
+	local name=$1
+
+	aws codepipeline list-pipelines \
+		--query "pipelines[?contains(name, '$name')].[name]" \
+		--output text |
+		args_keymap_s "$name"
+}
+
 function aws_keymap_c1 {
 	echo_eval 'export AWS_DEFAULT_REGION=eu-central-1'
+}
+
+AWS_KEYMAP_CC_STATUS='stageStates[-1].actionStates[-1].latestExecution.status'
+AWS_KEYMAP_CC_TIMESTAMP='stageStates[-1].actionStates[-1].latestExecution.lastStatusChange'
+
+function aws_keymap_cc {
+	local name=$1
+
+	aws codepipeline get-pipeline-state \
+		--name "$name" \
+		--query "[pipelineName, $AWS_KEYMAP_CC_STATUS, $AWS_KEYMAP_CC_TIMESTAMP]" \
+		--output text
 }
 
 function aws_keymap_e {
@@ -180,27 +201,6 @@ function aws_keymap_o {
 }
 
 function aws_keymap_p {
-	local name=$1
-
-	aws codepipeline list-pipelines \
-		--query "pipelines[?contains(name, '$name')].[name]" \
-		--output text |
-		args_keymap_s "$name"
-}
-
-AWS_KEYMAP_PP_STATUS='stageStates[-1].actionStates[-1].latestExecution.status'
-AWS_KEYMAP_PP_TIMESTAMP='stageStates[-1].actionStates[-1].latestExecution.lastStatusChange'
-
-function aws_keymap_pp {
-	local name=$1
-
-	aws codepipeline get-pipeline-state \
-		--name "$name" \
-		--query "[pipelineName, $AWS_KEYMAP_PP_STATUS, $AWS_KEYMAP_PP_TIMESTAMP]" \
-		--output text
-}
-
-function aws_keymap_ps {
 	local name=$1
 
 	local parameter; parameter=$(
