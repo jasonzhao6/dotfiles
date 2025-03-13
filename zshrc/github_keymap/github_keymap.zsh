@@ -3,24 +3,24 @@ GITHUB_ALIAS='h'
 GITHUB_DOT="${GITHUB_ALIAS}${KEYMAP_DOT}"
 
 GITHUB_KEYMAP=(
-	"${GITHUB_DOT}n # Create a new PR, then open it"
-	"${GITHUB_DOT}g # Create a new gist, then open it"
-	''
-	"${GITHUB_DOT}s # Save a copy of repos"
-	"${GITHUB_DOT}r # List repos"
-	"${GITHUB_DOT}r {match}* {-mismatch}* # Filter repos"
-	''
-	"${GITHUB_DOT}h # Navigate to the current org"
-	"${GITHUB_DOT}h {match}* {-mismatch}* # Navigate to the current org & filter repos"
-	"${GITHUB_DOT}t # Navigate to the current org & into repo in pasteboard"
-	"${GITHUB_DOT}tt # Copy the current repo name to pasteboard"
-	''
+	"${GITHUB_ALIAS} {repo} # Open the specified repo"
 	"${GITHUB_DOT}o # Open the current repo"
-	"${GITHUB_DOT}o {repo} # Open the specified repo (Shortcut: \`$GITHUB_ALIAS\`)"
 	"${GITHUB_DOT}p # Open the latest PRs"
 	"${GITHUB_DOT}p {pr} # Open the specified PR"
 	"${GITHUB_DOT}c # Open the latest commit"
 	"${GITHUB_DOT}c {sha} # Open the specified commit"
+	''
+	"${GITHUB_DOT}h # Navigate to the current org"
+	"${GITHUB_DOT}h {match}* {-mismatch}* # Navigate to the current org & filter repos"
+	"${GITHUB_DOT}t # Navigate to the repo name in pasteboard"
+	"${GITHUB_DOT}tt # Copy the current repo name to pasteboard"
+	''
+	"${GITHUB_DOT}s # Save a copy of remote repos"
+	"${GITHUB_DOT}r # List remote repos"
+	"${GITHUB_DOT}r {match}* {-mismatch}* # Filter remote repos"
+	''
+	"${GITHUB_DOT}n # Create a new PR, then open it"
+	"${GITHUB_DOT}g # Create a new gist, then open it"
 	''
 	"${GITHUB_DOT}url # Git url"
 	"${GITHUB_DOT}domain # Domain name"
