@@ -33,6 +33,9 @@ AWS_KEYMAP=(
 	"${AWS_DOT}ps {name} # Parameter Store get the latest version"
 	"${AWS_DOT}t {message} # STS decode"
 	''
+	"${AWS_DOT}q {name} # SQS search"
+	"${AWS_DOT}qq {queue id} # Open new tab to an SQS queue"
+	''
 	"${AWS_DOT}p {name} # Code Pipeline search"
 	"${AWS_DOT}pp {name} # Code Pipeline get the latest status"
 )
@@ -191,6 +194,18 @@ function aws_keymap_ps {
 
 	# If it's json, prettify with `jq`
 	[[ $parameter == \{*\} ]] && echo "$parameter" | jq || echo "$parameter"
+}
+
+function aws_keymap_q {
+	local name=$1
+
+	aws sqs list-queues | jq --raw-output '.QueueUrls[]' | args_keymap_s "$name"
+}
+
+function aws_keymap_qq {
+	local url; url=$(echo "$1" | encode_url)
+
+	open "$AWS_URL/sqs/v3/home?region=$AWS_DEFAULT_REGION#/queues/$url"
 }
 
 function aws_keymap_s {

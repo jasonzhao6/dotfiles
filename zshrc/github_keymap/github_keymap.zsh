@@ -122,7 +122,7 @@ function github_keymap_s {
 	# Save a copy for cached lookup
 	local org; org="$(github_keymap_org)"
 	gh repo list "$org" --no-archived --limit 1000 --json name |
-		jq -r '.[].name' |
+		jq --raw-output '.[].name' |
 		tee ~/Documents/github.repos."$org".txt |
 		args_keymap_s
 }

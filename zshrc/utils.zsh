@@ -99,6 +99,10 @@ function downcase {
 	tr '[:upper:]' '[:lower:]'
 }
 
+function encode_url() {
+    perl -MURI::Escape -ne 'print uri_escape($_)'
+}
+
 function extract_urls {
 	pgrep --only-matching '\b(?:https?:\/\/)(?:www\.)?[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,6}(?:\/[^\s?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?\b'
 }
