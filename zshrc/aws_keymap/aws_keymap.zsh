@@ -33,11 +33,14 @@ AWS_KEYMAP=(
 	"${AWS_DOT}ps {name} # Parameter Store get latest version"
 	"${AWS_DOT}t {message} # STS decode"
 	''
+	"${AWS_DOT}n {name} # SNS search"
+	"${AWS_DOT}nn {topic arn} # SNS open in new tab"
+	''
 	"${AWS_DOT}q {name} # SQS search"
-	"${AWS_DOT}qq {queue id} # SQS open in new tab"
-	"${AWS_DOT}qg {queue id} # SQS get stats"
-	"${AWS_DOT}qr {queue id} # SQS receive message"
-	"${AWS_DOT}qp {queue id} # SQS purge"
+	"${AWS_DOT}qq {queue url} # SQS open in new tab"
+	"${AWS_DOT}qg {queue url} # SQS get stats"
+	"${AWS_DOT}qr {queue url} # SQS receive message"
+	"${AWS_DOT}qp {queue url} # SQS purge"
 	''
 	"${AWS_DOT}p {name} # Code Pipeline search"
 	"${AWS_DOT}pp {name} # Code Pipeline get latest status"
@@ -152,6 +155,18 @@ function aws_keymap_md {
 		--force-delete-without-recovery
 }
 
+function aws_keymap_n {
+	local name=$1
+
+	aws sns list-topics | jq --raw-output '.Topics[].TopicArn' | args_keymap_s "$name"
+}
+
+function aws_keymap_nn {
+	local arn=$1
+
+	open "$AWS_URL/sns/v3/home?region=$AWS_DEFAULT_REGION#/topic/$arn"
+}
+
 # To be overwritten by `ZSHRC_SECRETS`
 AWS_OPAL=(
 	'role_name_1 request_page_url_1'
@@ -205,12 +220,6 @@ function aws_keymap_q {
 	aws sqs list-queues | jq --raw-output '.QueueUrls[]' | args_keymap_s "$name"
 }
 
-function aws_keymap_qq {
-	local url; url=$(echo "$1" | encode_url)
-
-	open "$AWS_URL/sqs/v3/home?region=$AWS_DEFAULT_REGION#/queues/$url"
-}
-
 function aws_keymap_qg {
 	local url=$1
 
@@ -223,6 +232,12 @@ function aws_keymap_qp {
 	local url=$1
 
 	aws sqs purge-queue --queue-url "$url"
+}
+
+function aws_keymap_qq {
+	local url; url=$(echo "$1" | encode_url)
+
+	open "$AWS_URL/sqs/v3/home?region=$AWS_DEFAULT_REGION#/queues/$url"
 }
 
 function aws_keymap_qr {

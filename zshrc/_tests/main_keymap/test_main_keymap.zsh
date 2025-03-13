@@ -102,14 +102,16 @@ function test__main_keymap_w {
 
 function test__main_keymap_w__when_specifying_a_key {
 	assert "$(
-		main_keymap_w q | bw
+		main_keymap_w j | bw
 	)" "$(
 		cat <<-eof
 
-		  $ t.qa # Apply & auto-approve
+		  $ k.j {params}                  # Get resource as json & save a copy
+		  $ k.jj                          # Get the copy of json
+		  $ o.j {url} {match} {num lines} # Curl a json endpoint
 
-		  alt-q # Step over
-		  cmd-q # Quit (Default)
+		  alt-j # Step into
+		  cmd-j # Join lines
 		eof
 	)"
 }; run_with_filter test__main_keymap_w__when_specifying_a_key
