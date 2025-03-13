@@ -19,25 +19,28 @@ AWS_KEYMAP=(
 	"${AWS_DOT}c1 # Use eu-central-1 region"
 	''
 	"${AWS_DOT}e {name} # EC2 search"
+	"${AWS_DOT}ee {ec2 id} # EC2 open in new tab"
 	"${AWS_DOT}a {name} # ASG search"
-	"${AWS_DOT}ee {ec2 id} # Open new tab to an EC2 instance"
-	"${AWS_DOT}aa {asg id} # Open new tab to an ASG group"
+	"${AWS_DOT}aa {asg id} # ASG open in new tab"
 	"${AWS_DOT}s # SSM start session with \`sudo -i\`"
 	"${AWS_DOT}sc # SSM start session with command"
 	"${AWS_DOT}sm # SSM start session"
 	"${AWS_DOT}z # Copy history bindings"
 	''
-	"${AWS_DOT}m {name} # Secret Manager get the latest version"
+	"${AWS_DOT}m {name} # Secret Manager get latest version"
 	"${AWS_DOT}m {name} {version} # Secret Manager get by version"
 	"${AWS_DOT}md {name} # Secret Manager delete"
-	"${AWS_DOT}ps {name} # Parameter Store get the latest version"
+	"${AWS_DOT}ps {name} # Parameter Store get latest version"
 	"${AWS_DOT}t {message} # STS decode"
 	''
 	"${AWS_DOT}q {name} # SQS search"
-	"${AWS_DOT}qq {queue id} # Open new tab to an SQS queue"
+	"${AWS_DOT}qq {queue id} # SQS open in new tab"
+	"${AWS_DOT}qg {queue id} # SQS get stats"
+	"${AWS_DOT}qr {queue id} # SQS receive message"
+	"${AWS_DOT}qp {queue id} # SQS purge"
 	''
 	"${AWS_DOT}p {name} # Code Pipeline search"
-	"${AWS_DOT}pp {name} # Code Pipeline get the latest status"
+	"${AWS_DOT}pp {name} # Code Pipeline get latest status"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
@@ -206,6 +209,31 @@ function aws_keymap_qq {
 	local url; url=$(echo "$1" | encode_url)
 
 	open "$AWS_URL/sqs/v3/home?region=$AWS_DEFAULT_REGION#/queues/$url"
+}
+
+function aws_keymap_qg {
+	local url=$1
+
+	aws sqs get-queue-attributes \
+		--queue-url "$url" \
+		--attribute-names ApproximateNumberOfMessages ApproximateNumberOfMessagesNotVisible | jq
+}
+
+function aws_keymap_qp {
+	local url=$1
+
+	aws sqs purge-queue --queue-url "$url"
+}
+
+function aws_keymap_qr {
+	local url=$1
+
+	aws sqs receive-message \
+		--queue-url "$url" \
+		--max-number-of-messages 1 \
+		--visibility-timeout 5 \
+		--wait-time-seconds 1 |
+		jq '.Messages[].Body | fromjson'
 }
 
 function aws_keymap_s {
