@@ -21,6 +21,7 @@ GITHUB_KEYMAP=(
 	"${GITHUB_DOT}c # Open the latest commit"
 	"${GITHUB_DOT}c {sha} # Open the specified commit"
 	''
+	"${GITHUB_DOT}url # Git url"
 	"${GITHUB_DOT}domain # Domain name"
 	"${GITHUB_DOT}org # Org name"
 	"${GITHUB_DOT}repo # Repo name"
@@ -44,18 +45,21 @@ function github_keymap {
 # Key mappings (Alphabetized)
 #
 
-source "$ZSHRC_DIR/$GITHUB_NAMESPACE/github_helpers.zsh"
-
 function github_keymap_branch {
 	git rev-parse --abbrev-ref HEAD
 }
 
 function github_keymap_c {
-	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_rr)"/commit/"$1"
+	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_repo)"/commit/"$1"
 }
 
+GITHUB_DEFAULT_DOMAIN='github.marqeta.com'
 function github_keymap_domain {
-	github_keymap_url | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/'
+	local domain
+	domain="$(github_keymap_url 2> /dev/null | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/')"
+	domain="${domain:-$GITHUB_DEFAULT_DOMAIN}"
+
+	echo "$domain"
 }
 
 function github_keymap_g {
@@ -80,17 +84,22 @@ function github_keymap_n {
 }
 
 function github_keymap_o {
-	local repo=${*:-$(github_keymap_rr 2> /dev/null)}
+	local repo=${*:-$(github_keymap_repo 2> /dev/null)}
 
 	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$repo"
 }
 
+GITHUB_DEFAULT_ORG='transaction-engine'
 function github_keymap_org {
-	github_keymap_url | sed 's/.*[:/]\([^/]*\)\/.*/\1/'
+	local org
+	org="$(github_keymap_url 2> /dev/null | sed 's/.*[:/]\([^/]*\)\/.*/\1/')"
+	org="${org:-$GITHUB_DEFAULT_ORG}"
+
+	echo "$org"
 }
 
 function github_keymap_p {
-	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_rr)"/pull/"$1"
+	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_repo)"/pull/"$1"
 }
 
 function github_keymap_r {
@@ -133,4 +142,9 @@ function github_keymap_t {
 	fi
 
 	cd "$target_path" && nav_keymap_n
+}
+
+function github_keymap_url {
+	# In case the current repo was forked, prefer the upstream url
+	git remote get-url upstream 2> /dev/null || git remote get-url origin
 }

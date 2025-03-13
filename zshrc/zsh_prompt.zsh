@@ -28,7 +28,7 @@ $'\n'\
 #
 
 function branch_info {
-	local branch_info; branch_info=$(github_keymap_b 2> /dev/null)
+	local branch_info; branch_info=$(github_keymap_branch 2> /dev/null)
 	[[ -n $branch_info ]] && echo " #$branch_info"
 }
 
