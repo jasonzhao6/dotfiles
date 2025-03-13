@@ -58,7 +58,8 @@ function test__main_keymap_r__when_specifying_a_description {
 			  all: h              # Show \`github_keymap\`
 			  vimium_search: h    # Github Search (TENGF)
 			  vimium_search: hh   # Github Search
-			  vimium_search: hr   # Github Repos
+			  vimium_search: hr   # Github Repos (TENGF)
+			  vimium_search: hrr  # Github Repos
 		eof
 	)"
 }; run_with_filter test__main_keymap_r__when_specifying_a_description

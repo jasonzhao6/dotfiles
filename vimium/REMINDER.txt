@@ -1,0 +1,2 @@
+- After updating `vimium-keymap.txt`, run `v` to extract it to keymap format
+- After updating `vimium-search-keymap.txt`, run `vv` to extract it to keymap format

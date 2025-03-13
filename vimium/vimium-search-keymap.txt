@@ -17,7 +17,8 @@ gm: https://www.google.com/maps?q=%s Google Maps
 
 h: https://github.marqeta.com/search?q=org%3Atransaction-engine+%s&type=code Github Search (TENGF)
 hh: https://github.marqeta.com/search?q=%s&type=code Github Search
-hr: https://github.marqeta.com/orgs/transaction-engine/repositories?q=%s Github Repos
+hr: https://github.marqeta.com/orgs/transaction-engine/repositories?q=%s Github Repos (TENGF)
+hrr: https://github.marqeta.com/search?q=%s&type=repositories Github Repos
 
 j: https://marqeta.atlassian.net/issues/%s Jira Ticket
 jj: https://marqeta.atlassian.net/browse/TENGF-%s Jira Ticket (TENGF)
