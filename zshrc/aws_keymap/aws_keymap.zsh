@@ -232,6 +232,7 @@ function aws_keymap_qp {
 	local url=$1
 
 	aws sqs purge-queue --queue-url "$url"
+	aws_keymap_qg "$url"
 }
 
 function aws_keymap_qq {
