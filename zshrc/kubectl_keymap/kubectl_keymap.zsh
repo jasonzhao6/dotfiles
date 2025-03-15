@@ -24,6 +24,9 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}c {command} {pod} # Exec a command on a pod"
 	"${KUBECTL_DOT}z # Copy history bindings and \`kubectl\` helpers"
 	''
+	"${KUBECTL_DOT}s {replicas} {deployment} # Scale deployment"
+	"${KUBECTL_DOT}ss {deployment} # Restart deployment"
+	''
 	"${KUBECTL_DOT}j {params} # Get resource as json & save a copy"
 	"${KUBECTL_DOT}jj # Get the copy of json"
 	"${KUBECTL_DOT}y {params} # Get resource as yaml & save a copy"
@@ -169,6 +172,19 @@ function kubectl_keymap_r {
 function kubectl_keymap_rr {
 	# Save a copy for offline lookup
 	kubectl api-resources > ~/Documents/k8.api-resources.txt
+}
+
+function kubectl_keymap_s {
+	local replicas="$1"
+	local deployment="$2"
+
+	kubectl scale --replicas="$replicas" deploy/"$deployment"
+}
+
+function kubectl_keymap_ss {
+	local deployment="$1"
+
+	kubectl rollout restart deploy/"$deployment"
 }
 
 function kubectl_keymap_w2 {

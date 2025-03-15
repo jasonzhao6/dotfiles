@@ -114,6 +114,10 @@ function github_keymap_r {
 	args_keymap_s "${filters[@]}" < ~/Documents/github.repos."$(github_keymap_org)".txt
 }
 
+function github_keymap_repo {
+	git rev-parse --show-toplevel | xargs basename
+}
+
 function github_keymap_rr {
 	# Save a copy for cached lookup
 	local org; org="$(github_keymap_org)"
@@ -121,10 +125,6 @@ function github_keymap_rr {
 		jq --raw-output '.[].name' |
 		tee ~/Documents/github.repos."$org".txt |
 		args_keymap_s
-}
-
-function github_keymap_repo {
-	git rev-parse --show-toplevel | xargs basename
 }
 
 function github_keymap_t {
