@@ -40,7 +40,7 @@ AWS_KEYMAP=(
 	"${AWS_DOT}qq {queue url} # SQS open in new tab"
 	"${AWS_DOT}qg {queue url} # SQS get stats"
 	"${AWS_DOT}qr {queue url} # SQS receive message"
-	"${AWS_DOT}qp {queue url} # SQS purge"
+	"${AWS_DOT}qpurge {queue url} # SQS purge"
 	''
 	"${AWS_DOT}c {name} # Code Pipeline search"
 	"${AWS_DOT}cc {name} # Code Pipeline get latest status"
@@ -228,7 +228,7 @@ function aws_keymap_qg {
 		--attribute-names ApproximateNumberOfMessages ApproximateNumberOfMessagesNotVisible | jq
 }
 
-function aws_keymap_qp {
+function aws_keymap_qpurge {
 	local url=$1
 
 	aws sqs purge-queue --queue-url "$url"
