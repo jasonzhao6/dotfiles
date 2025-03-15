@@ -29,9 +29,9 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}y {params} # Get resource as yaml & save a copy"
 	"${KUBECTL_DOT}yy # Get the copy of yaml"
 	''
-	"${KUBECTL_DOT}s # Save a copy of resource types"
 	"${KUBECTL_DOT}r # List resource types"
 	"${KUBECTL_DOT}r {match}* {-mismatch}* # Filter resource types"
+	"${KUBECTL_DOT}rr # Save a copy of resource types"
 	"${KUBECTL_DOT}x {resource type} # Explain a resource type"
 	''
 	"${KUBECTL_DOT}h {yaml file} # Render Helm template locally"
@@ -166,7 +166,7 @@ function kubectl_keymap_r {
 	args_keymap_s "${filters[@]}" < ~/Documents/k8.api-resources.txt
 }
 
-function kubectl_keymap_s {
+function kubectl_keymap_rr {
 	# Save a copy for offline lookup
 	kubectl api-resources > ~/Documents/k8.api-resources.txt
 }

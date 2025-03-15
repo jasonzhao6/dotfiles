@@ -15,9 +15,9 @@ GITHUB_KEYMAP=(
 	"${GITHUB_DOT}t # Navigate to the repo name in pasteboard"
 	"${GITHUB_DOT}tt # Copy the current repo name to pasteboard"
 	''
-	"${GITHUB_DOT}s # Save a copy of remote repos"
 	"${GITHUB_DOT}r # List remote repos"
 	"${GITHUB_DOT}r {match}* {-mismatch}* # Filter remote repos"
+	"${GITHUB_DOT}rr # Save a copy of remote repos"
 	''
 	"${GITHUB_DOT}n # Create a new PR, then open it"
 	"${GITHUB_DOT}g # Create a new gist, then open it"
@@ -114,17 +114,17 @@ function github_keymap_r {
 	args_keymap_s "${filters[@]}" < ~/Documents/github.repos."$(github_keymap_org)".txt
 }
 
-function github_keymap_repo {
-	git rev-parse --show-toplevel | xargs basename
-}
-
-function github_keymap_s {
+function github_keymap_rr {
 	# Save a copy for cached lookup
 	local org; org="$(github_keymap_org)"
 	gh repo list "$org" --no-archived --limit 1000 --json name |
 		jq --raw-output '.[].name' |
 		tee ~/Documents/github.repos."$org".txt |
 		args_keymap_s
+}
+
+function github_keymap_repo {
+	git rev-parse --show-toplevel | xargs basename
 }
 
 function github_keymap_t {
