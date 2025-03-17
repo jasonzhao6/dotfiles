@@ -2,10 +2,14 @@ c: https://marqeta.atlassian.net/wiki/search?text=%s Confluence
 
 da: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=prod Datadog APM Prod
 daa: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=qa Datadog APM QA
-ddl: https://app.datadoghq.com/dashboard/lists?q=%s Datadog Dashboard Lists
 di: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aprod%2Cservice%3A%s-ccapi Datadog Infrastructure Prod
 dii: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aqa%2Cservice%3A%s-ccapi Datadog Infrastructure QA
 dl: https://app.datadoghq.com/logs?query=%s Datadog Logs
+
+dd: https://app.datadoghq.com/orchestration/explorer/deployment?query=%s%20kube_namespace%3Atransaction-engine Datadog Kubernetes Deployments
+dp: https://app.datadoghq.com/orchestration/explorer/pod?query=%s%20kube_namespace%3Atransaction-engine Datadog Kubernetes Pods
+
+ddl: https://app.datadoghq.com/dashboard/lists?q=%s Datadog Dashboard Lists
 dmm: https://app.datadoghq.com/monitors/manage?q=%s%20tag%3A%22owner%3Atransaction-engine%22 Datadog Manage Monitors
 dms: https://app.datadoghq.com/metric/summary?filter=%s Datadog Metrics Summary
 
