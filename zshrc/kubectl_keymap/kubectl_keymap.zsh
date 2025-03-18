@@ -5,10 +5,10 @@ KUBECTL_DOT="${KUBECTL_ALIAS}${KEYMAP_DOT}"
 KUBECTL_KEYMAP=(
 	"${KUBECTL_ALIAS} {kubectl command}"
 	''
-	"${KUBECTL_DOT}n {name} # Set namespace"
-	"${KUBECTL_DOT}e1 # Set namespace and use us-east-1 region"
-	"${KUBECTL_DOT}e2 # Set namespace and use us-east-2 region"
-	"${KUBECTL_DOT}w2 # Set namespace and and us-west-2 region"
+	"${KUBECTL_DOT}n {namespace}? # Set namespace (to '$GITHUB_DEFAULT_ORG')"
+	"${KUBECTL_DOT}e1 {namespace}? # Set namespace, region, and kube config"
+	"${KUBECTL_DOT}e2 {namespace}? # Set namespace, region, and kube config"
+	"${KUBECTL_DOT}w2 {namespace}? # Set namespace, region, and kube config"
 	''
 	"${KUBECTL_DOT}k {resource type} {match}* {-mismatch}* # Get resources as args"
 	"${KUBECTL_DOT}g {params} # Get resources"
@@ -158,7 +158,7 @@ function kubectl_keymap_m {
 }
 
 function kubectl_keymap_n {
-	local namespace=$1
+	local namespace=${1:-$GITHUB_DEFAULT_ORG}
 
 	kubectl config set-context --current --namespace "$namespace"
 }

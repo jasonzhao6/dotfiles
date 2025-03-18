@@ -3,4 +3,4 @@ Test stats:
 - 221/221 tests were defined and invoked
 - 103/103 subjects have tests, and the tests are defined in the same order as their subjects
 - 238/238 keymap entries have corresponding key mapping functions
-- 237/238 key mapping functions are alphabetized
+- 238/238 key mapping functions are alphabetized
