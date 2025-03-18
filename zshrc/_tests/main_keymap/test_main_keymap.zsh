@@ -106,7 +106,7 @@ function test__main_keymap_w__when_specifying_a_key {
 	)" "$(
 		cat <<-eof
 
-		  $ k.j {params}                  # Get resource as json & save a copy
+		  $ k.j {type} {name}             # Get resource as json & save a copy
 		  $ k.jj                          # Get the copy of json
 		  $ o.j {url} {match} {num lines} # Curl a json endpoint
 

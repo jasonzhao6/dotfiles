@@ -10,32 +10,31 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}e2 {namespace}? # Set namespace, region, and kube config"
 	"${KUBECTL_DOT}w2 {namespace}? # Set namespace, region, and kube config"
 	''
-	"${KUBECTL_DOT}k {resource type} {match}* {-mismatch}* # Get resources as args"
-	"${KUBECTL_DOT}g {params} # Get resources"
-	"${KUBECTL_DOT}gg {params} # Get resources with \`-o wide\`"
-	"${KUBECTL_DOT}d {params} # Describe resource(s)"
-	"${KUBECTL_DOT}m {params} # Edit with TextMate"
-	"${KUBECTL_DOT}e {params} # Exec a command"
+	"${KUBECTL_DOT}k {type} {match}* {-mismatch}* # Get resources as args"
+	"${KUBECTL_DOT}g {type} {name} # Get resources"
+	"${KUBECTL_DOT}gg {type} {name} # Get resources with \`-o wide\`"
+	"${KUBECTL_DOT}d {type} {name} # Describe resources"
+	"${KUBECTL_DOT}m {type} {name} # Edit with TextMate"
 	''
 	"${KUBECTL_DOT}l {pod} # Show logs"
 	"${KUBECTL_DOT}ll {pod} # Tail logs"
 	"${KUBECTL_DOT}lp {pod} # Show previous logs"
 	"${KUBECTL_DOT}b {pod} # Exec into bash"
-	"${KUBECTL_DOT}c {command} {pod} # Exec a command on a pod"
+	"${KUBECTL_DOT}c {command} {pod} # Exec a command"
 	"${KUBECTL_DOT}z # Copy history bindings and \`kubectl\` helpers"
 	''
-	"${KUBECTL_DOT}s {count} {name} # Scale a deployment"
+	"${KUBECTL_DOT}s {count} {deployment} # Scale a deployment"
 	"${KUBECTL_DOT}ss {type} {name} # Restart a deployment/stateful set/daemon set"
 	''
-	"${KUBECTL_DOT}j {params} # Get resource as json & save a copy"
+	"${KUBECTL_DOT}j {type} {name} # Get resource as json & save a copy"
 	"${KUBECTL_DOT}jj # Get the copy of json"
-	"${KUBECTL_DOT}y {params} # Get resource as yaml & save a copy"
+	"${KUBECTL_DOT}y {type} {name} # Get resource as yaml & save a copy"
 	"${KUBECTL_DOT}yy # Get the copy of yaml"
 	''
 	"${KUBECTL_DOT}r # List resource types"
 	"${KUBECTL_DOT}r {match}* {-mismatch}* # Filter resource types"
 	"${KUBECTL_DOT}rr # Save a copy of resource types"
-	"${KUBECTL_DOT}x {resource type} # Explain a resource type"
+	"${KUBECTL_DOT}x {type} # Explain a resource type"
 	''
 	"${KUBECTL_DOT}h {yaml file} # Render Helm template locally"
 )
@@ -77,12 +76,6 @@ function kubectl_keymap_d {
 	local params=("$@")
 
 	kubectl describe "${params[@]}"
-}
-
-function kubectl_keymap_e {
-	local params=("$@")
-
-	kubectl exec "${params[@]}"
 }
 
 function kubectl_keymap_e1 {
@@ -127,10 +120,10 @@ function kubectl_keymap_jj {
 function kubectl_keymap_k {
 	[[ -z $1 ]] && return
 
-	local resource="$1"; shift
+	local resource_type="$1"; shift
 	local filters=("$@")
 
-	kubectl get "$resource" | args_keymap_so "${filters[@]}"
+	kubectl get "$resource_type" | args_keymap_so "${filters[@]}"
 }
 
 function kubectl_keymap_l {
@@ -194,9 +187,9 @@ function kubectl_keymap_w2 {
 }
 
 function kubectl_keymap_x {
-	local resource="$1"
+	local resource_type="$1"
 
-	kubectl explain "$resource"
+	kubectl explain "$resource_type"
 }
 
 function kubectl_keymap_y {
