@@ -24,8 +24,8 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}c {command} {pod} # Exec a command on a pod"
 	"${KUBECTL_DOT}z # Copy history bindings and \`kubectl\` helpers"
 	''
-	"${KUBECTL_DOT}ss {deployment} # Restart deployment"
-	"${KUBECTL_DOT}s {replica count} {deployment} # Scale deployment"
+	"${KUBECTL_DOT}s {count} {name} # Scale a deployment"
+	"${KUBECTL_DOT}ss {type} {name} # Restart a deployment/stateful set/daemon set"
 	''
 	"${KUBECTL_DOT}j {params} # Get resource as json & save a copy"
 	"${KUBECTL_DOT}jj # Get the copy of json"
@@ -178,13 +178,14 @@ function kubectl_keymap_s {
 	local replica_count="$1"
 	local deployment_name="$2"
 
-	kubectl scale --replicas="$replica_count" deploy/"$deployment_name"
+	kubectl scale --replicas="$replica_count" deploy "$deployment_name"
 }
 
 function kubectl_keymap_ss {
-	local deployment="$1"
+	local resource_type="$1"
+	local resource_name="$2"
 
-	kubectl rollout restart deploy/"$deployment"
+	kubectl rollout restart "$resource_type" "$resource_name"
 }
 
 function kubectl_keymap_w2 {
