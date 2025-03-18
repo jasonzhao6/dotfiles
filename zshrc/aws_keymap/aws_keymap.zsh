@@ -39,7 +39,7 @@ AWS_KEYMAP=(
 	"${AWS_DOT}q {name} # SQS search"
 	"${AWS_DOT}qq {queue url} # SQS open in new tab"
 	"${AWS_DOT}qg {queue url} # SQS get stats"
-	"${AWS_DOT}qr {queue url} # SQS receive message"
+	"${AWS_DOT}qr {queue url} {count}? # SQS receive message"
 	"${AWS_DOT}qpurge {queue url} # SQS purge"
 	''
 	"${AWS_DOT}c {name} # Code Pipeline search"
@@ -243,10 +243,11 @@ function aws_keymap_qq {
 
 function aws_keymap_qr {
 	local url=$1
+	local count=${2:-1}
 
 	aws sqs receive-message \
 		--queue-url "$url" \
-		--max-number-of-messages 1 \
+		--max-number-of-messages "$count" \
 		--visibility-timeout 5 \
 		--wait-time-seconds 1 |
 		jq '.Messages[].Body | fromjson'
