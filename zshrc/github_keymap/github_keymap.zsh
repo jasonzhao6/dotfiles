@@ -52,7 +52,9 @@ function github_keymap_branch {
 }
 
 function github_keymap_c {
-	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_repo)"/commit/"$1"
+	local sha; sha=$(paste_when_empty "$1")
+
+	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_repo)"/commit/"$sha"
 }
 
 GITHUB_DEFAULT_DOMAIN='github.marqeta.com'
@@ -128,7 +130,7 @@ function github_keymap_rr {
 }
 
 function github_keymap_t {
-	local repo; repo=$(pbpaste)
+	local repo; repo=$(paste_when_empty "$1")
 
 	# If pasteboard is empty, error
 	if [[ -z $repo ]]; then
