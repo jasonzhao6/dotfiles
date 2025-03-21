@@ -15,8 +15,7 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}f # List functions"
 	"${ZSH_DOT}f {match}* {-mismatch}* # Filter functions"
 	''
-	"${ZSH_DOT}h # List history"
-	"${ZSH_DOT}h {match}* {-mismatch}* # Filter history"
+	"${ZSH_DOT}h {grep}? # List history"
 	"${ZSH_DOT}hc # Clear history"
 	"${ZSH_DOT}hm # Edit history file in TextMate"
 	''
@@ -64,9 +63,9 @@ function zsh_keymap_f {
 }
 
 function zsh_keymap_h {
-	local filters=("$@")
+	local match="$*"
 
-	cut -c 16- "$HISTFILE" | sort --unique | args_keymap_s "${filters[@]}"
+	cut -c 16- "$HISTFILE" | sort --unique | grep "$match" | as
 }
 
 function zsh_keymap_hc {
