@@ -5,7 +5,8 @@ TERRAFORM_DOT="${TERRAFORM_ALIAS}${KEYMAP_DOT}"
 TERRAFORM_KEYMAP=(
 	"${TERRAFORM_ALIAS} {terraform command}"
 	''
-	"${TERRAFORM_DOT}w # Find manifests"
+	"${TERRAFORM_DOT}w # List manifests"
+	"${TERRAFORM_DOT}w {match}* {-mismatch}* # Filter manifests"
 	''
 	"${TERRAFORM_DOT}i # Init"
 	"${TERRAFORM_DOT}iu # Init & upgrade"
@@ -198,7 +199,9 @@ function terraform_keymap_v {
 }
 
 function terraform_keymap_w {
-	ls -- **/main.tf | trim 0 8 | args_keymap_s
+	local filters=("$@")
+
+	ls -- **/main.tf | trim 0 8 | args_keymap_s "${filters[@]}"
 }
 
 function terraform_keymap_z {
