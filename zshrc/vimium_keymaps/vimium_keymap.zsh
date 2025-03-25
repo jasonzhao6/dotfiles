@@ -1,5 +1,5 @@
 VIMIUM_NAMESPACE='vimium_keymap'
-VIMIUM_ALIAS='v'
+VIMIUM_ALIAS='vv'
 VIMIUM_KEYMAP_FILE="$ZSHRC_DIR/${VIMIUM_NAMESPACE}s/$VIMIUM_NAMESPACE.extracted.zsh"
 
 source "$ZSHRC_DIR/${VIMIUM_NAMESPACE}s/vimium_helpers.zsh"
