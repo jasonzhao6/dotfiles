@@ -14,6 +14,6 @@ ALL_KEYMAP=(
 	'ia # Show `intellij_alt_keymap`'
 	'i # Show `intellij_cmd_keymap`'
 	'ic # Show `intellij_ctrl_keymap`'
-	'v # Show `vimium_keymap`'
-	'vv # Show `vimium_search_keymap`'
+	'vv # Show `vimium_keymap`'
+	'v # Show `vimium_search_keymap`'
 )

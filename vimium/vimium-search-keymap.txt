@@ -1,22 +1,19 @@
 a: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=prod Datadog APM (Prod)
 aa: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=qa Datadog APM (QA)
 
-c: https://marqeta.atlassian.net/wiki/search?text=%s&spaces=TF Confluence (TENGF)
-cc: https://marqeta.atlassian.net/wiki/search?text=%s Confluence
+c: https://github.marqeta.com/search?q=org%3Atransaction-engine+%s&type=code Github Code Search (TENGF)
+cc: https://github.marqeta.com/search?q=%s&type=code Github Code Search
 
 dl: https://app.datadoghq.com/dashboard/lists?q=%s Datadog Dashboard Lists (go/dl)
 
-e: https://github.marqeta.com/search?q=org%3Atransaction-engine+%s&type=code Github Search (TENGF)
-ee: https://github.marqeta.com/search?q=%s&type=code Github Search
+e: https://ecr-ui.prod.ci.marqeta.io/?search=%s ECR (Prod)
+ee: https://ecr-ui.prod.ci.marqeta.io/us-west-2/repositories?search=%s ECR (QA)
 
 g: https://mail.google.com/mail/u/0/#search/%s Google Gmail
 gc: https://calendar.google.com/calendar/u/0/r/search?q=%s Google Calendar
 gd: https://drive.google.com/drive/search?q=%s Google Drive
 gi: https://www.google.com/search?q=%s&udm=2 Google Images
 gm: https://www.google.com/maps?q=%s Google Maps
-
-h: https://github.marqeta.com/orgs/transaction-engine/repositories?q=%s Github Repos (TENGF)
-hh: https://github.marqeta.com/search?q=%s&type=repositories Github Repos
 
 i: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aprod%2Cservice%3A%s-ccapi Datadog Infrastructure (Prod)
 ii: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aqa%2Cservice%3A%s-ccapi Datadog Infrastructure (QA)
@@ -39,12 +36,18 @@ ms: https://app.datadoghq.com/metric/summary?filter=%s Datadog Metrics Summary (
 
 o: https://golinks.io/%s Go Links
 
+r: https://github.marqeta.com/orgs/transaction-engine/repositories?q=%s Github Repo Search (TENGF)
+rr: https://github.marqeta.com/search?q=%s&type=repositories Github Repo Search
+
 se: https://us-east-1.console.aws.amazon.com/ec2/home#Instances:instanceState=running;search=%s AWS EC2
 sl: https://us-east-1.console.aws.amazon.com/ec2/home#LoadBalancers:search=%s AWS Load Balancers
 sm: https://us-east-1.console.aws.amazon.com/secretsmanager/listsecrets&search=all%3Dtransaction-engine%26all%3D%s AWS Secrets Manager
 
 t: https://e.ggtimer.com/%s0m E.ggtimer (10m)
 tt: https://e.ggtimer.com/%sm E.ggtimer (1m)
+
+w: https://marqeta.atlassian.net/wiki/search?text=%s&spaces=TF Confluence (TENGF)
+ww: https://marqeta.atlassian.net/wiki/search?text=%s Confluence
 
 y: https://www.yelp.com/search?find_desc=%s Yelp
 yt: https://www.youtube.com/results?search_query=%s YouTube
