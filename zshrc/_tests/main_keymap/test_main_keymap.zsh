@@ -56,10 +56,10 @@ function test__main_keymap_r__when_specifying_a_description {
 
 			  intellij_alt: alt-o # Open on GitHub
 			  all: h              # Show \`github_keymap\`
-			  vimium_search: e    # Github Search (TENGF)
-			  vimium_search: ee   # Github Search
-			  vimium_search: h    # Github Repos (TENGF)
-			  vimium_search: hh   # Github Repos
+			  vimium_search: c    # Github Code Search (TENGF)
+			  vimium_search: cc   # Github Code Search
+			  vimium_search: r    # Github Repo Search (TENGF)
+			  vimium_search: rr   # Github Repo Search
 		eof
 	)"
 }; run_with_filter test__main_keymap_r__when_specifying_a_description
