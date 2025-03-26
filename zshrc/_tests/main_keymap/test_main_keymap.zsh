@@ -56,10 +56,10 @@ function test__main_keymap_r__when_specifying_a_description {
 
 			  intellij_alt: alt-o # Open on GitHub
 			  all: h              # Show \`github_keymap\`
-			  vimium_search: h    # Github Search (TENGF)
-			  vimium_search: hh   # Github Search
-			  vimium_search: hr   # Github Repos (TENGF)
-			  vimium_search: hrr  # Github Repos
+			  vimium_search: e    # Github Search (TENGF)
+			  vimium_search: ee   # Github Search
+			  vimium_search: h    # Github Repos (TENGF)
+			  vimium_search: hh   # Github Repos
 		eof
 	)"
 }; run_with_filter test__main_keymap_r__when_specifying_a_description
@@ -82,9 +82,9 @@ function test__main_keymap_r__when_specifying_a_non_zsh_only_description {
 	)" "$(
 		cat <<-eof
 
+			  vimium_search: g  # Google Gmail
 			  vimium_search: gc # Google Calendar
 			  vimium_search: gd # Google Drive
-			  vimium_search: gg # Google Gmail
 			  vimium_search: gi # Google Images
 			  vimium_search: gm # Google Maps
 		eof
