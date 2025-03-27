@@ -52,6 +52,7 @@ function test__main_keymap_r__when_specifying_a_description {
 	)" "$(
 		cat <<-eof
 
+			  $ h.u # Open the current repo in GitHub Desktop
 			  $ n.h # Go to github
 
 			  intellij_alt: alt-o # Open on GitHub
