@@ -117,7 +117,8 @@ function git_keymap_c {
 }
 
 function git_keymap_d {
-	git diff
+	git add --all
+	git diff --staged
 }
 
 function git_keymap_e {
@@ -137,7 +138,8 @@ function git_keymap_g {
 function git_keymap_i {
 	local sha; sha=$(paste_when_empty "$1")
 
-	git add --all; git commit --fixup "$sha"
+	git add --all
+	git commit --fixup "$sha"
 }
 
 function git_keymap_ii {
