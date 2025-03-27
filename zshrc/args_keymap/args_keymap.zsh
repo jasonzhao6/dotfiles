@@ -8,15 +8,16 @@ ARGS_KEYMAP=(
 	"${ARGS_DOT}so # Save as args & soft-select the 1st column"
 	"${ARGS_DOT}so {match}* {-mismatch}* # Save as args & soft-select the 1st column & filter"
 	''
-	"${ARGS_DOT}n {number} {command} # Use an arg by number"
-	'{1-100} {command} # Use an arg by number'
+	"${ARGS_DOT}o {command} # Use the first arg"
+	"${ARGS_DOT}e {command} # Use a random arg"
 	'0 {command} # Use the last arg'
-	"${ARGS_DOT}o {command} # Use a random arg"
+	'{1-100} {command} # Use an arg by number up to 100'
+	"${ARGS_DOT}n {number} {command} # Use an arg by number beyond 100"
 	''
 	"each {command} # Use each arg in series"
 	"all {command} # Use all args in parallel"
 	"map {command} # Map args, e.g \`map echo '\$((~~ * 10))'\`"
-	"${ARGS_DOT}e {start} {finish} {command} # Use args within a sequence"
+	"${ARGS_DOT}- {start} {finish} {command} # Use args within a sequence"
 	''
 	"${ARGS_DOT}a # List args"
 	"${ARGS_DOT}a {match}* {-mismatch}* # Filter args"
@@ -65,6 +66,17 @@ source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_helpers.zsh"
 source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_history.zsh"; args_history_init
 source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_numbers.zsh"
 
+function args_keymap_- {
+	local start=$1; shift
+	local finish=$1; shift # `end` is a reserved keyword
+	local command=$*
+
+	for number in $(seq "$start" "$finish"); do
+		echo
+		args_keymap_n "$number" "$command"
+	done
+}
+
 # shellcheck disable=SC2120
 function args_keymap_a {
 	local filters=("$@")
@@ -92,15 +104,11 @@ function args_keymap_c {
 function args_keymap_d {
 	args_history_current | sort --unique | args_keymap_s
 }
+
 function args_keymap_e {
-	local start=$1; shift
-	local finish=$1; shift # `end` is a reserved keyword
 	local command=$*
 
-	for number in $(seq "$start" "$finish"); do
-		echo
-		args_keymap_n "$number" "$command"
-	done
+	args_keymap_n $((RANDOM % $(args_size) + 1)) "$command"
 }
 
 function args_keymap_h {
@@ -141,9 +149,7 @@ function args_keymap_n {
 }
 
 function args_keymap_o {
-	local command=$*
-
-	args_keymap_n $((RANDOM % $(args_size) + 1)) "$command"
+	args_keymap_n 1 "$@"
 }
 
 function args_keymap_p {
