@@ -116,10 +116,22 @@ function other_keymap_a {
 }
 
 function other_keymap_b {
-	local file=$1
-	local column_index=${2:-1}
+	local file
+	local column_index
 
-	sort --field-separator=, --key="$column_index,$column_index" --sort=numeric "$file"
+	# When invoked as standalone command
+	if [[ -t 0 ]]; then
+		file=$1
+		column_index=${2:-1}
+
+		sort --field-separator=, --key="$column_index,$column_index" --sort=numeric "$file"
+
+	# When invoked after a pipe `|`
+	else
+		column_index=${1:-1}
+
+		sort --field-separator=, --key="$column_index,$column_index" --sort=numeric
+	fi
 }
 
 function other_keymap_c {
@@ -287,12 +299,28 @@ function other_keymap_w {
 	local column_1=$2
 	local column_2=${3:-1}
 
-	awk -F, -v c1="$column_1" -v c2="$column_2" '{
+	local awk_script='{
 		tmp = $c1;
 		$c1 = $c2;
 		$c2 = tmp;
 		print $0
-	}' OFS=, "$file"
+	}'
+
+	# When invoked as standalone command
+	if [[ -t 0 ]]; then
+		file=$1
+		column_1=$2
+		column_2=${3:-1}
+
+		awk -F, -v c1="$column_1" -v c2="$column_2" "$awk_script" OFS=, "$file"
+
+	# When invoked after a pipe `|`
+	else
+		column_1=$1
+		column_2=${2:-1}
+
+		awk -F, -v c1="$column_1" -v c2="$column_2" "$awk_script" OFS=,
+	fi
 }
 
 function other_keymap_x {
