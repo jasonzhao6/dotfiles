@@ -11,8 +11,19 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}m # Open the current directory in TextMate"
 	"${OTHER_DOT}m {path} # Open the specified path in TextMate"
 	''
-	"${OTHER_DOT}cc # Copy the last command"
+	"${OTHER_DOT}s # Sleep"
+	"${OTHER_DOT}a # Stay awake"
+	"${OTHER_DOT}n # Stay on task"
+	''
+	"${OTHER_DOT}y # Alias for \`pbcopy\`"
+	"${OTHER_DOT}p # Alias for \`pbpaste\`"
 	"${OTHER_DOT}c # Copy the last output"
+	"${OTHER_DOT}cc # Copy the last command"
+	''
+	"${OTHER_DOT}k # Clear the terminal"
+	"${OTHER_DOT}kk # Show archived terminal outputs"
+	"${OTHER_DOT}kc # Clear archived terminal outputs"
+	''
 	"${OTHER_DOT}1 # Save the last output to \`1.txt\`"
 	"${OTHER_DOT}2 # Save the last output to \`2.txt\`"
 	"${OTHER_DOT}11 # Save pasteboard value to \`1.txt\`"
@@ -20,27 +31,16 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}e # Open \`1.txt\` and \`2.txt\` in TextMate"
 	"${OTHER_DOT}0 # Empty \`1.txt\` and \`2.txt\`"
 	"${OTHER_DOT}u {file 1} {file 2} # Unified diff"
-	"${OTHER_DOT}uu {file 1} {file 2} # Side-by-side diff"
-	''
-	"${OTHER_DOT}y # Alias for \`pbcopy\`"
-	"${OTHER_DOT}p # Alias for \`pbpaste\`"
-	''
-	"${OTHER_DOT}k # Clear the terminal"
-	"${OTHER_DOT}kk # Show archived terminal outputs"
-	"${OTHER_DOT}kc # Clear archived terminal outputs"
-	''
-	"${OTHER_DOT}s # Sleep"
-	"${OTHER_DOT}a # Stay awake"
-	"${OTHER_DOT}n # Stay on task"
+	"${OTHER_DOT}uu {file 1} {file 2} # Side by side diff"
 	''
 	"${OTHER_DOT}d {url} # DNS dig"
 	"${OTHER_DOT}df # DNS flush"
-	"${OTHER_DOT}- {start} {finish} {~~} # Run a sequence of commands"
-	"${OTHER_DOT}f # Format sql query from stdin"
-	"${OTHER_DOT}f '{sql}' # Format sql query from cli arg"
-	"${OTHER_DOT}j {url} {match} {num lines} # Curl a json endpoint"
+	"${OTHER_DOT}j {url} {regex} {num lines} # Curl a json endpoint"
+	"${OTHER_DOT}q # Format a sql query from stdin"
+	"${OTHER_DOT}q '{sql}' # Format a sql query from cli arg"
 	"${OTHER_DOT}r {before} {after} # Rename files in the current directory"
 	"${OTHER_DOT}t {command} # Time command execution"
+	"${OTHER_DOT}- {start} {finish} {~~} # Run a sequence of commands"
 )
 
 keymap_init $OTHER_NAMESPACE $OTHER_ALIAS "${OTHER_KEYMAP[@]}"
@@ -143,13 +143,6 @@ function other_keymap_e {
 	mate "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1" "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 }
 
-function other_keymap_f {
-	local sql=$*
-
-	# shellcheck disable=SC2086 # Empty quotes break Ruby's `gets` method
-	ruby ~/github/jasonzhao6/sql_formatter.rb/run.rb $sql
-}
-
 function other_keymap_i {
 	local target_path=${*:-.}
 
@@ -158,16 +151,16 @@ function other_keymap_i {
 
 function other_keymap_j {
 	local url=$1
-	local match=$2
+	local regex=$2
 	local num_lines=${3:-0}
 
 	[[ -z $url ]] && return
 
 	curl --silent "$url" | jq | {
-		if [[ -z "$match" ]]; then
+		if [[ -z "$regex" ]]; then
 			cat
 		else
-			grep --ignore-case -A"$num_lines" -B"$num_lines" "$match"
+			grep --ignore-case -A"$num_lines" -B"$num_lines" "$regex"
 		fi
 	}
 }
@@ -233,6 +226,13 @@ function other_keymap_o {
 
 function other_keymap_p {
 	pbpaste
+}
+
+function other_keymap_q {
+	local sql=$*
+
+	# shellcheck disable=SC2086 # Empty quotes break Ruby's `gets` method
+	ruby ~/github/jasonzhao6/sql_formatter.rb/run.rb $sql
 }
 
 function other_keymap_r {
