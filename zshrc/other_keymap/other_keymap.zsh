@@ -33,6 +33,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}u {file 1}? {file 2}? # Unified diff"
 	"${OTHER_DOT}uu {file 1}? {file 2}? # Side by side diff"
 	"${OTHER_DOT}x {file 1}? {file 2}? # Filter files by their first columns"
+	"${OTHER_DOT}b {file} {column index}? # Sort file by the specified column index"
 	''
 	"${OTHER_DOT}d {url} # DNS dig"
 	"${OTHER_DOT}df # DNS flush"
@@ -111,6 +112,13 @@ function other_keymap_22 {
 
 function other_keymap_a {
 	caffeinate
+}
+
+function other_keymap_b {
+	local file=$1
+	local column_index=${2:-1}
+
+	sort --field-separator=, --key="$column_index,$column_index" --sort=numeric "$file"
 }
 
 function other_keymap_c {
