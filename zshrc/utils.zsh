@@ -100,7 +100,7 @@ function downcase {
 }
 
 function encode_url() {
-    perl -MURI::Escape -ne 'print uri_escape($_)'
+	perl -MURI::Escape -ne 'print uri_escape($_)'
 }
 
 function extract_urls {
