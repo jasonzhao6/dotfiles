@@ -526,33 +526,6 @@ function test__other_keymap_x__when_file_1_has_only_1_column {
 
 	local file2; file2=$(
 		cat <<-eof
-			b
-			d
-		eof
-	)
-
-	assert "$(
-		other_keymap_x <(echo "$file1") <(echo "$file2")
-	)" "$(
-		cat <<-eof
-			b
-			d
-		eof
-	)"
-}; run_with_filter test__other_keymap_x__when_file_1_has_only_1_column
-
-function test__other_keymap_x__when_file_1_has_only_1_column {
-	local file1; file1=$(
-		cat <<-eof
-			a
-			b
-			c
-			d
-		eof
-	)
-
-	local file2; file2=$(
-		cat <<-eof
 			b,20
 			d,40
 		eof
@@ -594,3 +567,30 @@ function test__other_keymap_x__when_file_2_has_only_1_column {
 		eof
 	)"
 }; run_with_filter test__other_keymap_x__when_file_2_has_only_1_column
+
+function test__other_keymap_x__when_both_files_have_only_1_column {
+	local file1; file1=$(
+		cat <<-eof
+			a
+			b
+			c
+			d
+		eof
+	)
+
+	local file2; file2=$(
+		cat <<-eof
+			b
+			d
+		eof
+	)
+
+	assert "$(
+		other_keymap_x <(echo "$file1") <(echo "$file2")
+	)" "$(
+		cat <<-eof
+			b
+			d
+		eof
+	)"
+}; run_with_filter test__other_keymap_x__when_both_files_have_only_1_column
