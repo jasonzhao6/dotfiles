@@ -17,7 +17,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}2 # Save the last output to \`2.txt\`"
 	"${OTHER_DOT}11 # Save pasteboard value to \`1.txt\`"
 	"${OTHER_DOT}22 # Save pasteboard value to \`2.txt\`"
-	"${OTHER_DOT}- # Open \`1.txt\` and \`2.txt\` in TextMate"
+	"${OTHER_DOT}e # Open \`1.txt\` and \`2.txt\` in TextMate"
 	"${OTHER_DOT}0 # Empty \`1.txt\` and \`2.txt\`"
 	"${OTHER_DOT}u {file 1} {file 2} # Unified diff"
 	"${OTHER_DOT}uu {file 1} {file 2} # Side-by-side diff"
@@ -35,7 +35,7 @@ OTHER_KEYMAP=(
 	''
 	"${OTHER_DOT}d {url} # DNS dig"
 	"${OTHER_DOT}df # DNS flush"
-	"${OTHER_DOT}e {start} {finish} {~~} # Run a sequence of commands"
+	"${OTHER_DOT}- {start} {finish} {~~} # Run a sequence of commands"
 	"${OTHER_DOT}f # Format sql query from stdin"
 	"${OTHER_DOT}f '{sql}' # Format sql query from cli arg"
 	"${OTHER_DOT}j {url} {match} {num lines} # Curl a json endpoint"
@@ -63,7 +63,14 @@ OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$HOME/Documents/2.txt"
 source "$ZSHRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
 
 function other_keymap_- {
-	mate "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1" "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+	local start=$1; shift
+	local finish=$1; shift # `end` is a reserved keyword
+	local command=$*
+
+	for number in $(seq "$start" "$finish"); do
+		echo
+		echo_eval "${command//~~/$number}"
+	done
 }
 
 function other_keymap_0 {
@@ -133,14 +140,7 @@ function other_keymap_df {
 }
 
 function other_keymap_e {
-	local start=$1; shift
-	local finish=$1; shift # `end` is a reserved keyword
-	local command=$*
-
-	for number in $(seq "$start" "$finish"); do
-		echo
-		echo_eval "${command//~~/$number}"
-	done
+	mate "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1" "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 }
 
 function other_keymap_f {

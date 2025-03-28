@@ -208,7 +208,7 @@ function test__args_keymap_d {
 function test__args_keymap_e {
 	assert "$(
 		echo "$test__input_short" | args_keymap_s > /dev/null
-		other_keymap_e 1 $(($(args_size) * 4)) args_keymap_e echo 2>&1 | sort --unique
+		other_keymap_- 1 $(($(args_size) * 4)) args_keymap_e echo 2>&1 | sort --unique
 	)" "$(
 		cat <<-eof
 
