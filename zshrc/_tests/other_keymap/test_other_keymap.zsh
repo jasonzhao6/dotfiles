@@ -7,6 +7,65 @@ function test__other_keymap {
 	)" '1'
 }; run_with_filter test__other_keymap
 
+function test__other_keymap_- {	assert "$(
+		other_keymap_- 3 4 echo ~~ 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo 3
+			3
+
+			echo 4
+			4
+		eof
+	)"
+}; run_with_filter test__other_keymap_-
+
+function test__other_keymap_-__with_multiple_substitutions {
+	assert "$(
+		other_keymap_- 3 4 echo ~~ and ~~ again 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo 3 and 3 again
+			3 and 3 again
+
+			echo 4 and 4 again
+			4 and 4 again
+		eof
+	)"
+}; run_with_filter test__other_keymap_-__with_multiple_substitutions
+
+function test__other_keymap_-__with_multiple_substitutions_in_quotes {
+	assert "$(
+		other_keymap_- 3 4 'echo ~~ and ~~ again' 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo 3 and 3 again
+			3 and 3 again
+
+			echo 4 and 4 again
+			4 and 4 again
+		eof
+	)"
+}; run_with_filter test__other_keymap_-__with_multiple_substitutions_in_quotes
+
+function test__other_keymap_-__with_math {
+	assert "$(
+		other_keymap_- 3 4 echo ~~ and '$((~~ + 10))' too 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo 3 and \$((3 + 10)) too
+			3 and 13 too
+
+			echo 4 and \$((4 + 10)) too
+			4 and 14 too
+		eof
+	)"
+}; run_with_filter test__other_keymap_-__with_math
+
 function test__other_keymap_d {	assert "$(
 		ZSHRC_UNDER_TESTING=1 other_keymap_d www.google.com
 	)" "$(
@@ -42,65 +101,6 @@ function test__other_keymap_d__with_protocol_and_path {
 		eof
 	)"
 }; run_with_filter test__other_keymap_d__with_protocol_and_path
-
-function test__other_keymap_e {	assert "$(
-		other_keymap_e 3 4 echo ~~ 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo 3
-			3
-
-			echo 4
-			4
-		eof
-	)"
-}; run_with_filter test__other_keymap_e
-
-function test__other_keymap_e__with_multiple_substitutions {
-	assert "$(
-		other_keymap_e 3 4 echo ~~ and ~~ again 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo 3 and 3 again
-			3 and 3 again
-
-			echo 4 and 4 again
-			4 and 4 again
-		eof
-	)"
-}; run_with_filter test__other_keymap_e__with_multiple_substitutions
-
-function test__other_keymap_e__with_multiple_substitutions_in_quotes {
-	assert "$(
-		other_keymap_e 3 4 'echo ~~ and ~~ again' 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo 3 and 3 again
-			3 and 3 again
-
-			echo 4 and 4 again
-			4 and 4 again
-		eof
-	)"
-}; run_with_filter test__other_keymap_e__with_multiple_substitutions_in_quotes
-
-function test__other_keymap_e__with_math {
-	assert "$(
-		other_keymap_e 3 4 echo ~~ and '$((~~ + 10))' too 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo 3 and \$((3 + 10)) too
-			3 and 13 too
-
-			echo 4 and \$((4 + 10)) too
-			4 and 14 too
-		eof
-	)"
-}; run_with_filter test__other_keymap_e__with_math
 
 function test__other_keymap_k {	assert "$(
 		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"

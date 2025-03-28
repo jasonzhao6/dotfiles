@@ -72,7 +72,7 @@ function test__main_keymap_r__when_specifying_a_zsh_only_description {
 		cat <<-eof
 
 			  $ a.- {start} {finish} {command} # Use args within a sequence
-			  $ o.e {start} {finish} {~~}      # Run a sequence of commands
+			  $ o.- {start} {finish} {~~}      # Run a sequence of commands
 		eof
 	)"
 }; run_with_filter test__main_keymap_r__when_specifying_a_zsh_only_description
@@ -126,7 +126,7 @@ function test__main_keymap_w__when_specifying_a_special_char {
 		  $ a.- {start} {finish} {command} # Use args within a sequence
 		  $ s.-                            # MQ restore
 		  $ m.-                            # Show stats
-		  $ o.-                            # Open \`1.txt\` and \`2.txt\` in TextMate
+		  $ o.- {start} {finish} {~~}      # Run a sequence of commands
 
 		  ^cmd--       # Collapse all
 		  cmd--        # Decrease font size in all editors (Convention)
