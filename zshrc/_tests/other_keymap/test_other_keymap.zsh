@@ -66,6 +66,50 @@ function test__other_keymap_-__with_math {
 	)"
 }; run_with_filter test__other_keymap_-__with_math
 
+function test__other_keymap_b {
+	local file; file=$(
+		cat <<-eof
+			a,50
+			b,20
+			c,70
+			d,40
+		eof
+	)
+
+	assert "$(
+		other_keymap_b <(echo "$file") 2
+	)" "$(
+		cat <<-eof
+			b,20
+			d,40
+			a,50
+			c,70
+		eof
+	)"
+}; run_with_filter test__other_keymap_b
+
+function test__other_keymap_b__when_no_column_index {
+	local file; file=$(
+		cat <<-eof
+			b,20
+			d,40
+			a,50
+			c,70
+		eof
+	)
+
+	assert "$(
+		other_keymap_b <(echo "$file")
+	)" "$(
+		cat <<-eof
+			a,50
+			b,20
+			c,70
+			d,40
+		eof
+	)"
+}; run_with_filter test__other_keymap_b__when_no_column_index
+
 function test__other_keymap_d {	assert "$(
 		ZSHRC_UNDER_TESTING=1 other_keymap_d www.google.com
 	)" "$(
