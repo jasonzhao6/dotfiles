@@ -36,7 +36,7 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}rr # Save a copy of resource types"
 	"${KUBECTL_DOT}x {type} # Explain a resource type"
 	''
-	"${KUBECTL_DOT}h {yaml file} # Render Helm template locally"
+	"${KUBECTL_DOT}t {yaml file} # Render Helm template locally"
 )
 
 keymap_init $KUBECTL_NAMESPACE $KUBECTL_ALIAS "${KUBECTL_KEYMAP[@]}"
@@ -98,12 +98,6 @@ function kubectl_keymap_gg {
 	local params=("$@")
 
 	kubectl get "${params[@]}" -o wide
-}
-
-function kubectl_keymap_h {
-	local yaml_file="$1"
-
-	helm template -f "$yaml_file" .
 }
 
 function kubectl_keymap_j {
@@ -179,6 +173,12 @@ function kubectl_keymap_ss {
 	local resource_name="$2"
 
 	kubectl rollout restart "$resource_type" "$resource_name"
+}
+
+function kubectl_keymap_t {
+	local yaml_file="$1"
+
+	helm template --file "$yaml_file" .
 }
 
 function kubectl_keymap_w2 {
