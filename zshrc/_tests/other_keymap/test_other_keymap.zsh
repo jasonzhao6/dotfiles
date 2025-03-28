@@ -355,6 +355,50 @@ function test__other_keymap_uu {
 	)"
 }; run_with_filter test__other_keymap_uu
 
+function test__other_keymap_w {
+	local file; file=$(
+		cat <<-eof
+			a,10,x1
+			b,20,x2
+			c,30,x3
+			d,40,x4
+		eof
+	)
+
+	assert "$(
+		other_keymap_w <(echo "$file") 2 3
+	)" "$(
+		cat <<-eof
+			a,x1,10
+			b,x2,20
+			c,x3,30
+			d,x4,40
+		eof
+	)"
+}; run_with_filter test__other_keymap_w
+
+function test__other_keymap_w__when_specifying_only_one_column {
+	local file; file=$(
+		cat <<-eof
+			a,10,x1
+			b,20,x2
+			c,30,x3
+			d,40,x4
+		eof
+	)
+
+	assert "$(
+		other_keymap_w <(echo "$file") 2
+	)" "$(
+		cat <<-eof
+			10,a,x1
+			20,b,x2
+			30,c,x3
+			40,d,x4
+		eof
+	)"
+}; run_with_filter test__other_keymap_w__when_specifying_only_one_column
+
 function test__other_keymap_x {
 	local file1; file1=$(
 		cat <<-eof
