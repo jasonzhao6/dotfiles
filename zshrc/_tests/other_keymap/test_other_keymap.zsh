@@ -110,6 +110,50 @@ function test__other_keymap_b__when_no_column_index {
 	)"
 }; run_with_filter test__other_keymap_b__when_no_column_index
 
+function test__other_keymap_b__when_invoked_after_pipe {
+	local file; file=$(
+		cat <<-eof
+			a,50
+			b,20
+			c,70
+			d,40
+		eof
+	)
+
+	assert "$(
+		echo "$file" | other_keymap_b 2
+	)" "$(
+		cat <<-eof
+			b,20
+			d,40
+			a,50
+			c,70
+		eof
+	)"
+}; run_with_filter test__other_keymap_b__when_invoked_after_pipe
+
+function test__other_keymap_b__when_invoked_after_pipe_and_no_column_index {
+	local file; file=$(
+		cat <<-eof
+			b,20
+			d,40
+			a,50
+			c,70
+		eof
+	)
+
+	assert "$(
+		echo "$file" | other_keymap_b
+	)" "$(
+		cat <<-eof
+			a,50
+			b,20
+			c,70
+			d,40
+		eof
+	)"
+}; run_with_filter test__other_keymap_b__when_invoked_after_pipe_and_no_column_index
+
 function test__other_keymap_d {	assert "$(
 		ZSHRC_UNDER_TESTING=1 other_keymap_d www.google.com
 	)" "$(
@@ -398,6 +442,50 @@ function test__other_keymap_w__when_specifying_only_one_column {
 		eof
 	)"
 }; run_with_filter test__other_keymap_w__when_specifying_only_one_column
+
+function test__other_keymap_w__when_invoked_after_pipe {
+	local file; file=$(
+		cat <<-eof
+			a,10,x1
+			b,20,x2
+			c,30,x3
+			d,40,x4
+		eof
+	)
+
+	assert "$(
+		echo "$file" | other_keymap_w 2 3
+	)" "$(
+		cat <<-eof
+			a,x1,10
+			b,x2,20
+			c,x3,30
+			d,x4,40
+		eof
+	)"
+}; run_with_filter test__other_keymap_w__when_invoked_after_pipe
+
+function test__other_keymap_w__when_when_invoked_after_pipe_and_specifying_only_one_column {
+	local file; file=$(
+		cat <<-eof
+			a,10,x1
+			b,20,x2
+			c,30,x3
+			d,40,x4
+		eof
+	)
+
+	assert "$(
+		echo "$file" | other_keymap_w 2
+	)" "$(
+		cat <<-eof
+			10,a,x1
+			20,b,x2
+			30,c,x3
+			40,d,x4
+		eof
+	)"
+}; run_with_filter test__other_keymap_w__when_when_invoked_after_pipe_and_specifying_only_one_column
 
 function test__other_keymap_x {
 	local file1; file1=$(
