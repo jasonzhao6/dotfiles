@@ -24,8 +24,8 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}kk # Show archived terminal outputs"
 	"${OTHER_DOT}kc # Clear archived terminal outputs"
 	''
-	"${OTHER_DOT}1 # Save the last output to \`1.txt\`"
-	"${OTHER_DOT}2 # Save the last output to \`2.txt\`"
+	"${OTHER_DOT}1 {|}? # Save the last output to \`1.txt\`"
+	"${OTHER_DOT}2 {|}? # Save the last output to \`2.txt\`"
 	"${OTHER_DOT}11 # Save pasteboard value to \`1.txt\`"
 	"${OTHER_DOT}22 # Save pasteboard value to \`2.txt\`"
 	"${OTHER_DOT}e # Open \`1.txt\` and \`2.txt\` in TextMate"
@@ -33,8 +33,8 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}u {file 1}? {file 2}? # Unified diff"
 	"${OTHER_DOT}uu {file 1}? {file 2}? # Side by side diff"
 	"${OTHER_DOT}x {file 1}? {file 2}? # Filter files by their first columns"
-	"${OTHER_DOT}b {file} {column index}? # Sort file by the specified column index"
-	"${OTHER_DOT}w {file} {column 1} {column 2}? # Swap the specified columns"
+	"${OTHER_DOT}b {file} {column index}? {|}? # Sort file by the specified column index"
+	"${OTHER_DOT}w {file} {column 1} {column 2}? {|}? # Swap the specified columns"
 	''
 	"${OTHER_DOT}d {url} # DNS dig"
 	"${OTHER_DOT}df # DNS flush"

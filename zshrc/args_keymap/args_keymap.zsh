@@ -3,10 +3,10 @@ ARGS_ALIAS='a'
 ARGS_DOT="${ARGS_ALIAS}${KEYMAP_DOT}"
 
 ARGS_KEYMAP=(
-	"${ARGS_DOT}s # Save as args"
-	"${ARGS_DOT}s {match}* {-mismatch}* # Save as args & filter"
-	"${ARGS_DOT}so # Save as args & soft-select the 1st column"
-	"${ARGS_DOT}so {match}* {-mismatch}* # Save as args & soft-select the 1st column & filter"
+	"${ARGS_DOT}s {|}? # Save as args"
+	"${ARGS_DOT}s {match}* {-mismatch}* {|}? # Save as args & filter"
+	"${ARGS_DOT}so {|}? # Save as args & soft-select the 1st column"
+	"${ARGS_DOT}so {match}* {-mismatch}* {|}? # Save as args & soft-select the 1st column & filter"
 	''
 	"${ARGS_DOT}o {command} # Use the first arg"
 	"${ARGS_DOT}e {command} # Use a random arg"
@@ -184,7 +184,7 @@ function args_keymap_s {
 function args_keymap_so {
 	local filters=("$@")
 
-	as "$ARGS_SOFT_SELECT" "${filters[@]}"
+	args_keymap_s "$ARGS_SOFT_SELECT" "${filters[@]}"
 }
 
 function args_keymap_t {
