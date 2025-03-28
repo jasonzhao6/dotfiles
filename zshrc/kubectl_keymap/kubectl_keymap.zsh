@@ -36,6 +36,7 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}rr # Save a copy of resource types"
 	"${KUBECTL_DOT}x {type} # Explain a resource type"
 	''
+	"${KUBECTL_DOT}h # Run Helm unit tests and update snapshots"
 	"${KUBECTL_DOT}t {yaml file} # Render Helm template locally"
 )
 
@@ -98,6 +99,10 @@ function kubectl_keymap_gg {
 	local params=("$@")
 
 	kubectl get "${params[@]}" -o wide
+}
+
+function kubectl_keymap_h {
+	helm unittest --update-snapshot --file 'tests/*.yaml' .
 }
 
 function kubectl_keymap_j {
