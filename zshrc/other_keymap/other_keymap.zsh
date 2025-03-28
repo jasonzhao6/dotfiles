@@ -34,6 +34,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}uu {file 1}? {file 2}? # Side by side diff"
 	"${OTHER_DOT}x {file 1}? {file 2}? # Filter files by their first columns"
 	"${OTHER_DOT}b {file} {column index}? # Sort file by the specified column index"
+	"${OTHER_DOT}w {file} {column 1} {column 2}? # Swap the specified columns"
 	''
 	"${OTHER_DOT}d {url} # DNS dig"
 	"${OTHER_DOT}df # DNS flush"
@@ -279,6 +280,19 @@ function other_keymap_uu {
 	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
 
 	diff --side-by-side --suppress-common-lines "$file_1" "$file_2"
+}
+
+function other_keymap_w {
+	local file=$1
+	local column_1=$2
+	local column_2=${3:-1}
+
+	awk -F, -v c1="$column_1" -v c2="$column_2" '{
+		tmp = $c1;
+		$c1 = $c2;
+		$c2 = tmp;
+		print $0
+	}' OFS=, "$file"
 }
 
 function other_keymap_x {
