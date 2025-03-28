@@ -279,7 +279,8 @@ function test__other_keymap_u {
 	)"
 }; run_with_filter test__other_keymap_u
 
-function test__other_keymap_uu {	local old; old=$(
+function test__other_keymap_uu {
+	local old; old=$(
 		cat <<-eof
 			This is the original content.
 			Line 1
@@ -309,3 +310,111 @@ function test__other_keymap_uu {	local old; old=$(
 		eof
 	)"
 }; run_with_filter test__other_keymap_uu
+
+function test__other_keymap_x {
+	local file1; file1=$(
+		cat <<-eof
+			a,10
+			b,20
+			c,30
+			d,40
+		eof
+	)
+
+	local file2; file2=$(
+		cat <<-eof
+			b
+			d
+		eof
+	)
+
+	assert "$(
+		other_keymap_x <(echo "$file1") <(echo "$file2")
+	)" "$(
+		cat <<-eof
+			b,20
+			d,40
+		eof
+	)"
+}; run_with_filter test__other_keymap_x
+
+function test__other_keymap_x__when_file_1_has_only_1_column {
+	local file1; file1=$(
+		cat <<-eof
+			a
+			b
+			c
+			d
+		eof
+	)
+
+	local file2; file2=$(
+		cat <<-eof
+			b
+			d
+		eof
+	)
+
+	assert "$(
+		other_keymap_x <(echo "$file1") <(echo "$file2")
+	)" "$(
+		cat <<-eof
+			b
+			d
+		eof
+	)"
+}; run_with_filter test__other_keymap_x__when_file_1_has_only_1_column
+
+function test__other_keymap_x__when_file_1_has_only_1_column {
+	local file1; file1=$(
+		cat <<-eof
+			a
+			b
+			c
+			d
+		eof
+	)
+
+	local file2; file2=$(
+		cat <<-eof
+			b,20
+			d,40
+		eof
+	)
+
+	assert "$(
+		other_keymap_x <(echo "$file1") <(echo "$file2")
+	)" "$(
+		cat <<-eof
+			b
+			d
+		eof
+	)"
+}; run_with_filter test__other_keymap_x__when_file_1_has_only_1_column
+
+function test__other_keymap_x__when_file_2_has_only_1_column {
+	local file1; file1=$(
+		cat <<-eof
+			a,10
+			b,20
+			c,30
+			d,40
+		eof
+	)
+
+	local file2; file2=$(
+		cat <<-eof
+			b
+			d
+		eof
+	)
+
+	assert "$(
+		other_keymap_x <(echo "$file1") <(echo "$file2")
+	)" "$(
+		cat <<-eof
+			b,20
+			d,40
+		eof
+	)"
+}; run_with_filter test__other_keymap_x__when_file_2_has_only_1_column

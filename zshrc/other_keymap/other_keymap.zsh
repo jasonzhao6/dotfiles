@@ -30,8 +30,9 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}22 # Save pasteboard value to \`2.txt\`"
 	"${OTHER_DOT}e # Open \`1.txt\` and \`2.txt\` in TextMate"
 	"${OTHER_DOT}0 # Empty \`1.txt\` and \`2.txt\`"
-	"${OTHER_DOT}u {file 1} {file 2} # Unified diff"
-	"${OTHER_DOT}uu {file 1} {file 2} # Side by side diff"
+	"${OTHER_DOT}u {file 1}? {file 2}? # Unified diff"
+	"${OTHER_DOT}uu {file 1}? {file 2}? # Side by side diff"
+	"${OTHER_DOT}x {file 1}? {file 2}? # Filter files by their first columns"
 	''
 	"${OTHER_DOT}d {url} # DNS dig"
 	"${OTHER_DOT}df # DNS flush"
@@ -270,6 +271,13 @@ function other_keymap_uu {
 	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
 
 	diff --side-by-side --suppress-common-lines "$file_1" "$file_2"
+}
+
+function other_keymap_x {
+	local file_1=${1:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1}
+	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
+
+	awk -F, 'NR==FNR{found[$1]; next} $1 in found' "$file_2" "$file_1"
 }
 
 function other_keymap_y {
