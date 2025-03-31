@@ -220,7 +220,7 @@ function keymap_print_help {
 	fi
 
 	echo
-	echo Mappings
+	[[ $namespace == "$ALL_NAMESPACE" ]] && echo Namespaces || echo Mappings
 	echo
 
 	# `ALL_NAMESPACE` is an zsh keymap even though it does not have any dot aliases
