@@ -7,7 +7,7 @@
 # - `cmd-ctrl-shift` is Quaternary with right half of keymap
 
 INTELLIJ_CMD_NAMESPACE='intellij_cmd_keymap'
-INTELLIJ_CMD_ALIAS='i'
+INTELLIJ_CMD_ALIAS='ic'
 
 # Note that `[' ` ;]` require escaping to make `${${(z)...}[1]}` happy
 INTELLIJ_CMD_KEYMAP=(
@@ -73,7 +73,6 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-shift-g # Find previous (Default)"
 	''
 	"cmd-d # Duplicate line or selection"
-	"ctrl-d # Delete line (From \`intellij_ctrl_keymap\`)"
 	"cmd-ctrl-[up] # Move line up (TextMate)"
 	"cmd-ctrl-[down] # Move line down (TextMate)"
 	"cmd-ctrl-shift-[up] # Move statement up"

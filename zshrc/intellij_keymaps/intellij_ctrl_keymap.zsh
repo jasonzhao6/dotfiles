@@ -3,7 +3,7 @@
 # - `ctrl-shift` is secondary
 
 INTELLIJ_CTRL_NAMESPACE='intellij_ctrl_keymap'
-INTELLIJ_CTRL_ALIAS='ic'
+INTELLIJ_CTRL_ALIAS='it'
 
 INTELLIJ_CTRL_KEYMAP=(
 	"ctrl-- # Copilot show chat"
@@ -23,7 +23,7 @@ INTELLIJ_CTRL_KEYMAP=(
 	"ctrl-r # Rename variable in file / file in project"
 	"ctrl-shift-r # Rename file"
 	''
-	"ctrl-d # Delete line (Also in \`intellij_cmd_keymap\`)"
+	"ctrl-d # Delete line"
 	"ctrl-f # Reformat file"
 	"ctrl-g # Toggle case"
 	"ctrl-b # To tabs"

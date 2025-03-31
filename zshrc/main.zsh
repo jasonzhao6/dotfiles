@@ -38,6 +38,7 @@ source "$ZSHRC_DIR/terraform_keymap/terraform_keymap.zsh"
 source "$ZSHRC_DIR/zsh_keymap/zsh_keymap.zsh"
 
 # Load non-zsh keymaps (These mappings are used outside of zsh)
+source "$ZSHRC_DIR/intellij_keymaps/intellij_all_keymap.zsh"
 source "$ZSHRC_DIR/intellij_keymaps/intellij_alt_keymap.zsh"
 source "$ZSHRC_DIR/intellij_keymaps/intellij_cmd_keymap.zsh"
 source "$ZSHRC_DIR/intellij_keymaps/intellij_ctrl_keymap.zsh"
