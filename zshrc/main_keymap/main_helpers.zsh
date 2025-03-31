@@ -39,7 +39,9 @@ function main_keymap_extract_keymaps {
 	# Open keymap array
 	local extracted="$keymap_name=(\n"
 
+	#
 	# Populate keymap array
+	#
 
 	# shellcheck disable=SC2031
 	for keymap in "${reply_zsh_keymaps[@]}"; do
