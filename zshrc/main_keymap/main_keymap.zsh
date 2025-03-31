@@ -10,6 +10,8 @@ MAIN_KEYMAP=(
 	''
 	# These are default keyboard shortcuts as opposed to custom keymaps
 	"${MAIN_DOT}g {regex}? # Show Gmail shortcuts"
+	"${MAIN_DOT}i {regex}? # Show vi shortcuts"
+	"${MAIN_DOT}l {regex}? # Show less shortcuts"
 	"${MAIN_DOT}m {regex}? # Show TextMate shortcuts"
 	"${MAIN_DOT}n {regex}? # Show Notion shortcuts"
 	"${MAIN_DOT}o {regex}? # Show macOS shortcuts"
@@ -78,6 +80,18 @@ source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.gmail.zsh"
 function main_keymap_g {
 	local description=$*
 	main_keymap_show_non_zsh_keymap 'Gmail' "$description"
+}
+
+source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.vi.zsh"
+function main_keymap_i {
+	local description=$*
+	main_keymap_show_non_zsh_keymap 'vi' "$description"
+}
+
+source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.less.zsh"
+function main_keymap_l {
+	local description=$*
+	main_keymap_show_non_zsh_keymap 'less' "$description"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.textmate.zsh"

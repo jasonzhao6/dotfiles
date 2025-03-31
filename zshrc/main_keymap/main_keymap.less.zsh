@@ -1,0 +1,25 @@
+# shellcheck disable=SC2034 # Used by `main_keymap.zsh`
+LESS_KEYMAP=(
+	'k / {up} # Up'
+	'j / {down} # Down'
+	'b # Page up'
+	'{space} # Page down'
+	'u # Half-page up'
+	'd # Half-page down'
+	'g # Jump to top'
+	'G # Jump to bottom'
+	''
+	'/ # Search forward'
+	'? # Search backward'
+	'n # Next match'
+	'N # Previous match'
+	''
+	'& {match} # Filter'
+	'& # Unfilter'
+	''
+	'm {letter} # Set mark'
+	"' {letter} # Go to mark"
+	'= # Display the filename and line number'
+	''
+	'q # Quit'
+)
