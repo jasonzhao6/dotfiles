@@ -99,9 +99,7 @@ function test__keymap_show {
 	assert "$(test_keymap | bw | strip_right)" "$(
 		cat <<-eof
 
-			Keymap
-
-			  $ test_keymap
+			Keymap: test_keymap.zsh
 
 			  \`   1   2   3   4   5   |   6   7   8   9   0   [   ]
 			      '   ,   .   p   y   |   f   g  (c)  r   l   /   =  <\>
@@ -111,7 +109,7 @@ function test__keymap_show {
 			  \`<>\` key initials have one mapping
 			  \`()\` key initials have multiple mappings
 
-			Usage
+			Keymap Usage
 
 			  $ test__                   # Show this help
 			  $ test__ {regex}           # Filter key mappings
@@ -122,7 +120,7 @@ function test__keymap_show {
 			          ^                  # The \`.\` is only for documentation
 			                             # Omit it when invoking a mapping
 
-			Mappings
+			Keymap List
 
 			  $ test__.a                 # First
 			  $ test__.aa                # First related

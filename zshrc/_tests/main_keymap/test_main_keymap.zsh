@@ -11,7 +11,7 @@ function test__main_keymap_g {
 	assert "$(mg | bw)" "$(
 		cat <<-eof
 
-			Gmail
+			Shortcuts: main_keymap.gmail.zsh
 
 			  {enter} # Open conversation
 			  e       # Archive
@@ -56,7 +56,7 @@ function test__main_keymap_r__when_specifying_a_description {
 			  $ n.h # Go to github
 
 			  intellij_alt: alt-o # Open on GitHub
-			  all: h              # Show \`github_keymap\`
+			  all: h              # Custom aliases: github_keymap.zsh
 			  vimium_search: c    # Github Code Search (TENGF)
 			  vimium_search: cc   # Github Code Search
 			  vimium_search: r    # Github Repo Search (TENGF)

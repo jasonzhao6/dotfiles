@@ -1,5 +1,5 @@
 # shellcheck disable=SC2116 # Removing echo breaks array interpolation by name
-function main_keymap_show_non_zsh_keymap {
+function main_keymap_show_default_keyboard_shortcuts {
 	local name=$1; shift
 	local description=$*
 
@@ -9,7 +9,8 @@ function main_keymap_show_non_zsh_keymap {
 
 	if [[ -z $description ]]; then
 		echo
-		echo "$name"
+		echo -n 'Shortcuts: '
+		cyan_fg "$MAIN_NAMESPACE.$name.zsh"
 
 		main_keymap_print_key_mappings $is_zsh_keymap "${keymap_entries[@]}"
 	else
@@ -79,10 +80,10 @@ function main_keymap_find_keys {
 
 		if [[ -n $is_zsh_keymap ]]; then
 			# shellcheck disable=SC2030
-			reply_zsh_keymaps+=("$current_alias # Show \`$current_namespace\`")
+			reply_zsh_keymaps+=("$current_alias # Custom aliases: $current_namespace.zsh")
 		else
 			# shellcheck disable=SC2030
-			reply_non_zsh_keymaps+=("$current_alias # Show \`$current_namespace\`")
+			reply_non_zsh_keymaps+=("$current_alias # Custom shortcuts: $current_namespace.zsh")
 		fi
 	done < <(keymap_files)
 }

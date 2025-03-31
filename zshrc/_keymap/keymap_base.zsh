@@ -1,5 +1,4 @@
-KEYMAP_COLOR='cyan_fg'
-KEYMAP_PROMPT=$($KEYMAP_COLOR '  $ ')
+KEYMAP_PROMPT=$(cyan_fg '  $ ')
 KEYMAP_ALIAS='_PLACEHOLDER_'
 KEYMAP_DASH='-'
 KEYMAP_DOT='.'
@@ -182,14 +181,8 @@ function keymap_print_help {
 	local keymap_entries=("$@")
 
 	echo
-	echo Keymap
-
-	# If it's the `ALL_NAMESPACE` keymap, skip printing the name
-	if [[ $namespace != "$ALL_NAMESPACE" ]]; then
-		echo
-		echo -n "$KEYMAP_PROMPT"
-		$KEYMAP_COLOR "$namespace"
-	fi
+	echo -n 'Keymap: '
+	cyan_fg "$namespace.zsh"
 
 	keymap_print_map "$namespace" "${keymap_entries[@]}"
 
@@ -209,7 +202,7 @@ function keymap_print_help {
 		max_command_size=$(keymap_get_max_command_size "${keymap_usage[@]}" "${keymap_entries[@]}")
 
 		echo
-		echo Usage
+		echo Keymap Usage
 		echo
 
 		for entry in "${keymap_usage[@]}"; do
@@ -220,7 +213,7 @@ function keymap_print_help {
 	fi
 
 	echo
-	[[ $namespace == "$ALL_NAMESPACE" ]] && echo Namespaces || echo Mappings
+	[[ $namespace == "$ALL_NAMESPACE" ]] && echo All Namespaces || echo Keymap List
 	echo
 
 	# `ALL_NAMESPACE` is an zsh keymap even though it does not have any dot aliases

@@ -23,14 +23,14 @@ MAIN_KEYMAP=(
 
 SHORTCUT_NAMESPACES=(
 	''
-	"${MAIN_ALIAS}g # Show \`main_keymap.gmail\`"
-	"${MAIN_ALIAS}i # Show \`main_keymap.vi\`"
-	"${MAIN_ALIAS}l # Show \`main_keymap.less\`"
-	"${MAIN_ALIAS}m # Show \`main_keymap.textmate\`"
-	"${MAIN_ALIAS}n # Show \`main_keymap.notion\`"
-	"${MAIN_ALIAS}o # Show \`main_keymap.macos\`"
-	"${MAIN_ALIAS}s # Show \`main_keymap.slack\`"
-	"${MAIN_ALIAS}t # Show \`main_keymap.terminal\`"
+	"${MAIN_ALIAS}g # Default shortcuts: main_keymap.gmail.zsh"
+	"${MAIN_ALIAS}i # Default shortcuts: main_keymap.vi.zsh"
+	"${MAIN_ALIAS}l # Default shortcuts: main_keymap.less.zsh"
+	"${MAIN_ALIAS}m # Default shortcuts: main_keymap.textmate.zsh"
+	"${MAIN_ALIAS}n # Default shortcuts: main_keymap.notion.zsh"
+	"${MAIN_ALIAS}o # Default shortcuts: main_keymap.macos.zsh"
+	"${MAIN_ALIAS}s # Default shortcuts: main_keymap.slack.zsh"
+	"${MAIN_ALIAS}t # Default shortcuts: main_keymap.terminal.zsh"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
@@ -65,8 +65,8 @@ function main_keymap_- {
 	echo "- $ZSHRC_LINE_COUNT lines total"
 }
 
-ALL_NAMESPACE='Keymap of keymaps'
-ALL_KEYMAP_FILE="$ZSHRC_DIR/${MAIN_NAMESPACE}/$MAIN_NAMESPACE.all.zsh"
+ALL_NAMESPACE="$MAIN_NAMESPACE.all_namespaces"
+ALL_KEYMAP_FILE="$ZSHRC_DIR/$MAIN_NAMESPACE/$ALL_NAMESPACE.zsh"
 
 source "$ALL_KEYMAP_FILE"
 
@@ -82,7 +82,7 @@ function main_keymap_a {
 	if ! cmp --silent "$ALL_KEYMAP_FILE" "$ALL_KEYMAP_FILE.bak"; then
 		source "$ALL_KEYMAP_FILE"
 		echo
-		red_bar 'Keymap of keymaps updated'
+		red_bar "\`$ALL_NAMESPACE\` updated"
 	fi
 	rm "$ALL_KEYMAP_FILE.bak"
 }
@@ -90,37 +90,37 @@ function main_keymap_a {
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.gmail.zsh"
 function main_keymap_g {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'Gmail' "$description"
+	main_keymap_show_default_keyboard_shortcuts 'gmail' "$description"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.vi.zsh"
 function main_keymap_i {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'vi' "$description"
+	main_keymap_show_default_keyboard_shortcuts 'vi' "$description"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.less.zsh"
 function main_keymap_l {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'less' "$description"
+	main_keymap_show_default_keyboard_shortcuts 'less' "$description"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.textmate.zsh"
 function main_keymap_m {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'TextMate' "$description"
+	main_keymap_show_default_keyboard_shortcuts 'textmate' "$description"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.notion.zsh"
 function main_keymap_n {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'Notion' "$description"
+	main_keymap_show_default_keyboard_shortcuts 'notion' "$description"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.macos.zsh"
 function main_keymap_o {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'macOS' "$description"
+	main_keymap_show_default_keyboard_shortcuts 'macos' "$description"
 }
 
 # Includes custom zsh and non-zsh keymaps
@@ -142,13 +142,13 @@ function main_keymap_r {
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.slack.zsh"
 function main_keymap_s {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'Slack' "$description"
+	main_keymap_show_default_keyboard_shortcuts 'slack' "$description"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.terminal.zsh"
 function main_keymap_t {
 	local description=$*
-	main_keymap_show_non_zsh_keymap 'Terminal' "$description"
+	main_keymap_show_default_keyboard_shortcuts 'terminal' "$description"
 }
 
 # Includes zsh keymaps following a `KEYMAP_DOT`, e.g `g.x`

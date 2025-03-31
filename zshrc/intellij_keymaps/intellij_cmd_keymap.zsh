@@ -73,6 +73,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-shift-g # Find previous (Default)"
 	''
 	"cmd-d # Duplicate line or selection"
+	"^ctrl-d # Delete line (From \`intellij_ctrl_keymap\`)"
 	"cmd-ctrl-[up] # Move line up (TextMate)"
 	"cmd-ctrl-[down] # Move line down (TextMate)"
 	"cmd-ctrl-shift-[up] # Move statement up"

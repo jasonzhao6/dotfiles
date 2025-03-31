@@ -23,7 +23,7 @@ INTELLIJ_CTRL_KEYMAP=(
 	"ctrl-r # Rename variable in file / file in project"
 	"ctrl-shift-r # Rename file"
 	''
-	"ctrl-d # Delete line"
+	"ctrl-d # Delete line (Also in \`intellij_cmd_keymap\`)"
 	"ctrl-f # Reformat file"
 	"ctrl-g # Toggle case"
 	"ctrl-b # To tabs"
