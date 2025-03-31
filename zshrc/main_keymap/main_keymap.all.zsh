@@ -11,7 +11,7 @@ ALL_KEYMAP=(
 	't # Show `terraform_keymap`'
 	'z # Show `zsh_keymap`'
 	''
-	'i # Show `intellij_all_keymap`'
+	'i # Show `intellij_all`'
 	'ia # Show `intellij_alt_keymap`'
 	'ic # Show `intellij_cmd_keymap`'
 	'it # Show `intellij_ctrl_keymap`'
