@@ -4,11 +4,13 @@ MAIN_DOT="${MAIN_ALIAS}${KEYMAP_DOT}"
 
 MAIN_KEYMAP=(
 	"${MAIN_DOT}a # List all keymap namespaces"
+	"${MAIN_DOT}r # List all keymap entries"
+	"${MAIN_DOT}r {description} # Filter keymap entries by description"
+	"${MAIN_DOT}w {key} # Filter keymap entries by key"
+	"${MAIN_DOT}- # Show stats"
 	''
-	"${MAIN_DOT}r {regex}? # List all keymap entries"
-	"${MAIN_DOT}w {key} # Filter by key"
-	''
-	# These are default keyboard shortcuts as opposed to custom keymaps
+	# The following are default keyboard shortcuts as opposed to custom keymaps
+	# Note: Keep the following in sync with `SHORTCUT_NAMESPACES`
 	"${MAIN_DOT}g {regex}? # Show Gmail shortcuts"
 	"${MAIN_DOT}i {regex}? # Show vi shortcuts"
 	"${MAIN_DOT}l {regex}? # Show less shortcuts"
@@ -17,8 +19,18 @@ MAIN_KEYMAP=(
 	"${MAIN_DOT}o {regex}? # Show macOS shortcuts"
 	"${MAIN_DOT}s {regex}? # Show Slack shortcuts"
 	"${MAIN_DOT}t {regex}? # Show Terminal shortcuts"
+)
+
+SHORTCUT_NAMESPACES=(
 	''
-	"${MAIN_DOT}- # Show stats"
+	"${MAIN_ALIAS}g # Show \`main_keymap.gmail\`"
+	"${MAIN_ALIAS}i # Show \`main_keymap.vi\`"
+	"${MAIN_ALIAS}l # Show \`main_keymap.less\`"
+	"${MAIN_ALIAS}m # Show \`main_keymap.textmate\`"
+	"${MAIN_ALIAS}n # Show \`main_keymap.notion\`"
+	"${MAIN_ALIAS}o # Show \`main_keymap.macos\`"
+	"${MAIN_ALIAS}s # Show \`main_keymap.slack\`"
+	"${MAIN_ALIAS}t # Show \`main_keymap.terminal\`"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
@@ -61,19 +73,18 @@ source "$ALL_KEYMAP_FILE"
 # Includes custom zsh and non-zsh keymaps
 # But excludes default keyboard shortcuts
 function main_keymap_a {
-	# Show the cached keymap-of-keymaps right away
-	keymap_print_help "$ALL_NAMESPACE" '(no-op)' "${ALL_KEYMAP[@]}"
+	# Show the cached keymap-of-keymaps right away; append the shortcut namespaces for completeness
+	keymap_print_help "$ALL_NAMESPACE" '(no-op)' "${ALL_KEYMAP[@]}" "${SHORTCUT_NAMESPACES[@]}"
 
 	# Generate a new keymap-of-keymaps; if different, show a red notice
 	cp "$ALL_KEYMAP_FILE" "$ALL_KEYMAP_FILE.bak"
 	main_keymap_extract_keymaps 'ALL_KEYMAP'
-	if cmp --silent "$ALL_KEYMAP_FILE" "$ALL_KEYMAP_FILE.bak"; then
-		rm "$ALL_KEYMAP_FILE.bak"
-	else
+	if ! cmp --silent "$ALL_KEYMAP_FILE" "$ALL_KEYMAP_FILE.bak"; then
 		source "$ALL_KEYMAP_FILE"
 		echo
 		red_bar 'Keymap of keymaps updated'
 	fi
+	rm "$ALL_KEYMAP_FILE.bak"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.gmail.zsh"
