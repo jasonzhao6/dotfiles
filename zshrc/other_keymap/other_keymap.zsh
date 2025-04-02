@@ -15,11 +15,10 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}a # Stay awake"
 	"${OTHER_DOT}n # Stay on task"
 	''
-	"${OTHER_DOT}y # Alias for \`pbcopy\`"
-	"${OTHER_DOT}p # Alias for \`pbpaste\`"
 	"${OTHER_DOT}c # Copy the last output"
 	"${OTHER_DOT}cc # Copy the last command"
-	''
+	"${OTHER_DOT}y # Alias for \`pbcopy\`"
+	"${OTHER_DOT}p # Alias for \`pbpaste\`"
 	"${OTHER_DOT}k # Clear the terminal"
 	"${OTHER_DOT}kk # Show archived terminal outputs"
 	"${OTHER_DOT}kc # Clear archived terminal outputs"
@@ -36,6 +35,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}b {file} {column index}? {|}? # Sort file by the specified column index"
 	"${OTHER_DOT}w {file} {column 1} {column 2}? {|}? # Swap the specified columns"
 	''
+	"${OTHER_DOT}8 # Use Java 8"
 	"${OTHER_DOT}d {url} # DNS dig"
 	"${OTHER_DOT}df # DNS flush"
 	"${OTHER_DOT}j {url} {regex} {num lines} # Curl a json endpoint"
@@ -113,6 +113,11 @@ function other_keymap_2 {
 
 function other_keymap_22 {
 	pbpaste > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+}
+
+function other_keymap_8 {
+	eval "$(jenv init -)"
+	jenv shell 1.8
 }
 
 function other_keymap_a {
