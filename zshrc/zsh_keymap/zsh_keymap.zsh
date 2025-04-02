@@ -3,7 +3,7 @@ ZSH_ALIAS='z'
 ZSH_DOT="${ZSH_ALIAS}${KEYMAP_DOT}"
 
 ZSH_KEYMAP=(
-	"${ZSH_DOT}i # Edit in IntelliJ"
+	"${ZSH_DOT}e # Edit in IntelliJ"
 	"${ZSH_DOT}m # Edit in TextMate"
 	"${ZSH_DOT}s # Edit secrets"
 	"${ZSH_DOT}z # Source"
@@ -55,6 +55,10 @@ function zsh_keymap_a {
 	alias | args_keymap_s "${filters[@]}"
 }
 
+function zsh_keymap_e {
+	open -na 'IntelliJ IDEA CE.app' --args "$DOTFILES_DIR"
+}
+
 function zsh_keymap_f {
 	local filters=("$@")
 
@@ -74,10 +78,6 @@ function zsh_keymap_hc {
 
 function zsh_keymap_hm {
 	mate "$HISTFILE"
-}
-
-function zsh_keymap_i {
-	open -na 'IntelliJ IDEA CE.app' --args "$DOTFILES_DIR"
 }
 
 function zsh_keymap_m {

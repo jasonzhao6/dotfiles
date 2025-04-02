@@ -6,8 +6,8 @@ OTHER_KEYMAP=(
 	"${OTHER_ALIAS} {url} # Open the specified url"
 	"${OTHER_ALIAS} {path} # Open the specified path in Finder"
 	"${OTHER_DOT}o # Open the current directory in Finder"
-	"${OTHER_DOT}i # Open the current directory in IntelliJ IDEA"
-	"${OTHER_DOT}i {path} # Open the specified path in IntelliJ IDEA"
+	"${OTHER_DOT}e # Open the current directory in IntelliJ IDEA"
+	"${OTHER_DOT}e {path} # Open the specified path in IntelliJ IDEA"
 	"${OTHER_DOT}m # Open the current directory in TextMate"
 	"${OTHER_DOT}m {path} # Open the specified path in TextMate"
 	''
@@ -28,8 +28,8 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}2 {|}? # Save the last output to \`2.txt\`"
 	"${OTHER_DOT}11 # Save pasteboard value to \`1.txt\`"
 	"${OTHER_DOT}22 # Save pasteboard value to \`2.txt\`"
-	"${OTHER_DOT}e # Open \`1.txt\` and \`2.txt\` in TextMate"
-	"${OTHER_DOT}0 # Empty \`1.txt\` and \`2.txt\`"
+	"${OTHER_DOT}0 # Open \`1.txt\` and \`2.txt\` in TextMate"
+	"${OTHER_DOT}00 # Empty \`1.txt\` and \`2.txt\`"
 	"${OTHER_DOT}u {file 1}? {file 2}? # Unified diff"
 	"${OTHER_DOT}uu {file 1}? {file 2}? # Side by side diff"
 	"${OTHER_DOT}x {file 1}? {file 2}? # Filter files by their first columns"
@@ -77,6 +77,10 @@ function other_keymap_- {
 }
 
 function other_keymap_0 {
+	mate "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1" "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+}
+
+function other_keymap_00 {
 	echo -n > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
 	echo -n > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 }
@@ -162,10 +166,6 @@ function other_keymap_df {
 }
 
 function other_keymap_e {
-	mate "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1" "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
-}
-
-function other_keymap_i {
 	local target_path=${*:-.}
 
 	open -na 'IntelliJ IDEA CE.app' --args "$target_path"
