@@ -94,7 +94,9 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-[esc] # Cyclic expand word (TextMate)"
 	"cmd-shift-[esc] # Cyclic expand word backward (TextMate)"
 	''
-	"cmd-r # Run context configuration"
+	"cmd-r # Run (The last configuration)"
+	"^alt-r # Run context configuration (From \`intellij_alt_keymap\`)"
+	"^ctrl-alt-r # Run..."
 	"cmd-shift-r # Debug"
 	"cmd-ctrl-r # Run with coverage"
 	"cmd-ctrl-shift-r # Attach to process"

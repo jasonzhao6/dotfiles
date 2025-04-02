@@ -25,6 +25,7 @@ INTELLIJ_ALT_KEYMAP=(
 	"alt-{esc} # Next line bookmark (TextMate: \`{F2}\`)"
 	"alt-shift-{esc} # Previous line bookmark (TextMate: \`shift-{F2}\`)"
 	''
+	"alt-r # Run context configuration (Also in \`intellij_cmd_keymap\`)"
 	"alt-\; # Toggle line breakpoint (Default: \`cmd-{F8}\`)"
 	"alt-shift-\; # View breakpoints (Default: \`cmd-shift-{F8}\`)"
 	"alt-q # Stop"
