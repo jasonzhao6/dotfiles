@@ -19,19 +19,19 @@ INTELLIJ_ALT_KEYMAP=(
 	"alt-. # Expand (\`{F4}\`)"
 	"alt-p # Expand recursively (\`{F6}\`)"
 	''
-	"alt-{tab} # Toggle bookmark (\`cmd-{F2}\`)"
-	"alt-{tab} # View bookmarks (\`cmd-shift-{F2}\`)"
+	"alt-{tab} # Toggle bookmark (TextMate: \`cmd-{F2}\`)"
+	"alt-shift-{tab} # View bookmarks (\`cmd-shift-{F2}\`)"
 	"^cmd-a {del} # Delete bookmarks"
 	"alt-{esc} # Next line bookmark (TextMate: \`{F2}\`)"
-	"alt-{esc} # Previous line bookmark (\`shift-{F2}\`)"
+	"alt-shift-{esc} # Previous line bookmark (TextMate: \`shift-{F2}\`)"
 	''
 	"alt-\; # Toggle line breakpoint (Default: \`cmd-{F8}\`)"
 	"alt-shift-\; # View breakpoints (Default: \`cmd-shift-{F8}\`)"
-	"alt-q # Step over"
-	"alt-j # Step into"
-	"alt-k # Step out"
-	"alt-x # Stop"
-	"alt-i # Resume program"
+	"alt-q # Stop"
+	"alt-j # Step over"
+	"alt-k # Resume program"
+	"alt-i # Step into"
+	"alt-x # Step out"
 )
 
 keymap_init $INTELLIJ_ALT_NAMESPACE $INTELLIJ_ALT_ALIAS "${INTELLIJ_ALT_KEYMAP[@]}"

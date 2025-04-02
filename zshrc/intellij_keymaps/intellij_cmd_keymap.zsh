@@ -94,7 +94,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-[esc] # Cyclic expand word (TextMate)"
 	"cmd-shift-[esc] # Cyclic expand word backward (TextMate)"
 	''
-	"cmd-r # Run"
+	"cmd-r # Run context configuration"
 	"cmd-shift-r # Debug"
 	"cmd-ctrl-r # Run with coverage"
 	"cmd-ctrl-shift-r # Attach to process"

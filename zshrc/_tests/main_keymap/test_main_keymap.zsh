@@ -111,7 +111,7 @@ function test__main_keymap_w__when_specifying_a_key {
 		  $ k.jj                          # Get the copy of json
 		  $ o.j {url} {regex} {num lines} # Curl a json endpoint
 
-		  alt-j # Step into
+		  alt-j # Step over
 		  cmd-j # Join lines
 		eof
 	)"
