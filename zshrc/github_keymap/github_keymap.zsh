@@ -13,6 +13,7 @@ GITHUB_KEYMAP=(
 	"${GITHUB_DOT}h # Navigate to the current org"
 	"${GITHUB_DOT}h {match}* {-mismatch}* # Navigate to the current org & filter repos"
 	"${GITHUB_DOT}t # Navigate to the repo name in pasteboard"
+	"${GITHUB_DOT}tt # Save the current repo name to pasteboard"
 	"${GITHUB_DOT}u # Open the current repo in GitHub Desktop"
 	''
 	"${GITHUB_DOT}r # List remote repos"
@@ -150,6 +151,10 @@ function github_keymap_t {
 	fi
 
 	cd "$target_path" && nav_keymap_n
+}
+
+function github_keymap_tt {
+	github_keymap_repo | pbcopy
 }
 
 function github_keymap_u {
