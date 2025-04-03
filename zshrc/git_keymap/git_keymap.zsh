@@ -33,6 +33,11 @@ GIT_KEYMAP=(
 	"${GIT_DOT}yc # Cherry pick continue"
 	"${GIT_DOT}ya # Cherry pick abort"
 	''
+	"${GIT_DOT}v # Revert the commit in pasteboard"
+	"${GIT_DOT}v {sha} # Revert the specified commit"
+	"${GIT_DOT}vc # Revert continue"
+	"${GIT_DOT}va # Revert abort"
+	''
 	"${GIT_DOT}u # Undo the last commit"
 	"${GIT_DOT}u {number} # Undo the last N commits"
 	"${GIT_DOT}z # Discard uncommitted changes"
@@ -208,6 +213,21 @@ function git_keymap_u {
 	local number=$1
 
 	git reset --soft HEAD~"$number"
+}
+
+function git_keymap_v {
+	local sha; sha=$(paste_when_empty "$1")
+
+	git revert "$sha"
+}
+
+function git_keymap_va {
+	git revert --abort
+}
+
+function git_keymap_vc {
+	git add --all
+	git revert --continue
 }
 
 function git_keymap_w {
