@@ -98,6 +98,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"^alt-r # Run context configuration (From \`intellij_alt_keymap\`)"
 	"^ctrl-alt-r # Run..."
 	"cmd-shift-r # Debug"
+	"^alt-shift-r # Debug context configuration (From \`intellij_alt_keymap\`)"
 	"cmd-ctrl-r # Run with coverage"
 	"cmd-ctrl-shift-r # Attach to process"
 	"cmd-y # Git blame (TextMate)"
