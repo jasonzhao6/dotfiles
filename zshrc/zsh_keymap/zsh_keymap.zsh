@@ -120,7 +120,7 @@ function zsh_keymap_w {
 	[[ $definition == "$name not found" ]] && echo && red_bar "\`$name\` not found" && return
 
 	# If `name` in an alias, follow it
-	local is_alias=': aliased to ([a-zA-Z0-9_]+)$'
+	local is_alias=': aliased to (.+)$'
 	if [[ $definition =~ $is_alias ]]; then
 		echo
 		gray_fg "$definition"
