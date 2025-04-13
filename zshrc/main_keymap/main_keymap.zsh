@@ -21,6 +21,7 @@ MAIN_KEYMAP=(
 	"${MAIN_DOT}t {regex}? # Show Terminal shortcuts"
 )
 
+# Note: Keep the following in sync with their counterparts in `MAIN_KEYMAP`
 SHORTCUT_NAMESPACES=(
 	''
 	"${MAIN_ALIAS}g # Default shortcuts: main_keymap.gmail.zsh"
