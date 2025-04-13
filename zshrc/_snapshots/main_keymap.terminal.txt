@@ -1,0 +1,20 @@
+Shortcuts: main_keymap.terminal.zsh
+
+  cmd-shift-{left}  # Previous tab
+  cmd-shift-{right} # Next tab
+
+  cmd-{up}          # Go to previous command
+  cmd-{down}        # Go to pext command
+  cmd-shift-{up}    # Select previous command and output
+  cmd-shift-{down}  # Select next command and output
+  cmd-alt-{up}      # Go to top
+  cmd-alt-{down}    # Go to bottom
+
+  cmd-k             # Clear
+  cmd-d             # Split pane
+  cmd-shift-d       # Close split pane
+
+  ctrl-a            # Go to beginning of line
+  ctrl-e            # Go to end of line
+  ctrl-c            # Send interrupt signal
+  ctrl-d            # Send end-of-file signal

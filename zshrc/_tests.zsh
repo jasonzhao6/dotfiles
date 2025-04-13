@@ -24,15 +24,8 @@ ZSHRC_UNDER_TESTING=1 source ~/.zshrc
 # Source test harness
 source "$ZSHRC_DIR"/_tests/_test_harness.zsh
 
-# Update stats if running full test suite
-# shellcheck disable=SC2031
-if [[ -z $ZSHRC_TESTS_SECTION_FILTER && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	# Update code stats
-	main_keymap_- | ruby_strip > "$ZSHRC_DIR"/_code_stats.txt
-
-	# Update test stats
-	echo 'Test stats:' > "$ZSHRC_DIR"/_test_stats.txt
-fi
+# Update stats
+source "$ZSHRC_DIR"/_tests/_update_snapshots.zsh
 
 #
 # Testing: Start
@@ -69,7 +62,7 @@ if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_
 fi
 
 #
-# Testing: Finish finish
+# Testing: Finish
 #
 
 # Tracking `.zshrc` testing time: Finish

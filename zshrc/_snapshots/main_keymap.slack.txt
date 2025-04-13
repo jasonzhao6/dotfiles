@@ -1,0 +1,30 @@
+Shortcuts: main_keymap.slack.zsh
+
+  cmd-shift-d       # Show / hide sidebar in Home
+  ctrl-1            # Home
+  ctrl-3            # Activity (`cmd-shift-m`)
+  ctrl-4            # Later
+
+  alt-shift-{up}    # Go to unread channel above
+  alt-shift-{down}  # Go to unread channel below
+  shift-{page up}   # Scroll to previous day
+  shift-{page down} # Scroll to next day
+  {up}              # Move to previous message
+  {down}            # Move to next message
+  {right}           # Open a thread (t)
+  cmd-.             # Close right pane
+
+  cmd-{up}          # Edit last message
+  e                 # Edit
+  {del}             # Delete
+  r                 # React (`cmd-shift-\`)
+  a                 # Save / remove from Later
+  u                 # Mark unread
+
+  cmd-t             # Jump to a conversation
+  cmd-n             # New message
+  cmd-g             # Search
+  cmd-f             # Search current conversation
+
+  cmd-shift-y       # Set a status
+  cmd-/             # List keyboard shortcuts

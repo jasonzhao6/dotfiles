@@ -1,0 +1,60 @@
+Keymap: args_keymap.zsh
+
+  `   1   2   3   4   5   |   6   7   8   9  <0>  [   ] 
+      '   ,   .  <p> <y>  |   f   g  (c) <r>  l   /   =   \ 
+     (a) <o> (e) <u>  i   |  <d> (h) <t> <n> (s) <->
+      ;   q   j   k   x   |   b  <m> (w) (v) <z>
+
+  `<>` key initials have one mapping
+  `()` key initials have multiple mappings
+
+Keymap Usage
+
+  $ a                               # Show this help
+  $ a {regex}                       # Filter key mappings
+
+  $ a.{key}                         # Invoke a {key} mapping
+  $ a.{key} {arg}                   # Invoke a {key} mapping with {arg}
+
+     ^                              # The `.` is only for documentation
+                                    # Omit it when invoking a mapping
+
+Keymap List
+
+  $ a.s {|}?                        # Save as args
+  $ a.s {match}* {-mismatch}* {|}?  # Save as args & filter
+  $ a.so {|}?                       # Save as args & soft-select the 1st column
+  $ a.so {match}* {-mismatch}* {|}? # Save as args & soft-select the 1st column & filter
+
+  $ a.o {command}                   # Use the first arg
+  $ a.e {command}                   # Use a random arg
+  $ 0 {command}                     # Use the last arg
+  $ {1-100} {command}               # Use an arg by number up to 100
+  $ a.n {number} {command}          # Use an arg by number beyond 100
+
+  $ each {command}                  # Use each arg in series
+  $ all {command}                   # Use all args in parallel
+  $ map {command}                   # Map args, e.g `map echo '$((~~ * 10))'`
+  $ a.- {start} {finish} {command}  # Use args within a sequence
+
+  $ a.a                             # List args
+  $ a.a {match}* {-mismatch}*       # Filter args
+  $ a.d                             # Sort and dedupe args
+
+  $ a.t                             # Tabulate columns
+  $ a.w                             # Delimit columns based on the top row
+  $ a.w {letter}                    # Select a column based on the top row
+  $ a.v                             # Delimit columns based on the bottom row
+  $ a.v {letter}                    # Select a column based on the bottom row
+  $ a.z                             # Select the last column based on the bottom row
+
+  $ a.u                             # Undo "Filter args" or "Select a column"
+  $ a.r                             # Redo "Filter args" or "Select a column"
+  $ a.h                             # List history entries
+  $ a.h {index}                     # Select an entry by index
+  $ a.hc                            # Clear history entries
+
+  $ a.c                             # Copy args
+  $ a.c {number}                    # Copy an arg by number
+  $ a.y                             # Yank args
+  $ a.p                             # Put args (in a different tab)

@@ -1,0 +1,55 @@
+Keymap: terraform_keymap.zsh
+
+  `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
+      '   ,   .  <p>  y   |  <f> <g> (c) <r> <l>  /   =   \ 
+     <a> <o> <e> <u> (i)  |  <d> <h> (t) <n> <s>  - 
+      ;  <q>  j   k   x   |   b  <m> (w) <v> <z>
+
+  `<>` key initials have one mapping
+  `()` key initials have multiple mappings
+
+Keymap Usage
+
+  $ t                         # Show this help
+  $ t {regex}                 # Filter key mappings
+
+  $ t.{key}                   # Invoke a {key} mapping
+  $ t.{key} {arg}             # Invoke a {key} mapping with {arg}
+
+     ^                        # The `.` is only for documentation
+                              # Omit it when invoking a mapping
+
+Keymap List
+
+  $ t {terraform command}     
+
+  $ t.w                       # List manifests
+  $ t.w {match}* {-mismatch}* # Filter manifests
+
+  $ t.i                       # Init
+  $ t.iu                      # Init & upgrade
+  $ t.ir                      # Init & reconfigure
+  $ t.im                      # Init & migrate state
+  $ t.e                       # Load secret env vars
+
+  $ t.v {i,iu,ir,im,e}?       # Validate
+  $ t.p {i,iu,ir,im,e}?       # Plan
+  $ t.g                       # Upload gist
+  $ t.z                       # Unlock
+  $ t.a                       # Apply
+  $ t.d                       # Destroy
+  $ t.o                       # Show output
+
+  $ t.l {name}                # List states
+  $ t.s {name}                # Show state
+  $ t.t {name}                # Taint state
+  $ t.u {name}                # Untaint state
+  $ t.m {before} {after}      # Move state
+  $ t.rm {name}               # Remove state
+
+  $ t.f                       # Format
+  $ t.h                       # Scratch
+  $ t.n                       # Console
+  $ t.c                       # Clean
+  $ t.cc                      # Clean & clear plugin cache
+  $ t.qa                      # Apply & auto-approve

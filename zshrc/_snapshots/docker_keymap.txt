@@ -1,0 +1,26 @@
+Keymap: docker_keymap.zsh
+
+  `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
+      '   ,   .   p   y   |   f   g   c   r   l   /   =   \ 
+      a   o   e   u   i   |  <d>  h   t   n  <s>  - 
+      ;   q   j   k   x   |   b   m   w   v   z 
+
+  `<>` key initials have one mapping
+  `()` key initials have multiple mappings
+
+Keymap Usage
+
+  $ d                  # Show this help
+  $ d {regex}          # Filter key mappings
+
+  $ d.{key}            # Invoke a {key} mapping
+  $ d.{key} {arg}      # Invoke a {key} mapping with {arg}
+
+     ^                 # The `.` is only for documentation
+                       # Omit it when invoking a mapping
+
+Keymap List
+
+  $ d {docker command} 
+
+  $ d.s                # Login with AWS credentials

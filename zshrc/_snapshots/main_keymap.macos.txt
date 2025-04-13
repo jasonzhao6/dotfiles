@@ -1,0 +1,38 @@
+Shortcuts: main_keymap.macos.zsh
+
+  ctrl-{esc}         # Read selected text (Custom)
+  ctrl-{space}       # Toggle Dvorak (Custom)
+
+  cmd-option-{left}  # Move tab left
+  cmd-option-{right} # Move tab right
+  cmd-shift-{left}   # Move Terminal tab left
+  cmd-shift-{right}  # Move Terminal tab right
+  cmd-option-{up}    # Go to previous Safari tab group
+  cmd-option-{down}  # Go to next Safari tab group
+
+  cmd-shift-3        # Capture the entire screen to Desktop
+  cmd-shift-4        # Capture a portion of the screen to Desktop
+  cmd-ctrl-shift-3   # Capture the entire screen to pasteboard
+  cmd-ctrl-shift-4   # Capture a portion of the screen to pasteboard
+
+  cmd-ctrl-f         # Toggle full screen
+  ^cmd-shift-f       # Toggle Chrome toolbar in full screen
+  cmd-ctrl-{space}   # Show character viewer
+  cmd-shift-x        # Strike through
+
+  cmd-alt-{esc}      # Force quit applications
+  cmd-alt-{space}    # Search this mac
+  cmd-alt-d          # Toggle dock hiding
+  cmd-alt-h          # Hide other windows
+
+  fn-{up}            # Page up
+  fn-{down}          # Page down
+  fn-{left}          # Home
+  fn-{right}         # End
+  fn-{del}           # Delete forward
+  fn-{f}             # Toggle full screen
+  fn-{c}             # Toggle control center
+  fn-{m}             # Focus on menu bar
+  fn-{a}             # Focus on dock
+  fn-{h}             # Show desktop
+  fn-{e}             # Show emoji picker

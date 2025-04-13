@@ -1,0 +1,45 @@
+Keymap: vimium_keymap.zsh
+
+  `   1   2   3   4   5   |   6   7   8   9   0  ([)  ] 
+      '   ,   .  <p> <y>  |   f   g  <c> <r>  l   /   =   \ 
+     <a> <o>  e   u  <i>  |  <d> <h> <t> <n> <s> <->
+     <;> <q>  j   k   x   |   b  <m> <w> <v> <z>
+
+  `<>` key initials have one mapping
+  `()` key initials have multiple mappings
+
+Keymap List
+
+  a       # LinkHints.activateMode
+  ;       # LinkHints.activateModeToOpenInNewTab
+  o       # Vomnibar.activateInNewTab
+  q       # Vomnibar.activateBookmarksInNewTab
+  i       # enterInsertMode
+
+  h       # scrollPageUp
+  t       # scrollPageDown
+  H       # goPrevious
+  T       # goNext
+  m       # scrollToTop
+  w       # scrollToBottom
+
+  [up]    # scrollUp
+  [down]  # scrollDown
+  [left]  # scrollLeft
+  [right] # scrollRight
+
+  n       # previousTab
+  s       # nextTab
+  N       # moveTabLeft
+  S       # moveTabRight
+  v       # goBack
+  z       # goForward
+
+  c       # removeTab
+  C       # closeTabsOnRight
+  r       # reload
+  d       # duplicateTab
+  p       # openCopiedUrlInNewTab
+  y       # copyCurrentUrl
+
+  -       # focusInput

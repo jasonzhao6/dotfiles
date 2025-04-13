@@ -1,0 +1,45 @@
+Keymap: zsh_keymap.zsh
+
+  `  <1> <2>  3   4   5   |   6   7   8   9  <0>  [   ] 
+      '   ,   .  <p>  y   |  (f)  g   c   r   l   /   =   \ 
+     (a)  o  <e>  u   i   |   d  (h) <t>  n  <s>  - 
+      ;   q   j   k   x   |   b  <m> <w>  v  <z>
+
+  `<>` key initials have one mapping
+  `()` key initials have multiple mappings
+
+Keymap Usage
+
+  $ z                         # Show this help
+  $ z {regex}                 # Filter key mappings
+
+  $ z.{key}                   # Invoke a {key} mapping
+  $ z.{key} {arg}             # Invoke a {key} mapping with {arg}
+
+     ^                        # The `.` is only for documentation
+                              # Omit it when invoking a mapping
+
+Keymap List
+
+  $ z.e                       # Edit in IntelliJ
+  $ z.m                       # Edit in TextMate
+  $ z.s                       # Edit secrets
+  $ z.z                       # Source
+  $ z.t                       # Test
+
+  $ z.w {name}                # Custom `which`
+  $ z.a                       # List aliases
+  $ z.a {match}* {-mismatch}* # Filter aliases
+  $ z.f                       # List functions
+  $ z.f {match}* {-mismatch}* # Filter functions
+
+  $ z.h {grep}?               # List history
+  $ z.hc                      # Clear history
+  $ z.hm                      # Edit history file in TextMate
+
+  $ z.1                       # No session history
+  $ z.2                       # Session history in memory
+  $ z.0                       # Session history in memory & file
+
+  $ z.p                       # Push other dotfiles
+  $ z.P                       # Pull other dotfiles

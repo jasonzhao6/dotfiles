@@ -1,0 +1,58 @@
+Keymap: kubectl_keymap.zsh
+
+  `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
+      '   ,   .   p  (y)  |   f  (g) <c> (r) (l)  /   =   \ 
+      a   o  (e)  u   i   |  <d> <h> <t> <n> (s)  - 
+      ;   q  (j) (k) <x>  |  <b> <m> <w>  v  <z>
+
+  `<>` key initials have one mapping
+  `()` key initials have multiple mappings
+
+Keymap Usage
+
+  $ k                                # Show this help
+  $ k {regex}                        # Filter key mappings
+
+  $ k.{key}                          # Invoke a {key} mapping
+  $ k.{key} {arg}                    # Invoke a {key} mapping with {arg}
+
+     ^                               # The `.` is only for documentation
+                                     # Omit it when invoking a mapping
+
+Keymap List
+
+  $ k {kubectl command}              
+
+  $ k.n {namespace}?                 # Set namespace (to 'transaction-engine')
+  $ k.e1 {namespace}?                # Set namespace, region, and kube config
+  $ k.e2 {namespace}?                # Set namespace, region, and kube config
+  $ k.w2 {namespace}?                # Set namespace, region, and kube config
+
+  $ k.k {type} {match}* {-mismatch}* # Get resources as args
+  $ k.g {type} {name}                # Get resources
+  $ k.gg {type} {name}               # Get resources with `-o wide`
+  $ k.d {type} {name}                # Describe resources
+  $ k.m {type} {name}                # Edit with TextMate
+
+  $ k.l {pod}                        # Show logs
+  $ k.ll {pod}                       # Tail logs
+  $ k.lp {pod}                       # Show previous logs
+  $ k.b {pod}                        # Exec into bash
+  $ k.c {command} {pod}              # Exec a command
+  $ k.z                              # Copy history bindings and `kubectl` helpers
+
+  $ k.s {count} {deployment}         # Scale a deployment
+  $ k.ss {type} {name}               # Restart a deployment/stateful set/daemon set
+
+  $ k.j {type} {name}                # Get resource as json & save a copy
+  $ k.jj                             # Get the copy of json
+  $ k.y {type} {name}                # Get resource as yaml & save a copy
+  $ k.yy                             # Get the copy of yaml
+
+  $ k.r                              # List resource types
+  $ k.r {match}* {-mismatch}*        # Filter resource types
+  $ k.rr                             # Save a copy of resource types
+  $ k.x {type}                       # Explain a resource type
+
+  $ k.h                              # Run Helm unit tests and update snapshots
+  $ k.t {yaml file}                  # Render Helm template locally

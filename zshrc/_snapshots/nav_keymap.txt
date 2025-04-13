@@ -1,0 +1,42 @@
+Keymap: nav_keymap.zsh
+
+  `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
+      '   ,   .   p   y   |   f   g   c   r   l   /   =   \ 
+     <a> (o) (e) (u)  i   |  <d> <h> <t> (n) <s>  - 
+      ;   q   j   k   x   |   b  <m> <w> <v>  z 
+
+  `<>` key initials have one mapping
+  `()` key initials have multiple mappings
+
+Keymap Usage
+
+  $ n                          # Show this help
+  $ n {regex}                  # Filter key mappings
+
+  $ n.{key}                    # Invoke a {key} mapping
+  $ n.{key} {arg}              # Invoke a {key} mapping with {arg}
+
+     ^                         # The `.` is only for documentation
+                               # Omit it when invoking a mapping
+
+Keymap List
+
+  $ n {directory}              # Go to directory
+  $ n.t                        # Go to directory in pasteboard
+  $ n.h                        # Go to github
+  $ n.s                        # Go to scratch
+  $ n.d                        # Go to dotfiles
+  $ n.m                        # Go to Documents
+  $ n.w                        # Go to Downloads
+  $ n.v                        # Go to Desktop
+
+  $ n.n {match}* {-mismatch}*  # List visible directories & files
+  $ n.a {match}* {-mismatch}*  # List hidden directories & files
+  $ n.o {match}* {-mismatch}*  # List visible directories
+  $ n.oo {match}* {-mismatch}* # List hidden directories
+  $ n.e {match}* {-mismatch}*  # List visible files
+  $ n.ee {match}* {-mismatch}* # List hidden files
+
+  $ n.u                        # Go up one directory
+  $ n.uu                       # Go up two directories
+  $ n.uuu                      # Go up three directories
