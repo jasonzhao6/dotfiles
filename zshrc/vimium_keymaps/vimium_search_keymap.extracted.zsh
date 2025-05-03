@@ -7,6 +7,7 @@ VIMIUM_SEARCH_KEYMAP=(
 	''
 	'dl # Datadog Dashboard Lists (go/dl)'
 	''
+	'- # ECR (rel-2025.{MM.DD})'
 	'e # ECR (Prod)'
 	'ee # ECR (QA)'
 	''

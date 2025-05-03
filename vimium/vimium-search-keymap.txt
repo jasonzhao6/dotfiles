@@ -6,6 +6,7 @@ cc: https://github.marqeta.com/search?q=%s&type=code Github Code Search
 
 dl: https://app.datadoghq.com/dashboard/lists?q=%s Datadog Dashboard Lists (go/dl)
 
+-: https://ecr-ui.prod.ci.marqeta.io/us-east-1/repositories/transaction-engine/marqeta-jpos/jcard-marqkubed/rel-2025.%s ECR (rel-2025.{MM.DD})
 e: https://ecr-ui.prod.ci.marqeta.io/?search=%s ECR (Prod)
 ee: https://ecr-ui.prod.ci.marqeta.io/us-west-2/repositories?search=%s ECR (QA)
 

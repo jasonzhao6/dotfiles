@@ -9,7 +9,7 @@ function vimium_search_keymap_extract {
 	while IFS= read -r line; do
 		# Convert `line` to keymap format
 		# e.g `o: https://golinks.io/%s Go Links` -> `o # Go Links`
-		if [[ $line == [a-z]* ]]; then
+		if [[ $line == [a-z-]* ]]; then
 			fields=("${=line}")
 			extracted+="\t'${fields[1]//:} # ${fields[3, -1]}'\n"
 
