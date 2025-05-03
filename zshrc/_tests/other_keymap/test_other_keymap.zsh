@@ -594,3 +594,30 @@ function test__other_keymap_x__when_both_files_have_only_1_column {
 		eof
 	)"
 }; run_with_filter test__other_keymap_x__when_both_files_have_only_1_column
+
+function test__other_keymap_xx {
+	local file1; file1=$(
+		cat <<-eof
+			a,10
+			b,20
+			c,30
+			d,40
+		eof
+	)
+
+	local file2; file2=$(
+		cat <<-eof
+			a
+			c
+		eof
+	)
+
+	assert "$(
+		other_keymap_xx <(echo "$file1") <(echo "$file2")
+	)" "$(
+		cat <<-eof
+			b,20
+			d,40
+		eof
+	)"
+}; run_with_filter test__other_keymap_xx

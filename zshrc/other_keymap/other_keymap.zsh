@@ -31,9 +31,10 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}00 # Empty \`1.txt\` and \`2.txt\`"
 	"${OTHER_DOT}u {file 1}? {file 2}? # Unified diff"
 	"${OTHER_DOT}uu {file 1}? {file 2}? # Side by side diff"
-	"${OTHER_DOT}x {file 1}? {file 2}? # Filter files by their first columns"
-	"${OTHER_DOT}b {file} {column index}? {|}? # Sort file by the specified column index"
-	"${OTHER_DOT}w {file} {column 1} {column 2}? {|}? # Swap the specified columns"
+	"${OTHER_DOT}x {file 1}? {file 2}? # Keep lines with matching first columns"
+	"${OTHER_DOT}xx {file 1}? {file 2}? # Drop lines with matching first columns"
+	"${OTHER_DOT}b {file} {column index}? {|}? # Sort lines by the specified column index"
+	"${OTHER_DOT}w {file} {column 1} {column 2}? {|}? # Swap the specified columns by index"
 	''
 	"${OTHER_DOT}8 # Use Java 8"
 	"${OTHER_DOT}d {url} # DNS dig"
@@ -333,6 +334,13 @@ function other_keymap_x {
 	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
 
 	awk -F, 'NR==FNR{found[$1]; next} $1 in found' "$file_2" "$file_1"
+}
+
+function other_keymap_xx {
+	local file_1=${1:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1}
+	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
+
+	awk -F, 'NR==FNR{found[$1]; next} !($1 in found)' "$file_2" "$file_1"
 }
 
 function other_keymap_y {
