@@ -25,7 +25,7 @@ Keymap List
   $ h.o                       # Open the current repo
   $ h.p                       # Open the latest PRs
   $ h.p {pr}                  # Open the specified PR
-  $ h.c                       # Open the latest commit
+  $ h.c                       # Open the specified commit in pasteboard
   $ h.c {sha}                 # Open the specified commit
 
   $ h.h                       # Navigate to the current org

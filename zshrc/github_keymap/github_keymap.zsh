@@ -7,7 +7,7 @@ GITHUB_KEYMAP=(
 	"${GITHUB_DOT}o # Open the current repo"
 	"${GITHUB_DOT}p # Open the latest PRs"
 	"${GITHUB_DOT}p {pr} # Open the specified PR"
-	"${GITHUB_DOT}c # Open the latest commit"
+	"${GITHUB_DOT}c # Open the specified commit in pasteboard"
 	"${GITHUB_DOT}c {sha} # Open the specified commit"
 	''
 	"${GITHUB_DOT}h # Navigate to the current org"
