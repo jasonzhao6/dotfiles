@@ -48,9 +48,9 @@ test__input_with_headers_top_heavy=$(
 
 test__input_with_tabs=$(
 	cat <<-eof
-		10.0.0.1	# 2023-06-21T20:25:00+00:00	webhook-asg
-		10.0.0.2	# 2023-06-21T20:25:00+00:00	webhook-asg
-		10.0.0.3	# 2023-06-21T20:24:59+00:00	webhook-asg
+		10.0.0.3	# 2023-06-21T20:24:59+00:00	foo
+		10.0.0.2	# 2023-06-21T21:25:00+00:00	bar
+		10.0.0.1	# 2023-06-21T20:25:00+00:00	baz
 	eof
 )
 
@@ -332,6 +332,45 @@ function test__args_keymap_h__when_selecting_tail_index {
 		eof
 	)"
 }; run_with_filter test__args_keymap_h__when_selecting_tail_index
+
+function test__args_keymap_i {
+	assert "$(
+		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
+		args_keymap_i
+	)" "$(
+		cat <<-eof
+		     1	10.0.0.1	# 2023-06-21T20:25:00+00:00	baz
+		     2	10.0.0.2	# 2023-06-21T21:25:00+00:00	bar
+		     3	10.0.0.3	# 2023-06-21T20:24:59+00:00	foo
+		eof
+	)"
+}; run_with_filter test__args_keymap_i
+
+function test__args_keymap_i__with_timestamps {
+	assert "$(
+		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
+		args_keymap_i 3
+	)" "$(
+		cat <<-eof
+		     1	10.0.0.3	# 2023-06-21T20:24:59+00:00	foo
+		     2	10.0.0.1	# 2023-06-21T20:25:00+00:00	baz
+		     3	10.0.0.2	# 2023-06-21T21:25:00+00:00	bar
+		eof
+	)"
+}; run_with_filter test__args_keymap_i__with_timestamps
+
+function test__args_keymap_i__with_names {
+	assert "$(
+		echo "$test__input_with_tabs" | args_keymap_s > /dev/null
+		args_keymap_i 4
+	)" "$(
+		cat <<-eof
+		     1	10.0.0.2	# 2023-06-21T21:25:00+00:00	bar
+		     2	10.0.0.1	# 2023-06-21T20:25:00+00:00	baz
+		     3	10.0.0.3	# 2023-06-21T20:24:59+00:00	foo
+		eof
+	)"
+}; run_with_filter test__args_keymap_i__with_names
 
 function test__args_keymap_n {
 	assert "$(
@@ -795,10 +834,10 @@ function test__args_keymap_v {
 		args_keymap_v
 	)" "$(
 		cat <<-eof
-		     1	10.0.0.1	# 2023-06-21T20:25:00+00:00	webhook-asg
-		     2	10.0.0.2	# 2023-06-21T20:25:00+00:00	webhook-asg
-		     3	10.0.0.3	# 2023-06-21T20:24:59+00:00	webhook-asg
-			$(green_bg '        a               b c                             d          ')
+		     1	10.0.0.3	# 2023-06-21T20:24:59+00:00	foo
+		     2	10.0.0.2	# 2023-06-21T21:25:00+00:00	bar
+		     3	10.0.0.1	# 2023-06-21T20:25:00+00:00	baz
+			$(green_bg '        a               b c                             d  ')
 		eof
 	)"
 }; run_with_filter test__args_keymap_v
@@ -809,9 +848,9 @@ function test__args_keymap_v__when_selecting_first {
 		args_keymap_v a
 	)" "$(
 		cat <<-eof
-		     1	10.0.0.1
+		     1	10.0.0.3
 		     2	10.0.0.2
-		     3	10.0.0.3
+		     3	10.0.0.1
 		eof
 	)"
 }; run_with_filter test__args_keymap_v__when_selecting_first
@@ -822,9 +861,9 @@ function test__args_keymap_v__when_selecting_third {
 		args_keymap_v c
 	)" "$(
 		cat <<-eof
-		     1	2023-06-21T20:25:00+00:00
-		     2	2023-06-21T20:25:00+00:00
-		     3	2023-06-21T20:24:59+00:00
+		     1	2023-06-21T20:24:59+00:00
+		     2	2023-06-21T21:25:00+00:00
+		     3	2023-06-21T20:25:00+00:00
 		eof
 	)"
 }; run_with_filter test__args_keymap_v__when_selecting_third
@@ -835,9 +874,9 @@ function test__args_keymap_v__when_selecting_last {
 		args_keymap_v d
 	)" "$(
 		cat <<-eof
-		     1	webhook-asg
-		     2	webhook-asg
-		     3	webhook-asg
+		     1	foo
+		     2	bar
+		     3	baz
 		eof
 	)"
 }; run_with_filter test__args_keymap_v__when_selecting_last
@@ -848,9 +887,9 @@ function test__args_keymap_v__when_selecting_with_color {
 		args_keymap_v d
 	)" "$(
 		cat <<-eof
-		     1	webhook-asg
-		     2	webhook-asg
-		     3	webhook-asg
+		     1	foo
+		     2	bar
+		     3	baz
 		eof
 	)"
 }; run_with_filter test__args_keymap_v__when_selecting_with_color
@@ -861,10 +900,10 @@ function test__args_keymap_v__when_selecting_out_of_bound {
 		args_keymap_v z
 	)" "$(
 		cat <<-eof
-		     1	10.0.0.1        # 2023-06-21T20:25:00+00:00     webhook-asg
-		     2	10.0.0.2        # 2023-06-21T20:25:00+00:00     webhook-asg
-		     3	10.0.0.3        # 2023-06-21T20:24:59+00:00     webhook-asg
-			$(green_bg '        a               b c                             d          ')
+		     1	10.0.0.3        # 2023-06-21T20:24:59+00:00     foo
+		     2	10.0.0.2        # 2023-06-21T21:25:00+00:00     bar
+		     3	10.0.0.1        # 2023-06-21T20:25:00+00:00     baz
+			$(green_bg '        a               b c                             d  ')
 		eof
 	)"
 }; run_with_filter test__args_keymap_v__when_selecting_out_of_bound
@@ -985,9 +1024,9 @@ function test__args_keymap_z {
 		args_keymap_z
 	)" "$(
 		cat <<-eof
-		     1	webhook-asg
-		     2	webhook-asg
-		     3	webhook-asg
+		     1	foo
+		     2	bar
+		     3	baz
 		eof
 	)"
 }; run_with_filter test__args_keymap_z

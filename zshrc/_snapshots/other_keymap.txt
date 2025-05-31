@@ -2,64 +2,65 @@ Keymap: other_keymap.zsh
 
   `  (1) (2)  3   4   5   |   6   7  <8>  9  (0)  [   ] 
       '   ,   .  <p> <y>  |   f   g  (c) <r>  l   /   =   \ 
-     <a> (o) (e) (u)  i   |  (d)  h  <t> <n> <s> <->
-      ;  (q) <j> (k) (x)  |  <b> (m) <w>  v   z 
+     <a> (o) (e) (u) (i)  |  (d)  h  <t> <n> <s> <->
+      ;  (q) <j> (k) (x)  |   b  (m)  w   v   z 
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
 
 Keymap Usage
 
-  $ o                                      # Show this help
-  $ o {regex}                              # Filter key mappings
+  $ o                                       # Show this help
+  $ o {regex}                               # Filter key mappings
 
-  $ o.{key}                                # Invoke a {key} mapping
-  $ o.{key} {arg}                          # Invoke a {key} mapping with {arg}
+  $ o.{key}                                 # Invoke a {key} mapping
+  $ o.{key} {arg}                           # Invoke a {key} mapping with {arg}
 
-     ^                                     # The `.` is only for documentation
-                                           # Omit it when invoking a mapping
+     ^                                      # The `.` is only for documentation
+                                            # Omit it when invoking a mapping
 
 Keymap List
 
-  $ o {url}                                # Open the specified url
-  $ o {path}                               # Open the specified path in Finder
-  $ o.o                                    # Open the current directory in Finder
-  $ o.e                                    # Open the current directory in IntelliJ IDEA
-  $ o.e {path}                             # Open the specified path in IntelliJ IDEA
-  $ o.m                                    # Open the current directory in TextMate
-  $ o.m {path}                             # Open the specified path in TextMate
+  $ o {url}                                 # Open the specified url
+  $ o {path}                                # Open the specified path in Finder
+  $ o.o                                     # Open the current directory in Finder
+  $ o.e                                     # Open the current directory in IntelliJ IDEA
+  $ o.e {path}                              # Open the specified path in IntelliJ IDEA
+  $ o.m                                     # Open the current directory in TextMate
+  $ o.m {path}                              # Open the specified path in TextMate
 
-  $ o.s                                    # Sleep
-  $ o.a                                    # Stay awake
-  $ o.n                                    # Stay on task
+  $ o.s                                     # Sleep
+  $ o.a                                     # Stay awake
+  $ o.n                                     # Stay on task
 
-  $ o.c                                    # Copy the last output
-  $ o.cc                                   # Copy the last command
-  $ o.y                                    # Alias for `pbcopy`
-  $ o.p                                    # Alias for `pbpaste`
-  $ o.k                                    # Clear the terminal
-  $ o.kk                                   # Show archived terminal outputs
-  $ o.kc                                   # Clear archived terminal outputs
+  $ o.c                                     # Copy the last output
+  $ o.cc                                    # Copy the last command
+  $ o.y                                     # Alias for `pbcopy`
+  $ o.p                                     # Alias for `pbpaste`
+  $ o.k                                     # Clear the terminal
+  $ o.kk                                    # Show archived terminal outputs
+  $ o.kc                                    # Clear archived terminal outputs
 
-  $ o.1 {|}?                               # Save the last output to `1.txt`
-  $ o.2 {|}?                               # Save the last output to `2.txt`
-  $ o.11                                   # Save pasteboard value to `1.txt`
-  $ o.22                                   # Save pasteboard value to `2.txt`
-  $ o.0                                    # Open `1.txt` and `2.txt` in TextMate
-  $ o.00                                   # Empty `1.txt` and `2.txt`
-  $ o.u {file 1}? {file 2}?                # Unified diff
-  $ o.uu {file 1}? {file 2}?               # Side by side diff
-  $ o.x {file 1}? {file 2}?                # Keep lines with matching first columns
-  $ o.xx {file 1}? {file 2}?               # Drop lines with matching first columns
-  $ o.b {file} {column index}? {|}?        # Sort lines by the specified column index
-  $ o.w {file} {column 1} {column 2}? {|}? # Swap the specified columns by index
+  $ o.1 {|}?                                # Save the last output to `1.txt`
+  $ o.2 {|}?                                # Save the last output to `2.txt`
+  $ o.11                                    # Save pasteboard value to `1.txt`
+  $ o.22                                    # Save pasteboard value to `2.txt`
+  $ o.0                                     # Open `1.txt` and `2.txt` in TextMate
+  $ o.00                                    # Empty `1.txt` and `2.txt`
+  $ o.u {file 1}? {file 2}?                 # Unified diff
+  $ o.uu {file 1}? {file 2}?                # Side by side diff
 
-  $ o.8                                    # Use Java 8
-  $ o.d {url}                              # DNS dig
-  $ o.df                                   # DNS flush
-  $ o.j {url} {regex} {num lines}          # Curl a json endpoint
-  $ o.q                                    # Format a sql query from stdin
-  $ o.q '{sql}'                            # Format a sql query from cli arg
-  $ o.r {before} {after}                   # Rename files in the current directory
-  $ o.t {command}                          # Time command execution
-  $ o.- {start} {finish} {~~}              # Run a sequence of commands
+  $ o.i {file} {column index}? {|}?         # CSV: Sort lines by column index
+  $ o.ii {file} {column 1} {column 2}? {|}? # CSV: Swap columns by indexes
+  $ o.x {file 1}? {file 2}?                 # CSV: Keep lines with matching first columns
+  $ o.xx {file 1}? {file 2}?                # CSV: Drop lines with matching first columns
+
+  $ o.8                                     # Use Java 8
+  $ o.d {url}                               # DNS dig
+  $ o.df                                    # DNS flush
+  $ o.j {url} {regex} {num lines}           # Curl a json endpoint
+  $ o.q                                     # Format a sql query from stdin
+  $ o.q '{sql}'                             # Format a sql query from cli arg
+  $ o.r {before} {after}                    # Rename files in the current directory
+  $ o.t {command}                           # Time command execution
+  $ o.- {start} {finish} {~~}               # Run a sequence of commands

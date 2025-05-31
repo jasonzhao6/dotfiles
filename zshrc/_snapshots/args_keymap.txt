@@ -2,7 +2,7 @@ Keymap: args_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9  <0>  [   ] 
       '   ,   .  <p> <y>  |   f   g  (c) <r>  l   /   =   \ 
-     (a) <o> (e) <u>  i   |  <d> (h) <t> <n> (s) <->
+     (a) <o> (e) <u> <i>  |  <d> (h) <t> <n> (s) <->
       ;   q   j   k   x   |   b  <m> (w) (v) <z>
 
   `<>` key initials have one mapping
@@ -26,6 +26,9 @@ Keymap List
   $ a.so {|}?                       # Save as args & soft-select the 1st column
   $ a.so {match}* {-mismatch}* {|}? # Save as args & soft-select the 1st column & filter
 
+  $ a.a                             # List args
+  $ a.a {match}* {-mismatch}*       # Filter args
+
   $ a.o {command}                   # Use the first arg
   $ a.e {command}                   # Use a random arg
   $ 0 {command}                     # Use the last arg
@@ -37,9 +40,8 @@ Keymap List
   $ map {command}                   # Map args, e.g `map echo '$((~~ * 10))'`
   $ a.- {start} {finish} {command}  # Use args within a sequence
 
-  $ a.a                             # List args
-  $ a.a {match}* {-mismatch}*       # Filter args
-  $ a.d                             # Sort and dedupe args
+  $ a.i {column index}?             # Sort by column index
+  $ a.d                             # Dedupe by all columns
 
   $ a.t                             # Tabulate columns
   $ a.w                             # Delimit columns based on the top row

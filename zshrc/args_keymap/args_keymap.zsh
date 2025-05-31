@@ -8,6 +8,9 @@ ARGS_KEYMAP=(
 	"${ARGS_DOT}so {|}? # Save as args & soft-select the 1st column"
 	"${ARGS_DOT}so {match}* {-mismatch}* {|}? # Save as args & soft-select the 1st column & filter"
 	''
+	"${ARGS_DOT}a # List args"
+	"${ARGS_DOT}a {match}* {-mismatch}* # Filter args"
+	''
 	"${ARGS_DOT}o {command} # Use the first arg"
 	"${ARGS_DOT}e {command} # Use a random arg"
 	'0 {command} # Use the last arg'
@@ -19,9 +22,8 @@ ARGS_KEYMAP=(
 	"map {command} # Map args, e.g \`map echo '\$((~~ * 10))'\`"
 	"${ARGS_DOT}- {start} {finish} {command} # Use args within a sequence"
 	''
-	"${ARGS_DOT}a # List args"
-	"${ARGS_DOT}a {match}* {-mismatch}* # Filter args"
-	"${ARGS_DOT}d # Sort and dedupe args"
+	"${ARGS_DOT}i {column index}? # Sort by column index"
+	"${ARGS_DOT}d # Dedupe by all columns"
 	''
 	"${ARGS_DOT}t # Tabulate columns"
 	"${ARGS_DOT}w # Delimit columns based on the top row"
@@ -131,6 +133,12 @@ function args_keymap_h {
 
 function args_keymap_hc {
 	args_history_reset
+}
+
+function args_keymap_i {
+	local column_index=${1:-1}
+
+	args_history_current | sort --key="$column_index,$column_index" --version-sort | args_keymap_s
 }
 
 function args_keymap_n {

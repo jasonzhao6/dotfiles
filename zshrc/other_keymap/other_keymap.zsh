@@ -31,10 +31,11 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}00 # Empty \`1.txt\` and \`2.txt\`"
 	"${OTHER_DOT}u {file 1}? {file 2}? # Unified diff"
 	"${OTHER_DOT}uu {file 1}? {file 2}? # Side by side diff"
-	"${OTHER_DOT}x {file 1}? {file 2}? # Keep lines with matching first columns"
-	"${OTHER_DOT}xx {file 1}? {file 2}? # Drop lines with matching first columns"
-	"${OTHER_DOT}b {file} {column index}? {|}? # Sort lines by the specified column index"
-	"${OTHER_DOT}w {file} {column 1} {column 2}? {|}? # Swap the specified columns by index"
+	''
+	"${OTHER_DOT}i {file} {column index}? {|}? # CSV: Sort lines by column index"
+	"${OTHER_DOT}ii {file} {column 1} {column 2}? {|}? # CSV: Swap columns by indexes"
+	"${OTHER_DOT}x {file 1}? {file 2}? # CSV: Keep lines with matching first columns"
+	"${OTHER_DOT}xx {file 1}? {file 2}? # CSV: Drop lines with matching first columns"
 	''
 	"${OTHER_DOT}8 # Use Java 8"
 	"${OTHER_DOT}d {url} # DNS dig"
@@ -125,25 +126,6 @@ function other_keymap_a {
 	caffeinate
 }
 
-function other_keymap_b {
-	local file
-	local column_index
-
-	# When invoked as standalone command
-	if [[ -t 0 ]]; then
-		file=$1
-		column_index=${2:-1}
-
-		sort --field-separator=, --key="$column_index,$column_index" --sort=numeric "$file"
-
-	# When invoked after a pipe `|`
-	else
-		column_index=${1:-1}
-
-		sort --field-separator=, --key="$column_index,$column_index" --sort=numeric
-	fi
-}
-
 function other_keymap_c {
 	echo -n "$(eval "$(prev_command)" | bw | ruby_strip)" | pbcopy
 }
@@ -175,6 +157,54 @@ function other_keymap_e {
 	local target_path=${*:-.}
 
 	open -na 'IntelliJ IDEA CE.app' --args "$target_path"
+}
+
+function other_keymap_i {
+	local file
+	local column_index
+
+	# When invoked as standalone command
+	if [[ -t 0 ]]; then
+		file=$1
+		column_index=${2:-1}
+
+		sort --field-separator=, --key="$column_index,$column_index" --version-sort "$file"
+
+	# When invoked after a pipe `|`
+	else
+		column_index=${1:-1}
+
+		sort --field-separator=, --key="$column_index,$column_index" --version-sort
+	fi
+}
+
+function other_keymap_ii {
+	local file=$1
+	local column_1=$2
+	local column_2=${3:-1}
+
+	local awk_script='{
+		tmp = $c1;
+		$c1 = $c2;
+		$c2 = tmp;
+		print $0
+	}'
+
+	# When invoked as standalone command
+	if [[ -t 0 ]]; then
+		file=$1
+		column_1=$2
+		column_2=${3:-1}
+
+		awk -F, -v c1="$column_1" -v c2="$column_2" "$awk_script" OFS=, "$file"
+
+	# When invoked after a pipe `|`
+	else
+		column_1=$1
+		column_2=${2:-1}
+
+		awk -F, -v c1="$column_1" -v c2="$column_2" "$awk_script" OFS=,
+	fi
 }
 
 function other_keymap_j {
@@ -298,35 +328,6 @@ function other_keymap_uu {
 	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
 
 	diff --side-by-side --suppress-common-lines "$file_1" "$file_2"
-}
-
-function other_keymap_w {
-	local file=$1
-	local column_1=$2
-	local column_2=${3:-1}
-
-	local awk_script='{
-		tmp = $c1;
-		$c1 = $c2;
-		$c2 = tmp;
-		print $0
-	}'
-
-	# When invoked as standalone command
-	if [[ -t 0 ]]; then
-		file=$1
-		column_1=$2
-		column_2=${3:-1}
-
-		awk -F, -v c1="$column_1" -v c2="$column_2" "$awk_script" OFS=, "$file"
-
-	# When invoked after a pipe `|`
-	else
-		column_1=$1
-		column_2=${2:-1}
-
-		awk -F, -v c1="$column_1" -v c2="$column_2" "$awk_script" OFS=,
-	fi
 }
 
 function other_keymap_x {
