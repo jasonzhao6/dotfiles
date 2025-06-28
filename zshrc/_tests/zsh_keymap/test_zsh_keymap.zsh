@@ -118,29 +118,54 @@ function test__zsh_keymap_hc {
 	)" 'absent'
 }; run_with_filter test__zsh_keymap_hc
 
-function test__zsh_keymap_w {
-	assert "$(zsh_keymap_w)" "$(
+function test__zsh_keymap_s__when_args_history_is_not_initialized {
+	args_history_init
+	local args_history_max=$ARGS_HISTORY_MAX
+
+	assert "$(
+		ARGS_HISTORY_MAX=
+		ZSHRC_UNDER_TESTING=1 zsh_keymap_s
+		echo "$ARGS_HISTORY_MAX"
+	)" "$args_history_max"
+
+	args_history_reset
+}; run_with_filter test__zsh_keymap_s__when_args_history_is_not_initialized
+
+function test__zsh_keymap_s__when_args_history_is_already_initialized {
+	local overwrite='<overwrite>'
+
+	assert "$(
+		ARGS_HISTORY_MAX=$overwrite
+		ZSHRC_UNDER_TESTING=1 zsh_keymap_s
+		echo $ARGS_HISTORY_MAX
+	)" "$overwrite"
+
+	args_history_reset
+}; run_with_filter test__zsh_keymap_s__when_args_history_is_already_initialized
+
+function test__zsh_keymap_z {
+	assert "$(zsh_keymap_z)" "$(
 		cat <<-eof
 
 			$(red_bar 'name required')
 		eof
 	)"
-}; run_with_filter test__zsh_keymap_w
+}; run_with_filter test__zsh_keymap_z
 
-function test__zsh_keymap_w__when_program_is_not_found {
+function test__zsh_keymap_z__when_program_is_not_found {
 	assert "$(
-		zsh_keymap_w does_not_exist
+		zsh_keymap_z does_not_exist
 	)" "$(
 		cat <<-eof
 
 			$(red_bar '`does_not_exist` not found')
 		eof
 	)"
-}; run_with_filter test__zsh_keymap_w__when_program_is_not_found
+}; run_with_filter test__zsh_keymap_z__when_program_is_not_found
 
-function test__zsh_keymap_w__when_program_is_an_alias {
+function test__zsh_keymap_z__when_program_is_an_alias {
 	assert "$(
-		zsh_keymap_w z0
+		zsh_keymap_z z0
 	)" "$(
 		cat <<-eof
 
@@ -151,11 +176,11 @@ function test__zsh_keymap_w__when_program_is_an_alias {
 		     3	}
 		eof
 	)"
-}; run_with_filter test__zsh_keymap_w__when_program_is_an_alias
+}; run_with_filter test__zsh_keymap_z__when_program_is_an_alias
 
-function test__zsh_keymap_w__when_input_is_a_function {
+function test__zsh_keymap_z__when_input_is_a_function {
 	assert "$(
-		zsh_keymap_w zsh_keymap_0
+		zsh_keymap_z zsh_keymap_0
 	)" "$(
 		cat <<-eof
 		     1	zsh_keymap_0 () {
@@ -163,29 +188,4 @@ function test__zsh_keymap_w__when_input_is_a_function {
 		     3	}
 		eof
 	)"
-}; run_with_filter test__zsh_keymap_w__when_input_is_a_function
-
-function test__zsh_keymap_z__when_args_history_is_not_initialized {
-	args_history_init
-	local args_history_max=$ARGS_HISTORY_MAX
-
-	assert "$(
-		ARGS_HISTORY_MAX=
-		ZSHRC_UNDER_TESTING=1 zsh_keymap_z
-		echo "$ARGS_HISTORY_MAX"
-	)" "$args_history_max"
-
-	args_history_reset
-}; run_with_filter test__zsh_keymap_z__when_args_history_is_not_initialized
-
-function test__zsh_keymap_z__when_args_history_is_already_initialized {
-	local overwrite='<overwrite>'
-
-	assert "$(
-		ARGS_HISTORY_MAX=$overwrite
-		ZSHRC_UNDER_TESTING=1 zsh_keymap_z
-		echo $ARGS_HISTORY_MAX
-	)" "$overwrite"
-
-	args_history_reset
-}; run_with_filter test__zsh_keymap_z__when_args_history_is_already_initialized
+}; run_with_filter test__zsh_keymap_z__when_input_is_a_function

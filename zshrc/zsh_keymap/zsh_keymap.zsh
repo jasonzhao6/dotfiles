@@ -5,11 +5,11 @@ ZSH_DOT="${ZSH_ALIAS}${KEYMAP_DOT}"
 ZSH_KEYMAP=(
 	"${ZSH_DOT}e # Edit in IntelliJ"
 	"${ZSH_DOT}m # Edit in TextMate"
-	"${ZSH_DOT}s # Edit secrets"
-	"${ZSH_DOT}z # Source"
+	"${ZSH_DOT}mm # Edit secrets in TextMate"
+	"${ZSH_DOT}s # Source"
 	"${ZSH_DOT}t # Test"
 	''
-	"${ZSH_DOT}w {name} # Custom \`which\`"
+	"${ZSH_DOT}z {name} # Custom \`which\`"
 	"${ZSH_DOT}a # List aliases"
 	"${ZSH_DOT}a {match}* {-mismatch}* # Filter aliases"
 	"${ZSH_DOT}f # List functions"
@@ -84,6 +84,10 @@ function zsh_keymap_m {
 	mate "$DOTFILES_DIR"
 }
 
+function zsh_keymap_mm {
+	mate "$ZSHRC_SECRETS"
+}
+
 ZSH_OTHER_DOTFILES=(
 	colordiffrc
 	gitignore
@@ -104,39 +108,10 @@ function zsh_keymap_P {
 	done
 }
 
-function zsh_keymap_s {
-	mate "$ZSHRC_SECRETS"
-}
-
-function zsh_keymap_t {
-	zsh "$ZSHRC_DIR"/_tests.zsh "$@"
-}
-
-function zsh_keymap_w {
-	local name=$1
-	[[ -z $name ]] && echo && red_bar 'name required' && return
-
-	local definition; definition=$(which "$name")
-	[[ $definition == "$name not found" ]] && echo && red_bar "\`$name\` not found" && return
-
-	# If `name` in an alias, follow it
-	local is_alias=': aliased to (.+)$'
-	if [[ $definition =~ $is_alias ]]; then
-		echo
-		gray_fg "$definition"
-		echo
-
-		# shellcheck disable=SC2154 # `match` is defined by `=~`
-		definition=$(which "${match[1]}")
-	fi
-
-	echo "$definition" | args_keymap_s
-}
-
 ZSHRC_SECRETS_DIR="$HOME/Downloads/_Archive/zsh/.zshrc.secrets"
 ZSHRC_SECRETS_LATEST="$ZSHRC_SECRETS_DIR/latest.txt"
 
-function zsh_keymap_z {
+function zsh_keymap_s {
 	source ~/.zshrc
 
 	# Whenever `ZSHRC_SECRETS` changes, take a snapshot
@@ -151,4 +126,30 @@ function zsh_keymap_z {
 		cp "$ZSHRC_SECRETS" "$ZSHRC_SECRETS_LATEST"
 		cp "$ZSHRC_SECRETS" "$ZSHRC_SECRETS_DIR/$(date +'%y.%m.%d').txt"
 	fi
+}
+
+function zsh_keymap_t {
+	zsh "$ZSHRC_DIR"/_tests.zsh "$@"
+}
+
+# TODO show usage before definition
+function zsh_keymap_z {
+	local name=$1
+	[[ -z $name ]] && echo && red_bar 'name required' && return
+
+	local definition; definition=$(which "$name")
+	[[ $definition == "$name not found" ]] && echo && red_bar "\`$name\` not found" && return
+
+	# If `name` in an alias, follow it
+	local is_alias="^$name: aliased to (.+)$"
+	if [[ $definition =~ $is_alias ]]; then
+		echo
+		gray_fg "$definition"
+		echo
+
+		# shellcheck disable=SC2154 # `match` is defined by `=~`
+		definition=$(which "${match[1]}")
+	fi
+
+	echo "$definition" | args_keymap_s
 }
