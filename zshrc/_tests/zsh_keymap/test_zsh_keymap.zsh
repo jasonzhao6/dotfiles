@@ -165,11 +165,13 @@ function test__zsh_keymap_z__when_program_is_not_found {
 
 function test__zsh_keymap_z__when_program_is_an_alias {
 	assert "$(
-		zsh_keymap_z z0
+		zsh_keymap_z z0 | bw
 	)" "$(
 		cat <<-eof
 
-			$(gray_fg 'z0: aliased to zsh_keymap_0')
+			  # \`z0\` is aliased to \`zsh_keymap_0\`
+
+			  $ z.0 # Session history in memory & file
 
 		     1	zsh_keymap_0 () {
 		     2		unset -f zshaddhistory
@@ -183,6 +185,7 @@ function test__zsh_keymap_z__when_input_is_a_function {
 		zsh_keymap_z zsh_keymap_0
 	)" "$(
 		cat <<-eof
+
 		     1	zsh_keymap_0 () {
 		     2		unset -f zshaddhistory
 		     3	}

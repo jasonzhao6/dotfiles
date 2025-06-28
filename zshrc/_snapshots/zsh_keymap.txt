@@ -27,7 +27,7 @@ Keymap List
   $ z.s                       # Source
   $ z.t                       # Test
 
-  $ z.z {name}                # Custom `which`
+  $ z.z {name}                # Custom `which` lookup
   $ z.a                       # List aliases
   $ z.a {match}* {-mismatch}* # Filter aliases
   $ z.f                       # List functions

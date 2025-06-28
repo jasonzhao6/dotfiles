@@ -9,7 +9,7 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}s # Source"
 	"${ZSH_DOT}t # Test"
 	''
-	"${ZSH_DOT}z {name} # Custom \`which\`"
+	"${ZSH_DOT}z {name} # Custom \`which\` lookup"
 	"${ZSH_DOT}a # List aliases"
 	"${ZSH_DOT}a {match}* {-mismatch}* # Filter aliases"
 	"${ZSH_DOT}f # List functions"
@@ -36,6 +36,8 @@ function zsh_keymap {
 #
 # Key mappings (Alphabetized)
 #
+
+source "$ZSHRC_DIR/$ZSH_NAMESPACE/zsh_helpers.zsh"
 
 function zsh_keymap_0 {
 	unset -f zshaddhistory
@@ -132,19 +134,28 @@ function zsh_keymap_t {
 	zsh "$ZSHRC_DIR"/_tests.zsh "$@"
 }
 
-# TODO show usage before definition
 function zsh_keymap_z {
 	local name=$1
 	[[ -z $name ]] && echo && red_bar 'name required' && return
 
+	# Verify that name exists
 	local definition; definition=$(which "$name")
 	[[ $definition == "$name not found" ]] && echo && red_bar "\`$name\` not found" && return
 
-	# If `name` in an alias, follow it
+	# Prepare regex to match keys in keymaps
+	local key_regex; key_regex="^${name:0:1}[.]${name:1} "
+
+	echo
+
+	# If `name` is a zsh alias, show the alias definition
 	local is_alias="^$name: aliased to (.+)$"
 	if [[ $definition =~ $is_alias ]]; then
-		echo
-		gray_fg "$definition"
+		gray_fg "  # \`${definition/: aliased to /\` is aliased to \`}\`"
+
+		# If the zsh alias is a keymap key, show its usage
+		if zsh_keymap_does_key_exist "$key_regex"; then
+			eval "${name:0:1} '$key_regex'"
+	 	fi
 		echo
 
 		# shellcheck disable=SC2154 # `match` is defined by `=~`
