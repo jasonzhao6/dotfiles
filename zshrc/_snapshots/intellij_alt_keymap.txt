@@ -1,7 +1,7 @@
 Keymap: intellij_alt_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-     <'> <,> <.> <p>  y   |   f   g   c  (r)  l   /   =   \ 
+     <'> <,> <.> <p> (y)  |   f   g   c  (r)  l   /   =   \ 
      (a) (o)  e   u  <i>  |   d   h   t   n   s   - 
      (;) <q> <j> <k> <x>  |   b   m   w   v   z 
 
@@ -36,3 +36,6 @@ Keymap List
   alt-k           # Resume program
   alt-i           # Step into
   alt-x           # Step out
+
+  alt-y           # Preview
+  alt-shift-y     # Editor

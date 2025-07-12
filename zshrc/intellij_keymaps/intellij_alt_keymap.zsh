@@ -34,6 +34,9 @@ INTELLIJ_ALT_KEYMAP=(
 	"alt-k # Resume program"
 	"alt-i # Step into"
 	"alt-x # Step out"
+	''
+	"alt-y # Preview"
+	"alt-shift-y # Editor"
 )
 
 keymap_init $INTELLIJ_ALT_NAMESPACE $INTELLIJ_ALT_ALIAS "${INTELLIJ_ALT_KEYMAP[@]}"

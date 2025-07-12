@@ -161,3 +161,5 @@ Keymap List
   alt-k                   # Resume program
   alt-i                   # Step into
   alt-x                   # Step out
+  alt-y                   # Preview
+  alt-shift-y             # Editor
