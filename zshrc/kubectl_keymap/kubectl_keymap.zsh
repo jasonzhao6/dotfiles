@@ -234,6 +234,8 @@ function kubectl_keymap_z {
 		alias kg='kubectl get'
 		alias kd='kubectl describe'
 
+		function kb () { kubectl exec -it "\$1" -- bash; }
+
 		$(jq "$AWS_CLI_CACHE_JQ" "$AWS_CLI_CACHE_DIR/$current_role" | trim_list)
 
 		aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $KUBECTL_DEFAULT_CLUSTER
