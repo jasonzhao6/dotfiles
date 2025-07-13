@@ -1,10 +1,10 @@
-# When profiling, set to 1; otherwise, set to <empty>
-ZSHRC_UNDER_PROFILING=
+# To profile, uncomment the line below
+# ZSHRC_UNDER_PROFILING=1
 
-# Profile `.zshrc` loading time: Start here
+# Profile `.zshrc` load time: Start here
 [[ -z $ZSHRC_UNDER_TESTING && -n $ZSHRC_UNDER_PROFILING ]] && zmodload zsh/zprof
 
-# Track `.zshrc` loading time: Start here
+# Track `.zshrc` load time: Start here
 [[ -z $ZSHRC_UNDER_TESTING ]] && ZSHRC_START_TIME=$(gdate +%s.%2N)
 
 DOTFILES_DIR="$HOME/github/jasonzhao6/dotfiles"
@@ -53,10 +53,10 @@ source "$ZSHRC_DIR/zsh_prompt.zsh"
 # Source secrets
 [[ -z $ZSHRC_UNDER_TESTING && -f $ZSHRC_SECRETS ]] && source "$ZSHRC_SECRETS"
 
-# Track `.zshrc` loading time: Finish here
+# Track `.zshrc` load time: Finish here
 if [[ -z $ZSHRC_UNDER_TESTING ]]; then
 	gray_fg "\n\`.zshrc\` loaded in $(echo "$(gdate +%s.%2N) - $ZSHRC_START_TIME" | bc) seconds"
 fi
 
-# Profile `.zshrc` loading time: Finish here
+# Profile `.zshrc` load time: Finish here
 [[ -z $ZSHRC_UNDER_TESTING && -n $ZSHRC_UNDER_PROFILING ]] && echo && zprof

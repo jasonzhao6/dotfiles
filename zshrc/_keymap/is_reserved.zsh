@@ -6,7 +6,7 @@ function is_reserved {
 	[[ ${RESERVED[$keyword]} -eq 1 ]]
 }
 
-# Explicitly un-reserved
+# To flag a keyword as un-reserved, move it here and set its value to 0
 RESERVED[aa]=0
 RESERVED[ac]=0
 RESERVED[ar]=0
