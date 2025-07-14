@@ -7,6 +7,19 @@ function test__aws_keymap {
 	)" '1'
 }; run_with_filter test__aws_keymap
 
+function test__aws_keymap_c {	assert "$(
+		aws_keymap_c
+		pbpaste
+	)" "$(
+		cat <<-eof
+
+			$(green_bar History bindings copied to pasteboard)
+			bind '"\e[A": history-search-backward'
+			bind '"\e[B": history-search-forward'
+		eof
+	)"
+}; run_with_filter test__aws_keymap_c
+
 function test__aws_keymap_o {
 	assert "$(
 		aws_keymap_o
@@ -27,16 +40,3 @@ function test__aws_keymap_o__when_filtering_for_2 {
 		eof
 	)"
 }; run_with_filter test__aws_keymap_o__when_filtering_for_2
-
-function test__aws_keymap_z {	assert "$(
-		aws_keymap_z
-		pbpaste
-	)" "$(
-		cat <<-eof
-
-			$(green_bar History bindings copied to pasteboard)
-			bind '"\e[A": history-search-backward'
-			bind '"\e[B": history-search-forward'
-		eof
-	)"
-}; run_with_filter test__aws_keymap_z

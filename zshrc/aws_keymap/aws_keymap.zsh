@@ -22,15 +22,15 @@ AWS_KEYMAP=(
 	"${AWS_DOT}ee {ec2 id} # EC2 open in new tab"
 	"${AWS_DOT}a {name} # ASG search"
 	"${AWS_DOT}aa {asg id} # ASG open in new tab"
+	"${AWS_DOT}c # Copy history bindings"
 	"${AWS_DOT}s # SSM start session with \`sudo -i\`"
 	"${AWS_DOT}sc # SSM start session with command"
 	"${AWS_DOT}sm # SSM start session"
-	"${AWS_DOT}z # Copy history bindings"
 	''
 	"${AWS_DOT}m {name} # Secret Manager get latest version"
 	"${AWS_DOT}m {name} {version} # Secret Manager get by version"
 	"${AWS_DOT}md {name} # Secret Manager delete"
-	"${AWS_DOT}p {name} # Parameter Store get latest version"
+	"${AWS_DOT}r {name} # Parameter Store get latest version"
 	"${AWS_DOT}t {message} # STS decode"
 	''
 	"${AWS_DOT}n {name} # SNS search"
@@ -42,8 +42,8 @@ AWS_KEYMAP=(
 	"${AWS_DOT}qr {queue url} {count}? # SQS receive message"
 	"${AWS_DOT}qpurge {queue url} # SQS purge"
 	''
-	"${AWS_DOT}c {name} # Code Pipeline search"
-	"${AWS_DOT}cc {name} # Code Pipeline get latest status"
+	"${AWS_DOT}p {name} # Code Pipeline search"
+	"${AWS_DOT}pp {name} # Code Pipeline get latest status"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
@@ -104,28 +104,17 @@ function aws_keymap_aa {
 }
 
 function aws_keymap_c {
-	local name=$1
+	cat <<-eof | pbcopy
+		bind '"\e[A": history-search-backward'
+		bind '"\e[B": history-search-forward'
+	eof
 
-	aws codepipeline list-pipelines \
-		--query "pipelines[?contains(name, '$name')].[name]" \
-		--output text |
-		args_keymap_s "$name"
+	echo
+	green_bar 'History bindings copied to pasteboard'
 }
 
 function aws_keymap_c1 {
 	echo_eval 'export AWS_DEFAULT_REGION=eu-central-1'
-}
-
-AWS_KEYMAP_CC_STATUS='stageStates[-1].actionStates[-1].latestExecution.status'
-AWS_KEYMAP_CC_TIMESTAMP='stageStates[-1].actionStates[-1].latestExecution.lastStatusChange'
-
-function aws_keymap_cc {
-	local name=$1
-
-	aws codepipeline get-pipeline-state \
-		--name "$name" \
-		--query "[pipelineName, $AWS_KEYMAP_CC_STATUS, $AWS_KEYMAP_CC_TIMESTAMP]" \
-		--output text
 }
 
 function aws_keymap_e {
@@ -203,15 +192,22 @@ function aws_keymap_o {
 function aws_keymap_p {
 	local name=$1
 
-	local parameter; parameter=$(
-		aws ssm get-parameter \
-			--name "$name"	\
-			--query Parameter.Value \
-			--output text
-	)
+	aws codepipeline list-pipelines \
+		--query "pipelines[?contains(name, '$name')].[name]" \
+		--output text |
+		args_keymap_s "$name"
+}
 
-	# If it's json, prettify with `jq`
-	[[ $parameter == \{*\} ]] && echo "$parameter" | jq || echo "$parameter"
+AWS_KEYMAP_PP_STATUS='stageStates[-1].actionStates[-1].latestExecution.status'
+AWS_KEYMAP_PP_TIMESTAMP='stageStates[-1].actionStates[-1].latestExecution.lastStatusChange'
+
+function aws_keymap_pp {
+	local name=$1
+
+	aws codepipeline get-pipeline-state \
+		--name "$name" \
+		--query "[pipelineName, $AWS_KEYMAP_PP_STATUS, $AWS_KEYMAP_PP_TIMESTAMP]" \
+		--output text
 }
 
 function aws_keymap_q {
@@ -253,6 +249,20 @@ function aws_keymap_qr {
 		jq '.Messages[].Body | fromjson'
 }
 
+function aws_keymap_r {
+	local name=$1
+
+	local parameter; parameter=$(
+		aws ssm get-parameter \
+			--name "$name"	\
+			--query Parameter.Value \
+			--output text
+	)
+
+	# If it's json, prettify with `jq`
+	[[ $parameter == \{*\} ]] && echo "$parameter" | jq || echo "$parameter"
+}
+
 function aws_keymap_s {
 	local id=$1
 
@@ -287,14 +297,4 @@ function aws_keymap_t {
 
 function aws_keymap_w2 {
 	echo_eval 'export AWS_DEFAULT_REGION=us-west-2'
-}
-
-function aws_keymap_z {
-	cat <<-eof | pbcopy
-		bind '"\e[A": history-search-backward'
-		bind '"\e[B": history-search-forward'
-	eof
-
-	echo
-	green_bar 'History bindings copied to pasteboard'
 }

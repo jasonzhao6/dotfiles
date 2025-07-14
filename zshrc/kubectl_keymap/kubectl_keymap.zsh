@@ -20,8 +20,8 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}ll {pod} # Tail logs"
 	"${KUBECTL_DOT}lp {pod} # Show previous logs"
 	"${KUBECTL_DOT}b {pod} # Exec into bash"
-	"${KUBECTL_DOT}c {command} {pod} # Exec a command"
-	"${KUBECTL_DOT}z # Copy history bindings and \`kubectl\` helpers"
+	"${KUBECTL_DOT}bc {command} {pod} # Exec a command"
+	"${KUBECTL_DOT}c # Copy history bindings and \`kubectl\` helpers"
 	''
 	"${KUBECTL_DOT}s {count} {deployment} # Scale a deployment"
 	"${KUBECTL_DOT}ss {type} {name} # Restart a deployment/stateful set/daemon set"
@@ -66,11 +66,38 @@ function kubectl_keymap_b {
 	kubectl exec -it "$pod" -- bash
 }
 
-function kubectl_keymap_c {
+function kubectl_keymap_bc {
 	local command=("${@[1,-2]}")
 	local pod="${*[-1]}"
 
 	kubectl exec "$pod" -- "${command[@]}"
+}
+
+function kubectl_keymap_c {
+	# `AWS_CLI_CACHE_DIR` contains cached creds for multiple roles
+	# To get only the current role, empty the cache and run a command
+	rm -rf "$AWS_CLI_CACHE_DIR"
+	aws sts get-caller-identity
+	local current_role; current_role=$(ls "$AWS_CLI_CACHE_DIR")
+
+	cat <<-eof | pbcopy
+		bind '"\e[A": history-search-backward'
+		bind '"\e[B": history-search-forward'
+
+		alias k='kubectl'
+		alias kg='kubectl get'
+		alias kd='kubectl describe'
+
+		function kb () { kubectl exec -it "\$1" -- bash; }
+
+		$(jq "$AWS_CLI_CACHE_JQ" "$AWS_CLI_CACHE_DIR/$current_role" | trim_list)
+
+		aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $KUBECTL_DEFAULT_CLUSTER
+		kubectl config set-context --current --namespace=$GITHUB_DEFAULT_ORG
+	eof
+
+	echo
+	green_bar 'History bindings and `kubectl` helpers copied to pasteboard'
 }
 
 function kubectl_keymap_d {
@@ -218,30 +245,3 @@ AWS_CLI_CACHE_JQ=$(
 		]
 	eof
 )
-
-function kubectl_keymap_z {
-	# `AWS_CLI_CACHE_DIR` contains cached creds for multiple roles
-	# To get only the current role, empty the cache and run a command
-	rm -rf "$AWS_CLI_CACHE_DIR"
-	aws sts get-caller-identity
-	local current_role; current_role=$(ls "$AWS_CLI_CACHE_DIR")
-
-	cat <<-eof | pbcopy
-		bind '"\e[A": history-search-backward'
-		bind '"\e[B": history-search-forward'
-
-		alias k='kubectl'
-		alias kg='kubectl get'
-		alias kd='kubectl describe'
-
-		function kb () { kubectl exec -it "\$1" -- bash; }
-
-		$(jq "$AWS_CLI_CACHE_JQ" "$AWS_CLI_CACHE_DIR/$current_role" | trim_list)
-
-		aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $KUBECTL_DEFAULT_CLUSTER
-		kubectl config set-context --current --namespace=$GITHUB_DEFAULT_ORG
-	eof
-
-	echo
-	green_bar 'History bindings and `kubectl` helpers copied to pasteboard'
-}
