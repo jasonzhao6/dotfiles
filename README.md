@@ -74,33 +74,33 @@ Keymap: main_keymap.all_namespaces.zsh
 
 All Namespaces
 
-  $ a  # Custom aliases: args_keymap.zsh
-  $ s  # Custom aliases: aws_keymap.zsh
-  $ d  # Custom aliases: docker_keymap.zsh
-  $ g  # Custom aliases: git_keymap.zsh
-  $ h  # Custom aliases: github_keymap.zsh
-  $ k  # Custom aliases: kubectl_keymap.zsh
-  $ m  # Custom aliases: main_keymap.zsh
-  $ n  # Custom aliases: nav_keymap.zsh
-  $ o  # Custom aliases: other_keymap.zsh
-  $ t  # Custom aliases: terraform_keymap.zsh
-  $ z  # Custom aliases: zsh_keymap.zsh
+  $ a  # Keymap: args_keymap.zsh
+  $ s  # Keymap: aws_keymap.zsh
+  $ d  # Keymap: docker_keymap.zsh
+  $ g  # Keymap: git_keymap.zsh
+  $ h  # Keymap: github_keymap.zsh
+  $ k  # Keymap: kubectl_keymap.zsh
+  $ m  # Keymap: main_keymap.zsh
+  $ n  # Keymap: nav_keymap.zsh
+  $ o  # Keymap: other_keymap.zsh
+  $ t  # Keymap: terraform_keymap.zsh
+  $ z  # Keymap: zsh_keymap.zsh
 
-  $ i  # Custom shortcuts: intellij_all.zsh
-  $ ia # Custom shortcuts: intellij_alt_keymap.zsh
-  $ ic # Custom shortcuts: intellij_cmd_keymap.zsh
-  $ it # Custom shortcuts: intellij_ctrl_keymap.zsh
-  $ vv # Custom shortcuts: vimium_keymap.zsh
-  $ v  # Custom shortcuts: vimium_search_keymap.zsh
+  $ i  # Keyboard shortcuts: intellij_all.zsh
+  $ ia # Keyboard shortcuts: intellij_alt_keymap.zsh
+  $ ic # Keyboard shortcuts: intellij_cmd_keymap.zsh
+  $ it # Keyboard shortcuts: intellij_ctrl_keymap.zsh
+  $ vv # Keyboard shortcuts: vimium_keymap.zsh
+  $ v  # Keyboard shortcuts: vimium_search_keymap.zsh
 
-  $ mg # Default shortcuts: main_keymap.gmail.zsh
-  $ mi # Default shortcuts: main_keymap.vi.zsh
-  $ ml # Default shortcuts: main_keymap.less.zsh
-  $ mm # Default shortcuts: main_keymap.textmate.zsh
-  $ mn # Default shortcuts: main_keymap.notion.zsh
-  $ mo # Default shortcuts: main_keymap.macos.zsh
-  $ ms # Default shortcuts: main_keymap.slack.zsh
-  $ mt # Default shortcuts: main_keymap.terminal.zsh
+  $ mg # Default keyboard shortcuts: main_keymap.gmail.zsh
+  $ mi # Default keyboard shortcuts: main_keymap.vi.zsh
+  $ ml # Default keyboard shortcuts: main_keymap.less.zsh
+  $ mm # Default keyboard shortcuts: main_keymap.textmate.zsh
+  $ mn # Default keyboard shortcuts: main_keymap.notion.zsh
+  $ mo # Default keyboard shortcuts: main_keymap.macos.zsh
+  $ ms # Default keyboard shortcuts: main_keymap.slack.zsh
+  $ mt # Default keyboard shortcuts: main_keymap.terminal.zsh
 ```
 
 **Note:** My keyboard layout may look different than yours. I'm using the [Dvorak keyboard layout](https://en.wikipedia.org/wiki/Dvorak_keyboard_layout).
