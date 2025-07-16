@@ -18,6 +18,7 @@ MACOS_KEYMAP=(
 	'cmd-ctrl-f # Toggle full screen'
 	'^cmd-shift-f # Toggle Chrome toolbar in full screen'
 	'cmd-ctrl-{space} # Show character viewer'
+	"cmd-shift-c # Show Terminal's color picker"
 	'cmd-shift-x # Strike through'
 	''
 	'cmd-alt-{esc} # Force quit applications'
