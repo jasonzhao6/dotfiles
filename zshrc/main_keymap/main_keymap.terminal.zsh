@@ -18,4 +18,8 @@ TERMINAL_KEYMAP=(
 	'ctrl-e # Go to end of line'
 	'ctrl-c # Send interrupt signal'
 	'ctrl-d # Send end-of-file signal'
+	''
+	'ctrl-s # Pause output scrolling'
+	'ctrl-q # Resume output scrolling'
+	''
 )
