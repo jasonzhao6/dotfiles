@@ -5,6 +5,7 @@ VIMIUM_SEARCH_KEYMAP=(
 	'c # Github Code Search (TENGF)'
 	'cc # Github Code Search'
 	''
+	'd # Datadog Deployment Events'
 	'dl # Datadog Dashboard Lists (go/dl)'
 	''
 	'- # ECR (rel-2025.{MM.DD})'
