@@ -2,11 +2,11 @@
 
 When I transitioned from web development to infrastructure engineering, I started living in the terminal.
 
-Every day brought the minor annoyance of constructing long commands and scrolling through pages of documentation I've already visited countless times before.
+Every day brought the minor annoyance of constructing long commands by scrolling through endless pages of documentation I've already visited countless times before.
 
-During one Christmas break, I built this hobby project: A fast-loading zsh keymap system that reduces cognitive load and keystrokes for heavy command line users.
+During one Christmas break, I built this hobby project: A fast-loading zsh keymap system that reduces cognitive load and simplifies complex commands, mostly for me to recall my own knowledge.
 
-### Testimonial
+## Testimonial
 
 > *"I got to see first-hand how your shell shortcuts really save time during critical moments. Magic."*
 > 
@@ -16,18 +16,20 @@ During one Christmas break, I built this hobby project: A fast-loading zsh keyma
 
 This project organizes my favorite and most frequently used 1) shell commands and 2) keyboard shortcuts into namespaced keymaps.
 
-For shell commands, it has keymaps for **AWS, Git, Kubectl, Terraform, etc**. It also has keymaps for my custom workflows like cherry-picking a line from the previous output to pass to the next command.
+For shell commands, it has keymaps for **[AWS](./zshrc/_snapshots/aws_keymap.txt), [Git](./zshrc/_snapshots/git_keymap.txt), [Kubectl](./zshrc/_snapshots/kubectl_keymap.txt), [Terraform](./zshrc/_snapshots/terraform_keymap.txt), etc**. It also has keymaps for my custom workflows like cherry-picking a line from the previous output as **[Args](./zshrc/_snapshots/args_keymap.txt)** to pass to the next command.
 
-For keyboard shortcuts, it catalogs default keymaps for **MacOS, Gmail, Slack, Notion, etc**. It also catalogs my custom keymaps for **IntelliJ and Vimium**. 
+For keyboard shortcuts, it catalogs default keymaps for **[MacOS](./zshrc/_snapshots/main_keymap.macos.txt), [Gmail](./zshrc/_snapshots/main_keymap.gmail.txt), [Slack](./zshrc/_snapshots/main_keymap.slack.txt), [Notion](./zshrc/_snapshots/main_keymap.notion.txt), etc**. It also catalogs my custom keymaps for **IntelliJ** ([cmd](./zshrc/_snapshots/intellij_cmd_keymap.txt), [ctrl](./zshrc/_snapshots/intellij_ctrl_keymap.txt), [alt](./zshrc/_snapshots/intellij_alt_keymap.txt)) and **Vimium** ([nav](./zshrc/_snapshots/vimium_keymap.txt), [search](./zshrc/_snapshots/vimium_search_keymap.txt)). 
 
-### Features
+## Features
 
-- **Namespace Isolation**: Each keymap gets its own namespace and a 1-letter alias
-- **Fast Discovery**: Type any alias to see its available commands and search them
-- **Keymap Invocation**: Type `<alias><key>` (2-3 letters) to invoke a key mapping
-- **Conflict Prevention**: Conflicts with reserved keywords require explicit overwrite
+- **Namespace Isolation**: Each keymap gets its own namespace with a [1-letter alias](#example-1-list-all-keymap-namespaces-with-ma)
+- **Fast Discovery**: Type any alias to [print its available commands](#example-2-print-the-terraform-keymap-usage-with-t), or [search them](#example-3-search-the-terraform-keymap-usage-with-t-ini)
+- **Keymap Invocation**: Type `<ALIAS><KEY>` (2-3 letters) to [invoke a key mapping](#example-5-invoke-the-terraform-init--upgrade-mapping-with-tiu)
+- **Conflict Prevention**: Conflicts with standard commands require explicit overwrite
 
 ## Installation
+
+**Note:** You could also browse [snapshots](./zshrc/_snapshots) of keymaps without installation.
 
 1. Clone this repository:
    ```
@@ -44,16 +46,16 @@ For keyboard shortcuts, it catalogs default keymaps for **MacOS, Gmail, Slack, N
    touch ~/.zshrc.secrets
    ```
 
-1. Restart your terminal or source the config:
+1. Restart your terminal, or re-source your `~/.zshrc`:
    ```
    source ~/.zshrc
    ```
 
-### Dependencies
+## Dependencies
 
 - Zsh shell
-- Keymap specific tools: `aws`, `git`, `kubectl`, `terraform`, etc
-- Various misc tools: `jq`, `pgrep`, `pcregrep`, `zprof`, etc
+- Keymap specific tools: `aws`, `git`, `gh`, `kubectl`, `terraform`, etc
+- Various misc tools: `colordiff`, `jq`, `pgrep`, `pcregrep`, `zprof`, etc
 
 ## Usage
 
@@ -207,11 +209,19 @@ Terraform has been successfully initialized!
 
 ## Testing
 
+- **Framework Tests**: Keymap framework code is unit tested
+- **Keymap Tests**: Complex key mappings are unit tested
+- **Misc Tests**: 
+  - Every test that is defined is actually invoked
+  - Subjects and tests are defined in the same order
+  - Each keymap entry has a corresponding implementation
+  - All key mapping implementation functions are alphabetized
+
 ```
 # Go to project folder
 cd <project dir>
 
-# Run all tests
+# Run all test sections
 zt
 
 # Run a specific test section (1-5)
@@ -220,27 +230,17 @@ zt <num>
 # Run tests matching a partial test name
 zt <string>
 
-# Enable profiling during tests
+# Enable profiling during testing
 ZSHRC_TESTS_UNDER_PROFILING=1 zt
 ```
 
-### Test Features
- 
-- **Framework Tests**: Keymap framework code is unit tested
-- **Keymap Tests**: Complex key mappings are unit tested
-- **Misc Verifications**: 
-  - All tests defined are also invoked
-  - Subjects and tests are defined in the same order
-  - All keymap entries have corresponding key mapping functions
-  - Key mapping functions are alphabetized
-
-## Performance
-
-This project was built with fast load time in mind. Load time is measured by how quickly a new terminal tab opens and becomes ready for use.
+## Load Time
 
 ### Expected Performance
 
-On a 2019 Intel MacBook Pro, typical load times range from 0.08s - 0.15s for opening a new terminal tab. Load time is displayed automatically when opening new tabs.
+This project was built with fast load time in mind. Load time is measured by how quickly a new terminal tab opens and becomes ready for use.
+
+On a 2019 Intel MacBook Pro, typical load times range from 0.08s - 0.15s. Load time is displayed automatically when opening new tabs.
 
 ```
 Last login: Sat Jul 12 16:10:06 on ttys003
@@ -255,7 +255,7 @@ $
 
 If load times spike above the normal range, debug with `zprof`.
 
-Go to `main.zsh`, follow instruction at the top of the file to uncomment `ZSHRC_UNDER_PROFILING=1`. Then open a new terminal tab, and `zprof` output will display automatically. Study the `zprof` output to identify:
+Go to [main.zsh](./zshrc/main.zsh), follow instruction at the top of the file to uncomment `ZSHRC_UNDER_PROFILING=1`. Then open a new terminal tab, and `zprof` output will display automatically. Study the `zprof` output to identify:
 
 - Functions consuming the most time
 - Number of calls per function
@@ -287,9 +287,9 @@ num  calls                time                       self            name
 
 ```
 zshrc/
-├── _keymap/                # The underlying keymap framework code
-├── _snapshots/             # Snapshots of usages for lookup outside of a shell
-├── _tests/                 # Testing harness code and unit tests
+├── _keymap/                # The keymap framework
+├── _tests/                 # The testing framework + unit tests
+├── _snapshots/             # Snapshots of keymap usages (for lookup outside of a shell)
 ├── *_keymap/               # Keymaps organized by namespaces
 │   ├── args_keymap/
 │   ├── aws_keymap/
@@ -305,35 +305,35 @@ zshrc/
 │   ├── vimium_keymaps/
 │   └── zsh_keymap/
 ├── _tests.zsh              # The entry point to run unit tests
-├── colors.zsh              # Color definitions and helper functions
 ├── main.zsh                # The entry point to source keymaps
 ├── utils.zsh               # Helper functions used by multiple keymaps
+├── colors.zsh              # Color-specific helper functions
 └── zsh_*.zsh               # Zsh configuration tweaks
     ├── zsh_arrow_keys.zsh
     ├── zsh_history.zsh
     └── zsh_prompt.zsh
 
 vimium/                     # Vimium keymaps for browser navigation
-intellij_settings.zip       # IntelliJ settings export
+
 *.txt                       # Non-zsh dotfiles
 ├── colordiffrc.txt
 ├── gitignore.txt
 ├── shellcheckrc.txt
 ├── terraformrc.txt
 └── tm_properties.txt
+
+README.md                   # This file
 ```
 
 ### Adding New Keymaps
 
-1. Create a new directory: `<example>_keymap/`
-1. Add keymap definition file: `<example>_keymap.zsh`
-1. Add corresponding tests in `_tests/<example>_keymap/`
-1. Add corresponding entry in `main_keymap.all_namespaces.zsh`
-1. Source it in `main.zsh`
+1. Add keymap definition file: `<example>_keymap/<example>_keymap.zsh`
+1. Add corresponding tests in `_tests/<example>_keymap/test_<example>_keymap.zsh`
+1. Source it in [main.zsh](./zshrc/main.zsh)
 
 ### Keymap Template
 ```
-<EXAMPLE>_EXAMPLESPACE='<example>_keymap'
+<EXAMPLE>_NAMESPACE='<example>_keymap'
 <EXAMPLE>_ALIAS='<alias>'
 <EXAMPLE>_DOT="${<EXAMPLE>_ALIAS}${KEYMAP_DOT}"
 
@@ -341,10 +341,10 @@ intellij_settings.zip       # IntelliJ settings export
 	"${<EXAMPLE>_DOT}<key> # <description>"
 )
 
-keymap_init $<EXAMPLE>_EXAMPLESPACE $<EXAMPLE>_ALIAS "${<EXAMPLE>_KEYMAP[@]}"
+keymap_init $<EXAMPLE>_NAMESPACE $<EXAMPLE>_ALIAS "${<EXAMPLE>_KEYMAP[@]}"
 
 function <example>_keymap {
-	keymap_show $<EXAMPLE>_EXAMPLESPACE $<EXAMPLE>_ALIAS ${#<EXAMPLE>_KEYMAP} "${<EXAMPLE>_KEYMAP[@]}" "$@"
+	keymap_show $<EXAMPLE>_NAMESPACE $<EXAMPLE>_ALIAS ${#<EXAMPLE>_KEYMAP} "${<EXAMPLE>_KEYMAP[@]}" "$@"
 }
 
 #
@@ -356,8 +356,6 @@ function <example>_keymap_<key> {
 }
 ```
 
-## Contributing
+## Caveat
 
-This is a personal dotfiles collection with no backward compatibility guarantees. Keymaps may change based on my workflow needs.
-
-Feel free to fork and adapt for your own use, but expect this to remain a personal tool rather than a general-purpose framework.
+This is a personal dotfiles collection that evolves with my workflow needs. It does not have any guarantee of backward compatibility.

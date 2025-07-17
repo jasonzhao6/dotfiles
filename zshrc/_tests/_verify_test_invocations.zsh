@@ -3,7 +3,7 @@ function verify_test_invocations_section {
 
 	echo
 	echo
-	echo "$section_number: Verify all tests defined are also invoked"
+	echo "$section_number: Verify every test that is defined is actually invoked"
 
 	init
 
@@ -11,7 +11,7 @@ function verify_test_invocations_section {
 		verify_test_invocations "$test_file"
 	done
 
-	print_summary 'tests were defined and invoked'
+	print_summary 'tests that are defined are actually invoked'
 }
 
 function verify_test_invocations {

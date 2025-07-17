@@ -3,7 +3,7 @@ function verify_keymap_ordering_section {
 
 	echo
 	echo
-	echo "$section_number: Verify key mapping functions are alphabetized"
+	echo "$section_number: Verify all key mapping implementation functions are alphabetized"
 
 	init
 
