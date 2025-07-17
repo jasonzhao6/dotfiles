@@ -13,7 +13,7 @@ function verify_test_ordering_section {
 		verify_test_ordering "$subject_file" "$test_file"
 	done
 
-	print_summary 'subjects have tests, and the tests are defined in the same order as their subjects'
+	print_summary 'subjects and tests are defined in the same order'
 }
 
 function verify_test_ordering {
