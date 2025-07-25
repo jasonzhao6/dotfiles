@@ -33,6 +33,7 @@ MACOS_KEYMAP=(
 	'fn-{del} # Delete forward'
 	'fn-{f} # Toggle full screen'
 	'fn-{c} # Toggle control center'
+	'fn-{d} # Start dictation'
 	'fn-{m} # Focus on menu bar'
 	'fn-{a} # Focus on dock'
 	'fn-{h} # Show desktop'
