@@ -54,8 +54,8 @@ For keyboard shortcuts, it catalogs default keymaps for **[MacOS](./zshrc/_snaps
 ## Dependencies
 
 - Zsh shell
-- Keymap specific tools: `aws`, `git`, `gh`, `kubectl`, `terraform`, etc
-- Various misc tools: `colordiff`, `jq`, `pgrep`, `pcregrep`, `zprof`, etc
+- Main CLIs: `aws`, `git`, `gh`, `kubectl`, `terraform`, Docker Desktop
+- Helper CLIs: `colordiff`, `coreutils` (for `gdate`), `pcre` (for `pcregrep`)
 
 ## Usage
 
