@@ -98,23 +98,13 @@ ZSH_OTHER_DOTFILES=(
 	tm_properties
 )
 
+ZSHRC_SECRETS_DIR="$HOME/Downloads/_Archive/zsh/.zshrc.secrets"
+ZSHRC_SECRETS_LATEST="$ZSHRC_SECRETS_DIR/latest.txt"
+
 function zsh_keymap_p {
 	for dotfile in "${ZSH_OTHER_DOTFILES[@]}"; do
 		cp "$HOME/.$dotfile" "$DOTFILES_DIR/$dotfile.txt"
 	done
-}
-
-function zsh_keymap_P {
-	for dotfile in "${ZSH_OTHER_DOTFILES[@]}"; do
-		cp "$DOTFILES_DIR/$dotfile.txt" "$HOME/.$dotfile"
-	done
-}
-
-ZSHRC_SECRETS_DIR="$HOME/Downloads/_Archive/zsh/.zshrc.secrets"
-ZSHRC_SECRETS_LATEST="$ZSHRC_SECRETS_DIR/latest.txt"
-
-function zsh_keymap_s {
-	source ~/.zshrc
 
 	# Whenever `ZSHRC_SECRETS` changes, take a snapshot
 	if [[ -f $ZSHRC_SECRETS ]]; then
@@ -128,6 +118,18 @@ function zsh_keymap_s {
 		cp "$ZSHRC_SECRETS" "$ZSHRC_SECRETS_LATEST"
 		cp "$ZSHRC_SECRETS" "$ZSHRC_SECRETS_DIR/$(date +'%y.%m.%d').txt"
 	fi
+}
+
+function zsh_keymap_P {
+	for dotfile in "${ZSH_OTHER_DOTFILES[@]}"; do
+		cp "$DOTFILES_DIR/$dotfile.txt" "$HOME/.$dotfile"
+	done
+
+	cp "$ZSHRC_SECRETS_LATEST" "$ZSHRC_SECRETS"
+}
+
+function zsh_keymap_s {
+	source ~/.zshrc
 }
 
 function zsh_keymap_t {
