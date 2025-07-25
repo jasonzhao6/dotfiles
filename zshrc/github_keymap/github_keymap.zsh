@@ -85,7 +85,7 @@ function github_keymap_gg {
 function github_keymap_h {
 	local filters=("$@")
 
-	cd ~/github/"$(github_keymap_org)" && nav_keymap_n "${filters[@]}"
+	cd ~/GitHub/"$(github_keymap_org)" && nav_keymap_n "${filters[@]}"
 }
 
 function github_keymap_n {
@@ -141,7 +141,7 @@ function github_keymap_t {
 	fi
 
 	# Note: Do not use `local path`- It will overwrite $PATH in subshell
-	local target_path; target_path=~/github/$(github_keymap_org)/$repo
+	local target_path; target_path=~/GitHub/$(github_keymap_org)/$repo
 
 	# If it's not a folder path, error
 	if [[ ! -d $target_path  ]]; then

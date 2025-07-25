@@ -7,7 +7,7 @@
 # Track `.zshrc` load time: Start here
 [[ -z $ZSHRC_UNDER_TESTING ]] && ZSHRC_START_TIME=$(gdate +%s.%2N)
 
-DOTFILES_DIR="$HOME/github/jasonzhao6/dotfiles"
+DOTFILES_DIR="$HOME/GitHub/jasonzhao6/dotfiles"
 ZSHRC_DIR="$DOTFILES_DIR/zshrc"
 ZSHRC_SECRETS="$HOME/.zshrc.secrets"
 

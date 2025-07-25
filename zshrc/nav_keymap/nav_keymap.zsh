@@ -48,7 +48,7 @@ function nav_keymap_a {
 }
 
 function nav_keymap_d {
-	cd ~/github/jasonzhao6/dotfiles && nav_keymap_n || true
+	cd ~/GitHub/jasonzhao6/dotfiles && nav_keymap_n || true
 }
 
 function nav_keymap_e {
@@ -94,7 +94,7 @@ function nav_keymap_oo {
 }
 
 function nav_keymap_s {
-	cd ~/github/jasonzhao6/scratch && nav_keymap_n || true
+	cd ~/GitHub/jasonzhao6/scratch && nav_keymap_n || true
 }
 
 function nav_keymap_t {

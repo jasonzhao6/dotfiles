@@ -255,7 +255,7 @@ function other_keymap_m {
 }
 
 function other_keymap_n {
-	~/github/jasonzhao6/tt/tt.rb "$@"
+	~/GitHub/jasonzhao6/tt/tt.rb "$@"
 }
 
 function other_keymap_o {
@@ -290,7 +290,7 @@ function other_keymap_q {
 	local sql=$*
 
 	# shellcheck disable=SC2086 # Empty quotes break Ruby's `gets` method
-	ruby ~/github/jasonzhao6/sql_formatter.rb/run.rb $sql
+	ruby ~/GitHub/jasonzhao6/sql_formatter.rb/run.rb $sql
 }
 
 function other_keymap_r {
