@@ -66,7 +66,7 @@ keymap_init $GIT_NAMESPACE $GIT_ALIAS "${GIT_KEYMAP[@]}"
 function git_keymap {
 	# If the first arg is a branch in the current repo, delegate to `git_keymap_k`
 	local branch=$1
-	if egrep --quiet "^(\*| ) $branch$" <(git branch); then
+	if git status > /dev/null 2>&1 && egrep --quiet "^(\*| ) $branch$" <(git branch); then
 		git_keymap_k "$branch"
 		return
 	fi
