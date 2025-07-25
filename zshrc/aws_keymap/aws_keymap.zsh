@@ -61,9 +61,11 @@ AWS_URL="https://$AWS_DEFAULT_REGION.console.aws.amazon.com"
 
 source "$ZSHRC_DIR/$AWS_NAMESPACE/aws_helpers.zsh"
 
-for aws_keymap_mq2 in "$HOME/.config/zsh/config.d/"*.zsh; do
-	source "${aws_keymap_mq2}"
-done; unset aws_keymap_mq2
+if [[ -d "$HOME/.config/zsh/config.d" ]]; then
+	for aws_keymap_mq2 in "$HOME/.config/zsh/config.d/"*.zsh; do
+		source "${aws_keymap_mq2}"
+	done; unset aws_keymap_mq2
+fi
 
 function aws_keymap_- {
 	mq2 --restore
