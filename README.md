@@ -240,12 +240,12 @@ ZSHRC_TESTS_UNDER_PROFILING=1 zt
 
 This project was built with fast load time in mind. Load time is measured by how quickly a new terminal tab opens and becomes ready for use.
 
-On a 2019 Intel MacBook Pro, typical load times range from 0.08s - 0.15s. Load time is displayed automatically when opening new tabs.
+On a 2023 M3 MacBook Pro, typical load time is 0.04s - 0.05s. Load time is displayed automatically when opening new tabs.
 
 ```
-Last login: Sat Jul 12 16:10:06 on ttys003
+Last login: Thu Jul 24 18:32:47 on ttys011
 
-`.zshrc` loaded in .10 seconds
+`.zshrc` loaded in .04 seconds
 
 ~
 $
@@ -262,23 +262,23 @@ Go to [main.zsh](./zshrc/main.zsh), follow instruction at the top of the file to
 - Cumulative time spent in each component
 
 ```
-Last login: Sat Jul 12 16:10:07 on ttys004
+Last login: Thu Jul 24 18:34:32 on ttys011
 
-`.zshrc` loaded in .11 seconds
+`.zshrc` loaded in .05 seconds
 
 num  calls                time                       self            name
 -----------------------------------------------------------------------------------
- 1)   17          12.13     0.71   30.90%     12.13     0.71   30.90%  keymap_has_disjoint_dups
- 2)   11          16.26     1.48   41.44%      8.38     0.76   21.35%  keymap_set_dot_aliases
- 3)   17           7.23     0.43   18.41%      7.23     0.43   18.41%  keymap_has_dot_alias
- 4)  252           8.72     0.03   22.23%      6.54     0.03   16.65%  keymap_set_alias
- 5)   17          39.15     2.30   99.74%      2.69     0.16    6.85%  keymap_init
- 6)  252           2.19     0.01    5.57%      2.19     0.01    5.57%  is_reserved
- 7)    1           0.04     0.04    0.10%      0.04     0.04    0.10%  gray_fg
- 8)    1           0.03     0.03    0.07%      0.03     0.03    0.07%  color
- 9)    1           0.03     0.03    0.07%      0.01     0.01    0.04%  args_history_init
-10)    1           0.01     0.01    0.03%      0.01     0.01    0.03%  args_history_reset
-11)    1           0.01     0.01    0.02%      0.01     0.01    0.02%  other_keymap_k_reset
+ 1)   17           4.58     0.27   32.21%      4.58     0.27   32.21%  keymap_has_disjoint_dups
+ 2)   17           2.95     0.17   20.75%      2.95     0.17   20.75%  keymap_has_dot_alias
+ 3)   11           5.39     0.49   37.93%      2.89     0.26   20.37%  keymap_set_dot_aliases
+ 4)  252           2.72     0.01   19.15%      1.98     0.01   13.94%  keymap_set_alias
+ 5)   17          14.16     0.83   99.68%      1.02     0.06    7.20%  keymap_init
+ 6)  252           0.74     0.00    5.20%      0.74     0.00    5.20%  is_reserved
+ 7)    1           0.02     0.02    0.15%      0.02     0.02    0.15%  gray_fg
+ 8)    1           0.01     0.01    0.07%      0.01     0.01    0.07%  color
+ 9)    1           0.01     0.01    0.05%      0.01     0.01    0.05%  args_history_reset
+10)    1           0.01     0.01    0.09%      0.01     0.01    0.04%  args_history_init
+11)    1           0.00     0.00    0.01%      0.00     0.00    0.01%  other_keymap_k_reset
 ```
 
 ## Customization
