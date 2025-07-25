@@ -9,7 +9,7 @@ During one Christmas break, I built this hobby project: A fast-loading zsh keyma
 ## Testimonial
 
 > *"I got to see first-hand how your shell shortcuts really save time during critical moments. Magic."*
-> 
+>
 > — Another Infrastructure Engineer
 
 ## Overview
@@ -18,7 +18,7 @@ This project organizes my favorite and most frequently used 1) shell commands an
 
 For shell commands, it has keymaps for **[AWS](./zshrc/_snapshots/aws_keymap.txt), [Git](./zshrc/_snapshots/git_keymap.txt), [Kubectl](./zshrc/_snapshots/kubectl_keymap.txt), [Terraform](./zshrc/_snapshots/terraform_keymap.txt), etc**. It also has keymaps for my custom workflows like cherry-picking a line from the previous output as **[Args](./zshrc/_snapshots/args_keymap.txt)** to pass to the next command.
 
-For keyboard shortcuts, it catalogs default keymaps for **[MacOS](./zshrc/_snapshots/main_keymap.macos.txt), [Gmail](./zshrc/_snapshots/main_keymap.gmail.txt), [Slack](./zshrc/_snapshots/main_keymap.slack.txt), [Notion](./zshrc/_snapshots/main_keymap.notion.txt), etc**. It also catalogs my custom keymaps for **IntelliJ** ([cmd](./zshrc/_snapshots/intellij_cmd_keymap.txt), [ctrl](./zshrc/_snapshots/intellij_ctrl_keymap.txt), [alt](./zshrc/_snapshots/intellij_alt_keymap.txt)) and **Vimium** ([nav](./zshrc/_snapshots/vimium_keymap.txt), [search](./zshrc/_snapshots/vimium_search_keymap.txt)). 
+For keyboard shortcuts, it catalogs default keymaps for **[MacOS](./zshrc/_snapshots/main_keymap.macos.txt), [Gmail](./zshrc/_snapshots/main_keymap.gmail.txt), [Slack](./zshrc/_snapshots/main_keymap.slack.txt), [Notion](./zshrc/_snapshots/main_keymap.notion.txt), etc**. It also catalogs my custom keymaps for **IntelliJ** ([cmd](./zshrc/_snapshots/intellij_cmd_keymap.txt), [ctrl](./zshrc/_snapshots/intellij_ctrl_keymap.txt), [alt](./zshrc/_snapshots/intellij_alt_keymap.txt)) and **Vimium** ([nav](./zshrc/_snapshots/vimium_keymap.txt), [search](./zshrc/_snapshots/vimium_search_keymap.txt)).
 
 ## Features
 
@@ -66,9 +66,9 @@ $ ma
 
 Keymap: main_keymap.all_namespaces.zsh
 
-  `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .   p   y   |   f  <g>  c   r   l   /   =   \ 
-     <a> <o>  e   u  (i)  |  <d> <h> <t> <n> <s>  - 
+  `   1   2   3   4   5   |   6   7   8   9   0   [   ]
+      '   ,   .   p   y   |   f  <g>  c   r   l   /   =   \
+     <a> <o>  e   u  (i)  |  <d> <h> <t> <n> <s>  -
       ;   q   j  <k>  x   |   b  (m)  w  (v) <z>
 
   `<>` key initials have one mapping
@@ -114,9 +114,9 @@ $ t
 
 Keymap: terraform_keymap.zsh
 
-  `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .  <p>  y   |  <f> <g> (c) <r> <l>  /   =   \ 
-     <a> <o> <e> <u> (i)  |  <d> <h> (t) <n> <s>  - 
+  `   1   2   3   4   5   |   6   7   8   9   0   [   ]
+      '   ,   .  <p>  y   |  <f> <g> (c) <r> <l>  /   =   \
+     <a> <o> <e> <u> (i)  |  <d> <h> (t) <n> <s>  -
       ;  <q>  j   k   x   |   b  <m> (w) <v> <z>
 
   `<>` key initials have one mapping
@@ -135,7 +135,7 @@ Keymap Usage
 
 Keymap List
 
-  $ t {terraform command}     
+  $ t {terraform command}
 
   $ t.w                       # List manifests
   $ t.w {match}* {-mismatch}* # Filter manifests
@@ -162,8 +162,8 @@ Keymap List
   $ t.rm {name}               # Remove state
 
   $ t.f                       # Format
-  $ t.h                       # Scratch
-  $ t.n                       # Console
+  $ t.h {var name}?           # Scratch
+  $ t.n {var name}?           # Console
   $ t.c                       # Clean
   $ t.cc                      # Clean & clear plugin cache
   $ t.qa                      # Apply & auto-approve
@@ -211,7 +211,7 @@ Terraform has been successfully initialized!
 
 - **Framework Tests**: Keymap framework code is unit tested
 - **Keymap Tests**: Complex key mappings are unit tested
-- **Misc Tests**: 
+- **Misc Tests**:
   - Every test that is defined is actually invoked
   - Subjects and tests are defined in the same order
   - Each keymap entry has a corresponding implementation
@@ -248,7 +248,7 @@ Last login: Sat Jul 12 16:10:06 on ttys003
 `.zshrc` loaded in .10 seconds
 
 ~
-$ 
+$
 ```
 
 ### Debugging Performance Issues

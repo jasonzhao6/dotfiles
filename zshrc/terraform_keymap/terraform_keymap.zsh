@@ -30,8 +30,8 @@ TERRAFORM_KEYMAP=(
 	"${TERRAFORM_DOT}rm {name} # Remove state"
 	''
 	"${TERRAFORM_DOT}f # Format"
-	"${TERRAFORM_DOT}h # Scratch"
-	"${TERRAFORM_DOT}n # Console"
+	"${TERRAFORM_DOT}h {var name}? # Scratch"
+	"${TERRAFORM_DOT}n {var name}? # Console"
 	"${TERRAFORM_DOT}c # Clean"
 	"${TERRAFORM_DOT}cc # Clean & clear plugin cache"
 	"${TERRAFORM_DOT}qa # Apply & auto-approve"
@@ -151,7 +151,13 @@ function terraform_keymap_m {
 }
 
 function terraform_keymap_n {
-	terraform console
+	local var=$1
+
+	if [[ -z $var ]]; then
+		terraform console
+	else
+		echo "local.$var" | terraform console
+	fi
 }
 
 function terraform_keymap_o {

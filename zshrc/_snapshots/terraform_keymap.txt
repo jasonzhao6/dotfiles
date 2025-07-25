@@ -48,8 +48,8 @@ Keymap List
   $ t.rm {name}               # Remove state
 
   $ t.f                       # Format
-  $ t.h                       # Scratch
-  $ t.n                       # Console
+  $ t.h {var name}?           # Scratch
+  $ t.n {var name}?           # Console
   $ t.c                       # Clean
   $ t.cc                      # Clean & clear plugin cache
   $ t.qa                      # Apply & auto-approve
