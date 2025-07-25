@@ -49,4 +49,7 @@ TEXTMATE_KEYMAP=(
 	'cmd-ctrl-w # Close other tabs'
 	'cmd-ctrl-alt-w # Close all tabs'
 	'cmd-shift-w # Close project'
+	''
+	'alt-{up} # Go up a block'
+	'alt-{down} # Go down a block'
 )
