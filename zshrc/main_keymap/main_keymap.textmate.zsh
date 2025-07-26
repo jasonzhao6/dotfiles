@@ -46,6 +46,7 @@ TEXTMATE_KEYMAP=(
 	'cmd-ctrl-{tab} # Change file type'
 	'cmd-r # Run file'
 	''
+	'cmd-alt-s # Save all'
 	'cmd-ctrl-w # Close other tabs'
 	'cmd-ctrl-alt-w # Close all tabs'
 	'cmd-shift-w # Close project'
