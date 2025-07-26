@@ -24,7 +24,7 @@ function q_keymap {
 Q_KEYMAP_DIR="$HOME/.aws/amazonq"
 
 function q_keymap_0 {
-	~/.local/bin/q
+	~/.local/bin/q "$@"
 }
 
 function q_keymap_4 {
