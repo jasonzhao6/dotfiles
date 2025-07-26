@@ -44,7 +44,9 @@ function nav_keymap {
 function nav_keymap_a {
 	local filters=("$@")
 
+	setopt NULL_GLOB
 	ls -d .* | args_keymap_s "${filters[@]}"
+	unsetopt NULL_GLOB
 }
 
 function nav_keymap_d {

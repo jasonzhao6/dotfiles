@@ -52,6 +52,22 @@ function test__nav_keymap_a {
 	)"
 }; run_with_filter test__nav_keymap_a
 
+function test__nav_keymap_a__without_any_hidden_file {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_a
+		mkdir /tmp/test__nav_keymap_a
+		cd /tmp/test__nav_keymap_a || return
+		mkdir 1 2 3
+		touch 1.log 2.log 3.txt
+		nav_keymap_a | bw
+		rm -rf /tmp/test__nav_keymap_a
+	)" "$(
+		cat <<-eof
+		     1	.
+		eof
+	)"
+}; run_with_filter test__nav_keymap_a__without_any_hidden_file
+
 function test__nav_keymap_a__with_filters {
 	assert "$(
 		rm -rf /tmp/test__nav_keymap_a
