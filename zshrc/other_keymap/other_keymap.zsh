@@ -23,12 +23,12 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}kk # Show archived terminal outputs"
 	"${OTHER_DOT}kc # Clear archived terminal outputs"
 	''
-	"${OTHER_DOT}1 {|}? # Save the last output to \`diff.1.txt\`"
-	"${OTHER_DOT}2 {|}? # Save the last output to \`diff.2.txt\`"
-	"${OTHER_DOT}11 # Save pasteboard value to \`diff.1.txt\`"
-	"${OTHER_DOT}22 # Save pasteboard value to \`diff.2.txt\`"
-	"${OTHER_DOT}0 # Open \`diff.1.txt\` and \`diff.2.txt\` in TextMate"
-	"${OTHER_DOT}00 # Empty \`diff.1.txt\` and \`diff.2.txt\`"
+	"${OTHER_DOT}12 # Open \`diff.1.txt\` and \`diff.2.txt\` in TextMate"
+	"${OTHER_DOT}1 {|}? # Save pasteboard value to \`diff.1.txt\`"
+	"${OTHER_DOT}2 {|}? # Save pasteboard value to \`diff.2.txt\`"
+	"${OTHER_DOT}11 # Save the last output to \`diff.1.txt\`"
+	"${OTHER_DOT}22 # Save the last output to \`diff.2.txt\`"
+	"${OTHER_DOT}0 # Empty \`diff.1.txt\` and \`diff.2.txt\`"
 	"${OTHER_DOT}u {file 1}? {file 2}? # Unified diff"
 	"${OTHER_DOT}uu {file 1}? {file 2}? # Side by side diff"
 	''
@@ -79,10 +79,6 @@ function other_keymap_- {
 }
 
 function other_keymap_0 {
-	mate "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1" "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
-}
-
-function other_keymap_00 {
 	echo -n > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
 	echo -n > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 }
@@ -90,7 +86,7 @@ function other_keymap_00 {
 function other_keymap_1 {
 	# When invoked as standalone command
 	if [[ -t 0 ]]; then
-		eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
+		pbpaste > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
 
 	# When invoked after a pipe `|`
 	else
@@ -99,13 +95,17 @@ function other_keymap_1 {
 }
 
 function other_keymap_11 {
-	pbpaste > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
+	eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
+}
+
+function other_keymap_12 {
+	mate "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1" "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 }
 
 function other_keymap_2 {
 	# When invoked as standalone command
 	if [[ -t 0 ]]; then
-		eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+		pbpaste > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 
 	# When invoked after a pipe `|`
 	else
@@ -114,7 +114,7 @@ function other_keymap_2 {
 }
 
 function other_keymap_22 {
-	pbpaste > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+	eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 }
 
 function other_keymap_8 {

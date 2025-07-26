@@ -1,6 +1,6 @@
 Keymap: other_keymap.zsh
 
-  `  (1) (2)  3   4   5   |   6   7  <8>  9  (0)  [   ] 
+  `  (1) (2)  3   4   5   |   6   7  <8>  9  <0>  [   ] 
       '   ,   .  <p> <y>  |   f   g  (c) <r>  l   /   =   \ 
      <a> (o) (e) (u) (i)  |  (d)  h  <t> <n> <s> <->
       ;  (q) <j> (k) (x)  |   b  (m)  w   v   z 
@@ -41,12 +41,12 @@ Keymap List
   $ o.kk                                    # Show archived terminal outputs
   $ o.kc                                    # Clear archived terminal outputs
 
-  $ o.1 {|}?                                # Save the last output to `diff.1.txt`
-  $ o.2 {|}?                                # Save the last output to `diff.2.txt`
-  $ o.11                                    # Save pasteboard value to `diff.1.txt`
-  $ o.22                                    # Save pasteboard value to `diff.2.txt`
-  $ o.0                                     # Open `diff.1.txt` and `diff.2.txt` in TextMate
-  $ o.00                                    # Empty `diff.1.txt` and `diff.2.txt`
+  $ o.12                                    # Open `diff.1.txt` and `diff.2.txt` in TextMate
+  $ o.1 {|}?                                # Save pasteboard value to `diff.1.txt`
+  $ o.2 {|}?                                # Save pasteboard value to `diff.2.txt`
+  $ o.11                                    # Save the last output to `diff.1.txt`
+  $ o.22                                    # Save the last output to `diff.2.txt`
+  $ o.0                                     # Empty `diff.1.txt` and `diff.2.txt`
   $ o.u {file 1}? {file 2}?                 # Unified diff
   $ o.uu {file 1}? {file 2}?                # Side by side diff
 
