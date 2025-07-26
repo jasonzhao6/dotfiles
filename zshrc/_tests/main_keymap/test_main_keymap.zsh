@@ -125,6 +125,7 @@ function test__main_keymap_w__when_specifying_a_special_char {
 
 		  $ a.- {start} {finish} {command} # Use args within a sequence
 		  $ m.-                            # Show stats
+		  $ n.-                            # Sort subfolders by size
 		  $ o.- {start} {finish} {~~}      # Run a sequence of commands
 
 		  ^cmd--       # Collapse all

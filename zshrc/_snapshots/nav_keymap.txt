@@ -2,7 +2,7 @@ Keymap: nav_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .   p   y   |   f   g   c   r   l   /   =   \ 
-     <a> (o) <e> (u) (i)  |  <d> <h> <t> (n) <s>  - 
+     <a> (o) <e> (u) (i)  |  <d> <h> <t> (n) <s> <->
       ;   q   j   k   x   |   b  <m> <w> <v>  z 
 
   `<>` key initials have one mapping
@@ -43,3 +43,5 @@ Keymap List
   $ n.u                        # Go up one directory
   $ n.uu                       # Go up two directories
   $ n.uuu                      # Go up three directories
+
+  $ n.-                        # Sort subfolders by size
