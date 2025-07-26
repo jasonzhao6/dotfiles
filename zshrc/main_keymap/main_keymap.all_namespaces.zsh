@@ -9,6 +9,7 @@ ALL_KEYMAP=(
 	'm # Keymap: main_keymap.zsh'
 	'n # Keymap: nav_keymap.zsh'
 	'o # Keymap: other_keymap.zsh'
+	'q # Keymap: q_keymap.zsh'
 	't # Keymap: terraform_keymap.zsh'
 	'z # Keymap: zsh_keymap.zsh'
 	''

@@ -28,7 +28,7 @@ Keymap List
   $ n.w                        # Go to Downloads
   $ n.v                        # Go to Desktop
 
-  $ n.h                        # Go to github
+  $ n.h                        # Go to GitHub
   $ n.d                        # Go to dotfiles
   $ n.e                        # Go to excalidraw
   $ n.s                        # Go to scratch

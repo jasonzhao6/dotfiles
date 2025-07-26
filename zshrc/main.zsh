@@ -34,6 +34,7 @@ source "$ZSHRC_DIR/kubectl_keymap/kubectl_keymap.zsh"
 source "$ZSHRC_DIR/main_keymap/main_keymap.zsh"
 source "$ZSHRC_DIR/nav_keymap/nav_keymap.zsh"
 source "$ZSHRC_DIR/other_keymap/other_keymap.zsh"
+source "$ZSHRC_DIR/q_keymap/q_keymap.zsh"
 source "$ZSHRC_DIR/terraform_keymap/terraform_keymap.zsh"
 source "$ZSHRC_DIR/zsh_keymap/zsh_keymap.zsh"
 

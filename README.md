@@ -328,8 +328,8 @@ README.md                   # This file
 ### Adding New Keymaps
 
 1. Add keymap definition file: `<example>_keymap/<example>_keymap.zsh`
-1. Add corresponding tests in `_tests/<example>_keymap/test_<example>_keymap.zsh`
-1. Source it in [main.zsh](./zshrc/main.zsh)
+1. Add keymap test file: `_tests/<example>_keymap/test_<example>_keymap.zsh`
+1. Add this line in [main.zsh](./zshrc/main.zsh): `source "$ZSHRC_DIR/<example>_keymap/<example>_keymap.zsh"`
 
 ### Keymap Template
 ```

@@ -10,7 +10,7 @@ NAV_KEYMAP=(
 	"${NAV_DOT}w # Go to Downloads"
 	"${NAV_DOT}v # Go to Desktop"
 	''
-	"${NAV_DOT}h # Go to github"
+	"${NAV_DOT}h # Go to GitHub"
 	"${NAV_DOT}d # Go to dotfiles"
 	"${NAV_DOT}e # Go to excalidraw"
 	"${NAV_DOT}s # Go to scratch"
