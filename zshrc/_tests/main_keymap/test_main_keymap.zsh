@@ -124,7 +124,6 @@ function test__main_keymap_w__when_specifying_a_special_char {
 		cat <<-eof
 
 		  $ a.- {start} {finish} {command} # Use args within a sequence
-		  $ s.-                            # MQ restore
 		  $ m.-                            # Show stats
 		  $ o.- {start} {finish} {~~}      # Run a sequence of commands
 

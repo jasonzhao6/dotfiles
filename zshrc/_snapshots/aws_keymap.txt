@@ -2,7 +2,7 @@ Keymap: aws_keymap.zsh
 
   `  (1) (2)  3   4   5   |   6   7   8   9  <0>  [   ] 
       '   ,   .  (p)  y   |   f   g  (c) <r>  l   /   =   \ 
-     (a) (o) (e)  u   i   |   d   h  <t> (n) (s) <->
+     (a) (o) (e)  u   i   |   d   h  <t> (n) (s)  - 
       ;  (q)  j   k   x   |   b  (m) <w>  v   z 
 
   `<>` key initials have one mapping
@@ -26,7 +26,6 @@ Keymap List
 
   $ s.1                       # MQ login to 01
   $ s.2                       # MQ login to 02
-  $ s.-                       # MQ restore
   $ s.0                       # MQ logout
   $ s.11                      # MQ logout, then login to 01
   $ s.22                      # MQ logout, then login to 02

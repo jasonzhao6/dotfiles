@@ -8,7 +8,6 @@ AWS_KEYMAP=(
 	''
 	"${AWS_DOT}1 # MQ login to 01"
 	"${AWS_DOT}2 # MQ login to 02"
-	"${AWS_DOT}- # MQ restore"
 	"${AWS_DOT}0 # MQ logout"
 	"${AWS_DOT}11 # MQ logout, then login to 01"
 	"${AWS_DOT}22 # MQ logout, then login to 02"
@@ -61,36 +60,26 @@ AWS_URL="https://$AWS_DEFAULT_REGION.console.aws.amazon.com"
 
 source "$ZSHRC_DIR/$AWS_NAMESPACE/aws_helpers.zsh"
 
-if [[ -d "$HOME/.config/zsh/config.d" ]]; then
-	for aws_keymap_mq2 in "$HOME/.config/zsh/config.d/"*.zsh; do
-		source "${aws_keymap_mq2}"
-	done; unset aws_keymap_mq2
-fi
-
-function aws_keymap_- {
-	mq2 --restore
-}
-
 function aws_keymap_0 {
-	mq2 --logout
+	mqc logout
 }
 
 function aws_keymap_1 {
-	mq2 --mq01
+	mqc --mq01
 }
 
 function aws_keymap_11 {
-	mq2 --logout
-	mq2 --mq01
+	mqc logout
+	mqc --mq01
 }
 
 function aws_keymap_2 {
-	mq2 --mq02
+	mqc --mq02
 }
 
 function aws_keymap_22 {
-	mq2 --logout
-	mq2 --mq02
+	mqc logout
+	mqc --mq02
 }
 
 function aws_keymap_a {
