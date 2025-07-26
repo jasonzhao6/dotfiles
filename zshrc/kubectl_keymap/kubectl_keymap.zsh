@@ -125,7 +125,7 @@ function kubectl_keymap_g {
 function kubectl_keymap_gg {
 	local params=("$@")
 
-	kubectl get "${params[@]}" -o wide
+	kubectl get "${params[@]}" --output wide
 }
 
 function kubectl_keymap_h {
@@ -136,11 +136,11 @@ function kubectl_keymap_j {
 	local params=("$@")
 
 	# Save a copy in case original params is not deterministic b/c it references an arg number
-	[[ -n ${params[*]} ]] && kubectl get "${params[@]}" -o json | tee ~/Documents/k8s.get.json | jq
+	[[ -n ${params[*]} ]] && kubectl get "${params[@]}" --output json | tee ~/Documents/zshrc-data/k8s.get-output.json | jq
 }
 
 function kubectl_keymap_jj {
-	cat ~/Documents/k8s.get.json
+	cat ~/Documents/zshrc-data/k8s.get-output.json
 }
 
 function kubectl_keymap_k {
@@ -185,12 +185,12 @@ function kubectl_keymap_n {
 function kubectl_keymap_r {
 	local filters=("$@")
 
-	args_keymap_s "${filters[@]}" < ~/Documents/k8s.api-resources.txt
+	args_keymap_s "${filters[@]}" < ~/Documents/zshrc-data/k8s.api-resources.txt
 }
 
 function kubectl_keymap_rr {
 	# Save a copy for offline lookup
-	kubectl api-resources > ~/Documents/k8s.api-resources.txt
+	kubectl api-resources > ~/Documents/zshrc-data/k8s.api-resources.txt
 }
 
 function kubectl_keymap_s {
@@ -228,11 +228,11 @@ function kubectl_keymap_y {
 	local params=("$@")
 
 	# Save a copy in case original params is not deterministic b/c it references an arg number
-	[[ -n ${params[*]} ]] && kubectl get "${params[@]}" -o yaml | tee ~/Documents/k8s.get.yaml | cat
+	[[ -n ${params[*]} ]] && kubectl get "${params[@]}" --output yaml | tee ~/Documents/zshrc-data/k8s.get-output.yaml | cat
 }
 
 function kubectl_keymap_yy {
-	cat ~/Documents/k8s.get.yaml
+	cat ~/Documents/zshrc-data/k8s.get-output.yaml
 }
 
 AWS_CLI_CACHE_DIR="$HOME/.aws/cli/cache"

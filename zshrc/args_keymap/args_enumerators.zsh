@@ -1,20 +1,20 @@
-ALL_FILE="$HOME/Documents/args.all.txt"
+ALL_OUTPUT_FILE="$HOME/Documents/zshrc-data/args.all-output.txt"
 
 function all {
 	local command=$*
 
-	rm -f "$ALL_FILE"
+	rm -f "$ALL_OUTPUT_FILE"
 
-	# Collect arg outputs in `ALL_FILE` to print at the end
+	# Collect arg outputs in `ALL_OUTPUT_FILE` to print at the end
 	# Otherwise, arg outputs are interleaved with `&` outputs
 	for number in $(seq 1 "$(args_size)"); do
-		args_keymap_n "$number" "$command" >> "$ALL_FILE" &
+		args_keymap_n "$number" "$command" >> "$ALL_OUTPUT_FILE" &
 	done
 
 	wait
 
 	echo
-	cat "$ALL_FILE"
+	cat "$ALL_OUTPUT_FILE"
 }
 
 function each {

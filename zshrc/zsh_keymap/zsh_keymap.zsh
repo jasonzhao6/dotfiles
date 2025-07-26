@@ -98,7 +98,7 @@ ZSH_OTHER_DOTFILES=(
 	tm_properties
 )
 
-ZSHRC_SECRETS_DIR="$HOME/Downloads/_Archive/zsh/.zshrc.secrets"
+ZSHRC_SECRETS_DIR="$HOME/Documents/-backups/zsh.secrets"
 ZSHRC_SECRETS_LATEST="$ZSHRC_SECRETS_DIR/latest.txt"
 
 function zsh_keymap_p {

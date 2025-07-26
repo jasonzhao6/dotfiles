@@ -41,12 +41,12 @@ Keymap List
   $ o.kk                                    # Show archived terminal outputs
   $ o.kc                                    # Clear archived terminal outputs
 
-  $ o.1 {|}?                                # Save the last output to `1.txt`
-  $ o.2 {|}?                                # Save the last output to `2.txt`
-  $ o.11                                    # Save pasteboard value to `1.txt`
-  $ o.22                                    # Save pasteboard value to `2.txt`
-  $ o.0                                     # Open `1.txt` and `2.txt` in TextMate
-  $ o.00                                    # Empty `1.txt` and `2.txt`
+  $ o.1 {|}?                                # Save the last output to `diff.1.txt`
+  $ o.2 {|}?                                # Save the last output to `diff.2.txt`
+  $ o.11                                    # Save pasteboard value to `diff.1.txt`
+  $ o.22                                    # Save pasteboard value to `diff.2.txt`
+  $ o.0                                     # Open `diff.1.txt` and `diff.2.txt` in TextMate
+  $ o.00                                    # Empty `diff.1.txt` and `diff.2.txt`
   $ o.u {file 1}? {file 2}?                 # Unified diff
   $ o.uu {file 1}? {file 2}?                # Side by side diff
 

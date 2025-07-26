@@ -23,12 +23,12 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}kk # Show archived terminal outputs"
 	"${OTHER_DOT}kc # Clear archived terminal outputs"
 	''
-	"${OTHER_DOT}1 {|}? # Save the last output to \`1.txt\`"
-	"${OTHER_DOT}2 {|}? # Save the last output to \`2.txt\`"
-	"${OTHER_DOT}11 # Save pasteboard value to \`1.txt\`"
-	"${OTHER_DOT}22 # Save pasteboard value to \`2.txt\`"
-	"${OTHER_DOT}0 # Open \`1.txt\` and \`2.txt\` in TextMate"
-	"${OTHER_DOT}00 # Empty \`1.txt\` and \`2.txt\`"
+	"${OTHER_DOT}1 {|}? # Save the last output to \`diff.1.txt\`"
+	"${OTHER_DOT}2 {|}? # Save the last output to \`diff.2.txt\`"
+	"${OTHER_DOT}11 # Save pasteboard value to \`diff.1.txt\`"
+	"${OTHER_DOT}22 # Save pasteboard value to \`diff.2.txt\`"
+	"${OTHER_DOT}0 # Open \`diff.1.txt\` and \`diff.2.txt\` in TextMate"
+	"${OTHER_DOT}00 # Empty \`diff.1.txt\` and \`diff.2.txt\`"
 	"${OTHER_DOT}u {file 1}? {file 2}? # Unified diff"
 	"${OTHER_DOT}uu {file 1}? {file 2}? # Side by side diff"
 	''
@@ -62,8 +62,8 @@ function other_keymap {
 # Key mappings (Alphabetized)
 #
 
-OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$HOME/Documents/1.txt"
-OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$HOME/Documents/2.txt"
+OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$HOME/Documents/zshrc-data/diff.1.txt"
+OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$HOME/Documents/zshrc-data/diff.2.txt"
 
 source "$ZSHRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
 
