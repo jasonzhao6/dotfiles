@@ -91,17 +91,21 @@ function test__nav_keymap_d {
 	assert "$(nav_keymap_d > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/dotfiles"
 }; run_with_filter test__nav_keymap_d
 
-function test__nav_keymap_e {
+function test__nav_keymap_h {
+	assert "$(nav_keymap_h > /dev/null; pwd)" "$HOME/github"
+}; run_with_filter test__nav_keymap_h
+
+function test__nav_keymap_i {
 	assert "$(
-		rm -rf /tmp/test__nav_keymap_e
-		mkdir /tmp/test__nav_keymap_e
-		cd /tmp/test__nav_keymap_e || return
+		rm -rf /tmp/test__nav_keymap_i
+		mkdir /tmp/test__nav_keymap_i
+		cd /tmp/test__nav_keymap_i || return
 		mkdir 1 2 3
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		nav_keymap_e | bw
-		rm -rf /tmp/test__nav_keymap_e
+		nav_keymap_i | bw
+		rm -rf /tmp/test__nav_keymap_i
 	)" "$(
 		cat <<-eof
 		     1	1.log
@@ -109,66 +113,62 @@ function test__nav_keymap_e {
 		     3	3.txt
 		eof
 	)"
-}; run_with_filter test__nav_keymap_e
+}; run_with_filter test__nav_keymap_i
 
-function test__nav_keymap_e__with_filters {
+function test__nav_keymap_i__with_filters {
 	assert "$(
-		rm -rf /tmp/test__nav_keymap_e
-		mkdir /tmp/test__nav_keymap_e
-		cd /tmp/test__nav_keymap_e || return
+		rm -rf /tmp/test__nav_keymap_i
+		mkdir /tmp/test__nav_keymap_i
+		cd /tmp/test__nav_keymap_i || return
 		mkdir 1 2 3
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		nav_keymap_e -1 log | bw
-		rm -rf /tmp/test__nav_keymap_e
+		nav_keymap_i -1 log | bw
+		rm -rf /tmp/test__nav_keymap_i
 	)" "$(
 		cat <<-eof
 		     1	2.log
 		eof
 	)"
-}; run_with_filter test__nav_keymap_e__with_filters
+}; run_with_filter test__nav_keymap_i__with_filters
 
-function test__nav_keymap_ee {
+function test__nav_keymap_ii {
 	assert "$(
-		rm -rf /tmp/test__nav_keymap_ee
-		mkdir /tmp/test__nav_keymap_ee
-		cd /tmp/test__nav_keymap_ee || return
+		rm -rf /tmp/test__nav_keymap_ii
+		mkdir /tmp/test__nav_keymap_ii
+		cd /tmp/test__nav_keymap_ii || return
 		mkdir 1 2 3
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		nav_keymap_ee | bw
-		rm -rf /tmp/test__nav_keymap_ee
+		nav_keymap_ii | bw
+		rm -rf /tmp/test__nav_keymap_ii
 	)" "$(
 		cat <<-eof
 		     1	.2.hidden
 		     2	.3.hidden
 		eof
 	)"
-}; run_with_filter test__nav_keymap_ee
+}; run_with_filter test__nav_keymap_ii
 
-function test__nav_keymap_ee__with_filters {
+function test__nav_keymap_ii__with_filters {
 	assert "$(
-		rm -rf /tmp/test__nav_keymap_ee
-		mkdir /tmp/test__nav_keymap_ee
-		cd /tmp/test__nav_keymap_ee || return
+		rm -rf /tmp/test__nav_keymap_ii
+		mkdir /tmp/test__nav_keymap_ii
+		cd /tmp/test__nav_keymap_ii || return
 		mkdir 1 2 3
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		nav_keymap_ee -3 hidden | bw
-		rm -rf /tmp/test__nav_keymap_ee
+		nav_keymap_ii -3 hidden | bw
+		rm -rf /tmp/test__nav_keymap_ii
 	)" "$(
 		cat <<-eof
 		     1	.2.hidden
 		eof
 	)"
-}; run_with_filter test__nav_keymap_ee__with_filters
-
-function test__nav_keymap_h {
-	assert "$(nav_keymap_h > /dev/null; pwd)" "$HOME/github"
-}; run_with_filter test__nav_keymap_h
+}; run_with_filter test__nav_keymap_ii__with_filters
 
 function test__nav_keymap_m {
 	assert "$(nav_keymap_m > /dev/null; pwd)" "$HOME/Documents"

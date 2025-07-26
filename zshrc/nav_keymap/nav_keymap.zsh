@@ -5,19 +5,22 @@ NAV_DOT="${NAV_ALIAS}${KEYMAP_DOT}"
 NAV_KEYMAP=(
 	"${NAV_ALIAS} {directory} # Go to directory"
 	"${NAV_DOT}t # Go to directory in pasteboard"
-	"${NAV_DOT}h # Go to github"
-	"${NAV_DOT}s # Go to scratch"
-	"${NAV_DOT}d # Go to dotfiles"
+	''
 	"${NAV_DOT}m # Go to Documents"
 	"${NAV_DOT}w # Go to Downloads"
 	"${NAV_DOT}v # Go to Desktop"
+	''
+	"${NAV_DOT}h # Go to github"
+	"${NAV_DOT}d # Go to dotfiles"
+	"${NAV_DOT}e # Go to excalidraw"
+	"${NAV_DOT}s # Go to scratch"
 	''
 	"${NAV_DOT}n {match}* {-mismatch}* # List visible directories & files"
 	"${NAV_DOT}a {match}* {-mismatch}* # List hidden directories & files"
 	"${NAV_DOT}o {match}* {-mismatch}* # List visible directories"
 	"${NAV_DOT}oo {match}* {-mismatch}* # List hidden directories"
-	"${NAV_DOT}e {match}* {-mismatch}* # List visible files"
-	"${NAV_DOT}ee {match}* {-mismatch}* # List hidden files"
+	"${NAV_DOT}i {match}* {-mismatch}* # List visible files"
+	"${NAV_DOT}ii {match}* {-mismatch}* # List hidden files"
 	''
 	"${NAV_DOT}u # Go up one directory"
 	"${NAV_DOT}uu # Go up two directories"
@@ -54,21 +57,25 @@ function nav_keymap_d {
 }
 
 function nav_keymap_e {
+	cd ~/GitHub/jasonzhao6/excalidraw && nav_keymap_n || true
+}
+
+function nav_keymap_h {
+	cd ~/github && nav_keymap_n || true
+}
+
+function nav_keymap_i {
 	local filters=("$@")
 
 	# shellcheck disable=SC2010
 	ls -p | grep -v '/' | args_keymap_s "${filters[@]}"
 }
 
-function nav_keymap_ee {
+function nav_keymap_ii {
 	local filters=("$@")
 
 	# shellcheck disable=SC2010
 	ls -pd .* | grep -v '/' | args_keymap_s "${filters[@]}"
-}
-
-function nav_keymap_h {
-	cd ~/github && nav_keymap_n || true
 }
 
 function nav_keymap_m {
