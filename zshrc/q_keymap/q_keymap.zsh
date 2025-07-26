@@ -31,15 +31,17 @@ function q_keymap_0 {
 }
 
 function q_keymap_4 {
-	q_keymap_0 chat --model claude-4-sonnet
+	q_keymap_0 chat --model claude-4-sonnet "$@"
 }
 
 function q_keymap_h {
-	cp "$Q_KEYMAP_DIR"/profiles/github/mcp.json "$Q_KEYMAP_DIR"/; q_keymap_0 --profile github
+	cp "$Q_KEYMAP_DIR"/profiles/github/mcp.json "$Q_KEYMAP_DIR"/
+	q_keymap_4 --profile github
 }
 
 function q_keymap_j {
-	cp "$Q_KEYMAP_DIR"/profiles/jira/mcp.json "$Q_KEYMAP_DIR"/; q_keymap_0 --profile jira
+	cp "$Q_KEYMAP_DIR"/profiles/jira/mcp.json "$Q_KEYMAP_DIR"/
+	q_keymap_4 --profile jira
 }
 
 function q_keymap_p {
@@ -78,5 +80,6 @@ function q_keymap_P {
 }
 
 function q_keymap_q {
-	rm -f "$Q_KEYMAP_DIR"/mcp.json; q_keymap_4
+	rm -f "$Q_KEYMAP_DIR"/mcp.json
+	q_keymap_4
 }
