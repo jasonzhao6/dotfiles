@@ -1,7 +1,7 @@
 Keymap: q_keymap.zsh
 
   `   1   2   3  <4>  5   |   6   7   8   9  <0>  [   ] 
-      '   ,   .   p   y   |   f   g   c   r   l   /   =   \ 
+      '   ,   .  <p>  y   |   f   g   c   r   l   /   =   \ 
       a   o   e   u   i   |   d  <h>  t   n   s   - 
       ;  <q> <j>  k   x   |   b   m   w   v   z 
 
@@ -27,3 +27,6 @@ Keymap List
 
   $ q.0           # Invoke the plain `q` command
   $ q.4           # Invoke `q chat` with `claude-4-sonnet`
+
+  $ q.p           # Push `amazonq` folder to `scratch` repo
+  $ q.P           # Pull `amazonq` folder from `scratch` repo

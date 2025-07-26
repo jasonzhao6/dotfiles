@@ -23,8 +23,8 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}2 # Session history in memory"
 	"${ZSH_DOT}0 # Session history in memory & file"
 	''
-	"${ZSH_DOT}p # Push other dotfiles"
-	"${ZSH_DOT}P # Pull other dotfiles"
+	"${ZSH_DOT}p # Push other dotfiles to this repo"
+	"${ZSH_DOT}P # Pull other dotfiles from this repo"
 )
 
 keymap_init $ZSH_NAMESPACE $ZSH_ALIAS "${ZSH_KEYMAP[@]}"

@@ -41,5 +41,5 @@ Keymap List
   $ z.2                       # Session history in memory
   $ z.0                       # Session history in memory & file
 
-  $ z.p                       # Push other dotfiles
-  $ z.P                       # Pull other dotfiles
+  $ z.p                       # Push other dotfiles to this repo
+  $ z.P                       # Pull other dotfiles from this repo
