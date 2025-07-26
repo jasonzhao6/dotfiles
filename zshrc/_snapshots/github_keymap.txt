@@ -2,7 +2,7 @@ Keymap: github_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .  (p)  y   |   f  (g) (c) (r)  l   /   =   \ 
-      a  (o)  e  (u)  i   |  <d> (h) (t) <n>  s   - 
+     <a> (o)  e  <u>  i   |  <d> (h) (t) <n>  s   - 
       ;   q   j   k   x   |  <b>  m   w   v   z 
 
   `<>` key initials have one mapping
@@ -32,15 +32,15 @@ Keymap List
   $ h.h {match}* {-mismatch}* # Navigate to the current org & filter repos
   $ h.t                       # Navigate to the repo name in pasteboard
   $ h.tt                      # Save the current repo name to pasteboard
-  $ h.u                       # Open the current repo in GitHub Desktop
+
+  $ h.a                       # Open the current repo in GitHub Desktop
+  $ h.n                       # Create a new PR, then open it
+  $ h.g {|}?                  # Create a new gist, then open it
+  $ h.gg                      # Open new tab to create a gist
 
   $ h.r                       # List remote repos
   $ h.r {match}* {-mismatch}* # Filter remote repos
   $ h.rr                      # Save a copy of remote repos
-
-  $ h.n                       # Create a new PR, then open it
-  $ h.g {|}?                  # Create a new gist, then open it
-  $ h.gg                      # Open new tab to create a gist
 
   $ h.url                     # Git url
   $ h.domain                  # Domain name
