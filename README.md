@@ -1,14 +1,30 @@
+# A Fast-Loading Zsh Keymap System
+
+## Table of Contents
+
+- [Motivation](#motivation)
+- [Testimonial](#testimonial)
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Dependencies](#dependencies)
+- [Usage](#usage)
+- [Testing](#testing)
+- [Load Time](#load-time)
+- [Customization](#customization)
+- [Caveat](#caveat)
+
 ## Motivation
 
-When I transitioned from web development to infrastructure engineering, I started living in the terminal.
+When I transitioned from web development to infrastructure engineering, I started living full time in the terminal.
 
-Every day brought the minor annoyance of constructing long commands by scrolling through endless pages of documentation I've already visited countless times before.
+Every day, I felt the minor annoyance of constructing the same long commands and revisiting the same documentation I've done countless times before.
 
-During one Christmas break, I built this hobby project: A fast-loading zsh keymap system that reduces cognitive load and simplifies complex commands, mostly for me to recall my own knowledge.
+So one Christmas break, I built this as a hobby project: A fast-loading zsh keymap system that **catalogs and simplifies complex commands** frequently used in my workflow.
 
 ## Testimonial
 
-> *"I got to see first-hand how your shell shortcuts really save time during critical moments. Magic."*
+> *"I got to see first-hand how your shell shortcuts really **save time during critical moments**. Magic."*
 >
 > — Another Infrastructure Engineer
 
@@ -16,9 +32,9 @@ During one Christmas break, I built this hobby project: A fast-loading zsh keyma
 
 This project organizes my favorite and most frequently used 1) shell commands and 2) keyboard shortcuts into namespaced keymaps.
 
-For shell commands, it has keymaps for **[AWS](./zshrc/_snapshots/aws_keymap.txt), [Git](./zshrc/_snapshots/git_keymap.txt), [Kubectl](./zshrc/_snapshots/kubectl_keymap.txt), [Terraform](./zshrc/_snapshots/terraform_keymap.txt), etc**. It also has keymaps for my custom workflows like cherry-picking a line from the previous output as **[Args](./zshrc/_snapshots/args_keymap.txt)** to pass to the next command.
+**For shell commands**, it has keymaps for **[AWS](./zshrc/_snapshots/aws_keymap.txt)**, **[Git](./zshrc/_snapshots/git_keymap.txt)**, **[Kubectl](./zshrc/_snapshots/kubectl_keymap.txt)**, **[Terraform](./zshrc/_snapshots/terraform_keymap.txt)**, etc. It also has keymaps for my custom workflows like cherry-picking a line from the previous output as **[Args](./zshrc/_snapshots/args_keymap.txt)** to pass to the next command.
 
-For keyboard shortcuts, it catalogs default keymaps for **[MacOS](./zshrc/_snapshots/main_keymap.macos.txt), [Gmail](./zshrc/_snapshots/main_keymap.gmail.txt), [Slack](./zshrc/_snapshots/main_keymap.slack.txt), [Notion](./zshrc/_snapshots/main_keymap.notion.txt), etc**. It also catalogs my custom keymaps for **IntelliJ** ([cmd](./zshrc/_snapshots/intellij_cmd_keymap.txt), [ctrl](./zshrc/_snapshots/intellij_ctrl_keymap.txt), [alt](./zshrc/_snapshots/intellij_alt_keymap.txt)) and **Vimium** ([nav](./zshrc/_snapshots/vimium_keymap.txt), [search](./zshrc/_snapshots/vimium_search_keymap.txt)).
+**For keyboard shortcuts**, it catalogs default keymaps for **[MacOS](./zshrc/_snapshots/main_keymap.macos.txt)**, **[Gmail](./zshrc/_snapshots/main_keymap.gmail.txt)**, **[Slack](./zshrc/_snapshots/main_keymap.slack.txt)**, **[Notion](./zshrc/_snapshots/main_keymap.notion.txt)**, etc. It also catalogs my custom keymaps for **IntelliJ** ([cmd](./zshrc/_snapshots/intellij_cmd_keymap.txt), [ctrl](./zshrc/_snapshots/intellij_ctrl_keymap.txt), [alt](./zshrc/_snapshots/intellij_alt_keymap.txt)) and **Vimium** ([nav](./zshrc/_snapshots/vimium_keymap.txt), [search](./zshrc/_snapshots/vimium_search_keymap.txt)).
 
 ## Features
 
@@ -29,33 +45,43 @@ For keyboard shortcuts, it catalogs default keymaps for **[MacOS](./zshrc/_snaps
 
 ## Installation
 
-**Note:** You could also browse [snapshots](./zshrc/_snapshots) of keymaps without installation.
+**Note:** You can also browse [snapshots](./zshrc/_snapshots) of keymaps without installation.
 
-1. Clone this repository:
-   ```
+1. **Clone this repository**:
+   ```bash
    git clone https://github.com/jasonzhao6/dotfiles.git <project dir>
    ```
 
-1. Source `main.zsh` in your `~/.zshrc`:
-   ```
+1. **Source `main.zsh` in your `~/.zshrc`**:
+   ```bash
    echo "source <project dir>/zshrc/main.zsh" >> ~/.zshrc
    ```
 
-1. (Optional) Create a secrets file for sensitive keymaps:
-   ```
+1. **(Optional) Create a secrets file for sensitive keymaps**:
+   ```bash
    touch ~/.zshrc.secrets
    ```
 
-1. Restart your terminal, or re-source your `~/.zshrc`:
-   ```
+1. **Restart your terminal, or re-source your `~/.zshrc`**:
+   ```bash
    source ~/.zshrc
    ```
 
 ## Dependencies
 
-- Zsh shell
-- Main CLIs: `aws`, `git`, `gh`, `kubectl`, `terraform`, Docker Desktop
-- Helper CLIs: `colordiff`, `coreutils` (for `gdate`), `pcre` (for `pcregrep`)
+- **Zsh shell**
+- **Main Apps**:
+  [Docker Desktop](https://www.docker.com/products/docker-desktop/),
+  [GitHub Desktop](https://desktop.github.com/download/)
+- **Main CLIs**:
+  [`awscli`](https://formulae.brew.sh/formula/awscli),
+  [`gh`](https://formulae.brew.sh/formula/gh),
+  [`kubernetes-cli`](https://formulae.brew.sh/formula/kubernetes-cli),
+  [`tfenv`](https://formulae.brew.sh/formula/tfenv)
+- **Helper CLIs**:
+  [`colordiff`](https://formulae.brew.sh/formula/colordiff),
+  [`coreutils`](https://formulae.brew.sh/formula/coreutils),
+  [`pcre`](https://formulae.brew.sh/formula/pcre)
 
 ## Usage
 
@@ -107,7 +133,7 @@ All Namespaces
   $ mt # Default keyboard shortcuts: main_keymap.terminal.zsh
 ```
 
-**Note:** My keyboard layout may look different than yours. I'm using the [Dvorak keyboard layout](https://en.wikipedia.org/wiki/Dvorak_keyboard_layout).
+**Note:** My keyboard layout may look different. I'm using [Dvorak](https://en.wikipedia.org/wiki/Dvorak_keyboard_layout) instead of [QWERTY](https://en.wikipedia.org/wiki/QWERTY).
 
 ### Example #2: Print the Terraform keymap usage with `t`
 
@@ -244,7 +270,7 @@ ZSHRC_TESTS_UNDER_PROFILING=1 zt
 
 This project was built with fast load time in mind. Load time is measured by how quickly a new terminal tab opens and becomes ready for use.
 
-On a 2023 M3 MacBook Pro, typical load time is 0.04s - 0.05s. Load time is displayed automatically when opening new tabs.
+On a **2023 M3 MacBook Pro**, typical load time is between **0.04s - 0.05s**. Load time is displayed automatically when opening new tabs.
 
 ```
 Last login: Thu Jul 24 18:32:47 on ttys011
@@ -305,6 +331,7 @@ zshrc/
 │   ├── main_keymap/
 │   ├── nav_keymap/
 │   ├── other_keymap/
+│   ├── q_keymap/
 │   ├── terraform_keymap/
 │   ├── vimium_keymaps/
 │   └── zsh_keymap/
@@ -331,31 +358,32 @@ README.md                   # This file
 
 ### Adding New Keymaps
 
-1. Add keymap definition file: `<example>_keymap/<example>_keymap.zsh`
-1. Add keymap test file: `_tests/<example>_keymap/test_<example>_keymap.zsh`
-1. Add this line in [main.zsh](./zshrc/main.zsh): `source "$ZSHRC_DIR/<example>_keymap/<example>_keymap.zsh"`
+1. **Add keymap definition file**: `<new>_keymap/<new>_keymap.zsh`
+1. **Add keymap test file**: `_tests/<new>_keymap/test_<new>_keymap.zsh`
+1. **Add this line in [main.zsh](./zshrc/main.zsh)**: `source "$ZSHRC_DIR/<new>_keymap/<new>_keymap.zsh"`
+1. **Update this README**: E.g [Usage](#usage) and [Project Structure](#project-structure) sections
 
 ### Keymap Template
 ```
-<EXAMPLE>_NAMESPACE='<example>_keymap'
-<EXAMPLE>_ALIAS='<alias>'
-<EXAMPLE>_DOT="${<EXAMPLE>_ALIAS}${KEYMAP_DOT}"
+<NEW>_NAMESPACE='<new>_keymap'
+<NEW>_ALIAS='<alias>'
+<NEW>_DOT="${<NEW>_ALIAS}${KEYMAP_DOT}"
 
-<EXAMPLE>_KEYMAP=(
-	"${<EXAMPLE>_DOT}<key> # <description>"
+<NEW>_KEYMAP=(
+	"${<NEW>_DOT}<key> # <description>"
 )
 
-keymap_init $<EXAMPLE>_NAMESPACE $<EXAMPLE>_ALIAS "${<EXAMPLE>_KEYMAP[@]}"
+keymap_init $<NEW>_NAMESPACE $<NEW>_ALIAS "${<NEW>_KEYMAP[@]}"
 
-function <example>_keymap {
-	keymap_show $<EXAMPLE>_NAMESPACE $<EXAMPLE>_ALIAS ${#<EXAMPLE>_KEYMAP} "${<EXAMPLE>_KEYMAP[@]}" "$@"
+function <new>_keymap {
+	keymap_show $<NEW>_NAMESPACE $<NEW>_ALIAS ${#<NEW>_KEYMAP} "${<NEW>_KEYMAP[@]}" "$@"
 }
 
 #
 # Key mappings (Alphabetized)
 #
 
-function <example>_keymap_<key> {
+function <new>_keymap_<key> {
 	<...>
 }
 ```
