@@ -54,7 +54,7 @@ function test__main_keymap_r__when_specifying_a_description {
 
 			  $ h.a # Open the current repo in GitHub Desktop
 			  $ n.h # Go to GitHub
-			  $ q.h # Invoke \`q chat\` with GitHub MCP
+			  $ q.h # Chat with GitHub MCP, and \`pbcopy\` trust instructions
 
 			  intellij_alt: alt-o # Open on GitHub
 			  all: h              # Keymap: github_keymap.zsh
@@ -111,7 +111,7 @@ function test__main_keymap_w__when_specifying_a_key {
 		  $ k.j {type} {name}             # Get resource as json & save a copy
 		  $ k.jj                          # Get the copy of json
 		  $ o.j {url} {regex} {num lines} # Curl a json endpoint
-		  $ q.j                           # Invoke \`q chat\` with Jira MCP
+		  $ q.j                           # Chat with Jira MCP, and \`pbcopy\` trust instructions
 
 		  alt-j # Step over
 		  cmd-j # Join lines

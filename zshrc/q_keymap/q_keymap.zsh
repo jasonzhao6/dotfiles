@@ -3,12 +3,12 @@ Q_ALIAS='q'
 Q_DOT="${Q_ALIAS}${KEYMAP_DOT}"
 
 Q_KEYMAP=(
-	"${Q_DOT}q # Invoke \`q chat\` without any MCP"
-	"${Q_DOT}h # Invoke \`q chat\` with GitHub MCP"
-	"${Q_DOT}j # Invoke \`q chat\` with Jira MCP"
+	"${Q_DOT}q # Chat without MCP"
+	"${Q_DOT}h # Chat with GitHub MCP, and \`pbcopy\` trust instructions"
+	"${Q_DOT}j # Chat with Jira MCP, and \`pbcopy\` trust instructions"
 	''
-	"${Q_DOT}0 # Invoke the plain \`q\` command"
-	"${Q_DOT}4 # Invoke \`q chat\` with \`claude-4-sonnet\`"
+	"${Q_DOT}0 {command}? # Invoke \`q\`"
+	"${Q_DOT}4 {command}? # Invoke \`q chat\` with \`claude-4-sonnet\`"
 	''
 	"${Q_DOT}p # Push \`amazonq\` folder to \`scratch\` repo"
 	"${Q_DOT}P # Pull \`amazonq\` folder from \`scratch\` repo"
@@ -35,11 +35,29 @@ function q_keymap_4 {
 }
 
 function q_keymap_h {
+	# Create pasteboard instruction to trust read-only tools
+	local github_readonly_tools=$(
+		grep --color=never --only-matching 'mcp_github___[a-zA-Z_]*' \
+			"$ZSHRC_DIR/${Q_NAMESPACE}/mcp_tools.github.txt" |
+			egrep --color=never '(_get_|_list_|_search_|_download_)'
+	)
+	local pasteboard_content="/tools trust"$'\n'"$github_readonly_tools"
+	echo "$pasteboard_content" | pbcopy
+
 	cp "$Q_KEYMAP_DIR"/profiles/github/mcp.json "$Q_KEYMAP_DIR"/
 	q_keymap_4 --profile github
 }
 
 function q_keymap_j {
+	# Create pasteboard instruction to trust read-only tools
+	local jira_readonly_tools=$(
+		grep --color=never --only-matching 'mcp_atlassian___jira_[a-zA-Z_]*' \
+			"$ZSHRC_DIR/${Q_NAMESPACE}/mcp_tools.jira.txt" |
+			egrep --color=never '(_get_|_search_|_download_)'
+	)
+	local pasteboard_content="/tools trust"$'\n'"$jira_readonly_tools"
+	echo "$pasteboard_content" | pbcopy
+
 	cp "$Q_KEYMAP_DIR"/profiles/jira/mcp.json "$Q_KEYMAP_DIR"/
 	q_keymap_4 --profile jira
 }
