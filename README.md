@@ -97,6 +97,7 @@ All Namespaces
   $ v  # Keyboard shortcuts: vimium_search_keymap.zsh
 
   $ mg # Default keyboard shortcuts: main_keymap.gmail.zsh
+  $ mh # Default keyboard shortcuts: main_keymap.github_desktop.zsh
   $ mi # Default keyboard shortcuts: main_keymap.vi.zsh
   $ ml # Default keyboard shortcuts: main_keymap.less.zsh
   $ mm # Default keyboard shortcuts: main_keymap.textmate.zsh

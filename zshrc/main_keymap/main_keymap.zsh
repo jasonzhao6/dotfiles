@@ -12,6 +12,7 @@ MAIN_KEYMAP=(
 	# The following are default keyboard shortcuts as opposed to custom keymaps
 	# Note: Keep the following in sync with `SHORTCUT_NAMESPACES`
 	"${MAIN_DOT}g <regex>? # Show Gmail shortcuts"
+	"${MAIN_DOT}h <regex>? # Show GitHub Desktop shortcuts"
 	"${MAIN_DOT}i <regex>? # Show vi shortcuts"
 	"${MAIN_DOT}l <regex>? # Show less shortcuts"
 	"${MAIN_DOT}m <regex>? # Show TextMate shortcuts"
@@ -25,6 +26,7 @@ MAIN_KEYMAP=(
 SHORTCUT_NAMESPACES=(
 	''
 	"${MAIN_ALIAS}g # Default keyboard shortcuts: main_keymap.gmail.zsh"
+	"${MAIN_ALIAS}h # Default keyboard shortcuts: main_keymap.github_desktop.zsh"
 	"${MAIN_ALIAS}i # Default keyboard shortcuts: main_keymap.vi.zsh"
 	"${MAIN_ALIAS}l # Default keyboard shortcuts: main_keymap.less.zsh"
 	"${MAIN_ALIAS}m # Default keyboard shortcuts: main_keymap.textmate.zsh"
@@ -92,6 +94,12 @@ source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.gmail.zsh"
 function main_keymap_g {
 	local description=$*
 	main_keymap_show_default_keyboard_shortcuts 'gmail' "$description"
+}
+
+source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.github_desktop.zsh"
+function main_keymap_h {
+	local description=$*
+	main_keymap_show_default_keyboard_shortcuts 'github_desktop' "$description"
 }
 
 source "$ZSHRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.vi.zsh"

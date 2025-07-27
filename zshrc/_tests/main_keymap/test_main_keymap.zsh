@@ -52,16 +52,18 @@ function test__main_keymap_r__when_specifying_a_description {
 	)" "$(
 		cat <<-eof
 
-			  $ h.a # Open the current repo in GitHub Desktop
-			  $ n.h # Go to GitHub
-			  $ q.h # Chat with GitHub MCP, and \`pbcopy\` trust instructions
+			  $ h.a          # Open the current repo in GitHub Desktop
+			  $ m.h <regex>? # Show GitHub Desktop shortcuts
+			  $ n.h          # Go to GitHub
+			  $ q.h          # Chat with GitHub MCP, and \`pbcopy\` trust instructions
 
-			  intellij_alt: alt-o # Open on GitHub
-			  all: h              # Keymap: github_keymap.zsh
-			  vimium_search: c    # Github Code Search (TENGF)
-			  vimium_search: cc   # Github Code Search
-			  vimium_search: r    # Github Repo Search (TENGF)
-			  vimium_search: rr   # Github Repo Search
+			  intellij_alt: alt-o         # Open on GitHub
+			  all: h                      # Keymap: github_keymap.zsh
+			  github_desktop: cmd-shift-g # View on GitHub
+			  vimium_search: c            # Github Code Search (TENGF)
+			  vimium_search: cc           # Github Code Search
+			  vimium_search: r            # Github Repo Search (TENGF)
+			  vimium_search: rr           # Github Repo Search
 		eof
 	)"
 }; run_with_filter test__main_keymap_r__when_specifying_a_description
