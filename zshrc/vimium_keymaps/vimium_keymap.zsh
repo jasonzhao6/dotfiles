@@ -8,7 +8,7 @@ keymap_init $VIMIUM_NAMESPACE $VIMIUM_ALIAS "${VIMIUM_KEYMAP[@]}"
 
 function vimium_keymap {
 	# Extract, source, and init again in case keymap has changed
- 	vimium_keymap_extract 'VIMIUM_KEYMAP'
+	vimium_keymap_extract 'VIMIUM_KEYMAP'
 	source "$VIMIUM_KEYMAP_FILE"
 	keymap_init $VIMIUM_NAMESPACE $VIMIUM_ALIAS "${VIMIUM_KEYMAP[@]}"
 

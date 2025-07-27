@@ -9,7 +9,7 @@ keymap_init $VIMIUM_SEARCH_NAMESPACE $VIMIUM_SEARCH_ALIAS "${VIMIUM_SEARCH_KEYMA
 
 function vimium_search_keymap {
 	# Extract, source, and init again in case keymap has changed
- 	vimium_search_keymap_extract 'VIMIUM_SEARCH_KEYMAP'
+	vimium_search_keymap_extract 'VIMIUM_SEARCH_KEYMAP'
 	source "$VIMIUM_SEARCH_KEYMAP_FILE"
 	keymap_init $VIMIUM_SEARCH_NAMESPACE $VIMIUM_SEARCH_ALIAS "${VIMIUM_SEARCH_KEYMAP[@]}"
 
