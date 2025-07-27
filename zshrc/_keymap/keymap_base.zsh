@@ -111,7 +111,8 @@ function keymap_has_disjoint_dups {
 	declare -A seen
 
 	for entry in "${keymap_entries[@]}"; do
-		alias_dot_key="${${(z)entry}[1]}"
+		# If an entry contains multiple tokens, look at only the first token
+		[[ $entry == *\ * ]] && alias_dot_key=${${(z)entry}[1]} || alias_dot_key=$entry
 
 		# If it is the same as the last entry, allow it
 		if [[ $alias_dot_key == "$last_entry" ]]; then
@@ -262,12 +263,8 @@ function keymap_print_map {
 		key_initial=
 		escaped_initial=
 
-		if [[ $entry == *\#* ]]; then
-			# Bug: '`' is getting parsed as `c` somehow
-			first_token=${${(z)entry}[1]}
-		else
-			first_token=$entry
-		fi
+		# If an entry contains multiple tokens, look at only the first token
+		[[ $entry == *\ * ]] && first_token=${${(z)entry}[1]} || first_token=$entry
 
 		# Check `KEYMAP_DASH` before `KEYMAP_DOT` to account for keyboard shortcuts like `cmd-.`
 		if [[ $first_token == *$KEYMAP_DASH* ]]; then
