@@ -11,10 +11,10 @@ Keymap: aws_keymap.zsh
 Keymap Usage
 
   $ s                         # Show this help
-  $ s {regex}                 # Filter key mappings
+  $ s <regex>                 # Filter key mappings
 
-  $ s.{key}                   # Invoke a {key} mapping
-  $ s.{key} {arg}             # Invoke a {key} mapping with {arg}
+  $ s.<key>                   # Invoke a <key> mapping
+  $ s.<key> <arg>             # Invoke a <key> mapping with <arg>
 
      ^                        # The `.` is only for documentation
                               # Omit it when invoking a mapping

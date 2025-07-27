@@ -11,10 +11,10 @@ Keymap: zsh_keymap.zsh
 Keymap Usage
 
   $ z                         # Show this help
-  $ z {regex}                 # Filter key mappings
+  $ z <regex>                 # Filter key mappings
 
-  $ z.{key}                   # Invoke a {key} mapping
-  $ z.{key} {arg}             # Invoke a {key} mapping with {arg}
+  $ z.<key>                   # Invoke a <key> mapping
+  $ z.<key> <arg>             # Invoke a <key> mapping with <arg>
 
      ^                        # The `.` is only for documentation
                               # Omit it when invoking a mapping

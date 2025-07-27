@@ -72,8 +72,8 @@ function test__main_keymap_r__when_specifying_a_zsh_only_description {
 	)" "$(
 		cat <<-eof
 
-			  $ a.- {start} {finish} {command} # Use args within a sequence
-			  $ o.- {start} {finish} {~~}      # Run a sequence of commands
+			  $ a.- <start> <finish> <command> # Use args within a sequence
+			  $ o.- <start> <finish> (~~)      # Run a sequence of commands
 		eof
 	)"
 }; run_with_filter test__main_keymap_r__when_specifying_a_zsh_only_description
@@ -125,10 +125,10 @@ function test__main_keymap_w__when_specifying_a_special_char {
 	)" "$(
 		cat <<-eof
 
-		  $ a.- {start} {finish} {command} # Use args within a sequence
+		  $ a.- <start> <finish> <command> # Use args within a sequence
 		  $ m.-                            # Show stats
 		  $ n.-                            # Sort subfolders by size
-		  $ o.- {start} {finish} {~~}      # Run a sequence of commands
+		  $ o.- <start> <finish> (~~)      # Run a sequence of commands
 
 		  ^cmd--       # Collapse all
 		  cmd--        # Decrease font size in all editors (Convention)

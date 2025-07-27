@@ -11,20 +11,20 @@ Keymap: terraform_keymap.zsh
 Keymap Usage
 
   $ t                         # Show this help
-  $ t {regex}                 # Filter key mappings
+  $ t <regex>                 # Filter key mappings
 
-  $ t.{key}                   # Invoke a {key} mapping
-  $ t.{key} {arg}             # Invoke a {key} mapping with {arg}
+  $ t.<key>                   # Invoke a <key> mapping
+  $ t.<key> <arg>             # Invoke a <key> mapping with <arg>
 
      ^                        # The `.` is only for documentation
                               # Omit it when invoking a mapping
 
 Keymap List
 
-  $ t {terraform command}     
+  $ t <terraform command>     
 
   $ t.w                       # List manifests
-  $ t.w {match}* {-mismatch}* # Filter manifests
+  $ t.w <match>* <-mismatch>* # Filter manifests
 
   $ t.i                       # Init
   $ t.iu                      # Init & upgrade
@@ -32,24 +32,24 @@ Keymap List
   $ t.im                      # Init & migrate state
   $ t.e                       # Load secret env vars
 
-  $ t.v {i,iu,ir,im,e}?       # Validate
-  $ t.p {i,iu,ir,im,e}?       # Plan
+  $ t.v (i,iu,ir,im,e)?       # Validate
+  $ t.p (i,iu,ir,im,e)?       # Plan
   $ t.g                       # Upload gist
   $ t.z                       # Unlock
   $ t.a                       # Apply
   $ t.d                       # Destroy
   $ t.o                       # Show output
 
-  $ t.l {name}                # List states
-  $ t.s {name}                # Show state
-  $ t.t {name}                # Taint state
-  $ t.u {name}                # Untaint state
-  $ t.m {before} {after}      # Move state
-  $ t.rm {name}               # Remove state
+  $ t.l <name>                # List states
+  $ t.s <name>                # Show state
+  $ t.t <name>                # Taint state
+  $ t.u <name>                # Untaint state
+  $ t.m <before> <after>      # Move state
+  $ t.rm <name>               # Remove state
 
   $ t.f                       # Format
-  $ t.h {var name}?           # Scratch
-  $ t.n {var name}?           # Console
+  $ t.h <var name>?           # Scratch
+  $ t.n <var name>?           # Console
   $ t.c                       # Clean
   $ t.cc                      # Clean & clear plugin cache
   $ t.qa                      # Apply & auto-approve

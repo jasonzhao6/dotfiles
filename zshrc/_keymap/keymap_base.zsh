@@ -7,10 +7,10 @@ KEYMAP_ESCAPE="\\\\" # Escape twice to avoid special chars like `\n`
 
 KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS} # Show this help"
-	"${KEYMAP_ALIAS} {regex} # Filter key mappings"
+	"${KEYMAP_ALIAS} <regex> # Filter key mappings"
 	''
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} # Invoke a {key} mapping"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}{key} {arg} # Invoke a {key} mapping with {arg}"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # Invoke a <key> mapping"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <arg> # Invoke a <key> mapping with <arg>"
 )
 
 function keymap_init {
@@ -319,6 +319,17 @@ function keymap_print_map {
 	echo
 	gray_fg '  `<>` key initials have one mapping'
 	gray_fg '  `()` key initials have multiple mappings'
+
+	# Notes on `<>, (), {}, []` usage
+	# - `<>` is used to enclose keymap variables, e.g `<command>`
+	#   - Also used to indicate key initials with one mapping
+	# - `()` is used to enclose keymap literals, e.g `(i,iu,ir,im,e)`
+	#   - Also used to indicate key initials with mulitple mappings
+	#   - Also used in keymap descriptions to enclose clarifications
+	# - `{}` is used to enclose keyboard keys, e.g `{esc}`
+	#   - Cannot reuse `<>` b/c `"${${(z)...}[1]}"` splits on `<`
+	#   - Cannot reuse `()` b/c "(`{F5}`)" looks better than "(`(F5)`)"
+	# - `[]` cannot be used b/c `[` and `]` are keyboard keys in the keymap
 }
 
 function keymap_print_entry {

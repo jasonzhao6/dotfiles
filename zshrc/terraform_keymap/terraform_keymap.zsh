@@ -3,10 +3,10 @@ TERRAFORM_ALIAS='t'
 TERRAFORM_DOT="${TERRAFORM_ALIAS}${KEYMAP_DOT}"
 
 TERRAFORM_KEYMAP=(
-	"${TERRAFORM_ALIAS} {terraform command}"
+	"${TERRAFORM_ALIAS} <terraform command>"
 	''
 	"${TERRAFORM_DOT}w # List manifests"
-	"${TERRAFORM_DOT}w {match}* {-mismatch}* # Filter manifests"
+	"${TERRAFORM_DOT}w <match>* <-mismatch>* # Filter manifests"
 	''
 	"${TERRAFORM_DOT}i # Init"
 	"${TERRAFORM_DOT}iu # Init & upgrade"
@@ -14,24 +14,24 @@ TERRAFORM_KEYMAP=(
 	"${TERRAFORM_DOT}im # Init & migrate state"
 	"${TERRAFORM_DOT}e # Load secret env vars"
 	''
-	"${TERRAFORM_DOT}v {i,iu,ir,im,e}? # Validate"
-	"${TERRAFORM_DOT}p {i,iu,ir,im,e}? # Plan"
+	"${TERRAFORM_DOT}v (i,iu,ir,im,e)? # Validate"
+	"${TERRAFORM_DOT}p (i,iu,ir,im,e)? # Plan"
 	"${TERRAFORM_DOT}g # Upload gist"
 	"${TERRAFORM_DOT}z # Unlock"
 	"${TERRAFORM_DOT}a # Apply"
 	"${TERRAFORM_DOT}d # Destroy"
 	"${TERRAFORM_DOT}o # Show output"
 	''
-	"${TERRAFORM_DOT}l {name} # List states"
-	"${TERRAFORM_DOT}s {name} # Show state"
-	"${TERRAFORM_DOT}t {name} # Taint state"
-	"${TERRAFORM_DOT}u {name} # Untaint state"
-	"${TERRAFORM_DOT}m {before} {after} # Move state"
-	"${TERRAFORM_DOT}rm {name} # Remove state"
+	"${TERRAFORM_DOT}l <name> # List states"
+	"${TERRAFORM_DOT}s <name> # Show state"
+	"${TERRAFORM_DOT}t <name> # Taint state"
+	"${TERRAFORM_DOT}u <name> # Untaint state"
+	"${TERRAFORM_DOT}m <before> <after> # Move state"
+	"${TERRAFORM_DOT}rm <name> # Remove state"
 	''
 	"${TERRAFORM_DOT}f # Format"
-	"${TERRAFORM_DOT}h {var name}? # Scratch"
-	"${TERRAFORM_DOT}n {var name}? # Console"
+	"${TERRAFORM_DOT}h <var name>? # Scratch"
+	"${TERRAFORM_DOT}n <var name>? # Console"
 	"${TERRAFORM_DOT}c # Clean"
 	"${TERRAFORM_DOT}cc # Clean & clear plugin cache"
 	"${TERRAFORM_DOT}qa # Apply & auto-approve"

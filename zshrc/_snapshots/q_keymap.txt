@@ -11,10 +11,10 @@ Keymap: q_keymap.zsh
 Keymap Usage
 
   $ q              # Show this help
-  $ q {regex}      # Filter key mappings
+  $ q <regex>      # Filter key mappings
 
-  $ q.{key}        # Invoke a {key} mapping
-  $ q.{key} {arg}  # Invoke a {key} mapping with {arg}
+  $ q.<key>        # Invoke a <key> mapping
+  $ q.<key> <arg>  # Invoke a <key> mapping with <arg>
 
      ^             # The `.` is only for documentation
                    # Omit it when invoking a mapping

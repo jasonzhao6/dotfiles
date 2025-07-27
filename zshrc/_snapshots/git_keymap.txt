@@ -11,10 +11,10 @@ Keymap: git_keymap.zsh
 Keymap Usage
 
   $ g             # Show this help
-  $ g {regex}     # Filter key mappings
+  $ g <regex>     # Filter key mappings
 
-  $ g.{key}       # Invoke a {key} mapping
-  $ g.{key} {arg} # Invoke a {key} mapping with {arg}
+  $ g.<key>       # Invoke a <key> mapping
+  $ g.<key> <arg> # Invoke a <key> mapping with <arg>
 
      ^            # The `.` is only for documentation
                   # Omit it when invoking a mapping

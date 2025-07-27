@@ -8,10 +8,10 @@ TEST_KEYMAP=(
 	''
 	"${TEST_DOT}b # Second"
 	"${TEST_DOT}c # Third without args"
-	"${TEST_DOT}c {arg 1} {arg 2} # Third with args"
+	"${TEST_DOT}c <arg 1> <arg 2> # Third with args"
 	"${TEST_DOT}d"
 	''
-	"{1-9} # #1-9"
+	"<1-9> # #1-9"
 	"cmd-\` # Backtick"
 	"cmd-$KEYMAP_ESCAPE # Escape escape"
 )
@@ -112,10 +112,10 @@ function test__keymap_show {
 			Keymap Usage
 
 			  $ test__                   # Show this help
-			  $ test__ {regex}           # Filter key mappings
+			  $ test__ <regex>           # Filter key mappings
 
-			  $ test__.{key}             # Invoke a {key} mapping
-			  $ test__.{key} {arg}       # Invoke a {key} mapping with {arg}
+			  $ test__.<key>             # Invoke a <key> mapping
+			  $ test__.<key> <arg>       # Invoke a <key> mapping with <arg>
 
 			          ^                  # The \`.\` is only for documentation
 			                             # Omit it when invoking a mapping
@@ -127,10 +127,10 @@ function test__keymap_show {
 
 			  $ test__.b                 # Second
 			  $ test__.c                 # Third without args
-			  $ test__.c {arg 1} {arg 2} # Third with args
+			  $ test__.c <arg 1> <arg 2> # Third with args
 			  $ test__.d
 
-			  $ {1-9}                    # #1-9
+			  $ <1-9>                    # #1-9
 			  $ cmd-\`                    # Backtick
 			  $ cmd-\                    # Escape escape
 		eof
@@ -152,7 +152,7 @@ function test__keymap_show__with_multiple_words {
 		cat <<-eof
 
 		  $ test__.c                 # Third without args
-		  $ test__.c {arg 1} {arg 2} # Third with args
+		  $ test__.c <arg 1> <arg 2> # Third with args
 		eof
 	)"
 }; run_with_filter test__keymap_show__with_multiple_words
