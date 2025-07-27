@@ -32,22 +32,8 @@ function branch_info {
 	[[ -n $branch_info ]] && echo " #$branch_info"
 }
 
-STS_INFO_DIR="$HOME/.zshrc.sts_info.d"
-
-function sts_info_reset { rm -rf "$STS_INFO_DIR"; }
-
 function sts_info {
-	[[ -z $AWS_PROFILE ]] && return
-
-	if [[ ! -e $STS_INFO_DIR/$AWS_PROFILE ]]; then
-		local account; account=$(aws iam list-account-aliases --query 'AccountAliases[0]' --output text)
-		local role; role=$(aws sts get-caller-identity --query Arn --output text | awk -F'/' '{print $2}' | awk -F'_' '{print $2}')
-
-		mkdir -p "$STS_INFO_DIR"
-		echo "$account::$role" > "$STS_INFO_DIR"/"$AWS_PROFILE"
-	fi
-
-	echo " $(<"$STS_INFO_DIR"/"$AWS_PROFILE")"
+	[[ -n $AWS_PROFILE ]] && echo " $AWS_PROFILE"
 }
 
 function region_info {
