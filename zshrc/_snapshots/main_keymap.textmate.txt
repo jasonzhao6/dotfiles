@@ -10,6 +10,8 @@ Shortcuts: main_keymap.textmate.zsh
   ^cmd-{down}       # Go into/open (`cmd-o`)
   ^cmd-alt-i        # Toggle invisible files
   ^{enter}          # Rename
+  cmd-ctrl-n        # New file
+  cmd-shift-n       # New folder
 
   cmd-t             # Jump to file
   cmd-shift-t       # Jump to symbol
