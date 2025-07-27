@@ -9,13 +9,13 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}s # Source"
 	"${ZSH_DOT}t # Test"
 	''
-	"${ZSH_DOT}z {name} # Custom \`which\` lookup"
+	"${ZSH_DOT}z <name> # Custom \`which\` lookup"
 	"${ZSH_DOT}a # List aliases"
-	"${ZSH_DOT}a {match}* {-mismatch}* # Filter aliases"
+	"${ZSH_DOT}a <match>* <-mismatch>* # Filter aliases"
 	"${ZSH_DOT}f # List functions"
-	"${ZSH_DOT}f {match}* {-mismatch}* # Filter functions"
+	"${ZSH_DOT}f <match>* <-mismatch>* # Filter functions"
 	''
-	"${ZSH_DOT}h {grep}? # List history"
+	"${ZSH_DOT}h <grep>? # List history"
 	"${ZSH_DOT}hc # Clear history"
 	"${ZSH_DOT}hm # Edit history file in TextMate"
 	''

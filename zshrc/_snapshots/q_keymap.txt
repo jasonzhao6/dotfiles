@@ -25,8 +25,8 @@ Keymap List
   $ q.h            # Chat with GitHub MCP, and `pbcopy` trust instructions
   $ q.j            # Chat with Jira MCP, and `pbcopy` trust instructions
 
-  $ q.0 {command}? # Invoke `q`
-  $ q.4 {command}? # Invoke `q chat` with `claude-4-sonnet`
+  $ q.0 <command>? # Invoke `q`
+  $ q.4 <command>? # Invoke `q chat` with `claude-4-sonnet`
 
   $ q.p            # Push `amazonq` folder to `scratch` repo
   $ q.P            # Pull `amazonq` folder from `scratch` repo

@@ -21,7 +21,7 @@ Keymap Usage
 
 Keymap List
 
-  $ n {directory}              # Go to directory
+  $ n <directory>              # Go to directory
   $ n.t                        # Go to directory in pasteboard
 
   $ n.m                        # Go to Documents
@@ -33,12 +33,12 @@ Keymap List
   $ n.e                        # Go to excalidraw
   $ n.s                        # Go to scratch
 
-  $ n.n {match}* {-mismatch}*  # List visible directories & files
-  $ n.a {match}* {-mismatch}*  # List hidden directories & files
-  $ n.o {match}* {-mismatch}*  # List visible directories
-  $ n.oo {match}* {-mismatch}* # List hidden directories
-  $ n.i {match}* {-mismatch}*  # List visible files
-  $ n.ii {match}* {-mismatch}* # List hidden files
+  $ n.n <match>* <-mismatch>*  # List visible directories & files
+  $ n.a <match>* <-mismatch>*  # List hidden directories & files
+  $ n.o <match>* <-mismatch>*  # List visible directories
+  $ n.oo <match>* <-mismatch>* # List hidden directories
+  $ n.i <match>* <-mismatch>*  # List visible files
+  $ n.ii <match>* <-mismatch>* # List hidden files
 
   $ n.u                        # Go up one directory
   $ n.uu                       # Go up two directories

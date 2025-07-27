@@ -23,15 +23,15 @@ Keymap List
 
   $ m.a               # List all keymap namespaces
   $ m.r               # List all keymap entries
-  $ m.r {description} # Filter keymap entries by description
-  $ m.w {key}         # Filter keymap entries by key
+  $ m.r <description> # Filter keymap entries by description
+  $ m.w <key>         # Filter keymap entries by key
   $ m.-               # Show stats
 
-  $ m.g {regex}?      # Show Gmail shortcuts
-  $ m.i {regex}?      # Show vi shortcuts
-  $ m.l {regex}?      # Show less shortcuts
-  $ m.m {regex}?      # Show TextMate shortcuts
-  $ m.n {regex}?      # Show Notion shortcuts
-  $ m.o {regex}?      # Show macOS shortcuts
-  $ m.s {regex}?      # Show Slack shortcuts
-  $ m.t {regex}?      # Show Terminal shortcuts
+  $ m.g <regex>?      # Show Gmail shortcuts
+  $ m.i <regex>?      # Show vi shortcuts
+  $ m.l <regex>?      # Show less shortcuts
+  $ m.m <regex>?      # Show TextMate shortcuts
+  $ m.n <regex>?      # Show Notion shortcuts
+  $ m.o <regex>?      # Show macOS shortcuts
+  $ m.s <regex>?      # Show Slack shortcuts
+  $ m.t <regex>?      # Show Terminal shortcuts

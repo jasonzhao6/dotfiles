@@ -21,13 +21,13 @@ Keymap Usage
 
 Keymap List
 
-  $ g {branch}    # Checkout a local branch
-  $ g.k {branch}  # Checkout a remote branch
-  $ g.n {branch}  # Checkout a new branch
+  $ g <branch>    # Checkout a local branch
+  $ g.k <branch>  # Checkout a remote branch
+  $ g.n <branch>  # Checkout a new branch
   $ g.g           # Checkout the latest `main`
   $ g.b           # List branches
   $ g.bb          # Delete merged branches
-  $ g.bd {branch} # Delete the specified branch
+  $ g.bd <branch> # Delete the specified branch
 
   $ g.d           # Git diff
   $ g.t           # Git status
@@ -36,43 +36,43 @@ Keymap List
   $ g.w           # Reword the previous commit
   $ g.e           # Create an empty commit
   $ g.i           # Fix up the commit in pasteboard
-  $ g.i {sha}     # Fix up the specified commit
+  $ g.i <sha>     # Fix up the specified commit
   $ g.ii          # List the last 20 commits
 
   $ g.x           # Rebase with the latest main
-  $ g.x {number}  # Rebase with the last N commits
+  $ g.x <number>  # Rebase with the last N commits
   $ g.xm          # Rebase with the latest master
   $ g.xu          # Rebase with the latest upstream
   $ g.xc          # Rebase continue
   $ g.xa          # Rebase abort
 
   $ g.y           # Cherry pick the commit in pasteboard
-  $ g.y {sha}     # Cherry pick the specified commit
+  $ g.y <sha>     # Cherry pick the specified commit
   $ g.yc          # Cherry pick continue
   $ g.ya          # Cherry pick abort
 
   $ g.v           # Revert the commit in pasteboard
-  $ g.v {sha}     # Revert the specified commit
+  $ g.v <sha>     # Revert the specified commit
   $ g.vc          # Revert continue
   $ g.va          # Revert abort
 
   $ g.u           # Undo the last commit
-  $ g.u {number}  # Undo the last N commits
+  $ g.u <number>  # Undo the last N commits
   $ g.z           # Discard uncommitted changes
-  $ g.z {number}  # Discard uncommitted changes & the last N commits
+  $ g.z <number>  # Discard uncommitted changes & the last N commits
   $ g.zz          # Discard uncommitted changes & the last commit
 
   $ g.s           # Git stash
-  $ g.s {message} # Git stash with message
+  $ g.s <message> # Git stash with message
   $ g.a           # Apply the last stash
-  $ g.a {index}   # Apply stash by index
+  $ g.a <index>   # Apply stash by index
   $ g.l           # List the stash
   $ g.lc          # Clear the stash
 
   $ g.r           # List logs
-  $ g.r {match}*  # Filter logs
+  $ g.r <match>*  # Filter logs
   $ g.rr          # List first parent logs
-  $ g.rr {match}* # Filter first parent logs
+  $ g.rr <match>* # Filter first parent logs
 
   $ g.P           # Pull
   $ g.p           # Push

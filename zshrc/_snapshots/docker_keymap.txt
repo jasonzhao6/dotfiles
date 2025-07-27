@@ -21,6 +21,6 @@ Keymap Usage
 
 Keymap List
 
-  $ d {docker command} 
+  $ d <docker command> 
 
   $ d.s                # Login with AWS credentials

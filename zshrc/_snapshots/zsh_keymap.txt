@@ -27,13 +27,13 @@ Keymap List
   $ z.s                       # Source
   $ z.t                       # Test
 
-  $ z.z {name}                # Custom `which` lookup
+  $ z.z <name>                # Custom `which` lookup
   $ z.a                       # List aliases
-  $ z.a {match}* {-mismatch}* # Filter aliases
+  $ z.a <match>* <-mismatch>* # Filter aliases
   $ z.f                       # List functions
-  $ z.f {match}* {-mismatch}* # Filter functions
+  $ z.f <match>* <-mismatch>* # Filter functions
 
-  $ z.h {grep}?               # List history
+  $ z.h <grep>?               # List history
   $ z.hc                      # Clear history
   $ z.hm                      # Edit history file in TextMate
 

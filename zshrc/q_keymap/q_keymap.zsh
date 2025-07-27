@@ -7,8 +7,8 @@ Q_KEYMAP=(
 	"${Q_DOT}h # Chat with GitHub MCP, and \`pbcopy\` trust instructions"
 	"${Q_DOT}j # Chat with Jira MCP, and \`pbcopy\` trust instructions"
 	''
-	"${Q_DOT}0 {command}? # Invoke \`q\`"
-	"${Q_DOT}4 {command}? # Invoke \`q chat\` with \`claude-4-sonnet\`"
+	"${Q_DOT}0 <command>? # Invoke \`q\`"
+	"${Q_DOT}4 <command>? # Invoke \`q chat\` with \`claude-4-sonnet\`"
 	''
 	"${Q_DOT}p # Push \`amazonq\` folder to \`scratch\` repo"
 	"${Q_DOT}P # Pull \`amazonq\` folder from \`scratch\` repo"
@@ -53,7 +53,7 @@ function q_keymap_j {
 	local jira_readonly_tools=$(
 		grep --color=never --only-matching 'mcp_atlassian___jira_[a-zA-Z_]*' \
 			"$ZSHRC_DIR/${Q_NAMESPACE}/mcp_tools.jira.txt" |
-			egrep --color=never '(_get_|_search_|_download_)'
+			egrep --color=never '(_get_|_search|_download_)'
 	)
 	local pasteboard_content="/tools trust"$'\n'"$jira_readonly_tools"
 	echo "$pasteboard_content" | pbcopy

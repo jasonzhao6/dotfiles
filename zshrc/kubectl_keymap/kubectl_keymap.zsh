@@ -3,41 +3,41 @@ KUBECTL_ALIAS='k'
 KUBECTL_DOT="${KUBECTL_ALIAS}${KEYMAP_DOT}"
 
 KUBECTL_KEYMAP=(
-	"${KUBECTL_ALIAS} {kubectl command}"
+	"${KUBECTL_ALIAS} <kubectl command>"
 	''
-	"${KUBECTL_DOT}n {namespace}? # Set namespace (to '$GITHUB_DEFAULT_ORG')"
-	"${KUBECTL_DOT}e1 {namespace}? # Set namespace, region, and kube config"
-	"${KUBECTL_DOT}e2 {namespace}? # Set namespace, region, and kube config"
-	"${KUBECTL_DOT}w2 {namespace}? # Set namespace, region, and kube config"
+	"${KUBECTL_DOT}n <namespace>? # Set namespace (to '$GITHUB_DEFAULT_ORG')"
+	"${KUBECTL_DOT}e1 <namespace>? # Set namespace, region, and kube config"
+	"${KUBECTL_DOT}e2 <namespace>? # Set namespace, region, and kube config"
+	"${KUBECTL_DOT}w2 <namespace>? # Set namespace, region, and kube config"
 	''
-	"${KUBECTL_DOT}k {type} {match}* {-mismatch}* # Get resources as args"
-	"${KUBECTL_DOT}g {type} {name} # Get resources"
-	"${KUBECTL_DOT}gg {type} {name} # Get resources with \`-o wide\`"
-	"${KUBECTL_DOT}d {type} {name} # Describe resources"
-	"${KUBECTL_DOT}m {type} {name} # Edit with TextMate"
+	"${KUBECTL_DOT}k <type> <match>* <-mismatch>* # Get resources as args"
+	"${KUBECTL_DOT}g <type> <name> # Get resources"
+	"${KUBECTL_DOT}gg <type> <name> # Get resources with \`-o wide\`"
+	"${KUBECTL_DOT}d <type> <name> # Describe resources"
+	"${KUBECTL_DOT}m <type> <name> # Edit with TextMate"
 	''
-	"${KUBECTL_DOT}l {pod} # Show logs"
-	"${KUBECTL_DOT}ll {pod} # Tail logs"
-	"${KUBECTL_DOT}lp {pod} # Show previous logs"
-	"${KUBECTL_DOT}b {pod} # Exec into bash"
-	"${KUBECTL_DOT}bc {command} {pod} # Exec a command"
+	"${KUBECTL_DOT}l <pod> # Show logs"
+	"${KUBECTL_DOT}ll <pod> # Tail logs"
+	"${KUBECTL_DOT}lp <pod> # Show previous logs"
+	"${KUBECTL_DOT}b <pod> # Exec into bash"
+	"${KUBECTL_DOT}bc <command> <pod> # Exec a command"
 	"${KUBECTL_DOT}c # Copy history bindings and \`kubectl\` helpers"
 	''
-	"${KUBECTL_DOT}s {count} {deployment} # Scale a deployment"
-	"${KUBECTL_DOT}ss {type} {name} # Restart a deployment/stateful set/daemon set"
+	"${KUBECTL_DOT}s <count> <deployment> # Scale a deployment"
+	"${KUBECTL_DOT}ss <type> <name> # Restart a deployment/stateful set/daemon set"
 	''
-	"${KUBECTL_DOT}j {type} {name} # Get resource as json & save a copy"
+	"${KUBECTL_DOT}j <type> <name> # Get resource as json & save a copy"
 	"${KUBECTL_DOT}jj # Get the copy of json"
-	"${KUBECTL_DOT}y {type} {name} # Get resource as yaml & save a copy"
+	"${KUBECTL_DOT}y <type> <name> # Get resource as yaml & save a copy"
 	"${KUBECTL_DOT}yy # Get the copy of yaml"
 	''
 	"${KUBECTL_DOT}r # List resource types"
-	"${KUBECTL_DOT}r {match}* {-mismatch}* # Filter resource types"
+	"${KUBECTL_DOT}r <match>* <-mismatch>* # Filter resource types"
 	"${KUBECTL_DOT}rr # Save a copy of resource types"
-	"${KUBECTL_DOT}x {type} # Explain a resource type"
+	"${KUBECTL_DOT}x <type> # Explain a resource type"
 	''
 	"${KUBECTL_DOT}h # Run Helm unit tests and update snapshots"
-	"${KUBECTL_DOT}t {yaml file} # Render Helm template locally"
+	"${KUBECTL_DOT}t <yaml file> # Render Helm template locally"
 )
 
 keymap_init $KUBECTL_NAMESPACE $KUBECTL_ALIAS "${KUBECTL_KEYMAP[@]}"

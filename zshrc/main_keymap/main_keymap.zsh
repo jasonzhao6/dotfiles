@@ -5,20 +5,20 @@ MAIN_DOT="${MAIN_ALIAS}${KEYMAP_DOT}"
 MAIN_KEYMAP=(
 	"${MAIN_DOT}a # List all keymap namespaces"
 	"${MAIN_DOT}r # List all keymap entries"
-	"${MAIN_DOT}r {description} # Filter keymap entries by description"
-	"${MAIN_DOT}w {key} # Filter keymap entries by key"
+	"${MAIN_DOT}r <description> # Filter keymap entries by description"
+	"${MAIN_DOT}w <key> # Filter keymap entries by key"
 	"${MAIN_DOT}- # Show stats"
 	''
 	# The following are default keyboard shortcuts as opposed to custom keymaps
 	# Note: Keep the following in sync with `SHORTCUT_NAMESPACES`
-	"${MAIN_DOT}g {regex}? # Show Gmail shortcuts"
-	"${MAIN_DOT}i {regex}? # Show vi shortcuts"
-	"${MAIN_DOT}l {regex}? # Show less shortcuts"
-	"${MAIN_DOT}m {regex}? # Show TextMate shortcuts"
-	"${MAIN_DOT}n {regex}? # Show Notion shortcuts"
-	"${MAIN_DOT}o {regex}? # Show macOS shortcuts"
-	"${MAIN_DOT}s {regex}? # Show Slack shortcuts"
-	"${MAIN_DOT}t {regex}? # Show Terminal shortcuts"
+	"${MAIN_DOT}g <regex>? # Show Gmail shortcuts"
+	"${MAIN_DOT}i <regex>? # Show vi shortcuts"
+	"${MAIN_DOT}l <regex>? # Show less shortcuts"
+	"${MAIN_DOT}m <regex>? # Show TextMate shortcuts"
+	"${MAIN_DOT}n <regex>? # Show Notion shortcuts"
+	"${MAIN_DOT}o <regex>? # Show macOS shortcuts"
+	"${MAIN_DOT}s <regex>? # Show Slack shortcuts"
+	"${MAIN_DOT}t <regex>? # Show Terminal shortcuts"
 )
 
 # Note: Keep the following in sync with their counterparts in `MAIN_KEYMAP`

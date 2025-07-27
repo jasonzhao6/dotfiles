@@ -21,25 +21,25 @@ Keymap Usage
 
 Keymap List
 
-  $ h {repo}                  # Open the specified repo
+  $ h <repo>                  # Open the specified repo
   $ h.o                       # Open the current repo
   $ h.p                       # Open the latest PRs
-  $ h.p {pr}                  # Open the specified PR
+  $ h.p <pr>                  # Open the specified PR
   $ h.c                       # Open the specified commit in pasteboard
-  $ h.c {sha}                 # Open the specified commit
+  $ h.c <sha>                 # Open the specified commit
 
   $ h.h                       # Navigate to the current org
-  $ h.h {match}* {-mismatch}* # Navigate to the current org & filter repos
+  $ h.h <match>* <-mismatch>* # Navigate to the current org & filter repos
   $ h.t                       # Navigate to the repo name in pasteboard
   $ h.tt                      # Save the current repo name to pasteboard
 
   $ h.a                       # Open the current repo in GitHub Desktop
   $ h.n                       # Create a new PR, then open it
-  $ h.g {|}?                  # Create a new gist, then open it
+  $ h.g <|>?                  # Create a new gist, then open it
   $ h.gg                      # Open new tab to create a gist
 
   $ h.r                       # List remote repos
-  $ h.r {match}* {-mismatch}* # Filter remote repos
+  $ h.r <match>* <-mismatch>* # Filter remote repos
   $ h.rr                      # Save a copy of remote repos
 
   $ h.url                     # Git url

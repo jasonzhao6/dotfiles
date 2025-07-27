@@ -3,25 +3,25 @@ GITHUB_ALIAS='h'
 GITHUB_DOT="${GITHUB_ALIAS}${KEYMAP_DOT}"
 
 GITHUB_KEYMAP=(
-	"${GITHUB_ALIAS} {repo} # Open the specified repo"
+	"${GITHUB_ALIAS} <repo> # Open the specified repo"
 	"${GITHUB_DOT}o # Open the current repo"
 	"${GITHUB_DOT}p # Open the latest PRs"
-	"${GITHUB_DOT}p {pr} # Open the specified PR"
+	"${GITHUB_DOT}p <pr> # Open the specified PR"
 	"${GITHUB_DOT}c # Open the specified commit in pasteboard"
-	"${GITHUB_DOT}c {sha} # Open the specified commit"
+	"${GITHUB_DOT}c <sha> # Open the specified commit"
 	''
 	"${GITHUB_DOT}h # Navigate to the current org"
-	"${GITHUB_DOT}h {match}* {-mismatch}* # Navigate to the current org & filter repos"
+	"${GITHUB_DOT}h <match>* <-mismatch>* # Navigate to the current org & filter repos"
 	"${GITHUB_DOT}t # Navigate to the repo name in pasteboard"
 	"${GITHUB_DOT}tt # Save the current repo name to pasteboard"
 	''
 	"${GITHUB_DOT}a # Open the current repo in GitHub Desktop"
 	"${GITHUB_DOT}n # Create a new PR, then open it"
-	"${GITHUB_DOT}g {|}? # Create a new gist, then open it"
+	"${GITHUB_DOT}g <|>? # Create a new gist, then open it"
 	"${GITHUB_DOT}gg # Open new tab to create a gist"
 	''
 	"${GITHUB_DOT}r # List remote repos"
-	"${GITHUB_DOT}r {match}* {-mismatch}* # Filter remote repos"
+	"${GITHUB_DOT}r <match>* <-mismatch>* # Filter remote repos"
 	"${GITHUB_DOT}rr # Save a copy of remote repos"
 	''
 	"${GITHUB_DOT}url # Git url"

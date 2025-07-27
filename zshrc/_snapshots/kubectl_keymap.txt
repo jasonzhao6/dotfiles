@@ -21,38 +21,38 @@ Keymap Usage
 
 Keymap List
 
-  $ k {kubectl command}              
+  $ k <kubectl command>              
 
-  $ k.n {namespace}?                 # Set namespace (to 'transaction-engine')
-  $ k.e1 {namespace}?                # Set namespace, region, and kube config
-  $ k.e2 {namespace}?                # Set namespace, region, and kube config
-  $ k.w2 {namespace}?                # Set namespace, region, and kube config
+  $ k.n <namespace>?                 # Set namespace (to 'transaction-engine')
+  $ k.e1 <namespace>?                # Set namespace, region, and kube config
+  $ k.e2 <namespace>?                # Set namespace, region, and kube config
+  $ k.w2 <namespace>?                # Set namespace, region, and kube config
 
-  $ k.k {type} {match}* {-mismatch}* # Get resources as args
-  $ k.g {type} {name}                # Get resources
-  $ k.gg {type} {name}               # Get resources with `-o wide`
-  $ k.d {type} {name}                # Describe resources
-  $ k.m {type} {name}                # Edit with TextMate
+  $ k.k <type> <match>* <-mismatch>* # Get resources as args
+  $ k.g <type> <name>                # Get resources
+  $ k.gg <type> <name>               # Get resources with `-o wide`
+  $ k.d <type> <name>                # Describe resources
+  $ k.m <type> <name>                # Edit with TextMate
 
-  $ k.l {pod}                        # Show logs
-  $ k.ll {pod}                       # Tail logs
-  $ k.lp {pod}                       # Show previous logs
-  $ k.b {pod}                        # Exec into bash
-  $ k.bc {command} {pod}             # Exec a command
+  $ k.l <pod>                        # Show logs
+  $ k.ll <pod>                       # Tail logs
+  $ k.lp <pod>                       # Show previous logs
+  $ k.b <pod>                        # Exec into bash
+  $ k.bc <command> <pod>             # Exec a command
   $ k.c                              # Copy history bindings and `kubectl` helpers
 
-  $ k.s {count} {deployment}         # Scale a deployment
-  $ k.ss {type} {name}               # Restart a deployment/stateful set/daemon set
+  $ k.s <count> <deployment>         # Scale a deployment
+  $ k.ss <type> <name>               # Restart a deployment/stateful set/daemon set
 
-  $ k.j {type} {name}                # Get resource as json & save a copy
+  $ k.j <type> <name>                # Get resource as json & save a copy
   $ k.jj                             # Get the copy of json
-  $ k.y {type} {name}                # Get resource as yaml & save a copy
+  $ k.y <type> <name>                # Get resource as yaml & save a copy
   $ k.yy                             # Get the copy of yaml
 
   $ k.r                              # List resource types
-  $ k.r {match}* {-mismatch}*        # Filter resource types
+  $ k.r <match>* <-mismatch>*        # Filter resource types
   $ k.rr                             # Save a copy of resource types
-  $ k.x {type}                       # Explain a resource type
+  $ k.x <type>                       # Explain a resource type
 
   $ k.h                              # Run Helm unit tests and update snapshots
-  $ k.t {yaml file}                  # Render Helm template locally
+  $ k.t <yaml file>                  # Render Helm template locally

@@ -108,9 +108,9 @@ function test__main_keymap_w__when_specifying_a_key {
 	)" "$(
 		cat <<-eof
 
-		  $ k.j {type} {name}             # Get resource as json & save a copy
+		  $ k.j <type> <name>             # Get resource as json & save a copy
 		  $ k.jj                          # Get the copy of json
-		  $ o.j {url} {regex} {num lines} # Curl a json endpoint
+		  $ o.j <url> <regex> <num lines> # Curl a json endpoint
 		  $ q.j                           # Chat with Jira MCP, and \`pbcopy\` trust instructions
 
 		  alt-j # Step over
