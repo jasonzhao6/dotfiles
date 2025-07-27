@@ -10,11 +10,13 @@ Keymap: github_keymap.zsh
 
 Keymap Usage
 
-  $ h                         # Show this help
-  $ h <regex>                 # Filter key mappings
+  $ h                         # Show this keymap
+  $ h <regex>                 # Search this keymap
 
-  $ h.<key>                   # Invoke a <key> mapping
-  $ h.<key> <arg>             # Invoke a <key> mapping with <arg>
+  $ h.<key1>                  # This mapping takes no argument
+  $ (|)? h.<key2>             # This mapping can be invoked after a `|`
+  $ h.<key3> <var>?           # This mapping takes an optional variable
+  $ h.<key4> <var> (val)      # This mapping takes a variable and an exact value
 
      ^                        # The `.` is only for documentation
                               # Omit it when invoking a mapping
@@ -35,7 +37,7 @@ Keymap List
 
   $ h.a                       # Open the current repo in GitHub Desktop
   $ h.n                       # Create a new PR, then open it
-  $ h.g (|)?                  # Create a new gist, then open it
+  $ (|)? h.g                  # Create a new gist, then open it
   $ h.gg                      # Open new tab to create a gist
 
   $ h.r                       # List remote repos

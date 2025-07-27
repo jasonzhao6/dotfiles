@@ -1,9 +1,9 @@
 function test__aws_keymap {
 	assert "$(
-		local show_this_help; show_this_help=$(aws_keymap | grep help | bw)
+		local show_this_help; show_this_help=$(aws_keymap | grep 'Show this keymap' | bw)
 
 		# shellcheck disable=SC2076
-		[[ $show_this_help =~ "^  \\$ $AWS_ALIAS +# Show this help$" ]] && echo 1
+		[[ $show_this_help =~ "^  \\$ $AWS_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
 }; run_with_filter test__aws_keymap
 

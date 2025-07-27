@@ -10,11 +10,13 @@ Keymap: zsh_keymap.zsh
 
 Keymap Usage
 
-  $ z                         # Show this help
-  $ z <regex>                 # Filter key mappings
+  $ z                         # Show this keymap
+  $ z <regex>                 # Search this keymap
 
-  $ z.<key>                   # Invoke a <key> mapping
-  $ z.<key> <arg>             # Invoke a <key> mapping with <arg>
+  $ z.<key1>                  # This mapping takes no argument
+  $ (|)? z.<key2>             # This mapping can be invoked after a `|`
+  $ z.<key3> <var>?           # This mapping takes an optional variable
+  $ z.<key4> <var> (val)      # This mapping takes a variable and an exact value
 
      ^                        # The `.` is only for documentation
                               # Omit it when invoking a mapping

@@ -10,11 +10,13 @@ Keymap: terraform_keymap.zsh
 
 Keymap Usage
 
-  $ t                         # Show this help
-  $ t <regex>                 # Filter key mappings
+  $ t                         # Show this keymap
+  $ t <regex>                 # Search this keymap
 
-  $ t.<key>                   # Invoke a <key> mapping
-  $ t.<key> <arg>             # Invoke a <key> mapping with <arg>
+  $ t.<key1>                  # This mapping takes no argument
+  $ (|)? t.<key2>             # This mapping can be invoked after a `|`
+  $ t.<key3> <var>?           # This mapping takes an optional variable
+  $ t.<key4> <var> (val)      # This mapping takes a variable and an exact value
 
      ^                        # The `.` is only for documentation
                               # Omit it when invoking a mapping

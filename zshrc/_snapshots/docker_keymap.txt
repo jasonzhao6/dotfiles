@@ -10,17 +10,19 @@ Keymap: docker_keymap.zsh
 
 Keymap Usage
 
-  $ d                  # Show this help
-  $ d <regex>          # Filter key mappings
+  $ d                    # Show this keymap
+  $ d <regex>            # Search this keymap
 
-  $ d.<key>            # Invoke a <key> mapping
-  $ d.<key> <arg>      # Invoke a <key> mapping with <arg>
+  $ d.<key1>             # This mapping takes no argument
+  $ (|)? d.<key2>        # This mapping can be invoked after a `|`
+  $ d.<key3> <var>?      # This mapping takes an optional variable
+  $ d.<key4> <var> (val) # This mapping takes a variable and an exact value
 
-     ^                 # The `.` is only for documentation
-                       # Omit it when invoking a mapping
+     ^                   # The `.` is only for documentation
+                         # Omit it when invoking a mapping
 
 Keymap List
 
-  $ d <docker command> 
+  $ d <docker command>   
 
-  $ d.s                # Login with AWS credentials
+  $ d.s                  # Login with AWS credentials

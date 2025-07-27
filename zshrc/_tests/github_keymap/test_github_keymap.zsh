@@ -1,9 +1,9 @@
 function test__github_keymap {
 	assert "$(
-		local show_this_help; show_this_help=$(github_keymap | grep help | bw)
+		local show_this_help; show_this_help=$(github_keymap | grep 'Show this keymap' | bw)
 
 		# shellcheck disable=SC2076
-		[[ $show_this_help =~ "^  \\$ $GITHUB_ALIAS +# Show this help$" ]] && echo 1
+		[[ $show_this_help =~ "^  \\$ $GITHUB_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
 }; run_with_filter test__github_keymap
 

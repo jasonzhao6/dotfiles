@@ -10,11 +10,13 @@ Keymap: kubectl_keymap.zsh
 
 Keymap Usage
 
-  $ k                                # Show this help
-  $ k <regex>                        # Filter key mappings
+  $ k                                # Show this keymap
+  $ k <regex>                        # Search this keymap
 
-  $ k.<key>                          # Invoke a <key> mapping
-  $ k.<key> <arg>                    # Invoke a <key> mapping with <arg>
+  $ k.<key1>                         # This mapping takes no argument
+  $ (|)? k.<key2>                    # This mapping can be invoked after a `|`
+  $ k.<key3> <var>?                  # This mapping takes an optional variable
+  $ k.<key4> <var> (val)             # This mapping takes a variable and an exact value
 
      ^                               # The `.` is only for documentation
                                      # Omit it when invoking a mapping

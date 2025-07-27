@@ -1,9 +1,9 @@
 function test__main_keymap {
 	assert "$(
-		local show_this_help; show_this_help=$(main_keymap | grep help | bw)
+		local show_this_help; show_this_help=$(main_keymap | grep 'Show this keymap' | bw)
 
 		# shellcheck disable=SC2076
-		[[ $show_this_help =~ "^  \\$ $MAIN_ALIAS +# Show this help$" ]] && echo 1
+		[[ $show_this_help =~ "^  \\$ $MAIN_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
 }; run_with_filter test__main_keymap
 

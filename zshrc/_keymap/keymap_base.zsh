@@ -3,14 +3,17 @@ KEYMAP_ALIAS='_PLACEHOLDER_'
 KEYMAP_DASH='-'
 KEYMAP_DOT='.'
 KEYMAP_DOT_POINTER='^'
+KEYMAP_PIPE_PATTERN="(|)? "
 KEYMAP_ESCAPE="\\\\" # Escape twice to avoid special chars like `\n`
 
 KEYMAP_USAGE=(
-	"${KEYMAP_ALIAS} # Show this help"
-	"${KEYMAP_ALIAS} <regex> # Filter key mappings"
+	"${KEYMAP_ALIAS} # Show this keymap"
+	"${KEYMAP_ALIAS} <regex> # Search this keymap"
 	''
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # Invoke a <key> mapping"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <arg> # Invoke a <key> mapping with <arg>"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key1> # This mapping takes no argument"
+	"(|)? ${KEYMAP_ALIAS}${KEYMAP_DOT}<key2> # This mapping can be invoked after a \`|\`"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key3> <var>? # This mapping takes an optional variable"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key4> <var> (val) # This mapping takes a variable and an exact value"
 )
 
 function keymap_init {
@@ -111,26 +114,28 @@ function keymap_has_disjoint_dups {
 	declare -A seen
 
 	for entry in "${keymap_entries[@]}"; do
-		# If an entry contains multiple tokens, look at only the first token
-		[[ $entry == *\ * ]] && alias_dot_key=${${(z)entry}[1]} || alias_dot_key=$entry
+		# Get the first token while igonring any leading "(|)? " pattern
+		# Note: This is inlined and repeated b/c calling a function in a loop is slow
+		[[ $entry == "$KEYMAP_PIPE_PATTERN"* ]] && entry="${entry#\(\|\)\? }"
+		[[ $entry == *\ * ]] && first_token=${${(z)entry}[1]} || first_token=$entry
 
 		# If it is the same as the last entry, allow it
-		if [[ $alias_dot_key == "$last_entry" ]]; then
+		if [[ $first_token == "$last_entry" ]]; then
 			continue
 
 		# Otherwise, remember it to allow dupe in the next entry
 		else
-			last_entry=$alias_dot_key
+			last_entry=$first_token
 		fi
 
 		# If we have not seen an entry, remember it
-		if [[ -z ${seen[$alias_dot_key]} ]]; then
-			seen[$alias_dot_key]=$entry
+		if [[ -z ${seen[$first_token]} ]]; then
+			seen[$first_token]=$entry
 
 		# Otherwise, report on disjoint dups
 		else
 			echo
-			red_bar "\`$namespace\` has duplicate \`$alias_dot_key\` entries"
+			red_bar "\`$namespace\` has duplicate \`$first_token\` entries"
 			has_disjoint_dups=1
 		fi
 	done
@@ -159,7 +164,10 @@ function keymap_set_dot_aliases {
 	declare -A seen
 
 	for entry in "${keymap_entries[@]}"; do
-		first_token="${${(z)entry}[1]}"
+		# Get the first token while igonring any leading "(|)? " pattern
+		# Note: This is inlined and repeated b/c calling a function in a loop is slow
+		[[ $entry == "$KEYMAP_PIPE_PATTERN"* ]] && entry="${entry#\(\|\)\? }"
+		[[ $entry == *\ * ]] && first_token=${${(z)entry}[1]} || first_token=$entry
 
 		# Set alias only for `key`s preceded by `KEYMAP_DOT`s
 		[[ $first_token != *$KEYMAP_DOT* ]] && continue
@@ -263,7 +271,9 @@ function keymap_print_map {
 		key_initial=
 		escaped_initial=
 
-		# If an entry contains multiple tokens, look at only the first token
+		# Get the first token while igonring any leading "(|)? " pattern
+		# Note: This is inlined and repeated b/c calling a function in a loop is slow
+		[[ $entry == "$KEYMAP_PIPE_PATTERN"* ]] && entry="${entry#\(\|\)\? }"
 		[[ $entry == *\ * ]] && first_token=${${(z)entry}[1]} || first_token=$entry
 
 		# Check `KEYMAP_DASH` before `KEYMAP_DOT` to account for keyboard shortcuts like `cmd-.`

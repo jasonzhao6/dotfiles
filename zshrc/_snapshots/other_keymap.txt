@@ -10,11 +10,13 @@ Keymap: other_keymap.zsh
 
 Keymap Usage
 
-  $ o                                       # Show this help
-  $ o <regex>                               # Filter key mappings
+  $ o                                       # Show this keymap
+  $ o <regex>                               # Search this keymap
 
-  $ o.<key>                                 # Invoke a <key> mapping
-  $ o.<key> <arg>                           # Invoke a <key> mapping with <arg>
+  $ o.<key1>                                # This mapping takes no argument
+  $ (|)? o.<key2>                           # This mapping can be invoked after a `|`
+  $ o.<key3> <var>?                         # This mapping takes an optional variable
+  $ o.<key4> <var> (val)                    # This mapping takes a variable and an exact value
 
      ^                                      # The `.` is only for documentation
                                             # Omit it when invoking a mapping
@@ -42,16 +44,16 @@ Keymap List
   $ o.kc                                    # Clear archived terminal outputs
 
   $ o.12                                    # Open `diff.1.txt` and `diff.2.txt` in TextMate
-  $ o.1 (|)?                                # Save pasteboard value to `diff.1.txt`
-  $ o.2 (|)?                                # Save pasteboard value to `diff.2.txt`
+  $ (|)? o.1                                # Save pasteboard value to `diff.1.txt`
+  $ (|)? o.2                                # Save pasteboard value to `diff.2.txt`
   $ o.11                                    # Save the last output to `diff.1.txt`
   $ o.22                                    # Save the last output to `diff.2.txt`
   $ o.0                                     # Empty `diff.1.txt` and `diff.2.txt`
   $ o.u <file 1>? <file 2>?                 # Unified diff
   $ o.uu <file 1>? <file 2>?                # Side by side diff
 
-  $ o.i <file> <column index>? (|)?         # CSV: Sort lines by column index
-  $ o.ii <file> <column 1> <column 2>? (|)? # CSV: Swap columns by indexes
+  $ (|)? o.i <file> <column index>?         # CSV: Sort lines by column index
+  $ (|)? o.ii <file> <column 1> <column 2>? # CSV: Swap columns by indexes
   $ o.x <file 1>? <file 2>?                 # CSV: Keep lines with matching first columns
   $ o.xx <file 1>? <file 2>?                # CSV: Drop lines with matching first columns
 

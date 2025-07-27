@@ -10,11 +10,13 @@ Keymap: nav_keymap.zsh
 
 Keymap Usage
 
-  $ n                          # Show this help
-  $ n <regex>                  # Filter key mappings
+  $ n                          # Show this keymap
+  $ n <regex>                  # Search this keymap
 
-  $ n.<key>                    # Invoke a <key> mapping
-  $ n.<key> <arg>              # Invoke a <key> mapping with <arg>
+  $ n.<key1>                   # This mapping takes no argument
+  $ (|)? n.<key2>              # This mapping can be invoked after a `|`
+  $ n.<key3> <var>?            # This mapping takes an optional variable
+  $ n.<key4> <var> (val)       # This mapping takes a variable and an exact value
 
      ^                         # The `.` is only for documentation
                                # Omit it when invoking a mapping

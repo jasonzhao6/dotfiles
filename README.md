@@ -69,7 +69,7 @@ Keymap: main_keymap.all_namespaces.zsh
   `   1   2   3   4   5   |   6   7   8   9   0   [   ]
       '   ,   .   p   y   |   f  <g>  c   r   l   /   =   \
      <a> <o>  e   u  (i)  |  <d> <h> <t> <n> <s>  -
-      ;   q   j  <k>  x   |   b  (m)  w  (v) <z>
+      ;  <q>  j  <k>  x   |   b  (m)  w  (v) <z>
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
@@ -85,6 +85,7 @@ All Namespaces
   $ m  # Keymap: main_keymap.zsh
   $ n  # Keymap: nav_keymap.zsh
   $ o  # Keymap: other_keymap.zsh
+  $ q  # Keymap: q_keymap.zsh
   $ t  # Keymap: terraform_keymap.zsh
   $ z  # Keymap: zsh_keymap.zsh
 
@@ -124,21 +125,23 @@ Keymap: terraform_keymap.zsh
 
 Keymap Usage
 
-  $ t                         # Show this help
-  $ t {regex}                 # Filter key mappings
+  $ t                         # Show this keymap
+  $ t <regex>                 # Search this keymap
 
-  $ t.{key}                   # Invoke a {key} mapping
-  $ t.{key} {arg}             # Invoke a {key} mapping with {arg}
+  $ t.<key1>                  # This mapping takes no argument
+  $ (|)? t.<key2>             # This mapping can be invoked after a `|`
+  $ t.<key3> <var>?           # This mapping takes an optional variable
+  $ t.<key4> <var> (val)      # This mapping takes a variable and an exact value
 
      ^                        # The `.` is only for documentation
                               # Omit it when invoking a mapping
 
 Keymap List
 
-  $ t {terraform command}
+  $ t <terraform command>
 
   $ t.w                       # List manifests
-  $ t.w {match}* {-mismatch}* # Filter manifests
+  $ t.w <match>* <-mismatch>* # Filter manifests
 
   $ t.i                       # Init
   $ t.iu                      # Init & upgrade
@@ -146,24 +149,24 @@ Keymap List
   $ t.im                      # Init & migrate state
   $ t.e                       # Load secret env vars
 
-  $ t.v {i,iu,ir,im,e}?       # Validate
-  $ t.p {i,iu,ir,im,e}?       # Plan
+  $ t.v (i,iu,ir,im,e)?       # Validate
+  $ t.p (i,iu,ir,im,e)?       # Plan
   $ t.g                       # Upload gist
   $ t.z                       # Unlock
   $ t.a                       # Apply
   $ t.d                       # Destroy
   $ t.o                       # Show output
 
-  $ t.l {name}                # List states
-  $ t.s {name}                # Show state
-  $ t.t {name}                # Taint state
-  $ t.u {name}                # Untaint state
-  $ t.m {before} {after}      # Move state
-  $ t.rm {name}               # Remove state
+  $ t.l <name>                # List states
+  $ t.s <name>                # Show state
+  $ t.t <name>                # Taint state
+  $ t.u <name>                # Untaint state
+  $ t.m <before> <after>      # Move state
+  $ t.rm <name>               # Remove state
 
   $ t.f                       # Format
-  $ t.h {var name}?           # Scratch
-  $ t.n {var name}?           # Console
+  $ t.h <var name>?           # Scratch
+  $ t.n <var name>?           # Console
   $ t.c                       # Clean
   $ t.cc                      # Clean & clear plugin cache
   $ t.qa                      # Apply & auto-approve

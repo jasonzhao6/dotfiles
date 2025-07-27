@@ -24,16 +24,16 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}kc # Clear archived terminal outputs"
 	''
 	"${OTHER_DOT}12 # Open \`diff.1.txt\` and \`diff.2.txt\` in TextMate"
-	"${OTHER_DOT}1 (|)? # Save pasteboard value to \`diff.1.txt\`"
-	"${OTHER_DOT}2 (|)? # Save pasteboard value to \`diff.2.txt\`"
+	"(|)? ${OTHER_DOT}1 # Save pasteboard value to \`diff.1.txt\`"
+	"(|)? ${OTHER_DOT}2 # Save pasteboard value to \`diff.2.txt\`"
 	"${OTHER_DOT}11 # Save the last output to \`diff.1.txt\`"
 	"${OTHER_DOT}22 # Save the last output to \`diff.2.txt\`"
 	"${OTHER_DOT}0 # Empty \`diff.1.txt\` and \`diff.2.txt\`"
 	"${OTHER_DOT}u <file 1>? <file 2>? # Unified diff"
 	"${OTHER_DOT}uu <file 1>? <file 2>? # Side by side diff"
 	''
-	"${OTHER_DOT}i <file> <column index>? (|)? # CSV: Sort lines by column index"
-	"${OTHER_DOT}ii <file> <column 1> <column 2>? (|)? # CSV: Swap columns by indexes"
+	"(|)? ${OTHER_DOT}i <file> <column index>? # CSV: Sort lines by column index"
+	"(|)? ${OTHER_DOT}ii <file> <column 1> <column 2>? # CSV: Swap columns by indexes"
 	"${OTHER_DOT}x <file 1>? <file 2>? # CSV: Keep lines with matching first columns"
 	"${OTHER_DOT}xx <file 1>? <file 2>? # CSV: Drop lines with matching first columns"
 	''

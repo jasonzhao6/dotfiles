@@ -10,11 +10,13 @@ Keymap: aws_keymap.zsh
 
 Keymap Usage
 
-  $ s                         # Show this help
-  $ s <regex>                 # Filter key mappings
+  $ s                         # Show this keymap
+  $ s <regex>                 # Search this keymap
 
-  $ s.<key>                   # Invoke a <key> mapping
-  $ s.<key> <arg>             # Invoke a <key> mapping with <arg>
+  $ s.<key1>                  # This mapping takes no argument
+  $ (|)? s.<key2>             # This mapping can be invoked after a `|`
+  $ s.<key3> <var>?           # This mapping takes an optional variable
+  $ s.<key4> <var> (val)      # This mapping takes a variable and an exact value
 
      ^                        # The `.` is only for documentation
                               # Omit it when invoking a mapping

@@ -10,6 +10,7 @@ TEST_KEYMAP=(
 	"${TEST_DOT}c # Third without args"
 	"${TEST_DOT}c <arg 1> <arg 2> # Third with args"
 	"${TEST_DOT}d"
+	"(|)? ${TEST_DOT}e"
 	''
 	"<1-9> # #1-9"
 	"cmd-\` # Backtick"
@@ -103,7 +104,7 @@ function test__keymap_show {
 
 			  \`   1   2   3   4   5   |   6   7   8   9   0   [   ]
 			      '   ,   .   p   y   |   f   g  (c)  r   l   /   =  <\>
-			     (a)  o   e   u   i   |  <d>  h   t   n   s   -
+			     (a)  o  <e>  u   i   |  <d>  h   t   n   s   -
 			      ;   q   j   k   x   |  <b>  m   w   v   z
 
 			  \`<>\` key initials have one mapping
@@ -111,28 +112,31 @@ function test__keymap_show {
 
 			Keymap Usage
 
-			  $ test__                   # Show this help
-			  $ test__ <regex>           # Filter key mappings
+			  $ test__                    # Show this keymap
+			  $ test__ <regex>            # Search this keymap
 
-			  $ test__.<key>             # Invoke a <key> mapping
-			  $ test__.<key> <arg>       # Invoke a <key> mapping with <arg>
+			  $ test__.<key1>             # This mapping takes no argument
+			  $ (|)? test__.<key2>        # This mapping can be invoked after a \`|\`
+			  $ test__.<key3> <var>?      # This mapping takes an optional variable
+			  $ test__.<key4> <var> (val) # This mapping takes a variable and an exact value
 
-			          ^                  # The \`.\` is only for documentation
-			                             # Omit it when invoking a mapping
+			          ^                   # The \`.\` is only for documentation
+			                              # Omit it when invoking a mapping
 
 			Keymap List
 
-			  $ test__.a                 # First
-			  $ test__.aa                # First related
+			  $ test__.a                  # First
+			  $ test__.aa                 # First related
 
-			  $ test__.b                 # Second
-			  $ test__.c                 # Third without args
-			  $ test__.c <arg 1> <arg 2> # Third with args
+			  $ test__.b                  # Second
+			  $ test__.c                  # Third without args
+			  $ test__.c <arg 1> <arg 2>  # Third with args
 			  $ test__.d
+			  $ (|)? test__.e
 
-			  $ <1-9>                    # #1-9
-			  $ cmd-\`                    # Backtick
-			  $ cmd-\                    # Escape escape
+			  $ <1-9>                     # #1-9
+			  $ cmd-\`                     # Backtick
+			  $ cmd-\                     # Escape escape
 		eof
 	)"
 }; run_with_filter test__keymap_show

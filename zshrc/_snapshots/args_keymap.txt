@@ -10,21 +10,23 @@ Keymap: args_keymap.zsh
 
 Keymap Usage
 
-  $ a                               # Show this help
-  $ a <regex>                       # Filter key mappings
+  $ a                               # Show this keymap
+  $ a <regex>                       # Search this keymap
 
-  $ a.<key>                         # Invoke a <key> mapping
-  $ a.<key> <arg>                   # Invoke a <key> mapping with <arg>
+  $ a.<key1>                        # This mapping takes no argument
+  $ (|)? a.<key2>                   # This mapping can be invoked after a `|`
+  $ a.<key3> <var>?                 # This mapping takes an optional variable
+  $ a.<key4> <var> (val)            # This mapping takes a variable and an exact value
 
      ^                              # The `.` is only for documentation
                                     # Omit it when invoking a mapping
 
 Keymap List
 
-  $ a.s (|)?                        # Save as args
-  $ a.s <match>* <-mismatch>* (|)?  # Save as args & filter
-  $ a.so (|)?                       # Save as args & soft-select the 1st column
-  $ a.so <match>* <-mismatch>* (|)? # Save as args & soft-select the 1st column & filter
+  $ (|)? a.s                        # Save as args
+  $ (|)? a.s <match>* <-mismatch>*  # Save as args & filter
+  $ (|)? a.so                       # Save as args & soft-select the 1st column
+  $ (|)? a.so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter
 
   $ a.a                             # List args
   $ a.a <match>* <-mismatch>*       # Filter args

@@ -10,23 +10,25 @@ Keymap: q_keymap.zsh
 
 Keymap Usage
 
-  $ q              # Show this help
-  $ q <regex>      # Filter key mappings
+  $ q                    # Show this keymap
+  $ q <regex>            # Search this keymap
 
-  $ q.<key>        # Invoke a <key> mapping
-  $ q.<key> <arg>  # Invoke a <key> mapping with <arg>
+  $ q.<key1>             # This mapping takes no argument
+  $ (|)? q.<key2>        # This mapping can be invoked after a `|`
+  $ q.<key3> <var>?      # This mapping takes an optional variable
+  $ q.<key4> <var> (val) # This mapping takes a variable and an exact value
 
-     ^             # The `.` is only for documentation
-                   # Omit it when invoking a mapping
+     ^                   # The `.` is only for documentation
+                         # Omit it when invoking a mapping
 
 Keymap List
 
-  $ q.q            # Chat without MCP
-  $ q.h            # Chat with GitHub MCP, and `pbcopy` trust instructions
-  $ q.j            # Chat with Jira MCP, and `pbcopy` trust instructions
+  $ q.q                  # Chat without MCP
+  $ q.h                  # Chat with GitHub MCP, and `pbcopy` trust instructions
+  $ q.j                  # Chat with Jira MCP, and `pbcopy` trust instructions
 
-  $ q.0 <command>? # Invoke `q`
-  $ q.4 <command>? # Invoke `q chat` with `claude-4-sonnet`
+  $ q.0 <command>?       # Invoke `q`
+  $ q.4 <command>?       # Invoke `q chat` with `claude-4-sonnet`
 
-  $ q.p            # Push `amazonq` folder to `scratch` repo
-  $ q.P            # Pull `amazonq` folder from `scratch` repo
+  $ q.p                  # Push `amazonq` folder to `scratch` repo
+  $ q.P                  # Pull `amazonq` folder from `scratch` repo
