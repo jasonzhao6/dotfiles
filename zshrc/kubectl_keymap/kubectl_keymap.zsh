@@ -73,12 +73,47 @@ function kubectl_keymap_bc {
 	kubectl exec "$pod" -- "${command[@]}"
 }
 
+AWS_SSO_CACHE_DIR="$HOME/.aws/sso/cache"
+AWS_SSO_CACHE_JQ=$(
+	cat <<-eof | tr -d '\n'
+		.Credentials | [
+			"export AWS_ACCESS_KEY_ID='\(.AccessKeyId)'",
+			"export AWS_SECRET_ACCESS_KEY='\(.SecretAccessKey)'",
+			"export AWS_SESSION_TOKEN='\(.SessionToken)'"
+		]
+	eof
+)
+
 function kubectl_keymap_c {
-	# `AWS_CLI_CACHE_DIR` contains cached creds for multiple roles
-	# To get only the current role, empty the cache and run a command
-	rm -rf "$AWS_CLI_CACHE_DIR"
+	# `AWS_SSO_CACHE_DIR` can contain SSO creds for multiple roles
+	# To identify creds for the current role, delete all creds, then run a command
+	# Note: This folder also contains an OAuth cred, which needs to be preserved
+	#       Deleting it causes the next command to reinitiate OAuth with AWS
+	if [[ -d "$AWS_SSO_CACHE_DIR" ]]; then
+		for file in "$AWS_SSO_CACHE_DIR"/*; do
+			if [[ -f "$file" ]] && grep -q '"ProviderType": "sso"' "$file"; then
+				rm "$file"
+			fi
+		done
+	fi
+
+	# Run a command to generate fresh SSO cred
 	aws sts get-caller-identity
-	local current_role; current_role=$(ls "$AWS_CLI_CACHE_DIR")
+
+	# Find the current SSO cred (should be the only one now)
+	local current_role
+	for file in "$AWS_SSO_CACHE_DIR"/*; do
+		if [[ -f "$file" ]] && grep -q '"ProviderType": "sso"' "$file"; then
+			current_role=$(basename "$file")
+			break
+		fi
+	done
+
+	# Check if we found an SSO file
+	if [[ -z "$current_role" ]]; then
+		echo "Error: No SSO credentials file found in $AWS_SSO_CACHE_DIR"
+		return 1
+	fi
 
 	cat <<-eof | pbcopy
 		bind '"\e[A": history-search-backward'
@@ -90,7 +125,7 @@ function kubectl_keymap_c {
 
 		function kb () { kubectl exec -it "\$1" -- bash; }
 
-		$(jq "$AWS_CLI_CACHE_JQ" "$AWS_CLI_CACHE_DIR/$current_role" | trim_list)
+		$(jq "$AWS_SSO_CACHE_JQ" "$AWS_SSO_CACHE_DIR/$current_role" | trim_list)
 
 		aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $KUBECTL_DEFAULT_CLUSTER
 		kubectl config set-context --current --namespace=$GITHUB_DEFAULT_ORG
@@ -234,14 +269,3 @@ function kubectl_keymap_y {
 function kubectl_keymap_yy {
 	cat ~/Documents/zshrc-data/k8s.get-output.yaml
 }
-
-AWS_CLI_CACHE_DIR="$HOME/.aws/cli/cache"
-AWS_CLI_CACHE_JQ=$(
-	cat <<-eof | tr -d '\n'
-		.Credentials | [
-			"export AWS_ACCESS_KEY_ID='\(.AccessKeyId)'",
-			"export AWS_SECRET_ACCESS_KEY='\(.SecretAccessKey)'",
-			"export AWS_SESSION_TOKEN='\(.SessionToken)'"
-		]
-	eof
-)
