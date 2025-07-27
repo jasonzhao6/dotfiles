@@ -14,8 +14,8 @@ INTELLIJ_CTRL_KEYMAP=(
 	"ctrl-shift-$KEYMAP_ESCAPE # Copilot disable completions"
 	"ctrl-[ # Copilot show previous completions"
 	"ctrl-] # Copilot show next completions"
-	"ctrl-[enter] # Copilot apply next word"
-	"ctrl-shift-[enter] # Copilot apply next line"
+	"ctrl-{enter} # Copilot apply next word"
+	"ctrl-shift-{enter} # Copilot apply next line"
 	''
 	"ctrl-c # Close tabs to the right"
 	"ctrl-shift-c # Close tabs to the left"

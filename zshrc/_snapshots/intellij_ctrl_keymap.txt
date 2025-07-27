@@ -1,6 +1,6 @@
 Keymap: intellij_ctrl_keymap.zsh
 
-  `   1   2   3   4   5   |   6   7   8   9   0  <[> (])
+  `   1   2   3   4   5   |   6   7   8   9   0  <[> <]>
       '   ,   .   p   y   |  <f> <g> (c) (r) <l>  /  (=) (\)
       a   o   e   u   i   |  <d> <h> (t) (n) <s> (-)
       ;   q   j   k   x   |  (b) <m> (w) <v> (z)
@@ -18,8 +18,8 @@ Keymap List
   ctrl-shift-\       # Copilot disable completions
   ctrl-[             # Copilot show previous completions
   ctrl-]             # Copilot show next completions
-  ctrl-[enter]       # Copilot apply next word
-  ctrl-shift-[enter] # Copilot apply next line
+  ctrl-{enter}       # Copilot apply next word
+  ctrl-shift-{enter} # Copilot apply next line
 
   ctrl-c             # Close tabs to the right
   ctrl-shift-c       # Close tabs to the left

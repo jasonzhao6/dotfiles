@@ -27,8 +27,8 @@ Keymap List
   ^cmd-+                  # Expand all
   cmd-;                   # Find (Toggle bottom panel)
   cmd-shift-;             # Terminal (Default)
-  shift-[esc]             # Hide all tool windows (default)
-  cmd-[1-8]               # Select tabs #1-8 (convention)
+  shift-{esc}             # Hide all tool windows (default)
+  cmd-{1-8}               # Select tabs #1-8 (convention)
   cmd-9                   # Select last tab (Convention)
   cmd-p                   # Keep tab open
   cmd-alt-1               # Collapse all (TextMate)
@@ -41,8 +41,8 @@ Keymap List
   cmd-alt-`               # Expand all (For Mac keyboard)
   cmd-alt-/               # Expand all (For Kinesis keyboard)
   cmd-a                   # Select all (Default)
-  cmd-shift-[up]          # Move caret to text start with selection (Convention)
-  cmd-shift-[down]        # Move caret to text end with selection (Convention)
+  cmd-shift-{up}          # Move caret to text start with selection (Convention)
+  cmd-shift-{down}        # Move caret to text end with selection (Convention)
   cmd-c                   # Copy (Default)
   cmd-x                   # Cut (Default)
   cmd-v                   # Paste (Default)
@@ -58,7 +58,7 @@ Keymap List
   ^ctrl-alt-f             # Toggle comment/string filters
   cmd-ctrl-f              # Replace
   cmd-ctrl-shift-f        # Replace in files
-  ^alt-shift-[enter]      # Replace all (`alt-a`)
+  ^alt-shift-{enter}      # Replace all (`alt-a`)
   ^() $1                  # Replace with regex capture group
   cmd-e                   # Next occurrence of the word at caret (Convention)
   cmd-shift-e             # Previous occurrence of the word at caret (Convention)
@@ -66,10 +66,10 @@ Keymap List
   cmd-shift-g             # Find previous (Default)
   cmd-d                   # Duplicate line or selection
   ^ctrl-d                 # Delete line (From `intellij_ctrl_keymap`)
-  cmd-ctrl-[up]           # Move line up (TextMate)
-  cmd-ctrl-[down]         # Move line down (TextMate)
-  cmd-ctrl-shift-[up]     # Move statement up
-  cmd-ctrl-shift-[down]   # Move statement down
+  cmd-ctrl-{up}           # Move line up (TextMate)
+  cmd-ctrl-{down}         # Move line down (TextMate)
+  cmd-ctrl-shift-{up}     # Move statement up
+  cmd-ctrl-shift-{down}   # Move statement down
   cmd-[                   # Indent left (Default)
   cmd-]                   # Indent right (Default)
   cmd-/                   # Line comment (Convention)
@@ -81,8 +81,8 @@ Keymap List
   cmd-l                   # Go to line
   cmd-shift-l             # Extend line selection (TextMate)
   cmd-alt-w               # Soft-wrap (TextMate)
-  cmd-[esc]               # Cyclic expand word (TextMate)
-  cmd-shift-[esc]         # Cyclic expand word backward (TextMate)
+  cmd-{esc}               # Cyclic expand word (TextMate)
+  cmd-shift-{esc}         # Cyclic expand word backward (TextMate)
   cmd-r                   # Run (The last configuration)
   ^alt-r                  # Run context configuration (From `intellij_alt_keymap`)
   ^ctrl-alt-r             # Run...
@@ -115,8 +115,8 @@ Keymap List
   ctrl-shift-\            # Copilot disable completions
   ctrl-[                  # Copilot show previous completions
   ctrl-]                  # Copilot show next completions
-  ctrl-[enter]            # Copilot apply next word
-  ctrl-shift-[enter]      # Copilot apply next line
+  ctrl-{enter}            # Copilot apply next word
+  ctrl-shift-{enter}      # Copilot apply next line
   ctrl-c                  # Close tabs to the right
   ctrl-shift-c            # Close tabs to the left
   ctrl-shift-t            # Reopen closed tab

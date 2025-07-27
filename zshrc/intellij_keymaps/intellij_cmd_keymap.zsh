@@ -9,7 +9,7 @@
 INTELLIJ_CMD_NAMESPACE='intellij_cmd_keymap'
 INTELLIJ_CMD_ALIAS='ic'
 
-# Note that `[' ` ;]` require escaping to make `${${(z)...}[1]}` happy
+# Note that `[' ` ;]` chars require escaping to make `${${(z)...}[1]}` happy
 INTELLIJ_CMD_KEYMAP=(
 	"cmd-n # Create new (Default)"
 	"cmd-shift-n # Show scratch files"
@@ -30,9 +30,9 @@ INTELLIJ_CMD_KEYMAP=(
 	"^cmd-+ # Expand all"
 	"cmd-\; # Find (Toggle bottom panel)"
 	"cmd-shift-\; # Terminal (Default)"
-	"shift-[esc] # Hide all tool windows (default)"
+	"shift-{esc} # Hide all tool windows (default)"
 	''
-	"cmd-[1-8] # Select tabs #1-8 (convention)"
+	"cmd-{1-8} # Select tabs #1-8 (convention)"
 	"cmd-9 # Select last tab (Convention)"
 	"cmd-p # Keep tab open" # After clicking into a preview tab
 	''
@@ -47,8 +47,8 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-alt-/ # Expand all (For Kinesis keyboard)"
 	''
 	"cmd-a # Select all (Default)"
-	"cmd-shift-[up] # Move caret to text start with selection (Convention)"
-	"cmd-shift-[down] # Move caret to text end with selection (Convention)"
+	"cmd-shift-{up} # Move caret to text start with selection (Convention)"
+	"cmd-shift-{down} # Move caret to text end with selection (Convention)"
 	"cmd-c # Copy (Default)"
 	"cmd-x # Cut (Default)"
 	"cmd-v # Paste (Default)"
@@ -65,7 +65,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"^ctrl-alt-f # Toggle comment/string filters"
 	"cmd-ctrl-f # Replace"
 	"cmd-ctrl-shift-f # Replace in files"
-	"^alt-shift-[enter] # Replace all (\`alt-a\`)"
+	"^alt-shift-{enter} # Replace all (\`alt-a\`)"
 	"^() \$1 # Replace with regex capture group"
 	"cmd-e # Next occurrence of the word at caret (Convention)"
 	"cmd-shift-e # Previous occurrence of the word at caret (Convention)"
@@ -74,10 +74,10 @@ INTELLIJ_CMD_KEYMAP=(
 	''
 	"cmd-d # Duplicate line or selection"
 	"^ctrl-d # Delete line (From \`intellij_ctrl_keymap\`)"
-	"cmd-ctrl-[up] # Move line up (TextMate)"
-	"cmd-ctrl-[down] # Move line down (TextMate)"
-	"cmd-ctrl-shift-[up] # Move statement up"
-	"cmd-ctrl-shift-[down] # Move statement down"
+	"cmd-ctrl-{up} # Move line up (TextMate)"
+	"cmd-ctrl-{down} # Move line down (TextMate)"
+	"cmd-ctrl-shift-{up} # Move statement up"
+	"cmd-ctrl-shift-{down} # Move statement down"
 	"cmd-[ # Indent left (Default)"
 	"cmd-] # Indent right (Default)"
 	"cmd-/ # Line comment (Convention)"
@@ -91,8 +91,8 @@ INTELLIJ_CMD_KEYMAP=(
 	"cmd-shift-l # Extend line selection (TextMate)"
 	''
 	"cmd-alt-w # Soft-wrap (TextMate)"
-	"cmd-[esc] # Cyclic expand word (TextMate)"
-	"cmd-shift-[esc] # Cyclic expand word backward (TextMate)"
+	"cmd-{esc} # Cyclic expand word (TextMate)"
+	"cmd-shift-{esc} # Cyclic expand word backward (TextMate)"
 	''
 	"cmd-r # Run (The last configuration)"
 	"^alt-r # Run context configuration (From \`intellij_alt_keymap\`)"

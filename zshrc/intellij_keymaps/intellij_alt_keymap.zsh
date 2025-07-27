@@ -6,7 +6,7 @@ INTELLIJ_ALT_NAMESPACE='intellij_alt_keymap'
 INTELLIJ_ALT_ALIAS='ia'
 
 # Note that `alt-e/u` do not work for some reason
-# Note that `[' ` ;]` require escaping to make `${${(z)...}[1]}` happy
+# Note that `[' ` ;]` chars require escaping to make `${${(z)...}[1]}` happy
 INTELLIJ_ALT_KEYMAP=(
 	"alt-a # Sort lines (TextMate: \`{F5}\`)"
 	"alt-shift-a # Reverse lines"

@@ -224,7 +224,7 @@ function keymap_print_help {
 	done
 }
 
-# Zsh keymaps should avoid these chars
+# Zsh keymap keys should avoid these chars
 # - `'` b/c it begins a new quote in zsh
 # - `,` b/c it breaks IntelliJ's error checking
 # - `.` b/c it's already used as `KEYMAP_DOT`
@@ -288,7 +288,6 @@ function keymap_print_map {
 	done
 
 	# Print a map of key initials
-	# - If a key maps to other keymaps, print with `()` in keymap theme color
 	# - If a key maps to multiple mapping functions, print with `()`
 	# - If a key maps to one mapping function, print with `<>`
 	# - If a key is unused, print in gray
