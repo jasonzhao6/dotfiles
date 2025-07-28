@@ -10,72 +10,74 @@ Keymap: git_keymap.zsh
 
 Keymap Usage
 
-  $ g                    # Show this keymap
-  $ g <regex>            # Search this keymap
+  $ g              # Show this keymap
+  $ g <regex>      # Search this keymap
 
-  $ g.<key1>             # This mapping takes no argument
-  $ (|)? g.<key2>        # This mapping can be invoked after a `|`
-  $ g.<key3> <var>?      # This mapping takes an optional variable
-  $ g.<key4> <var> (val) # This mapping takes a variable and an exact value
+  $ (|)? g.<key>   # This mapping can be invoked after a `|`
+  $ g.<key>        # This mapping takes no variable
+  $ g.<key> <var>  # This mapping takes one variable
+  $ g.<key> <var>? # This mapping takes zero or one variable
+  $ g.<key> <var>* # This mapping takes zero or multiple variables
+  $ g.<key> (1-10) # This mapping takes an exact value from the list
 
-     ^                   # The `.` is only for documentation
-                         # Omit it when invoking a mapping
+     ^             # The `.` is only for documentation
+                   # Omit it when invoking a mapping
 
 Keymap List
 
-  $ g <branch>           # Checkout a local branch
-  $ g.k <branch>         # Checkout a remote branch
-  $ g.n <branch>         # Checkout a new branch
-  $ g.g                  # Checkout the latest `main`
-  $ g.b                  # List branches
-  $ g.bb                 # Delete merged branches
-  $ g.bd <branch>        # Delete the specified branch
+  $ g <branch>     # Checkout a local branch
+  $ g.k <branch>   # Checkout a remote branch
+  $ g.n <branch>   # Checkout a new branch
+  $ g.g            # Checkout the latest `main`
+  $ g.b            # List branches
+  $ g.bb           # Delete merged branches
+  $ g.bd <branch>  # Delete the specified branch
 
-  $ g.d                  # Git diff
-  $ g.t                  # Git status
-  $ g.c                  # Create a new commit
-  $ g.m                  # Amend the previous commit
-  $ g.w                  # Reword the previous commit
-  $ g.e                  # Create an empty commit
-  $ g.i                  # Fix up the commit in pasteboard
-  $ g.i <sha>            # Fix up the specified commit
-  $ g.ii                 # List the last 20 commits
+  $ g.d            # Git diff
+  $ g.t            # Git status
+  $ g.c            # Create a new commit
+  $ g.m            # Amend the previous commit
+  $ g.w            # Reword the previous commit
+  $ g.e            # Create an empty commit
+  $ g.i            # Fix up the commit in pasteboard
+  $ g.i <sha>      # Fix up the specified commit
+  $ g.ii           # List the last 20 commits
 
-  $ g.x                  # Rebase with the latest main
-  $ g.x <number>         # Rebase with the last N commits
-  $ g.xm                 # Rebase with the latest master
-  $ g.xu                 # Rebase with the latest upstream
-  $ g.xc                 # Rebase continue
-  $ g.xa                 # Rebase abort
+  $ g.x            # Rebase with the latest main
+  $ g.x <number>   # Rebase with the last N commits
+  $ g.xm           # Rebase with the latest master
+  $ g.xu           # Rebase with the latest upstream
+  $ g.xc           # Rebase continue
+  $ g.xa           # Rebase abort
 
-  $ g.y                  # Cherry pick the commit in pasteboard
-  $ g.y <sha>            # Cherry pick the specified commit
-  $ g.yc                 # Cherry pick continue
-  $ g.ya                 # Cherry pick abort
+  $ g.y            # Cherry pick the commit in pasteboard
+  $ g.y <sha>      # Cherry pick the specified commit
+  $ g.yc           # Cherry pick continue
+  $ g.ya           # Cherry pick abort
 
-  $ g.v                  # Revert the commit in pasteboard
-  $ g.v <sha>            # Revert the specified commit
-  $ g.vc                 # Revert continue
-  $ g.va                 # Revert abort
+  $ g.v            # Revert the commit in pasteboard
+  $ g.v <sha>      # Revert the specified commit
+  $ g.vc           # Revert continue
+  $ g.va           # Revert abort
 
-  $ g.u                  # Undo the last commit
-  $ g.u <number>         # Undo the last N commits
-  $ g.z                  # Discard uncommitted changes
-  $ g.z <number>         # Discard uncommitted changes & the last N commits
-  $ g.zz                 # Discard uncommitted changes & the last commit
+  $ g.u            # Undo the last commit
+  $ g.u <number>   # Undo the last N commits
+  $ g.z            # Discard uncommitted changes
+  $ g.z <number>   # Discard uncommitted changes & the last N commits
+  $ g.zz           # Discard uncommitted changes & the last commit
 
-  $ g.s                  # Git stash
-  $ g.s <message>        # Git stash with message
-  $ g.a                  # Apply the last stash
-  $ g.a <index>          # Apply stash by index
-  $ g.l                  # List the stash
-  $ g.lc                 # Clear the stash
+  $ g.s            # Git stash
+  $ g.s <message>  # Git stash with message
+  $ g.a            # Apply the last stash
+  $ g.a <index>    # Apply stash by index
+  $ g.l            # List the stash
+  $ g.lc           # Clear the stash
 
-  $ g.r                  # List logs
-  $ g.r <match>*         # Filter logs
-  $ g.rr                 # List first parent logs
-  $ g.rr <match>*        # Filter first parent logs
+  $ g.r            # List logs
+  $ g.r <match>*   # Filter logs
+  $ g.rr           # List first parent logs
+  $ g.rr <match>*  # Filter first parent logs
 
-  $ g.P                  # Pull
-  $ g.p                  # Push
-  $ g.f                  # Force push
+  $ g.P            # Pull
+  $ g.p            # Push
+  $ g.f            # Force push

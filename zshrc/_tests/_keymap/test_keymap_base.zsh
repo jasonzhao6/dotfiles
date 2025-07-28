@@ -112,31 +112,33 @@ function test__keymap_show {
 
 			Keymap Usage
 
-			  $ test__                    # Show this keymap
-			  $ test__ <regex>            # Search this keymap
+			  $ test__                   # Show this keymap
+			  $ test__ <regex>           # Search this keymap
 
-			  $ test__.<key1>             # This mapping takes no argument
-			  $ (|)? test__.<key2>        # This mapping can be invoked after a \`|\`
-			  $ test__.<key3> <var>?      # This mapping takes an optional variable
-			  $ test__.<key4> <var> (val) # This mapping takes a variable and an exact value
+			  $ (|)? test__.<key>        # This mapping can be invoked after a \`|\`
+			  $ test__.<key>             # This mapping takes no variable
+			  $ test__.<key> <var>       # This mapping takes one variable
+			  $ test__.<key> <var>?      # This mapping takes zero or one variable
+			  $ test__.<key> <var>*      # This mapping takes zero or multiple variables
+			  $ test__.<key> (1-10)      # This mapping takes an exact value from the list
 
-			          ^                   # The \`.\` is only for documentation
-			                              # Omit it when invoking a mapping
+			          ^                  # The \`.\` is only for documentation
+			                             # Omit it when invoking a mapping
 
 			Keymap List
 
-			  $ test__.a                  # First
-			  $ test__.aa                 # First related
+			  $ test__.a                 # First
+			  $ test__.aa                # First related
 
-			  $ test__.b                  # Second
-			  $ test__.c                  # Third without args
-			  $ test__.c <arg 1> <arg 2>  # Third with args
+			  $ test__.b                 # Second
+			  $ test__.c                 # Third without args
+			  $ test__.c <arg 1> <arg 2> # Third with args
 			  $ test__.d
 			  $ (|)? test__.e
 
-			  $ <1-9>                     # #1-9
-			  $ cmd-\`                     # Backtick
-			  $ cmd-\                     # Escape escape
+			  $ <1-9>                    # #1-9
+			  $ cmd-\`                    # Backtick
+			  $ cmd-\                    # Escape escape
 		eof
 	)"
 }; run_with_filter test__keymap_show

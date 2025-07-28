@@ -13,10 +13,12 @@ Keymap Usage
   $ k                                # Show this keymap
   $ k <regex>                        # Search this keymap
 
-  $ k.<key1>                         # This mapping takes no argument
-  $ (|)? k.<key2>                    # This mapping can be invoked after a `|`
-  $ k.<key3> <var>?                  # This mapping takes an optional variable
-  $ k.<key4> <var> (val)             # This mapping takes a variable and an exact value
+  $ (|)? k.<key>                     # This mapping can be invoked after a `|`
+  $ k.<key>                          # This mapping takes no variable
+  $ k.<key> <var>                    # This mapping takes one variable
+  $ k.<key> <var>?                   # This mapping takes zero or one variable
+  $ k.<key> <var>*                   # This mapping takes zero or multiple variables
+  $ k.<key> (1-10)                   # This mapping takes an exact value from the list
 
      ^                               # The `.` is only for documentation
                                      # Omit it when invoking a mapping
