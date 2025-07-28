@@ -45,7 +45,7 @@ This project organizes my favorite and most frequently used 1) shell commands an
 
 ## Installation
 
-**Note:** You can also browse [snapshots](./zshrc/_snapshots) of keymaps without installation.
+**Note:** You can also preview [snapshots](./zshrc/_snapshots) of keymaps without installation.
 
 1. **Clone this repository**:
    ```bash
@@ -70,18 +70,18 @@ This project organizes my favorite and most frequently used 1) shell commands an
 ## Dependencies
 
 - **Zsh shell**
-- **Main Apps**:
-  [Docker Desktop](https://www.docker.com/products/docker-desktop/),
+- **Main GUIs**:
+  [Docker Desktop](https://www.docker.com/products/docker-desktop/) (`docker`),
   [GitHub Desktop](https://desktop.github.com/download/)
 - **Main CLIs**:
-  [`awscli`](https://formulae.brew.sh/formula/awscli),
+  [awscli](https://formulae.brew.sh/formula/awscli) (`aws`),
   [`gh`](https://formulae.brew.sh/formula/gh),
-  [`kubernetes-cli`](https://formulae.brew.sh/formula/kubernetes-cli),
-  [`tfenv`](https://formulae.brew.sh/formula/tfenv)
+  [`kubectl`](https://formulae.brew.sh/formula/kubernetes-cli),
+  [`tfenv`](https://formulae.brew.sh/formula/tfenv) (`terraform`)
 - **Helper CLIs**:
   [`colordiff`](https://formulae.brew.sh/formula/colordiff),
-  [`coreutils`](https://formulae.brew.sh/formula/coreutils),
-  [`pcre`](https://formulae.brew.sh/formula/pcre)
+  [coreutils](https://formulae.brew.sh/formula/coreutils) (`gdate`),
+  [pcre](https://formulae.brew.sh/formula/pcre) (`pcregrep`)
 
 ## Usage
 
@@ -133,7 +133,7 @@ All Namespaces
   $ mt # Default keyboard shortcuts: main_keymap.terminal.zsh
 ```
 
-**Note:** My keyboard layout may look different. I'm using [Dvorak](https://en.wikipedia.org/wiki/Dvorak_keyboard_layout) instead of [QWERTY](https://en.wikipedia.org/wiki/QWERTY).
+**Note:** My keyboard layout may look different from yours. I'm using [Dvorak](https://en.wikipedia.org/wiki/Dvorak_keyboard_layout) instead of [QWERTY](https://en.wikipedia.org/wiki/QWERTY).
 
 ### Example #2: Print the Terraform keymap usage with `t`
 
@@ -212,7 +212,7 @@ $ t ini
   $ t.im # Init & migrate state
 ```
 
-**Note:** Unlike `t ini`, `t init` would recognize `init` as a native `terraform` command and pass it along instead of searching for "init" as a partial string in the keymap usage.
+**Note:** Unlike `t ini`, `t init` would have recognized `init` as a native `terraform` command and passed it along instead of searching for "init" as a partial string in the keymap usage.
 
 ### Example #4: Inspect the definition of `tiu` with `zz tiu`
 
@@ -272,7 +272,7 @@ ZSHRC_TESTS_UNDER_PROFILING=1 zt
 
 This project was built with fast load time in mind. Load time is measured by how quickly a new terminal tab opens and becomes ready for use.
 
-On a **2023 M3 MacBook Pro**, typical load time is between **0.04s - 0.05s**. Load time is displayed automatically when opening new tabs.
+On a **2023 M3 MacBook Pro**, typical load time is between **0.04s - 0.05s**. Look for load time when opening a new terminal tab:
 
 ```
 Last login: Thu Jul 24 18:32:47 on ttys011
@@ -285,7 +285,7 @@ $
 
 ### Debugging Performance Issues
 
-If load times spike above the normal range, debug with `zprof`.
+If load times are consistently above the normal range, debug with `zprof`.
 
 Go to [main.zsh](./zshrc/main.zsh), follow instruction at the top of the file to uncomment `ZSHRC_UNDER_PROFILING=1`. Then open a new terminal tab, and `zprof` output will display automatically. Study the `zprof` output to identify:
 
