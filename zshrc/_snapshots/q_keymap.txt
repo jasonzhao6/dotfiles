@@ -2,8 +2,8 @@ Keymap: q_keymap.zsh
 
   `   1   2   3  <4>  5   |   6   7   8   9  <0>  [   ] 
       '   ,   .  <p>  y   |   f   g   c   r   l   /   =   \ 
-      a   o   e   u   i   |   d  <h>  t   n   s   - 
-      ;  <q> <j>  k   x   |   b   m   w   v   z 
+      a  <o>  e   u   i   |   d  <h>  t   n   s   - 
+      ;  <q> <j>  k   x   |   b  <m>  w   v   z 
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
@@ -26,11 +26,13 @@ Keymap Usage
 Keymap List
 
   $ q.q            # Chat without MCP
-  $ q.h            # Chat with GitHub MCP, and `pbcopy` trust instructions
-  $ q.j            # Chat with Jira MCP, and `pbcopy` trust instructions
+  $ q.h            # Chat with GitHub MCP
+  $ q.j            # Chat with Jira MCP
 
   $ q.0 <command>? # Invoke `q`
   $ q.4 <command>? # Invoke `q chat` with `claude-4-sonnet`
 
+  $ q.o            # Open `amazonq` folder in Finder
+  $ q.m            # Edit `amazonq` folder in TextMate
   $ q.p            # Push `amazonq` folder to `scratch` repo
   $ q.P            # Pull `amazonq` folder from `scratch` repo

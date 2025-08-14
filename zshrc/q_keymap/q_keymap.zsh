@@ -4,12 +4,14 @@ Q_DOT="${Q_ALIAS}${KEYMAP_DOT}"
 
 Q_KEYMAP=(
 	"${Q_DOT}q # Chat without MCP"
-	"${Q_DOT}h # Chat with GitHub MCP, and \`pbcopy\` trust instructions"
-	"${Q_DOT}j # Chat with Jira MCP, and \`pbcopy\` trust instructions"
+	"${Q_DOT}h # Chat with GitHub MCP"
+	"${Q_DOT}j # Chat with Jira MCP"
 	''
 	"${Q_DOT}0 <command>? # Invoke \`q\`"
 	"${Q_DOT}4 <command>? # Invoke \`q chat\` with \`claude-4-sonnet\`"
 	''
+	"${Q_DOT}o # Open \`amazonq\` folder in Finder"
+	"${Q_DOT}m # Edit \`amazonq\` folder in TextMate"
 	"${Q_DOT}p # Push \`amazonq\` folder to \`scratch\` repo"
 	"${Q_DOT}P # Pull \`amazonq\` folder from \`scratch\` repo"
 )
@@ -35,69 +37,55 @@ function q_keymap_4 {
 }
 
 function q_keymap_h {
-	# Create pasteboard instruction to trust read-only tools
-	local github_readonly_tools=$(
-		grep --color=never --only-matching 'mcp_github___[a-zA-Z_]*' \
-			"$ZSHRC_DIR/${Q_NAMESPACE}/mcp_tools.github.txt" |
-			egrep --color=never '(_get_|_list_|_search_|_download_)'
-	)
-	local pasteboard_content="/tools trust"$'\n'"$github_readonly_tools"
-	echo "$pasteboard_content" | pbcopy
-
-	cp "$Q_KEYMAP_DIR"/profiles/github/mcp.json "$Q_KEYMAP_DIR"/
-	q_keymap_4 --profile github
+	q_keymap_4 --agent github
 }
 
 function q_keymap_j {
-	# Create pasteboard instruction to trust read-only tools
-	local jira_readonly_tools=$(
-		grep --color=never --only-matching 'mcp_atlassian___jira_[a-zA-Z_]*' \
-			"$ZSHRC_DIR/${Q_NAMESPACE}/mcp_tools.jira.txt" |
-			egrep --color=never '(_get_|_search|_download_)'
-	)
-	local pasteboard_content="/tools trust"$'\n'"$jira_readonly_tools"
-	echo "$pasteboard_content" | pbcopy
+	q_keymap_4 --agent jira
+}
 
-	cp "$Q_KEYMAP_DIR"/profiles/jira/mcp.json "$Q_KEYMAP_DIR"/
-	q_keymap_4 --profile jira
+function q_keymap_m {
+	mate "$Q_KEYMAP_DIR"
+}
+
+function q_keymap_o {
+	open "$Q_KEYMAP_DIR"
 }
 
 function q_keymap_p {
-	echo "Pushing amazonq folder to scratch repository..."
-	cp -r "$HOME/.aws/amazonq" "$HOME/GitHub/jasonzhao6/scratch/"
+	echo "Pushing 'amazonq' folder to 'scratch' repository..."
 
-	if [ $? -eq 0 ]; then
-		echo "Copy completed successfully."
+	if [ -d "$HOME/GitHub/jasonzhao6/scratch/amazonq" ]; then
+		rm -rf "$HOME/GitHub/jasonzhao6/scratch/amazonq"
+		cp -r "$HOME/.aws/amazonq" "$HOME/GitHub/jasonzhao6/scratch/"
 
-		# Delete mcp.json file in the first level of the copied folder
-		if [ -f "$HOME/GitHub/jasonzhao6/scratch/amazonq/mcp.json" ]; then
-			rm "$HOME/GitHub/jasonzhao6/scratch/amazonq/mcp.json"
-			echo "Deleted mcp.json from copied folder."
+		if [ $? -eq 0 ]; then
+			echo "Push operation completed."
+		else
+			echo "Error: Failed to copy 'amazonq' folder."
 		fi
-
-		echo "Push operation completed."
 	else
-		echo "Error: Failed to copy amazonq folder."
+		echo "Error: 'amazonq' folder not found in 'scratch' repository."
 	fi
 }
 
 function q_keymap_P {
-	echo "Pulling amazonq folder from scratch repository..."
+	echo "Pulling 'amazonq' folder from 'scratch' repository..."
 
 	if [ -d "$HOME/GitHub/jasonzhao6/scratch/amazonq" ]; then
+		rm -rf "$HOME/.aws/amazonq"
 		cp -r "$HOME/GitHub/jasonzhao6/scratch/amazonq" "$HOME/.aws/"
 
 		if [ $? -eq 0 ]; then
 			echo "Pull operation completed successfully."
 		else
-			echo "Error: Failed to copy amazonq folder from scratch repository."
+			echo "Error: Failed to copy 'amazonq' folder from 'scratch' repository."
 		fi
 	else
-		echo "Error: amazonq folder not found in scratch repository."
+		echo "Error: 'amazonq' folder not found in 'scratch' repository."
 	fi
 }
 
 function q_keymap_q {
-	rm -f "$Q_KEYMAP_DIR"/mcp.json
-	q_keymap_4
+	q_keymap_4 --agent q
 }
