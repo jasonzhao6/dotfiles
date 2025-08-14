@@ -156,7 +156,7 @@ function other_keymap_df {
 function other_keymap_e {
 	local target_path=${*:-.}
 
-	open -na 'IntelliJ IDEA CE.app' --args "$target_path"
+	open -na 'IntelliJ IDEA.app' --args "$target_path"
 }
 
 function other_keymap_i {

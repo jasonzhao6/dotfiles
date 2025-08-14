@@ -58,7 +58,7 @@ function zsh_keymap_a {
 }
 
 function zsh_keymap_e {
-	open -na 'IntelliJ IDEA CE.app' --args "$DOTFILES_DIR"
+	open -na 'IntelliJ IDEA.app' --args "$DOTFILES_DIR"
 }
 
 function zsh_keymap_f {
