@@ -1,7 +1,7 @@
 # shellcheck disable=SC2034 # Used by `main_keymap.zsh`
 MACOS_KEYMAP=(
-	'ctrl-{esc} # Read selected text (Custom)'
-	'ctrl-{space} # Toggle Dvorak (Custom)'
+	'alt-{esc} # Read selected text'
+	'ctrl-{space} # Toggle Dvorak'
 	''
 	'cmd-option-{left} # Move tab left'
 	'cmd-option-{right} # Move tab right'
@@ -17,8 +17,8 @@ MACOS_KEYMAP=(
 	''
 	'cmd-ctrl-f # Toggle full screen'
 	'^cmd-shift-f # Toggle Chrome toolbar in full screen'
-	'cmd-ctrl-{space} # Show character viewer'
-	"cmd-shift-c # Show Terminal's color picker"
+	''
+	'cmd-shift-c # Show color picker in Terminal'
 	'cmd-shift-x # Strike through'
 	''
 	'cmd-alt-{esc} # Force quit applications'
@@ -31,11 +31,11 @@ MACOS_KEYMAP=(
 	'fn-{left} # Home'
 	'fn-{right} # End'
 	'fn-{del} # Delete forward'
-	'fn-{f} # Toggle full screen'
-	'fn-{c} # Toggle control center'
-	'fn-{d} # Start dictation'
-	'fn-{m} # Focus on menu bar'
 	'fn-{a} # Focus on dock'
+	'fn-{c} # Toggle control center'
+	'fn-{d} # Start dictation (`ctrl-ctrl`)'
+	'fn-{e} # Show emoji picker (`cmd-ctrl-{space}`)'
+	'fn-{f} # Toggle full screen'
 	'fn-{h} # Show desktop'
-	'fn-{e} # Show emoji picker'
+	'fn-{m} # Focus on menu bar'
 )
