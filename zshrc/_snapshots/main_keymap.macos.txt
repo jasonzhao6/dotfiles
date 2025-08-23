@@ -1,6 +1,7 @@
 Shortcuts: main_keymap.macos.zsh
 
-  ctrl-{esc}         # Read selected text (Custom)
+  alt-{esc}          # Read selected text
+  ctrl-ctrl          # Start dictation
   ctrl-{space}       # Toggle Dvorak (Custom)
 
   cmd-option-{left}  # Move tab left
@@ -33,7 +34,6 @@ Shortcuts: main_keymap.macos.zsh
   fn-{del}           # Delete forward
   fn-{f}             # Toggle full screen
   fn-{c}             # Toggle control center
-  fn-{d}             # Start dictation
   fn-{m}             # Focus on menu bar
   fn-{a}             # Focus on dock
   fn-{h}             # Show desktop
