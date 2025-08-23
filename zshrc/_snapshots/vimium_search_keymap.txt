@@ -2,7 +2,7 @@ Keymap: vimium_search_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .   p  (y)  |   f  (g) (c) (r) (l)  /   =   \ 
-     (a) <o> (e)  u  (i)  |  <d>  h  (t)  n  (s) <->
+     (a) <o> (e)  u  (i)  |  (d)  h  (t)  n  (s) <->
       ;   q  (j) (k)  x   |   b  (m) (w)  v   z 
 
   `<>` key initials have one mapping
@@ -10,12 +10,14 @@ Keymap: vimium_search_keymap.zsh
 
 Keymap List
 
-  a   # Datadog APM (Prod)
-  aa  # Datadog APM (QA)
+  a   # Datadog App APM (Prod)
+  aa  # Datadog App APM (QA)
 
   c   # Github Code Search (TENGF)
   cc  # Github Code Search
 
+  d   # Datadog DB APM (Prod)
+  dd  # Datadog DB APM (QA)
   dl  # Datadog Dashboard Lists (go/dl)
 
   -   # ECR (rel-2025.{MM.DD})

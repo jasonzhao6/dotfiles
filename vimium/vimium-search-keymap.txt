@@ -1,9 +1,11 @@
-a: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=prod Datadog APM (Prod)
-aa: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=qa Datadog APM (QA)
+a: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=prod Datadog App APM (Prod)
+aa: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=qa Datadog App APM (QA)
 
 c: https://github.marqeta.com/search?q=org%3Atransaction-engine+%s&type=code Github Code Search (TENGF)
 cc: https://github.marqeta.com/search?q=%s&type=code Github Code Search
 
+d: https://app.datadoghq.com/apm/services/%s-mysql/operations/iso.8583/resources?env=prod Datadog DB APM (Prod)
+dd: https://app.datadoghq.com/apm/services/%s-mysql/operations/iso.8583/resources?env=qa Datadog DB APM (QA)
 dl: https://app.datadoghq.com/dashboard/lists?q=%s Datadog Dashboard Lists (go/dl)
 
 -: https://ecr-ui.prod.ci.marqeta.io/us-east-1/repositories/transaction-engine/marqeta-jpos/jcard-marqkubed/rel-2025.%s ECR (rel-2025.{MM.DD})
