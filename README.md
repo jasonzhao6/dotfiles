@@ -3,7 +3,7 @@
 ## Table of Contents
 
 - [Motivation](#motivation)
-- [Testimonial](#testimonial)
+- [Feedback](#feedback)
 - [Overview](#overview)
 - [Features](#features)
 - [Installation](#installation)
@@ -22,11 +22,11 @@ Every day, I felt the minor annoyance of constructing the same long commands and
 
 So one Christmas break, I built this as a hobby project: A fast-loading zsh keymap system that **catalogs and simplifies complex commands** frequently used in my workflow.
 
-## Testimonial
+## Feedback
 
 > *"I got to see first-hand how your shell shortcuts really **save time during critical moments**. Magic."*
 >
-> — Another Infrastructure Engineer
+> — An Infrastructure Engineer
 
 ## Overview
 
