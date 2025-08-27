@@ -37,6 +37,7 @@ INTELLIJ_CTRL_KEYMAP=(
 	"ctrl-m # Multi-column selection mode"
 	''
 	"ctrl-l # Recent locations"
+	"^ctrl-l # Show edited only"
 	"ctrl-z # Last edit location"
 	"ctrl-shift-z # Next edit locations"
 	"ctrl-n # Next highlighted error"
