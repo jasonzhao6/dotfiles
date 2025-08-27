@@ -18,7 +18,6 @@ Keymap Usage
   $ t.<key> <var>?            # This mapping takes zero or one variable
   $ t.<key> <var>*            # This mapping takes zero or multiple variables
   $ t.<key> (1-10)            # This mapping takes an exact value from the list
-  $ (|)? t.<key>              # This mapping can be invoked after a `|`
 
      ^                        # The `.` is only for documentation
                               # Omit it when invoking a mapping

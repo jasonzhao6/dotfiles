@@ -18,7 +18,6 @@ Keymap Usage
   $ g.<key> <var>? # This mapping takes zero or one variable
   $ g.<key> <var>* # This mapping takes zero or multiple variables
   $ g.<key> (1-10) # This mapping takes an exact value from the list
-  $ (|)? g.<key>   # This mapping can be invoked after a `|`
 
      ^             # The `.` is only for documentation
                    # Omit it when invoking a mapping

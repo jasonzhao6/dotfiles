@@ -15,7 +15,6 @@ KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <var>? # This mapping takes zero or one variable"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <var>* # This mapping takes zero or multiple variables"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> (1-10) # This mapping takes an exact value from the list"
-	"(|)? ${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # This mapping can be invoked after a \`|\`"
 )
 
 function keymap_init {
@@ -116,7 +115,7 @@ function keymap_has_disjoint_dups {
 	declare -A seen
 
 	for entry in "${keymap_entries[@]}"; do
-		# Get the first token while igonring any leading "(|)? " pattern
+		# Get the first token while ignoring any leading "(|)? " pattern
 		# Note: This is inlined and repeated b/c calling a function in a loop is slow
 		[[ $entry == "$KEYMAP_PIPE_PATTERN"* ]] && entry="${entry#\(\|\)\? }"
 		[[ $entry == *\ * ]] && first_token=${${(z)entry}[1]} || first_token=$entry
@@ -166,7 +165,7 @@ function keymap_set_dot_aliases {
 	declare -A seen
 
 	for entry in "${keymap_entries[@]}"; do
-		# Get the first token while igonring any leading "(|)? " pattern
+		# Get the first token while ignoring any leading "(|)? " pattern
 		# Note: This is inlined and repeated b/c calling a function in a loop is slow
 		[[ $entry == "$KEYMAP_PIPE_PATTERN"* ]] && entry="${entry#\(\|\)\? }"
 		[[ $entry == *\ * ]] && first_token=${${(z)entry}[1]} || first_token=$entry
@@ -273,7 +272,7 @@ function keymap_print_map {
 		key_initial=
 		escaped_initial=
 
-		# Get the first token while igonring any leading "(|)? " pattern
+		# Get the first token while ignoring any leading "(|)? " pattern
 		# Note: This is inlined and repeated b/c calling a function in a loop is slow
 		[[ $entry == "$KEYMAP_PIPE_PATTERN"* ]] && entry="${entry#\(\|\)\? }"
 		[[ $entry == *\ * ]] && first_token=${${(z)entry}[1]} || first_token=$entry

@@ -10,7 +10,7 @@ TEST_KEYMAP=(
 	"${TEST_DOT}c # Third without args"
 	"${TEST_DOT}c <arg 1> <arg 2> # Third with args"
 	"${TEST_DOT}d"
-	"(|)? ${TEST_DOT}e"
+	"${KEYMAP_PIPE_PATTERN}${TEST_DOT}e"
 	''
 	"<1-9> # #1-9"
 	"cmd-\` # Backtick"
@@ -120,7 +120,6 @@ function test__keymap_show {
 			  $ test__.<key> <var>?      # This mapping takes zero or one variable
 			  $ test__.<key> <var>*      # This mapping takes zero or multiple variables
 			  $ test__.<key> (1-10)      # This mapping takes an exact value from the list
-			  $ (|)? test__.<key>        # This mapping can be invoked after a \`|\`
 
 			          ^                  # The \`.\` is only for documentation
 			                             # Omit it when invoking a mapping

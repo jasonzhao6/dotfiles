@@ -3,10 +3,10 @@ ARGS_ALIAS='a'
 ARGS_DOT="${ARGS_ALIAS}${KEYMAP_DOT}"
 
 ARGS_KEYMAP=(
-	"(|)? ${ARGS_DOT}s # Save as args"
-	"(|)? ${ARGS_DOT}s <match>* <-mismatch>* # Save as args & filter"
-	"(|)? ${ARGS_DOT}so # Save as args & soft-select the 1st column"
-	"(|)? ${ARGS_DOT}so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
+	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}s # Save as args"
+	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}s <match>* <-mismatch>* # Save as args & filter"
+	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}so # Save as args & soft-select the 1st column"
+	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
 	''
 	"${ARGS_DOT}a # List args"
 	"${ARGS_DOT}a <match>* <-mismatch>* # Filter args"
