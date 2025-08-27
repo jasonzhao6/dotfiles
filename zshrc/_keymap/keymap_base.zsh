@@ -10,12 +10,12 @@ KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS} # Show this keymap"
 	"${KEYMAP_ALIAS} <regex> # Search this keymap"
 	''
-	"(|)? ${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # This mapping can be invoked after a \`|\`"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # This mapping takes no variable"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <var> # This mapping takes one variable"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <var>? # This mapping takes zero or one variable"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <var>* # This mapping takes zero or multiple variables"
 	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> (1-10) # This mapping takes an exact value from the list"
+	"(|)? ${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # This mapping can be invoked after a \`|\`"
 )
 
 function keymap_init {

@@ -115,12 +115,12 @@ function test__keymap_show {
 			  $ test__                   # Show this keymap
 			  $ test__ <regex>           # Search this keymap
 
-			  $ (|)? test__.<key>        # This mapping can be invoked after a \`|\`
 			  $ test__.<key>             # This mapping takes no variable
 			  $ test__.<key> <var>       # This mapping takes one variable
 			  $ test__.<key> <var>?      # This mapping takes zero or one variable
 			  $ test__.<key> <var>*      # This mapping takes zero or multiple variables
 			  $ test__.<key> (1-10)      # This mapping takes an exact value from the list
+			  $ (|)? test__.<key>        # This mapping can be invoked after a \`|\`
 
 			          ^                  # The \`.\` is only for documentation
 			                             # Omit it when invoking a mapping
