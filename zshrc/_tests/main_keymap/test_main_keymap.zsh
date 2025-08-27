@@ -58,7 +58,7 @@ function test__main_keymap_r__when_specifying_a_description {
 			  $ q.h          # Chat with GitHub MCP
 
 			  intellij_alt: alt-o         # Open on GitHub
-			  all: h                      # Keymap: github_keymap.zsh
+			  all: h                      # Shell shortcuts: github_keymap.zsh
 			  github_desktop: cmd-shift-g # View on GitHub
 			  vimium_search: c            # Github Code Search (TENGF)
 			  vimium_search: cc           # Github Code Search

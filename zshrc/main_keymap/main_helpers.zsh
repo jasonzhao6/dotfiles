@@ -80,10 +80,10 @@ function main_keymap_find_keys {
 
 		if [[ -n $is_zsh_keymap ]]; then
 			# shellcheck disable=SC2030
-			reply_zsh_keymaps+=("$current_alias # Keymap: $current_namespace.zsh")
+			reply_zsh_keymaps+=("$current_alias # Shell shortcuts: $current_namespace.zsh")
 		else
 			# shellcheck disable=SC2030
-			reply_non_zsh_keymaps+=("$current_alias # Keyboard shortcuts: $current_namespace.zsh")
+			reply_non_zsh_keymaps+=("$current_alias # App shortcuts: $current_namespace.zsh")
 		fi
 	done < <(keymap_files)
 }

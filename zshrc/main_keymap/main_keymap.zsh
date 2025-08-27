@@ -25,15 +25,15 @@ MAIN_KEYMAP=(
 # Note: Keep the following in sync with their counterparts in `MAIN_KEYMAP`
 SHORTCUT_NAMESPACES=(
 	''
-	"${MAIN_ALIAS}g # Default keyboard shortcuts: main_keymap.gmail.zsh"
-	"${MAIN_ALIAS}h # Default keyboard shortcuts: main_keymap.github_desktop.zsh"
-	"${MAIN_ALIAS}i # Default keyboard shortcuts: main_keymap.vi.zsh"
-	"${MAIN_ALIAS}l # Default keyboard shortcuts: main_keymap.less.zsh"
-	"${MAIN_ALIAS}m # Default keyboard shortcuts: main_keymap.textmate.zsh"
-	"${MAIN_ALIAS}n # Default keyboard shortcuts: main_keymap.notion.zsh"
-	"${MAIN_ALIAS}o # Default keyboard shortcuts: main_keymap.macos.zsh"
-	"${MAIN_ALIAS}s # Default keyboard shortcuts: main_keymap.slack.zsh"
-	"${MAIN_ALIAS}t # Default keyboard shortcuts: main_keymap.terminal.zsh"
+	"${MAIN_ALIAS}g # App defaults: main_keymap.gmail.zsh"
+	"${MAIN_ALIAS}h # App defaults: main_keymap.github_desktop.zsh"
+	"${MAIN_ALIAS}i # App defaults: main_keymap.vi.zsh"
+	"${MAIN_ALIAS}l # App defaults: main_keymap.less.zsh"
+	"${MAIN_ALIAS}m # App defaults: main_keymap.textmate.zsh"
+	"${MAIN_ALIAS}n # App defaults: main_keymap.notion.zsh"
+	"${MAIN_ALIAS}o # App defaults: main_keymap.macos.zsh"
+	"${MAIN_ALIAS}s # App defaults: main_keymap.slack.zsh"
+	"${MAIN_ALIAS}t # App defaults: main_keymap.terminal.zsh"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
