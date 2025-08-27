@@ -106,6 +106,7 @@ function terraform_keymap_f {
 
 	terraform fmt -recursive "$target_path"
 }
+
 function terraform_keymap_g {
 	terraform show -bw tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web
 }
