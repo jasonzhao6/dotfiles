@@ -45,7 +45,7 @@ r: https://github.marqeta.com/orgs/transaction-engine/repositories?q=%s Github R
 rr: https://github.marqeta.com/search?q=%s&type=repositories Github Repo Search
 
 se: https://us-east-1.console.aws.amazon.com/ec2/home#Instances:instanceState=running;search=%s AWS EC2
-sl: https://us-east-1.console.aws.amazon.com/ec2/home#LoadBalancers:search=%s AWS Load Balancers
+sl: https://us-east-1.console.aws.amazon.com/ec2/home#LoadBalancers:search=%s;sort=name AWS Load Balancers
 sm: https://us-east-1.console.aws.amazon.com/secretsmanager/listsecrets?region=us-east-1&search=all%3D%s AWS Secrets Manager
 
 t: https://e.ggtimer.com/%s0m E.ggtimer (10m)
