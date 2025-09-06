@@ -2,8 +2,8 @@ Keymap: q_keymap.zsh
 
   `   1   2   3  <4>  5   |   6   7   8   9  <0>  [   ] 
       '   ,   .  <p>  y   |   f   g   c   r   l   /   =   \ 
-      a  <o>  e   u   i   |   d  <h>  t   n   s   - 
-      ;  <q> <j>  k   x   |   b  <m>  w   v   z 
+     <a> <o>  e   u   i   |   d  <h>  t   n   s   - 
+      ;  <q>  j   k   x   |   b  <m>  w   v   z 
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
@@ -25,8 +25,8 @@ Keymap Usage
 Keymap List
 
   $ q.q            # Chat without MCP
+  $ q.a            # Chat with Atlassian MCP
   $ q.h            # Chat with GitHub MCP
-  $ q.j            # Chat with Jira MCP
 
   $ q.0 <command>? # Invoke `q`
   $ q.4 <command>? # Invoke `q chat` with `claude-4-sonnet`

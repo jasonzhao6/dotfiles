@@ -4,8 +4,8 @@ Q_DOT="${Q_ALIAS}${KEYMAP_DOT}"
 
 Q_KEYMAP=(
 	"${Q_DOT}q # Chat without MCP"
+	"${Q_DOT}a # Chat with Atlassian MCP"
 	"${Q_DOT}h # Chat with GitHub MCP"
-	"${Q_DOT}j # Chat with Jira MCP"
 	''
 	"${Q_DOT}0 <command>? # Invoke \`q\`"
 	"${Q_DOT}4 <command>? # Invoke \`q chat\` with \`claude-4-sonnet\`"
@@ -42,12 +42,12 @@ function q_keymap_4 {
 	q_keymap_0 chat --model claude-4-sonnet "$@"
 }
 
-function q_keymap_h {
-	q_keymap_4 --agent github
+function q_keymap_a {
+	q_keymap_4 --agent atlassian
 }
 
-function q_keymap_j {
-	q_keymap_4 --agent jira
+function q_keymap_h {
+	q_keymap_4 --agent github
 }
 
 function q_keymap_m {
