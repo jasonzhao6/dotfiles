@@ -26,6 +26,7 @@ Shortcuts: main_keymap.macos.zsh
   cmd-alt-d          # Toggle dock hiding
   cmd-alt-h          # Hide other windows
 
+  fn                 # Show emoji picker (`fn-{e}`, `cmd-ctrl-{space}`)
   fn-{up}            # Page up
   fn-{down}          # Page down
   fn-{left}          # Home
@@ -34,7 +35,6 @@ Shortcuts: main_keymap.macos.zsh
   fn-{a}             # Focus on dock
   fn-{c}             # Toggle control center
   fn-{d}             # Start dictation (`ctrl-ctrl`)
-  fn-{e}             # Show emoji picker (`cmd-ctrl-{space}`)
   fn-{f}             # Toggle full screen
   fn-{h}             # Show desktop
   fn-{m}             # Focus on menu bar
