@@ -1,8 +1,8 @@
 Keymap: nav_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .   p   y   |   f   g   c   r   l   /   =   \ 
-     <a> (o) <e> (u) (i)  |  <d> <h> <t> (n) <s> <->
+      '   ,   .   p   y   |   f  <g>  c   r   l   /   =   \ 
+     <a> (o) (e) (u) <i>  |  <d> <h> <t> (n) <s>  - 
       ;   q   j   k   x   |   b  <m> <w> <v>  z 
 
   `<>` key initials have one mapping
@@ -31,20 +31,20 @@ Keymap List
   $ n.w                        # Go to Downloads
   $ n.v                        # Go to Desktop
 
-  $ n.h                        # Go to GitHub
+  $ n.i                        # Go to excalidraw
   $ n.d                        # Go to dotfiles
-  $ n.e                        # Go to excalidraw
-  $ n.s                        # Go to scratch
+  $ n.g                        # Go to GitHub
+  $ n.h                        # Go to scratch
 
   $ n.n <match>* <-mismatch>*  # List visible directories & files
   $ n.a <match>* <-mismatch>*  # List hidden directories & files
   $ n.o <match>* <-mismatch>*  # List visible directories
   $ n.oo <match>* <-mismatch>* # List hidden directories
-  $ n.i <match>* <-mismatch>*  # List visible files
-  $ n.ii <match>* <-mismatch>* # List hidden files
+  $ n.e <match>* <-mismatch>*  # List visible files
+  $ n.ee <match>* <-mismatch>* # List hidden files
 
   $ n.u                        # Go up one directory
   $ n.uu                       # Go up two directories
   $ n.uuu                      # Go up three directories
 
-  $ n.-                        # Sort subfolders by size
+  $ n.s                        # Sort subfolders by size

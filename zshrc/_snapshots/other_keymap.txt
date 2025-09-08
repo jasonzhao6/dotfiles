@@ -1,9 +1,9 @@
 Keymap: other_keymap.zsh
 
   `  (1) (2)  3   4   5   |   6   7  <8>  9  <0>  [   ] 
-      '   ,   .  <p> <y>  |   f   g  (c) <r>  l   /   =   \ 
-     <a> (o) (e) (u) (i)  |  (d)  h  <t> <n> <s> <->
-      ;  (q) <j> (k) (x)  |   b  (m)  w   v   z 
+      '   ,   .  <p> <y>  |  <f>  g  (c) <r>  l   /   =   \ 
+     <a> (o) (e) (u) (i)  |  (d)  h  <t> <n> <s>  - 
+      ;  (q) <j> (k) (x)  |  <b> (m)  w   v   z 
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
@@ -66,4 +66,5 @@ Keymap List
   $ o.q '<sql>'                              # Format a sql query from cli arg
   $ o.r <before> <after>                     # Rename files in the current directory
   $ o.t <command>                            # Time command execution
-  $ o.- <start> <finish> (~~)                # Run a sequence of commands
+  $ o.f <start> <finish> (~~)                # Run a sequence of commands in foreground
+  $ o.b <start> <finish> (~~)                # Run a sequence of commands in background

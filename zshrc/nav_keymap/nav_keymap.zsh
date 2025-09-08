@@ -10,23 +10,23 @@ NAV_KEYMAP=(
 	"${NAV_DOT}w # Go to Downloads"
 	"${NAV_DOT}v # Go to Desktop"
 	''
-	"${NAV_DOT}h # Go to GitHub"
+	"${NAV_DOT}i # Go to excalidraw"
 	"${NAV_DOT}d # Go to dotfiles"
-	"${NAV_DOT}e # Go to excalidraw"
-	"${NAV_DOT}s # Go to scratch"
+	"${NAV_DOT}g # Go to GitHub"
+	"${NAV_DOT}h # Go to scratch"
 	''
 	"${NAV_DOT}n <match>* <-mismatch>* # List visible directories & files"
 	"${NAV_DOT}a <match>* <-mismatch>* # List hidden directories & files"
 	"${NAV_DOT}o <match>* <-mismatch>* # List visible directories"
 	"${NAV_DOT}oo <match>* <-mismatch>* # List hidden directories"
-	"${NAV_DOT}i <match>* <-mismatch>* # List visible files"
-	"${NAV_DOT}ii <match>* <-mismatch>* # List hidden files"
+	"${NAV_DOT}e <match>* <-mismatch>* # List visible files"
+	"${NAV_DOT}ee <match>* <-mismatch>* # List hidden files"
 	''
 	"${NAV_DOT}u # Go up one directory"
 	"${NAV_DOT}uu # Go up two directories"
 	"${NAV_DOT}uuu # Go up three directories"
 	''
-	"${NAV_DOT}- # Sort subfolders by size"
+	"${NAV_DOT}s # Sort subfolders by size"
 )
 
 keymap_init $NAV_NAMESPACE $NAV_ALIAS "${NAV_KEYMAP[@]}"
@@ -46,12 +46,6 @@ function nav_keymap {
 # Key mappings (Alphabetized)
 #
 
-function nav_keymap_- {
-	local levels="${1:-1}"
-
-	du -hd "$levels" | sort -h
-}
-
 function nav_keymap_a {
 	local filters=("$@")
 
@@ -65,25 +59,29 @@ function nav_keymap_d {
 }
 
 function nav_keymap_e {
-	cd ~/GitHub/jasonzhao6/excalidraw && nav_keymap_n || true
-}
-
-function nav_keymap_h {
-	cd ~/github && nav_keymap_n || true
-}
-
-function nav_keymap_i {
 	local filters=("$@")
 
 	# shellcheck disable=SC2010
 	ls -p | grep -v '/' | args_keymap_s "${filters[@]}"
 }
 
-function nav_keymap_ii {
+function nav_keymap_ee {
 	local filters=("$@")
 
 	# shellcheck disable=SC2010
 	ls -pd .* | grep -v '/' | args_keymap_s "${filters[@]}"
+}
+
+function nav_keymap_g {
+	cd ~/GitHub && nav_keymap_n || true
+}
+
+function nav_keymap_h {
+	cd ~/GitHub/jasonzhao6/scratch && nav_keymap_n || true
+}
+
+function nav_keymap_i {
+	cd ~/GitHub/jasonzhao6/excalidraw && nav_keymap_n || true
 }
 
 function nav_keymap_m {
@@ -111,7 +109,9 @@ function nav_keymap_oo {
 }
 
 function nav_keymap_s {
-	cd ~/GitHub/jasonzhao6/scratch && nav_keymap_n || true
+	local levels="${1:-1}"
+
+	du -hd "$levels" | sort -h
 }
 
 function nav_keymap_t {

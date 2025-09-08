@@ -63,38 +63,6 @@ function test__args_keymap {
 	)" '1'
 }; run_with_filter test__args_keymap
 
-function test__args_keymap_- {
-	assert "$(
-		echo "$test__input" | args_keymap_s > /dev/null
-		args_keymap_- 3 4 echo 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo terraform-application-region-shared-3
-			terraform-application-region-shared-3
-
-			echo terraform-application-region-program-A
-			terraform-application-region-program-A
-		eof
-	)"
-}; run_with_filter test__args_keymap_-
-
-function test__args_keymap_-__with_multiple_substitutions {
-	assert "$(
-		echo "$test__input" | args_keymap_s > /dev/null
-		args_keymap_- 3 4 echo ~~ and ~~ again 2>&1
-	)" "$(
-		cat <<-eof
-
-			echo terraform-application-region-shared-3 and terraform-application-region-shared-3 again
-			terraform-application-region-shared-3 and terraform-application-region-shared-3 again
-
-			echo terraform-application-region-program-A and terraform-application-region-program-A again
-			terraform-application-region-program-A and terraform-application-region-program-A again
-		eof
-	)"
-}; run_with_filter test__args_keymap_-__with_multiple_substitutions
-
 function test__args_keymap_a {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null
@@ -208,7 +176,7 @@ function test__args_keymap_d {
 function test__args_keymap_e {
 	assert "$(
 		echo "$test__input_short" | args_keymap_s > /dev/null
-		other_keymap_- 1 $(($(args_size) * 4)) args_keymap_e echo 2>&1 | sort --unique
+		other_keymap_f 1 $(($(args_size) * 4)) args_keymap_e echo 2>&1 | sort --unique
 	)" "$(
 		cat <<-eof
 
@@ -220,6 +188,38 @@ function test__args_keymap_e {
 		eof
 	)"
 }; run_with_filter test__args_keymap_e
+
+function test__args_keymap_f {
+	assert "$(
+		echo "$test__input" | args_keymap_s > /dev/null
+		args_keymap_f 3 4 echo 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo terraform-application-region-shared-3
+			terraform-application-region-shared-3
+
+			echo terraform-application-region-program-A
+			terraform-application-region-program-A
+		eof
+	)"
+}; run_with_filter test__args_keymap_f
+
+function test__args_keymap_f__with_multiple_substitutions {
+	assert "$(
+		echo "$test__input" | args_keymap_s > /dev/null
+		args_keymap_f 3 4 echo ~~ and ~~ again 2>&1
+	)" "$(
+		cat <<-eof
+
+			echo terraform-application-region-shared-3 and terraform-application-region-shared-3 again
+			terraform-application-region-shared-3 and terraform-application-region-shared-3 again
+
+			echo terraform-application-region-program-A and terraform-application-region-program-A again
+			terraform-application-region-program-A and terraform-application-region-program-A again
+		eof
+	)"
+}; run_with_filter test__args_keymap_f__with_multiple_substitutions
 
 function test__args_keymap_h {
 	assert "$(

@@ -1,9 +1,9 @@
 Keymap: args_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9  <0>  [   ] 
-      '   ,   .  <p> <y>  |   f   g  (c) <r>  l   /   =   \ 
-     (a) <o> (e) <u> <i>  |  <d> (h) <t> <n> (s) <->
-      ;   q   j   k   x   |   b  <m> (w) (v) <z>
+      '   ,   .  <p> <y>  |  <f>  g  (c) <r>  l   /   =   \ 
+     (a) <o> (e) <u> <i>  |  <d> (h) <t> <n> (s)  - 
+      ;   q   j   k   x   |  <b> <m> (w) (v) <z>
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
@@ -41,7 +41,8 @@ Keymap List
   $ each <command>                  # Use each arg in series
   $ all <command>                   # Use all args in parallel
   $ map <command>                   # Map args, e.g `map echo '$((~~ * 10))'`
-  $ a.- <start> <finish> <command>  # Use args within a sequence
+  $ a.f <start> <finish> <command>  # Use selected args in foreground
+  $ a.b <start> <finish> <command>  # Use selected args in background
 
   $ a.i <column index>?             # Sort by column index
   $ a.d                             # Dedupe by all columns

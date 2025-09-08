@@ -54,7 +54,7 @@ function test__main_keymap_r__when_specifying_a_description {
 
 			  $ h.a          # Open the current repo in GitHub Desktop
 			  $ m.h <regex>? # Show GitHub Desktop shortcuts
-			  $ n.h          # Go to GitHub
+			  $ n.g          # Go to GitHub
 			  $ q.h          # Chat with GitHub MCP
 
 			  intellij_alt: alt-o         # Open on GitHub
@@ -74,8 +74,8 @@ function test__main_keymap_r__when_specifying_a_zsh_only_description {
 	)" "$(
 		cat <<-eof
 
-			  $ a.- <start> <finish> <command> # Use args within a sequence
-			  $ o.- <start> <finish> (~~)      # Run a sequence of commands
+			  $ o.f <start> <finish> (~~) # Run a sequence of commands in foreground
+			  $ o.b <start> <finish> (~~) # Run a sequence of commands in background
 		eof
 	)"
 }; run_with_filter test__main_keymap_r__when_specifying_a_zsh_only_description
@@ -126,10 +126,7 @@ function test__main_keymap_w__when_specifying_a_special_char {
 	)" "$(
 		cat <<-eof
 
-		  $ a.- <start> <finish> <command> # Use args within a sequence
-		  $ m.-                            # Show stats
-		  $ n.-                            # Sort subfolders by size
-		  $ o.- <start> <finish> (~~)      # Run a sequence of commands
+		  $ m.- # Show stats
 
 		  ^cmd--       # Collapse all
 		  cmd--        # Decrease font size in all editors (Convention)

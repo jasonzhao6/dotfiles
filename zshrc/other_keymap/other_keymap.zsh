@@ -45,7 +45,8 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}q '<sql>' # Format a sql query from cli arg"
 	"${OTHER_DOT}r <before> <after> # Rename files in the current directory"
 	"${OTHER_DOT}t <command> # Time command execution"
-	"${OTHER_DOT}- <start> <finish> (~~) # Run a sequence of commands"
+	"${OTHER_DOT}f <start> <finish> (~~) # Run a sequence of commands in foreground"
+	"${OTHER_DOT}b <start> <finish> (~~) # Run a sequence of commands in background"
 )
 
 keymap_init $OTHER_NAMESPACE $OTHER_ALIAS "${OTHER_KEYMAP[@]}"
@@ -66,17 +67,6 @@ OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$HOME/Documents/zshrc-data/diff.1.txt"
 OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$HOME/Documents/zshrc-data/diff.2.txt"
 
 source "$ZSHRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
-
-function other_keymap_- {
-	local start=$1; shift
-	local finish=$1; shift # `end` is a reserved keyword
-	local command=$*
-
-	for number in $(seq "$start" "$finish"); do
-		echo
-		echo_eval "${command//~~/$number}"
-	done
-}
 
 function other_keymap_0 {
 	echo -n > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
@@ -126,6 +116,28 @@ function other_keymap_a {
 	caffeinate
 }
 
+OTHER_KEYMAP_B_OUTPUT_FILE="$HOME/Documents/zshrc-data/other.selected-output.txt"
+
+function other_keymap_b {
+	local start=$1; shift
+	local finish=$1; shift # `end` is a reserved keyword
+	local command=$*
+
+	rm -f "$OTHER_KEYMAP_B_OUTPUT_FILE"
+
+	# Collect arg outputs in `OTHER_KEYMAP_B_OUTPUT_FILE` to print at the end
+	# Otherwise, arg outputs are interleaved with `&` outputs
+	for number in $(seq "$start" "$finish"); do
+		echo
+		echo_eval "${command//~~/$number}" >> "$OTHER_KEYMAP_B_OUTPUT_FILE" &
+	done
+
+	wait
+
+	echo
+	cat "$OTHER_KEYMAP_B_OUTPUT_FILE"
+}
+
 function other_keymap_c {
 	echo -n "$(eval "$(prev_command)" | bw | ruby_strip)" | pbcopy
 }
@@ -157,6 +169,17 @@ function other_keymap_e {
 	local target_path=${*:-.}
 
 	open -na 'IntelliJ IDEA.app' --args "$target_path"
+}
+
+function other_keymap_f {
+	local start=$1; shift
+	local finish=$1; shift # `end` is a reserved keyword
+	local command=$*
+
+	for number in $(seq "$start" "$finish"); do
+		echo
+		echo_eval "${command//~~/$number}"
+	done
 }
 
 function other_keymap_i {

@@ -20,7 +20,8 @@ ARGS_KEYMAP=(
 	"each <command> # Use each arg in series"
 	"all <command> # Use all args in parallel"
 	"map <command> # Map args, e.g \`map echo '\$((~~ * 10))'\`"
-	"${ARGS_DOT}- <start> <finish> <command> # Use args within a sequence"
+	"${ARGS_DOT}f <start> <finish> <command> # Use selected args in foreground"
+	"${ARGS_DOT}b <start> <finish> <command> # Use selected args in background"
 	''
 	"${ARGS_DOT}i <column index>? # Sort by column index"
 	"${ARGS_DOT}d # Dedupe by all columns"
@@ -68,17 +69,6 @@ source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_helpers.zsh"
 source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_history.zsh"; args_history_init
 source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_numbers.zsh"
 
-function args_keymap_- {
-	local start=$1; shift
-	local finish=$1; shift # `end` is a reserved keyword
-	local command=$*
-
-	for number in $(seq "$start" "$finish"); do
-		echo
-		args_keymap_n "$number" "$command"
-	done
-}
-
 # shellcheck disable=SC2120
 function args_keymap_a {
 	local filters=("$@")
@@ -91,6 +81,28 @@ function args_keymap_a {
 	else
 		args_plain | args_filter "${filters[@]}" | args_keymap_s
 	fi
+}
+
+ARGS_KEYMAP_B_OUTPUT_FILE="$HOME/Documents/zshrc-data/args.selected-output.txt"
+
+function args_keymap_b {
+	local start=$1; shift
+	local finish=$1; shift # `end` is a reserved keyword
+	local command=$*
+
+	rm -f "$ARGS_KEYMAP_B_OUTPUT_FILE"
+
+	# Collect arg outputs in `ARGS_KEYMAP_B_OUTPUT_FILE` to print at the end
+	# Otherwise, arg outputs are interleaved with `&` outputs
+	for number in $(seq "$start" "$finish"); do
+		echo
+		args_keymap_n "$number" "$command" >> "$ARGS_KEYMAP_B_OUTPUT_FILE" &
+	done
+
+	wait
+
+	echo
+	cat "$ARGS_KEYMAP_B_OUTPUT_FILE"
 }
 
 function args_keymap_c {
@@ -111,6 +123,17 @@ function args_keymap_e {
 	local command=$*
 
 	args_keymap_n $((RANDOM % $(args_size) + 1)) "$command"
+}
+
+function args_keymap_f {
+	local start=$1; shift
+	local finish=$1; shift # `end` is a reserved keyword
+	local command=$*
+
+	for number in $(seq "$start" "$finish"); do
+		echo
+		args_keymap_n "$number" "$command"
+	done
 }
 
 function args_keymap_h {

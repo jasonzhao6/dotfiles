@@ -8,6 +8,7 @@ function is_reserved {
 
 # To flag a keyword as un-reserved, move it here and set its value to 0
 RESERVED[aa]=0
+RESERVED[ab]=0
 RESERVED[ac]=0
 RESERVED[ar]=0
 RESERVED[as]=0
@@ -91,7 +92,6 @@ RESERVED[ResMerger]=1
 RESERVED[Rez]=1
 RESERVED[SetFile]=1
 RESERVED[SplitForks]=1
-RESERVED[ab]=1
 RESERVED[accton]=1
 RESERVED[aclocal]=1
 RESERVED[actool]=1
