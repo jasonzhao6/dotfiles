@@ -3,7 +3,7 @@ Keymap: other_keymap.zsh
   `  (1) (2)  3   4   5   |   6   7  <8>  9  <0>  [   ] 
       '   ,   .  <p> <y>  |  <f>  g  (c) <r>  l   /   =   \ 
      <a> (o) (e) (u) (i)  |  (d)  h  <t> <n> <s>  - 
-      ;  (q) <j> (k) (x)  |  <b> (m)  w   v   z 
+      ;  (q) <j> (k) (x)  |  <b> (m) <w>  v   z 
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
@@ -58,6 +58,11 @@ Keymap List
   $ o.x <file 1>? <file 2>?                  # CSV: Keep lines with matching first columns
   $ o.xx <file 1>? <file 2>?                 # CSV: Drop lines with matching first columns
 
+  $ o.t <command>                            # Time command execution
+  $ o.w <seconds> <command>                  # Execute command in loop with sleep interval
+  $ o.f <start> <finish> (~~)                # Run a sequence of commands in foreground
+  $ o.b <start> <finish> (~~)                # Run a sequence of commands in background
+
   $ o.8                                      # Use Java 8
   $ o.d <url>                                # DNS dig
   $ o.df                                     # DNS flush
@@ -65,6 +70,3 @@ Keymap List
   $ o.q                                      # Format a sql query from stdin
   $ o.q '<sql>'                              # Format a sql query from cli arg
   $ o.r <before> <after>                     # Rename files in the current directory
-  $ o.t <command>                            # Time command execution
-  $ o.f <start> <finish> (~~)                # Run a sequence of commands in foreground
-  $ o.b <start> <finish> (~~)                # Run a sequence of commands in background

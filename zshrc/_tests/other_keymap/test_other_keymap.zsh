@@ -479,6 +479,19 @@ function test__other_keymap_uu {
 	)"
 }; run_with_filter test__other_keymap_uu
 
+function test__other_keymap_w {
+	local count; count=$(
+		{
+			other_keymap_w 0.01 echo test &
+			local pid=$!
+			sleep 0.02
+			kill $pid 2>/dev/null
+		} | grep -c 'test'
+	)
+
+	assert "$([[ $count -gt 1 ]] && echo 1)" '1'
+}; run_with_filter test__other_keymap_w
+
 function test__other_keymap_x {
 	local file1; file1=$(
 		cat <<-eof

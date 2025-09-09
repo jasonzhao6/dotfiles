@@ -37,6 +37,11 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}x <file 1>? <file 2>? # CSV: Keep lines with matching first columns"
 	"${OTHER_DOT}xx <file 1>? <file 2>? # CSV: Drop lines with matching first columns"
 	''
+	"${OTHER_DOT}t <command> # Time command execution"
+	"${OTHER_DOT}w <seconds> <command> # Execute command in loop with sleep interval"
+	"${OTHER_DOT}f <start> <finish> (~~) # Run a sequence of commands in foreground"
+	"${OTHER_DOT}b <start> <finish> (~~) # Run a sequence of commands in background"
+	''
 	"${OTHER_DOT}8 # Use Java 8"
 	"${OTHER_DOT}d <url> # DNS dig"
 	"${OTHER_DOT}df # DNS flush"
@@ -44,9 +49,6 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}q # Format a sql query from stdin"
 	"${OTHER_DOT}q '<sql>' # Format a sql query from cli arg"
 	"${OTHER_DOT}r <before> <after> # Rename files in the current directory"
-	"${OTHER_DOT}t <command> # Time command execution"
-	"${OTHER_DOT}f <start> <finish> (~~) # Run a sequence of commands in foreground"
-	"${OTHER_DOT}b <start> <finish> (~~) # Run a sequence of commands in background"
 )
 
 keymap_init $OTHER_NAMESPACE $OTHER_ALIAS "${OTHER_KEYMAP[@]}"
@@ -150,11 +152,11 @@ function other_keymap_d {
 	local url=$*
 	[[ -z "$1" ]] && return
 
-	# Strip protocol and path
+	# shellcheck disable=SC2298,SC2299 # Strip protocol and path
 	local domain=${${${url}#*://}%%/*}
 
 	if [[ -z $ZSHRC_UNDER_TESTING ]]; then
-		dig +short $domain | args_keymap_s
+		dig +short "$domain" | args_keymap_s
 	else
 		printf "test output for\n%s" "$domain" | args_keymap_s
 	fi
@@ -351,6 +353,26 @@ function other_keymap_uu {
 	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
 
 	diff --side-by-side --suppress-common-lines "$file_1" "$file_2"
+}
+
+function other_keymap_w {
+	local seconds=$1; shift
+	local command=$*
+
+	local output
+	while true; do
+		output=$(eval "$command")
+
+		clear
+		echo "$(yellow_fg '$') $command"
+		echo
+		echo "$output"
+		echo
+		echo -n 'Last executed: '
+		date +"%Y-%m-%d %H:%M:%S"
+
+		sleep "$seconds"
+	done
 }
 
 function other_keymap_x {
