@@ -6,6 +6,8 @@ Q_KEYMAP=(
 	"${Q_DOT}q # Chat without MCP"
 	"${Q_DOT}a # Chat with Atlassian MCP"
 	"${Q_DOT}h # Chat with GitHub MCP"
+	"${Q_DOT}c # Vibe code the current repo"
+	"${Q_DOT}j # Vibe code the JCard repo"
 	''
 	"${Q_DOT}0 <command>? # Invoke \`q\`"
 	"${Q_DOT}4 <command>? # Invoke \`q chat\` with \`claude-4-sonnet\`"
@@ -26,7 +28,10 @@ function q_keymap {
 # Key mappings (Alphabetized)
 #
 
-Q_KEYMAP_DIR="$HOME/.aws/amazonq"
+Q_KEYMAP_JCARD_DIR="$HOME/GitHub/transaction-engine/marqeta-jpos/jcard"
+Q_KEYMAP_SOURCE_DIR="$HOME/GitHub/jasonzhao6/scratch/amazonq"
+Q_KEYMAP_SUB_DIRS=(cli-agents my-agent-configs my-agent-contexts my-global-contexts)
+Q_KEYMAP_TARGET_DIR="$HOME/.aws/amazonq"
 
 function q_keymap_0 {
 	# Check if Docker is running; Q's MCP servers run on it
@@ -46,24 +51,39 @@ function q_keymap_a {
 	q_keymap_4 --agent atlassian
 }
 
+function q_keymap_c {
+	q_keymap_4 --agent code
+}
+
 function q_keymap_h {
 	q_keymap_4 --agent github
 }
 
+function q_keymap_j {
+	cd "$Q_KEYMAP_JCARD_DIR"
+	q_keymap_4 --agent code
+}
+
 function q_keymap_m {
-	mate "$Q_KEYMAP_DIR"
+	mate "$Q_KEYMAP_TARGET_DIR"
 }
 
 function q_keymap_o {
-	open "$Q_KEYMAP_DIR"
+	open "$Q_KEYMAP_TARGET_DIR"
 }
 
 function q_keymap_p {
 	echo "Pushing 'amazonq' folder to 'scratch' repository..."
 
-	if [ -d "$HOME/GitHub/jasonzhao6/scratch/amazonq" ]; then
-		rm -rf "$HOME/GitHub/jasonzhao6/scratch/amazonq"
-		cp -r "$HOME/.aws/amazonq" "$HOME/GitHub/jasonzhao6/scratch/"
+	if [ -d "$Q_KEYMAP_SOURCE_DIR" ]; then
+		rm -rf "$Q_KEYMAP_SOURCE_DIR"
+		mkdir -p "$Q_KEYMAP_SOURCE_DIR"
+
+		for subfolder in $Q_KEYMAP_SUB_DIRS; do
+			if [ -d "$Q_KEYMAP_TARGET_DIR/$subfolder" ]; then
+				cp -r "$Q_KEYMAP_TARGET_DIR/$subfolder" "$Q_KEYMAP_SOURCE_DIR/"
+			fi
+		done
 
 		if [ $? -eq 0 ]; then
 			echo "Push operation completed."
@@ -78,9 +98,13 @@ function q_keymap_p {
 function q_keymap_P {
 	echo "Pulling 'amazonq' folder from 'scratch' repository..."
 
-	if [ -d "$HOME/GitHub/jasonzhao6/scratch/amazonq" ]; then
-		rm -rf "$HOME/.aws/amazonq"
-		cp -r "$HOME/GitHub/jasonzhao6/scratch/amazonq" "$HOME/.aws/"
+	if [ -d "$Q_KEYMAP_SOURCE_DIR" ]; then
+		for subfolder in $Q_KEYMAP_SUB_DIRS; do
+			if [ -d "$Q_KEYMAP_SOURCE_DIR/$subfolder" ]; then
+				rm -rf "$Q_KEYMAP_TARGET_DIR/$subfolder"
+				cp -r "$Q_KEYMAP_SOURCE_DIR/$subfolder" "$Q_KEYMAP_TARGET_DIR/"
+			fi
+		done
 
 		if [ $? -eq 0 ]; then
 			echo "Pull operation completed successfully."
