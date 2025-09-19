@@ -138,6 +138,7 @@ function aws_keymap_m {
 	# Get secret
 	local secret; secret=$(
 		aws secretsmanager get-secret-value \
+			--region "$AWS_DEFAULT_REGION" \
 			--secret-id "$name" \
 			"${version_args[@]}" \
 			--query SecretString \
@@ -152,6 +153,7 @@ function aws_keymap_md {
 	local name=$1
 
 	aws secretsmanager delete-secret \
+		--region "$AWS_DEFAULT_REGION" \
 		--secret-id "$name" \
 		--force-delete-without-recovery
 }
@@ -159,7 +161,9 @@ function aws_keymap_md {
 function aws_keymap_n {
 	local name=$1
 
-	aws sns list-topics | jq --raw-output '.Topics[].TopicArn' | args_keymap_s "$name"
+	aws sns list-topics \
+		--region "$AWS_DEFAULT_REGION" |
+			jq --raw-output '.Topics[].TopicArn' | args_keymap_s "$name"
 }
 
 function aws_keymap_nn {
@@ -184,6 +188,7 @@ function aws_keymap_p {
 	local name=$1
 
 	aws codepipeline list-pipelines \
+		--region "$AWS_DEFAULT_REGION" \
 		--query "pipelines[?contains(name, '$name')].[name]" \
 		--output text |
 		args_keymap_s "$name"
@@ -196,6 +201,7 @@ function aws_keymap_pp {
 	local name=$1
 
 	aws codepipeline get-pipeline-state \
+		--region "$AWS_DEFAULT_REGION" \
 		--name "$name" \
 		--query "[pipelineName, $AWS_KEYMAP_PP_STATUS, $AWS_KEYMAP_PP_TIMESTAMP]" \
 		--output text
@@ -204,13 +210,16 @@ function aws_keymap_pp {
 function aws_keymap_q {
 	local name=$1
 
-	aws sqs list-queues | jq --raw-output '.QueueUrls[]' | args_keymap_s "$name"
+	aws sqs list-queues \
+		--region "$AWS_DEFAULT_REGION" |
+			jq --raw-output '.QueueUrls[]' | args_keymap_s "$name"
 }
 
 function aws_keymap_qg {
 	local url=$1
 
 	aws sqs get-queue-attributes \
+		--region "$AWS_DEFAULT_REGION" \
 		--queue-url "$url" \
 		--attribute-names ApproximateNumberOfMessages ApproximateNumberOfMessagesNotVisible | jq
 }
@@ -218,7 +227,10 @@ function aws_keymap_qg {
 function aws_keymap_qpurge {
 	local url=$1
 
-	aws sqs purge-queue --queue-url "$url"
+	aws sqs purge-queue \
+		--region "$AWS_DEFAULT_REGION" \
+		--queue-url "$url"
+
 	aws_keymap_qg "$url"
 }
 
@@ -233,11 +245,12 @@ function aws_keymap_qr {
 	local count=${2:-1}
 
 	aws sqs receive-message \
+		--region "$AWS_DEFAULT_REGION" \
 		--queue-url "$url" \
 		--max-number-of-messages "$count" \
 		--visibility-timeout 5 \
 		--wait-time-seconds 1 |
-		jq '.Messages[].Body | fromjson'
+			jq '.Messages[].Body | fromjson'
 }
 
 function aws_keymap_r {
@@ -245,6 +258,7 @@ function aws_keymap_r {
 
 	local parameter; parameter=$(
 		aws ssm get-parameter \
+			--region "$AWS_DEFAULT_REGION" \
 			--name "$name"	\
 			--query Parameter.Value \
 			--output text
@@ -258,6 +272,7 @@ function aws_keymap_s {
 	local id=$1
 
 	aws ssm start-session \
+		--region "$AWS_DEFAULT_REGION" \
 		--document-name 'AWS-StartInteractiveCommand' \
 		--parameters '{"command": ["sudo -i"]}' \
 		--target "$(ec2_get_id "$id")"
@@ -270,6 +285,7 @@ function aws_keymap_sc {
 	local id="$*[-1]"
 
 	aws ssm start-session \
+		--region "$AWS_DEFAULT_REGION" \
 		--document-name 'AWS-StartNonInteractiveCommand' \
 		--parameters "{\"command\": [\"$command\"]}" \
 		--target "$(ec2_get_id "$id")" |
@@ -277,13 +293,18 @@ function aws_keymap_sc {
 }
 
 function aws_keymap_sm {
-	aws ssm start-session --target "$(ec2_get_id "$@")"
+	aws ssm start-session \
+		--region "$AWS_DEFAULT_REGION" \
+		--target "$(ec2_get_id "$@")"
 }
 
 function aws_keymap_t {
 	local message=$*
 
-	aws sts decode-authorization-message --encoded-message "$message" --output text | jq .
+	aws sts decode-authorization-message
+		--region "$AWS_DEFAULT_REGION" \
+		--encoded-message "$message" --output text |
+			jq .
 }
 
 function aws_keymap_w2 {
