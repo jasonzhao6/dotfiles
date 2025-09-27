@@ -163,7 +163,8 @@ function aws_keymap_n {
 
 	aws sns list-topics \
 		--region "$AWS_DEFAULT_REGION" |
-			jq --raw-output '.Topics[].TopicArn' | args_keymap_s "$name"
+		jq --raw-output '.Topics[].TopicArn' |
+		args_keymap_s "$name"
 }
 
 function aws_keymap_nn {
@@ -212,7 +213,7 @@ function aws_keymap_q {
 
 	aws sqs list-queues \
 		--region "$AWS_DEFAULT_REGION" |
-			jq --raw-output '.QueueUrls[]' | args_keymap_s "$name"
+		jq --raw-output '.QueueUrls[]' | args_keymap_s "$name"
 }
 
 function aws_keymap_qg {
@@ -250,7 +251,7 @@ function aws_keymap_qr {
 		--max-number-of-messages "$count" \
 		--visibility-timeout 5 \
 		--wait-time-seconds 1 |
-			jq '.Messages[].Body | fromjson'
+		jq '.Messages[].Body | fromjson'
 }
 
 function aws_keymap_r {
@@ -289,7 +290,7 @@ function aws_keymap_sc {
 		--document-name 'AWS-StartNonInteractiveCommand' \
 		--parameters "{\"command\": [\"$command\"]}" \
 		--target "$(ec2_get_id "$id")" |
-			pgrep --multiline --ignore-case --invert-match "$AWS_KEYMAP_SC_REGEX"
+		pgrep --multiline --ignore-case --invert-match "$AWS_KEYMAP_SC_REGEX"
 }
 
 function aws_keymap_sm {
@@ -304,7 +305,7 @@ function aws_keymap_t {
 	aws sts decode-authorization-message
 		--region "$AWS_DEFAULT_REGION" \
 		--encoded-message "$message" --output text |
-			jq .
+		jq .
 }
 
 function aws_keymap_w2 {
