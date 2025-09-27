@@ -8,9 +8,9 @@ d: https://app.datadoghq.com/apm/services/%s-mysql/operations/iso.8583/resources
 dd: https://app.datadoghq.com/apm/services/%s-mysql/operations/iso.8583/resources?env=qa Datadog DB APM (QA)
 dl: https://app.datadoghq.com/dashboard/lists?q=%s Datadog Dashboard Lists (go/dl)
 
--: https://ecr-ui.prod.ci.marqeta.io/us-east-1/repositories/transaction-engine/marqeta-jpos/jcard-marqkubed/rel-2025.%s ECR (rel-2025.{MM.DD})
-e: https://ecr-ui.prod.ci.marqeta.io/?search=%s ECR (Prod)
-ee: https://ecr-ui.prod.ci.marqeta.io/us-west-2/repositories?search=%s ECR (QA)
+-: https://ecr-ui.marqeta.com/us-east-1/repositories/transaction-engine/marqeta-jpos/jcard-marqkubed/rel-2025.%s ECR (rel-2025.{MM.DD})
+e: https://ecr-ui.marqeta.com/?search=%s ECR (Prod)
+ee: https://ecr-ui.marqeta.com/us-west-2/repositories?search=%s ECR (QA)
 
 g: https://mail.google.com/mail/u/0/#search/%s Google Gmail
 gc: https://calendar.google.com/calendar/u/0/r/search?q=%s Google Calendar
