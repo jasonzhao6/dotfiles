@@ -11,33 +11,38 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}w2 <namespace>? # Set namespace, region, and kube config"
 	''
 	"${KUBECTL_DOT}k <type> <match>* <-mismatch>* # Get resources as args"
-	"${KUBECTL_DOT}g <type> <name> # Get resources"
-	"${KUBECTL_DOT}gg <type> <name> # Get resources with \`-o wide\`"
-	"${KUBECTL_DOT}d <type> <name> # Describe resources"
-	"${KUBECTL_DOT}m <type> <name> # Edit with TextMate"
+	"${KUBECTL_DOT}h <match>* <-mismatch>* # Get pods as args"
+	"${KUBECTL_DOT}hh <match>* <-mismatch>* # Get unready pods as args"
+	"${KUBECTL_DOT}t <match>* <-mismatch>* # Get deployments as args"
+	"${KUBECTL_DOT}m <pod> # Edit a pod with TextMate" #
+	"${KUBECTL_DOT}w <deployment> # Edit a deployment with TextMate" #
+	"${KUBECTL_DOT}v <type> <name> # Edit a given type with TextMate" #
 	''
-	"${KUBECTL_DOT}l <pod> # Show logs"
-	"${KUBECTL_DOT}ll <pod> # Tail logs"
-	"${KUBECTL_DOT}lp <pod> # Show previous logs"
 	"${KUBECTL_DOT}b <pod> # Exec into bash"
 	"${KUBECTL_DOT}bc <command> <pod> # Exec a command"
 	"${KUBECTL_DOT}c # Copy history bindings and \`kubectl\` helpers"
+	"${KUBECTL_DOT}l <pod> # Show logs"
+	"${KUBECTL_DOT}ll <pod> # Tail logs"
+	"${KUBECTL_DOT}lp <pod> # Show previous logs"
 	''
+	"${KUBECTL_DOT}r <deployment> # Restart a deployment"
+	"${KUBECTL_DOT}rd <daemon set> # Restart a daemon set"
+	"${KUBECTL_DOT}rs <stateful set> # Restart a stateful set"
+	"${KUBECTL_DOT}rm <pod> # Remove a pod"
 	"${KUBECTL_DOT}s <count> <deployment> # Scale a deployment"
-	"${KUBECTL_DOT}ss <type> <name> # Restart a deployment/stateful set/daemon set"
 	''
+	"${KUBECTL_DOT}f <match>* <-mismatch>* # Filter resource types"
+	"${KUBECTL_DOT}ff # Save a copy of resource types"
+	"${KUBECTL_DOT}g <type> <name> # Get resources"
+	"${KUBECTL_DOT}gg <type> <name> # Get resources with \`-o wide\`"
+	"${KUBECTL_DOT}d <type> <name> # Describe resources"
 	"${KUBECTL_DOT}j <type> <name> # Get resource as json & save a copy"
 	"${KUBECTL_DOT}jj # Get the copy of json"
 	"${KUBECTL_DOT}y <type> <name> # Get resource as yaml & save a copy"
 	"${KUBECTL_DOT}yy # Get the copy of yaml"
 	''
-	"${KUBECTL_DOT}r # List resource types"
-	"${KUBECTL_DOT}r <match>* <-mismatch>* # Filter resource types"
-	"${KUBECTL_DOT}rr # Save a copy of resource types"
-	"${KUBECTL_DOT}x <type> # Explain a resource type"
-	''
-	"${KUBECTL_DOT}h # Run Helm unit tests and update snapshots"
-	"${KUBECTL_DOT}t <yaml file> # Render Helm template locally"
+	"${KUBECTL_DOT}u # Run unit tests and update snapshots"
+	"${KUBECTL_DOT}p <yaml file> # Print spec from yaml file locally"
 )
 
 keymap_init $KUBECTL_NAMESPACE $KUBECTL_ALIAS "${KUBECTL_KEYMAP[@]}"
@@ -151,6 +156,17 @@ function kubectl_keymap_e2 {
 	return
 }
 
+function kubectl_keymap_f {
+	local filters=("$@")
+
+	args_keymap_s "${filters[@]}" < ~/Documents/zshrc-data/k8s.api-resources.txt
+}
+
+function kubectl_keymap_ff {
+	# Save a copy for offline lookup
+	kubectl api-resources > ~/Documents/zshrc-data/k8s.api-resources.txt
+}
+
 function kubectl_keymap_g {
 	local params=("$@")
 
@@ -164,7 +180,27 @@ function kubectl_keymap_gg {
 }
 
 function kubectl_keymap_h {
-	helm unittest --update-snapshot --file 'tests/*.yaml' .
+	[[ -z $1 ]] && return
+
+	local filters=("$@")
+
+	kubectl get pod | args_keymap_so "${filters[@]}"
+}
+
+function kubectl_keymap_hh {
+	local filters=("$@")
+	local columns="\
+		NAME:.metadata.name,\
+		STATUS:.status.phase,\
+		READY:.status.containerStatuses[0].ready,\
+		READINESS GATES:.status.conditions[?(@.type=='Ready')].status,\
+		CREATED AT:.metadata.creationTimestamp,\
+		RESTARTED AT:.status.containerStatuses[0].lastState.terminated.finishedAt"
+
+	kubectl get pods -o custom-columns="$columns" |
+		awk 'NR==1 {print; next} /False/ {gsub(/true/, "Ready"); gsub(/false/, "Unready"); gsub(/False/, "Unregistered"); print}' |
+		column -t |
+		args_keymap_so "${filters[@]}"
 }
 
 function kubectl_keymap_j {
@@ -206,9 +242,9 @@ function kubectl_keymap_lp {
 }
 
 function kubectl_keymap_m {
-	local params=("$@")
+	local pod="$1"
 
-	kubectl edit "${params[@]}"
+	kubectl edit pods "$pod"
 }
 
 function kubectl_keymap_n {
@@ -217,46 +253,70 @@ function kubectl_keymap_n {
 	kubectl config set-context --current --namespace "$namespace"
 }
 
-function kubectl_keymap_r {
-	local filters=("$@")
+function kubectl_keymap_p {
+	local yaml_file="$1"
 
-	args_keymap_s "${filters[@]}" < ~/Documents/zshrc-data/k8s.api-resources.txt
+	helm template -f "$yaml_file" .
 }
 
-function kubectl_keymap_rr {
-	# Save a copy for offline lookup
-	kubectl api-resources > ~/Documents/zshrc-data/k8s.api-resources.txt
+function kubectl_keymap_r {
+	local resource_name="$1"
+
+	kubectl rollout restart deployments "$resource_name"
+}
+
+function kubectl_keymap_rd {
+	local resource_name="$1"
+
+	kubectl rollout restart daemonsets "$resource_name"
+}
+
+function kubectl_keymap_rm {
+	local pod="$1"
+
+	kubectl delete pod "$pod"
+}
+
+function kubectl_keymap_rs {
+	local resource_name="$1"
+
+	kubectl rollout restart statefulsets "$resource_name"
 }
 
 function kubectl_keymap_s {
 	local replica_count="$1"
 	local deployment_name="$2"
 
-	kubectl scale --replicas="$replica_count" deploy "$deployment_name"
-}
-
-function kubectl_keymap_ss {
-	local resource_type="$1"
-	local resource_name="$2"
-
-	kubectl rollout restart "$resource_type" "$resource_name"
+	kubectl scale --replicas="$replica_count" deployments "$deployment_name"
 }
 
 function kubectl_keymap_t {
-	local yaml_file="$1"
+	[[ -z $1 ]] && return
 
-	helm template --file "$yaml_file" .
+	local filters=("$@")
+
+	kubectl get deployments | args_keymap_so "${filters[@]}"
+}
+
+function kubectl_keymap_u {
+	helm unittest --update-snapshot --file 'tests/*.yaml' .
+}
+
+function kubectl_keymap_v {
+	local params=("$@")
+
+	kubectl edit "${params[@]}"
+}
+
+function kubectl_keymap_w {
+	local deployment="$1"
+
+	kubectl edit deployments "$deployment"
 }
 
 function kubectl_keymap_w2 {
 	# To be overwritten by `ZSHRC_SECRETS`
 	return
-}
-
-function kubectl_keymap_x {
-	local resource_type="$1"
-
-	kubectl explain "$resource_type"
 }
 
 function kubectl_keymap_y {
