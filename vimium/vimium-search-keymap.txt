@@ -28,10 +28,11 @@ ji: https://marqeta.atlassian.net/issues/INCI-%s Jira Ticket (INCI)
 jj: https://marqeta.atlassian.net/browse/TENGF-%s Jira Ticket (TENGF)
 js: https://marqeta.atlassian.net/jira/software/c/projects/TENGF/boards/1033?search=%s Jira Sprint
 
-kd: https://app.datadoghq.com/orchestration/explorer/deployment?query=%s%20kube_namespace%3Atransaction-engine Datadog K8s Deployments
-kde: https://app.datadoghq.com/event/explorer?query=service%3A%s-ccapi%20source%3Achange_tracking Datadog K8s Deployment Events
-kdl: https://app.datadoghq.com/logs?query=kube_job%3A%s-ccapi-job Datadog K8s Deployment Logs
-kp: https://app.datadoghq.com/orchestration/explorer/pod?query=%s%20kube_namespace%3Atransaction-engine Datadog K8s Pods
+kh: https://app.datadoghq.com/orchestration/explorer/pod?query=%s%20kube_namespace%3Atransaction-engine Datadog K8s Pods
+khh: https://app.datadoghq.com/orchestration/explorer/pod?query=%s%20kube_namespace%3Atransaction-engine%20kube_condition_ready%3Afalse Datadog K8s Pods
+kt: https://app.datadoghq.com/orchestration/explorer/deployment?query=%s%20kube_namespace%3Atransaction-engine Datadog K8s Deployments
+kte: https://app.datadoghq.com/event/explorer?query=service%3A%s-ccapi%20source%3Achange_tracking Datadog K8s Deployment Events
+ktl: https://app.datadoghq.com/logs?query=kube_job%3A%s-ccapi-job Datadog K8s Deployment Logs
 
 l: https://app.datadoghq.com/logs?query=env%3Aprod%20%s Datadog Logs (Prod)
 ll: https://app.datadoghq.com/logs?query=env%3Aqa%20%s Datadog Logs (QA)
