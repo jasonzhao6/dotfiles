@@ -58,7 +58,8 @@ GIT_KEYMAP=(
 	''
 	"${GIT_DOT}P # Pull"
 	"${GIT_DOT}p # Push"
-	"${GIT_DOT}f # Force push"
+	"${GIT_DOT}f # Force push with lease"
+	"${GIT_DOT}ff # Force push"
 )
 
 keymap_init $GIT_NAMESPACE $GIT_ALIAS "${GIT_KEYMAP[@]}"
@@ -131,6 +132,10 @@ function git_keymap_e {
 }
 
 function git_keymap_f {
+	git push --force-with-lease
+}
+
+function git_keymap_ff {
 	git push --force
 }
 
