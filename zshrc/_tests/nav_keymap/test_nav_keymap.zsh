@@ -166,12 +166,8 @@ function test__nav_keymap_ee__with_filters {
 	)"
 }; run_with_filter test__nav_keymap_ee__with_filters
 
-function test__nav_keymap_g {
-	assert "$(nav_keymap_g > /dev/null; pwd)" "$HOME/GitHub"
-}; run_with_filter test__nav_keymap_g
-
 function test__nav_keymap_h {
-	assert "$(nav_keymap_h > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/scratch"
+	assert "$(nav_keymap_h > /dev/null; pwd)" "$HOME/GitHub"
 }; run_with_filter test__nav_keymap_h
 
 function test__nav_keymap_m {
@@ -291,6 +287,10 @@ function test__nav_keymap_oo__with_filters {
 		rm -rf /tmp/test__nav_keymap_oo
 	)" ''
 }; run_with_filter test__nav_keymap_oo__with_filters
+
+function test__nav_keymap_s {
+	assert "$(nav_keymap_s > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/scratch"
+}; run_with_filter test__nav_keymap_s
 
 function test__nav_keymap_t__with_dir {
 	assert "$(

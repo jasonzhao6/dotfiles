@@ -54,7 +54,7 @@ function test__main_keymap_r__when_specifying_a_description {
 
 			  $ h.a          # Open the current repo in GitHub Desktop
 			  $ m.h <regex>? # Show GitHub Desktop shortcuts
-			  $ n.g          # Go to GitHub
+			  $ n.h          # Go to GitHub
 			  $ q.h          # Chat with GitHub MCP
 
 			  intellij_alt: alt-o         # Open on GitHub
@@ -128,6 +128,7 @@ function test__main_keymap_w__when_specifying_a_special_char {
 		cat <<-eof
 
 		  $ m.- # Show stats
+		  $ n.- # Sort subfolders by size
 
 		  ^cmd--       # Collapse all
 		  cmd--        # Decrease font size in all editors (Convention)
