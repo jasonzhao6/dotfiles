@@ -18,6 +18,9 @@ gd: https://drive.google.com/drive/search?q=%s Google Drive
 gi: https://www.google.com/search?q=%s&udm=2 Google Images
 gm: https://www.google.com/maps?q=%s Google Maps
 
+h: https://app.datadoghq.com/orchestration/explorer/pod?query=%s%20kube_namespace%3Atransaction-engine%20kube_cluster_name%3Amkprod-%2A Datadog K8s Pods (Prod)
+hh: https://app.datadoghq.com/orchestration/explorer/pod?query=%s%20kube_namespace%3Atransaction-engine%20kube_cluster_name%3Amkqa-%2A Datadog K8s Pods (QA)
+
 i: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aprod%2Cservice%3A%s-ccapi Datadog Infrastructure (Prod)
 ii: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aqa%2Cservice%3A%s-ccapi Datadog Infrastructure (QA)
 
@@ -27,12 +30,6 @@ jc: https://marqeta.atlassian.net/issues/CHANGE-%s Jira Ticket (CHANGE)
 ji: https://marqeta.atlassian.net/issues/INCI-%s Jira Ticket (INCI)
 jj: https://marqeta.atlassian.net/browse/TENGF-%s Jira Ticket (TENGF)
 js: https://marqeta.atlassian.net/jira/software/c/projects/TENGF/boards/1033?search=%s Jira Sprint
-
-kh: https://app.datadoghq.com/orchestration/explorer/pod?query=%s%20kube_namespace%3Atransaction-engine Datadog K8s Pods
-khh: https://app.datadoghq.com/orchestration/explorer/pod?query=%s%20kube_namespace%3Atransaction-engine%20kube_condition_ready%3Afalse Datadog K8s Pods
-kt: https://app.datadoghq.com/orchestration/explorer/deployment?query=%s%20kube_namespace%3Atransaction-engine Datadog K8s Deployments
-kte: https://app.datadoghq.com/event/explorer?query=service%3A%s-ccapi%20source%3Achange_tracking Datadog K8s Deployment Events
-ktl: https://app.datadoghq.com/logs?query=kube_job%3A%s-ccapi-job Datadog K8s Deployment Logs
 
 l: https://app.datadoghq.com/logs?query=env%3Aprod%20%s Datadog Logs (Prod)
 ll: https://app.datadoghq.com/logs?query=env%3Aqa%20%s Datadog Logs (QA)
@@ -49,11 +46,18 @@ se: https://us-east-1.console.aws.amazon.com/ec2/home#Instances:instanceState=ru
 sl: https://us-east-1.console.aws.amazon.com/ec2/home#LoadBalancers:search=%s;sort=name AWS Load Balancers
 sm: https://us-east-1.console.aws.amazon.com/secretsmanager/listsecrets?region=us-east-1&search=all%3D%s AWS Secrets Manager
 
-t: https://e.ggtimer.com/%s0m E.ggtimer (10m)
-tt: https://e.ggtimer.com/%sm E.ggtimer (1m)
+t: https://app.datadoghq.com/orchestration/explorer/deployment?query=%s%20kube_namespace%3Atransaction-engine%20kube_cluster_name%3Amkprod-%2A Datadog K8s Deployments (Prod)
+tt: https://app.datadoghq.com/orchestration/explorer/deployment?query=%s%20kube_namespace%3Atransaction-engine%20kube_cluster_name%3Amkqa-%2A Datadog K8s Deployments (QA)
+te: https://app.datadoghq.com/event/explorer?query=service%3A%s-ccapi%20source%3Achange_tracking%20kube_cluster%3Amkprod-%2A Datadog K8s Deployment Events (Prod)
+tee: https://app.datadoghq.com/event/explorer?query=service%3A%s-ccapi%20source%3Achange_tracking%20kube_cluster%3Amkqa-%2A Datadog K8s Deployment Events (QA)
+tl: https://app.datadoghq.com/logs?query=kube_job%3A%s-ccapi-job%20kube_cluster_name%3Amkprod-%2A Datadog K8s Deployment Logs (Prod)
+tll: https://app.datadoghq.com/logs?query=kube_job%3A%s-ccapi-job%20kube_cluster_name%3Amkqa-%2A Datadog K8s Deployment Logs (QA)
 
 w: https://marqeta.atlassian.net/wiki/search?text=%s&spaces=TF Confluence (TENGF)
 ww: https://marqeta.atlassian.net/wiki/search?text=%s Confluence
 
 y: https://www.yelp.com/search?find_desc=%s Yelp
 yt: https://www.youtube.com/results?search_query=%s YouTube
+
+z: https://e.ggtimer.com/%s0m E.ggtimer (10m)
+zz: https://e.ggtimer.com/%sm E.ggtimer (1m)
