@@ -2,5 +2,5 @@ Test stats:
 - 239/239 tests passed
 - 239/239 tests that are defined are actually invoked
 - 110/110 subjects and tests are defined in the same order
-- 277/277 keymap entries have corresponding implementations
-- 277/277 key mapping functions are alphabetized
+- 278/278 keymap entries have corresponding implementations
+- 278/278 key mapping functions are alphabetized

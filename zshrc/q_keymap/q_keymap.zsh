@@ -5,6 +5,7 @@ Q_DOT="${Q_ALIAS}${KEYMAP_DOT}"
 Q_KEYMAP=(
 	"${Q_DOT}q # Chat without MCP"
 	"${Q_DOT}a # Chat with Atlassian MCP"
+	"${Q_DOT}d # Chat with Datadog MCP"
 	"${Q_DOT}h # Chat with GitHub MCP"
 	"${Q_DOT}c # Vibe code the current repo"
 	"${Q_DOT}j # Vibe code the JCard repo"
@@ -53,6 +54,10 @@ function q_keymap_a {
 
 function q_keymap_c {
 	q_keymap_4 --agent code
+}
+
+function q_keymap_d {
+	q_keymap_4 --agent datadog
 }
 
 function q_keymap_h {
