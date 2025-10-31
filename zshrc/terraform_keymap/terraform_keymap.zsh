@@ -166,9 +166,9 @@ function terraform_keymap_o {
 }
 
 function terraform_keymap_p {
-	local option=$1
+	local options=$1
 
-	terraform_keymap_init "$option" && terraform plan -out=tfplan
+	terraform_keymap_init "$options" && terraform plan -out=tfplan
 }
 
 function terraform_keymap_qa {
@@ -200,9 +200,9 @@ function terraform_keymap_u {
 }
 
 function terraform_keymap_v {
-	local option=$1
+	local options=$1
 
-	terraform_keymap_init "$option" && terraform validate
+	terraform_keymap_init "$options" && terraform validate
 }
 
 function terraform_keymap_w {

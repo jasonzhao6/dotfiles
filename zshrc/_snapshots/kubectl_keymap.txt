@@ -26,10 +26,10 @@ Keymap List
 
   $ k <kubectl command>              
 
-  $ k.n <namespace>?                 # Set namespace (to 'transaction-engine')
-  $ k.e1 <namespace>?                # Set namespace, region, and kube config
-  $ k.e2 <namespace>?                # Set namespace, region, and kube config
-  $ k.w2 <namespace>?                # Set namespace, region, and kube config
+  $ k.n <namespace>?                 # Set QA namespace (to 'transaction-engine')
+  $ k.e1 <namespace>?                # Set QA namespace, region, and kube config
+  $ k.e2 <namespace>?                # Set QA namespace, region, and kube config
+  $ k.w2 <namespace>?                # Set QA namespace, region, and kube config
 
   $ k.k <type> <match>* <-mismatch>* # Get resources as args
   $ k.h <match>* <-mismatch>*        # Get pods as args
@@ -41,7 +41,7 @@ Keymap List
 
   $ k.b <pod>                        # Exec into bash
   $ k.bc <command> <pod>             # Exec a command
-  $ k.c                              # Copy history bindings and `kubectl` helpers
+  $ k.c (e11,e12,e21,w21)?           # Copy Prod helpers and history bindings
   $ k.l <pod>                        # Show logs
   $ k.ll <pod>                       # Tail logs
   $ k.lp <pod>                       # Show previous logs

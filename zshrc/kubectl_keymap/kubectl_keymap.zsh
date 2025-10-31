@@ -5,10 +5,10 @@ KUBECTL_DOT="${KUBECTL_ALIAS}${KEYMAP_DOT}"
 KUBECTL_KEYMAP=(
 	"${KUBECTL_ALIAS} <kubectl command>"
 	''
-	"${KUBECTL_DOT}n <namespace>? # Set namespace (to '$GITHUB_DEFAULT_ORG')"
-	"${KUBECTL_DOT}e1 <namespace>? # Set namespace, region, and kube config"
-	"${KUBECTL_DOT}e2 <namespace>? # Set namespace, region, and kube config"
-	"${KUBECTL_DOT}w2 <namespace>? # Set namespace, region, and kube config"
+	"${KUBECTL_DOT}n <namespace>? # Set QA namespace (to '$GITHUB_DEFAULT_ORG')"
+	"${KUBECTL_DOT}e1 <namespace>? # Set QA namespace, region, and kube config"
+	"${KUBECTL_DOT}e2 <namespace>? # Set QA namespace, region, and kube config"
+	"${KUBECTL_DOT}w2 <namespace>? # Set QA namespace, region, and kube config"
 	''
 	"${KUBECTL_DOT}k <type> <match>* <-mismatch>* # Get resources as args"
 	"${KUBECTL_DOT}h <match>* <-mismatch>* # Get pods as args"
@@ -20,7 +20,7 @@ KUBECTL_KEYMAP=(
 	''
 	"${KUBECTL_DOT}b <pod> # Exec into bash"
 	"${KUBECTL_DOT}bc <command> <pod> # Exec a command"
-	"${KUBECTL_DOT}c # Copy history bindings and \`kubectl\` helpers"
+	"${KUBECTL_DOT}c (e11,e12,e21,w21)? # Copy Prod helpers and history bindings"
 	"${KUBECTL_DOT}l <pod> # Show logs"
 	"${KUBECTL_DOT}ll <pod> # Tail logs"
 	"${KUBECTL_DOT}lp <pod> # Show previous logs"
@@ -90,12 +90,34 @@ AWS_SSO_CACHE_JQ=$(
 )
 
 function kubectl_keymap_c {
+	local kubectl_cluster
+	local option=$1
+
+	case $AWS_DEFAULT_REGION in
+		us-east-1) kubectl_cluster=$KUBECTL_USE11_CLUSTER;;
+		us-east-2) kubectl_cluster=$KUBECTL_USE21_CLUSTER;;
+		us-west-2) kubectl_cluster=$KUBECTL_USW21_CLUSTER;;
+	esac
+
+	case $option in
+		e11) kubectl_cluster=$KUBECTL_USE11_CLUSTER;;
+		e12) kubectl_cluster=$KUBECTL_USE12_CLUSTER;;
+		e21) kubectl_cluster=$KUBECTL_USE21_CLUSTER;;
+		w21) kubectl_cluster=$KUBECTL_USW21_CLUSTER;;
+	esac
+
+	if [[ -z "$kubectl_cluster" ]]; then
+		red_bar "Error: \`\$kubectl_cluster\` local var is undefined"
+		return 1
+	fi
+
 	# `AWS_SSO_CACHE_DIR` can contain SSO creds for multiple roles
-	# To identify creds for the current role, delete all creds, then run a command
-	# Note: This folder also contains an OAuth cred, which needs to be preserved
-	#       Deleting it causes the next command to reinitiate OAuth with AWS
+	# To identify creds for the current role, delete all creds,
+	# then run a command to generate fresh SSO cred
 	if [[ -d "$AWS_SSO_CACHE_DIR" ]]; then
 		for file in "$AWS_SSO_CACHE_DIR"/*; do
+			# Note: This folder also contains an OAuth cred, which needs to be preserved
+			#       Deleting it causes the next command to re-initiate OAuth with AWS
 			if [[ -f "$file" ]] && grep -q '"ProviderType": "sso"' "$file"; then
 				rm "$file"
 			fi
@@ -116,7 +138,7 @@ function kubectl_keymap_c {
 
 	# Check if we found an SSO file
 	if [[ -z "$current_role" ]]; then
-		echo "Error: No SSO credentials file found in $AWS_SSO_CACHE_DIR"
+		red_bar "Error: No SSO credentials file found in $AWS_SSO_CACHE_DIR"
 		return 1
 	fi
 
@@ -132,7 +154,7 @@ function kubectl_keymap_c {
 
 		$(jq "$AWS_SSO_CACHE_JQ" "$AWS_SSO_CACHE_DIR/$current_role" | trim_list)
 
-		aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $KUBECTL_DEFAULT_CLUSTER
+		aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $kubectl_cluster
 		kubectl config set-context --current --namespace=$GITHUB_DEFAULT_ORG
 	eof
 

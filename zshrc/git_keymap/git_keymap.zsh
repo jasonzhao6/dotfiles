@@ -241,13 +241,14 @@ function git_keymap_w {
 }
 
 function git_keymap_x {
-	local option=$1
+	local options=$1
 
 	local remote; remote=origin
 	local branch; branch=main
 	local head_num
 
-	for var in $option; do
+	# Rule: OR (AND/OR u m) *
+	for var in $options; do
 		case $var in
 			u) remote=upstream;;
 			m) branch=master;;

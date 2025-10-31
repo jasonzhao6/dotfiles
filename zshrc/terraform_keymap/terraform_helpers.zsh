@@ -1,8 +1,9 @@
 function terraform_keymap_init {
-	local option=$1
+	local options=$1
 	[[ -z $1 ]] && return
 
-	for var in $option; do
+	# Rule: AND/OR e (OR i iu ir im)
+	for var in $options; do
 		case $var in
 			e) terraform_keymap_e;;
 			i) terraform_keymap_i;;
