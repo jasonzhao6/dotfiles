@@ -22,4 +22,5 @@ TERMINAL_KEYMAP=(
 	'ctrl-s # Pause output scrolling'
 	'ctrl-q # Resume output scrolling'
 	''
+	'cmd-shift-c # Show color picker'
 )

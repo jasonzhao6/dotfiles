@@ -21,3 +21,5 @@ Shortcuts: main_keymap.terminal.zsh
 
   ctrl-s            # Pause output scrolling
   ctrl-q            # Resume output scrolling
+
+  cmd-shift-c       # Show color picker

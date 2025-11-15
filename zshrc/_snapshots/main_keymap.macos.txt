@@ -18,7 +18,6 @@ Shortcuts: main_keymap.macos.zsh
   cmd-ctrl-f         # Toggle full screen
   ^cmd-shift-f       # Toggle Chrome toolbar in full screen
 
-  cmd-shift-c        # Show color picker in Terminal
   cmd-shift-x        # Strike through
 
   cmd-alt-{esc}      # Force quit applications
