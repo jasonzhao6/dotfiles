@@ -7,8 +7,11 @@ Q_KEYMAP=(
 	"${Q_DOT}a # Chat with Atlassian MCP"
 	"${Q_DOT}d # Chat with Datadog MCP"
 	"${Q_DOT}h # Chat with GitHub MCP"
-	"${Q_DOT}c # Vibe code the current repo"
-	"${Q_DOT}j # Vibe code the JCard repo"
+	"${Q_DOT}s # Chat with SDLC MCP"
+	''
+	"${Q_DOT}c # Vibe code in the current repo"
+	"${Q_DOT}j # Vibe code in the JCard repo"
+	"${Q_DOT}k # Vibe code in the K8s Helm repo"
 	''
 	"${Q_DOT}0 <command>? # Invoke \`q\`"
 	"${Q_DOT}4 <command>? # Invoke \`q chat\` with \`claude-4-sonnet\`"
@@ -30,6 +33,7 @@ function q_keymap {
 #
 
 Q_KEYMAP_JCARD_DIR="$HOME/GitHub/transaction-engine/marqeta-jpos/jcard"
+Q_KEYMAP_HELM_DIR="$HOME/GitHub/transaction-engine/ccapi-marqkubed-helm"
 Q_KEYMAP_SOURCE_DIR="$HOME/GitHub/jasonzhao6/scratch/amazonq"
 Q_KEYMAP_SUB_DIRS=(cli-agents my-agent-configs my-agent-contexts my-global-contexts)
 Q_KEYMAP_TARGET_DIR="$HOME/.aws/amazonq"
@@ -66,6 +70,11 @@ function q_keymap_h {
 
 function q_keymap_j {
 	cd "$Q_KEYMAP_JCARD_DIR"
+	q_keymap_4 --agent code
+}
+
+function q_keymap_k {
+	cd "$Q_KEYMAP_HELM_DIR"
 	q_keymap_4 --agent code
 }
 
@@ -123,4 +132,8 @@ function q_keymap_P {
 
 function q_keymap_q {
 	q_keymap_4 --agent q
+}
+
+function q_keymap_s {
+	q_keymap_4 --agent sdlc
 }

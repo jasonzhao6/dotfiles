@@ -113,7 +113,7 @@ function test__main_keymap_w__when_specifying_a_key {
 		  $ k.j <type> <name>             # Get resource as json & save a copy
 		  $ k.jj                          # Get the copy of json
 		  $ o.j <url> <regex> <num lines> # Curl a json endpoint
-		  $ q.j                           # Vibe code the JCard repo
+		  $ q.j                           # Vibe code in the JCard repo
 
 		  alt-j # Step over
 		  cmd-j # Join lines
