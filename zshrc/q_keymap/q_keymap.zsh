@@ -14,7 +14,7 @@ Q_KEYMAP=(
 	"${Q_DOT}k # Vibe code in the K8s Helm repo"
 	''
 	"${Q_DOT}0 <command>? # Invoke \`q\`"
-	"${Q_DOT}4 <command>? # Invoke \`q chat\` with \`claude-4-sonnet\`"
+	"${Q_DOT}4 <command>? # Invoke \`q chat\` with \`claude-sonnet-4.5\`"
 	''
 	"${Q_DOT}o # Open \`amazonq\` folder in Finder"
 	"${Q_DOT}m # Edit \`amazonq\` folder in TextMate"
@@ -49,7 +49,7 @@ function q_keymap_0 {
 }
 
 function q_keymap_4 {
-	q_keymap_0 chat --model claude-4-sonnet "$@"
+	q_keymap_0 chat --model claude-sonnet-4.5 "$@"
 }
 
 function q_keymap_a {

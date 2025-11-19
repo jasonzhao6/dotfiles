@@ -35,7 +35,7 @@ Keymap List
   $ q.k            # Vibe code in the K8s Helm repo
 
   $ q.0 <command>? # Invoke `q`
-  $ q.4 <command>? # Invoke `q chat` with `claude-4-sonnet`
+  $ q.4 <command>? # Invoke `q chat` with `claude-sonnet-4.5`
 
   $ q.o            # Open `amazonq` folder in Finder
   $ q.m            # Edit `amazonq` folder in TextMate
