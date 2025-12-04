@@ -3,7 +3,7 @@
 #
 
 function caller {
-	# shellcheck disable=SC2154
+	# shellcheck disable=SC2154 # Allow zsh-specific special var
 	echo "${funcstack[3]}"
 }
 

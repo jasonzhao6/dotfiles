@@ -94,6 +94,7 @@ function terraform_keymap_e {
 
 		echo_eval "export $var_name=\$(aws_keymap_m $secret_name)"
 
+		# shellcheck disable=SC2296 # Allow zsh-specific param expansion
 		# If env var was not set, exit with error
 		[[ -z ${(P)var_name} ]] && return 1
 	done

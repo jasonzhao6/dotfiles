@@ -7,6 +7,7 @@ function zsh_keymap_does_key_exist {
 	# shellcheck disable=SC2034 # Used to define `keymap_entries`
 	while IFS= read -r keymap; do
 		# shellcheck disable=SC2206 # Adding double quote breaks array expansion
+		# shellcheck disable=SC2296 # Allow zsh-specific param expansion
 		keymap_entries=(${(P)keymap})
 
 		# Zsh keymaps have a dot alias; skip non-zsh keymaps

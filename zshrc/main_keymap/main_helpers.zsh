@@ -5,7 +5,10 @@ function main_keymap_show_default_keyboard_shortcuts {
 
 	local is_zsh_keymap=0
 	local namespace; namespace=$(echo "${name}_KEYMAP" | upcase)
-	local keymap_entries; keymap_entries=("${(P)$(echo "$namespace")[@]}")
+
+	local keymap_entries
+	# shellcheck disable=SC2296 # Allow zsh-specific param expansion
+	keymap_entries=("${(P)$(echo "$namespace")[@]}")
 
 	if [[ -z $description ]]; then
 		echo
@@ -101,6 +104,7 @@ function main_keymap_find_key_mappings {
 	# shellcheck disable=SC2034 # Used to define `keymap_entries`
 	while IFS= read -r keymap; do
 		# shellcheck disable=SC2206 # Adding double quote breaks array expansion
+		# shellcheck disable=SC2296 # Allow zsh-specific param expansion
 		keymap_entries=(${(P)keymap})
 
 		# Find keymap keymap_entries with matching description

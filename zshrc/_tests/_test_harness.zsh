@@ -9,7 +9,7 @@ function assert {
 	local output=$1
 	local expected=$2
 
-	# shellcheck disable=SC2154
+	# shellcheck disable=SC2154 # Allow zsh-specific special var
 	[[ $output == "$expected" ]] && pass || fail "'${funcstack[2]}'" "$output" "$expected"
 }
 

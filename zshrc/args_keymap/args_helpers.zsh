@@ -149,6 +149,7 @@ function args_filter {
 	# Do not add coloring yet as coloring from a previous `grep` can mess up the next `grep`
 	greps=${greps//grep/grep --color=never --ignore-case}
 
+	# shellcheck disable=SC2296,SC2298 # Allow zsh-specific param expansion
 	# Now that filtering is done, add coloring for all positive matches
 	local positive_filters=${${(j: :)filters:#-*}// /|}
 	greps+=" | egrep --color=always --ignore-case '$positive_filters'"
