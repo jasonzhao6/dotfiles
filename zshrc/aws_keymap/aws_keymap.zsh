@@ -3,8 +3,8 @@ AWS_ALIAS='s'
 AWS_DOT="${AWS_ALIAS}${KEYMAP_DOT}"
 
 AWS_KEYMAP=(
-	"${AWS_DOT}o # List Opal groups"
-	"${AWS_DOT}o <match>* <-mismatch>* # Filter Opal groups"
+	"${AWS_DOT}- # List Britive groups"
+	"${AWS_DOT}- <match>* <-mismatch>* # Filter Britive groups"
 	''
 	"${AWS_DOT}1 # MQ login to 01"
 	"${AWS_DOT}2 # MQ login to 02"
@@ -59,6 +59,12 @@ export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
 AWS_URL="https://$AWS_DEFAULT_REGION.console.aws.amazon.com"
 
 source "$ZSHRC_DIR/$AWS_NAMESPACE/aws_helpers.zsh"
+
+function aws_keymap_- {
+	local filters=("$@")
+
+	print -l "${AWS_BRITIVE[@]}" | sort | column -t | args_keymap_s "${filters[@]}"
+}
 
 function aws_keymap_0 {
 	mqc logout
@@ -174,16 +180,10 @@ function aws_keymap_nn {
 }
 
 # To be overwritten by `ZSHRC_SECRETS`
-AWS_OPAL=(
+AWS_BRITIVE=(
 	'role_name_1 request_page_url_1'
 	'role_name_2 request_page_url_2'
 )
-
-function aws_keymap_o {
-	local filters=("$@")
-
-	print -l "${AWS_OPAL[@]}" | sort | column -t | args_keymap_s "${filters[@]}"
-}
 
 function aws_keymap_p {
 	local name=$1

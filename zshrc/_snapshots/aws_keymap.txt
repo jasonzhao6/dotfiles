@@ -2,7 +2,7 @@ Keymap: aws_keymap.zsh
 
   `  (1) (2)  3   4   5   |   6   7   8   9  <0>  [   ] 
       '   ,   .  (p)  y   |   f   g  (c) <r>  l   /   =   \ 
-     (a) (o) (e)  u   i   |   d   h  <t> (n) (s)  - 
+     (a)  o  (e)  u   i   |   d   h  <t> (n) (s) (-)
       ;  (q)  j   k   x   |   b  (m) <w>  v   z 
 
   `<>` key initials have one mapping
@@ -24,8 +24,8 @@ Keymap Usage
 
 Keymap List
 
-  $ s.o                       # List Opal groups
-  $ s.o <match>* <-mismatch>* # Filter Opal groups
+  $ s.-                       # List Britive groups
+  $ s.- <match>* <-mismatch>* # Filter Britive groups
 
   $ s.1                       # MQ login to 01
   $ s.2                       # MQ login to 02
