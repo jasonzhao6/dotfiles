@@ -39,9 +39,9 @@ Keymap List
   j   # Jira Ticket
   jb  # Jira Backlog
   jc  # Jira Ticket (CHANGE)
-  ji  # Jira Ticket (INCI)
-  jj  # Jira Ticket (TENGF)
+  jj  # Jira Ticket (INCI)
   js  # Jira Sprint
+  jt  # Jira Ticket (TENGF)
 
   l   # Datadog Logs (Prod)
   ll  # Datadog Logs (QA)

@@ -27,9 +27,9 @@ ii: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=e
 j: https://marqeta.atlassian.net/issues/%s Jira Ticket
 jb: https://marqeta.atlassian.net/jira/software/c/projects/TENGF/boards/1033/backlog?text=%s Jira Backlog
 jc: https://marqeta.atlassian.net/issues/CHANGE-%s Jira Ticket (CHANGE)
-ji: https://marqeta.atlassian.net/issues/INCI-%s Jira Ticket (INCI)
-jj: https://marqeta.atlassian.net/browse/TENGF-%s Jira Ticket (TENGF)
+jj: https://marqeta.atlassian.net/issues/INCI-%s Jira Ticket (INCI)
 js: https://marqeta.atlassian.net/jira/software/c/projects/TENGF/boards/1033?search=%s Jira Sprint
+jt: https://marqeta.atlassian.net/browse/TENGF-%s Jira Ticket (TENGF)
 
 l: https://app.datadoghq.com/logs?query=env%3Aprod%20%s Datadog Logs (Prod)
 ll: https://app.datadoghq.com/logs?query=env%3Aqa%20%s Datadog Logs (QA)
