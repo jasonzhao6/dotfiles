@@ -1,9 +1,9 @@
 Keymap: aws_keymap.zsh
 
-  `  (1) (2)  3   4   5   |   6   7   8   9  <0>  [   ] 
-      '   ,   .  (p)  y   |   f   g  (c) <r>  l   /   =   \ 
-     (a)  o  (e)  u   i   |   d   h  <t> (n) (s) (-)
-      ;  (q)  j   k   x   |   b  (m) <w>  v   z 
+  `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
+      '   ,   .  (p)  y   |   f   g  (c)  r   l   /   =   \ 
+     (a)  o  (e)  u   i   |   d   h  <t> (n) (s)  - 
+      ;  (q)  j   k   x   |  (b) (m) <w>  v   z 
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
@@ -24,34 +24,29 @@ Keymap Usage
 
 Keymap List
 
-  $ s.-                       # List Britive groups
-  $ s.- <match>* <-mismatch>* # Filter Britive groups
-
-  $ s.1                       # MQ login to 01
-  $ s.2                       # MQ login to 02
-  $ s.0                       # MQ logout
-  $ s.11                      # MQ logout, then login to 01
-  $ s.22                      # MQ logout, then login to 02
+  $ s.s                       # List Britive roles
+  $ s.s <match>* <-mismatch>* # Filter Britive roles
+  $ s <role>                  # Assume the specified role
 
   $ s.e1                      # Use us-east-1 region
   $ s.e2                      # Use us-east-2 region
   $ s.w2                      # Use us-west-2 region
   $ s.c1                      # Use eu-central-1 region
 
-  $ s.e <name>                # EC2 search
-  $ s.ee <ec2 id>             # EC2 open in new tab
   $ s.a <name>                # ASG search
   $ s.aa <asg id>             # ASG open in new tab
-  $ s.c                       # Copy history bindings
-  $ s.s                       # SSM start session with `sudo -i`
-  $ s.sc                      # SSM start session with command
-  $ s.sm                      # SSM start session
+  $ s.e <name>                # EC2 search
+  $ s.ee <ec2 id>             # EC2 open in new tab
 
-  $ s.m <name>                # Secret Manager get latest version
-  $ s.m <name> <version>      # Secret Manager get by version
-  $ s.md <name>               # Secret Manager delete
-  $ s.r <name>                # Parameter Store get latest version
+  $ s.c                       # Copy history bindings
+  $ s.b                       # SSM start session with `sudo -i`
+  $ s.bc                      # SSM start session with command
+  $ s.bb                      # SSM start session
+
   $ s.t <message>             # STS decode
+
+  $ s.m <name> <version>?     # Secret Manager get by version
+  $ s.md <name>               # Secret Manager delete
 
   $ s.n <name>                # SNS search
   $ s.nn <topic arn>          # SNS open in new tab
@@ -64,3 +59,5 @@ Keymap List
 
   $ s.p <name>                # Code Pipeline search
   $ s.pp <name>               # Code Pipeline get latest status
+
+  $ s.ps <name>               # Parameter Store get latest version

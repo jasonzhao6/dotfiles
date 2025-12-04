@@ -127,10 +127,8 @@ function test__main_keymap_w__when_specifying_a_special_char {
 	)" "$(
 		cat <<-eof
 
-		  $ s.-                       # List Britive groups
-		  $ s.- <match>* <-mismatch>* # Filter Britive groups
-		  $ m.-                       # Show stats
-		  $ n.-                       # Sort subfolders by size
+		  $ m.- # Show stats
+		  $ n.- # Sort subfolders by size
 
 		  ^cmd--       # Collapse all
 		  cmd--        # Decrease font size in all editors (Convention)

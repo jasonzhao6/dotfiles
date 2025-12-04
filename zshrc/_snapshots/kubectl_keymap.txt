@@ -39,9 +39,9 @@ Keymap List
   $ k.w <deployment>                 # Edit a deployment with TextMate
   $ k.v <type> <name>                # Edit a given type with TextMate
 
+  $ k.c (e11,e12,e21,w21)?           # Copy Prod helpers and history bindings
   $ k.b <pod>                        # Exec into bash
   $ k.bc <command> <pod>             # Exec a command
-  $ k.c (e11,e12,e21,w21)?           # Copy Prod helpers and history bindings
   $ k.l <pod>                        # Show logs
   $ k.ll <pod>                       # Tail logs
   $ k.lp <pod>                       # Show previous logs

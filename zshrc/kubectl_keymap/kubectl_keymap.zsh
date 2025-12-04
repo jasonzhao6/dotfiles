@@ -18,9 +18,9 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}w <deployment> # Edit a deployment with TextMate" #
 	"${KUBECTL_DOT}v <type> <name> # Edit a given type with TextMate" #
 	''
+	"${KUBECTL_DOT}c (e11,e12,e21,w21)? # Copy Prod helpers and history bindings"
 	"${KUBECTL_DOT}b <pod> # Exec into bash"
 	"${KUBECTL_DOT}bc <command> <pod> # Exec a command"
-	"${KUBECTL_DOT}c (e11,e12,e21,w21)? # Copy Prod helpers and history bindings"
 	"${KUBECTL_DOT}l <pod> # Show logs"
 	"${KUBECTL_DOT}ll <pod> # Tail logs"
 	"${KUBECTL_DOT}lp <pod> # Show previous logs"

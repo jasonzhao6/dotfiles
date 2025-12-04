@@ -3,34 +3,29 @@ AWS_ALIAS='s'
 AWS_DOT="${AWS_ALIAS}${KEYMAP_DOT}"
 
 AWS_KEYMAP=(
-	"${AWS_DOT}- # List Britive groups"
-	"${AWS_DOT}- <match>* <-mismatch>* # Filter Britive groups"
-	''
-	"${AWS_DOT}1 # MQ login to 01"
-	"${AWS_DOT}2 # MQ login to 02"
-	"${AWS_DOT}0 # MQ logout"
-	"${AWS_DOT}11 # MQ logout, then login to 01"
-	"${AWS_DOT}22 # MQ logout, then login to 02"
+	"${AWS_DOT}s # List Britive roles"
+	"${AWS_DOT}s <match>* <-mismatch>* # Filter Britive roles"
+	"${AWS_ALIAS} <role> # Assume the specified role"
 	''
 	"${AWS_DOT}e1 # Use us-east-1 region"
 	"${AWS_DOT}e2 # Use us-east-2 region"
 	"${AWS_DOT}w2 # Use us-west-2 region"
 	"${AWS_DOT}c1 # Use eu-central-1 region"
 	''
-	"${AWS_DOT}e <name> # EC2 search"
-	"${AWS_DOT}ee <ec2 id> # EC2 open in new tab"
 	"${AWS_DOT}a <name> # ASG search"
 	"${AWS_DOT}aa <asg id> # ASG open in new tab"
-	"${AWS_DOT}c # Copy history bindings"
-	"${AWS_DOT}s # SSM start session with \`sudo -i\`"
-	"${AWS_DOT}sc # SSM start session with command"
-	"${AWS_DOT}sm # SSM start session"
+	"${AWS_DOT}e <name> # EC2 search"
+	"${AWS_DOT}ee <ec2 id> # EC2 open in new tab"
 	''
-	"${AWS_DOT}m <name> # Secret Manager get latest version"
-	"${AWS_DOT}m <name> <version> # Secret Manager get by version"
-	"${AWS_DOT}md <name> # Secret Manager delete"
-	"${AWS_DOT}r <name> # Parameter Store get latest version"
+	"${AWS_DOT}c # Copy history bindings"
+	"${AWS_DOT}b # SSM start session with \`sudo -i\`"
+	"${AWS_DOT}bc # SSM start session with command"
+	"${AWS_DOT}bb # SSM start session"
+	''
 	"${AWS_DOT}t <message> # STS decode"
+	''
+	"${AWS_DOT}m <name> <version>? # Secret Manager get by version"
+	"${AWS_DOT}md <name> # Secret Manager delete"
 	''
 	"${AWS_DOT}n <name> # SNS search"
 	"${AWS_DOT}nn <topic arn> # SNS open in new tab"
@@ -43,11 +38,22 @@ AWS_KEYMAP=(
 	''
 	"${AWS_DOT}p <name> # Code Pipeline search"
 	"${AWS_DOT}pp <name> # Code Pipeline get latest status"
+	''
+	"${AWS_DOT}ps <name> # Parameter Store get latest version"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
 
 function aws_keymap {
+	# If the input is a British role, assume it via `mqc`
+	local input=$*
+	# shellcheck disable=SC2076 # Breaks regex
+	if [[ $input =~ '^([a-z0-9-]+)[[:space:]]+([a-z0-9-]+)' ]]; then
+		# shellcheck disable=SC2154 # `match` is defined by `=~`
+		mqc --britive --account-name "${match[1]}" --role-name "${match[2]}"
+		return
+	fi
+
 	keymap_show $AWS_NAMESPACE $AWS_ALIAS ${#AWS_KEYMAP} "${AWS_KEYMAP[@]}" "$@"
 }
 
@@ -60,34 +66,6 @@ AWS_URL="https://$AWS_DEFAULT_REGION.console.aws.amazon.com"
 
 source "$ZSHRC_DIR/$AWS_NAMESPACE/aws_helpers.zsh"
 
-function aws_keymap_- {
-	local filters=("$@")
-
-	print -l "${AWS_BRITIVE[@]}" | sort | column -t | args_keymap_s "${filters[@]}"
-}
-
-function aws_keymap_0 {
-	mqc logout
-}
-
-function aws_keymap_1 {
-	mqc --mq01
-}
-
-function aws_keymap_11 {
-	mqc logout
-	mqc --mq01
-}
-
-function aws_keymap_2 {
-	mqc --mq02
-}
-
-function aws_keymap_22 {
-	mqc logout
-	mqc --mq02
-}
-
 function aws_keymap_a {
 	local name=$1
 
@@ -98,6 +76,37 @@ function aws_keymap_aa {
 	local id=$*
 
 	open "$AWS_URL/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$id"
+}
+
+function aws_keymap_b {
+	local id=$1
+
+	aws ssm start-session \
+		--region "$AWS_DEFAULT_REGION" \
+		--document-name 'AWS-StartInteractiveCommand' \
+		--parameters '{"command": ["sudo -i"]}' \
+		--target "$(ec2_get_id "$id")"
+}
+
+AWS_KEYMAP_SC_REGEX="(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
+
+function aws_keymap_bb {
+	aws ssm start-session \
+		--region "$AWS_DEFAULT_REGION" \
+		--target "$(ec2_get_id "$@")"
+}
+
+function aws_keymap_bc {
+	# shellcheck disable=SC2296 # Allow zsh-specific param expansion
+	local command=${(j: :)@[1,-2]}
+	local id="$*[-1]"
+
+	aws ssm start-session \
+		--region "$AWS_DEFAULT_REGION" \
+		--document-name 'AWS-StartNonInteractiveCommand' \
+		--parameters "{\"command\": [\"$command\"]}" \
+		--target "$(ec2_get_id "$id")" |
+		pgrep --multiline --ignore-case --invert-match "$AWS_KEYMAP_SC_REGEX"
 }
 
 function aws_keymap_c {
@@ -208,6 +217,21 @@ function aws_keymap_pp {
 		--output text
 }
 
+function aws_keymap_ps {
+	local name=$1
+
+	local parameter; parameter=$(
+		aws ssm get-parameter \
+			--region "$AWS_DEFAULT_REGION" \
+			--name "$name"	\
+			--query Parameter.Value \
+			--output text
+	)
+
+	# If it's json, prettify with `jq`
+	[[ $parameter == \{*\} ]] && echo "$parameter" | jq || echo "$parameter"
+}
+
 function aws_keymap_q {
 	local name=$1
 
@@ -254,55 +278,16 @@ function aws_keymap_qr {
 		jq '.Messages[].Body | fromjson'
 }
 
-function aws_keymap_r {
-	local name=$1
-
-	local parameter; parameter=$(
-		aws ssm get-parameter \
-			--region "$AWS_DEFAULT_REGION" \
-			--name "$name"	\
-			--query Parameter.Value \
-			--output text
-	)
-
-	# If it's json, prettify with `jq`
-	[[ $parameter == \{*\} ]] && echo "$parameter" | jq || echo "$parameter"
-}
-
 function aws_keymap_s {
-	local id=$1
+	local filters=("$@")
 
-	aws ssm start-session \
-		--region "$AWS_DEFAULT_REGION" \
-		--document-name 'AWS-StartInteractiveCommand' \
-		--parameters '{"command": ["sudo -i"]}' \
-		--target "$(ec2_get_id "$id")"
-}
-
-AWS_KEYMAP_SC_REGEX="(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
-
-function aws_keymap_sc {
-	local command=${(j: :)@[1,-2]}
-	local id="$*[-1]"
-
-	aws ssm start-session \
-		--region "$AWS_DEFAULT_REGION" \
-		--document-name 'AWS-StartNonInteractiveCommand' \
-		--parameters "{\"command\": [\"$command\"]}" \
-		--target "$(ec2_get_id "$id")" |
-		pgrep --multiline --ignore-case --invert-match "$AWS_KEYMAP_SC_REGEX"
-}
-
-function aws_keymap_sm {
-	aws ssm start-session \
-		--region "$AWS_DEFAULT_REGION" \
-		--target "$(ec2_get_id "$@")"
+	print -l "${AWS_BRITIVE[@]}" | sort | column -t | args_keymap_s "${filters[@]}"
 }
 
 function aws_keymap_t {
 	local message=$*
 
-	aws sts decode-authorization-message
+	aws sts decode-authorization-message \
 		--region "$AWS_DEFAULT_REGION" \
 		--encoded-message "$message" --output text |
 		jq .
