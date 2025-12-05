@@ -2,7 +2,7 @@ Keymap: q_keymap.zsh
 
   `   1   2   3  <4>  5   |   6   7   8   9  <0>  [   ] 
       '   ,   .  <p>  y   |   f   g  <c>  r   l   /   =   \ 
-     <a> <o>  e   u   i   |  <d> <h>  t   n  <s>  - 
+     <a> <o>  e   u   i   |  <d> <h> <t>  n  <s>  - 
       ;  <q> <j> <k>  x   |   b  <m>  w   v   z 
 
   `<>` key initials have one mapping
@@ -29,6 +29,7 @@ Keymap List
   $ q.d            # Chat with Datadog MCP
   $ q.h            # Chat with GitHub MCP
   $ q.s            # Chat with SDLC MCP
+  $ q.t            # Chat with Trancache context
 
   $ q.c            # Vibe code in the current repo
   $ q.j            # Vibe code in the JCard repo
@@ -37,7 +38,7 @@ Keymap List
   $ q.0 <command>? # Invoke `q`
   $ q.4 <command>? # Invoke `q chat` with `claude-sonnet-4.5`
 
-  $ q.o            # Open `amazonq` folder in Finder
-  $ q.m            # Edit `amazonq` folder in TextMate
-  $ q.p            # Push `amazonq` folder to `scratch` repo
-  $ q.P            # Pull `amazonq` folder from `scratch` repo
+  $ q.o            # Open `kiro` folder in Finder
+  $ q.m            # Edit `kiro` folder in TextMate
+  $ q.p            # Push `kiro` folder to `scratch` repo
+  $ q.P            # Pull `kiro` folder from `scratch` repo
