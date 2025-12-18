@@ -49,7 +49,7 @@ function nav_keymap {
 #
 
 # Constants
-NAV_YANK_FILE="$HOME/.zshrc.nav"
+NAV_YANK_FILE="$ZSHRC_DATA_DIR/nav.yank.txt"
 
 function nav_keymap_- {
 	local levels="${1:-1}"

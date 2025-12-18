@@ -65,8 +65,10 @@ function other_keymap {
 # Key mappings (Alphabetized)
 #
 
-OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$ZSHRC_DATA_DIR/diff.1.txt"
-OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$ZSHRC_DATA_DIR/diff.2.txt"
+# Constants
+OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$ZSHRC_DATA_DIR/other.diff-1.txt"
+OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$ZSHRC_DATA_DIR/other.diff-2.txt"
+OTHER_BACKGROUND_OUTPUTS_FILE="$ZSHRC_DATA_DIR/other.background-outputs.txt"
 
 source "$ZSHRC_SRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
 
@@ -118,26 +120,24 @@ function other_keymap_a {
 	caffeinate
 }
 
-OTHER_KEYMAP_B_OUTPUT_FILE="$ZSHRC_DATA_DIR/other.selected-output.txt"
-
 function other_keymap_b {
 	local start=$1; shift
 	local finish=$1; shift # `end` is a reserved keyword
 	local command=$*
 
-	rm -f "$OTHER_KEYMAP_B_OUTPUT_FILE"
+	rm -f "$OTHER_BACKGROUND_OUTPUTS_FILE"
 
-	# Collect arg outputs in `OTHER_KEYMAP_B_OUTPUT_FILE` to print at the end
+	# Collect arg outputs in `OTHER_BACKGROUND_OUTPUTS_FILE` to print at the end
 	# Otherwise, arg outputs are interleaved with `&` outputs
 	for number in $(seq "$start" "$finish"); do
 		echo
-		echo_eval "${command//~~/$number}" >> "$OTHER_KEYMAP_B_OUTPUT_FILE" &
+		echo_eval "${command//~~/$number}" >> "$OTHER_BACKGROUND_OUTPUTS_FILE" &
 	done
 
 	wait
 
 	echo
-	cat "$OTHER_KEYMAP_B_OUTPUT_FILE"
+	cat "$OTHER_BACKGROUND_OUTPUTS_FILE"
 }
 
 function other_keymap_c {

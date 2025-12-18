@@ -57,7 +57,8 @@ function args_keymap {
 
 # Constants
 ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd column'
-ARGS_YANK_FILE="$HOME/.zshrc.args"
+ARGS_YANK_FILE="$ZSHRC_DATA_DIR/args.yank.txt"
+ARGS_BACKGROUND_OUTPUTS_FILE="$ZSHRC_DATA_DIR/args.background-outputs.txt"
 
 # States
 # shellcheck disable=SC2034
@@ -83,26 +84,24 @@ function args_keymap_a {
 	fi
 }
 
-ARGS_KEYMAP_B_OUTPUT_FILE="$ZSHRC_DATA_DIR/args.selected-output.txt"
-
 function args_keymap_b {
 	local start=$1; shift
 	local finish=$1; shift # `end` is a reserved keyword
 	local command=$*
 
-	rm -f "$ARGS_KEYMAP_B_OUTPUT_FILE"
+	rm -f "$ARGS_BACKGROUND_OUTPUTS_FILE"
 
-	# Collect arg outputs in `ARGS_KEYMAP_B_OUTPUT_FILE` to print at the end
+	# Collect arg outputs in `ARGS_BACKGROUND_OUTPUTS_FILE` to print at the end
 	# Otherwise, arg outputs are interleaved with `&` outputs
 	for number in $(seq "$start" "$finish"); do
 		echo
-		args_keymap_n "$number" "$command" >> "$ARGS_KEYMAP_B_OUTPUT_FILE" &
+		args_keymap_n "$number" "$command" >> "$ARGS_BACKGROUND_OUTPUTS_FILE" &
 	done
 
 	wait
 
 	echo
-	cat "$ARGS_KEYMAP_B_OUTPUT_FILE"
+	cat "$ARGS_BACKGROUND_OUTPUTS_FILE"
 }
 
 function args_keymap_c {
