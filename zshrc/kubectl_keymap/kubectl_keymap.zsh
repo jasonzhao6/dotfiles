@@ -78,7 +78,7 @@ function kubectl_keymap_bc {
 	kubectl exec "$pod" -- "${command[@]}"
 }
 
-AWS_SSO_CACHE_DIR="$HOME/.aws/sso/cache"
+AWS_SSO_CACHE_DIR="$HOME/.aws/britive/cache"
 AWS_SSO_CACHE_JQ=$(
 	cat <<-eof | tr -d '\n'
 		.Credentials | [
@@ -90,8 +90,8 @@ AWS_SSO_CACHE_JQ=$(
 )
 
 function kubectl_keymap_c {
-	local kubectl_cluster
 	local option=$1
+	local kubectl_cluster
 
 	case $AWS_DEFAULT_REGION in
 		us-east-1) kubectl_cluster=$KUBECTL_USE11_CLUSTER;;
@@ -118,7 +118,7 @@ function kubectl_keymap_c {
 		for file in "$AWS_SSO_CACHE_DIR"/*; do
 			# Note: This folder also contains an OAuth cred, which needs to be preserved
 			#       Deleting it causes the next command to re-initiate OAuth with AWS
-			if [[ -f "$file" ]] && grep -q '"ProviderType": "sso"' "$file"; then
+			if [[ -f "$file" ]] && grep -q '"ProviderType": "britive"' "$file"; then
 				rm "$file"
 			fi
 		done
@@ -130,7 +130,7 @@ function kubectl_keymap_c {
 	# Find the current SSO cred (should be the only one now)
 	local current_role
 	for file in "$AWS_SSO_CACHE_DIR"/*; do
-		if [[ -f "$file" ]] && grep -q '"ProviderType": "sso"' "$file"; then
+		if [[ -f "$file" ]] && grep -q '"ProviderType": "britive"' "$file"; then
 			current_role=$(basename "$file")
 			break
 		fi
