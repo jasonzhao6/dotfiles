@@ -1,7 +1,7 @@
 Keymap: nav_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .   p   y   |   f   g   c   r   l   /   =   \ 
+      '   ,   .  <p> <y>  |   f   g   c   r   l   /   =   \ 
      <a> (o) (e) (u) <i>  |  <d> <h> <t> (n) <s> <->
       ;   q   j   k   x   |   b  <m> <w> <v>  z 
 
@@ -26,6 +26,8 @@ Keymap List
 
   $ n <directory>              # Go to directory
   $ n.t                        # Go to directory in pasteboard
+  $ n.y                        # Yank the current path
+  $ n.p                        # Put the yanked path
 
   $ n.m                        # Go to Documents
   $ n.w                        # Go to Downloads

@@ -288,6 +288,14 @@ function test__nav_keymap_oo__with_filters {
 	)" ''
 }; run_with_filter test__nav_keymap_oo__with_filters
 
+function test__nav_keymap_p {
+	assert "$(
+		echo "$HOME/Documents" > "$NAV_YANK_FILE"
+		nav_keymap_p > /dev/null
+		pwd
+	)" "$HOME/Documents"
+}; run_with_filter test__nav_keymap_p
+
 function test__nav_keymap_s {
 	assert "$(nav_keymap_s > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/scratch"
 }; run_with_filter test__nav_keymap_s
@@ -357,3 +365,12 @@ function test__nav_keymap_v {
 function test__nav_keymap_w {
 	assert "$(nav_keymap_w > /dev/null; pwd)" "$HOME/Downloads"
 }; run_with_filter test__nav_keymap_w
+
+function test__nav_keymap_y {
+	assert "$(
+		cd "$HOME/Documents" || return
+		rm -f "$NAV_YANK_FILE"
+		nav_keymap_y
+		cat "$NAV_YANK_FILE"
+	)" "$HOME/Documents"
+}; run_with_filter test__nav_keymap_y

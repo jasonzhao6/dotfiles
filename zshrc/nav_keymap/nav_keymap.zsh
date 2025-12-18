@@ -5,6 +5,8 @@ NAV_DOT="${NAV_ALIAS}${KEYMAP_DOT}"
 NAV_KEYMAP=(
 	"${NAV_ALIAS} <directory> # Go to directory"
 	"${NAV_DOT}t # Go to directory in pasteboard"
+	"${NAV_DOT}y # Yank the current path"
+	"${NAV_DOT}p # Put the yanked path"
 	''
 	"${NAV_DOT}m # Go to Documents"
 	"${NAV_DOT}w # Go to Downloads"
@@ -45,6 +47,9 @@ function nav_keymap {
 #
 # Key mappings (Alphabetized)
 #
+
+# Constants
+NAV_YANK_FILE="$HOME/.zshrc.nav"
 
 function nav_keymap_- {
 	local levels="${1:-1}"
@@ -110,6 +115,10 @@ function nav_keymap_oo {
 	ls -d .*/ | args_keymap_s "${filters[@]}"
 }
 
+function nav_keymap_p {
+	cd "$(<"$NAV_YANK_FILE")" && nav_keymap_n || true
+}
+
 function nav_keymap_s {
 	cd ~/GitHub/jasonzhao6/scratch && nav_keymap_n || true
 }
@@ -155,4 +164,8 @@ function nav_keymap_v {
 
 function nav_keymap_w {
 	cd ~/Downloads && nav_keymap_n || true
+}
+
+function nav_keymap_y {
+	pwd > "$NAV_YANK_FILE"
 }
