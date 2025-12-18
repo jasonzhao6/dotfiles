@@ -3,6 +3,7 @@ function init {
 	total=0
 	failed=''
 	debug=''
+	test_queue=()
 }
 
 function assert {
@@ -16,14 +17,21 @@ function assert {
 function run_with_filter {
 	local test_name=$1
 
-	[[ -z $ZSHRC_TESTS_NAME_FILTER || $test_name == *$ZSHRC_TESTS_NAME_FILTER* ]] && $test_name
+	if [[ -z $ZSHRC_TESTS_NAME_FILTER || $test_name == *$ZSHRC_TESTS_NAME_FILTER* ]]; then
+		test_queue+=("$test_name")
+	fi
+}
+
+function execute_tests {
+	shuf -e "${test_queue[@]}" | while read -r test_name; do
+		eval "$test_name"
+	done
 }
 
 function print_summary {
 	local message=$1
 
 	message="$passes/$total $message"
-
 
 	# Print to test stats if running full test suite
 	if [[ -z $ZSHRC_TESTS_SECTION_FILTER && -z $ZSHRC_TESTS_NAME_FILTER ]]; then

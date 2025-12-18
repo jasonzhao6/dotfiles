@@ -11,6 +11,7 @@ function run_all_test_cases_section {
 
 	init
 	for test in $(find_test_files); do source "$test"; done
+	execute_tests
 	print_summary 'tests passed'
 
 	echo "$pasteboard" | pbcopy # Restore saved pasteboard value

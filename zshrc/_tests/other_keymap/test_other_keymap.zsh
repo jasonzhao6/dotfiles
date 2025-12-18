@@ -113,7 +113,7 @@ function test__other_keymap_i {
 	)
 
 	assert "$(
-		other_keymap_i <(echo "$file") 2
+		echo "$file" | other_keymap_i 2
 	)" "$(
 		cat <<-eof
 			b,20
@@ -135,7 +135,7 @@ function test__other_keymap_i__when_no_column_index {
 	)
 
 	assert "$(
-		other_keymap_i <(echo "$file")
+		echo "$file" | other_keymap_i
 	)" "$(
 		cat <<-eof
 			a,50
@@ -201,7 +201,7 @@ function test__other_keymap_ii {
 	)
 
 	assert "$(
-		other_keymap_ii <(echo "$file") 2 3
+		echo "$file" | other_keymap_ii 2 3
 	)" "$(
 		cat <<-eof
 			a,x1,10
@@ -223,7 +223,7 @@ function test__other_keymap_ii__when_specifying_only_one_column {
 	)
 
 	assert "$(
-		other_keymap_ii <(echo "$file") 2
+		echo "$file" | other_keymap_ii 2
 	)" "$(
 		cat <<-eof
 			10,a,x1

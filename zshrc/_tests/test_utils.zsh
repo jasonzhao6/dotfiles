@@ -13,7 +13,7 @@ test__ls_dash_l=$(
 )
 
 function test__caller {
-	assert "$(caller)" 'run_with_filter'
+	assert "$(caller)" '(eval)'
 }; run_with_filter test__caller
 
 function test__callee {
