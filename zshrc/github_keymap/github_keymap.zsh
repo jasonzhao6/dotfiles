@@ -36,7 +36,7 @@ keymap_init $GITHUB_NAMESPACE $GITHUB_ALIAS "${GITHUB_KEYMAP[@]}"
 function github_keymap {
 	# If the first arg is a repo in the current org, delegate to `github_keymap_o`
 	local repo=$1
-	if grep --quiet "^$repo$" ~/Documents/zshrc-data/github."$(github_keymap_org)".txt; then
+	if grep --quiet "^$repo$" $ZSHRC_DATA_DIR/github."$(github_keymap_org)".txt; then
 		github_keymap_o "$repo"
 		return
 	fi
@@ -118,7 +118,7 @@ function github_keymap_p {
 function github_keymap_r {
 	local filters=("$@")
 
-	args_keymap_s "${filters[@]}" < ~/Documents/zshrc-data/github."$(github_keymap_org)".txt
+	args_keymap_s "${filters[@]}" < $ZSHRC_DATA_DIR/github."$(github_keymap_org)".txt
 }
 
 function github_keymap_repo {
@@ -130,7 +130,7 @@ function github_keymap_rr {
 	local org; org="$(github_keymap_org)"
 	gh repo list "$org" --no-archived --limit 1000 --json name |
 		jq --raw-output '.[].name' |
-		tee ~/Documents/zshrc-data/github."$org".txt |
+		tee $ZSHRC_DATA_DIR/github."$org".txt |
 		args_keymap_s
 }
 

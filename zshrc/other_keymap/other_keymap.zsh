@@ -65,10 +65,10 @@ function other_keymap {
 # Key mappings (Alphabetized)
 #
 
-OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$HOME/Documents/zshrc-data/diff.1.txt"
-OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$HOME/Documents/zshrc-data/diff.2.txt"
+OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$ZSHRC_DATA_DIR/diff.1.txt"
+OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$ZSHRC_DATA_DIR/diff.2.txt"
 
-source "$ZSHRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
+source "$ZSHRC_SRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
 
 function other_keymap_0 {
 	echo -n > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
@@ -118,7 +118,7 @@ function other_keymap_a {
 	caffeinate
 }
 
-OTHER_KEYMAP_B_OUTPUT_FILE="$HOME/Documents/zshrc-data/other.selected-output.txt"
+OTHER_KEYMAP_B_OUTPUT_FILE="$ZSHRC_DATA_DIR/other.selected-output.txt"
 
 function other_keymap_b {
 	local start=$1; shift

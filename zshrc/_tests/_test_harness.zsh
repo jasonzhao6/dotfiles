@@ -27,7 +27,7 @@ function print_summary {
 
 	# Print to test stats if running full test suite
 	if [[ -z $ZSHRC_TESTS_SECTION_FILTER && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-		echo "- $message" >> "$ZSHRC_DIR"/_snapshots/_test_stats.txt
+		echo "- $message" >> "$ZSHRC_SRC_DIR"/_snapshots/_test_stats.txt
 	fi
 
 	# Print to terminal
@@ -41,7 +41,7 @@ function print_summary {
 #
 
 function find_test_files {
-	ls "$ZSHRC_DIR"/_tests/**/test_*.zsh | bw | sort --random-sort
+	ls "$ZSHRC_SRC_DIR"/_tests/**/test_*.zsh | bw | sort --random-sort
 }
 
 function pass {

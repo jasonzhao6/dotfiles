@@ -81,7 +81,7 @@ function git_keymap {
 
 export EDITOR='mate --wait'
 
-source "$ZSHRC_DIR/$GIT_NAMESPACE/git_helpers.zsh"
+source "$ZSHRC_SRC_DIR/$GIT_NAMESPACE/git_helpers.zsh"
 
 function git_keymap_a {
 	local index=${1:-0}

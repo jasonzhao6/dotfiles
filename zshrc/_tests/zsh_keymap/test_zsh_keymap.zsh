@@ -10,7 +10,7 @@ function test__zsh_keymap {
 function test__zsh_keymap_a {
 	assert "$(
 		local count; count=$(zsh_keymap_a | wc -l)
-		local min_count; min_count=$(grep --count '^\talias ' "$ZSHRC_DIR"/colors.zsh)
+		local min_count; min_count=$(grep --count '^\talias ' "$ZSHRC_SRC_DIR"/colors.zsh)
 
 		[[ $count -ge $min_count ]] && echo 1
 	)" '1'
@@ -19,7 +19,7 @@ function test__zsh_keymap_a {
 function test__zsh_keymap_a__when_counting_greps {
 	assert "$(
 		local count; count=$(zsh_keymap_a grep | wc -l)
-		local actual_count; actual_count=$(grep --count '^\talias.*grep' "$ZSHRC_DIR"/colors.zsh)
+		local actual_count; actual_count=$(grep --count '^\talias.*grep' "$ZSHRC_SRC_DIR"/colors.zsh)
 
 		[[ $count -eq actual_count ]] && echo 1
 	)" '1'

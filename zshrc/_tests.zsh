@@ -22,10 +22,10 @@ ZSHRC_TESTS_NAME_FILTER=$([[ -z $ZSHRC_TESTS_SECTION_FILTER && -n $1 ]] && echo 
 ZSHRC_UNDER_TESTING=1 source ~/.zshrc
 
 # Source test harness
-source "$ZSHRC_DIR"/_tests/_test_harness.zsh
+source "$ZSHRC_SRC_DIR"/_tests/_test_harness.zsh
 
 # Update stats
-source "$ZSHRC_DIR"/_tests/_update_snapshots.zsh
+source "$ZSHRC_SRC_DIR"/_tests/_update_snapshots.zsh
 
 #
 # Test: Start
@@ -33,31 +33,31 @@ source "$ZSHRC_DIR"/_tests/_update_snapshots.zsh
 
 ZSHRC_TESTS_SECTION_NUMBER=1
 if [[ $ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER ]]; then
-	source "$ZSHRC_DIR"/_tests/_run_all_test_cases.zsh
+	source "$ZSHRC_SRC_DIR"/_tests/_run_all_test_cases.zsh
 	run_all_test_cases_section $ZSHRC_TESTS_SECTION_NUMBER
 fi
 
 ZSHRC_TESTS_SECTION_NUMBER=2
 if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	source "$ZSHRC_DIR"/_tests/_verify_test_invocations.zsh
+	source "$ZSHRC_SRC_DIR"/_tests/_verify_test_invocations.zsh
 	verify_test_invocations_section $ZSHRC_TESTS_SECTION_NUMBER
 fi
 
 ZSHRC_TESTS_SECTION_NUMBER=3
 if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	source "$ZSHRC_DIR"/_tests/_verify_test_ordering.zsh
+	source "$ZSHRC_SRC_DIR"/_tests/_verify_test_ordering.zsh
 	verify_test_ordering_section $ZSHRC_TESTS_SECTION_NUMBER
 fi
 
 ZSHRC_TESTS_SECTION_NUMBER=4
 if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	source "$ZSHRC_DIR"/_tests/_verify_keymap_definitions.zsh
+	source "$ZSHRC_SRC_DIR"/_tests/_verify_keymap_definitions.zsh
 	verify_keymap_definitions_section $ZSHRC_TESTS_SECTION_NUMBER
 fi
 
 ZSHRC_TESTS_SECTION_NUMBER=5
 if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	source "$ZSHRC_DIR"/_tests/_verify_keymap_ordering.zsh
+	source "$ZSHRC_SRC_DIR"/_tests/_verify_keymap_ordering.zsh
 	verify_keymap_ordering_section $ZSHRC_TESTS_SECTION_NUMBER
 fi
 

@@ -10,7 +10,7 @@ DOCKER_KEYMAP=(
 
 keymap_init $DOCKER_NAMESPACE $DOCKER_ALIAS "${DOCKER_KEYMAP[@]}"
 
-source "$ZSHRC_DIR/$DOCKER_NAMESPACE/docker_commands.zsh"
+source "$ZSHRC_SRC_DIR/$DOCKER_NAMESPACE/docker_commands.zsh"
 
 function docker_keymap {
 	# If the first arg is a `docker` command, pass it through

@@ -64,7 +64,7 @@ function aws_keymap {
 export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
 AWS_URL="https://$AWS_DEFAULT_REGION.console.aws.amazon.com"
 
-source "$ZSHRC_DIR/$AWS_NAMESPACE/aws_helpers.zsh"
+source "$ZSHRC_SRC_DIR/$AWS_NAMESPACE/aws_helpers.zsh"
 
 function aws_keymap_a {
 	local name=$1

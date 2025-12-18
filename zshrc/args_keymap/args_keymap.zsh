@@ -64,10 +64,10 @@ ARGS_YANK_FILE="$HOME/.zshrc.args"
 ARGS_PUSHED=
 ARGS_USED_TOP_ROW=
 
-source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_enumerators.zsh"
-source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_helpers.zsh"
-source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_history.zsh"; args_history_init
-source "$ZSHRC_DIR/$ARGS_NAMESPACE/args_numbers.zsh"
+source "$ZSHRC_SRC_DIR/$ARGS_NAMESPACE/args_enumerators.zsh"
+source "$ZSHRC_SRC_DIR/$ARGS_NAMESPACE/args_helpers.zsh"
+source "$ZSHRC_SRC_DIR/$ARGS_NAMESPACE/args_history.zsh"; args_history_init
+source "$ZSHRC_SRC_DIR/$ARGS_NAMESPACE/args_numbers.zsh"
 
 # shellcheck disable=SC2120
 function args_keymap_a {
@@ -83,7 +83,7 @@ function args_keymap_a {
 	fi
 }
 
-ARGS_KEYMAP_B_OUTPUT_FILE="$HOME/Documents/zshrc-data/args.selected-output.txt"
+ARGS_KEYMAP_B_OUTPUT_FILE="$ZSHRC_DATA_DIR/args.selected-output.txt"
 
 function args_keymap_b {
 	local start=$1; shift

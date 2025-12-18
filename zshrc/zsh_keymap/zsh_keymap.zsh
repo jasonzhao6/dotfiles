@@ -37,7 +37,7 @@ function zsh_keymap {
 # Key mappings (Alphabetized)
 #
 
-source "$ZSHRC_DIR/$ZSH_NAMESPACE/zsh_helpers.zsh"
+source "$ZSHRC_SRC_DIR/$ZSH_NAMESPACE/zsh_helpers.zsh"
 
 function zsh_keymap_0 {
 	unset -f zshaddhistory
@@ -133,7 +133,7 @@ function zsh_keymap_s {
 }
 
 function zsh_keymap_t {
-	zsh "$ZSHRC_DIR"/_tests.zsh "$@"
+	zsh "$ZSHRC_SRC_DIR"/_tests.zsh "$@"
 }
 
 function zsh_keymap_z {

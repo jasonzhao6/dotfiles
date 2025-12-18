@@ -1,4 +1,4 @@
-ALL_OUTPUT_FILE="$HOME/Documents/zshrc-data/args.all-output.txt"
+ALL_OUTPUT_FILE="$ZSHRC_DATA_DIR/args.all-output.txt"
 
 function all {
 	local command=$*
