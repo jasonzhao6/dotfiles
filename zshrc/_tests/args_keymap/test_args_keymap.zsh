@@ -432,6 +432,20 @@ function test__args_keymap_n__with_multiple_substitutions_in_quotes {
 	)"
 }; run_with_filter test__args_keymap_n__with_multiple_substitutions_in_quotes
 
+function test__args_keymap_n__cd_into_folder_with_spaces {
+	mkdir -p '/tmp/test folder with spaces'
+	assert "$(
+		echo '/tmp/test folder with spaces' | args_keymap_s > /dev/null
+		args_keymap_n 1 cd 2>&1 && pwd
+	)" "$(
+		cat <<-eof
+			cd "/tmp/test folder with spaces"
+			/tmp/test folder with spaces
+		eof
+	)"
+	rm -rf '/tmp/test folder with spaces'
+}; run_with_filter test__args_keymap_n__cd_into_folder_with_spaces
+
 function test__args_keymap_o {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null

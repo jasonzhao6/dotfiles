@@ -170,7 +170,9 @@ function args_keymap_n {
 	if [[ -n $number && -n $command ]]; then
 		local arg; arg="$(args_plain | sed -n "${number}p" | sed 's/ *#.*//' | strip)"
 
-		if [[ $command != *'~~'* ]]; then
+		if [[ -e $arg ]]; then
+			echo_eval "$command \"$arg\""
+		elif [[ $command != *'~~'* ]]; then
 			echo_eval "$command $arg"
 		else
 			echo_eval "${command//~~/$arg}"
