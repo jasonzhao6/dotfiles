@@ -50,7 +50,7 @@ Keymap List
   $ t.m <before> <after>      # Move state
   $ t.rm <name>               # Remove state
 
-  $ t.f                       # Format
+  $ t.f <path>?               # Format
   $ t.h <var name>?           # Scratch
   $ t.n <var name>?           # Console
   $ t.c                       # Clean

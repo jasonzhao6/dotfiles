@@ -29,7 +29,7 @@ TERRAFORM_KEYMAP=(
 	"${TERRAFORM_DOT}m <before> <after> # Move state"
 	"${TERRAFORM_DOT}rm <name> # Remove state"
 	''
-	"${TERRAFORM_DOT}f # Format"
+	"${TERRAFORM_DOT}f <path>? # Format"
 	"${TERRAFORM_DOT}h <var name>? # Scratch"
 	"${TERRAFORM_DOT}n <var name>? # Console"
 	"${TERRAFORM_DOT}c # Clean"
