@@ -50,7 +50,7 @@ function aws_keymap {
 	# shellcheck disable=SC2076 # Breaks regex
 	if [[ $input =~ '^([a-z0-9-]+)[[:space:]]+([a-z0-9-]+)' ]]; then
 		# shellcheck disable=SC2154 # `match` is defined by `=~`
-		mqc --britive --account-name "${match[1]}" --role-name "${match[2]}"
+		mqc --account-name "${match[1]}" --role-name "${match[2]}"
 		return
 	fi
 
