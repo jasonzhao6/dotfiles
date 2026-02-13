@@ -37,9 +37,9 @@ Keymap List
 
   $ t.v (i,iu,ir,im,e)?       # Validate
   $ t.p (i,iu,ir,im,e)?       # Plan
+  $ t.a (i,iu,ir,im,e)?       # Apply
   $ t.g                       # Upload gist
   $ t.z                       # Unlock
-  $ t.a                       # Apply
   $ t.d                       # Destroy
   $ t.o                       # Show output
 

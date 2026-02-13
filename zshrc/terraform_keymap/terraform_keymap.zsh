@@ -16,9 +16,9 @@ TERRAFORM_KEYMAP=(
 	''
 	"${TERRAFORM_DOT}v (i,iu,ir,im,e)? # Validate"
 	"${TERRAFORM_DOT}p (i,iu,ir,im,e)? # Plan"
+	"${TERRAFORM_DOT}a (i,iu,ir,im,e)? # Apply"
 	"${TERRAFORM_DOT}g # Upload gist"
 	"${TERRAFORM_DOT}z # Unlock"
-	"${TERRAFORM_DOT}a # Apply"
 	"${TERRAFORM_DOT}d # Destroy"
 	"${TERRAFORM_DOT}o # Show output"
 	''
@@ -61,7 +61,9 @@ function terraform_keymap {
 source "$ZSHRC_SRC_DIR/$TERRAFORM_NAMESPACE/terraform_helpers.zsh"
 
 function terraform_keymap_a {
-	terraform apply
+	local options=$1
+
+	terraform_keymap_init "$options" && terraform apply
 }
 
 function terraform_keymap_c {
