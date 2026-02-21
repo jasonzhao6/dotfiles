@@ -33,7 +33,7 @@ The test entry point is `zshrc/_tests.zsh`. Tests run with `ZSHRC_UNDER_TESTING=
 
 ### Keymap Framework (`zshrc/_keymap/`)
 - `keymap_base.zsh` — Core framework: `keymap_init`, `keymap_show`, `keymap_print_help`, alias management, duplicate detection.
-- `is_reserved.zsh` — Prevents keymaps from overwriting reserved shell keywords.
+- `is_reserved.zsh` — Prevents keymaps from overwriting reserved shell keywords. When un-reserving a word, add a `=0` entry AND remove the `=1` entry.
 
 Each keymap calls `keymap_init <NAMESPACE> <ALIAS> "${KEYMAP_ARRAY[@]}"` on load, which sets up:
 - A top-level alias (e.g. `g` → `git_keymap`) that prints usage or searches when called
