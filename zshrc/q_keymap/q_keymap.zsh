@@ -70,12 +70,12 @@ function q_keymap_h {
 }
 
 function q_keymap_j {
-	cd "$Q_KEYMAP_JCARD_DIR" || exit
+	cd "$Q_KEYMAP_JCARD_DIR" || return
 	q_keymap_4 --agent code
 }
 
 function q_keymap_k {
-	cd "$Q_KEYMAP_HELM_DIR" || exit
+	cd "$Q_KEYMAP_HELM_DIR" || return
 	q_keymap_4 --agent code
 }
 
@@ -142,6 +142,6 @@ function q_keymap_s {
 }
 
 function q_keymap_t {
-	cd "$Q_KEYMAP_JCARD_DIR" || exit
+	cd "$Q_KEYMAP_JCARD_DIR" || return
 	q_keymap_4 --agent trancache
 }
