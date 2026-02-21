@@ -6,6 +6,7 @@ CLAUDE_KEYMAP=(
 	"${CLAUDE_DOT}c # Start new session"
 	"${CLAUDE_DOT}r # Continue last session"
 	"${CLAUDE_DOT}l <match>? # Resume matching session"
+	"${CLAUDE_DOT}m # Edit config folder in TextMate"
 	"${CLAUDE_DOT}u # Push config to \`scratch\` repo (not \`p\` b/c \`cp\` is reserved)"
 	"${CLAUDE_DOT}U # Pull config from \`scratch\` repo"
 )
@@ -30,6 +31,10 @@ function claude_keymap_c {
 
 function claude_keymap_l {
 	claude --resume "$*"
+}
+
+function claude_keymap_m {
+	mate "$CLAUDE_KEYMAP_TARGET_DIR"
 }
 
 function claude_keymap_r {
