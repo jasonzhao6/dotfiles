@@ -2,8 +2,8 @@ Keymap: claude_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .   p   y   |   f   g  <c> <r> <l>  /   =   \ 
-      a   o   e   u   i   |   d   h   t   n   s   - 
-      ;   q   j   k   x   |   b   m   w   v   z 
+      a   o   e  <u>  i   |   d   h   t   n   s   - 
+      ;   q   j   k   x   |   b  <m>  w   v   z 
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
@@ -27,3 +27,6 @@ Keymap List
   $ c.c            # Start new session
   $ c.r            # Continue last session
   $ c.l <match>?   # Resume matching session
+  $ c.m            # Edit config folder in TextMate
+  $ c.u            # Push config to `scratch` repo (not `p` b/c `cp` is reserved)
+  $ c.U            # Pull config from `scratch` repo

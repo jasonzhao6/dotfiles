@@ -1,4 +1,9 @@
 Shortcuts: main_keymap.claude_code.zsh
 
+  !           # Bash mode
+  &           # Background task
+  /           # Commands
+  @           # File paths
   ctrl-g      # Interrupt and provide new instructions
+  ctrl-v      # Paste images
   shift-{tab} # Cycle permission modes
