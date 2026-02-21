@@ -79,6 +79,12 @@ Key conventions:
   - `<var>*` — takes zero or multiple variables
   - `(1-10)` — takes an exact value from the list
 
+### App Defaults (`main_keymap.*.zsh`)
+Non-zsh shortcut reference files for external apps (e.g. Gmail, Terminal, Claude Code). Format:
+- Modifiers are lowercase and hyphen-separated: `cmd-shift-f`, `ctrl-g`, `alt-shift-{up}`
+- Special keys use braces: `{tab}`, `{left}`, `{up}`, `{page up}`
+- Regular keys are bare: `cmd-k`, `ctrl-c`, `r`
+
 ### Test Framework (`zshrc/_tests/`)
 - `_test_harness.zsh` — `init`, `assert`, `pass`, `fail`, `execute_tests`, `print_summary`
 - Test files live in `_tests/<namespace>/test_<name>.zsh`

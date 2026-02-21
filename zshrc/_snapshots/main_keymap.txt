@@ -1,7 +1,7 @@
 Keymap: main_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .   p   y   |   f  <g>  c  (r) <l>  /   =   \ 
+      '   ,   .   p   y   |   f  <g> <c> (r) <l>  /   =   \ 
      <a> <o>  e   u  <i>  |   d  <h> <t> <n> <s> <->
       ;   q   j   k   x   |   b  <m> <w>  v   z 
 
@@ -30,6 +30,7 @@ Keymap List
   $ m.w <key>         # Filter keymap entries by key
   $ m.-               # Show stats
 
+  $ m.c <regex>?      # Show Claude Code shortcuts
   $ m.g <regex>?      # Show Gmail shortcuts
   $ m.h <regex>?      # Show GitHub Desktop shortcuts
   $ m.i <regex>?      # Show vi shortcuts

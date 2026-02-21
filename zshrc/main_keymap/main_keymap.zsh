@@ -11,6 +11,7 @@ MAIN_KEYMAP=(
 	''
 	# The following are default keyboard shortcuts as opposed to custom keymaps
 	# Note: Keep the following in sync with `SHORTCUT_NAMESPACES`
+	"${MAIN_DOT}c <regex>? # Show Claude Code shortcuts"
 	"${MAIN_DOT}g <regex>? # Show Gmail shortcuts"
 	"${MAIN_DOT}h <regex>? # Show GitHub Desktop shortcuts"
 	"${MAIN_DOT}i <regex>? # Show vi shortcuts"
@@ -25,6 +26,7 @@ MAIN_KEYMAP=(
 # Note: Keep the following in sync with their counterparts in `MAIN_KEYMAP`
 SHORTCUT_NAMESPACES=(
 	''
+	"${MAIN_ALIAS}c # App defaults: main_keymap.claude.zsh"
 	"${MAIN_ALIAS}g # App defaults: main_keymap.gmail.zsh"
 	"${MAIN_ALIAS}h # App defaults: main_keymap.github_desktop.zsh"
 	"${MAIN_ALIAS}i # App defaults: main_keymap.vi.zsh"
@@ -88,6 +90,12 @@ function main_keymap_a {
 		red_bar "\`$ALL_NAMESPACE\` updated"
 	fi
 	rm "$ALL_KEYMAP_FILE.bak"
+}
+
+source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.claude.zsh"
+function main_keymap_c {
+	local description=$*
+	main_keymap_show_default_keyboard_shortcuts 'claude_code' "$description"
 }
 
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.gmail.zsh"

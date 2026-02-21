@@ -1,0 +1,4 @@
+Shortcuts: main_keymap.claude_code.zsh
+
+  ctrl-g      # Interrupt and provide new instructions
+  shift-{tab} # Cycle permission modes
