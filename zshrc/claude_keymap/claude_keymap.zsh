@@ -39,24 +39,20 @@ function claude_keymap_r {
 function claude_keymap_u {
 	echo "Pushing Claude config to 'scratch' repository..."
 
-	if [ -d "$CLAUDE_KEYMAP_SOURCE_DIR" ]; then
-		rm -rf "$CLAUDE_KEYMAP_SOURCE_DIR"
-		mkdir -p "$CLAUDE_KEYMAP_SOURCE_DIR"
+	rm -rf "$CLAUDE_KEYMAP_SOURCE_DIR"
+	mkdir -p "$CLAUDE_KEYMAP_SOURCE_DIR"
 
-		local copy_status=0
-		for file in $CLAUDE_KEYMAP_FILES; do
-			if [ -f "$CLAUDE_KEYMAP_TARGET_DIR/$file" ]; then
-				cp "$CLAUDE_KEYMAP_TARGET_DIR/$file" "$CLAUDE_KEYMAP_SOURCE_DIR/" || copy_status=1
-			fi
-		done
-
-		if [ $copy_status -eq 0 ]; then
-			echo "Push operation completed."
-		else
-			echo "Error: Failed to copy Claude config."
+	local copy_status=0
+	for file in $CLAUDE_KEYMAP_FILES; do
+		if [ -f "$CLAUDE_KEYMAP_TARGET_DIR/$file" ]; then
+			cp "$CLAUDE_KEYMAP_TARGET_DIR/$file" "$CLAUDE_KEYMAP_SOURCE_DIR/" || copy_status=1
 		fi
+	done
+
+	if [ $copy_status -eq 0 ]; then
+		echo "Push operation completed."
 	else
-		echo "Error: 'claude' folder not found in 'scratch' repository."
+		echo "Error: Failed to copy Claude config."
 	fi
 }
 

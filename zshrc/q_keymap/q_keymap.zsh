@@ -90,24 +90,20 @@ function q_keymap_o {
 function q_keymap_p {
 	echo "Pushing 'kiro' folder to 'scratch' repository..."
 
-	if [ -d "$Q_KEYMAP_SOURCE_DIR" ]; then
-		rm -rf "$Q_KEYMAP_SOURCE_DIR"
-		mkdir -p "$Q_KEYMAP_SOURCE_DIR"
+	rm -rf "$Q_KEYMAP_SOURCE_DIR"
+	mkdir -p "$Q_KEYMAP_SOURCE_DIR"
 
-		local copy_status=0
-		for subfolder in $Q_KEYMAP_SUB_DIRS; do
-			if [ -d "$Q_KEYMAP_TARGET_DIR/$subfolder" ]; then
-				cp -r "$Q_KEYMAP_TARGET_DIR/$subfolder" "$Q_KEYMAP_SOURCE_DIR/" || copy_status=1
-			fi
-		done
-
-		if [ $copy_status -eq 0 ]; then
-			echo "Push operation completed."
-		else
-			echo "Error: Failed to copy 'kiro' folder."
+	local copy_status=0
+	for subfolder in $Q_KEYMAP_SUB_DIRS; do
+		if [ -d "$Q_KEYMAP_TARGET_DIR/$subfolder" ]; then
+			cp -r "$Q_KEYMAP_TARGET_DIR/$subfolder" "$Q_KEYMAP_SOURCE_DIR/" || copy_status=1
 		fi
+	done
+
+	if [ $copy_status -eq 0 ]; then
+		echo "Push operation completed."
 	else
-		echo "Error: 'kiro' folder not found in 'scratch' repository."
+		echo "Error: Failed to copy 'kiro' folder."
 	fi
 }
 
