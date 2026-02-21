@@ -2,6 +2,7 @@
 ALL_KEYMAP=(
 	'a # Shell shortcuts: args_keymap.zsh'
 	's # Shell shortcuts: aws_keymap.zsh'
+	'c # Shell shortcuts: claude_keymap.zsh'
 	'd # Shell shortcuts: docker_keymap.zsh'
 	'g # Shell shortcuts: git_keymap.zsh'
 	'h # Shell shortcuts: github_keymap.zsh'

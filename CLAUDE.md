@@ -30,7 +30,6 @@ The test entry point is `zshrc/_tests.zsh`. Tests run with `ZSHRC_UNDER_TESTING=
 
 ### Entry Points
 - `zshrc/main.zsh` — Sources all keymaps and zsh configs in order. Also handles load-time measurement and optional profiling (`ZSHRC_UNDER_PROFILING=1`).
-- `zshrc/_tests.zsh` — Test runner entry point.
 
 ### Keymap Framework (`zshrc/_keymap/`)
 - `keymap_base.zsh` — Core framework: `keymap_init`, `keymap_show`, `keymap_print_help`, alias management, duplicate detection.
@@ -74,6 +73,11 @@ Key conventions:
 - Multi-character keys like `bb`, `iu` map to functions named `namespace_bb`, `namespace_iu`
 - Joint duplicates (same key with different args) are allowed; disjoint duplicates (same key, different purpose) are detected and reported as errors
 - Avoid chars `'`, `,`, `.`, `;`, `[`, `/`, `=`, `\` as key initials
+- Parameter annotations in keymap entries:
+  - `<var>` — takes exactly one variable
+  - `<var>?` — takes zero or one variable (optional)
+  - `<var>*` — takes zero or multiple variables
+  - `(1-10)` — takes an exact value from the list
 
 ### Test Framework (`zshrc/_tests/`)
 - `_test_harness.zsh` — `init`, `assert`, `pass`, `fail`, `execute_tests`, `print_summary`

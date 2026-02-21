@@ -28,6 +28,7 @@ source "$ZSHRC_SRC_DIR/_keymap/is_reserved.zsh"
 # Load zsh keymaps (These mappings invoke zsh functions)
 source "$ZSHRC_SRC_DIR/args_keymap/args_keymap.zsh"
 source "$ZSHRC_SRC_DIR/aws_keymap/aws_keymap.zsh"
+source "$ZSHRC_SRC_DIR/claude_keymap/claude_keymap.zsh"
 source "$ZSHRC_SRC_DIR/docker_keymap/docker_keymap.zsh"
 source "$ZSHRC_SRC_DIR/git_keymap/git_keymap.zsh"
 source "$ZSHRC_SRC_DIR/github_keymap/github_keymap.zsh"
