@@ -94,7 +94,7 @@ function q_keymap_p {
 		rm -rf "$Q_KEYMAP_SOURCE_DIR"
 		mkdir -p "$Q_KEYMAP_SOURCE_DIR"
 
-		copy_status=0
+		local copy_status=0
 		for subfolder in $Q_KEYMAP_SUB_DIRS; do
 			if [ -d "$Q_KEYMAP_TARGET_DIR/$subfolder" ]; then
 				cp -r "$Q_KEYMAP_TARGET_DIR/$subfolder" "$Q_KEYMAP_SOURCE_DIR/" || copy_status=1
@@ -115,7 +115,7 @@ function q_keymap_P {
 	echo "Pulling 'kiro' folder from 'scratch' repository..."
 
 	if [ -d "$Q_KEYMAP_SOURCE_DIR" ]; then
-		copy_status=0
+		local copy_status=0
 		for subfolder in $Q_KEYMAP_SUB_DIRS; do
 			if [ -d "$Q_KEYMAP_SOURCE_DIR/$subfolder" ]; then
 				rm -rf "$Q_KEYMAP_TARGET_DIR/$subfolder"
