@@ -33,8 +33,9 @@ function test__echo_eval {
 
 function test__ellipsize {
 	assert "$(
+		COLUMNS=80
 		ellipsize "$(printf "%.0sX" {1..1000})" | bw | wc -c | awk '{print $1}'
-	)" "$COLUMNS"
+	)" '80'
 }; run_with_filter test__ellipsize
 
 function test__epoch {
