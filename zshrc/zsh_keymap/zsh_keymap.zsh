@@ -96,6 +96,7 @@ ZSH_OTHER_DOTFILES=(
 	shellcheckrc
 	terraformrc
 	tm_properties
+	zshrc
 )
 
 ZSHRC_SECRETS_DIR="$HOME/Documents/-backups/zsh.secrets"

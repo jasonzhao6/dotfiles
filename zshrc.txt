@@ -1,0 +1,29 @@
+# Amazon Q pre block. Keep at the top of this file.
+# [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
+# Amazon Q post block. Keep at the bottom of this file.
+# [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
+
+# From Marqeta IT
+export PATH="${HOMEBREW_PREFIX}/opt/openssl/bin:$PATH"
+
+# From my dotfiles
+source /Users/yzhao/GitHub/jasonzhao6/dotfiles/zshrc/main.zsh
+
+# From `pyenv init`
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"
+
+# From Marqeta `mqc`: Load config files
+for conf in "$HOME/.config/zsh/config.d/"*.zsh; do
+  source "${conf}"
+done
+unset conf
+
+# From go/local-jcard
+export AWS_REGION=us-east-1
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-8.jdk/Contents/Home
+# export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+
+# From Claude
+export PATH="$HOME/.local/bin:$PATH"
