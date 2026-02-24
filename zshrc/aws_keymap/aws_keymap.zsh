@@ -40,6 +40,8 @@ AWS_KEYMAP=(
 	"${AWS_DOT}pp <name> # Code Pipeline get latest status"
 	''
 	"${AWS_DOT}ps <name> # Parameter Store get latest version"
+	''
+	"${AWS_DOT}o <id or name> # Account ID ↔ name lookup"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
@@ -193,6 +195,18 @@ AWS_BRITIVE=(
 	'role_name_1 request_page_url_1'
 	'role_name_2 request_page_url_2'
 )
+
+AWS_ACCOUNTS_TSV="$HOME/GitHub/jasonzhao6/scratch/claude/skills/aws-accounts/SKILL.md"
+
+function aws_keymap_o {
+	local input=$1
+
+	if [[ "$input" =~ ^[0-9]+$ ]]; then
+		awk -F'\t' -v val="$input" '$2 == val { print $1 }' "$AWS_ACCOUNTS_TSV"
+	else
+		awk -F'\t' -v val="$input" '$1 == val { print $2 }' "$AWS_ACCOUNTS_TSV"
+	fi
+}
 
 function aws_keymap_p {
 	local name=$1
