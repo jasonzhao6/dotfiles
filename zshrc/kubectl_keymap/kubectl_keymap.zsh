@@ -18,7 +18,7 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}w <deployment> # Edit a deployment with TextMate" #
 	"${KUBECTL_DOT}v <type> <name> # Edit a given type with TextMate" #
 	''
-	"${KUBECTL_DOT}c (e11,e12,e21,w21)? # Copy Prod helpers and history bindings"
+	"${KUBECTL_DOT}c (e11,e12,e21,w21,c11)? # Copy Prod helpers and history bindings"
 	"${KUBECTL_DOT}b <pod> # Exec into bash"
 	"${KUBECTL_DOT}bc <command> <pod> # Exec a command"
 	"${KUBECTL_DOT}l <pod> # Show logs"
@@ -78,28 +78,21 @@ function kubectl_keymap_bc {
 	kubectl exec "$pod" -- "${command[@]}"
 }
 
-AWS_SSO_CACHE_DIR="$HOME/.aws/britive/cache"
-AWS_SSO_CACHE_JQ=$(
-	cat <<-eof | tr -d '\n'
-		.Credentials | [
-			"export AWS_ACCESS_KEY_ID='\(.AccessKeyId)'",
-			"export AWS_SECRET_ACCESS_KEY='\(.SecretAccessKey)'",
-			"export AWS_SESSION_TOKEN='\(.SessionToken)'"
-		]
-	eof
-)
-
 function kubectl_keymap_c {
 	local option=$1
 	local kubectl_cluster
 
+	# Infer k8s cluster by current AWS region
 	case $AWS_DEFAULT_REGION in
+		eu-central-1) kubectl_cluster=$KUBECTL_EUC11_CLUSTER;;
 		us-east-1) kubectl_cluster=$KUBECTL_USE11_CLUSTER;;
 		us-east-2) kubectl_cluster=$KUBECTL_USE21_CLUSTER;;
 		us-west-2) kubectl_cluster=$KUBECTL_USW21_CLUSTER;;
 	esac
 
+	# Allow k8s cluster to be specified via optional param
 	case $option in
+		c11) kubectl_cluster=$KUBECTL_EUC11_CLUSTER;;
 		e11) kubectl_cluster=$KUBECTL_USE11_CLUSTER;;
 		e12) kubectl_cluster=$KUBECTL_USE12_CLUSTER;;
 		e21) kubectl_cluster=$KUBECTL_USE21_CLUSTER;;
@@ -111,34 +104,11 @@ function kubectl_keymap_c {
 		return 1
 	fi
 
-	# `AWS_SSO_CACHE_DIR` can contain SSO creds for multiple roles
-	# To identify creds for the current role, delete all creds,
-	# then run a command to generate fresh SSO cred
-	if [[ -d "$AWS_SSO_CACHE_DIR" ]]; then
-		for file in "$AWS_SSO_CACHE_DIR"/*; do
-			# Note: This folder also contains an OAuth cred, which needs to be preserved
-			#       Deleting it causes the next command to re-initiate OAuth with AWS
-			if [[ -f "$file" ]] && grep -q '"ProviderType": "britive"' "$file"; then
-				rm "$file"
-			fi
-		done
-	fi
-
-	# Run a command to generate fresh SSO cred
-	aws sts get-caller-identity
-
-	# Find the current SSO cred (should be the only one now)
-	local current_role
-	for file in "$AWS_SSO_CACHE_DIR"/*; do
-		if [[ -f "$file" ]] && grep -q '"ProviderType": "britive"' "$file"; then
-			current_role=$(basename "$file")
-			break
-		fi
-	done
-
-	# Check if we found an SSO file
-	if [[ -z "$current_role" ]]; then
-		red_bar "Error: No SSO credentials file found in $AWS_SSO_CACHE_DIR"
+	# Export credentials for the current AWS profile
+	local aws_creds
+	aws_creds=$(aws configure export-credentials --format env 2>/dev/null)
+	if [[ -z "$aws_creds" ]]; then
+		red_bar "Error: Failed to export AWS credentials"
 		return 1
 	fi
 
@@ -152,7 +122,7 @@ function kubectl_keymap_c {
 
 		function kb () { kubectl exec -it "\$1" -- bash; }
 
-		$(jq "$AWS_SSO_CACHE_JQ" "$AWS_SSO_CACHE_DIR/$current_role" | trim_list)
+		$aws_creds
 
 		aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $kubectl_cluster
 		kubectl config set-context --current --namespace=$GITHUB_DEFAULT_ORG
