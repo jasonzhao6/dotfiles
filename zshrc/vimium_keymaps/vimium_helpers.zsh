@@ -17,9 +17,10 @@ function vimium_keymap_extract {
 		if [[ $line == map* ]]; then
 			fields=("${=line}")
 
-			# Replace `<>` with `[]` for consistency with all other keymap entries
-			fields[2]=${fields[2]/</[}
-			fields[2]=${fields[2]/>/]}
+			# Replace `<>` with `{}` for consistency with all other keymap entries
+			local lbrace='{' rbrace='}'
+			fields[2]=${fields[2]/</$lbrace}
+			fields[2]=${fields[2]/>/$rbrace}
 
 			extracted+="\t'${fields[2]} # ${fields[3]}'\n"
 
