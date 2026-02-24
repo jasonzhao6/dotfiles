@@ -196,15 +196,15 @@ AWS_BRITIVE=(
 	'role_name_2 request_page_url_2'
 )
 
-AWS_ACCOUNTS_TSV="$HOME/GitHub/jasonzhao6/scratch/claude/skills/aws-accounts/SKILL.md"
+AWS_ACCOUNTS_TSV="$HOME/GitHub/jasonzhao6/scratch/claude/skills/aws-accounts/accounts.tsv"
 
 function aws_keymap_o {
 	local input=$1
 
 	if [[ "$input" =~ ^[0-9]+$ ]]; then
-		awk -F'\t' -v val="$input" '$2 == val { print $1 }' "$AWS_ACCOUNTS_TSV"
+		awk -F'\t' -v val="$input" '$2 ~ val { print $2 "\t" $1 }' "$AWS_ACCOUNTS_TSV"
 	else
-		awk -F'\t' -v val="$input" '$1 == val { print $2 }' "$AWS_ACCOUNTS_TSV"
+		awk -F'\t' -v val="$input" '$1 ~ val { print $2 "\t" $1 }' "$AWS_ACCOUNTS_TSV"
 	fi
 }
 
