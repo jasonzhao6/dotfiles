@@ -77,9 +77,9 @@ gray_fg "\n\`.zshrc\` tests ran in $(echo "$(gdate +%s.%2N) - $ZSHRC_TESTS_START
 
 # Print overall result
 if $ZSHRC_TESTS_ALL_PASSED; then
-	echo "\n$(green_bg 'All tests passed')"
+	echo "\n$(green_bar 'All tests passed')"
 else
-	echo "\n$(red_bg 'Some tests failed')"
+	echo "\n$(red_bar 'Some tests failed')"
 fi
 
 # Profile `.zshrc` test time: Finish
