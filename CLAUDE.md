@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Alias Shorthand
+
+When the user references an alias like `cu`, the first letter is the keymap namespace and the subsequent letters are keys within that keymap. For example, `cu` means the `u` key in the `c` (claude) keymap, i.e. `claude_keymap_u`.
+
 ## What This Repo Is
 
 A fast-loading zsh keymap system that catalogs and simplifies complex shell commands via short 2-3 letter aliases. Uses a Dvorak keyboard layout for key assignments.

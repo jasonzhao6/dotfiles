@@ -19,7 +19,8 @@ function claude_keymap {
 
 CLAUDE_KEYMAP_SOURCE_DIR="$HOME/GitHub/jasonzhao6/scratch/claude"
 CLAUDE_KEYMAP_TARGET_DIR="$HOME/.claude"
-CLAUDE_KEYMAP_FILES=(CLAUDE.md settings.json)
+CLAUDE_KEYMAP_FILES=(CLAUDE.md settings.json .mcp.json)
+CLAUDE_KEYMAP_FOLDERS=(skills)
 
 #
 # Key mappings (Alphabetized)
@@ -53,6 +54,11 @@ function claude_keymap_u {
 			cp "$CLAUDE_KEYMAP_TARGET_DIR/$file" "$CLAUDE_KEYMAP_SOURCE_DIR/" || copy_status=1
 		fi
 	done
+	for folder in $CLAUDE_KEYMAP_FOLDERS; do
+		if [ -d "$CLAUDE_KEYMAP_TARGET_DIR/$folder" ]; then
+			cp -r "$CLAUDE_KEYMAP_TARGET_DIR/$folder" "$CLAUDE_KEYMAP_SOURCE_DIR/" || copy_status=1
+		fi
+	done
 
 	if [ $copy_status -eq 0 ]; then
 		echo "Push operation completed."
@@ -69,6 +75,11 @@ function claude_keymap_U {
 		for file in $CLAUDE_KEYMAP_FILES; do
 			if [ -f "$CLAUDE_KEYMAP_SOURCE_DIR/$file" ]; then
 				cp "$CLAUDE_KEYMAP_SOURCE_DIR/$file" "$CLAUDE_KEYMAP_TARGET_DIR/" || copy_status=1
+			fi
+		done
+		for folder in $CLAUDE_KEYMAP_FOLDERS; do
+			if [ -d "$CLAUDE_KEYMAP_SOURCE_DIR/$folder" ]; then
+				cp -r "$CLAUDE_KEYMAP_SOURCE_DIR/$folder" "$CLAUDE_KEYMAP_TARGET_DIR/" || copy_status=1
 			fi
 		done
 
