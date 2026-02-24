@@ -5,6 +5,7 @@ CLAUDE_CODE_KEYMAP=(
 	'/ # Commands'
 	'@ # File paths'
 	'ctrl-g # Interrupt and provide new instructions'
+	'ctrl-j # Newline'
 	'ctrl-v # Paste images'
 	'shift-{tab} # Cycle permission modes'
 )

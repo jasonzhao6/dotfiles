@@ -5,5 +5,6 @@ Shortcuts: main_keymap.claude_code.zsh
   /           # Commands
   @           # File paths
   ctrl-g      # Interrupt and provide new instructions
+  ctrl-j      # Newline
   ctrl-v      # Paste images
   shift-{tab} # Cycle permission modes
