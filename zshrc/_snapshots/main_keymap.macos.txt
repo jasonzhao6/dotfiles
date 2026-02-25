@@ -21,9 +21,10 @@ Shortcuts: main_keymap.macos.zsh
   cmd-shift-x        # Strike through
 
   cmd-alt-{esc}      # Force quit applications
-  cmd-alt-{space}    # Search this mac
   cmd-alt-d          # Toggle dock hiding
+  cmd-alt-{space}    # Search this mac
   cmd-alt-h          # Hide other windows
+  cmd-shift-.        # Toggle invisible files
 
   fn                 # Show emoji picker (`fn-{e}`, `cmd-ctrl-{space}`)
   fn-{up}            # Page up
