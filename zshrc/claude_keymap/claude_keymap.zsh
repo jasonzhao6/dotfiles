@@ -26,11 +26,15 @@ CLAUDE_KEYMAP_FOLDERS=(skills)
 # Key mappings (Alphabetized)
 #
 
+source "$ZSHRC_SRC_DIR/$CLAUDE_NAMESPACE/claude_helpers.zsh"
+
 function claude_keymap_c {
+	claude_keymap_check_docker
 	claude
 }
 
 function claude_keymap_l {
+	claude_keymap_check_docker
 	claude --resume "$*"
 }
 
@@ -39,6 +43,7 @@ function claude_keymap_m {
 }
 
 function claude_keymap_r {
+	claude_keymap_check_docker
 	claude --continue
 }
 
