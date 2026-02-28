@@ -35,9 +35,9 @@ function q_keymap {
 
 Q_KEYMAP_JCARD_DIR="$HOME/GitHub/transaction-engine/marqeta-jpos/jcard"
 Q_KEYMAP_HELM_DIR="$HOME/GitHub/transaction-engine/ccapi-marqkubed-helm"
-Q_KEYMAP_SOURCE_DIR="$HOME/GitHub/jasonzhao6/scratch/kiro"
+Q_KEYMAP_SCRATCH_DIR="$HOME/GitHub/jasonzhao6/scratch/kiro"
 Q_KEYMAP_SUB_DIRS=(agents my-agent-configs my-agent-contexts my-global-contexts)
-Q_KEYMAP_TARGET_DIR="$HOME/.kiro"
+Q_KEYMAP_CONFIG_DIR="$HOME/.kiro"
 
 function q_keymap_0 {
 	# Check if Docker is running; Q's MCP servers run on it
@@ -80,23 +80,23 @@ function q_keymap_k {
 }
 
 function q_keymap_m {
-	mate "$Q_KEYMAP_TARGET_DIR"
+	mate "$Q_KEYMAP_CONFIG_DIR"
 }
 
 function q_keymap_o {
-	open "$Q_KEYMAP_TARGET_DIR"
+	open "$Q_KEYMAP_CONFIG_DIR"
 }
 
 function q_keymap_p {
 	echo "Pushing 'kiro' folder to 'scratch' repository..."
 
-	rm -rf "$Q_KEYMAP_SOURCE_DIR"
-	mkdir -p "$Q_KEYMAP_SOURCE_DIR"
+	rm -rf "$Q_KEYMAP_SCRATCH_DIR"
+	mkdir -p "$Q_KEYMAP_SCRATCH_DIR"
 
 	local copy_status=0
 	for subfolder in $Q_KEYMAP_SUB_DIRS; do
-		if [ -d "$Q_KEYMAP_TARGET_DIR/$subfolder" ]; then
-			cp -r "$Q_KEYMAP_TARGET_DIR/$subfolder" "$Q_KEYMAP_SOURCE_DIR/" || copy_status=1
+		if [ -d "$Q_KEYMAP_CONFIG_DIR/$subfolder" ]; then
+			cp -r "$Q_KEYMAP_CONFIG_DIR/$subfolder" "$Q_KEYMAP_SCRATCH_DIR/" || copy_status=1
 		fi
 	done
 
@@ -110,12 +110,12 @@ function q_keymap_p {
 function q_keymap_P {
 	echo "Pulling 'kiro' folder from 'scratch' repository..."
 
-	if [ -d "$Q_KEYMAP_SOURCE_DIR" ]; then
+	if [ -d "$Q_KEYMAP_SCRATCH_DIR" ]; then
 		local copy_status=0
 		for subfolder in $Q_KEYMAP_SUB_DIRS; do
-			if [ -d "$Q_KEYMAP_SOURCE_DIR/$subfolder" ]; then
-				rm -rf "$Q_KEYMAP_TARGET_DIR/$subfolder"
-				cp -r "$Q_KEYMAP_SOURCE_DIR/$subfolder" "$Q_KEYMAP_TARGET_DIR/" || copy_status=1
+			if [ -d "$Q_KEYMAP_SCRATCH_DIR/$subfolder" ]; then
+				rm -rf "$Q_KEYMAP_CONFIG_DIR/$subfolder"
+				cp -r "$Q_KEYMAP_SCRATCH_DIR/$subfolder" "$Q_KEYMAP_CONFIG_DIR/" || copy_status=1
 			fi
 		done
 

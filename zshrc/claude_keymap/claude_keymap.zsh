@@ -17,8 +17,8 @@ function claude_keymap {
 	keymap_show $CLAUDE_NAMESPACE $CLAUDE_ALIAS ${#CLAUDE_KEYMAP} "${CLAUDE_KEYMAP[@]}" "$@"
 }
 
-CLAUDE_KEYMAP_SOURCE_DIR="$HOME/GitHub/jasonzhao6/scratch/claude"
-CLAUDE_KEYMAP_TARGET_DIR="$HOME/.claude"
+CLAUDE_KEYMAP_SCRATCH_DIR="$HOME/GitHub/jasonzhao6/scratch/claude"
+CLAUDE_KEYMAP_CONFIG_DIR="$HOME/.claude"
 CLAUDE_KEYMAP_FILES=(CLAUDE.md settings.json)
 CLAUDE_KEYMAP_FOLDERS=(skills)
 
@@ -39,7 +39,7 @@ function claude_keymap_l {
 }
 
 function claude_keymap_m {
-	mate "$CLAUDE_KEYMAP_TARGET_DIR"
+	mate "$CLAUDE_KEYMAP_CONFIG_DIR"
 }
 
 function claude_keymap_r {
@@ -50,28 +50,28 @@ function claude_keymap_r {
 function claude_keymap_u {
 	echo "Pushing Claude config to 'scratch' repository..."
 
-	rm -rf "$CLAUDE_KEYMAP_SOURCE_DIR"
-	mkdir -p "$CLAUDE_KEYMAP_SOURCE_DIR"
+	rm -rf "$CLAUDE_KEYMAP_SCRATCH_DIR"
+	mkdir -p "$CLAUDE_KEYMAP_SCRATCH_DIR"
 
 	local copy_status=0
 
 	# Copy files; strip leading dot so dot files are visible in scratch repo
 	for file in $CLAUDE_KEYMAP_FILES; do
-		if [ -f "$CLAUDE_KEYMAP_TARGET_DIR/$file" ]; then
-			cp "$CLAUDE_KEYMAP_TARGET_DIR/$file" "$CLAUDE_KEYMAP_SOURCE_DIR/${file#.}" || copy_status=1
+		if [ -f "$CLAUDE_KEYMAP_CONFIG_DIR/$file" ]; then
+			cp "$CLAUDE_KEYMAP_CONFIG_DIR/$file" "$CLAUDE_KEYMAP_SCRATCH_DIR/${file#.}" || copy_status=1
 		fi
 	done
 
 	# Copy folders as-is
 	for folder in $CLAUDE_KEYMAP_FOLDERS; do
-		if [ -d "$CLAUDE_KEYMAP_TARGET_DIR/$folder" ]; then
-			cp -r "$CLAUDE_KEYMAP_TARGET_DIR/$folder" "$CLAUDE_KEYMAP_SOURCE_DIR/" || copy_status=1
+		if [ -d "$CLAUDE_KEYMAP_CONFIG_DIR/$folder" ]; then
+			cp -r "$CLAUDE_KEYMAP_CONFIG_DIR/$folder" "$CLAUDE_KEYMAP_SCRATCH_DIR/" || copy_status=1
 		fi
 	done
 
 	# Copy ~/.mcp.json as ~mcp.json
 	if [ -f "$HOME/.mcp.json" ]; then
-		cp "$HOME/.mcp.json" "$CLAUDE_KEYMAP_SOURCE_DIR/~mcp.json" || copy_status=1
+		cp "$HOME/.mcp.json" "$CLAUDE_KEYMAP_SCRATCH_DIR/~mcp.json" || copy_status=1
 	fi
 
 	if [ $copy_status -eq 0 ]; then
@@ -84,27 +84,27 @@ function claude_keymap_u {
 function claude_keymap_U {
 	echo "Pulling Claude config from 'scratch' repository..."
 
-	if [ -d "$CLAUDE_KEYMAP_SOURCE_DIR" ]; then
+	if [ -d "$CLAUDE_KEYMAP_SCRATCH_DIR" ]; then
 		local copy_status=0
 
 		# Copy files; restore leading dot for dot files
 		for file in $CLAUDE_KEYMAP_FILES; do
-			if [ -f "$CLAUDE_KEYMAP_SOURCE_DIR/${file#.}" ]; then
-				cp "$CLAUDE_KEYMAP_SOURCE_DIR/${file#.}" "$CLAUDE_KEYMAP_TARGET_DIR/$file" || copy_status=1
+			if [ -f "$CLAUDE_KEYMAP_SCRATCH_DIR/${file#.}" ]; then
+				cp "$CLAUDE_KEYMAP_SCRATCH_DIR/${file#.}" "$CLAUDE_KEYMAP_CONFIG_DIR/$file" || copy_status=1
 			fi
 		done
 
 		# Copy folders; remove target first so deletions in source are reflected
 		for folder in $CLAUDE_KEYMAP_FOLDERS; do
-			if [ -d "$CLAUDE_KEYMAP_SOURCE_DIR/$folder" ]; then
-				rm -rf "$CLAUDE_KEYMAP_TARGET_DIR/$folder"
-				cp -r "$CLAUDE_KEYMAP_SOURCE_DIR/$folder" "$CLAUDE_KEYMAP_TARGET_DIR/" || copy_status=1
+			if [ -d "$CLAUDE_KEYMAP_SCRATCH_DIR/$folder" ]; then
+				rm -rf "$CLAUDE_KEYMAP_CONFIG_DIR/$folder"
+				cp -r "$CLAUDE_KEYMAP_SCRATCH_DIR/$folder" "$CLAUDE_KEYMAP_CONFIG_DIR/" || copy_status=1
 			fi
 		done
 
 		# Restore ~mcp.json as ~/.mcp.json
-		if [ -f "$CLAUDE_KEYMAP_SOURCE_DIR/~mcp.json" ]; then
-			cp "$CLAUDE_KEYMAP_SOURCE_DIR/~mcp.json" "$HOME/.mcp.json" || copy_status=1
+		if [ -f "$CLAUDE_KEYMAP_SCRATCH_DIR/~mcp.json" ]; then
+			cp "$CLAUDE_KEYMAP_SCRATCH_DIR/~mcp.json" "$HOME/.mcp.json" || copy_status=1
 		fi
 
 		if [ $copy_status -eq 0 ]; then
