@@ -94,9 +94,10 @@ function claude_keymap_U {
 			fi
 		done
 
-		# Copy folders as-is
+		# Copy folders; remove target first so deletions in source are reflected
 		for folder in $CLAUDE_KEYMAP_FOLDERS; do
 			if [ -d "$CLAUDE_KEYMAP_SOURCE_DIR/$folder" ]; then
+				rm -rf "$CLAUDE_KEYMAP_TARGET_DIR/$folder"
 				cp -r "$CLAUDE_KEYMAP_SOURCE_DIR/$folder" "$CLAUDE_KEYMAP_TARGET_DIR/" || copy_status=1
 			fi
 		done
