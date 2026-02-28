@@ -7,6 +7,8 @@ CLAUDE_KEYMAP=(
 	"${CLAUDE_DOT}r # Continue last session"
 	"${CLAUDE_DOT}l <match>? # Resume matching session"
 	"${CLAUDE_DOT}m # Edit config folder in TextMate"
+	"${CLAUDE_DOT}o # Print project's local settings"
+	"${CLAUDE_DOT}oo # Move project's local permissions to global settings"
 	"${CLAUDE_DOT}u # Push config to \`scratch\` repo (not \`p\` b/c \`cp\` is reserved)"
 	"${CLAUDE_DOT}U # Pull config from \`scratch\` repo"
 )
@@ -19,7 +21,7 @@ function claude_keymap {
 
 CLAUDE_KEYMAP_SCRATCH_DIR="$HOME/GitHub/jasonzhao6/scratch/claude"
 CLAUDE_KEYMAP_CONFIG_DIR="$HOME/.claude"
-CLAUDE_KEYMAP_FILES=(CLAUDE.md settings.json)
+CLAUDE_KEYMAP_FILES=(CLAUDE.md settings.json settings.local.json)
 CLAUDE_KEYMAP_FOLDERS=(skills)
 
 #
@@ -40,6 +42,57 @@ function claude_keymap_l {
 
 function claude_keymap_m {
 	mate "$CLAUDE_KEYMAP_CONFIG_DIR"
+}
+
+function claude_keymap_o {
+	local local_settings='.claude/settings.local.json'
+
+	if [ -f "$local_settings" ]; then
+		cat "$local_settings"
+	else
+		red_bar "No local settings"
+	fi
+}
+
+function claude_keymap_oo {
+	local local_settings='.claude/settings.local.json'
+	local global_settings="$CLAUDE_KEYMAP_CONFIG_DIR/settings.json"
+
+	if [ ! -f "$local_settings" ]; then
+		red_bar "No local settings"
+		return 1
+	fi
+
+	# Extract local permissions
+	local local_perms
+	local_perms=$(jq -r '.permissions.allow // [] | .[]' "$local_settings" 2>/dev/null)
+
+	if [ -z "$local_perms" ]; then
+		red_bar "No local permissions"
+		return 1
+	fi
+
+	# Merge local permissions into global settings
+	jq --argjson new "$(jq '.permissions.allow // []' "$local_settings")" \
+		'.permissions.allow = ([.permissions.allow // [], $new] | flatten | unique | sort)' \
+		"$global_settings" > "${global_settings}.tmp" &&
+		mv "${global_settings}.tmp" "$global_settings"
+
+	# Remove permissions from local settings
+	local updated
+	updated=$(jq 'del(.permissions.allow) | if .permissions == {} then del(.permissions) else . end' "$local_settings")
+
+	if [ "$(echo "$updated" | jq 'length')" -eq 0 ]; then
+		rm "$local_settings"
+		green_bar "Moved to global"
+	else
+		echo "$updated" > "$local_settings"
+		green_bar "Moved to global; kept local"
+	fi
+
+	# Push updated global config to scratch repo
+	echo
+	claude_keymap_u
 }
 
 function claude_keymap_r {
