@@ -1,10 +1,10 @@
 Shortcuts: main_keymap.claude_code.zsh
 
   !           # Run bash command
-  &           # Queue instruction in the background
+  &           # Run prompt in the background
   /{skill}?   # Invoke Claude command or skill
   @           # Reference a local file or folder
-  ctrl-g      # Interrupt and provide new instructions
+  ctrl-g      # Compose prompt in editor
   ctrl-j      # Add newline
   ctrl-v      # Paste image
   shift-{tab} # Cycle permission modes
