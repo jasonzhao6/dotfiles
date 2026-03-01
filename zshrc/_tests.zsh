@@ -83,4 +83,4 @@ else
 fi
 
 # Profile `.zshrc` test time: Finish
-[[ -n $ZSHRC_TESTS_UNDER_PROFILING ]] && echo && zprof
+[[ -n $ZSHRC_TESTS_UNDER_PROFILING ]] && echo && zprof || true
