@@ -12,7 +12,7 @@ NAV_KEYMAP=(
 	"${NAV_DOT}w # Go to Downloads"
 	"${NAV_DOT}v # Go to Desktop"
 	''
-	"${NAV_DOT}h # Go to GitHub"
+	"${NAV_DOT}h <match>* <-mismatch>* # Go to GitHub"
 	"${NAV_DOT}d # Go to dotfiles"
 	"${NAV_DOT}i # Go to excalidraw"
 	"${NAV_DOT}s # Go to scratch"
@@ -84,7 +84,9 @@ function nav_keymap_ee {
 }
 
 function nav_keymap_h {
-	cd ~/GitHub && nav_keymap_n || true
+	local filters=("$@")
+
+	cd ~/GitHub && nav_keymap_n "${filters[@]}" || true
 }
 
 function nav_keymap_i {

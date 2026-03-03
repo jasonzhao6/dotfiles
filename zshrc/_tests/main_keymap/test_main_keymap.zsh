@@ -52,10 +52,10 @@ function test__main_keymap_r__when_specifying_a_description {
 	)" "$(
 		cat <<-eof
 
-			  $ h.a          # Open the current repo in GitHub Desktop
-			  $ m.h <regex>? # Show GitHub Desktop shortcuts
-			  $ n.h          # Go to GitHub
-			  $ q.h          # Chat with GitHub MCP
+			  $ h.a                       # Open the current repo in GitHub Desktop
+			  $ m.h <regex>?              # Show GitHub Desktop shortcuts
+			  $ n.h <match>* <-mismatch>* # Go to GitHub
+			  $ q.h                       # Chat with GitHub MCP
 
 			  intellij_alt: alt-o         # Open on GitHub
 			  all: h                      # Shell shortcuts: github_keymap.zsh

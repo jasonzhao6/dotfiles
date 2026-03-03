@@ -33,7 +33,7 @@ Keymap List
   $ n.w                        # Go to Downloads
   $ n.v                        # Go to Desktop
 
-  $ n.h                        # Go to GitHub
+  $ n.h <match>* <-mismatch>*  # Go to GitHub
   $ n.d                        # Go to dotfiles
   $ n.i                        # Go to excalidraw
   $ n.s                        # Go to scratch
