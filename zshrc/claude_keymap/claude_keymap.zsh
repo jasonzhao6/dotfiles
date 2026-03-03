@@ -6,6 +6,7 @@ CLAUDE_KEYMAP=(
 	"${CLAUDE_DOT}c # Start new session"
 	"${CLAUDE_DOT}r # Continue last session"
 	"${CLAUDE_DOT}l <match>? # Resume matching session"
+	"${CLAUDE_DOT}t # Start Claude in scratch repo"
 	"${CLAUDE_DOT}m # Edit config folder in TextMate"
 	"${CLAUDE_DOT}o # Print project's local settings"
 	"${CLAUDE_DOT}oo # Move project's local permissions to global settings"
@@ -98,6 +99,26 @@ function claude_keymap_oo {
 function claude_keymap_r {
 	claude_keymap_check_docker
 	claude --continue
+}
+
+function claude_keymap_t {
+	# Save current background color, then tint the tab blue to signal scratch mode
+	local original_bg
+	original_bg=$(osascript -e 'tell application "Terminal" to get background color of selected tab of front window')
+	osascript -e '
+		tell application "Terminal"
+			set bg to background color of selected tab of front window
+			set item 3 of bg to (item 3 of bg) + 5000
+			set background color of selected tab of front window to bg
+		end tell'
+
+	cd "$HOME/GitHub/jasonzhao6/scratch"
+	# Notify Terminal.app of new cwd so Claude's tab title shows 'scratch'
+	printf '\e]7;file://%s%s\a' "$HOST" "$PWD"
+	claude_keymap_c
+
+	# Restore original background color
+	osascript -e "tell application \"Terminal\" to set background color of selected tab of front window to {$original_bg}"
 }
 
 function claude_keymap_u {
