@@ -5,6 +5,7 @@ NAV_DOT="${NAV_ALIAS}${KEYMAP_DOT}"
 NAV_KEYMAP=(
 	"${NAV_ALIAS} <directory> # Go to directory"
 	"${NAV_DOT}t # Go to directory in pasteboard"
+	"${NAV_DOT}tt # Copy current path to pasteboard"
 	"${NAV_DOT}y # Yank the current path"
 	"${NAV_DOT}p # Put the yanked path"
 	''
@@ -142,6 +143,10 @@ function nav_keymap_t {
 
 	# Go to folder
 	cd $target_path && nav_keymap_n || true
+}
+
+function nav_keymap_tt {
+	pwd | tr -d '\n' | pbcopy
 }
 
 function nav_keymap_u {
