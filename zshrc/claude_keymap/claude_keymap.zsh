@@ -6,7 +6,8 @@ CLAUDE_KEYMAP=(
 	"${CLAUDE_DOT}c # Start new session"
 	"${CLAUDE_DOT}r # Continue last session"
 	"${CLAUDE_DOT}l <match>? # Resume matching session"
-	"${CLAUDE_DOT}t # Start Claude in scratch repo"
+	"${CLAUDE_DOT}n # Start a new 5-hour token window"
+	"${CLAUDE_DOT}s # Start Claude in scratch repo"
 	"${CLAUDE_DOT}m # Edit config folder in TextMate"
 	"${CLAUDE_DOT}o # Print project's local settings"
 	"${CLAUDE_DOT}oo # Move project's local permissions to global settings"
@@ -43,6 +44,23 @@ function claude_keymap_l {
 
 function claude_keymap_m {
 	mate "$CLAUDE_KEYMAP_CONFIG_DIR"
+}
+
+function claude_keymap_n {
+	# Run a fast haiku ping in the background to start a new 5-hour token window.
+
+	# Suppress job control messages `[1] 12345` on launch and `[1] + done ...` on completion.
+	setopt local_options no_notify no_monitor
+	{
+		# </dev/null: Detach stdin so background `claude` doesn't get suspended (SIGTTOU).
+		# &>/dev/null: Suppress `claude` output since we only care about exit status.
+		claude -p "ping" --model haiku --system-prompt "Reply to ping with pong." </dev/null &>/dev/null \
+			&& green_bar "New token window" \
+			|| red_bar "Failed to start token window"
+
+		# Background output lands mid-prompt; redraw so the user gets a clean `$ ` line.
+		print -Pn "${PROMPT}"
+	} &! # &!: Background and disown so zsh forgets about this job entirely (no done message).
 }
 
 function claude_keymap_o {
@@ -101,7 +119,7 @@ function claude_keymap_r {
 	claude --continue
 }
 
-function claude_keymap_t {
+function claude_keymap_s {
 	# Save current background color, then tint the tab blue to signal scratch mode
 	local original_bg
 	original_bg=$(osascript -e 'tell application "Terminal" to get background color of selected tab of front window')
