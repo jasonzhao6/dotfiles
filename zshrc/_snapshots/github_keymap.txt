@@ -41,9 +41,9 @@ Keymap List
   $ (|)? h.g                  # Create a new gist, then open it
   $ h.gg                      # Open new tab to create a gist
 
-  $ h.r                       # List remote repos
-  $ h.r <match>* <-mismatch>* # Filter remote repos
-  $ h.rr                      # Save a copy of remote repos
+  $ h.r                       # List all remote repos
+  $ h.r <match>* <-mismatch>* # Filter all remote repos
+  $ h.rr                      # Save a copy of all remote repos
 
   $ h.url                     # Remote url
   $ h.domain                  # Remote domain

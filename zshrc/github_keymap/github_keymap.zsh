@@ -20,9 +20,9 @@ GITHUB_KEYMAP=(
 	"${KEYMAP_PIPE_PATTERN}${GITHUB_DOT}g # Create a new gist, then open it"
 	"${GITHUB_DOT}gg # Open new tab to create a gist"
 	''
-	"${GITHUB_DOT}r # List remote repos"
-	"${GITHUB_DOT}r <match>* <-mismatch>* # Filter remote repos"
-	"${GITHUB_DOT}rr # Save a copy of remote repos"
+	"${GITHUB_DOT}r # List all remote repos"
+	"${GITHUB_DOT}r <match>* <-mismatch>* # Filter all remote repos"
+	"${GITHUB_DOT}rr # Save a copy of all remote repos"
 	''
 	"${GITHUB_DOT}url # Remote url"
 	"${GITHUB_DOT}domain # Remote domain"
@@ -36,7 +36,7 @@ keymap_init $GITHUB_NAMESPACE $GITHUB_ALIAS "${GITHUB_KEYMAP[@]}"
 function github_keymap {
 	# If the first arg is a repo in the current org, delegate to `github_keymap_o`
 	local repo=$1
-	if grep --quiet "^$repo$" $ZSHRC_DATA_DIR/github."$(github_keymap_org)".txt 2> /dev/null; then
+	if grep --quiet "^$repo$" $ZSHRC_DATA_DIR/github/"$(github_keymap_org)".txt 2> /dev/null; then
 		github_keymap_o "$repo"
 		return
 	fi
@@ -115,10 +115,12 @@ function github_keymap_p {
 	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_repo)"/pull/"$1"
 }
 
+GITHUB_ALL_REPOS="$ZSHRC_DATA_DIR/github.all.txt"
+
 function github_keymap_r {
 	local filters=("$@")
 
-	args_keymap_s "${filters[@]}" < $ZSHRC_DATA_DIR/github."$(github_keymap_org)".txt
+	args_keymap_s "${filters[@]}" < $GITHUB_ALL_REPOS
 }
 
 function github_keymap_repo {
@@ -126,12 +128,36 @@ function github_keymap_repo {
 }
 
 function github_keymap_rr {
-	# Save a copy for cached lookup
-	local org; org="$(github_keymap_org)"
-	gh repo list "$org" --no-archived --limit 1000 --json name |
-		jq --raw-output '.[].name' |
-		tee $ZSHRC_DATA_DIR/github."$org".txt |
-		args_keymap_s
+	local orgs org hostname repos count=0
+	orgs=(~/GitHub/*/)
+
+	# Reset local cache
+	rm -rf $ZSHRC_DATA_DIR/github
+	mkdir -p $ZSHRC_DATA_DIR/github
+	: > $GITHUB_ALL_REPOS
+
+	# Iterate over each org and fetch its repos
+	for org in "${orgs[@]}"; do
+		org=$(basename "$org")
+		((count++))
+		echo -n "[${count}/${#orgs}] ${org}"
+
+		# Infer hostname from the first cloned repo's remote url
+		hostname=$(git -C ~/GitHub/"$org"/*(Y1) remote get-url origin 2> /dev/null |
+			sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/')
+		if [[ -z $hostname ]]; then echo ' ... skipped'; continue; fi
+
+		# Avoid rate limiting, wait a second in between orgs
+		sleep 1
+
+		# Fetch repos and save to per-org and combined files
+		repos=$(GH_HOST=$hostname gh repo list "$org" --no-archived --limit 1000 --json name 2> /dev/null |
+			jq --raw-output '.[].name')
+		if [[ -z $repos ]]; then echo ' ... skipped'; continue; fi
+		echo "$repos" > $ZSHRC_DATA_DIR/github/"$org".txt
+		echo "$repos" | sed "s|^|$org/|" >> $GITHUB_ALL_REPOS
+		echo " ... $(echo "$repos" | wc -l | tr -d ' ') repos"
+	done
 }
 
 function github_keymap_t {
