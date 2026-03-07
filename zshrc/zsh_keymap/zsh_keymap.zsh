@@ -139,11 +139,11 @@ function zsh_keymap_t {
 
 function zsh_keymap_z {
 	local name=$1
-	[[ -z $name ]] && echo && red_bar 'name required' && return
+	[[ -z $name ]] && red_bar 'name required' && return
 
 	# Verify that name exists
 	local definition; definition=$(which "$name")
-	[[ $definition == "$name not found" ]] && echo && red_bar "\`$name\` not found" && return
+	[[ $definition == "$name not found" ]] && red_bar "\`$name\` not found" && return
 
 	# Prepare regex to match keys in keymaps
 	local key_regex; key_regex="^${name:0:1}[.]${name:1} "

@@ -98,7 +98,6 @@ function test__main_keymap_r__when_specifying_a_non_zsh_only_description {
 function test__main_keymap_w {
 	assert "$(main_keymap_w)" "$(
 		cat <<-eof
-
 			$(red_bar 'key required')
 		eof
 	)"

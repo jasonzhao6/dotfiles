@@ -52,7 +52,7 @@ function args_history_push {
 }
 
 function args_history_current {
-	echo "${ARGS_HISTORY[$ARGS_HISTORY_INDEX]}"
+	[[ -n "${ARGS_HISTORY[$ARGS_HISTORY_INDEX]}" ]] && echo "${ARGS_HISTORY[$ARGS_HISTORY_INDEX]}"
 }
 
 function args_history_replace_current {

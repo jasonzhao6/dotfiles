@@ -117,7 +117,6 @@ function aws_keymap_c {
 		bind '"\e[B": history-search-forward'
 	eof
 
-	echo
 	green_bar 'History bindings copied to pasteboard'
 }
 

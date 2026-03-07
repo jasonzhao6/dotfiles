@@ -12,7 +12,6 @@ function test__aws_keymap_c {	assert "$(
 		pbpaste
 	)" "$(
 		cat <<-eof
-
 			$(green_bar History bindings copied to pasteboard)
 			bind '"\e[A": history-search-backward'
 			bind '"\e[B": history-search-forward'

@@ -146,7 +146,6 @@ function test__zsh_keymap_s__when_args_history_is_already_initialized {
 function test__zsh_keymap_z {
 	assert "$(zsh_keymap_z)" "$(
 		cat <<-eof
-
 			$(red_bar 'name required')
 		eof
 	)"
@@ -157,7 +156,6 @@ function test__zsh_keymap_z__when_program_is_not_found {
 		zsh_keymap_z does_not_exist
 	)" "$(
 		cat <<-eof
-
 			$(red_bar '`does_not_exist` not found')
 		eof
 	)"

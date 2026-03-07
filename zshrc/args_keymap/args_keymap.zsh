@@ -148,7 +148,6 @@ function args_keymap_h {
 	# Otherwise, list history entries again and show error bar
 	else
 		args_history_entries
-		echo
 		red_bar "Index out of range: $index"
 	fi
 }

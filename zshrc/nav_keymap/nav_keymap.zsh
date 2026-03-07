@@ -131,7 +131,6 @@ function nav_keymap_t {
 
 	# If it's not a file or folder path, error
 	if [[ ! -f $target_path && ! -d $target_path  ]]; then
-		echo
 		red_bar 'Invalid path in pasteboard'
 		return
 	fi

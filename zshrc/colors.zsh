@@ -53,5 +53,5 @@ function cyan_bg { echo "\e[46m$*\e[0m"; }
 function white_bg { echo "\e[47m$*\e[0m"; }
 
 # Bars (Background color + padding on both sides)
-function red_bar { echo "\e[41m  $*  \e[0m"; }
-function green_bar { echo "\e[42m  $*  \e[0m"; }
+function red_bar { echo "\n\e[41m  $*  \e[0m"; }
+function green_bar { echo "\n\e[42m  $*  \e[0m"; }

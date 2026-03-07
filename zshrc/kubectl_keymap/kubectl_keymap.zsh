@@ -128,7 +128,6 @@ function kubectl_keymap_c {
 		kubectl config set-context --current --namespace=$GITHUB_DEFAULT_ORG
 	eof
 
-	echo
 	green_bar 'History bindings and `kubectl` helpers copied to pasteboard'
 }
 

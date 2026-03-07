@@ -86,7 +86,6 @@ function main_keymap_a {
 	main_keymap_extract_keymaps 'ALL_KEYMAP'
 	if ! cmp --silent "$ALL_KEYMAP_FILE" "$ALL_KEYMAP_FILE.bak"; then
 		source "$ALL_KEYMAP_FILE"
-		echo
 		red_bar "\`$ALL_NAMESPACE\` updated"
 	fi
 	rm "$ALL_KEYMAP_FILE.bak"
@@ -172,7 +171,7 @@ function main_keymap_t {
 # Includes non-zsh keymaps following a `KEYMAP_DASH`, e.g `alt-x`
 function main_keymap_w {
 	local key=$1
-	[[ -z $key ]] && echo && red_bar 'key required' && return
+	[[ -z $key ]] && red_bar 'key required' && return
 
 	# Find zsh entries with matching `key`
 	local keymap_entries=()

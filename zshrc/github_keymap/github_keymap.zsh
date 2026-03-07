@@ -139,7 +139,6 @@ function github_keymap_t {
 
 	# If pasteboard is empty, error
 	if [[ -z $repo ]]; then
-		echo
 		red_bar 'Empty repo name in pasteboard'
 		return
 	fi
@@ -149,7 +148,6 @@ function github_keymap_t {
 
 	# If it's not a folder path, error
 	if [[ ! -d $target_path  ]]; then
-		echo
 		red_bar 'Invalid repo name in pasteboard'
 		return
 	fi

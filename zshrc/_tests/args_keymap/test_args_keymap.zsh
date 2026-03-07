@@ -285,7 +285,6 @@ function test__args_keymap_h__when_selecting_out_of_head_and_tail {
 			----------------------------------------
 			1
 			2
-
 			$(red_bar 'Index out of range: 4')
 		eof
 	)"
@@ -477,7 +476,6 @@ function test__args_keymap_r__when_undoing_empty_history {
 		args_keymap_r
 	)" "$(
 		cat <<-eof
-
 			$(red_bar 'Reached the end of redo history')
 		eof
 	)"
@@ -654,7 +652,6 @@ function test__args_keymap_u__when_undoing_empty_history {
 		args_keymap_u
 	)" "$(
 		cat <<-eof
-
 			$(red_bar 'Reached the end of undo history')
 		eof
 	)"

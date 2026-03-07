@@ -59,7 +59,6 @@ function keymap_set_alias {
 
 	# Do not overwrite reserved keywords, error instead
 	if is_reserved "$key"; then
-		echo
 		red_bar "\`$key\` is a reserved keyword"
 		return
 	fi
@@ -86,10 +85,10 @@ function keymap_filter_entries {
 	unsetopt nocasematch
 
 	# Print keymap entries matched
-	echo
 	if [[ -z ${entries_matched[*]} ]]; then
 		red_bar "\`$description\` does not match any description"
 	else
+		echo
 		local is_zsh_keymap; keymap_has_dot_alias "${entries_matched[@]}" && is_zsh_keymap=1
 		local max_command_size; max_command_size=$(keymap_get_max_command_size "${entries_matched[@]}")
 
@@ -137,7 +136,6 @@ function keymap_has_disjoint_dups {
 
 		# Otherwise, report on disjoint dups
 		else
-			echo
 			red_bar "\`$namespace\` has duplicate \`$first_token\` entries"
 			has_disjoint_dups=1
 		fi

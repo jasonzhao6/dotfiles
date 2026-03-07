@@ -322,7 +322,7 @@ function test__nav_keymap_t__with_invalid_path {
 	assert "$(
 		echo 'does not exist' | pbcopy
 		nav_keymap_t
-	)" "$(echo; red_bar 'Invalid path in pasteboard')"
+	)" "$(red_bar 'Invalid path in pasteboard')"
 }; run_with_filter test__nav_keymap_t__with_invalid_path
 
 function test__nav_keymap_u {
