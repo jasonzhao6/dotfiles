@@ -10,10 +10,10 @@ GITHUB_KEYMAP=(
 	"${GITHUB_DOT}c # Open the specified commit in pasteboard"
 	"${GITHUB_DOT}c <sha> # Open the specified commit"
 	''
-	"${GITHUB_DOT}h # Navigate to the current org"
-	"${GITHUB_DOT}h <match>* <-mismatch>* # Navigate to the current org & filter repos"
+	"${GITHUB_DOT}h # Navigate to GitHub & list all repos"
+	"${GITHUB_DOT}h <match>* <-mismatch>* # Navigate to GitHub & filter all repos"
 	"${GITHUB_DOT}t # Navigate to the repo name in pasteboard"
-	"${GITHUB_DOT}tt # Save the current repo name to pasteboard"
+	"${GITHUB_DOT}tt # Copy the current repo name to pasteboard"
 	''
 	"${GITHUB_DOT}a # Open the current repo in GitHub Desktop"
 	"${GITHUB_DOT}n # Create a new PR, then open it"
@@ -24,8 +24,8 @@ GITHUB_KEYMAP=(
 	"${GITHUB_DOT}r <match>* <-mismatch>* # Filter remote repos"
 	"${GITHUB_DOT}rr # Save a copy of remote repos"
 	''
-	"${GITHUB_DOT}url # Git url"
-	"${GITHUB_DOT}domain # Domain name"
+	"${GITHUB_DOT}url # Remote url"
+	"${GITHUB_DOT}domain # Remote domain"
 	"${GITHUB_DOT}org # Org name"
 	"${GITHUB_DOT}repo # Repo name"
 	"${GITHUB_DOT}branch # Branch name"
@@ -36,7 +36,7 @@ keymap_init $GITHUB_NAMESPACE $GITHUB_ALIAS "${GITHUB_KEYMAP[@]}"
 function github_keymap {
 	# If the first arg is a repo in the current org, delegate to `github_keymap_o`
 	local repo=$1
-	if grep --quiet "^$repo$" $ZSHRC_DATA_DIR/github."$(github_keymap_org)".txt; then
+	if grep --quiet "^$repo$" $ZSHRC_DATA_DIR/github."$(github_keymap_org)".txt 2> /dev/null; then
 		github_keymap_o "$repo"
 		return
 	fi
@@ -89,7 +89,7 @@ function github_keymap_gg {
 function github_keymap_h {
 	local filters=("$@")
 
-	cd ~/GitHub/"$(github_keymap_org)" && nav_keymap_n "${filters[@]}"
+	cd ~/GitHub && echo && ls -d */* | args_keymap_s "${filters[@]}"
 }
 
 function github_keymap_n {
