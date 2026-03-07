@@ -7,8 +7,11 @@ Shortcuts: main_keymap.terminal.zsh
   cmd-{down}        # Go to pext command
   cmd-shift-{up}    # Select previous command and output
   cmd-shift-{down}  # Select next command and output
+
   cmd-alt-{up}      # Go to top
   cmd-alt-{down}    # Go to bottom
+  fn-{up}           # Page up
+  fn-{down}         # Page down
 
   cmd-k             # Clear
   cmd-d             # Split pane
