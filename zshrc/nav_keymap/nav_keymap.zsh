@@ -15,8 +15,11 @@ NAV_KEYMAP=(
 	''
 	"${NAV_DOT}h <match>* <-mismatch>* # Go to GitHub"
 	"${NAV_DOT}d # Go to dotfiles"
-	"${NAV_DOT}i # Go to excalidraw"
+	"${NAV_DOT}dd # Go to dotfiles, open GitHub Desktop"
+	"${NAV_DOT}x # Go to excalidraw"
 	"${NAV_DOT}s # Go to scratch"
+	"${NAV_DOT}ss # Go to scratch, open GitHub Desktop"
+	"${NAV_DOT}z # Go to scratch/claude-plans"
 	''
 	"${NAV_DOT}n <match>* <-mismatch>* # List visible directories & files"
 	"${NAV_DOT}a <match>* <-mismatch>* # List hidden directories & files"
@@ -29,7 +32,7 @@ NAV_KEYMAP=(
 	"${NAV_DOT}uu # Go up two directories"
 	"${NAV_DOT}uuu # Go up three directories"
 	''
-	"${NAV_DOT}- # Sort subfolders by size"
+	"${NAV_DOT}- <levels>? # Sort subfolders by size"
 )
 
 keymap_init $NAV_NAMESPACE $NAV_ALIAS "${NAV_KEYMAP[@]}"
@@ -70,6 +73,10 @@ function nav_keymap_d {
 	cd ~/GitHub/jasonzhao6/dotfiles && nav_keymap_n || true
 }
 
+function nav_keymap_dd {
+	nav_keymap_d && github_keymap_a
+}
+
 function nav_keymap_e {
 	local filters=("$@")
 
@@ -88,10 +95,6 @@ function nav_keymap_h {
 	local filters=("$@")
 
 	cd ~/GitHub && nav_keymap_n "${filters[@]}" || true
-}
-
-function nav_keymap_i {
-	cd ~/GitHub/jasonzhao6/excalidraw && nav_keymap_n || true
 }
 
 function nav_keymap_m {
@@ -124,6 +127,10 @@ function nav_keymap_p {
 
 function nav_keymap_s {
 	cd ~/GitHub/jasonzhao6/scratch && nav_keymap_n || true
+}
+
+function nav_keymap_ss {
+	nav_keymap_s && github_keymap_a
 }
 
 function nav_keymap_t {
@@ -172,6 +179,14 @@ function nav_keymap_w {
 	cd ~/Downloads && nav_keymap_n || true
 }
 
+function nav_keymap_x {
+	cd ~/GitHub/jasonzhao6/excalidraw && nav_keymap_n || true
+}
+
 function nav_keymap_y {
 	pwd > "$NAV_YANK_FILE"
+}
+
+function nav_keymap_z {
+	cd ~/GitHub/jasonzhao6/scratch/claude-plans && nav_keymap_n || true
 }
