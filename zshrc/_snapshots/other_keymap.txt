@@ -26,6 +26,7 @@ Keymap List
 
   $ o <url>                                  # Open the specified url
   $ o <path>                                 # Open the specified path in Finder
+
   $ o.o                                      # Open the current directory in Finder
   $ o.e <path>?                              # Open in IntelliJ IDEA (Default: Current directory)
   $ o.m <path>?                              # Open in TextMate (Default: Current directory)
@@ -38,6 +39,7 @@ Keymap List
   $ o.cc                                     # Copy the last command
   $ o.y                                      # Alias for `pbcopy`
   $ o.p                                      # Alias for `pbpaste`
+
   $ o.k                                      # Clear the terminal
   $ o.kk                                     # Show archived terminal outputs
   $ o.kc                                     # Clear archived terminal outputs
@@ -51,15 +53,15 @@ Keymap List
   $ o.u <file 1>? <file 2>?                  # Unified diff
   $ o.uu <file 1>? <file 2>?                 # Side by side diff
 
-  $ (|)? o.i <file>? <column index>?         # CSV: Sort lines by column index
-  $ (|)? o.ii <file>? <column 1> <column 2>? # CSV: Swap columns by indexes
-  $ o.x <file 1>? <file 2>?                  # CSV: Keep lines with matching first columns
-  $ o.xx <file 1>? <file 2>?                 # CSV: Drop lines with matching first columns
-
   $ o.t <command>                            # Time command execution
   $ o.w <seconds> <command>                  # Execute command in loop with sleep interval
   $ o.f <start> <finish> (~~)                # Run a sequence of commands in foreground
   $ o.b <start> <finish> (~~)                # Run a sequence of commands in background
+
+  $ (|)? o.i <file>? <column index>?         # CSV: Sort lines by column index
+  $ (|)? o.ii <file>? <column 1> <column 2>? # CSV: Swap columns by indexes
+  $ o.x <file 1>? <file 2>?                  # CSV: Keep lines with matching first columns
+  $ o.xx <file 1>? <file 2>?                 # CSV: Drop lines with matching first columns
 
   $ o.8                                      # Use Java 8
   $ o.d <url>                                # DNS dig

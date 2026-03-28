@@ -5,17 +5,22 @@ KUBECTL_DOT="${KUBECTL_ALIAS}${KEYMAP_DOT}"
 KUBECTL_KEYMAP=(
 	"${KUBECTL_ALIAS} <kubectl command>"
 	''
-	"${KUBECTL_DOT}n <namespace>? # Set QA namespace (to '$GITHUB_DEFAULT_ORG')"
+	"${KUBECTL_DOT}u # Run unit tests and update snapshots"
+	"${KUBECTL_DOT}p <yaml file> # Print spec from yaml file locally"
+	''
 	"${KUBECTL_DOT}e1 <namespace>? # Set QA namespace, region, and kube config"
 	"${KUBECTL_DOT}e2 <namespace>? # Set QA namespace, region, and kube config"
 	"${KUBECTL_DOT}w2 <namespace>? # Set QA namespace, region, and kube config"
+	"${KUBECTL_DOT}n <namespace>? # Set QA namespace (to '$GITHUB_DEFAULT_ORG')"
 	''
-	"${KUBECTL_DOT}k <type> <match>* <-mismatch>* # Get resources as args"
 	"${KUBECTL_DOT}h <match>* <-mismatch>* # Get pods as args"
 	"${KUBECTL_DOT}hh <match>* <-mismatch>* # Get unready pods as args"
-	"${KUBECTL_DOT}t <match>* <-mismatch>* # Get deployments as args"
 	"${KUBECTL_DOT}m <pod> # Edit a pod with TextMate" #
+	''
+	"${KUBECTL_DOT}t <match>* <-mismatch>* # Get deployments as args"
 	"${KUBECTL_DOT}w <deployment> # Edit a deployment with TextMate" #
+	''
+	"${KUBECTL_DOT}k <type> <match>* <-mismatch>* # Get resources as args"
 	"${KUBECTL_DOT}v <type> <name> # Edit a given type with TextMate" #
 	''
 	"${KUBECTL_DOT}c (e11,e12,e21,w21,c11)? # Copy Prod helpers and history bindings"
@@ -31,18 +36,15 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}rm <pod> # Remove a pod"
 	"${KUBECTL_DOT}s <count> <deployment> # Scale a deployment"
 	''
-	"${KUBECTL_DOT}f <match>* <-mismatch>* # Filter resource types"
+	"${KUBECTL_DOT}f <match>* <-mismatch>* # List resource types & filter"
 	"${KUBECTL_DOT}ff # Save a copy of resource types"
+	"${KUBECTL_DOT}d <type> <name> # Describe resources"
 	"${KUBECTL_DOT}g <type> <name> # Get resources"
 	"${KUBECTL_DOT}gg <type> <name> # Get resources with \`-o wide\`"
-	"${KUBECTL_DOT}d <type> <name> # Describe resources"
 	"${KUBECTL_DOT}j <type> <name> # Get resource as json & save a copy"
 	"${KUBECTL_DOT}jj # Get the copy of json"
 	"${KUBECTL_DOT}y <type> <name> # Get resource as yaml & save a copy"
 	"${KUBECTL_DOT}yy # Get the copy of yaml"
-	''
-	"${KUBECTL_DOT}u # Run unit tests and update snapshots"
-	"${KUBECTL_DOT}p <yaml file> # Print spec from yaml file locally"
 )
 
 keymap_init $KUBECTL_NAMESPACE $KUBECTL_ALIAS "${KUBECTL_KEYMAP[@]}"

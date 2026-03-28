@@ -24,24 +24,25 @@ Keymap Usage
 
 Keymap List
 
-  $ g <branch>     # Checkout a local branch
-  $ g.k <branch>   # Checkout a remote branch
-  $ g.n <branch>   # Checkout a new branch
   $ g.g            # Checkout the latest `main`
+  $ g.n <branch>   # Checkout a new branch
+  $ g.k <branch>   # Checkout a remote branch
+
   $ g.b            # List branches
   $ g.bb           # Delete merged branches
   $ g.bd <branch>  # Delete the specified branch
+  $ g <branch>     # Checkout a local branch
 
   $ g.d            # Git diff
   $ g.t            # Git status
   $ g.c            # Create a new commit
   $ g.m            # Amend the previous commit
   $ g.w            # Reword the previous commit
-  $ g.e            # Create an empty commit
   $ g.i <sha>?     # Fix up a commit (Default: Pasteboard)
   $ g.ii           # List the last 20 commits
+  $ g.e            # Create an empty commit
 
-  $ g.x <number>?  # Rebase with main (or last N commits)
+  $ g.x <number>?  # Rebase with the latest main (or last N commits)
   $ g.xm           # Rebase with the latest master
   $ g.xu           # Rebase with the latest upstream
   $ g.xc           # Rebase continue
@@ -59,13 +60,13 @@ Keymap List
   $ g.z <number>?  # Discard uncommitted changes (& last N commits)
   $ g.zz           # Discard uncommitted changes & the last commit
 
-  $ g.s <message>? # Stash (with optional message)
+  $ g.s <message>? # Stash
   $ g.a <index>?   # Apply a stash (Default: Latest)
-  $ g.l            # List the stash
-  $ g.lc           # Clear the stash
+  $ g.l            # List stashes
+  $ g.lc           # Clear stashes
 
   $ g.r <match>*   # List logs & filter
-  $ g.rr <match>*  # List first parent logs & filter
+  $ g.rr <match>*  # List first-parent logs & filter
 
   $ g.P            # Pull
   $ g.p            # Push

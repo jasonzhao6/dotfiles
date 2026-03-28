@@ -3,11 +3,6 @@ GITHUB_ALIAS='h'
 GITHUB_DOT="${GITHUB_ALIAS}${KEYMAP_DOT}"
 
 GITHUB_KEYMAP=(
-	"${GITHUB_ALIAS} <repo> # Open the specified repo"
-	"${GITHUB_DOT}o # Open the current repo"
-	"${GITHUB_DOT}p <pr>? # Open PRs (or a specific PR)"
-	"${GITHUB_DOT}c <sha>? # Open a commit (Default: Pasteboard)"
-	''
 	"${GITHUB_DOT}h <match>* <-mismatch>* # Navigate to GitHub & list repos & filter"
 	"${GITHUB_DOT}t # Navigate to the repo name in pasteboard"
 	"${GITHUB_DOT}tt # Copy the current repo name to pasteboard"
@@ -16,6 +11,11 @@ GITHUB_KEYMAP=(
 	"${GITHUB_DOT}n # Create a new PR, then open it"
 	"${KEYMAP_PIPE_PATTERN}${GITHUB_DOT}g # Create a new gist, then open it"
 	"${GITHUB_DOT}gg # Open new tab to create a gist"
+	''
+	"${GITHUB_ALIAS} <repo> # Open the specified repo"
+	"${GITHUB_DOT}o # Open the current repo"
+	"${GITHUB_DOT}p <pr>? # Open PRs (or a specific PR)"
+	"${GITHUB_DOT}c <sha>? # Open a commit (Default: Pasteboard)"
 	''
 	"${GITHUB_DOT}r <match>* <-mismatch>* # List remote repos & filter"
 	"${GITHUB_DOT}rr # Save a copy of remote repos"

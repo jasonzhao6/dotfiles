@@ -14,6 +14,16 @@ ARGS_KEYMAP=(
 	'(1-100) <command> # Use an arg by number up to 100'
 	"${ARGS_DOT}n <number> <command> # Use an arg by number beyond 100"
 	''
+	"${ARGS_DOT}c <number>? # Copy args (or a specific arg)"
+	"${ARGS_DOT}y # Yank args"
+	"${ARGS_DOT}p # Put args (in a different tab)"
+	''
+	"${ARGS_DOT}u # Undo \"Filter args\" or \"Select a column\""
+	"${ARGS_DOT}r # Redo \"Filter args\" or \"Select a column\""
+	"${ARGS_DOT}h # List history entries"
+	"${ARGS_DOT}h <history index> # Select an entry by index"
+	"${ARGS_DOT}hc # Clear history entries"
+	''
 	"each <command> # Use each arg in series"
 	"all <command> # Use all args in parallel"
 	"map <command> # Map args, e.g \`map echo '\$((~~ * 10))'\`"
@@ -29,16 +39,6 @@ ARGS_KEYMAP=(
 	"${ARGS_DOT}v # Delimit columns based on the bottom row"
 	"${ARGS_DOT}v <letter> # Select a column based on the bottom row"
 	"${ARGS_DOT}z # Select the last column based on the bottom row"
-	''
-	"${ARGS_DOT}u # Undo \"Filter args\" or \"Select a column\""
-	"${ARGS_DOT}r # Redo \"Filter args\" or \"Select a column\""
-	"${ARGS_DOT}h # List history entries"
-	"${ARGS_DOT}h <index> # Select an entry by index"
-	"${ARGS_DOT}hc # Clear history entries"
-	''
-	"${ARGS_DOT}c <index>? # Copy args (or a specific arg)"
-	"${ARGS_DOT}y # Yank args"
-	"${ARGS_DOT}p # Put args (in a different tab)"
 )
 
 keymap_init $ARGS_NAMESPACE $ARGS_ALIAS "${ARGS_KEYMAP[@]}"

@@ -24,11 +24,22 @@ Keymap Usage
 
 Keymap List
 
+  $ n.n <match>* <-mismatch>*  # List visible directories & files
+  $ n.a <match>* <-mismatch>*  # List hidden directories & files
+  $ n.o <match>* <-mismatch>*  # List visible directories
+  $ n.oo <match>* <-mismatch>* # List hidden directories
+  $ n.e <match>* <-mismatch>*  # List visible files
+  $ n.ee <match>* <-mismatch>* # List hidden files
+
   $ n <directory>              # Go to directory
   $ n.t                        # Go to directory in pasteboard
   $ n.tt                       # Copy current path to pasteboard
   $ n.y                        # Yank the current path
   $ n.p                        # Put the yanked path
+
+  $ n.u                        # Go up one directory
+  $ n.uu                       # Go up two directories
+  $ n.uuu                      # Go up three directories
 
   $ n.m                        # Go to Documents
   $ n.w                        # Go to Downloads
@@ -37,21 +48,10 @@ Keymap List
   $ n.h <match>* <-mismatch>*  # Go to GitHub
   $ n.d                        # Go to dotfiles
   $ n.dd                       # Go to dotfiles, open GitHub Desktop
-  $ n.x                        # Go to excalidraw
   $ n.s                        # Go to scratch
   $ n.ss                       # Go to scratch, open GitHub Desktop
   $ n.z                        # Go to scratch/claude-plans
-
-  $ n.n <match>* <-mismatch>*  # List visible directories & files
-  $ n.a <match>* <-mismatch>*  # List hidden directories & files
-  $ n.o <match>* <-mismatch>*  # List visible directories
-  $ n.oo <match>* <-mismatch>* # List hidden directories
-  $ n.e <match>* <-mismatch>*  # List visible files
-  $ n.ee <match>* <-mismatch>* # List hidden files
-
-  $ n.u                        # Go up one directory
-  $ n.uu                       # Go up two directories
-  $ n.uuu                      # Go up three directories
+  $ n.x                        # Go to excalidraw
 
   $ n.f                        # Sort files by size
   $ n.g <levels>?              # Sort subfolders by size

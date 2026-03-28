@@ -26,17 +26,22 @@ Keymap List
 
   $ k <kubectl command>              
 
-  $ k.n <namespace>?                 # Set QA namespace (to 'transaction-engine')
+  $ k.u                              # Run unit tests and update snapshots
+  $ k.p <yaml file>                  # Print spec from yaml file locally
+
   $ k.e1 <namespace>?                # Set QA namespace, region, and kube config
   $ k.e2 <namespace>?                # Set QA namespace, region, and kube config
   $ k.w2 <namespace>?                # Set QA namespace, region, and kube config
+  $ k.n <namespace>?                 # Set QA namespace (to 'transaction-engine')
 
-  $ k.k <type> <match>* <-mismatch>* # Get resources as args
   $ k.h <match>* <-mismatch>*        # Get pods as args
   $ k.hh <match>* <-mismatch>*       # Get unready pods as args
-  $ k.t <match>* <-mismatch>*        # Get deployments as args
   $ k.m <pod>                        # Edit a pod with TextMate
+
+  $ k.t <match>* <-mismatch>*        # Get deployments as args
   $ k.w <deployment>                 # Edit a deployment with TextMate
+
+  $ k.k <type> <match>* <-mismatch>* # Get resources as args
   $ k.v <type> <name>                # Edit a given type with TextMate
 
   $ k.c (e11,e12,e21,w21,c11)?       # Copy Prod helpers and history bindings
@@ -52,15 +57,12 @@ Keymap List
   $ k.rm <pod>                       # Remove a pod
   $ k.s <count> <deployment>         # Scale a deployment
 
-  $ k.f <match>* <-mismatch>*        # Filter resource types
+  $ k.f <match>* <-mismatch>*        # List resource types & filter
   $ k.ff                             # Save a copy of resource types
+  $ k.d <type> <name>                # Describe resources
   $ k.g <type> <name>                # Get resources
   $ k.gg <type> <name>               # Get resources with `-o wide`
-  $ k.d <type> <name>                # Describe resources
   $ k.j <type> <name>                # Get resource as json & save a copy
   $ k.jj                             # Get the copy of json
   $ k.y <type> <name>                # Get resource as yaml & save a copy
   $ k.yy                             # Get the copy of yaml
-
-  $ k.u                              # Run unit tests and update snapshots
-  $ k.p <yaml file>                  # Print spec from yaml file locally

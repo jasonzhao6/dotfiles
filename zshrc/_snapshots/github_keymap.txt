@@ -24,11 +24,6 @@ Keymap Usage
 
 Keymap List
 
-  $ h <repo>                  # Open the specified repo
-  $ h.o                       # Open the current repo
-  $ h.p <pr>?                 # Open PRs (or a specific PR)
-  $ h.c <sha>?                # Open a commit (Default: Pasteboard)
-
   $ h.h <match>* <-mismatch>* # Navigate to GitHub & list repos & filter
   $ h.t                       # Navigate to the repo name in pasteboard
   $ h.tt                      # Copy the current repo name to pasteboard
@@ -37,6 +32,11 @@ Keymap List
   $ h.n                       # Create a new PR, then open it
   $ (|)? h.g                  # Create a new gist, then open it
   $ h.gg                      # Open new tab to create a gist
+
+  $ h <repo>                  # Open the specified repo
+  $ h.o                       # Open the current repo
+  $ h.p <pr>?                 # Open PRs (or a specific PR)
+  $ h.c <sha>?                # Open a commit (Default: Pasteboard)
 
   $ h.r <match>* <-mismatch>* # List remote repos & filter
   $ h.rr                      # Save a copy of remote repos

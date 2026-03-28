@@ -35,6 +35,16 @@ Keymap List
   $ (1-100) <command>               # Use an arg by number up to 100
   $ a.n <number> <command>          # Use an arg by number beyond 100
 
+  $ a.c <number>?                   # Copy args (or a specific arg)
+  $ a.y                             # Yank args
+  $ a.p                             # Put args (in a different tab)
+
+  $ a.u                             # Undo "Filter args" or "Select a column"
+  $ a.r                             # Redo "Filter args" or "Select a column"
+  $ a.h                             # List history entries
+  $ a.h <history index>             # Select an entry by index
+  $ a.hc                            # Clear history entries
+
   $ each <command>                  # Use each arg in series
   $ all <command>                   # Use all args in parallel
   $ map <command>                   # Map args, e.g `map echo '$((~~ * 10))'`
@@ -50,13 +60,3 @@ Keymap List
   $ a.v                             # Delimit columns based on the bottom row
   $ a.v <letter>                    # Select a column based on the bottom row
   $ a.z                             # Select the last column based on the bottom row
-
-  $ a.u                             # Undo "Filter args" or "Select a column"
-  $ a.r                             # Redo "Filter args" or "Select a column"
-  $ a.h                             # List history entries
-  $ a.h <index>                     # Select an entry by index
-  $ a.hc                            # Clear history entries
-
-  $ a.c <index>?                    # Copy args (or a specific arg)
-  $ a.y                             # Yank args
-  $ a.p                             # Put args (in a different tab)

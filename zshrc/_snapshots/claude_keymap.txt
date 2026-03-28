@@ -24,14 +24,17 @@ Keymap Usage
 
 Keymap List
 
+  $ c.n            # Start a new 5-hour token window
+
   $ c.c            # Start new session
   $ c.r            # Continue last session
-  $ c.l <match>?   # Resume matching session
-  $ c.n            # Start a new 5-hour token window
-  $ c.s            # Start Claude in scratch repo
+  $ c.l <match>?   # Find a matching session
+  $ c.s            # Start a scratch session
+
+  $ c.o            # Print local settings
+  $ c.oo           # Move local settings to global
+
   $ c.m            # Edit config folder in TextMate
-  $ c.o            # Print project's local settings
-  $ c.oo           # Move project's local permissions to global settings
   $ c.u            # Push config to `scratch` repo (`cp` is reserved)
   $ c.U            # Pull config from `scratch` repo
 

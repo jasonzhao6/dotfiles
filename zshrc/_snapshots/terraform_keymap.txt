@@ -3,7 +3,7 @@ Keymap: terraform_keymap.zsh
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .  <p>  y   |  <f> <g> (c) (r) <l>  /   =   \ 
      <a> <o> <e> <u> (i)  |  <d> <h> (t) <n> <s>  - 
-      ;  <q>  j   k   x   |   b  <m> <w> <v> <z>
+      ;   q   j   k   x   |   b  <m> <w> <v> <z>
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
@@ -36,11 +36,15 @@ Keymap List
 
   $ t.v (i,iu,ir,im,e)?       # Validate
   $ t.p (i,iu,ir,im,e)?       # Plan
-  $ t.a (i,iu,ir,im,e)?       # Apply
-  $ t.g                       # Upload gist
-  $ t.z                       # Unlock
+  $ t.a (i,iu,ir,im,e)?       # Apply & auto-approve
+
+  $ t.c                       # Clean
+  $ t.cc                      # Clean & clear plugin cache
   $ t.d                       # Destroy
+  $ t.f <path>?               # Format
+  $ t.g                       # Upload gist
   $ t.o                       # Show output
+  $ t.z                       # Unlock
 
   $ t.l <name>                # List states
   $ t.s <name>                # Show state
@@ -49,11 +53,7 @@ Keymap List
   $ t.m <before> <after>      # Move state
   $ t.rm <name>               # Remove state
 
-  $ t.f <path>?               # Format
-  $ t.h <var name>?           # Scratch
   $ t.n <var name>?           # Console
-  $ t.c                       # Clean
-  $ t.cc                      # Clean & clear plugin cache
-  $ t.qa                      # Apply & auto-approve
+  $ t.h <var name>?           # Scratch
 
   $ t.r                       # (Reserved: Translate chars)

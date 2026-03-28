@@ -3,11 +3,22 @@ NAV_ALIAS='n'
 NAV_DOT="${NAV_ALIAS}${KEYMAP_DOT}"
 
 NAV_KEYMAP=(
+	"${NAV_DOT}n <match>* <-mismatch>* # List visible directories & files"
+	"${NAV_DOT}a <match>* <-mismatch>* # List hidden directories & files"
+	"${NAV_DOT}o <match>* <-mismatch>* # List visible directories"
+	"${NAV_DOT}oo <match>* <-mismatch>* # List hidden directories"
+	"${NAV_DOT}e <match>* <-mismatch>* # List visible files"
+	"${NAV_DOT}ee <match>* <-mismatch>* # List hidden files"
+	''
 	"${NAV_ALIAS} <directory> # Go to directory"
 	"${NAV_DOT}t # Go to directory in pasteboard"
 	"${NAV_DOT}tt # Copy current path to pasteboard"
 	"${NAV_DOT}y # Yank the current path"
 	"${NAV_DOT}p # Put the yanked path"
+	''
+	"${NAV_DOT}u # Go up one directory"
+	"${NAV_DOT}uu # Go up two directories"
+	"${NAV_DOT}uuu # Go up three directories"
 	''
 	"${NAV_DOT}m # Go to Documents"
 	"${NAV_DOT}w # Go to Downloads"
@@ -16,21 +27,10 @@ NAV_KEYMAP=(
 	"${NAV_DOT}h <match>* <-mismatch>* # Go to GitHub"
 	"${NAV_DOT}d # Go to dotfiles"
 	"${NAV_DOT}dd # Go to dotfiles, open GitHub Desktop"
-	"${NAV_DOT}x # Go to excalidraw"
 	"${NAV_DOT}s # Go to scratch"
 	"${NAV_DOT}ss # Go to scratch, open GitHub Desktop"
 	"${NAV_DOT}z # Go to scratch/claude-plans"
-	''
-	"${NAV_DOT}n <match>* <-mismatch>* # List visible directories & files"
-	"${NAV_DOT}a <match>* <-mismatch>* # List hidden directories & files"
-	"${NAV_DOT}o <match>* <-mismatch>* # List visible directories"
-	"${NAV_DOT}oo <match>* <-mismatch>* # List hidden directories"
-	"${NAV_DOT}e <match>* <-mismatch>* # List visible files"
-	"${NAV_DOT}ee <match>* <-mismatch>* # List hidden files"
-	''
-	"${NAV_DOT}u # Go up one directory"
-	"${NAV_DOT}uu # Go up two directories"
-	"${NAV_DOT}uuu # Go up three directories"
+	"${NAV_DOT}x # Go to excalidraw"
 	''
 	"${NAV_DOT}f # Sort files by size"
 	"${NAV_DOT}g <levels>? # Sort subfolders by size"

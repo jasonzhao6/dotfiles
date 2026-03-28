@@ -6,6 +6,8 @@ AWS_KEYMAP=(
 	"${AWS_DOT}s <match>* <-mismatch>* # List Britive roles & filter"
 	"${AWS_ALIAS} <role> # Assume the specified role"
 	''
+	"${AWS_DOT}o <id or name> # Account ID ↔ name lookup"
+	''
 	"${AWS_DOT}e1 # Use us-east-1 region"
 	"${AWS_DOT}e2 # Use us-east-2 region"
 	"${AWS_DOT}w2 # Use us-west-2 region"
@@ -39,8 +41,6 @@ AWS_KEYMAP=(
 	"${AWS_DOT}pp <name> # Code Pipeline get latest status"
 	''
 	"${AWS_DOT}ps <name> # Parameter Store get latest version"
-	''
-	"${AWS_DOT}o <id or name> # Account ID ↔ name lookup"
 	''
 	"${AWS_DOT}h # (Reserved: Shell)"
 	"${AWS_DOT}u # (Reserved: Switch user)"

@@ -5,6 +5,7 @@ OTHER_DOT="${OTHER_ALIAS}${KEYMAP_DOT}"
 OTHER_KEYMAP=(
 	"${OTHER_ALIAS} <url> # Open the specified url"
 	"${OTHER_ALIAS} <path> # Open the specified path in Finder"
+	''
 	"${OTHER_DOT}o # Open the current directory in Finder"
 	"${OTHER_DOT}e <path>? # Open in IntelliJ IDEA (Default: Current directory)"
 	"${OTHER_DOT}m <path>? # Open in TextMate (Default: Current directory)"
@@ -17,6 +18,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}cc # Copy the last command"
 	"${OTHER_DOT}y # Alias for \`pbcopy\`"
 	"${OTHER_DOT}p # Alias for \`pbpaste\`"
+	''
 	"${OTHER_DOT}k # Clear the terminal"
 	"${OTHER_DOT}kk # Show archived terminal outputs"
 	"${OTHER_DOT}kc # Clear archived terminal outputs"
@@ -30,15 +32,15 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}u <file 1>? <file 2>? # Unified diff"
 	"${OTHER_DOT}uu <file 1>? <file 2>? # Side by side diff"
 	''
-	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}i <file>? <column index>? # CSV: Sort lines by column index"
-	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}ii <file>? <column 1> <column 2>? # CSV: Swap columns by indexes"
-	"${OTHER_DOT}x <file 1>? <file 2>? # CSV: Keep lines with matching first columns"
-	"${OTHER_DOT}xx <file 1>? <file 2>? # CSV: Drop lines with matching first columns"
-	''
 	"${OTHER_DOT}t <command> # Time command execution"
 	"${OTHER_DOT}w <seconds> <command> # Execute command in loop with sleep interval"
 	"${OTHER_DOT}f <start> <finish> (~~) # Run a sequence of commands in foreground"
 	"${OTHER_DOT}b <start> <finish> (~~) # Run a sequence of commands in background"
+	''
+	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}i <file>? <column index>? # CSV: Sort lines by column index"
+	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}ii <file>? <column 1> <column 2>? # CSV: Swap columns by indexes"
+	"${OTHER_DOT}x <file 1>? <file 2>? # CSV: Keep lines with matching first columns"
+	"${OTHER_DOT}xx <file 1>? <file 2>? # CSV: Drop lines with matching first columns"
 	''
 	"${OTHER_DOT}8 # Use Java 8"
 	"${OTHER_DOT}d <url> # DNS dig"

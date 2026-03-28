@@ -15,11 +15,15 @@ TERRAFORM_KEYMAP=(
 	''
 	"${TERRAFORM_DOT}v (i,iu,ir,im,e)? # Validate"
 	"${TERRAFORM_DOT}p (i,iu,ir,im,e)? # Plan"
-	"${TERRAFORM_DOT}a (i,iu,ir,im,e)? # Apply"
-	"${TERRAFORM_DOT}g # Upload gist"
-	"${TERRAFORM_DOT}z # Unlock"
+	"${TERRAFORM_DOT}a (i,iu,ir,im,e)? # Apply & auto-approve"
+	''
+	"${TERRAFORM_DOT}c # Clean"
+	"${TERRAFORM_DOT}cc # Clean & clear plugin cache"
 	"${TERRAFORM_DOT}d # Destroy"
+	"${TERRAFORM_DOT}f <path>? # Format"
+	"${TERRAFORM_DOT}g # Upload gist"
 	"${TERRAFORM_DOT}o # Show output"
+	"${TERRAFORM_DOT}z # Unlock"
 	''
 	"${TERRAFORM_DOT}l <name> # List states"
 	"${TERRAFORM_DOT}s <name> # Show state"
@@ -28,12 +32,8 @@ TERRAFORM_KEYMAP=(
 	"${TERRAFORM_DOT}m <before> <after> # Move state"
 	"${TERRAFORM_DOT}rm <name> # Remove state"
 	''
-	"${TERRAFORM_DOT}f <path>? # Format"
-	"${TERRAFORM_DOT}h <var name>? # Scratch"
 	"${TERRAFORM_DOT}n <var name>? # Console"
-	"${TERRAFORM_DOT}c # Clean"
-	"${TERRAFORM_DOT}cc # Clean & clear plugin cache"
-	"${TERRAFORM_DOT}qa # Apply & auto-approve"
+	"${TERRAFORM_DOT}h <var name>? # Scratch"
 	''
 	"${TERRAFORM_DOT}r # (Reserved: Translate chars)"
 )
@@ -64,7 +64,7 @@ source "$ZSHRC_SRC_DIR/$TERRAFORM_NAMESPACE/terraform_helpers.zsh"
 function terraform_keymap_a {
 	local options=$1
 
-	terraform_keymap_init "$options" && terraform apply
+	terraform_keymap_init "$options" && terraform apply -auto-approve
 }
 
 function terraform_keymap_c {
@@ -173,10 +173,6 @@ function terraform_keymap_p {
 	local options=$1
 
 	terraform_keymap_init "$options" && terraform plan -out=tfplan
-}
-
-function terraform_keymap_qa {
-	terraform apply -auto-approve
 }
 
 function terraform_keymap_rm {

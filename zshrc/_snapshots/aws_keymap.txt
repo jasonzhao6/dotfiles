@@ -27,6 +27,8 @@ Keymap List
   $ s.s <match>* <-mismatch>* # List Britive roles & filter
   $ s <role>                  # Assume the specified role
 
+  $ s.o <id or name>          # Account ID ↔ name lookup
+
   $ s.e1                      # Use us-east-1 region
   $ s.e2                      # Use us-east-2 region
   $ s.w2                      # Use us-west-2 region
@@ -60,8 +62,6 @@ Keymap List
   $ s.pp <name>               # Code Pipeline get latest status
 
   $ s.ps <name>               # Parameter Store get latest version
-
-  $ s.o <id or name>          # Account ID ↔ name lookup
 
   $ s.h                       # (Reserved: Shell)
   $ s.u                       # (Reserved: Switch user)

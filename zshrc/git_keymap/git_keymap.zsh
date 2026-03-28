@@ -3,24 +3,25 @@ GIT_ALIAS='g'
 GIT_DOT="${GIT_ALIAS}${KEYMAP_DOT}"
 
 GIT_KEYMAP=(
-	"${GIT_ALIAS} <branch> # Checkout a local branch"
-	"${GIT_DOT}k <branch> # Checkout a remote branch"
-	"${GIT_DOT}n <branch> # Checkout a new branch"
 	"${GIT_DOT}g # Checkout the latest \`main\`"
+	"${GIT_DOT}n <branch> # Checkout a new branch"
+	"${GIT_DOT}k <branch> # Checkout a remote branch"
+	''
 	"${GIT_DOT}b # List branches"
 	"${GIT_DOT}bb # Delete merged branches"
 	"${GIT_DOT}bd <branch> # Delete the specified branch"
+	"${GIT_ALIAS} <branch> # Checkout a local branch"
 	''
 	"${GIT_DOT}d # Git diff"
 	"${GIT_DOT}t # Git status"
 	"${GIT_DOT}c # Create a new commit"
 	"${GIT_DOT}m # Amend the previous commit"
 	"${GIT_DOT}w # Reword the previous commit"
-	"${GIT_DOT}e # Create an empty commit"
 	"${GIT_DOT}i <sha>? # Fix up a commit (Default: Pasteboard)"
 	"${GIT_DOT}ii # List the last 20 commits"
+	"${GIT_DOT}e # Create an empty commit"
 	''
-	"${GIT_DOT}x <number>? # Rebase with main (or last N commits)"
+	"${GIT_DOT}x <number>? # Rebase with the latest main (or last N commits)"
 	"${GIT_DOT}xm # Rebase with the latest master"
 	"${GIT_DOT}xu # Rebase with the latest upstream"
 	"${GIT_DOT}xc # Rebase continue"
@@ -38,13 +39,13 @@ GIT_KEYMAP=(
 	"${GIT_DOT}z <number>? # Discard uncommitted changes (& last N commits)"
 	"${GIT_DOT}zz # Discard uncommitted changes & the last commit"
 	''
-	"${GIT_DOT}s <message>? # Stash (with optional message)"
+	"${GIT_DOT}s <message>? # Stash"
 	"${GIT_DOT}a <index>? # Apply a stash (Default: Latest)"
-	"${GIT_DOT}l # List the stash"
-	"${GIT_DOT}lc # Clear the stash"
+	"${GIT_DOT}l # List stashes"
+	"${GIT_DOT}lc # Clear stashes"
 	''
 	"${GIT_DOT}r <match>* # List logs & filter"
-	"${GIT_DOT}rr <match>* # List first parent logs & filter"
+	"${GIT_DOT}rr <match>* # List first-parent logs & filter"
 	''
 	"${GIT_DOT}P # Pull"
 	"${GIT_DOT}p # Push"
