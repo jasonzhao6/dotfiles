@@ -1,7 +1,7 @@
 Keymap: args_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9  <0>  [   ] 
-      '   ,   .  <p> <y>  |  <f>  g  (c) <r>  l   /   =   \ 
+      '   ,   .  <p> <y>  |  <f>  g  <c> <r>  l   /   =   \ 
      (a) <o> (e) <u> <i>  |  <d> (h) <t> <n> (s)  - 
       ;   q   j   k   x   |  <b> <m> (w) (v) <z>
 
@@ -24,13 +24,10 @@ Keymap Usage
 
 Keymap List
 
-  $ (|)? a.s                        # Save as args
   $ (|)? a.s <match>* <-mismatch>*  # Save as args & filter
-  $ (|)? a.so                       # Save as args & soft-select the 1st column
   $ (|)? a.so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter
 
-  $ a.a                             # List args
-  $ a.a <match>* <-mismatch>*       # Filter args
+  $ a.a <match>* <-mismatch>*       # List args & filter
 
   $ a.o <command>                   # Use the first arg
   $ a.e <command>                   # Use a random arg
@@ -60,7 +57,6 @@ Keymap List
   $ a.h <index>                     # Select an entry by index
   $ a.hc                            # Clear history entries
 
-  $ a.c                             # Copy args
-  $ a.c <number>                    # Copy an arg by number
+  $ a.c <index>?                    # Copy args (or a specific arg)
   $ a.y                             # Yank args
   $ a.p                             # Put args (in a different tab)

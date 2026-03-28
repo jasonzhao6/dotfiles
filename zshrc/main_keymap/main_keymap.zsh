@@ -4,8 +4,7 @@ MAIN_DOT="${MAIN_ALIAS}${KEYMAP_DOT}"
 
 MAIN_KEYMAP=(
 	"${MAIN_DOT}a # List all keymap namespaces"
-	"${MAIN_DOT}r # List all keymap entries"
-	"${MAIN_DOT}r <description> # Filter keymap entries by description"
+	"${MAIN_DOT}r <description>* # List keymap entries & filter"
 	"${MAIN_DOT}w <key> # Filter keymap entries by key"
 	"${MAIN_DOT}- # Show stats"
 	''

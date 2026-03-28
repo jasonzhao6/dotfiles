@@ -3,8 +3,7 @@ AWS_ALIAS='s'
 AWS_DOT="${AWS_ALIAS}${KEYMAP_DOT}"
 
 AWS_KEYMAP=(
-	"${AWS_DOT}s # List Britive roles"
-	"${AWS_DOT}s <match>* <-mismatch>* # Filter Britive roles"
+	"${AWS_DOT}s <match>* <-mismatch>* # List Britive roles & filter"
 	"${AWS_ALIAS} <role> # Assume the specified role"
 	''
 	"${AWS_DOT}e1 # Use us-east-1 region"

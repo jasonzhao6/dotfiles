@@ -6,10 +6,8 @@ OTHER_KEYMAP=(
 	"${OTHER_ALIAS} <url> # Open the specified url"
 	"${OTHER_ALIAS} <path> # Open the specified path in Finder"
 	"${OTHER_DOT}o # Open the current directory in Finder"
-	"${OTHER_DOT}e # Open the current directory in IntelliJ IDEA"
-	"${OTHER_DOT}e <path> # Open the specified path in IntelliJ IDEA"
-	"${OTHER_DOT}m # Open the current directory in TextMate"
-	"${OTHER_DOT}m <path> # Open the specified path in TextMate"
+	"${OTHER_DOT}e <path>? # Open in IntelliJ IDEA (Default: Current directory)"
+	"${OTHER_DOT}m <path>? # Open in TextMate (Default: Current directory)"
 	''
 	"${OTHER_DOT}s # Sleep"
 	"${OTHER_DOT}a # Stay awake"

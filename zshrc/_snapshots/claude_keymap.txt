@@ -32,7 +32,7 @@ Keymap List
   $ c.m            # Edit config folder in TextMate
   $ c.o            # Print project's local settings
   $ c.oo           # Move project's local permissions to global settings
-  $ c.u            # Push config to `scratch` repo (not `p` b/c `cp` is reserved)
+  $ c.u            # Push config to `scratch` repo (`cp` is reserved)
   $ c.U            # Pull config from `scratch` repo
 
   $ c.d            # (Reserved: Change directory)

@@ -10,10 +10,8 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}t # Test"
 	''
 	"${ZSH_DOT}z <name> # Custom \`which\` lookup"
-	"${ZSH_DOT}a # List aliases"
-	"${ZSH_DOT}a <match>* <-mismatch>* # Filter aliases"
-	"${ZSH_DOT}f # List functions"
-	"${ZSH_DOT}f <match>* <-mismatch>* # Filter functions"
+	"${ZSH_DOT}a <match>* <-mismatch>* # List aliases & filter"
+	"${ZSH_DOT}f <match>* <-mismatch>* # List functions & filter"
 	''
 	"${ZSH_DOT}h <grep>? # List history"
 	"${ZSH_DOT}hc # Clear history"

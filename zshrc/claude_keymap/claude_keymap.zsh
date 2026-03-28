@@ -11,7 +11,7 @@ CLAUDE_KEYMAP=(
 	"${CLAUDE_DOT}m # Edit config folder in TextMate"
 	"${CLAUDE_DOT}o # Print project's local settings"
 	"${CLAUDE_DOT}oo # Move project's local permissions to global settings"
-	"${CLAUDE_DOT}u # Push config to \`scratch\` repo (not \`p\` b/c \`cp\` is reserved)"
+	"${CLAUDE_DOT}u # Push config to \`scratch\` repo (\`cp\` is reserved)"
 	"${CLAUDE_DOT}U # Pull config from \`scratch\` repo"
 	''
 	"${CLAUDE_DOT}d # (Reserved: Change directory)"

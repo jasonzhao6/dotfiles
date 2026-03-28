@@ -24,8 +24,7 @@ Keymap Usage
 
 Keymap List
 
-  $ s.s                       # List Britive roles
-  $ s.s <match>* <-mismatch>* # Filter Britive roles
+  $ s.s <match>* <-mismatch>* # List Britive roles & filter
   $ s <role>                  # Assume the specified role
 
   $ s.e1                      # Use us-east-1 region

@@ -2,7 +2,7 @@ Keymap: git_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .  <p> (y)  |  (f) (g) <c> (r) (l)  /   =   \ 
-     (a) <o> <e> (u) (i)  |  <d> <h> <t> <n> (s)  - 
+     <a> <o> <e> <u> (i)  |  <d> <h> <t> <n> <s>  - 
       ;   q   j  <k> (x)  |  (b) <m> <w> (v) (z)
 
   `<>` key initials have one mapping
@@ -38,44 +38,34 @@ Keymap List
   $ g.m            # Amend the previous commit
   $ g.w            # Reword the previous commit
   $ g.e            # Create an empty commit
-  $ g.i            # Fix up the commit in pasteboard
-  $ g.i <sha>      # Fix up the specified commit
+  $ g.i <sha>?     # Fix up a commit (Default: Pasteboard)
   $ g.ii           # List the last 20 commits
 
-  $ g.x            # Rebase with the latest main
-  $ g.x <number>   # Rebase with the last N commits
+  $ g.x <number>?  # Rebase with main (or last N commits)
   $ g.xm           # Rebase with the latest master
   $ g.xu           # Rebase with the latest upstream
   $ g.xc           # Rebase continue
   $ g.xa           # Rebase abort
 
-  $ g.y            # Cherry pick the commit in pasteboard
-  $ g.y <sha>      # Cherry pick the specified commit
+  $ g.y <sha>?     # Cherry pick a commit (Default: Pasteboard)
   $ g.yc           # Cherry pick continue
   $ g.ya           # Cherry pick abort
 
-  $ g.v            # Revert the commit in pasteboard
-  $ g.v <sha>      # Revert the specified commit
+  $ g.v <sha>?     # Revert a commit (Default: Pasteboard)
   $ g.vc           # Revert continue
   $ g.va           # Revert abort
 
-  $ g.u            # Undo the last commit
-  $ g.u <number>   # Undo the last N commits
-  $ g.z            # Discard uncommitted changes
-  $ g.z <number>   # Discard uncommitted changes & the last N commits
+  $ g.u <number>?  # Undo the last N commits (Default: 1)
+  $ g.z <number>?  # Discard uncommitted changes (& last N commits)
   $ g.zz           # Discard uncommitted changes & the last commit
 
-  $ g.s            # Git stash
-  $ g.s <message>  # Git stash with message
-  $ g.a            # Apply the last stash
-  $ g.a <index>    # Apply stash by index
+  $ g.s <message>? # Stash (with optional message)
+  $ g.a <index>?   # Apply a stash (Default: Latest)
   $ g.l            # List the stash
   $ g.lc           # Clear the stash
 
-  $ g.r            # List logs
-  $ g.r <match>*   # Filter logs
-  $ g.rr           # List first parent logs
-  $ g.rr <match>*  # Filter first parent logs
+  $ g.r <match>*   # List logs & filter
+  $ g.rr <match>*  # List first parent logs & filter
 
   $ g.P            # Pull
   $ g.p            # Push

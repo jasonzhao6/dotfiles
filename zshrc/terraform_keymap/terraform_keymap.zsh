@@ -5,8 +5,7 @@ TERRAFORM_DOT="${TERRAFORM_ALIAS}${KEYMAP_DOT}"
 TERRAFORM_KEYMAP=(
 	"${TERRAFORM_ALIAS} <terraform command>"
 	''
-	"${TERRAFORM_DOT}w # List manifests"
-	"${TERRAFORM_DOT}w <match>* <-mismatch>* # Filter manifests"
+	"${TERRAFORM_DOT}w <match>* <-mismatch>* # List manifests & filter"
 	''
 	"${TERRAFORM_DOT}i # Init"
 	"${TERRAFORM_DOT}iu # Init & upgrade"

@@ -3,13 +3,10 @@ ARGS_ALIAS='a'
 ARGS_DOT="${ARGS_ALIAS}${KEYMAP_DOT}"
 
 ARGS_KEYMAP=(
-	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}s # Save as args"
 	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}s <match>* <-mismatch>* # Save as args & filter"
-	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}so # Save as args & soft-select the 1st column"
 	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
 	''
-	"${ARGS_DOT}a # List args"
-	"${ARGS_DOT}a <match>* <-mismatch>* # Filter args"
+	"${ARGS_DOT}a <match>* <-mismatch>* # List args & filter"
 	''
 	"${ARGS_DOT}o <command> # Use the first arg"
 	"${ARGS_DOT}e <command> # Use a random arg"
@@ -39,8 +36,7 @@ ARGS_KEYMAP=(
 	"${ARGS_DOT}h <index> # Select an entry by index"
 	"${ARGS_DOT}hc # Clear history entries"
 	''
-	"${ARGS_DOT}c # Copy args"
-	"${ARGS_DOT}c <number> # Copy an arg by number"
+	"${ARGS_DOT}c <index>? # Copy args (or a specific arg)"
 	"${ARGS_DOT}y # Yank args"
 	"${ARGS_DOT}p # Put args (in a different tab)"
 )
