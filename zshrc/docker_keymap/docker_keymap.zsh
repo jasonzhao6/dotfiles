@@ -6,6 +6,12 @@ DOCKER_KEYMAP=(
 	"${DOCKER_ALIAS} <docker command>"
 	''
 	"${DOCKER_DOT}s # Login with AWS credentials"
+	''
+	"${DOCKER_DOT}c # (Reserved: Desk calculator)"
+	"${DOCKER_DOT}d # (Reserved: Data duplicator)"
+	"${DOCKER_DOT}f # (Reserved: Disk free)"
+	"${DOCKER_DOT}o # (Reserved: Shell keyword)"
+	"${DOCKER_DOT}u # (Reserved: Disk usage)"
 )
 
 keymap_init $DOCKER_NAMESPACE $DOCKER_ALIAS "${DOCKER_KEYMAP[@]}"

@@ -35,6 +35,9 @@ NAV_KEYMAP=(
 	"${NAV_DOT}f # Sort files by size"
 	"${NAV_DOT}g <levels>? # Sort subfolders by size"
 	"${NAV_DOT}r # Sort files by recent"
+	''
+	"${NAV_DOT}c # (Reserved: Netcat)"
+	"${NAV_DOT}l # (Reserved: Number lines)"
 )
 
 keymap_init $NAV_NAMESPACE $NAV_ALIAS "${NAV_KEYMAP[@]}"

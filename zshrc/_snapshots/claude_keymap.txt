@@ -1,8 +1,8 @@
 Keymap: claude_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .   p   y   |   f   g  <c> <r> <l>  /   =   \ 
-      a  (o)  e  <u>  i   |   d   h   t  <n> <s>  - 
+      '   ,   .  <p>  y   |   f   g  <c> <r> <l>  /   =   \ 
+      a  (o)  e  <u>  i   |  <d>  h   t  <n> <s>  - 
       ;   q   j   k   x   |   b  <m>  w   v   z 
 
   `<>` key initials have one mapping
@@ -34,3 +34,6 @@ Keymap List
   $ c.oo           # Move project's local permissions to global settings
   $ c.u            # Push config to `scratch` repo (not `p` b/c `cp` is reserved)
   $ c.U            # Pull config from `scratch` repo
+
+  $ c.d            # (Reserved: Change directory)
+  $ c.p            # (Reserved: Copy files)

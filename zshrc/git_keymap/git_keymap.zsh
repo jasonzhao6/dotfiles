@@ -60,6 +60,9 @@ GIT_KEYMAP=(
 	"${GIT_DOT}p # Push"
 	"${GIT_DOT}f # Force push with lease"
 	"${GIT_DOT}ff # Force push"
+	''
+	"${GIT_DOT}h # (Reserved: GitHub CLI)"
+	"${GIT_DOT}o # (Reserved: Go language)"
 )
 
 keymap_init $GIT_NAMESPACE $GIT_ALIAS "${GIT_KEYMAP[@]}"

@@ -52,6 +52,7 @@ function test__main_keymap_r__when_specifying_a_description {
 	)" "$(
 		cat <<-eof
 
+			  $ g.h                       # (Reserved: GitHub CLI)
 			  $ h.h                       # Navigate to GitHub & list all repos
 			  $ h.h <match>* <-mismatch>* # Navigate to GitHub & filter all repos
 			  $ h.a                       # Open the current repo in GitHub Desktop

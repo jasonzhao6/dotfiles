@@ -181,7 +181,9 @@ function keymap_set_dot_aliases {
 		if [[ -z ${seen[$key]} ]]; then
 			seen[$key]=1
 
-			keymap_set_alias "${alias}${key}" "${namespace}_${key}"
+			if [[ $entry != *"(Reserved"* ]]; then
+				keymap_set_alias "${alias}${key}" "${namespace}_${key}"
+			fi
 		fi
 	done
 }

@@ -42,6 +42,9 @@ AWS_KEYMAP=(
 	"${AWS_DOT}ps <name> # Parameter Store get latest version"
 	''
 	"${AWS_DOT}o <id or name> # Account ID ↔ name lookup"
+	''
+	"${AWS_DOT}h # (Reserved: Shell)"
+	"${AWS_DOT}u # (Reserved: Switch user)"
 )
 
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"

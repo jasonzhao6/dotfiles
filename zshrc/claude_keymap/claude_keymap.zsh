@@ -13,6 +13,9 @@ CLAUDE_KEYMAP=(
 	"${CLAUDE_DOT}oo # Move project's local permissions to global settings"
 	"${CLAUDE_DOT}u # Push config to \`scratch\` repo (not \`p\` b/c \`cp\` is reserved)"
 	"${CLAUDE_DOT}U # Pull config from \`scratch\` repo"
+	''
+	"${CLAUDE_DOT}d # (Reserved: Change directory)"
+	"${CLAUDE_DOT}p # (Reserved: Copy files)"
 )
 
 keymap_init $CLAUDE_NAMESPACE $CLAUDE_ALIAS "${CLAUDE_KEYMAP[@]}"

@@ -21,6 +21,9 @@ MAIN_KEYMAP=(
 	"${MAIN_DOT}o <regex>? # Show macOS shortcuts"
 	"${MAIN_DOT}s <regex>? # Show Slack shortcuts"
 	"${MAIN_DOT}t <regex>? # Show Terminal shortcuts"
+	''
+	"${MAIN_DOT}q # (Reserved: Message queue)"
+	"${MAIN_DOT}v # (Reserved: Move files)"
 )
 
 # Note: Keep the following in sync with their counterparts in `MAIN_KEYMAP`

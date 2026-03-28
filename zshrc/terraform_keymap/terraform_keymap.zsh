@@ -35,6 +35,8 @@ TERRAFORM_KEYMAP=(
 	"${TERRAFORM_DOT}c # Clean"
 	"${TERRAFORM_DOT}cc # Clean & clear plugin cache"
 	"${TERRAFORM_DOT}qa # Apply & auto-approve"
+	''
+	"${TERRAFORM_DOT}r # (Reserved: Translate chars)"
 )
 
 keymap_init $TERRAFORM_NAMESPACE $TERRAFORM_ALIAS "${TERRAFORM_KEYMAP[@]}"

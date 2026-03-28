@@ -1,8 +1,8 @@
 Keymap: docker_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .   p   y   |   f   g   c   r   l   /   =   \ 
-      a   o   e   u   i   |  <d>  h   t   n  <s>  - 
+      '   ,   .   p   y   |  <f>  g  <c>  r   l   /   =   \ 
+      a  <o>  e  <u>  i   |  (d)  h   t   n  <s>  - 
       ;   q   j   k   x   |   b   m   w   v   z 
 
   `<>` key initials have one mapping
@@ -27,3 +27,9 @@ Keymap List
   $ d <docker command> 
 
   $ d.s                # Login with AWS credentials
+
+  $ d.c                # (Reserved: Desk calculator)
+  $ d.d                # (Reserved: Data duplicator)
+  $ d.f                # (Reserved: Disk free)
+  $ d.o                # (Reserved: Shell keyword)
+  $ d.u                # (Reserved: Disk usage)

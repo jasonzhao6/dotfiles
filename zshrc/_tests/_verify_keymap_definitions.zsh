@@ -21,8 +21,9 @@ function verify_keymap_definitions {
 
 	# Find all keymap keys
 	local keymap_keys; keymap_keys=$(
-		# Ignore comment lines
+		# Ignore comment lines and reserved entries
 		grep --invert-match '^#' "$keymap_file" |
+			grep --invert-match '(Reserved' |
 			# Extract keymap keys
 			pgrep --only-matching "(?<=_DOT})[^$\*]+?(?=\s)" | bw | sort --unique
 	)
