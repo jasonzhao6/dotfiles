@@ -130,8 +130,7 @@ function test__main_keymap_w__when_specifying_a_special_char {
 	)" "$(
 		cat <<-eof
 
-		  $ m.-           # Show stats
-		  $ n.- <levels>? # Sort subfolders by size
+		  $ m.- # Show stats
 
 		  ^cmd--       # Collapse all
 		  cmd--        # Decrease font size in all editors (Convention)

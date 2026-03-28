@@ -32,7 +32,9 @@ NAV_KEYMAP=(
 	"${NAV_DOT}uu # Go up two directories"
 	"${NAV_DOT}uuu # Go up three directories"
 	''
-	"${NAV_DOT}- <levels>? # Sort subfolders by size"
+	"${NAV_DOT}f # Sort files by size"
+	"${NAV_DOT}g <levels>? # Sort subfolders by size"
+	"${NAV_DOT}r # Sort files by recent"
 )
 
 keymap_init $NAV_NAMESPACE $NAV_ALIAS "${NAV_KEYMAP[@]}"
@@ -54,12 +56,6 @@ function nav_keymap {
 
 # Constants
 NAV_YANK_FILE="$ZSHRC_DATA_DIR/nav.yank.txt"
-
-function nav_keymap_- {
-	local levels="${1:-1}"
-
-	du -hd "$levels" | sort -h
-}
 
 function nav_keymap_a {
 	local filters=("$@")
@@ -89,6 +85,16 @@ function nav_keymap_ee {
 
 	# shellcheck disable=SC2010
 	ls -pd .* | grep -v '/' | args_keymap_s "${filters[@]}"
+}
+
+function nav_keymap_f {
+	ls -lhSr | tail -n +2
+}
+
+function nav_keymap_g {
+	local levels="${1:-1}"
+
+	du -hd "$levels" | sort -h
 }
 
 function nav_keymap_h {
@@ -123,6 +129,10 @@ function nav_keymap_oo {
 
 function nav_keymap_p {
 	cd "$(<"$NAV_YANK_FILE")" && nav_keymap_n || true
+}
+
+function nav_keymap_r {
+	ls -lhtr | tail -n +2
 }
 
 function nav_keymap_s {
