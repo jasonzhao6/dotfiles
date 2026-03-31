@@ -9,6 +9,7 @@ CLAUDE_KEYMAP=(
 	"${CLAUDE_DOT}r # Continue last session"
 	"${CLAUDE_DOT}l <match>? # Find a matching session"
 	"${CLAUDE_DOT}s # Start a scratch session"
+	"${CLAUDE_DOT}ss # Reset tab background color"
 	''
 	"${CLAUDE_DOT}o # Print local settings"
 	"${CLAUDE_DOT}oo # Move local settings to global"
@@ -126,14 +127,10 @@ function claude_keymap_r {
 }
 
 function claude_keymap_s {
-	# Save current background color, then tint the tab blue to signal scratch mode
-	local original_bg
-	original_bg=$(osascript -e 'tell application "Terminal" to get background color of selected tab of front window')
+	# Tint the tab blue to signal scratch mode
 	osascript -e '
 		tell application "Terminal"
-			set bg to background color of selected tab of front window
-			set item 3 of bg to (item 3 of bg) + 5000
-			set background color of selected tab of front window to bg
+			set background color of selected tab of front window to {6224, 6224, 11224}
 		end tell'
 
 	cd "$HOME/GitHub/jasonzhao6/scratch"
@@ -142,7 +139,14 @@ function claude_keymap_s {
 	claude_keymap_c
 
 	# Restore original background color
-	osascript -e "tell application \"Terminal\" to set background color of selected tab of front window to {$original_bg}"
+	claude_keymap_ss
+}
+
+function claude_keymap_ss {
+	osascript -e '
+		tell application "Terminal"
+			set background color of selected tab of front window to {6224, 6224, 6224}
+		end tell'
 }
 
 function claude_keymap_u {
