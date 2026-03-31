@@ -197,7 +197,7 @@ AWS_BRITIVE=(
 	'role_name_2 request_page_url_2'
 )
 
-AWS_ACCOUNTS_TSV="$HOME/GitHub/jasonzhao6/scratch/claude/skills/aws-accounts/accounts.tsv"
+AWS_ACCOUNTS_TSV="$HOME/GitHub/jasonzhao6/scratch/claude-config/skills/aws-accounts/accounts.tsv"
 
 function aws_keymap_o {
 	local input=$1
