@@ -66,7 +66,7 @@ function claude_keymap_n {
 
 		# Background output lands mid-prompt; redraw so the user gets a clean `$ ` line.
 		print -Pn "${PROMPT}"
-	} &! # &!: Background and disown so zsh forgets about this job entirely (no done message).
+	} & disown # Background and disown so zsh forgets about this job entirely (no done message).
 }
 
 function claude_keymap_o {
