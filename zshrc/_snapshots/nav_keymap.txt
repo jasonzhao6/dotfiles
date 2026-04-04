@@ -33,7 +33,7 @@ Keymap List
 
   $ n <directory>              # Go to directory
   $ n.t                        # Go to directory in pasteboard
-  $ n.tt                       # Copy current path to pasteboard
+  $ n.tt <file>?               # Copy current path to pasteboard
   $ n.y                        # Yank the current path
   $ n.p                        # Put the yanked path
 

@@ -12,7 +12,7 @@ NAV_KEYMAP=(
 	''
 	"${NAV_ALIAS} <directory> # Go to directory"
 	"${NAV_DOT}t # Go to directory in pasteboard"
-	"${NAV_DOT}tt # Copy current path to pasteboard"
+	"${NAV_DOT}tt <file>? # Copy current path to pasteboard"
 	"${NAV_DOT}y # Yank the current path"
 	"${NAV_DOT}p # Put the yanked path"
 	''
@@ -166,7 +166,13 @@ function nav_keymap_t {
 }
 
 function nav_keymap_tt {
-	pwd | tr -d '\n' | pbcopy
+	local file="$1"
+
+	if [[ -n $file ]]; then
+		echo -n "$(pwd)/$file" | pbcopy
+	else
+		pwd | tr -d '\n' | pbcopy
+	fi
 }
 
 function nav_keymap_u {

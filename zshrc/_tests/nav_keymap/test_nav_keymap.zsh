@@ -325,6 +325,22 @@ function test__nav_keymap_t__with_invalid_path {
 	)" "$(red_bar 'Invalid path in pasteboard')"
 }; run_with_filter test__nav_keymap_t__with_invalid_path
 
+function test__nav_keymap_tt {
+	assert "$(
+		cd /tmp || return
+		nav_keymap_tt
+		pbpaste
+	)" '/tmp'
+}; run_with_filter test__nav_keymap_tt
+
+function test__nav_keymap_tt__with_file {
+	assert "$(
+		cd /tmp || return
+		nav_keymap_tt 'foo.txt'
+		pbpaste
+	)" '/tmp/foo.txt'
+}; run_with_filter test__nav_keymap_tt__with_file
+
 function test__nav_keymap_u {
 	assert "$(
 		rm -rf /tmp/_nav_keymap_u
