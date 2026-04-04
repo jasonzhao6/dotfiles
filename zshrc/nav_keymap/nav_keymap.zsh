@@ -217,6 +217,9 @@ function nav_keymap_zz {
 	latest=$(ls -t "$NAV_CLAUDE_PLANS_DIR"/*.md 2>/dev/null | head -1)
 
 	if [ -n "$latest" ]; then
+		echo
+		echo -n 'Plan: '
+		cyan_fg "${latest##*/}"
 		cd "$NAV_CLAUDE_PLANS_DIR" && glow "$latest"
 	else
 		red_bar "No plans found"
