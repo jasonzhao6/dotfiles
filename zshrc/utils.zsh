@@ -11,6 +11,10 @@ function callee {
 	echo "${funcstack[2]}"
 }
 
+function comma_num {
+	printf "%'d" "$1" 2>/dev/null || echo "$1"
+}
+
 function echo_eval {
 	local command=$*
 

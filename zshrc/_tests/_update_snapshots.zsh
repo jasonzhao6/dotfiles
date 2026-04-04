@@ -1,8 +1,9 @@
+#
+# Pre-tests
+#
+
 # Snapshot code stats
 main_keymap_- | ruby_strip > "$ZSHRC_SRC_DIR"/_snapshots/_code_stats.txt
-
-# Snapshot test stats
-echo 'Test stats:' > "$ZSHRC_SRC_DIR"/_snapshots/_test_stats.txt
 
 # Snapshot keymaps
 main_keymap_a | grep '\$' | bw | while read -r line; do
@@ -15,3 +16,9 @@ main_keymap_a | grep '\$' | bw | while read -r line; do
     eval "$command" | ruby_strip | bw > "$ZSHRC_SRC_DIR/_snapshots/$file"
   fi
 done & # Run in the background so that testing can start right away
+
+#
+# Post-tests
+#
+
+# Expect _tests.zsh to snapshot test stats

@@ -30,6 +30,8 @@ ZSHRC_TESTS_UNDER_PROFILING=1 zt
 
 The test entry point is `zshrc/_tests.zsh`. Tests run with `ZSHRC_UNDER_TESTING=1` set, which suppresses load-time output and secrets sourcing.
 
+When running tests after modifying a specific keymap, filter by passing a name to `zt`. For example, after changing `usage_keymap.zsh`, run: `zt usage_keymap`
+
 ## Architecture
 
 ### Entry Points

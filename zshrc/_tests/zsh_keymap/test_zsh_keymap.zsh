@@ -146,7 +146,7 @@ function test__zsh_keymap_s__when_args_history_is_already_initialized {
 function test__zsh_keymap_z {
 	assert "$(zsh_keymap_z)" "$(
 		cat <<-eof
-			$(red_bar 'name required')
+			$(red_bar 'Required: <name>')
 		eof
 	)"
 }; run_with_filter test__zsh_keymap_z

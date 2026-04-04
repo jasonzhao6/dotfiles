@@ -7,7 +7,7 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}m # Edit in TextMate"
 	"${ZSH_DOT}mm # Edit secrets in TextMate"
 	"${ZSH_DOT}s # Source"
-	"${ZSH_DOT}t # Test"
+	"${ZSH_DOT}t <match OR section>? # Test"
 	''
 	"${ZSH_DOT}z <name> # Custom \`which\` lookup"
 	"${ZSH_DOT}a <match>* <-mismatch>* # List aliases & filter"
@@ -137,7 +137,7 @@ function zsh_keymap_t {
 
 function zsh_keymap_z {
 	local name=$1
-	[[ -z $name ]] && red_bar 'name required' && return
+	[[ -z $name ]] && red_bar 'Required: <name>' && return
 
 	# Verify that name exists
 	local definition; definition=$(which "$name")

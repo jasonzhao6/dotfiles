@@ -27,7 +27,7 @@ Keymap List
   $ s.s <match>* <-mismatch>* # List Britive roles & filter
   $ s <role>                  # Assume the specified role
 
-  $ s.o <id or name>          # Account ID ↔ name lookup
+  $ s.o <id OR name>          # Account ID ↔ name lookup
 
   $ s.e1                      # Use us-east-1 region
   $ s.e2                      # Use us-east-2 region

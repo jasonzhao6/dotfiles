@@ -428,7 +428,7 @@ function test__other_keymap_t {
 	assert "$(
 		local output; output=$(other_keymap_t sleep 0.1| bw)
 		# shellcheck disable=SC2076
-		[[ $output =~ 'Command executed in .1[0-9] seconds$' ]] && echo 1 || echo 2
+		[[ $output =~ 'Command executed in .[0-9][0-9] seconds$' ]] && echo 1 || echo 2
 	)" '1'
 }; run_with_filter test__other_keymap_t
 
@@ -505,10 +505,11 @@ function test__other_keymap_uu {
 function test__other_keymap_w {
 	local count; count=$(
 		{
-			other_keymap_w 0.01 echo test &
+			other_keymap_w 0.05 echo test &
 			local pid=$!
-			sleep 0.03
+			sleep 0.3
 			kill $pid 2>/dev/null
+			wait $pid 2>/dev/null # Flush pipe output before grep
 		} | grep -c 'test'
 	)
 

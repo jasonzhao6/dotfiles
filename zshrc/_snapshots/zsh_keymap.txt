@@ -28,7 +28,7 @@ Keymap List
   $ z.m                       # Edit in TextMate
   $ z.mm                      # Edit secrets in TextMate
   $ z.s                       # Source
-  $ z.t                       # Test
+  $ z.t <match OR section>?   # Test
 
   $ z.z <name>                # Custom `which` lookup
   $ z.a <match>* <-mismatch>* # List aliases & filter

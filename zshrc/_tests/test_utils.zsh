@@ -20,6 +20,22 @@ function test__callee {
 	assert "$(callee)" 'test__callee'
 }; run_with_filter test__callee
 
+function test__comma_num {
+	assert "$(comma_num 1234567)" '1,234,567'
+}; run_with_filter test__comma_num
+
+function test__comma_num__small {
+	assert "$(comma_num 42)" '42'
+}; run_with_filter test__comma_num__small
+
+function test__comma_num__negative {
+	assert "$(comma_num -1234)" '-1,234'
+}; run_with_filter test__comma_num__negative
+
+function test__comma_num__zero {
+	assert "$(comma_num 0)" '0'
+}; run_with_filter test__comma_num__zero
+
 function test__echo_eval {
 	assert "$(
 		echo_eval echo 123 2>&1

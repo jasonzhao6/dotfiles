@@ -82,5 +82,10 @@ else
 	red_bar 'Some tests failed'
 fi
 
+# Write test stats file
+if [[ -n $ZSHRC_TESTS_STATS_BUFFER ]]; then
+	printf "Test stats:\n%b" "$ZSHRC_TESTS_STATS_BUFFER" > "$ZSHRC_SRC_DIR"/_snapshots/_test_stats.txt
+fi
+
 # Profile `.zshrc` test time: Finish
 [[ -n $ZSHRC_TESTS_UNDER_PROFILING ]] && echo && zprof || true

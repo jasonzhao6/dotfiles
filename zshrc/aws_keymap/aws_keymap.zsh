@@ -6,7 +6,7 @@ AWS_KEYMAP=(
 	"${AWS_DOT}s <match>* <-mismatch>* # List Britive roles & filter"
 	"${AWS_ALIAS} <role> # Assume the specified role"
 	''
-	"${AWS_DOT}o <id or name> # Account ID ↔ name lookup"
+	"${AWS_DOT}o <id OR name> # Account ID ↔ name lookup"
 	''
 	"${AWS_DOT}e1 # Use us-east-1 region"
 	"${AWS_DOT}e2 # Use us-east-2 region"

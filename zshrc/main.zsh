@@ -38,6 +38,7 @@ source "$ZSHRC_SRC_DIR/nav_keymap/nav_keymap.zsh"
 source "$ZSHRC_SRC_DIR/other_keymap/other_keymap.zsh"
 source "$ZSHRC_SRC_DIR/q_keymap/q_keymap.zsh"
 source "$ZSHRC_SRC_DIR/terraform_keymap/terraform_keymap.zsh"
+source "$ZSHRC_SRC_DIR/usage_keymap/usage_keymap.zsh"
 source "$ZSHRC_SRC_DIR/zsh_keymap/zsh_keymap.zsh"
 
 # Load non-zsh keymaps (These mappings are used outside of zsh)

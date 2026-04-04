@@ -103,7 +103,7 @@ function test__main_keymap_r__when_specifying_a_non_zsh_only_description {
 function test__main_keymap_w {
 	assert "$(main_keymap_w)" "$(
 		cat <<-eof
-			$(red_bar 'key required')
+			$(red_bar 'Required: <key>')
 		eof
 	)"
 }; run_with_filter test__main_keymap_w

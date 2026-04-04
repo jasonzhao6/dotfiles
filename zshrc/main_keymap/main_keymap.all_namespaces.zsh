@@ -12,6 +12,7 @@ ALL_KEYMAP=(
 	'o # Shell shortcuts: other_keymap.zsh'
 	'q # Shell shortcuts: q_keymap.zsh'
 	't # Shell shortcuts: terraform_keymap.zsh'
+	'u # Shell shortcuts: usage_keymap.zsh'
 	'z # Shell shortcuts: zsh_keymap.zsh'
 	''
 	'i # App shortcuts: intellij_all.zsh'

@@ -173,7 +173,7 @@ function main_keymap_t {
 # Includes non-zsh keymaps following a `KEYMAP_DASH`, e.g `alt-x`
 function main_keymap_w {
 	local key=$1
-	[[ -z $key ]] && red_bar 'key required' && return
+	[[ -z $key ]] && red_bar 'Required: <key>' && return
 
 	# Find zsh entries with matching `key`
 	local keymap_entries=()
