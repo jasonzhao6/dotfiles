@@ -4,4 +4,5 @@ function claude_keymap_check_docker {
 		grep 'Server Version' > /dev/null &&
 		green_bar 'Docker is running' ||
 		red_bar 'Docker is NOT running'
+		echo
 }
