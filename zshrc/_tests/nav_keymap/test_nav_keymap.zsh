@@ -448,5 +448,19 @@ function test__nav_keymap_y {
 }; run_with_filter test__nav_keymap_y
 
 function test__nav_keymap_z {
-	assert "$(nav_keymap_z > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/scratch/claude-plans"
+	assert "$(nav_keymap_z > /dev/null; pwd)" "$NAV_CLAUDE_PLANS_DIR"
 }; run_with_filter test__nav_keymap_z
+
+function test__nav_keymap_zz__with_no_plans {
+	assert "$(
+		local tmp_dir; tmp_dir=$(mktemp -d)
+		local orig=$NAV_CLAUDE_PLANS_DIR
+		NAV_CLAUDE_PLANS_DIR=$tmp_dir
+
+		# Empty dir should show error
+		nav_keymap_zz 2>/dev/null
+
+		rm -rf "$tmp_dir"
+		NAV_CLAUDE_PLANS_DIR=$orig
+	)" "$(red_bar 'No plans found')"
+}; run_with_filter test__nav_keymap_zz__with_no_plans

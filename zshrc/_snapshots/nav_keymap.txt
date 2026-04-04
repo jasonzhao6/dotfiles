@@ -3,7 +3,7 @@ Keymap: nav_keymap.zsh
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .  <p> <y>  |  <f> <g> <c> <r> <l>  /   =   \ 
      <a> (o) (e) (u)  i   |  (d) <h> (t) (n) (s)  - 
-      ;   q   j   k  <x>  |   b  <m> <w> <v> <z>
+      ;   q   j   k  <x>  |   b  <m> <w> <v> (z)
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
@@ -51,6 +51,7 @@ Keymap List
   $ n.s                        # Go to scratch
   $ n.ss                       # Go to scratch, open GitHub Desktop
   $ n.z                        # Go to scratch/claude-plans
+  $ n.zz                       # Print the latest claude plan with glow
   $ n.x                        # Go to excalidraw
 
   $ n.f                        # Sort files by size

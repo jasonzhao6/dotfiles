@@ -30,6 +30,7 @@ NAV_KEYMAP=(
 	"${NAV_DOT}s # Go to scratch"
 	"${NAV_DOT}ss # Go to scratch, open GitHub Desktop"
 	"${NAV_DOT}z # Go to scratch/claude-plans"
+	"${NAV_DOT}zz # Print the latest claude plan with glow"
 	"${NAV_DOT}x # Go to excalidraw"
 	''
 	"${NAV_DOT}f # Sort files by size"
@@ -58,6 +59,7 @@ function nav_keymap {
 #
 
 # Constants
+NAV_CLAUDE_PLANS_DIR="$HOME/GitHub/jasonzhao6/scratch/claude-plans"
 NAV_YANK_FILE="$ZSHRC_DATA_DIR/nav.yank.txt"
 
 function nav_keymap_a {
@@ -207,5 +209,16 @@ function nav_keymap_y {
 }
 
 function nav_keymap_z {
-	cd ~/GitHub/jasonzhao6/scratch/claude-plans && nav_keymap_n || true
+	cd "$NAV_CLAUDE_PLANS_DIR" && nav_keymap_n || true
+}
+
+function nav_keymap_zz {
+	local latest
+	latest=$(ls -t "$NAV_CLAUDE_PLANS_DIR"/*.md 2>/dev/null | head -1)
+
+	if [ -n "$latest" ]; then
+		cd "$NAV_CLAUDE_PLANS_DIR" && glow "$latest"
+	else
+		red_bar "No plans found"
+	fi
 }
