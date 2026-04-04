@@ -7,6 +7,59 @@ function test__terraform_keymap {
 	)" '1'
 }; run_with_filter test__terraform_keymap
 
+function test__terraform_keymap_c {
+	assert "$(
+		local home=$HOME
+		HOME="/tmp/test__terraform_keymap_c"
+		mkdir -p $HOME/.terraform.d
+		mkdir -p $HOME/project/.terraform
+		touch $HOME/project/tfplan
+
+		cd $HOME/project || return
+		terraform_keymap_c
+		[[ -e tfplan ]] && echo tfplan_present || echo tfplan_absent
+		[[ -e .terraform ]] && echo terraform_present || echo terraform_absent
+		[[ -e $HOME/.terraform.d ]] && echo d_present || echo d_absent
+
+		rm -rf $HOME
+		HOME=$home
+	)" "$(
+		cat <<-eof
+			tfplan_absent
+			terraform_absent
+			d_absent
+		eof
+	)"
+}; run_with_filter test__terraform_keymap_c
+
+function test__terraform_keymap_cc {
+	assert "$(
+		local home=$HOME
+		HOME="/tmp/test__terraform_keymap_cc"
+		mkdir -p $HOME/.terraform.d
+		mkdir -p $HOME/.terraform.cache
+		mkdir -p $HOME/project/.terraform
+		touch $HOME/project/tfplan
+
+		cd $HOME/project || return
+		terraform_keymap_cc
+		[[ -e tfplan ]] && echo tfplan_present || echo tfplan_absent
+		[[ -e .terraform ]] && echo terraform_present || echo terraform_absent
+		[[ -e $HOME/.terraform.d ]] && echo d_present || echo d_absent
+		[[ -e $HOME/.terraform.cache ]] && echo cache_present || echo cache_absent
+
+		rm -rf $HOME
+		HOME=$home
+	)" "$(
+		cat <<-eof
+			tfplan_absent
+			terraform_absent
+			d_absent
+			cache_absent
+		eof
+	)"
+}; run_with_filter test__terraform_keymap_cc
+
 function test__terraform_keymap_w {
 	assert "$(
 		local home=$HOME

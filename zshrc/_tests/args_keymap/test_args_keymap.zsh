@@ -128,6 +128,19 @@ function test__args_keymap_a__with_two_args_including_negation {
 	)"
 }; run_with_filter test__args_keymap_a__with_two_args_including_negation
 
+function test__args_keymap_b {
+	assert "$(
+		echo "$test__input" | args_keymap_s > /dev/null
+		args_keymap_b 1 2 echo ~~ > /dev/null 2>&1
+		sort "$ARGS_BACKGROUND_OUTPUTS_FILE"
+	)" "$(
+		cat <<-eof
+			terraform-application-region-shared-1
+			terraform-application-region-shared-2
+		eof
+	)"
+}; run_with_filter test__args_keymap_b
+
 function test__args_keymap_c {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null
@@ -331,6 +344,14 @@ function test__args_keymap_h__when_selecting_tail_index {
 		eof
 	)"
 }; run_with_filter test__args_keymap_h__when_selecting_tail_index
+
+function test__args_keymap_hc {
+	assert "$(
+		echo "$test__input" | args_keymap_s > /dev/null
+		args_keymap_hc
+		echo "$ARGS_HISTORY_INDEX/$ARGS_HISTORY_HEAD/$ARGS_HISTORY_TAIL"
+	)" '100/100/-1'
+}; run_with_filter test__args_keymap_hc
 
 function test__args_keymap_i {
 	assert "$(

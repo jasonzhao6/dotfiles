@@ -166,6 +166,39 @@ function test__nav_keymap_ee__with_filters {
 	)"
 }; run_with_filter test__nav_keymap_ee__with_filters
 
+function test__nav_keymap_f {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_f
+		mkdir /tmp/test__nav_keymap_f
+		cd /tmp/test__nav_keymap_f || return
+		dd if=/dev/zero of=small.txt bs=1 count=100 2>/dev/null
+		dd if=/dev/zero of=big.txt bs=1 count=200 2>/dev/null
+		local output; output=$(nav_keymap_f)
+		echo "$output" | head -1 | awk '{print $NF}'
+		echo "$output" | tail -1 | awk '{print $NF}'
+		rm -rf /tmp/test__nav_keymap_f
+	)" "$(
+		cat <<-eof
+			small.txt
+			big.txt
+		eof
+	)"
+}; run_with_filter test__nav_keymap_f
+
+function test__nav_keymap_g {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_g
+		mkdir -p /tmp/test__nav_keymap_g/sub1
+		mkdir -p /tmp/test__nav_keymap_g/sub2
+		cd /tmp/test__nav_keymap_g || return
+		dd if=/dev/zero of=sub1/f.txt bs=1024 count=1 2>/dev/null
+		local output; output=$(nav_keymap_g)
+		# du -hd1 returns: sub1, sub2, and . (3 lines total)
+		echo "$output" | wc -l | tr -d ' '
+		rm -rf /tmp/test__nav_keymap_g
+	)" '3'
+}; run_with_filter test__nav_keymap_g
+
 function test__nav_keymap_h {
 	assert "$(nav_keymap_h > /dev/null; pwd)" "$HOME/GitHub"
 }; run_with_filter test__nav_keymap_h
@@ -296,6 +329,25 @@ function test__nav_keymap_p {
 	)" "$HOME/Documents"
 }; run_with_filter test__nav_keymap_p
 
+function test__nav_keymap_r {
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_r
+		mkdir /tmp/test__nav_keymap_r
+		cd /tmp/test__nav_keymap_r || return
+		touch -t 202301010000 old.txt
+		touch -t 202401010000 new.txt
+		local output; output=$(nav_keymap_r)
+		echo "$output" | head -1 | awk '{print $NF}'
+		echo "$output" | tail -1 | awk '{print $NF}'
+		rm -rf /tmp/test__nav_keymap_r
+	)" "$(
+		cat <<-eof
+			old.txt
+			new.txt
+		eof
+	)"
+}; run_with_filter test__nav_keymap_r
+
 function test__nav_keymap_s {
 	assert "$(nav_keymap_s > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/scratch"
 }; run_with_filter test__nav_keymap_s
@@ -382,6 +434,10 @@ function test__nav_keymap_w {
 	assert "$(nav_keymap_w > /dev/null; pwd)" "$HOME/Downloads"
 }; run_with_filter test__nav_keymap_w
 
+function test__nav_keymap_x {
+	assert "$(nav_keymap_x > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/excalidraw"
+}; run_with_filter test__nav_keymap_x
+
 function test__nav_keymap_y {
 	assert "$(
 		cd "$HOME/Documents" || return
@@ -390,3 +446,7 @@ function test__nav_keymap_y {
 		cat "$NAV_YANK_FILE"
 	)" "$HOME/Documents"
 }; run_with_filter test__nav_keymap_y
+
+function test__nav_keymap_z {
+	assert "$(nav_keymap_z > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/scratch/claude-plans"
+}; run_with_filter test__nav_keymap_z

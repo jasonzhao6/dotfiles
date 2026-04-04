@@ -7,6 +7,7 @@ function test__main_keymap {
 	)" '1'
 }; run_with_filter test__main_keymap
 
+# Use Gmail to test printing shortcuts on behalf of all other default keyboard shortcuts
 function test__main_keymap_g {
 	assert "$(mg | bw)" "$(
 		cat <<-eof

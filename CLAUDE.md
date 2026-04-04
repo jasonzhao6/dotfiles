@@ -106,6 +106,9 @@ Non-zsh shortcut reference files for external apps (e.g. Gmail, Terminal, Claude
 2. Create `zshrc/_tests/<new>_keymap/test_<new>_keymap.zsh`
 3. Add `source "$ZSHRC_SRC_DIR/<new>_keymap/<new>_keymap.zsh"` in `zshrc/main.zsh`
 
+### Workflow
+- For each code change, evaluate whether existing tests need to be updated or new tests need to be added.
+
 ### Style Conventions
 - For success/error messages, use `green_bar`/`red_bar` (which include left and right padding), not `green_bg`/`red_bg`.
 

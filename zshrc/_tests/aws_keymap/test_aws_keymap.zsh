@@ -19,6 +19,32 @@ function test__aws_keymap_c {	assert "$(
 	)"
 }; run_with_filter test__aws_keymap_c
 
+function test__aws_keymap_o__with_numeric_input {
+	assert "$(
+		local orig=$AWS_ACCOUNTS_TSV
+		AWS_ACCOUNTS_TSV=/tmp/test__aws_keymap_o.tsv
+		printf 'acme-prod\t111111111111\nacme-staging\t222222222222\n' > "$AWS_ACCOUNTS_TSV"
+
+		aws_keymap_o 111111111111
+
+		rm -f "$AWS_ACCOUNTS_TSV"
+		AWS_ACCOUNTS_TSV=$orig
+	)" "$(printf '111111111111\tacme-prod')"
+}; run_with_filter test__aws_keymap_o__with_numeric_input
+
+function test__aws_keymap_o__with_text_input {
+	assert "$(
+		local orig=$AWS_ACCOUNTS_TSV
+		AWS_ACCOUNTS_TSV=/tmp/test__aws_keymap_o.tsv
+		printf 'acme-prod\t111111111111\nacme-staging\t222222222222\n' > "$AWS_ACCOUNTS_TSV"
+
+		aws_keymap_o staging
+
+		rm -f "$AWS_ACCOUNTS_TSV"
+		AWS_ACCOUNTS_TSV=$orig
+	)" "$(printf '222222222222\tacme-staging')"
+}; run_with_filter test__aws_keymap_o__with_text_input
+
 function test__aws_keymap_s {
 	assert "$(
 		aws_keymap_s

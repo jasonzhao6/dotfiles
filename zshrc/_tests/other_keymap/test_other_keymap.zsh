@@ -7,6 +7,29 @@ function test__other_keymap {
 	)" '1'
 }; run_with_filter test__other_keymap
 
+function test__other_keymap_0 {
+	assert "$(
+		echo 'content1' > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
+		echo 'content2' > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
+		other_keymap_0
+		local size1; size1=$(wc -c < "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1" | tr -d ' ')
+		local size2; size2=$(wc -c < "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2" | tr -d ' ')
+		echo "$size1/$size2"
+	)" '0/0'
+}; run_with_filter test__other_keymap_0
+
+function test__other_keymap_b {
+	assert "$(
+		other_keymap_b 3 4 echo ~~ > /dev/null 2>&1
+		sort "$OTHER_BACKGROUND_OUTPUTS_FILE"
+	)" "$(
+		cat <<-eof
+			3
+			4
+		eof
+	)"
+}; run_with_filter test__other_keymap_b
+
 function test__other_keymap_d {	assert "$(
 		ZSHRC_UNDER_TESTING=1 other_keymap_d www.google.com
 	)" "$(
@@ -484,7 +507,7 @@ function test__other_keymap_w {
 		{
 			other_keymap_w 0.01 echo test &
 			local pid=$!
-			sleep 0.02
+			sleep 0.03
 			kill $pid 2>/dev/null
 		} | grep -c 'test'
 	)
