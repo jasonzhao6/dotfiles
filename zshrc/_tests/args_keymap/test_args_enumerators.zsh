@@ -19,15 +19,16 @@ test__input_with_comments=$(
 function test__all {
 	function test__all__sleep_and_echo { sleep "$@"; echo "$@"; }
 
+	# Note: Needed to widen gaps in order to parallelize test executions
 	assert "$(
-		printf '0.01\n0.03\n0.05' | args_keymap_s > /dev/null
+		printf '0.01\n0.10\n0.20' | args_keymap_s > /dev/null
 		all test__all__sleep_and_echo 2> /dev/null
 	)" "$(
 		cat <<-eof
 
 			0.01
-			0.03
-			0.05
+			0.10
+			0.20
 		eof
 	)"
 }; run_with_filter test__all
