@@ -7,7 +7,7 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}m # Edit in TextMate"
 	"${ZSH_DOT}mm # Edit secrets in TextMate"
 	"${ZSH_DOT}s # Source"
-	"${ZSH_DOT}t <match OR section>? # Test"
+	"${ZSH_DOT}t <match OR 1-5>? # Test matching test cases or a specified section"
 	''
 	"${ZSH_DOT}z <name> # Custom \`which\` lookup"
 	"${ZSH_DOT}a <match>* <-mismatch>* # List aliases & filter"

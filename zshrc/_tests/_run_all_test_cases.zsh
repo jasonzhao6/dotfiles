@@ -2,7 +2,7 @@ function run_all_test_cases_section {
 	local section_number=$1
 
 	if [[ -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-		printf "\n%s: Run all test cases in parallel\n" "$section_number"
+		printf "\n%s: Run all test files in parallel\n" "$section_number"
 	else
 		printf "\n%s: Run test cases matching \`*%s*\`\n" "$section_number" "$ZSHRC_TESTS_NAME_FILTER"
 	fi

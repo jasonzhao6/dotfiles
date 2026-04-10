@@ -428,7 +428,7 @@ function test__other_keymap_t {
 	assert "$(
 		local output; output=$(other_keymap_t sleep 0.1| bw)
 		# shellcheck disable=SC2076
-		[[ $output =~ 'Command executed in .[0-9][0-9] seconds$' ]] && echo 1 || echo 2
+		[[ $output =~ 'Command executed in .[1-2][0-9] seconds$' ]] && echo 1 || echo 2
 	)" '1'
 }; run_with_filter test__other_keymap_t
 

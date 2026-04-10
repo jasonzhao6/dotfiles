@@ -3,7 +3,7 @@ function verify_test_ordering_section {
 
 	echo
 	echo
-	echo "$section_number: Verify subjects and tests are defined in the same order"
+	echo "$section_number: Verify all implementations and tests are defined in same order"
 
 	init
 
@@ -13,7 +13,7 @@ function verify_test_ordering_section {
 		verify_test_ordering "$subject_file" "$test_file"
 	done
 
-	print_summary 'subjects and tests are defined in the same order'
+	print_summary 'implementations and tests in same order'
 }
 
 function verify_test_ordering {

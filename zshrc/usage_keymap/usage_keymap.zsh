@@ -19,8 +19,6 @@ USAGE_KEYMAP=(
 
 keymap_init $USAGE_NAMESPACE $USAGE_ALIAS "${USAGE_KEYMAP[@]}"
 
-source "$ZSHRC_SRC_DIR/$USAGE_NAMESPACE/usage_zsh_hook.zsh"
-
 function usage_keymap {
 	keymap_show $USAGE_NAMESPACE $USAGE_ALIAS ${#USAGE_KEYMAP} "${USAGE_KEYMAP[@]}" "$@"
 }
@@ -29,9 +27,10 @@ function usage_keymap {
 # Key mappings (Alphabetized)
 #
 
-USAGE_KEYMAP_A_MAX_ROWS=15
-
 source "$ZSHRC_SRC_DIR/$USAGE_NAMESPACE/usage_helpers.zsh"
+source "$ZSHRC_SRC_DIR/$USAGE_NAMESPACE/usage_zsh_hook.zsh"
+
+USAGE_KEYMAP_A_MAX_ROWS=15
 
 function usage_keymap_a {
 	# If numeric, treat as days; if string, treat as match
@@ -47,7 +46,7 @@ function usage_keymap_a {
 	# Filter data
 	local filtered; filtered=$(usage_helpers_filter_by_calendar_days "$([[ $num_days -gt 0 ]] && echo "$num_days")")
 
-	# First pass: collect counts and label widths
+	# First pass: Collect counts and label widths
 	local awk_counts
 	awk_counts=$(echo "$filtered" | gawk -F'\t' \
 		'{total[$2]++} END {for (a in total) printf "%s\t%d\n", a, total[a]}' \
@@ -101,7 +100,7 @@ function usage_keymap_a {
 
 	[[ ${#rows} -eq 0 ]] && { red_bar "No alias matching \`$match\`"; return; }
 
-	# Compute sparkline width and generate sparklines
+	# Second pass: Compute sparkline width and generate sparklines
 	local label_width=$(( 2 + max_alias_len + 2 + max_desc_len + 2 + max_count_len + 2 ))
 	local sparkline_width=$(( COLUMNS - label_width - 1 ))
 	[[ $sparkline_width -lt 1 ]] && sparkline_width=1
@@ -134,9 +133,7 @@ function usage_keymap_a {
 
 		# Print label above first row if rows exceed screen height
 		if [[ $is_first -eq 1 ]]; then
-			local lines=${LINES:-24}
-			[[ $lines -lt 1 ]] && lines=24
-			if [[ ${#rows} -ge $lines ]]; then
+			if [[ ${#rows} -ge $LINES ]]; then
 				printf "  %-*s  %-*s  %*s  %s\n" \
 					"$max_alias_len" "" "$max_desc_len" "" "$max_count_len" "" "$label_line"
 			fi
@@ -234,7 +231,7 @@ function usage_keymap_n {
 	# Filter data
 	local filtered; filtered=$(usage_helpers_filter_by_calendar_days "$([[ $num_days -gt 0 ]] && echo "$num_days")")
 
-	# First pass: collect counts and label widths
+	# First pass: Collect counts and label widths
 	local awk_counts
 	awk_counts=$(echo "$filtered" | gawk -F'\t' \
 		'{total[substr($2,1,1)]++} END {for (a in total) printf "%s\t%d\n", a, total[a]}' \
@@ -263,7 +260,7 @@ function usage_keymap_n {
 
 	[[ ${#rows} -eq 0 ]] && { red_bar "No namespace matching \`$match\`"; return; }
 
-	# Compute sparkline width and generate sparklines
+	# Second pass: Compute sparkline width and generate sparklines
 	local label_width=$(( 2 + max_name_len + 2 + max_count_len + 2 ))
 	local sparkline_width=$(( COLUMNS - label_width - 1 ))
 	[[ $sparkline_width -lt 1 ]] && sparkline_width=1
@@ -294,9 +291,7 @@ function usage_keymap_n {
 
 		# Print label above first row if rows exceed screen height
 		if [[ $is_first -eq 1 ]]; then
-			local lines=${LINES:-24}
-			[[ $lines -lt 1 ]] && lines=24
-			if [[ ${#rows} -ge $lines ]]; then
+			if [[ ${#rows} -ge $LINES ]]; then
 				printf "  %-*s  %*s  %s\n" "$max_name_len" "" "$max_count_len" "" "$label_line"
 			fi
 			is_first=0

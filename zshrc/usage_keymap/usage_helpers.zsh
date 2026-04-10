@@ -11,7 +11,7 @@ function usage_helpers_horizontal_bars {
 	local max_label_len=0
 	local max_count_len=0
 
-	# First pass: Collect data and track max widths for alignment
+	# First pass: Collect data and track max widths for propertions
 	local count_len
 	while IFS=':' read -r label count; do
 		count="${count# }" # Strip space after ':'
@@ -23,7 +23,7 @@ function usage_helpers_horizontal_bars {
 		[[ $count_len -gt $max_count_len ]] && max_count_len=$count_len
 	done
 
-	# Second pass: Render each row with proportional bar
+	# Second pass: Render each row with a proportional horizontal bar
 	local label count bar_len bar
 	for (( idx = 1; idx <= ${#labels}; idx++ )); do
 		label="${labels[$idx]}"
@@ -44,7 +44,7 @@ function usage_helpers_sparklines {
 	# Stdin: raw usage data lines (timestamp\talias), pre-filtered by calendar_days
 	# Stdout:
 	#   group_key\tsparkline per group (one line each, colored)
-	#   date_label on last line
+	#   Date range + granularity label on last two lines
 	local sparkline_width=$1
 	local group_by=$2
 
@@ -71,14 +71,19 @@ function usage_helpers_sparklines {
 
 	# Pick finest granularity that fits the available width
 	if [[ $total_days -le $sparkline_width ]]; then
+		# Daily
 		date_fmt='%Y-%m-%d'; label_fmt='%-m/%-d/%y'
 	elif [[ $num_weeks -le $sparkline_width ]]; then
+		# Weekly
 		date_fmt='%Y-%W'; label_fmt='%-m/%-d/%y'
 	elif [[ $num_months -le $sparkline_width ]]; then
+		# Monthly
 		date_fmt='%Y-%m'; label_fmt="%b '%y"
 	elif [[ $num_quarters -le $sparkline_width ]]; then
+		# Quarterly
 		date_fmt='quarter'; label_fmt="Q%q '%y"
 	else
+		# Yearly
 		date_fmt='%Y'; label_fmt='%Y'
 	fi
 
@@ -140,7 +145,7 @@ function usage_helpers_sparklines {
 		printf "_labels\t%s\t%s\n", labels[1], labels[n]
 	}')
 
-	# First pass: collect all groups and find global max
+	# First pass: Collect all groups and find global max
 	local -A group_counts
 	local first_label last_label global_max=0
 	local group_key rest
@@ -156,7 +161,7 @@ function usage_helpers_sparklines {
 		done
 	done <<< "$bucket_result"
 
-	# Second pass: render sparklines using global max
+	# Second pass: Render sparklines using global max
 	local counts sparkline idx num_buckets=0
 	for group_key in "${(@k)group_counts}"; do
 		counts=("${(@s:	:)group_counts[$group_key]}")
@@ -187,7 +192,7 @@ function usage_helpers_sparklines {
 		'%Y')       gran_name='yearly' ;;
 	esac
 
-	# Last two lines: date range + granularity (prefixed with _labels/_gran for caller parsing)
+	# Last two lines: Date range + granularity (prefixed with _labels/_gran for caller parsing)
 	if [[ $first_label == "$last_label" ]]; then
 		printf "_labels\t%s\n" "$first_label"
 		printf "_gran\t(1 %s bucket)\n" "$gran_name"
@@ -200,7 +205,7 @@ function usage_helpers_sparklines {
 }
 
 function usage_helpers_stats {
-	# Prints two-line stats header from filtered usage data on stdin
+	# Prints a two-line stats header from filtered usage data on stdin
 	local filtered; filtered=$(cat)
 
 	local file_size; file_size=$(ls -lh "$KEYMAP_USAGE_FILE" | awk '{s=$5; u=substr(s,length(s)); if(u=="B") s=substr(s,1,length(s)-1)" B"; else s=substr(s,1,length(s)-1)" "u"B"; print s}')
@@ -269,5 +274,3 @@ function usage_helpers_filter_by_calendar_days {
 
 	awk -F'\t' -v min_ts="$min_ts" -v max_ts="$max_ts" '$1 >= min_ts && $1 < max_ts' "$KEYMAP_USAGE_FILE"
 }
-
-

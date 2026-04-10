@@ -42,29 +42,29 @@ fi
 
 ZSHRC_TESTS_SECTION_NUMBER=2
 if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	source "$ZSHRC_SRC_DIR"/_tests/_verify_test_invocations.zsh
-	verify_test_invocations_section $ZSHRC_TESTS_SECTION_NUMBER
+	source "$ZSHRC_SRC_DIR"/_tests/_verify_keymap_definitions.zsh
+	verify_keymap_definitions_section $ZSHRC_TESTS_SECTION_NUMBER
 	[[ $passes -ne $total ]] && ZSHRC_TESTS_ALL_PASSED=false
 fi
 
 ZSHRC_TESTS_SECTION_NUMBER=3
+if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
+	source "$ZSHRC_SRC_DIR"/_tests/_verify_keymap_ordering.zsh
+	verify_keymap_ordering_section $ZSHRC_TESTS_SECTION_NUMBER
+	[[ $passes -ne $total ]] && ZSHRC_TESTS_ALL_PASSED=false
+fi
+
+ZSHRC_TESTS_SECTION_NUMBER=4
 if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
 	source "$ZSHRC_SRC_DIR"/_tests/_verify_test_ordering.zsh
 	verify_test_ordering_section $ZSHRC_TESTS_SECTION_NUMBER
 	[[ $passes -ne $total ]] && ZSHRC_TESTS_ALL_PASSED=false
 fi
 
-ZSHRC_TESTS_SECTION_NUMBER=4
-if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	source "$ZSHRC_SRC_DIR"/_tests/_verify_keymap_definitions.zsh
-	verify_keymap_definitions_section $ZSHRC_TESTS_SECTION_NUMBER
-	[[ $passes -ne $total ]] && ZSHRC_TESTS_ALL_PASSED=false
-fi
-
 ZSHRC_TESTS_SECTION_NUMBER=5
 if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	source "$ZSHRC_SRC_DIR"/_tests/_verify_keymap_ordering.zsh
-	verify_keymap_ordering_section $ZSHRC_TESTS_SECTION_NUMBER
+	source "$ZSHRC_SRC_DIR"/_tests/_verify_test_invocations.zsh
+	verify_test_invocations_section $ZSHRC_TESTS_SECTION_NUMBER
 	[[ $passes -ne $total ]] && ZSHRC_TESTS_ALL_PASSED=false
 fi
 

@@ -99,6 +99,7 @@ function github_keymap_o {
 }
 
 GITHUB_DEFAULT_ORG='transaction-engine'
+
 function github_keymap_org {
 	local org
 	org="$(github_keymap_url 2> /dev/null | sed 's/.*[:/]\([^/]*\)\/.*/\1/')"

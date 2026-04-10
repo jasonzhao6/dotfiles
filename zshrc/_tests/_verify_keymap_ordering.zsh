@@ -3,7 +3,7 @@ function verify_keymap_ordering_section {
 
 	echo
 	echo
-	echo "$section_number: Verify all key mapping implementation functions are alphabetized"
+	echo "$section_number: Verify all implementations are alphabetized"
 
 	init
 
@@ -11,7 +11,7 @@ function verify_keymap_ordering_section {
 		verify_keymap_ordering "$keymap_file"
 	done
 
-	print_summary 'key mapping functions are alphabetized'
+	print_summary 'keymap implementations alphabetized'
 }
 
 function verify_keymap_ordering {

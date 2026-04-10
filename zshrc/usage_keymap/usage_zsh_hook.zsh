@@ -1,5 +1,5 @@
 KEYMAP_USAGE_FILE="$ZSHRC_DATA_DIR/usage.tsv"
-zmodload zsh/datetime
+zmodload zsh/datetime # Use $EPOCHSECONDS (to avoid forking `gdate` on every invocation)
 
 function keymap_track_usage {
 	local first_word="${1%% *}"
