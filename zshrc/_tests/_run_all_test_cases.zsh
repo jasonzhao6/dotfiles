@@ -19,9 +19,11 @@ function run_all_test_cases_section {
 		files+=("$base")
 
 		(
-			# Isolate pasteboard per subshell via file-backed overrides
+			# Isolate shared resources per subshell
 			function pbcopy { cat > "$tmpdir/$base.pb"; }
 			function pbpaste { cat "$tmpdir/$base.pb" 2>/dev/null; }
+			ARGS_YANK_FILE="$tmpdir/$base.yank"
+			ARGS_BACKGROUND_OUTPUTS_FILE="$tmpdir/$base.bg"
 
 			init
 			source "$test"
