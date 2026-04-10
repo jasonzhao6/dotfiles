@@ -18,7 +18,7 @@ function test__0 {
 			terraform-application-region-program-B
 		eof
 	)"
-}; run_with_filter test__0
+}
 
 function test__1 {
 	assert "$(
@@ -30,7 +30,7 @@ function test__1 {
 			terraform-application-region-shared-1
 		eof
 	)"
-}; run_with_filter test__1
+}
 
 function test__5 {
 	assert "$(
@@ -42,11 +42,11 @@ function test__5 {
 			terraform-application-region-program-B
 		eof
 	)"
-}; run_with_filter test__5
+}
 
 function test__6 {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null
 		6 echo 2>&1
 	)" "echo "
-}; run_with_filter test__6
+}

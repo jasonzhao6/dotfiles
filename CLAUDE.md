@@ -92,7 +92,7 @@ Non-zsh shortcut reference files for external apps (e.g. Gmail, Terminal, Claude
 - Regular keys are bare: `cmd-k`, `ctrl-c`, `r`
 
 ### Test Framework (`zshrc/_tests/`)
-- `_test_harness.zsh` — `init`, `assert`, `pass`, `fail`, `execute_tests`, `print_summary`
+- `_test_harness.zsh` — `init`, `assert`, `pass`, `fail`, `run_tests`, `print_summary`
 - Test files live in `_tests/<namespace>/test_<name>.zsh`
 - Tests are shuffled before execution to catch ordering dependencies
 - 5 test sections:

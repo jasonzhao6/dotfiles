@@ -5,7 +5,7 @@ function test__main_keymap {
 		# shellcheck disable=SC2076
 		[[ $show_this_help =~ "^  \\$ $MAIN_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
-}; run_with_filter test__main_keymap
+}
 
 # Use Gmail to test printing shortcuts on behalf of all other default keyboard shortcuts
 function test__main_keymap_g {
@@ -31,7 +31,7 @@ function test__main_keymap_g {
 			  ?       # Show keyboard shortcuts
 		eof
 	)"
-}; run_with_filter test__main_keymap_g
+}
 
 function test__main_keymap_g__with_multiple_words {
 	assert "$(mg er con | bw)" "$(
@@ -41,11 +41,11 @@ function test__main_keymap_g__with_multiple_words {
 			  k # Newer conversation
 		eof
 	)"
-}; run_with_filter test__main_keymap_g__with_multiple_words
+}
 
 function test__main_keymap_r {
 	assert "$([[ $(main_keymap_r | wc -l) -gt 500 ]] && echo 1)" '1'
-}; run_with_filter test__main_keymap_r
+}
 
 function test__main_keymap_r__when_specifying_a_description {
 	assert "$(
@@ -71,7 +71,7 @@ function test__main_keymap_r__when_specifying_a_description {
 			  vimium_search: rr           # Github Repo Search
 		eof
 	)"
-}; run_with_filter test__main_keymap_r__when_specifying_a_description
+}
 
 function test__main_keymap_r__when_specifying_a_zsh_only_description {
 	assert "$(
@@ -83,7 +83,7 @@ function test__main_keymap_r__when_specifying_a_zsh_only_description {
 			  $ o.b <start> <finish> (~~) # Run a sequence of commands in background
 		eof
 	)"
-}; run_with_filter test__main_keymap_r__when_specifying_a_zsh_only_description
+}
 
 function test__main_keymap_r__when_specifying_a_non_zsh_only_description {
 	assert "$(
@@ -98,7 +98,7 @@ function test__main_keymap_r__when_specifying_a_non_zsh_only_description {
 			  vimium_search: gm # Google Maps
 		eof
 	)"
-}; run_with_filter test__main_keymap_r__when_specifying_a_non_zsh_only_description
+}
 
 function test__main_keymap_w {
 	assert "$(main_keymap_w)" "$(
@@ -106,7 +106,7 @@ function test__main_keymap_w {
 			$(red_bar 'Required: <key>')
 		eof
 	)"
-}; run_with_filter test__main_keymap_w
+}
 
 function test__main_keymap_w__when_specifying_a_key {
 	assert "$(
@@ -123,7 +123,7 @@ function test__main_keymap_w__when_specifying_a_key {
 		  cmd-j # Join lines
 		eof
 	)"
-}; run_with_filter test__main_keymap_w__when_specifying_a_key
+}
 
 function test__main_keymap_w__when_specifying_a_special_char {
 	assert "$(
@@ -139,4 +139,4 @@ function test__main_keymap_w__when_specifying_a_special_char {
 		  ctrl-shift-- # Copilot new conversation
 		eof
 	)"
-}; run_with_filter test__main_keymap_w__when_specifying_a_special_char
+}

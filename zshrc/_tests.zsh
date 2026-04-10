@@ -11,10 +11,10 @@ ZSHRC_TESTS_START_TIME=$(gdate +%s.%2N)
 # Test setup
 #
 
-# Allow filtering test sections by number (1-5)
-ZSHRC_TESTS_SECTION_FILTER=$([[ $1 -ge 1 && $1 -le 5 ]] && echo "$1")
+# Allow filtering test sections by number (1-4)
+ZSHRC_TESTS_SECTION_FILTER=$([[ $1 -ge 1 && $1 -le 4 ]] && echo "$1")
 
-# Allow filtering test cases by substring match
+# Allow filtering tests by substring match
 # shellcheck disable=SC2030
 ZSHRC_TESTS_NAME_FILTER=$([[ -z $ZSHRC_TESTS_SECTION_FILTER && -n $1 ]] && echo "$1")
 
@@ -58,13 +58,6 @@ ZSHRC_TESTS_SECTION_NUMBER=4
 if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
 	source "$ZSHRC_SRC_DIR"/_tests/_verify_test_ordering.zsh
 	verify_test_ordering_section $ZSHRC_TESTS_SECTION_NUMBER
-	[[ $passes -ne $total ]] && ZSHRC_TESTS_ALL_PASSED=false
-fi
-
-ZSHRC_TESTS_SECTION_NUMBER=5
-if [[ ($ZSHRC_TESTS_SECTION_FILTER -eq $ZSHRC_TESTS_SECTION_NUMBER || -z $ZSHRC_TESTS_SECTION_FILTER) && -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-	source "$ZSHRC_SRC_DIR"/_tests/_verify_test_invocations.zsh
-	verify_test_invocations_section $ZSHRC_TESTS_SECTION_NUMBER
 	[[ $passes -ne $total ]] && ZSHRC_TESTS_ALL_PASSED=false
 fi
 

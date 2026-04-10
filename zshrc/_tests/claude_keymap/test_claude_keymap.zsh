@@ -5,7 +5,7 @@ function test__claude_keymap {
 		# shellcheck disable=SC2076
 		[[ $show_this_help =~ "^  \\$ $CLAUDE_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
-}; run_with_filter test__claude_keymap
+}
 
 function test__claude_keymap_u {
 	assert "$(
@@ -41,7 +41,7 @@ function test__claude_keymap_u {
 			skill1
 		eof
 	)"
-}; run_with_filter test__claude_keymap_u
+}
 
 function test__claude_keymap_U {
 	assert "$(
@@ -78,4 +78,4 @@ function test__claude_keymap_U {
 			pulled_skill
 		eof
 	)"
-}; run_with_filter test__claude_keymap_U
+}

@@ -61,7 +61,7 @@ function test__args_keymap {
 		# shellcheck disable=SC2076
 		[[ $show_this_help =~ "^  \\$ $ARGS_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
-}; run_with_filter test__args_keymap
+}
 
 function test__args_keymap_a {
 	assert "$(
@@ -76,7 +76,7 @@ function test__args_keymap_a {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run_with_filter test__args_keymap_a
+}
 
 function test__args_keymap_a__adds_color {
 	assert "$(
@@ -89,7 +89,7 @@ function test__args_keymap_a__adds_color {
 		     3	terraform-application-region-$(grep_color shared)-3
 		eof
 	)"
-}; run_with_filter test__args_keymap_a__adds_color
+}
 
 function test__args_keymap_a__replaces_color {
 	assert "$(
@@ -103,7 +103,7 @@ function test__args_keymap_a__replaces_color {
 		     3	terraform-application-$(grep_color region)-shared-3
 		eof
 	)"
-}; run_with_filter test__args_keymap_a__replaces_color
+}
 
 function test__args_keymap_a__with_two_args_out_of_order {
 	assert "$(
@@ -114,7 +114,7 @@ function test__args_keymap_a__with_two_args_out_of_order {
 		     1	terraform-application-region-$(grep_color shared)-$(grep_color 2)
 		eof
 	)"
-}; run_with_filter test__args_keymap_a__with_two_args_out_of_order
+}
 
 function test__args_keymap_a__with_two_args_including_negation {
 	assert "$(
@@ -126,7 +126,7 @@ function test__args_keymap_a__with_two_args_including_negation {
 		     2	terraform-application-region-$(grep_color shared)-3
 		eof
 	)"
-}; run_with_filter test__args_keymap_a__with_two_args_including_negation
+}
 
 function test__args_keymap_b {
 	assert "$(
@@ -139,7 +139,7 @@ function test__args_keymap_b {
 			terraform-application-region-shared-2
 		eof
 	)"
-}; run_with_filter test__args_keymap_b
+}
 
 function test__args_keymap_c {
 	assert "$(
@@ -155,15 +155,15 @@ function test__args_keymap_c {
 			terraform-application-region-program-B
 		eof
 	)"
-}; run_with_filter test__args_keymap_c
+}
 
 function test__args_keymap_c__with_one_arg {
 	assert "$(args_keymap_c '123'; pbpaste)" '123'
-}; run_with_filter test__args_keymap_c__with_one_arg
+}
 
 function test__args_keymap_c__with_two_args {
 	assert "$(args_keymap_c '123 321'; pbpaste)" '123 321'
-}; run_with_filter test__args_keymap_c__with_two_args
+}
 
 function test__args_keymap_d {
 	local input; input=$(
@@ -184,7 +184,7 @@ function test__args_keymap_d {
 	     2	Succeeded
 		eof
 	)"
-}; run_with_filter test__args_keymap_d
+}
 
 function test__args_keymap_e {
 	assert "$(
@@ -200,7 +200,7 @@ function test__args_keymap_e {
 			terraform-application-region-shared-2
 		eof
 	)"
-}; run_with_filter test__args_keymap_e
+}
 
 function test__args_keymap_f {
 	assert "$(
@@ -216,7 +216,7 @@ function test__args_keymap_f {
 			terraform-application-region-program-A
 		eof
 	)"
-}; run_with_filter test__args_keymap_f
+}
 
 function test__args_keymap_f__with_multiple_substitutions {
 	assert "$(
@@ -232,7 +232,7 @@ function test__args_keymap_f__with_multiple_substitutions {
 			terraform-application-region-program-A and terraform-application-region-program-A again
 		eof
 	)"
-}; run_with_filter test__args_keymap_f__with_multiple_substitutions
+}
 
 function test__args_keymap_h {
 	assert "$(
@@ -266,7 +266,7 @@ function test__args_keymap_h {
 			2
 		eof
 	)"
-}; run_with_filter test__args_keymap_h
+}
 
 function test__args_keymap_h__when_selecting_out_of_head_and_tail {
 	assert "$(
@@ -301,7 +301,7 @@ function test__args_keymap_h__when_selecting_out_of_head_and_tail {
 			$(red_bar 'Index out of range: 4')
 		eof
 	)"
-}; run_with_filter test__args_keymap_h__when_selecting_out_of_head_and_tail
+}
 
 function test__args_keymap_h__when_selecting_head_index {
 	assert "$(
@@ -315,7 +315,7 @@ function test__args_keymap_h__when_selecting_head_index {
 		     2	4
 		eof
 	)"
-}; run_with_filter test__args_keymap_h__when_selecting_head_index
+}
 
 function test__args_keymap_h__when_selecting_middle_index {
 	assert "$(
@@ -329,7 +329,7 @@ function test__args_keymap_h__when_selecting_middle_index {
 		     2	3
 		eof
 	)"
-}; run_with_filter test__args_keymap_h__when_selecting_middle_index
+}
 
 function test__args_keymap_h__when_selecting_tail_index {
 	assert "$(
@@ -343,7 +343,7 @@ function test__args_keymap_h__when_selecting_tail_index {
 		     2	2
 		eof
 	)"
-}; run_with_filter test__args_keymap_h__when_selecting_tail_index
+}
 
 function test__args_keymap_hc {
 	assert "$(
@@ -351,7 +351,7 @@ function test__args_keymap_hc {
 		args_keymap_hc
 		echo "$ARGS_HISTORY_INDEX/$ARGS_HISTORY_HEAD/$ARGS_HISTORY_TAIL"
 	)" '100/100/-1'
-}; run_with_filter test__args_keymap_hc
+}
 
 function test__args_keymap_i {
 	assert "$(
@@ -364,7 +364,7 @@ function test__args_keymap_i {
 		     3	10.0.0.3	# 2023-06-21T20:24:59+00:00	foo
 		eof
 	)"
-}; run_with_filter test__args_keymap_i
+}
 
 function test__args_keymap_i__with_timestamps {
 	assert "$(
@@ -377,7 +377,7 @@ function test__args_keymap_i__with_timestamps {
 		     3	10.0.0.2	# 2023-06-21T21:25:00+00:00	bar
 		eof
 	)"
-}; run_with_filter test__args_keymap_i__with_timestamps
+}
 
 function test__args_keymap_i__with_names {
 	assert "$(
@@ -390,7 +390,7 @@ function test__args_keymap_i__with_names {
 		     3	10.0.0.3	# 2023-06-21T20:24:59+00:00	foo
 		eof
 	)"
-}; run_with_filter test__args_keymap_i__with_names
+}
 
 function test__args_keymap_n {
 	assert "$(
@@ -402,7 +402,7 @@ function test__args_keymap_n {
 			terraform-application-region-shared-3
 		eof
 	)"
-}; run_with_filter test__args_keymap_n
+}
 
 function test__args_keymap_n__with_whitespace {
 	assert "$(
@@ -414,7 +414,7 @@ function test__args_keymap_n__with_whitespace {
 			terraform-application-region-shared-3
 		eof
 	)"
-}; run_with_filter test__args_keymap_n__with_whitespace
+}
 
 function test__args_keymap_n__with_substitution {
 	assert "$(
@@ -426,7 +426,7 @@ function test__args_keymap_n__with_substitution {
 			http://terraform-application-region-shared-3:8080
 		eof
 	)"
-}; run_with_filter test__args_keymap_n__with_substitution
+}
 
 function test__args_keymap_n__with_multiple_substitutions {
 	assert "$(
@@ -438,7 +438,7 @@ function test__args_keymap_n__with_multiple_substitutions {
 			http://terraform-application-region-shared-3:80 and https://terraform-application-region-shared-3:443
 		eof
 	)"
-}; run_with_filter test__args_keymap_n__with_multiple_substitutions
+}
 
 function test__args_keymap_n__with_multiple_substitutions_in_quotes {
 	assert "$(
@@ -450,7 +450,7 @@ function test__args_keymap_n__with_multiple_substitutions_in_quotes {
 			http://terraform-application-region-shared-3:80 and https://terraform-application-region-shared-3:443
 		eof
 	)"
-}; run_with_filter test__args_keymap_n__with_multiple_substitutions_in_quotes
+}
 
 function test__args_keymap_n__cd_into_folder_with_spaces {
 	mkdir -p '/tmp/test folder with spaces'
@@ -464,7 +464,7 @@ function test__args_keymap_n__cd_into_folder_with_spaces {
 		eof
 	)"
 	rm -rf '/tmp/test folder with spaces'
-}; run_with_filter test__args_keymap_n__cd_into_folder_with_spaces
+}
 
 function test__args_keymap_o {
 	assert "$(
@@ -476,7 +476,7 @@ function test__args_keymap_o {
 			terraform-application-region-shared-1
 		eof
 	)"
-}; run_with_filter test__args_keymap_o
+}
 
 function test__args_keymap_p {
 	assert "$(
@@ -489,7 +489,7 @@ function test__args_keymap_p {
 		     3	3
 		eof
 	)"
-}; run_with_filter test__args_keymap_p
+}
 
 function test__args_keymap_r__when_undoing_empty_history {
 	assert "$(
@@ -500,7 +500,7 @@ function test__args_keymap_r__when_undoing_empty_history {
 			$(red_bar 'Reached the end of redo history')
 		eof
 	)"
-}; run_with_filter test__args_keymap_r__when_undoing_empty_history
+}
 
 function test__args_keymap_r__when_redoing_x2 {
 	assert "$(
@@ -517,7 +517,7 @@ function test__args_keymap_r__when_redoing_x2 {
 		     2	4
 		eof
 	)"
-}; run_with_filter test__args_keymap_r__when_redoing_x2
+}
 
 function test__args_keymap_r__when_redoing_beyond_head {
 	assert "$(
@@ -536,7 +536,7 @@ function test__args_keymap_r__when_redoing_beyond_head {
 			$(red_bar 'Reached the end of redo history')
 		eof
 	)"
-}; run_with_filter test__args_keymap_r__when_redoing_beyond_head
+}
 
 function test__args_keymap_r__when_redoing_beyond_new_head {
 	assert "$(
@@ -554,7 +554,7 @@ function test__args_keymap_r__when_redoing_beyond_new_head {
 			$(red_bar 'Reached the end of redo history')
 		eof
 	)"
-}; run_with_filter test__args_keymap_r__when_redoing_beyond_new_head
+}
 
 function test__args_keymap_s {
 	# Can test `[command] | args_keymap_s`, but not `[command]; as`
@@ -571,7 +571,7 @@ function test__args_keymap_s {
 		     6	terraform-application-region-program-B  select via headers for this one
 		eof
 	)"
-}; run_with_filter test__args_keymap_s
+}
 
 function test__args_keymap_s__with_filters {
 	# Can test `[command] | args_keymap_s`, but not `[command]; as`
@@ -584,7 +584,7 @@ function test__args_keymap_s__with_filters {
 		     2	terraform-application-region-$(grep_color shared)-3   sup
 		eof
 	)"
-}; run_with_filter test__args_keymap_s__with_filters
+}
 
 function test__args_keymap_s__with_whitespace {
 	# Can test `[command] | args_keymap_s`, but not `[command]; as`
@@ -599,7 +599,7 @@ function test__args_keymap_s__with_whitespace {
 		     4	terraform-application-region-program-A
 		eof
 	)"
-}; run_with_filter test__args_keymap_s__with_whitespace
+}
 
 function test__args_keymap_so {
 	# Can test `<command> | args_keymap_so`, but not `<command>; aso`
@@ -616,7 +616,7 @@ function test__args_keymap_so {
 		     6	terraform-application-region-program-B  # select via headers for this one
 		eof
 	)"
-}; run_with_filter test__args_keymap_so
+}
 
 function test__args_keymap_so__with_filters {
 	# Can test `<command> | args_keymap_so`, but not `<command>; aso`
@@ -629,7 +629,7 @@ function test__args_keymap_so__with_filters {
 		     2	terraform-application-region-$(grep_color shared)-3   # sup
 		eof
 	)"
-}; run_with_filter test__args_keymap_so__with_filters
+}
 
 function test__args_keymap_t {
 	local input; input=$(
@@ -649,7 +649,7 @@ function test__args_keymap_t {
 	     3	cc-us-east-1  Failed     2025-01-16T15:14:34.400000-08:00
 		eof
 	)"
-}; run_with_filter test__args_keymap_t
+}
 
 function test__args_keymap_u {
 	assert "$(
@@ -665,7 +665,7 @@ function test__args_keymap_u {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run_with_filter test__args_keymap_u
+}
 
 function test__args_keymap_u__when_undoing_empty_history {
 	assert "$(
@@ -676,7 +676,7 @@ function test__args_keymap_u__when_undoing_empty_history {
 			$(red_bar 'Reached the end of undo history')
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_empty_history
+}
 
 function test__args_keymap_u__when_undoing_d_with_headers {
 	assert "$(
@@ -694,7 +694,7 @@ function test__args_keymap_u__when_undoing_d_with_headers {
 			$(green_bg '        a                                       b      c   d       e   f    g  ')
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_d_with_headers
+}
 
 function test__args_keymap_u__when_undoing_t_with_headers {
 	assert "$(
@@ -712,7 +712,7 @@ function test__args_keymap_u__when_undoing_t_with_headers {
 			$(green_bg '        a                                       b      ')
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_t_with_headers
+}
 
 function test__args_keymap_u__when_undoing_t_then_requesting_n {
 	assert "$(
@@ -731,7 +731,7 @@ function test__args_keymap_u__when_undoing_t_then_requesting_n {
 			$(green_bg '        a                                       b      c   d       e   f    g  ')
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_t_then_requesting_n
+}
 
 function test__args_keymap_u__when_undoing_t_with_headers_top_heavy {
 	assert "$(
@@ -749,7 +749,7 @@ function test__args_keymap_u__when_undoing_t_with_headers_top_heavy {
 			$(green_bg '        a                                       b      ')
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_t_with_headers_top_heavy
+}
 
 function test__args_keymap_u__when_undoing_ss_that_could_look_like_nn {
 	assert "$(
@@ -767,7 +767,7 @@ function test__args_keymap_u__when_undoing_ss_that_could_look_like_nn {
 		     6	terraform-application-region-program-B  select via headers for this one
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_ss_that_could_look_like_nn
+}
 
 function test__args_keymap_u__when_undoing_x2 {
 	assert "$(
@@ -782,7 +782,7 @@ function test__args_keymap_u__when_undoing_x2 {
 		     2	2
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_x2
+}
 
 function test__args_keymap_u__when_undoing_beyond_tail {
 	assert "$(
@@ -799,7 +799,7 @@ function test__args_keymap_u__when_undoing_beyond_tail {
 			$(red_bar 'Reached the end of undo history')
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_beyond_tail
+}
 
 function test__args_keymap_u__when_pushing_beyond_head_then_undoing_beyond_tail {
 	# shellcheck disable=SC2034
@@ -824,7 +824,7 @@ function test__args_keymap_u__when_pushing_beyond_head_then_undoing_beyond_tail 
 	)"
 
 	args_history_reset
-}; run_with_filter test__args_keymap_u__when_pushing_beyond_head_then_undoing_beyond_tail
+}
 
 function test__args_keymap_u__when_undoing_then_redoing_with_color {
 	assert "$(
@@ -838,7 +838,7 @@ function test__args_keymap_u__when_undoing_then_redoing_with_color {
 		     2	terraform-application-region-$(grep_color program)-B
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_then_redoing_with_color
+}
 
 function test__args_keymap_u__when_undoing_then_redoing_then_undoing_again_with_color {
 	assert "$(
@@ -858,7 +858,7 @@ function test__args_keymap_u__when_undoing_then_redoing_then_undoing_again_with_
 		     5	terraform-$(grep_color application)-region-program-B
 		eof
 	)"
-}; run_with_filter test__args_keymap_u__when_undoing_then_redoing_then_undoing_again_with_color
+}
 
 function test__args_keymap_v {
 	assert "$(
@@ -872,7 +872,7 @@ function test__args_keymap_v {
 			$(green_bg '        a               b c                             d  ')
 		eof
 	)"
-}; run_with_filter test__args_keymap_v
+}
 
 function test__args_keymap_v__when_selecting_first {
 	assert "$(
@@ -885,7 +885,7 @@ function test__args_keymap_v__when_selecting_first {
 		     3	10.0.0.1
 		eof
 	)"
-}; run_with_filter test__args_keymap_v__when_selecting_first
+}
 
 function test__args_keymap_v__when_selecting_third {
 	assert "$(
@@ -898,7 +898,7 @@ function test__args_keymap_v__when_selecting_third {
 		     3	2023-06-21T20:25:00+00:00
 		eof
 	)"
-}; run_with_filter test__args_keymap_v__when_selecting_third
+}
 
 function test__args_keymap_v__when_selecting_last {
 	assert "$(
@@ -911,7 +911,7 @@ function test__args_keymap_v__when_selecting_last {
 		     3	baz
 		eof
 	)"
-}; run_with_filter test__args_keymap_v__when_selecting_last
+}
 
 function test__args_keymap_v__when_selecting_with_color {
 	assert "$(
@@ -924,7 +924,7 @@ function test__args_keymap_v__when_selecting_with_color {
 		     3	baz
 		eof
 	)"
-}; run_with_filter test__args_keymap_v__when_selecting_with_color
+}
 
 function test__args_keymap_v__when_selecting_out_of_bound {
 	assert "$(
@@ -938,7 +938,7 @@ function test__args_keymap_v__when_selecting_out_of_bound {
 			$(green_bg '        a               b c                             d  ')
 		eof
 	)"
-}; run_with_filter test__args_keymap_v__when_selecting_out_of_bound
+}
 
 function test__args_keymap_v__with_kubectl_get_pods_output {
 	local input; input=$(
@@ -961,7 +961,7 @@ function test__args_keymap_v__with_kubectl_get_pods_output {
 		     4	14h
 		eof
 	)"
-}; run_with_filter test__args_keymap_v__with_kubectl_get_pods_output
+}
 
 function test__args_keymap_v__with_one_column {
 	assert "$(
@@ -976,7 +976,7 @@ function test__args_keymap_v__with_one_column {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run_with_filter test__args_keymap_v__with_one_column
+}
 
 function test__args_keymap_v__with_whitespace {
 	assert "$(
@@ -990,7 +990,7 @@ function test__args_keymap_v__with_whitespace {
 		     4	terraform-application-region-program-A
 		eof
 	)"
-}; run_with_filter test__args_keymap_v__with_whitespace
+}
 
 function test__args_keymap_v__with_headers {
 	assert "$(
@@ -1007,7 +1007,7 @@ function test__args_keymap_v__with_headers {
 			$(green_bg '        a                                       b      c   d       e   f    g  ')
 		eof
 	)"
-}; run_with_filter test__args_keymap_v__with_headers
+}
 
 function test__args_keymap_w {
 	assert "$(
@@ -1024,7 +1024,7 @@ function test__args_keymap_w {
 			$(green_bg '        a                                       b      ')
 		eof
 	)"
-}; run_with_filter test__args_keymap_w
+}
 
 function test__args_keymap_w__with_one_column {
 	assert "$(
@@ -1039,7 +1039,7 @@ function test__args_keymap_w__with_one_column {
 		     5	terraform-application-region-program-B
 		eof
 	)"
-}; run_with_filter test__args_keymap_w__with_one_column
+}
 
 function test__args_keymap_y {
 	assert "$(
@@ -1048,7 +1048,7 @@ function test__args_keymap_y {
 		args_keymap_y
 		cat "$ARGS_YANK_FILE"
 	)" "$test__input"
-}; run_with_filter test__args_keymap_y
+}
 
 function test__args_keymap_z {
 	assert "$(
@@ -1061,4 +1061,4 @@ function test__args_keymap_z {
 		     3	baz
 		eof
 	)"
-}; run_with_filter test__args_keymap_z
+}

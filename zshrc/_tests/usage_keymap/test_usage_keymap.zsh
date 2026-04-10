@@ -5,7 +5,7 @@ function test__usage_keymap {
 		# shellcheck disable=SC2076
 		[[ $show_this_help =~ "^  \\$ $USAGE_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
-}; run_with_filter test__usage_keymap
+}
 
 function test__usage_keymap_a {
 	assert "$(
@@ -27,7 +27,7 @@ function test__usage_keymap_a {
 			g.c
 		eof
 	)"
-}; run_with_filter test__usage_keymap_a
+}
 
 function test__usage_keymap_a__with_match {
 	assert "$(
@@ -45,7 +45,7 @@ function test__usage_keymap_a__with_match {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_a__with_match
+}
 
 function test__usage_keymap_a__with_n_days {
 	assert "$(
@@ -63,7 +63,7 @@ function test__usage_keymap_a__with_n_days {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_a__with_n_days
+}
 
 function test__usage_keymap_a__with_no_match {
 	assert "$(
@@ -78,7 +78,7 @@ function test__usage_keymap_a__with_no_match {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" 'No alias matching `zzz`'
-}; run_with_filter test__usage_keymap_a__with_no_match
+}
 
 function test__usage_keymap_a__top_level_alias {
 	assert "$(
@@ -94,7 +94,7 @@ function test__usage_keymap_a__top_level_alias {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" 'u Show'
-}; run_with_filter test__usage_keymap_a__top_level_alias
+}
 
 function test__usage_keymap_a__row_limit {
 	assert "$(
@@ -115,7 +115,7 @@ function test__usage_keymap_a__row_limit {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" "$USAGE_KEYMAP_A_MAX_ROWS"
-}; run_with_filter test__usage_keymap_a__row_limit
+}
 
 function test__usage_keymap_a__sorted_by_count {
 	assert "$(
@@ -133,7 +133,7 @@ function test__usage_keymap_a__sorted_by_count {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" 'g.c'
-}; run_with_filter test__usage_keymap_a__sorted_by_count
+}
 
 function test__usage_keymap_c {
 	assert "$(
@@ -153,7 +153,7 @@ function test__usage_keymap_c {
 			0
 		eof
 	)"
-}; run_with_filter test__usage_keymap_c
+}
 
 function test__usage_keymap_c__when_no_file {
 	assert "$(
@@ -165,7 +165,7 @@ function test__usage_keymap_c__when_no_file {
 
 		KEYMAP_USAGE_FILE=$orig
 	)" 'No usage file to clear'
-}; run_with_filter test__usage_keymap_c__when_no_file
+}
 
 function test__usage_keymap_d {
 	assert "$(
@@ -189,7 +189,7 @@ function test__usage_keymap_d {
 			Fri 1
 		eof
 	)"
-}; run_with_filter test__usage_keymap_d
+}
 
 function test__usage_keymap_d__with_n_days {
 	assert "$(
@@ -207,7 +207,7 @@ function test__usage_keymap_d__with_n_days {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_d__with_n_days
+}
 
 function test__usage_keymap_d__shows_all_7_days {
 	assert "$(
@@ -224,7 +224,7 @@ function test__usage_keymap_d__shows_all_7_days {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '7'
-}; run_with_filter test__usage_keymap_d__shows_all_7_days
+}
 
 function test__usage_keymap_h {
 	assert "$(
@@ -248,7 +248,7 @@ function test__usage_keymap_h {
 			14 1
 		eof
 	)"
-}; run_with_filter test__usage_keymap_h
+}
 
 function test__usage_keymap_h__with_n_days {
 	assert "$(
@@ -266,7 +266,7 @@ function test__usage_keymap_h__with_n_days {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_h__with_n_days
+}
 
 function test__usage_keymap_h__shows_all_24_hours {
 	assert "$(
@@ -283,7 +283,7 @@ function test__usage_keymap_h__shows_all_24_hours {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '24'
-}; run_with_filter test__usage_keymap_h__shows_all_24_hours
+}
 
 function test__usage_keymap_m__when_no_file {
 	assert "$(
@@ -295,7 +295,7 @@ function test__usage_keymap_m__when_no_file {
 
 		KEYMAP_USAGE_FILE=$orig
 	)" 'No usage file'
-}; run_with_filter test__usage_keymap_m__when_no_file
+}
 
 function test__usage_keymap_n {
 	assert "$(
@@ -312,7 +312,7 @@ function test__usage_keymap_n {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '3'
-}; run_with_filter test__usage_keymap_n
+}
 
 function test__usage_keymap_n__with_match {
 	assert "$(
@@ -328,7 +328,7 @@ function test__usage_keymap_n__with_match {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_n__with_match
+}
 
 function test__usage_keymap_n__with_n_days {
 	assert "$(
@@ -346,7 +346,7 @@ function test__usage_keymap_n__with_n_days {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_n__with_n_days
+}
 
 function test__usage_keymap_n__with_no_match {
 	assert "$(
@@ -361,7 +361,7 @@ function test__usage_keymap_n__with_no_match {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" 'No namespace matching `zzz`'
-}; run_with_filter test__usage_keymap_n__with_no_match
+}
 
 function test__usage_keymap_n__sorted_by_count {
 	assert "$(
@@ -380,7 +380,7 @@ function test__usage_keymap_n__sorted_by_count {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" 'git'
-}; run_with_filter test__usage_keymap_n__sorted_by_count
+}
 
 function test__usage_keymap_t {
 	assert "$(
@@ -405,7 +405,7 @@ function test__usage_keymap_t {
 			backup exists
 		eof
 	)"
-}; run_with_filter test__usage_keymap_t
+}
 
 function test__usage_keymap_t__repeated {
 	assert "$(
@@ -431,13 +431,13 @@ function test__usage_keymap_t__repeated {
 			1
 		eof
 	)"
-}; run_with_filter test__usage_keymap_t__repeated
+}
 
 function test__usage_keymap_t__when_no_arg {
 	assert "$(
 		usage_keymap_t | bw | ruby_strip
 	)" 'Required: <n> days'
-}; run_with_filter test__usage_keymap_t__when_no_arg
+}
 
 function test__usage_keymap_t__when_no_data {
 	assert "$(
@@ -449,7 +449,7 @@ function test__usage_keymap_t__when_no_data {
 
 		KEYMAP_USAGE_FILE=$orig
 	)" 'No usage data to back up'
-}; run_with_filter test__usage_keymap_t__when_no_data
+}
 
 function test__usage_keymap_tt {
 	assert "$(
@@ -478,7 +478,7 @@ function test__usage_keymap_tt {
 			1
 		eof
 	)"
-}; run_with_filter test__usage_keymap_tt
+}
 
 function test__usage_keymap_tt__when_no_backup {
 	assert "$(
@@ -490,7 +490,7 @@ function test__usage_keymap_tt__when_no_backup {
 
 		KEYMAP_USAGE_FILE=$orig
 	)" 'No backup to restore'
-}; run_with_filter test__usage_keymap_tt__when_no_backup
+}
 
 function test__usage_keymap_u {
 	assert "$(
@@ -507,7 +507,7 @@ function test__usage_keymap_u {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '3'
-}; run_with_filter test__usage_keymap_u
+}
 
 function test__usage_keymap_u__stats {
 	assert "$(
@@ -523,7 +523,7 @@ function test__usage_keymap_u__stats {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_u__stats
+}
 
 function test__usage_keymap_u__with_n_days {
 	assert "$(
@@ -541,7 +541,7 @@ function test__usage_keymap_u__with_n_days {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_u__with_n_days
+}
 
 function test__usage_keymap_u__auto_granularity_daily {
 	assert "$(
@@ -557,7 +557,7 @@ function test__usage_keymap_u__auto_granularity_daily {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_u__auto_granularity_daily
+}
 
 function test__usage_keymap_u__granularity_line_singular {
 	assert "$(
@@ -573,7 +573,7 @@ function test__usage_keymap_u__granularity_line_singular {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '(1 daily bucket)'
-}; run_with_filter test__usage_keymap_u__granularity_line_singular
+}
 
 function test__usage_keymap_u__granularity_line_plural {
 	assert "$(
@@ -591,7 +591,7 @@ function test__usage_keymap_u__granularity_line_plural {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '(5 daily buckets)'
-}; run_with_filter test__usage_keymap_u__granularity_line_plural
+}
 
 function test__usage_keymap_u__auto_granularity_weekly {
 	assert "$(
@@ -610,7 +610,7 @@ function test__usage_keymap_u__auto_granularity_weekly {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_u__auto_granularity_weekly
+}
 
 function test__usage_keymap_u__auto_granularity_monthly {
 	assert "$(
@@ -629,7 +629,7 @@ function test__usage_keymap_u__auto_granularity_monthly {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_u__auto_granularity_monthly
+}
 
 function test__usage_keymap_u__auto_granularity_quarterly {
 	assert "$(
@@ -651,7 +651,7 @@ function test__usage_keymap_u__auto_granularity_quarterly {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_u__auto_granularity_quarterly
+}
 
 function test__usage_keymap_u__auto_granularity_yearly {
 	assert "$(
@@ -670,6 +670,6 @@ function test__usage_keymap_u__auto_granularity_yearly {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '1'
-}; run_with_filter test__usage_keymap_u__auto_granularity_yearly
+}
 
 

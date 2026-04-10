@@ -3,7 +3,7 @@ function verify_test_ordering_section {
 
 	echo
 	echo
-	echo "$section_number: Verify all implementations and tests are defined in same order"
+	echo "$section_number: Verify implementations and tests are in same order"
 
 	init
 
@@ -13,7 +13,7 @@ function verify_test_ordering_section {
 		verify_test_ordering "$subject_file" "$test_file"
 	done
 
-	print_summary 'implementations and tests in same order'
+	print_summary 'implementations and tests are in same order'
 }
 
 function verify_test_ordering {
@@ -44,7 +44,7 @@ function verify_test_ordering {
 		if [[ $diff =~ '^ ?function' ]]; then
 			pass
 		elif [[ $diff =~ '^\+function' ]]; then
-			fail "'$(echo "$diff" | trim 1)' does not match"
+			fail "'$(echo "$diff" | trim 1)' is out of order"
 		fi
 	done <<< "$functions_compared"
 }

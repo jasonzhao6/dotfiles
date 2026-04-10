@@ -5,7 +5,7 @@ function test__aws_keymap {
 		# shellcheck disable=SC2076
 		[[ $show_this_help =~ "^  \\$ $AWS_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
-}; run_with_filter test__aws_keymap
+}
 
 function test__aws_keymap_c {	assert "$(
 		aws_keymap_c
@@ -17,7 +17,7 @@ function test__aws_keymap_c {	assert "$(
 			bind '"\e[B": history-search-forward'
 		eof
 	)"
-}; run_with_filter test__aws_keymap_c
+}
 
 function test__aws_keymap_o__with_numeric_input {
 	assert "$(
@@ -30,7 +30,7 @@ function test__aws_keymap_o__with_numeric_input {
 		rm -f "$AWS_ACCOUNTS_TSV"
 		AWS_ACCOUNTS_TSV=$orig
 	)" "$(printf '111111111111\tacme-prod')"
-}; run_with_filter test__aws_keymap_o__with_numeric_input
+}
 
 function test__aws_keymap_o__with_text_input {
 	assert "$(
@@ -43,7 +43,7 @@ function test__aws_keymap_o__with_text_input {
 		rm -f "$AWS_ACCOUNTS_TSV"
 		AWS_ACCOUNTS_TSV=$orig
 	)" "$(printf '222222222222\tacme-staging')"
-}; run_with_filter test__aws_keymap_o__with_text_input
+}
 
 function test__aws_keymap_s {
 	assert "$(
@@ -54,7 +54,7 @@ function test__aws_keymap_s {
 		     2	role_name_2  request_page_url_2
 		eof
 	)"
-}; run_with_filter test__aws_keymap_s
+}
 
 function test__aws_keymap_s__when_filtering_for_2 {
 	assert "$(
@@ -64,4 +64,4 @@ function test__aws_keymap_s__when_filtering_for_2 {
 		     1	role_name_2  request_page_url_2
 		eof
 	)"
-}; run_with_filter test__aws_keymap_s__when_filtering_for_2
+}

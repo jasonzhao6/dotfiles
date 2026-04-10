@@ -31,7 +31,7 @@ function test__all {
 			0.20
 		eof
 	)"
-}; run_with_filter test__all
+}
 
 function test__each {
 	assert "$(
@@ -56,7 +56,7 @@ function test__each {
 			terraform-application-region-program-B
 		eof
 	)"
-}; run_with_filter test__each
+}
 
 function test__each__with_comments {
 	assert "$(
@@ -75,7 +75,7 @@ function test__each__with_comments {
 			10.0.0.3
 		eof
 	)"
-}; run_with_filter test__each__with_comments
+}
 
 function test__map {
 	assert "$(
@@ -106,7 +106,7 @@ function test__map {
 		     5	pre-terraform-application-region-program-B
 		eof
 	)"
-}; run_with_filter test__map
+}
 
 function test__map__with_math {
 	assert "$(
@@ -137,4 +137,4 @@ function test__map__with_math {
 			     5	5 doubles to 50
 		eof
 	)"
-}; run_with_filter test__map__with_math
+}

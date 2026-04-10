@@ -12,7 +12,7 @@ function test__keymap_track_usage {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" 'gd'
-}; run_with_filter test__keymap_track_usage
+}
 
 function test__keymap_track_usage__timestamp_format {
 	assert "$(
@@ -28,7 +28,7 @@ function test__keymap_track_usage__timestamp_format {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" 'valid'
-}; run_with_filter test__keymap_track_usage__timestamp_format
+}
 
 function test__keymap_track_usage__non_keymap {
 	assert "$(
@@ -44,4 +44,4 @@ function test__keymap_track_usage__non_keymap {
 		rm -f "$KEYMAP_USAGE_FILE"
 		KEYMAP_USAGE_FILE=$orig
 	)" '0'
-}; run_with_filter test__keymap_track_usage__non_keymap
+}

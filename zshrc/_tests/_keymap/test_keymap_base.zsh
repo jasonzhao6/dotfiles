@@ -33,14 +33,14 @@ function test__keymap_init__it_sets_alias {
 		keymap_init $TEST_NAMESPACE $TEST_ALIAS "${TEST_KEYMAP[@]}"
 		which $TEST_ALIAS
 	)" "$TEST_ALIAS: aliased to $TEST_NAMESPACE"
-}; run_with_filter test__keymap_init__it_sets_alias
+}
 
 function test__keymap_init__it_sets_key_alias {
 	assert "$(
 		keymap_init $TEST_NAMESPACE $TEST_ALIAS "${TEST_KEYMAP[@]}"
 		which ${TEST_ALIAS}b
 	)" "${TEST_ALIAS}b: aliased to ${TEST_NAMESPACE}_b"
-}; run_with_filter test__keymap_init__it_sets_key_alias
+}
 
 function test__keymap_init__with_joint_duplicates {
 	local join_dups=(
@@ -54,7 +54,7 @@ function test__keymap_init__with_joint_duplicates {
 	assert "$(
 		keymap_init $TEST_NAMESPACE $TEST_ALIAS "${join_dups[@]}"
 	)" ''
-}; run_with_filter test__keymap_init__with_joint_duplicates
+}
 
 function test__keymap_init__with_disjoint_duplicates {
 	local join_dups=(
@@ -72,7 +72,7 @@ function test__keymap_init__with_disjoint_duplicates {
 			$(red_bar "\`$TEST_NAMESPACE\` has duplicate \`$TEST_ALIAS.a\` entries")
 		eof
 	)"
-}; run_with_filter test__keymap_init__with_disjoint_duplicates
+}
 
 function test__keymap_init__still_sets_some_aliases_with_disjoint_duplicates {
 	local join_dups=(
@@ -93,7 +93,7 @@ function test__keymap_init__still_sets_some_aliases_with_disjoint_duplicates {
 			test__b not found
 		eof
 	)"
-}; run_with_filter test__keymap_init__still_sets_some_aliases_with_disjoint_duplicates
+}
 
 function test__keymap_show {
 	assert "$(test_keymap | bw | strip_right)" "$(
@@ -139,7 +139,7 @@ function test__keymap_show {
 			  $ cmd-\                    # Escape escape
 		eof
 	)"
-}; run_with_filter test__keymap_show
+}
 
 function test__keymap_show__with_partial_word {
 	assert "$(test_keymap fir | bw)" "$(
@@ -149,7 +149,7 @@ function test__keymap_show__with_partial_word {
 		  $ test__.aa # First related
 		eof
 	)"
-}; run_with_filter test__keymap_show__with_partial_word
+}
 
 function test__keymap_show__with_multiple_words {
 	assert "$(test_keymap third with | bw)" "$(
@@ -159,7 +159,7 @@ function test__keymap_show__with_multiple_words {
 		  $ test__.c <arg 1> <arg 2> # Third with args
 		eof
 	)"
-}; run_with_filter test__keymap_show__with_multiple_words
+}
 
 function test__keymap_show__with_no_match {
 	assert "$(test_keymap z)" "$(
@@ -167,4 +167,4 @@ function test__keymap_show__with_no_match {
 			$(red_bar "\`z\` does not match any description")
 		eof
 	)"
-}; run_with_filter test__keymap_show__with_no_match
+}

@@ -5,4 +5,4 @@ function test__kubectl_keymap {
 		# shellcheck disable=SC2076
 		[[ $show_this_help =~ "^  \\$ $KUBECTL_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
-}; run_with_filter test__kubectl_keymap
+}

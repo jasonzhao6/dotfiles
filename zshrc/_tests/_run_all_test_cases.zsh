@@ -2,9 +2,9 @@ function run_all_test_cases_section {
 	local section_number=$1
 
 	if [[ -z $ZSHRC_TESTS_NAME_FILTER ]]; then
-		printf "\n%s: Run all test files in parallel\n" "$section_number"
+		printf "\n%s: Run keymap test files in parallel\n" "$section_number"
 	else
-		printf "\n%s: Run test cases matching \`*%s*\`\n" "$section_number" "$ZSHRC_TESTS_NAME_FILTER"
+		printf "\n%s: Run keymap tests matching \`*%s*\`\n" "$section_number" "$ZSHRC_TESTS_NAME_FILTER"
 	fi
 
 	pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
@@ -25,7 +25,10 @@ function run_all_test_cases_section {
 
 			init
 			source "$test"
-			execute_tests
+			for func in $(typeset +f | command grep '^test__'); do
+				enqueue_test "$func"
+			done
+			run_tests
 
 			# Serialize results
 			echo "$passes $total" > "$tmpdir/$base.result"
@@ -59,7 +62,7 @@ function run_all_test_cases_section {
 		[[ -f "$tmpdir/$base.debug" ]] && debug+=$(cat "$tmpdir/$base.debug")
 	done
 
-	print_summary 'tests passed'
+	print_summary 'keymap tests passed'
 
 	echo "$pasteboard" | pbcopy # Restore saved pasteboard value
 	rm -rf "$tmpdir"

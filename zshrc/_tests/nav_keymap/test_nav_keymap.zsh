@@ -5,7 +5,7 @@ function test__nav_keymap {
 		# shellcheck disable=SC2076
 		[[ $show_this_help =~ "^  \\$ $NAV_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
-}; run_with_filter test__nav_keymap
+}
 
 function test__nav_keymap__when_specifying_a_directory_instead_of_key {
 	assert "$(
@@ -30,7 +30,7 @@ function test__nav_keymap__when_specifying_a_directory_instead_of_key {
 		     6	3.txt
 		eof
 	)"
-}; run_with_filter test__nav_keymap__when_specifying_a_directory_instead_of_key
+}
 
 function test__nav_keymap_a {
 	assert "$(
@@ -50,7 +50,7 @@ function test__nav_keymap_a {
 		     3	.3.hidden
 		eof
 	)"
-}; run_with_filter test__nav_keymap_a
+}
 
 function test__nav_keymap_a__without_any_hidden_file {
 	assert "$(
@@ -66,7 +66,7 @@ function test__nav_keymap_a__without_any_hidden_file {
 		     1	.
 		eof
 	)"
-}; run_with_filter test__nav_keymap_a__without_any_hidden_file
+}
 
 function test__nav_keymap_a__with_filters {
 	assert "$(
@@ -85,11 +85,11 @@ function test__nav_keymap_a__with_filters {
 		     2	.3.hidden
 		eof
 	)"
-}; run_with_filter test__nav_keymap_a__with_filters
+}
 
 function test__nav_keymap_d {
 	assert "$(nav_keymap_d > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/dotfiles"
-}; run_with_filter test__nav_keymap_d
+}
 
 function test__nav_keymap_e {
 	assert "$(
@@ -109,7 +109,7 @@ function test__nav_keymap_e {
 		     3	3.txt
 		eof
 	)"
-}; run_with_filter test__nav_keymap_e
+}
 
 function test__nav_keymap_e__with_filters {
 	assert "$(
@@ -127,7 +127,7 @@ function test__nav_keymap_e__with_filters {
 		     1	2.log
 		eof
 	)"
-}; run_with_filter test__nav_keymap_e__with_filters
+}
 
 function test__nav_keymap_ee {
 	assert "$(
@@ -146,7 +146,7 @@ function test__nav_keymap_ee {
 		     2	.3.hidden
 		eof
 	)"
-}; run_with_filter test__nav_keymap_ee
+}
 
 function test__nav_keymap_ee__with_filters {
 	assert "$(
@@ -164,7 +164,7 @@ function test__nav_keymap_ee__with_filters {
 		     1	.2.hidden
 		eof
 	)"
-}; run_with_filter test__nav_keymap_ee__with_filters
+}
 
 function test__nav_keymap_f {
 	assert "$(
@@ -183,7 +183,7 @@ function test__nav_keymap_f {
 			big.txt
 		eof
 	)"
-}; run_with_filter test__nav_keymap_f
+}
 
 function test__nav_keymap_g {
 	assert "$(
@@ -197,15 +197,15 @@ function test__nav_keymap_g {
 		echo "$output" | wc -l | tr -d ' '
 		rm -rf /tmp/test__nav_keymap_g
 	)" '3'
-}; run_with_filter test__nav_keymap_g
+}
 
 function test__nav_keymap_h {
 	assert "$(nav_keymap_h > /dev/null; pwd)" "$HOME/GitHub"
-}; run_with_filter test__nav_keymap_h
+}
 
 function test__nav_keymap_m {
 	assert "$(nav_keymap_m > /dev/null; pwd)" "$HOME/Documents"
-}; run_with_filter test__nav_keymap_m
+}
 
 function test__nav_keymap_n {
 	assert "$(
@@ -229,7 +229,7 @@ function test__nav_keymap_n {
 		     6	3.txt
 		eof
 	)"
-}; run_with_filter test__nav_keymap_n
+}
 
 function test__nav_keymap_n__with_filters {
 	assert "$(
@@ -248,7 +248,7 @@ function test__nav_keymap_n__with_filters {
 		     1	2.log
 		eof
 	)"
-}; run_with_filter test__nav_keymap_n__with_filters
+}
 
 function test__nav_keymap_o {
 	assert "$(
@@ -268,7 +268,7 @@ function test__nav_keymap_o {
 		     3	3/
 		eof
 	)"
-}; run_with_filter test__nav_keymap_o
+}
 
 function test__nav_keymap_o__with_filters {
 	assert "$(
@@ -287,7 +287,7 @@ function test__nav_keymap_o__with_filters {
 		     2	3/
 		eof
 	)"
-}; run_with_filter test__nav_keymap_o__with_filters
+}
 
 function test__nav_keymap_oo {
 	assert "$(
@@ -305,7 +305,7 @@ function test__nav_keymap_oo {
 		     1	.1.hidden/
 		eof
 	)"
-}; run_with_filter test__nav_keymap_oo
+}
 
 function test__nav_keymap_oo__with_filters {
 	assert "$(
@@ -319,7 +319,7 @@ function test__nav_keymap_oo__with_filters {
 		nav_keymap_oo -1 hidden | bw
 		rm -rf /tmp/test__nav_keymap_oo
 	)" ''
-}; run_with_filter test__nav_keymap_oo__with_filters
+}
 
 function test__nav_keymap_p {
 	assert "$(
@@ -327,7 +327,7 @@ function test__nav_keymap_p {
 		nav_keymap_p > /dev/null
 		pwd
 	)" "$HOME/Documents"
-}; run_with_filter test__nav_keymap_p
+}
 
 function test__nav_keymap_r {
 	assert "$(
@@ -346,11 +346,11 @@ function test__nav_keymap_r {
 			new.txt
 		eof
 	)"
-}; run_with_filter test__nav_keymap_r
+}
 
 function test__nav_keymap_s {
 	assert "$(nav_keymap_s > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/scratch"
-}; run_with_filter test__nav_keymap_s
+}
 
 function test__nav_keymap_t__with_dir {
 	assert "$(
@@ -358,7 +358,7 @@ function test__nav_keymap_t__with_dir {
 		nav_keymap_t > /dev/null
 		pwd
 	)" "$HOME/Documents"
-}; run_with_filter test__nav_keymap_t__with_dir
+}
 
 function test__nav_keymap_t__with_file {
 	assert "$(
@@ -368,14 +368,14 @@ function test__nav_keymap_t__with_file {
 		pwd
 		rm -f /tmp/test__nav_keymap_t__with_file
 	)" '/tmp'
-}; run_with_filter test__nav_keymap_t__with_file
+}
 
 function test__nav_keymap_t__with_invalid_path {
 	assert "$(
 		echo 'does not exist' | pbcopy
 		nav_keymap_t
 	)" "$(red_bar 'Invalid path in pasteboard')"
-}; run_with_filter test__nav_keymap_t__with_invalid_path
+}
 
 function test__nav_keymap_tt {
 	assert "$(
@@ -383,7 +383,7 @@ function test__nav_keymap_tt {
 		nav_keymap_tt
 		pbpaste
 	)" '/tmp'
-}; run_with_filter test__nav_keymap_tt
+}
 
 function test__nav_keymap_tt__with_file {
 	assert "$(
@@ -391,7 +391,7 @@ function test__nav_keymap_tt__with_file {
 		nav_keymap_tt 'foo.txt'
 		pbpaste
 	)" '/tmp/foo.txt'
-}; run_with_filter test__nav_keymap_tt__with_file
+}
 
 function test__nav_keymap_u {
 	assert "$(
@@ -402,7 +402,7 @@ function test__nav_keymap_u {
 		pwd
 		rm -rf /tmp/_nav_keymap_u
 	)" '/tmp/_nav_keymap_u'
-}; run_with_filter test__nav_keymap_u
+}
 
 function test__nav_keymap_uu {
 	assert "$(
@@ -413,7 +413,7 @@ function test__nav_keymap_uu {
 		pwd
 		rm -rf /tmp/_nav_keymap_uu
 	)" '/tmp/_nav_keymap_uu'
-}; run_with_filter test__nav_keymap_uu
+}
 
 function test__nav_keymap_uuu {
 	assert "$(
@@ -424,19 +424,19 @@ function test__nav_keymap_uuu {
 		pwd
 		rm -rf /tmp/_nav_keymap_uuu
 	)" '/tmp/_nav_keymap_uuu'
-}; run_with_filter test__nav_keymap_uuu
+}
 
 function test__nav_keymap_v {
 	assert "$(nav_keymap_v > /dev/null; pwd)" "$HOME/Desktop"
-}; run_with_filter test__nav_keymap_v
+}
 
 function test__nav_keymap_w {
 	assert "$(nav_keymap_w > /dev/null; pwd)" "$HOME/Downloads"
-}; run_with_filter test__nav_keymap_w
+}
 
 function test__nav_keymap_x {
 	assert "$(nav_keymap_x > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/excalidraw"
-}; run_with_filter test__nav_keymap_x
+}
 
 function test__nav_keymap_y {
 	assert "$(
@@ -445,11 +445,11 @@ function test__nav_keymap_y {
 		nav_keymap_y
 		cat "$NAV_YANK_FILE"
 	)" "$HOME/Documents"
-}; run_with_filter test__nav_keymap_y
+}
 
 function test__nav_keymap_z {
 	assert "$(nav_keymap_z > /dev/null; pwd)" "$NAV_CLAUDE_PLANS_DIR"
-}; run_with_filter test__nav_keymap_z
+}
 
 function test__nav_keymap_zz__with_no_plans {
 	assert "$(
@@ -463,4 +463,4 @@ function test__nav_keymap_zz__with_no_plans {
 		rm -rf "$tmp_dir"
 		NAV_CLAUDE_PLANS_DIR=$orig
 	)" "$(red_bar 'No plans found')"
-}; run_with_filter test__nav_keymap_zz__with_no_plans
+}

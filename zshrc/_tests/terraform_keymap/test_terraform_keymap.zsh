@@ -5,7 +5,7 @@ function test__terraform_keymap {
 		# shellcheck disable=SC2076
 		[[ $show_this_help =~ "^  \\$ $TERRAFORM_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
-}; run_with_filter test__terraform_keymap
+}
 
 function test__terraform_keymap_c {
 	assert "$(
@@ -30,7 +30,7 @@ function test__terraform_keymap_c {
 			d_absent
 		eof
 	)"
-}; run_with_filter test__terraform_keymap_c
+}
 
 function test__terraform_keymap_cc {
 	assert "$(
@@ -58,7 +58,7 @@ function test__terraform_keymap_cc {
 			cache_absent
 		eof
 	)"
-}; run_with_filter test__terraform_keymap_cc
+}
 
 function test__terraform_keymap_w {
 	assert "$(
@@ -83,4 +83,4 @@ function test__terraform_keymap_w {
 		     2	project/module
 		eof
 	)"
-}; run_with_filter test__terraform_keymap_w
+}

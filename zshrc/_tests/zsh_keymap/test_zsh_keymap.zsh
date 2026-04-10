@@ -5,7 +5,7 @@ function test__zsh_keymap {
 		# shellcheck disable=SC2076
 		[[ $show_this_help =~ "^  \\$ $ZSH_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
-}; run_with_filter test__zsh_keymap
+}
 
 function test__zsh_keymap_a {
 	assert "$(
@@ -14,7 +14,7 @@ function test__zsh_keymap_a {
 
 		[[ $count -ge $min_count ]] && echo 1
 	)" '1'
-}; run_with_filter test__zsh_keymap_a
+}
 
 function test__zsh_keymap_a__when_counting_greps {
 	assert "$(
@@ -23,13 +23,13 @@ function test__zsh_keymap_a__when_counting_greps {
 
 		[[ $count -eq actual_count ]] && echo 1
 	)" '1'
-}; run_with_filter test__zsh_keymap_a__when_counting_greps
+}
 
 function test__zsh_keymap_f {
 	assert "$(
 		[[ $(zsh_keymap_f | wc -l) -gt 400 ]] && echo 1
 	)" '1'
-}; run_with_filter test__zsh_keymap_f
+}
 
 function test__zsh_keymap_f__when_counting_0_ending_functions {
 	assert "$(
@@ -38,7 +38,7 @@ function test__zsh_keymap_f__when_counting_0_ending_functions {
 		# `3`: `10, 20, 0` from `args_numbers.zsh`
 		[[ $count -ge 3 ]] && echo 1
 	)" '1'
-}; run_with_filter test__zsh_keymap_f__when_counting_0_ending_functions
+}
 
 function test__zsh_keymap_h {
 	local history_entries; history_entries=$(
@@ -72,7 +72,7 @@ function test__zsh_keymap_h {
 		     5	echo 5
 		eof
 	)"
-}; run_with_filter test__zsh_keymap_h
+}
 
 function test__zsh_keymap_h__when_filtering {
 	local history_entries; history_entries=$(
@@ -102,7 +102,7 @@ function test__zsh_keymap_h__when_filtering {
 		     1	echo $(grep_color 3)
 		eof
 	)"
-}; run_with_filter test__zsh_keymap_h__when_filtering
+}
 
 function test__zsh_keymap_hc {
 	# shellcheck disable=SC2031
@@ -116,7 +116,7 @@ function test__zsh_keymap_hc {
 
 		HISTFILE=$histfile
 	)" 'absent'
-}; run_with_filter test__zsh_keymap_hc
+}
 
 function test__zsh_keymap_s__when_args_history_is_not_initialized {
 	args_history_init
@@ -129,7 +129,7 @@ function test__zsh_keymap_s__when_args_history_is_not_initialized {
 	)" "$args_history_max"
 
 	args_history_reset
-}; run_with_filter test__zsh_keymap_s__when_args_history_is_not_initialized
+}
 
 function test__zsh_keymap_s__when_args_history_is_already_initialized {
 	local overwrite='<overwrite>'
@@ -141,7 +141,7 @@ function test__zsh_keymap_s__when_args_history_is_already_initialized {
 	)" "$overwrite"
 
 	args_history_reset
-}; run_with_filter test__zsh_keymap_s__when_args_history_is_already_initialized
+}
 
 function test__zsh_keymap_z {
 	assert "$(zsh_keymap_z)" "$(
@@ -149,7 +149,7 @@ function test__zsh_keymap_z {
 			$(red_bar 'Required: <name>')
 		eof
 	)"
-}; run_with_filter test__zsh_keymap_z
+}
 
 function test__zsh_keymap_z__when_program_is_not_found {
 	assert "$(
@@ -159,7 +159,7 @@ function test__zsh_keymap_z__when_program_is_not_found {
 			$(red_bar '`does_not_exist` not found')
 		eof
 	)"
-}; run_with_filter test__zsh_keymap_z__when_program_is_not_found
+}
 
 function test__zsh_keymap_z__when_program_is_an_alias {
 	assert "$(
@@ -176,7 +176,7 @@ function test__zsh_keymap_z__when_program_is_an_alias {
 		     3	}
 		eof
 	)"
-}; run_with_filter test__zsh_keymap_z__when_program_is_an_alias
+}
 
 function test__zsh_keymap_z__when_input_is_a_function {
 	assert "$(
@@ -189,4 +189,4 @@ function test__zsh_keymap_z__when_input_is_a_function {
 		     3	}
 		eof
 	)"
-}; run_with_filter test__zsh_keymap_z__when_input_is_a_function
+}

@@ -5,7 +5,7 @@ function test__other_keymap {
 		# shellcheck disable=SC2076
 		[[ $show_this_help =~ "^  \\$ $OTHER_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
-}; run_with_filter test__other_keymap
+}
 
 function test__other_keymap_0 {
 	assert "$(
@@ -16,7 +16,7 @@ function test__other_keymap_0 {
 		local size2; size2=$(wc -c < "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2" | tr -d ' ')
 		echo "$size1/$size2"
 	)" '0/0'
-}; run_with_filter test__other_keymap_0
+}
 
 function test__other_keymap_b {
 	assert "$(
@@ -28,7 +28,7 @@ function test__other_keymap_b {
 			4
 		eof
 	)"
-}; run_with_filter test__other_keymap_b
+}
 
 function test__other_keymap_d {	assert "$(
 		ZSHRC_UNDER_TESTING=1 other_keymap_d www.google.com
@@ -38,11 +38,11 @@ function test__other_keymap_d {	assert "$(
 		     2	www.google.com
 		eof
 	)"
-}; run_with_filter test__other_keymap_d
+}
 
 function test__other_keymap_d__without_input {
 	assert "$(ZSHRC_UNDER_TESTING=1 other_keymap_d)" ''
-}; run_with_filter test__other_keymap_d__without_input
+}
 
 function test__other_keymap_d__with_protocol {
 	assert "$(
@@ -53,7 +53,7 @@ function test__other_keymap_d__with_protocol {
 		     2	www.google.com
 		eof
 	)"
-}; run_with_filter test__other_keymap_d__with_protocol
+}
 
 function test__other_keymap_d__with_protocol_and_path {
 	assert "$(
@@ -64,7 +64,7 @@ function test__other_keymap_d__with_protocol_and_path {
 		     2	www.google.com
 		eof
 	)"
-}; run_with_filter test__other_keymap_d__with_protocol_and_path
+}
 
 function test__other_keymap_f {	assert "$(
 		other_keymap_f 3 4 echo ~~ 2>&1
@@ -78,7 +78,7 @@ function test__other_keymap_f {	assert "$(
 			4
 		eof
 	)"
-}; run_with_filter test__other_keymap_f
+}
 
 function test__other_keymap_f__with_multiple_substitutions {
 	assert "$(
@@ -93,7 +93,7 @@ function test__other_keymap_f__with_multiple_substitutions {
 			4 and 4 again
 		eof
 	)"
-}; run_with_filter test__other_keymap_f__with_multiple_substitutions
+}
 
 function test__other_keymap_f__with_multiple_substitutions_in_quotes {
 	assert "$(
@@ -108,7 +108,7 @@ function test__other_keymap_f__with_multiple_substitutions_in_quotes {
 			4 and 4 again
 		eof
 	)"
-}; run_with_filter test__other_keymap_f__with_multiple_substitutions_in_quotes
+}
 
 function test__other_keymap_f__with_math {
 	assert "$(
@@ -123,7 +123,7 @@ function test__other_keymap_f__with_math {
 			4 and 14 too
 		eof
 	)"
-}; run_with_filter test__other_keymap_f__with_math
+}
 
 function test__other_keymap_i {
 	local file; file=$(
@@ -145,7 +145,7 @@ function test__other_keymap_i {
 			c,70
 		eof
 	)"
-}; run_with_filter test__other_keymap_i
+}
 
 function test__other_keymap_i__when_no_column_index {
 	local file; file=$(
@@ -167,7 +167,7 @@ function test__other_keymap_i__when_no_column_index {
 			d,40
 		eof
 	)"
-}; run_with_filter test__other_keymap_i__when_no_column_index
+}
 
 function test__other_keymap_i__when_invoked_after_pipe {
 	local file; file=$(
@@ -189,7 +189,7 @@ function test__other_keymap_i__when_invoked_after_pipe {
 			c,70
 		eof
 	)"
-}; run_with_filter test__other_keymap_i__when_invoked_after_pipe
+}
 
 function test__other_keymap_i__when_invoked_after_pipe_and_no_column_index {
 	local file; file=$(
@@ -211,7 +211,7 @@ function test__other_keymap_i__when_invoked_after_pipe_and_no_column_index {
 			d,40
 		eof
 	)"
-}; run_with_filter test__other_keymap_i__when_invoked_after_pipe_and_no_column_index
+}
 
 function test__other_keymap_ii {
 	local file; file=$(
@@ -233,7 +233,7 @@ function test__other_keymap_ii {
 			d,x4,40
 		eof
 	)"
-}; run_with_filter test__other_keymap_ii
+}
 
 function test__other_keymap_ii__when_specifying_only_one_column {
 	local file; file=$(
@@ -255,7 +255,7 @@ function test__other_keymap_ii__when_specifying_only_one_column {
 			40,d,x4
 		eof
 	)"
-}; run_with_filter test__other_keymap_ii__when_specifying_only_one_column
+}
 
 function test__other_keymap_ii__when_invoked_after_pipe {
 	local file; file=$(
@@ -277,7 +277,7 @@ function test__other_keymap_ii__when_invoked_after_pipe {
 			d,x4,40
 		eof
 	)"
-}; run_with_filter test__other_keymap_ii__when_invoked_after_pipe
+}
 
 function test__other_keymap_ii__when_when_invoked_after_pipe_and_specifying_only_one_column {
 	local file; file=$(
@@ -299,7 +299,7 @@ function test__other_keymap_ii__when_when_invoked_after_pipe_and_specifying_only
 			40,d,x4
 		eof
 	)"
-}; run_with_filter test__other_keymap_ii__when_when_invoked_after_pipe_and_specifying_only_one_column
+}
 
 function test__other_keymap_k {	assert "$(
 		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
@@ -318,7 +318,7 @@ function test__other_keymap_k {	assert "$(
 			$
 		eof
 	)"
-}; run_with_filter test__other_keymap_k
+}
 
 function test__other_keymap_k__when_dumping_same_pasteboard_twice {
 	assert "$(
@@ -339,7 +339,7 @@ function test__other_keymap_k__when_dumping_same_pasteboard_twice {
 			$
 		eof
 	)"
-}; run_with_filter test__other_keymap_k__when_dumping_same_pasteboard_twice
+}
 
 function test__other_keymap_k__when_dumping_two_different_pasteboards {
 	assert "$(
@@ -364,7 +364,7 @@ function test__other_keymap_k__when_dumping_two_different_pasteboards {
 			$
 		eof
 	)"
-}; run_with_filter test__other_keymap_k__when_dumping_two_different_pasteboards
+}
 
 function test__other_keymap_k__when_not_terminal_output {
 	assert "$(
@@ -378,7 +378,7 @@ function test__other_keymap_k__when_not_terminal_output {
 
 		other_keymap_k_reset
 	)" '       1'
-}; run_with_filter test__other_keymap_k__when_not_terminal_output
+}
 
 function test__other_keymap_kc {
 	assert "$(
@@ -391,7 +391,7 @@ function test__other_keymap_kc {
 
 		other_keymap_k_reset
 	)" 'absent'
-}; run_with_filter test__other_keymap_kc
+}
 
 function test__other_keymap_kk {
 	# shellcheck disable=SC2031
@@ -404,7 +404,7 @@ function test__other_keymap_kk {
 			$OTHER_KEYMAP_K_DIR
 		eof
 	)"
-}; run_with_filter test__other_keymap_kk
+}
 
 function test__other_keymap_r {
 	assert "$(
@@ -422,7 +422,7 @@ function test__other_keymap_r {
 			3.txt
 		eof
 	)"
-}; run_with_filter test__other_keymap_r
+}
 
 function test__other_keymap_t {
 	assert "$(
@@ -430,7 +430,7 @@ function test__other_keymap_t {
 		# shellcheck disable=SC2076
 		[[ $output =~ 'Command executed in .[1-2][0-9] seconds$' ]] && echo 1 || echo 2
 	)" '1'
-}; run_with_filter test__other_keymap_t
+}
 
 function test__other_keymap_u {
 	local old; old=$(
@@ -468,7 +468,7 @@ function test__other_keymap_u {
 			 Line 4
 		eof
 	)"
-}; run_with_filter test__other_keymap_u
+}
 
 function test__other_keymap_uu {
 	local old; old=$(
@@ -500,7 +500,7 @@ function test__other_keymap_uu {
 			                                                              > New Line
 		eof
 	)"
-}; run_with_filter test__other_keymap_uu
+}
 
 function test__other_keymap_w {
 	local count; count=$(
@@ -514,7 +514,7 @@ function test__other_keymap_w {
 	)
 
 	assert "$([[ $count -gt 1 ]] && echo 1)" '1'
-}; run_with_filter test__other_keymap_w
+}
 
 function test__other_keymap_x {
 	local file1; file1=$(
@@ -541,7 +541,7 @@ function test__other_keymap_x {
 			d,40
 		eof
 	)"
-}; run_with_filter test__other_keymap_x
+}
 
 function test__other_keymap_x__when_file_1_has_only_1_column {
 	local file1; file1=$(
@@ -568,7 +568,7 @@ function test__other_keymap_x__when_file_1_has_only_1_column {
 			d
 		eof
 	)"
-}; run_with_filter test__other_keymap_x__when_file_1_has_only_1_column
+}
 
 function test__other_keymap_x__when_file_2_has_only_1_column {
 	local file1; file1=$(
@@ -595,7 +595,7 @@ function test__other_keymap_x__when_file_2_has_only_1_column {
 			d,40
 		eof
 	)"
-}; run_with_filter test__other_keymap_x__when_file_2_has_only_1_column
+}
 
 function test__other_keymap_x__when_both_files_have_only_1_column {
 	local file1; file1=$(
@@ -622,7 +622,7 @@ function test__other_keymap_x__when_both_files_have_only_1_column {
 			d
 		eof
 	)"
-}; run_with_filter test__other_keymap_x__when_both_files_have_only_1_column
+}
 
 function test__other_keymap_xx {
 	local file1; file1=$(
@@ -649,4 +649,4 @@ function test__other_keymap_xx {
 			d,40
 		eof
 	)"
-}; run_with_filter test__other_keymap_xx
+}

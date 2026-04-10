@@ -3,7 +3,7 @@ function verify_keymap_definitions_section {
 
 	echo
 	echo
-	echo "$section_number: Verify all keymaps have implementations"
+	echo "$section_number: Verify keymap entries and implementations match"
 
 	init
 
@@ -11,7 +11,7 @@ function verify_keymap_definitions_section {
 		verify_keymap_definitions "$keymap_file"
 	done
 
-	print_summary 'keymap entries have implementations'
+	print_summary 'keymap entries and implementations matched'
 }
 
 function verify_keymap_definitions {

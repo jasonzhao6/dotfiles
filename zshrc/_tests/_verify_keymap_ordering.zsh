@@ -3,7 +3,7 @@ function verify_keymap_ordering_section {
 
 	echo
 	echo
-	echo "$section_number: Verify all implementations are alphabetized"
+	echo "$section_number: Verify implementations are alphabetized"
 
 	init
 
@@ -11,7 +11,7 @@ function verify_keymap_ordering_section {
 		verify_keymap_ordering "$keymap_file"
 	done
 
-	print_summary 'keymap implementations alphabetized'
+	print_summary 'implementations are alphabetized'
 }
 
 function verify_keymap_ordering {
@@ -41,7 +41,7 @@ function verify_keymap_ordering {
 		if [[ $diff =~ '^ ?function' ]]; then
 			pass
 		elif [[ $diff =~ '^-function' ]]; then
-			fail "'$(echo "$diff" | trim 1)' does not match"
+			fail "'$(echo "$diff" | trim 1)' is not alphabetized"
 		fi
 	done <<< "$functions_compared"
 }

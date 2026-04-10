@@ -14,7 +14,7 @@ function assert {
 	[[ $output == "$expected" ]] && pass || fail "'${funcstack[2]}'" "$output" "$expected"
 }
 
-function run_with_filter {
+function enqueue_test {
 	local test_name=$1
 
 	if [[ -z $ZSHRC_TESTS_NAME_FILTER || $test_name == *$ZSHRC_TESTS_NAME_FILTER* ]]; then
@@ -22,7 +22,7 @@ function run_with_filter {
 	fi
 }
 
-function execute_tests {
+function run_tests {
 	shuf -e "${test_queue[@]}" | while read -r test_name; do
 		eval "$test_name"
 	done

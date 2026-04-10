@@ -5,7 +5,7 @@ function test__q_keymap {
 		# shellcheck disable=SC2076
 		[[ $show_this_help =~ "^  \\$ $Q_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
-}; run_with_filter test__q_keymap
+}
 
 function test__q_keymap_p {
 	assert "$(
@@ -35,7 +35,7 @@ function test__q_keymap_p {
 			agent1
 		eof
 	)"
-}; run_with_filter test__q_keymap_p
+}
 
 function test__q_keymap_P {
 	assert "$(
@@ -66,4 +66,4 @@ function test__q_keymap_P {
 			pulled_agent
 		eof
 	)"
-}; run_with_filter test__q_keymap_P
+}
