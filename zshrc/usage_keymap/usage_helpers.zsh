@@ -69,26 +69,15 @@ function usage_helpers_sparklines {
 	local num_months=$(( total_days / 30 + 1 ))
 	local num_quarters=$(( total_days / 91 + 1 ))
 
-	# Include year in labels if date range crosses a year boundary
-	local first_year="${first_date%%-*}"
-	local this_year="${today%%-*}"
-	local cross_year=0
-	[[ $first_year != "$this_year" ]] && cross_year=1
-
 	# Pick finest granularity that fits the available width
-	# Include year in labels when data crosses a year boundary
 	if [[ $total_days -le $sparkline_width ]]; then
-		date_fmt='%Y-%m-%d'
-		[[ $cross_year -eq 1 ]] && label_fmt='%-m/%-d/%y' || label_fmt='%-m/%-d'
+		date_fmt='%Y-%m-%d'; label_fmt='%-m/%-d/%y'
 	elif [[ $num_weeks -le $sparkline_width ]]; then
-		date_fmt='%Y-%W'
-		[[ $cross_year -eq 1 ]] && label_fmt='%-m/%-d/%y' || label_fmt='%-m/%-d'
+		date_fmt='%Y-%W'; label_fmt='%-m/%-d/%y'
 	elif [[ $num_months -le $sparkline_width ]]; then
-		date_fmt='%Y-%m'
-		[[ $cross_year -eq 1 ]] && label_fmt="%b '%y" || label_fmt='%b'
+		date_fmt='%Y-%m'; label_fmt="%b '%y"
 	elif [[ $num_quarters -le $sparkline_width ]]; then
-		date_fmt='quarter'
-		[[ $cross_year -eq 1 ]] && label_fmt="Q%q '%y" || label_fmt='Q%q'
+		date_fmt='quarter'; label_fmt="Q%q '%y"
 	else
 		date_fmt='%Y'; label_fmt='%Y'
 	fi
