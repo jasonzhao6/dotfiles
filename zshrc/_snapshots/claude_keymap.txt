@@ -24,19 +24,19 @@ Keymap Usage
 
 Keymap List
 
-  $ c.n            # Start a new 5-hour token window
+  $ c.n            # Start new 5-hour token window
 
   $ c.c            # Start new session
   $ c.r            # Continue last session
-  $ c.l <match>?   # Find a matching session
-  $ c.s            # Start a scratch session
+  $ c.l <match>?   # Find matching session
+  $ c.s            # Start scratch session
   $ c.ss           # Reset tab background color
 
   $ c.o            # Print local settings
   $ c.oo           # Move local settings to global
 
   $ c.m            # Edit config folder in TextMate
-  $ c.u            # Push config to `scratch` repo (`cp` is reserved)
+  $ c.u            # Push config to `scratch` (`cp` reserved)
   $ c.U            # Pull config from `scratch` repo
 
   $ c.d            # (Reserved: Change directory)

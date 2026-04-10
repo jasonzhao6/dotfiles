@@ -13,8 +13,8 @@ NAV_KEYMAP=(
 	"${NAV_ALIAS} <directory> # Go to directory"
 	"${NAV_DOT}t # Go to directory in pasteboard"
 	"${NAV_DOT}tt <file>? # Copy current path to pasteboard"
-	"${NAV_DOT}y # Yank the current path"
-	"${NAV_DOT}p # Put the yanked path"
+	"${NAV_DOT}y # Yank current path"
+	"${NAV_DOT}p # Put yanked path"
 	''
 	"${NAV_DOT}u # Go up one directory"
 	"${NAV_DOT}uu # Go up two directories"
@@ -30,7 +30,7 @@ NAV_KEYMAP=(
 	"${NAV_DOT}s # Go to scratch"
 	"${NAV_DOT}ss # Go to scratch, open GitHub Desktop"
 	"${NAV_DOT}z # Go to scratch/claude-plans"
-	"${NAV_DOT}zz # Print the latest claude plan with glow"
+	"${NAV_DOT}zz # Print latest claude plan with glow"
 	"${NAV_DOT}x # Go to excalidraw"
 	''
 	"${NAV_DOT}f # Sort files by size"

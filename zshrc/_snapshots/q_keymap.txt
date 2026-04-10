@@ -31,9 +31,9 @@ Keymap List
   $ q.s            # Chat with SDLC MCP
   $ q.t            # Chat with Trancache context
 
-  $ q.c            # Vibe code in the current repo
-  $ q.j            # Vibe code in the JCard repo
-  $ q.k            # Vibe code in the K8s Helm repo
+  $ q.c            # Vibe code in current repo
+  $ q.j            # Vibe code in JCard repo
+  $ q.k            # Vibe code in K8s Helm repo
 
   $ q.0 <command>? # Invoke `q`
   $ q.4 <command>? # Invoke `q chat` with `claude-opus-4.5`

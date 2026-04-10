@@ -58,6 +58,7 @@ function keymap_set_alias {
 	local value=$2
 
 	# Do not overwrite reserved keywords, error instead
+	# Check at load time instead of test time for immediate feedback when remapping keys
 	if is_reserved "$key"; then
 		red_bar "\`$key\` is a reserved keyword"
 		return

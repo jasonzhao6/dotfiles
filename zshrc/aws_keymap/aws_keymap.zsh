@@ -4,7 +4,7 @@ AWS_DOT="${AWS_ALIAS}${KEYMAP_DOT}"
 
 AWS_KEYMAP=(
 	"${AWS_DOT}s <match>* <-mismatch>* # List Britive roles & filter"
-	"${AWS_ALIAS} <role> # Assume the specified role"
+	"${AWS_ALIAS} <role> # Assume specified role"
 	''
 	"${AWS_DOT}o <id OR name> # Account ID ↔ name lookup"
 	''

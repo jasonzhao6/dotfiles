@@ -34,8 +34,8 @@ Keymap List
   $ n <directory>              # Go to directory
   $ n.t                        # Go to directory in pasteboard
   $ n.tt <file>?               # Copy current path to pasteboard
-  $ n.y                        # Yank the current path
-  $ n.p                        # Put the yanked path
+  $ n.y                        # Yank current path
+  $ n.p                        # Put yanked path
 
   $ n.u                        # Go up one directory
   $ n.uu                       # Go up two directories
@@ -51,7 +51,7 @@ Keymap List
   $ n.s                        # Go to scratch
   $ n.ss                       # Go to scratch, open GitHub Desktop
   $ n.z                        # Go to scratch/claude-plans
-  $ n.zz                       # Print the latest claude plan with glow
+  $ n.zz                       # Print latest claude plan with glow
   $ n.x                        # Go to excalidraw
 
   $ n.f                        # Sort files by size

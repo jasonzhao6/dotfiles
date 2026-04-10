@@ -3,17 +3,17 @@ USAGE_ALIAS='u'
 USAGE_DOT="${USAGE_ALIAS}${KEYMAP_DOT}"
 
 USAGE_KEYMAP=(
-	"${USAGE_DOT}u <n>? # Usage overview, for last <n> calendar days (Default: All)"
-	"${USAGE_DOT}d <n>? # Usage by day of week, for last <n> calendar days (Default: All)"
-	"${USAGE_DOT}h <n>? # Usage by hour of day, for last <n> calendar days (Default: All)"
+	"${USAGE_DOT}u <n>? # Usage overview (Default: All days)"
+	"${USAGE_DOT}d <n>? # By day of week (Default: All days)"
+	"${USAGE_DOT}h <n>? # By hour of day (Default: All days)"
 	''
-	"${USAGE_DOT}n <n OR match>? # Top namespaces, for last <n> calendar days (Default: All)"
-	"${USAGE_DOT}a <n OR match>? # Top aliases, for last <n> calendar days (Default: All)"
+	"${USAGE_DOT}n <n OR match>? # Top namespaces (Default: All days)"
+	"${USAGE_DOT}a <n OR match>? # Top aliases (Default: All days)"
 	''
-	"${USAGE_DOT}m # Open usage file in TextMate"
+	"${USAGE_DOT}m # Open usage in TextMate"
 	"${USAGE_DOT}c # Clear usage file"
 	''
-	"${USAGE_DOT}t <n> # Back up real data, generate test data for <n> calendar days"
+	"${USAGE_DOT}t <n> # Backup data, generate test data (n days)"
 	"${USAGE_DOT}tt # Restore real data from backup"
 )
 

@@ -54,8 +54,8 @@ function test__main_keymap_r__when_specifying_a_description {
 		cat <<-eof
 
 			  $ g.h                       # (Reserved: GitHub CLI)
-			  $ h.h <match>* <-mismatch>* # Navigate to GitHub & list repos & filter
-			  $ h.a                       # Open the current repo in GitHub Desktop
+			  $ h.h <match>* <-mismatch>* # Go to GitHub & list repos & filter
+			  $ h.a                       # Open current repo in GitHub Desktop
 			  $ m.h <regex>?              # Show GitHub Desktop shortcuts
 			  $ n.h <match>* <-mismatch>* # Go to GitHub
 			  $ n.dd                      # Go to dotfiles, open GitHub Desktop
@@ -79,8 +79,8 @@ function test__main_keymap_r__when_specifying_a_zsh_only_description {
 	)" "$(
 		cat <<-eof
 
-			  $ o.f <start> <finish> (~~) # Run a sequence of commands in foreground
-			  $ o.b <start> <finish> (~~) # Run a sequence of commands in background
+			  $ o.f <start> <finish> (~~) # Run command sequence in foreground
+			  $ o.b <start> <finish> (~~) # Run command sequence in background
 		eof
 	)"
 }
@@ -114,10 +114,10 @@ function test__main_keymap_w__when_specifying_a_key {
 	)" "$(
 		cat <<-eof
 
-		  $ k.j <type> <name>             # Get resource as json & save a copy
+		  $ k.j <type> <name>             # Get resource as json & save copy
 		  $ k.jj                          # Get the copy of json
-		  $ o.j <url> <regex> <num lines> # Curl a json endpoint
-		  $ q.j                           # Vibe code in the JCard repo
+		  $ o.j <url> <regex> <num lines> # Curl json endpoint
+		  $ q.j                           # Vibe code in JCard repo
 
 		  alt-j # Step over
 		  cmd-j # Join lines

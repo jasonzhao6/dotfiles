@@ -25,7 +25,7 @@ Keymap Usage
 Keymap List
 
   $ s.s <match>* <-mismatch>* # List Britive roles & filter
-  $ s <role>                  # Assume the specified role
+  $ s <role>                  # Assume specified role
 
   $ s.o <id OR name>          # Account ID ↔ name lookup
 

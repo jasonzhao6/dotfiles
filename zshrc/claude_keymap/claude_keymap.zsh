@@ -3,19 +3,19 @@ CLAUDE_ALIAS='c'
 CLAUDE_DOT="${CLAUDE_ALIAS}${KEYMAP_DOT}"
 
 CLAUDE_KEYMAP=(
-	"${CLAUDE_DOT}n # Start a new 5-hour token window"
+	"${CLAUDE_DOT}n # Start new 5-hour token window"
 	''
 	"${CLAUDE_DOT}c # Start new session"
 	"${CLAUDE_DOT}r # Continue last session"
-	"${CLAUDE_DOT}l <match>? # Find a matching session"
-	"${CLAUDE_DOT}s # Start a scratch session"
+	"${CLAUDE_DOT}l <match>? # Find matching session"
+	"${CLAUDE_DOT}s # Start scratch session"
 	"${CLAUDE_DOT}ss # Reset tab background color"
 	''
 	"${CLAUDE_DOT}o # Print local settings"
 	"${CLAUDE_DOT}oo # Move local settings to global"
 	''
 	"${CLAUDE_DOT}m # Edit config folder in TextMate"
-	"${CLAUDE_DOT}u # Push config to \`scratch\` repo (\`cp\` is reserved)"
+	"${CLAUDE_DOT}u # Push config to \`scratch\` (\`cp\` reserved)"
 	"${CLAUDE_DOT}U # Pull config from \`scratch\` repo"
 	''
 	"${CLAUDE_DOT}d # (Reserved: Change directory)"

@@ -97,10 +97,10 @@ Non-zsh shortcut reference files for external apps (e.g. Gmail, Terminal, Claude
 - Tests are shuffled before execution to catch ordering dependencies
 - 5 test sections:
   1. Unit tests (`_run_all_test_cases.zsh`)
-  2. Verify every defined test is invoked (`_verify_test_invocations.zsh`)
-  3. Verify subjects and tests are defined in the same order (`_verify_test_ordering.zsh`)
-  4. Verify each keymap entry has a corresponding implementation function (`_verify_keymap_definitions.zsh`)
-  5. Verify all implementation functions are alphabetized (`_verify_keymap_ordering.zsh`)
+  2. Verify keymap descriptions are at most 40 characters (`_verify_description_length.zsh`)
+  3. Verify each keymap entry has a corresponding implementation function (`_verify_keymap_definitions.zsh`)
+  4. Verify all implementation functions are alphabetized (`_verify_keymap_ordering.zsh`)
+  5. Verify subjects and tests are defined in the same order (`_verify_test_ordering.zsh`)
 
 ### Adding a New Keymap
 

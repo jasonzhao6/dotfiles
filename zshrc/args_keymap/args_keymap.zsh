@@ -4,13 +4,13 @@ ARGS_DOT="${ARGS_ALIAS}${KEYMAP_DOT}"
 
 ARGS_KEYMAP=(
 	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}s <match>* <-mismatch>* # Save as args & filter"
-	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}so <match>* <-mismatch>* # Save as args & soft-select the 1st column & filter"
+	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}so <match>* <-mismatch>* # Save, soft-select 1st column & filter"
 	''
 	"${ARGS_DOT}a <match>* <-mismatch>* # List args & filter"
 	''
-	"${ARGS_DOT}o <command> # Use the first arg"
+	"${ARGS_DOT}o <command> # Use first arg"
 	"${ARGS_DOT}e <command> # Use a random arg"
-	'0 <command> # Use the last arg'
+	'0 <command> # Use last arg'
 	'(1-100) <command> # Use an arg by number up to 100'
 	"${ARGS_DOT}n <number> <command> # Use an arg by number beyond 100"
 	''
@@ -21,7 +21,7 @@ ARGS_KEYMAP=(
 	"${ARGS_DOT}u # Undo \"Filter args\" or \"Select a column\""
 	"${ARGS_DOT}r # Redo \"Filter args\" or \"Select a column\""
 	"${ARGS_DOT}h # List history entries"
-	"${ARGS_DOT}h <history index> # Select an entry by index"
+	"${ARGS_DOT}h <history index> # Select entry by index"
 	"${ARGS_DOT}hc # Clear history entries"
 	''
 	"each <command> # Use each arg in series"
@@ -34,11 +34,11 @@ ARGS_KEYMAP=(
 	"${ARGS_DOT}d # Dedupe by all columns"
 	''
 	"${ARGS_DOT}t # Tabulate columns"
-	"${ARGS_DOT}w # Delimit columns based on the top row"
-	"${ARGS_DOT}w <letter> # Select a column based on the top row"
-	"${ARGS_DOT}v # Delimit columns based on the bottom row"
-	"${ARGS_DOT}v <letter> # Select a column based on the bottom row"
-	"${ARGS_DOT}z # Select the last column based on the bottom row"
+	"${ARGS_DOT}w # Delimit columns by top row"
+	"${ARGS_DOT}w <letter> # Select column by top row"
+	"${ARGS_DOT}v # Delimit columns by bottom row"
+	"${ARGS_DOT}v <letter> # Select column by bottom row"
+	"${ARGS_DOT}z # Select last column by bottom row"
 )
 
 keymap_init $ARGS_NAMESPACE $ARGS_ALIAS "${ARGS_KEYMAP[@]}"

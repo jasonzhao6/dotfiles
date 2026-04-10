@@ -24,15 +24,15 @@ Keymap Usage
 
 Keymap List
 
-  $ u.u <n>?          # Usage overview, for last <n> calendar days (Default: All)
-  $ u.d <n>?          # Usage by day of week, for last <n> calendar days (Default: All)
-  $ u.h <n>?          # Usage by hour of day, for last <n> calendar days (Default: All)
+  $ u.u <n>?          # Usage overview (Default: All days)
+  $ u.d <n>?          # By day of week (Default: All days)
+  $ u.h <n>?          # By hour of day (Default: All days)
 
-  $ u.n <n OR match>? # Top namespaces, for last <n> calendar days (Default: All)
-  $ u.a <n OR match>? # Top aliases, for last <n> calendar days (Default: All)
+  $ u.n <n OR match>? # Top namespaces (Default: All days)
+  $ u.a <n OR match>? # Top aliases (Default: All days)
 
-  $ u.m               # Open usage file in TextMate
+  $ u.m               # Open usage in TextMate
   $ u.c               # Clear usage file
 
-  $ u.t <n>           # Back up real data, generate test data for <n> calendar days
+  $ u.t <n>           # Backup data, generate test data (n days)
   $ u.tt              # Restore real data from backup

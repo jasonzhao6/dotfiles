@@ -24,41 +24,41 @@ Keymap Usage
 
 Keymap List
 
-  $ g.g            # Checkout the latest `main`
+  $ g.g            # Checkout latest `main`
   $ g.n <branch>   # Checkout a new branch
   $ g.k <branch>   # Checkout a remote branch
 
   $ g.b            # List branches
   $ g.bb           # Delete merged branches
-  $ g.bd <branch>  # Delete the specified branch
+  $ g.bd <branch>  # Delete specified branch
   $ g <branch>     # Checkout a local branch
 
-  $ g.d            # Git diff
-  $ g.t            # Git status
-  $ g.c            # Create a new commit
-  $ g.m            # Amend the previous commit
-  $ g.w            # Reword the previous commit
-  $ g.i <sha>?     # Fix up a commit (Default: Pasteboard)
-  $ g.ii           # List the last 20 commits
-  $ g.e            # Create an empty commit
+  $ g.d            # Diff
+  $ g.t            # Status
+  $ g.c            # Create new commit
+  $ g.m            # Amend previous commit
+  $ g.w            # Reword previous commit
+  $ g.i <sha>?     # Fixup commit (Default: Pasteboard)
+  $ g.ii           # List last 20 commits
+  $ g.e            # Create empty commit
 
-  $ g.x <number>?  # Rebase with the latest main (or last N commits)
-  $ g.xm           # Rebase with the latest master
-  $ g.xu           # Rebase with the latest upstream
+  $ g.x <number>?  # Rebase on main (or last N commits)
+  $ g.xm           # Rebase on master
+  $ g.xu           # Rebase on upstream
   $ g.xc           # Rebase continue
   $ g.xa           # Rebase abort
 
-  $ g.y <sha>?     # Cherry pick a commit (Default: Pasteboard)
+  $ g.y <sha>?     # Cherry pick (Default: Pasteboard)
   $ g.yc           # Cherry pick continue
   $ g.ya           # Cherry pick abort
 
-  $ g.v <sha>?     # Revert a commit (Default: Pasteboard)
+  $ g.v <sha>?     # Revert commit (Default: Pasteboard)
   $ g.vc           # Revert continue
   $ g.va           # Revert abort
 
-  $ g.u <number>?  # Undo the last N commits (Default: 1)
-  $ g.z <number>?  # Discard uncommitted changes (& last N commits)
-  $ g.zz           # Discard uncommitted changes & the last commit
+  $ g.u <number>?  # Undo last N commits (Default: 1)
+  $ g.z <number>?  # Discard changes (& last N commits)
+  $ g.zz           # Discard changes & last commit
 
   $ g.s <message>? # Stash
   $ g.a <index>?   # Apply a stash (Default: Latest)

@@ -10,9 +10,9 @@ Q_KEYMAP=(
 	"${Q_DOT}s # Chat with SDLC MCP"
 	"${Q_DOT}t # Chat with Trancache context"
 	''
-	"${Q_DOT}c # Vibe code in the current repo"
-	"${Q_DOT}j # Vibe code in the JCard repo"
-	"${Q_DOT}k # Vibe code in the K8s Helm repo"
+	"${Q_DOT}c # Vibe code in current repo"
+	"${Q_DOT}j # Vibe code in JCard repo"
+	"${Q_DOT}k # Vibe code in K8s Helm repo"
 	''
 	"${Q_DOT}0 <command>? # Invoke \`q\`"
 	"${Q_DOT}4 <command>? # Invoke \`q chat\` with \`claude-opus-4.5\`"
