@@ -13,6 +13,9 @@ function run_all_test_cases_section {
 	local pids=()
 	local files=()
 
+	# Save stdout for streaming dots from subshells
+	exec 3>&1
+
 	#	Parallelize test executions by file
 	for test in $(find_test_files); do
 		local base=$(basename "$test")
@@ -25,6 +28,20 @@ function run_all_test_cases_section {
 			ARGS_YANK_FILE="$tmpdir/$base.yank"
 			ARGS_BACKGROUND_OUTPUTS_FILE="$tmpdir/$base.bg"
 
+			# Override `pass`/`fail` from `_test_harness.zsh` to stream dots via fd 3,
+			# bypassing the subshell's `/dev/null` redirect on stdout
+			function pass { ((passes++)); ((total++)); echo -n . >&3; }
+			function fail {
+				local name=$1; local output=$2; local expected=$3
+				failed+="\n$(red_bg fail): $name"
+				((total++))
+				echo -n f >&3
+				if [[ -n $output || -n $expected ]]; then
+					debug+="\n\n$(red_bg debug): $name\n"
+					debug+=$(diff -u <(echo "$expected") <(echo "$output") | sed '/--- /d; /+++ /d; /@@ /d')
+				fi
+			}
+
 			init
 			source "$test"
 			for func in $(typeset +f | command grep '^test__'); do
@@ -36,7 +53,7 @@ function run_all_test_cases_section {
 			echo "$passes $total" > "$tmpdir/$base.result"
 			[[ -n $failed ]] && printf '%b' "$failed" > "$tmpdir/$base.failed"
 			[[ -n $debug ]] && printf '%b' "$debug" > "$tmpdir/$base.debug"
-		) > "$tmpdir/$base.dots" 2>/dev/null &
+		) > /dev/null 2>/dev/null &
 		pids+=($!)
 	done
 
@@ -51,9 +68,6 @@ function run_all_test_cases_section {
 		wait ${pids[$i]}
 		local base=${files[$i]}
 
-		# Print buffered dots for this file
-		[[ -s "$tmpdir/$base.dots" ]] && cat "$tmpdir/$base.dots"
-
 		# Accumulate pass/total counts
 		read p t < "$tmpdir/$base.result"
 		((passes += p))
@@ -63,6 +77,8 @@ function run_all_test_cases_section {
 		[[ -f "$tmpdir/$base.failed" ]] && failed+=$(cat "$tmpdir/$base.failed")
 		[[ -f "$tmpdir/$base.debug" ]] && debug+=$(cat "$tmpdir/$base.debug")
 	done
+
+	exec 3>&-
 
 	print_summary 'keymap tests passed'
 

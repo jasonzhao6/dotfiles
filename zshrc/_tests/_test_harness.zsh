@@ -52,6 +52,9 @@ function find_test_files {
 	ls "$ZSHRC_SRC_DIR"/_tests/**/test_*.zsh | bw | sort --random-sort
 }
 
+# Note: `pass` and `fail` are overridden in `_run_all_test_cases.zsh` to stream
+# dots via fd 3 during parallel execution. These versions are used by sections 2-4.
+
 function pass {
 	((passes++))
 	((total++))
