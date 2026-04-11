@@ -153,6 +153,10 @@ function test__downcase {
 	assert "$(echo 'HELLO world FoO BaR' | downcase)" 'hello world foo bar'
 }
 
+function test__encode_url {
+	assert "$(echo -n 'hello world&foo=bar' | encode_url)" 'hello%20world%26foo%3Dbar'
+}
+
 function test__extract_urls {
 	local url='http://example.com'
 	assert "$(echo $url | extract_urls)" "$(pgrep_color "$url")"

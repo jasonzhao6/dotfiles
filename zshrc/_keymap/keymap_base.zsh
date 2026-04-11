@@ -415,18 +415,6 @@ function keymap_annotate_the_dot {
 		"$(gray_fg "# Omit it when invoking a mapping")"
 }
 
-function keymap_is_key_mapped {
-	local alias=$1; shift
-	local key=$1; shift
-	local keymap_entries=("$@")
-
-	for entry in "${keymap_entries[@]}"; do
-		[[ $entry == "$alias$KEYMAP_DOT$key"* ]] && return 0
-	done
-
-	return 1
-}
-
 # Includes custom zsh and non-zsh keymaps
 # But excludes default keyboard shortcuts
 function keymap_files {

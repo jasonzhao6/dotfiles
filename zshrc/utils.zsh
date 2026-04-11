@@ -103,7 +103,7 @@ function downcase {
 	tr '[:upper:]' '[:lower:]'
 }
 
-function encode_url() {
+function encode_url {
 	perl -MURI::Escape -ne 'print uri_escape($_)'
 }
 
