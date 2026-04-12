@@ -37,8 +37,8 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}f <start> <finish> (~~) # Run command sequence in foreground"
 	"${OTHER_DOT}b <start> <finish> (~~) # Run command sequence in background"
 	''
-	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}i <file>? <column index>? # CSV: Sort lines by column index"
-	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}ii <file>? <column 1> <column 2>? # CSV: Swap columns by indexes"
+	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}i <file>? <col index>? # CSV: Sort lines by column index"
+	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}ii <file>? <i1> <i2>? # CSV: Swap columns by indexes"
 	"${OTHER_DOT}x <file 1>? <file 2>? # CSV: Keep lines matching 1st column"
 	"${OTHER_DOT}xx <file 1>? <file 2>? # CSV: Drop lines matching 1st column"
 	''
