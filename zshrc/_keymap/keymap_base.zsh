@@ -387,7 +387,7 @@ function keymap_get_max_command_size {
 
 	for entry in "${keymap_entries[@]}"; do
 		# If `entry` starts with `#`, this enry does not have any command
-		[[ $entry == \#* ]] && command_size=0 || command_size="${#entry% \#*}"
+		[[ $entry == \#* ]] && command_size=0 || command_size="${#entry%% \#*}"
 
 		[[ $command_size -gt $max_command_size ]] && max_command_size=$command_size
 	done
