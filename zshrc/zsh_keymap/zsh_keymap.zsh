@@ -9,9 +9,10 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}s # Source"
 	"${ZSH_DOT}t <match OR 1-5>? # Run tests by name or section #"
 	''
-	"${ZSH_DOT}z <name> # Custom \`which\` lookup"
+	"${ZSH_DOT}w <name> # Custom \`which\` lookup"
 	"${ZSH_DOT}a <match>* <-mismatch>* # List aliases & filter"
 	"${ZSH_DOT}f <match>* <-mismatch>* # List functions & filter"
+	"${ZSH_DOT}z <file> # Render markdown with \`mdcat\`"
 	''
 	"${ZSH_DOT}h <grep>? # List history"
 	"${ZSH_DOT}hc # Clear history"
@@ -135,7 +136,7 @@ function zsh_keymap_t {
 	zsh "$ZSHRC_SRC_DIR"/_tests.zsh "$@"
 }
 
-function zsh_keymap_z {
+function zsh_keymap_w {
 	local name=$1
 	[[ -z $name ]] && red_bar 'Required: <name>' && return
 
@@ -164,4 +165,11 @@ function zsh_keymap_z {
 	fi
 
 	echo "$definition" | args_keymap_s
+}
+
+function zsh_keymap_z {
+	local file=$1
+
+	echo
+	mdcat --columns 80 "$file"
 }

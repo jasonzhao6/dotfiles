@@ -143,17 +143,17 @@ function test__zsh_keymap_s__when_args_history_is_already_initialized {
 	args_history_reset
 }
 
-function test__zsh_keymap_z {
-	assert "$(zsh_keymap_z)" "$(
+function test__zsh_keymap_w {
+	assert "$(zsh_keymap_w)" "$(
 		cat <<-eof
 			$(red_bar 'Required: <name>')
 		eof
 	)"
 }
 
-function test__zsh_keymap_z__when_program_is_not_found {
+function test__zsh_keymap_w__when_program_is_not_found {
 	assert "$(
-		zsh_keymap_z does_not_exist
+		zsh_keymap_w does_not_exist
 	)" "$(
 		cat <<-eof
 			$(red_bar '`does_not_exist` not found')
@@ -161,9 +161,9 @@ function test__zsh_keymap_z__when_program_is_not_found {
 	)"
 }
 
-function test__zsh_keymap_z__when_program_is_an_alias {
+function test__zsh_keymap_w__when_program_is_an_alias {
 	assert "$(
-		zsh_keymap_z z0 | bw
+		zsh_keymap_w z0 | bw
 	)" "$(
 		cat <<-eof
 
@@ -178,9 +178,9 @@ function test__zsh_keymap_z__when_program_is_an_alias {
 	)"
 }
 
-function test__zsh_keymap_z__when_input_is_a_function {
+function test__zsh_keymap_w__when_input_is_a_function {
 	assert "$(
-		zsh_keymap_z zsh_keymap_0
+		zsh_keymap_w zsh_keymap_0
 	)" "$(
 		cat <<-eof
 

@@ -220,7 +220,7 @@ function nav_keymap_zz {
 		echo
 		echo -n 'Plan: '
 		cyan_fg "${latest##*/}"
-		cd "$NAV_CLAUDE_PLANS_DIR" && glow "$latest"
+		cd "$NAV_CLAUDE_PLANS_DIR" && zsh_keymap_z "$latest"
 	else
 		red_bar "No plans found"
 	fi
