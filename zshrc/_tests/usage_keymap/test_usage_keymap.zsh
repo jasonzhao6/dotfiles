@@ -232,8 +232,8 @@ function test__usage_keymap_h {
 		KEYMAP_USAGE_FILE=/tmp/test__usage_keymap_h.tsv
 
 		# Use gdate to get known hour epochs in local time
-		local h09=1772460000  # 2026-03-02 09:00
-		local h14=1772478000  # 2026-03-02 14:00
+		local h09; h09=$(gdate -d '2026-03-02 09:00:00' +%s)
+		local h14; h14=$(gdate -d '2026-03-02 14:00:00' +%s)
 		printf '%s\tgd\n' "$h09" > "$KEYMAP_USAGE_FILE"
 		printf '%s\tgd\n' "$h09" >> "$KEYMAP_USAGE_FILE"
 		printf '%s\tgc\n' "$h14" >> "$KEYMAP_USAGE_FILE"
