@@ -171,5 +171,11 @@ function zsh_keymap_z {
 	local file=$1
 
 	echo
-	mdcat --columns 80 "$file"
+	# Override some of `mdcat`'s styling to match `glow`'s
+	mdcat --columns 80 "$file" | perl -pe '
+		s/\xe2\x94\x84/#/g;                                # Replace heading leading ┄ dashes with `#`
+		s/(#+)\e\[0m/$1 \e[0m/g;                           # Append trailing space after `#`
+		s/\e\[34m/\e[36m/g;                                # Swap heading dark blue (34) for cyan (36)
+		s/\e\[32m(?:\xe2\x94\x80)+\e\[0m/\e[33m```\e[0m/g; # Replace code fence ─ rules with ``` and swap green (32) for yellow (33)
+	'
 }

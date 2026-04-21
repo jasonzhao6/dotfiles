@@ -190,3 +190,58 @@ function test__zsh_keymap_w__when_input_is_a_function {
 		eof
 	)"
 }
+
+function test__zsh_keymap_z__replaces_heading_dashes_with_hashes {
+	local md='/tmp/test__zsh_keymap_z.md'
+	printf '# H1\n\n## H2\n' > $md
+
+	assert "$(zsh_keymap_z $md | bw | compact)" "$(
+		cat <<-eof
+			# H1
+			## H2
+		eof
+	)"
+
+	rm $md
+}
+
+function test__zsh_keymap_z__swaps_heading_blue_for_cyan {
+	local md='/tmp/test__zsh_keymap_z.md'
+	echo '# H1' > $md
+
+	# shellcheck disable=SC2076
+	assert "$(
+		local output; output=$(zsh_keymap_z $md)
+		[[ $output =~ $'\e\\[36m' ]] && [[ ! $output =~ $'\e\\[34m' ]] && echo 1
+	)" '1'
+
+	rm $md
+}
+
+function test__zsh_keymap_z__replaces_fence_dashes_with_backticks {
+	local md='/tmp/test__zsh_keymap_z.md'
+	printf '```\ncode\n```\n' > $md
+
+	assert "$(zsh_keymap_z $md | bw | compact)" "$(
+		cat <<-eof
+			\`\`\`
+			code
+			\`\`\`
+		eof
+	)"
+
+	rm $md
+}
+
+function test__zsh_keymap_z__swaps_fence_green_for_yellow {
+	local md='/tmp/test__zsh_keymap_z.md'
+	printf '```\ncode\n```\n' > $md
+
+	# shellcheck disable=SC2076
+	assert "$(
+		local output; output=$(zsh_keymap_z $md)
+		[[ $output =~ $'\e\\[33m```' ]] && [[ ! $output =~ $'\e\\[32m' ]] && echo 1
+	)" '1'
+
+	rm $md
+}
