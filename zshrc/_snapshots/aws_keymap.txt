@@ -2,7 +2,7 @@ Keymap: aws_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .  (p)  y   |   f   g  (c)  r   l   /   =   \ 
-     (a) <o> (e) <u>  i   |   d  <h> <t> (n) (s)  - 
+     (a) <o> (e) <u> <i>  |   d  <h> <t> (n) (s)  - 
       ;  (q)  j   k   x   |  (b) (m) <w>  v   z 
 
   `<>` key initials have one mapping
@@ -10,58 +10,59 @@ Keymap: aws_keymap.zsh
 
 Keymap Usage
 
-  $ s                         # Show this keymap
-  $ s <regex>                 # Search this keymap
+  $ s                           # Show this keymap
+  $ s <regex>                   # Search this keymap
 
-  $ s.<key>                   # This mapping takes no variable
-  $ s.<key> <var>             # This mapping takes one variable
-  $ s.<key> <var>?            # This mapping takes zero or one variable
-  $ s.<key> <var>*            # This mapping takes zero or multiple variables
-  $ s.<key> (1-10)            # This mapping takes an exact value from the list
+  $ s.<key>                     # This mapping takes no variable
+  $ s.<key> <var>               # This mapping takes one variable
+  $ s.<key> <var>?              # This mapping takes zero or one variable
+  $ s.<key> <var>*              # This mapping takes zero or multiple variables
+  $ s.<key> (1-10)              # This mapping takes an exact value from the list
 
-     ^                        # The `.` is only for documentation
-                              # Omit it when invoking a mapping
+     ^                          # The `.` is only for documentation
+                                # Omit it when invoking a mapping
 
 Keymap List
 
-  $ s.s <match>* <-mismatch>* # List Britive roles & filter
-  $ s <role>                  # Assume specified role
+  $ s.s <match>* <-mismatch>*   # List Britive roles & filter
+  $ s <role>                    # Assume specified role
 
-  $ s.o <id OR name>          # Account ID ↔ name lookup
+  $ s.o <account id OR name>    # Account ID ↔ name lookup
+  $ s.i <ec2 ip OR name>        # EC2 ID ↔ ip ↔ name lookup
 
-  $ s.e1                      # Use us-east-1 region
-  $ s.e2                      # Use us-east-2 region
-  $ s.w2                      # Use us-west-2 region
-  $ s.c1                      # Use eu-central-1 region
+  $ s.e1                        # Use us-east-1 region
+  $ s.e2                        # Use us-east-2 region
+  $ s.w2                        # Use us-west-2 region
+  $ s.c1                        # Use eu-central-1 region
 
-  $ s.a <name>                # ASG search
-  $ s.aa <asg id>             # ASG open in new tab
-  $ s.e <name>                # EC2 search
-  $ s.ee <ec2 id>             # EC2 open in new tab
+  $ s.a <name>                  # ASG search
+  $ s.aa <asg id>               # ASG open in new tab
+  $ s.e <name>                  # EC2 search
+  $ s.ee <ec2 id OR ip OR name> # EC2 open in new tab
 
-  $ s.c                       # Copy history bindings
-  $ s.b                       # SSM start session with `sudo -i`
-  $ s.bc                      # SSM start session with command
-  $ s.bb                      # SSM start session
+  $ s.c                         # Copy history bindings
+  $ s.b                         # SSM start session with `sudo -i`
+  $ s.bc                        # SSM start session with command
+  $ s.bb                        # SSM start session
 
-  $ s.t <message>             # STS decode
+  $ s.t <message>               # STS decode
 
-  $ s.m <name> <version>?     # Secret Manager get by version
-  $ s.md <name>               # Secret Manager delete
+  $ s.m <name> <version>?       # Secret Manager get by version
+  $ s.md <name>                 # Secret Manager delete
 
-  $ s.n <name>                # SNS search
-  $ s.nn <topic arn>          # SNS open in new tab
+  $ s.n <name>                  # SNS search
+  $ s.nn <topic arn>            # SNS open in new tab
 
-  $ s.q <name>                # SQS search
-  $ s.qq <queue url>          # SQS open in new tab
-  $ s.qg <queue url>          # SQS get stats
-  $ s.qr <queue url> <count>? # SQS receive message
-  $ s.qpurge <queue url>      # SQS purge
+  $ s.q <name>                  # SQS search
+  $ s.qq <queue url>            # SQS open in new tab
+  $ s.qg <queue url>            # SQS get stats
+  $ s.qr <queue url> <count>?   # SQS receive message
+  $ s.qpurge <queue url>        # SQS purge
 
-  $ s.p <name>                # Code Pipeline search
-  $ s.pp <name>               # Code Pipeline get latest status
+  $ s.p <name>                  # Code Pipeline search
+  $ s.pp <name>                 # Code Pipeline get latest status
 
-  $ s.ps <name>               # Parameter Store get latest version
+  $ s.ps <name>                 # Parameter Store get latest version
 
-  $ s.h                       # (Reserved: Shell)
-  $ s.u                       # (Reserved: Switch user)
+  $ s.h                         # (Reserved: Shell)
+  $ s.u                         # (Reserved: Switch user)

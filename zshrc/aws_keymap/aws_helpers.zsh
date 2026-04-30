@@ -11,14 +11,6 @@ function ec2_args {
 			args_keymap_so
 }
 
-function ec2_get_id {
-	if [[ "$1" =~ ^(i-)?[a-z0-9]{17}$ ]]; then
-		[[ "$1" =~ ^i-.*$ ]] && echo "$1" || echo i-"$1"
-	else
-		[[ "$1" =~ ^[0-9\.]+$ ]] && ec2_ip_to_id "$1" || ec2_name_to_id "$1"
-	fi
-}
-
 function ec2_ip_to_id {
 	local ip=$1
 

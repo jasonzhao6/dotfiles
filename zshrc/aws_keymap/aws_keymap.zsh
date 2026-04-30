@@ -6,7 +6,8 @@ AWS_KEYMAP=(
 	"${AWS_DOT}s <match>* <-mismatch>* # List Britive roles & filter"
 	"${AWS_ALIAS} <role> # Assume specified role"
 	''
-	"${AWS_DOT}o <id OR name> # Account ID ↔ name lookup"
+	"${AWS_DOT}o <account id OR name> # Account ID ↔ name lookup"
+	"${AWS_DOT}i <ec2 ip OR name> # EC2 ID ↔ ip ↔ name lookup"
 	''
 	"${AWS_DOT}e1 # Use us-east-1 region"
 	"${AWS_DOT}e2 # Use us-east-2 region"
@@ -16,7 +17,7 @@ AWS_KEYMAP=(
 	"${AWS_DOT}a <name> # ASG search"
 	"${AWS_DOT}aa <asg id> # ASG open in new tab"
 	"${AWS_DOT}e <name> # EC2 search"
-	"${AWS_DOT}ee <ec2 id> # EC2 open in new tab"
+	"${AWS_DOT}ee <ec2 id OR ip OR name> # EC2 open in new tab"
 	''
 	"${AWS_DOT}c # Copy history bindings"
 	"${AWS_DOT}b # SSM start session with \`sudo -i\`"
@@ -89,7 +90,7 @@ function aws_keymap_b {
 		--region "$AWS_DEFAULT_REGION" \
 		--document-name 'AWS-StartInteractiveCommand' \
 		--parameters '{"command": ["sudo -i"]}' \
-		--target "$(ec2_get_id "$id")"
+		--target "$(aws_keymap_i "$id")"
 }
 
 AWS_KEYMAP_SC_REGEX="(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
@@ -97,7 +98,7 @@ AWS_KEYMAP_SC_REGEX="(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(
 function aws_keymap_bb {
 	aws ssm start-session \
 		--region "$AWS_DEFAULT_REGION" \
-		--target "$(ec2_get_id "$@")"
+		--target "$(aws_keymap_i "$@")"
 }
 
 function aws_keymap_bc {
@@ -109,7 +110,7 @@ function aws_keymap_bc {
 		--region "$AWS_DEFAULT_REGION" \
 		--document-name 'AWS-StartNonInteractiveCommand' \
 		--parameters "{\"command\": [\"$command\"]}" \
-		--target "$(ec2_get_id "$id")" |
+		--target "$(aws_keymap_i "$id")" |
 		pgrep --multiline --ignore-case --invert-match "$AWS_KEYMAP_SC_REGEX"
 }
 
@@ -141,9 +142,17 @@ function aws_keymap_e2 {
 }
 
 function aws_keymap_ee {
-	local id; id=$(ec2_get_id "$@")
+	local id; id=$(aws_keymap_i "$@")
 
 	open "$AWS_URL/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$id"
+}
+
+function aws_keymap_i {
+	if [[ "$1" =~ ^(i-)?[a-z0-9]{17}$ ]]; then
+		[[ "$1" =~ ^i-.*$ ]] && echo "$1" || echo i-"$1"
+	else
+		[[ "$1" =~ ^[0-9\.]+$ ]] && ec2_ip_to_id "$1" || ec2_name_to_id "$1"
+	fi
 }
 
 function aws_keymap_m {
