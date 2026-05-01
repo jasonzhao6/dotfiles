@@ -203,6 +203,185 @@ function test__nav_keymap_h {
 	assert "$(nav_keymap_h > /dev/null; pwd)" "$HOME/GitHub"
 }
 
+function test__nav_keymap_j {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_j
+		mkdir /tmp/test__nav_keymap_j
+		cd /tmp/test__nav_keymap_j || return
+		echo 'one' > 1.txt
+		echo 'two' > 2.txt
+		echo 'three' > 3.txt
+		nav_keymap_n > /dev/null
+		(nav_keymap_j; nav_keymap_j; nav_keymap_j) | bw
+		rm -rf /tmp/test__nav_keymap_j
+	)" "$(
+		cat <<-eof
+		"1.txt"
+
+		one
+		"2.txt"
+
+		two
+		"3.txt"
+
+		three
+		eof
+	)"
+}
+
+function test__nav_keymap_j__when_at_end {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_j
+		mkdir /tmp/test__nav_keymap_j
+		cd /tmp/test__nav_keymap_j || return
+		echo 'one' > 1.txt
+		nav_keymap_n > /dev/null
+		nav_keymap_j > /dev/null
+		nav_keymap_j | bw
+		rm -rf /tmp/test__nav_keymap_j
+	)" "$(red_bar 'Reached the end of file list' | bw)"
+}
+
+function test__nav_keymap_j__renders_md_with_zsh_keymap_z {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_j
+		mkdir /tmp/test__nav_keymap_j
+		cd /tmp/test__nav_keymap_j || return
+		echo '# Heading' > note.md
+		nav_keymap_n > /dev/null
+		# zsh_keymap_z output differs from cat; just check it does not error
+		# and that the file name is shown
+		nav_keymap_j 2>/dev/null | bw | grep -c '^"note.md"$'
+		rm -rf /tmp/test__nav_keymap_j
+	)" '1'
+}
+
+function test__nav_keymap_j__cats_log {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_j
+		mkdir /tmp/test__nav_keymap_j
+		cd /tmp/test__nav_keymap_j || return
+		echo 'logged' > app.log
+		nav_keymap_n > /dev/null
+		nav_keymap_j | bw
+		rm -rf /tmp/test__nav_keymap_j
+	)" "$(
+		cat <<-eof
+		"app.log"
+
+		logged
+		eof
+	)"
+}
+
+function test__nav_keymap_j__rejects_unknown_type {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_j
+		mkdir /tmp/test__nav_keymap_j
+		cd /tmp/test__nav_keymap_j || return
+		touch unknown.bin
+		nav_keymap_n > /dev/null
+		nav_keymap_j | bw
+		rm -rf /tmp/test__nav_keymap_j
+	)" "$(
+		echo '"unknown.bin"'
+		red_bar 'Unsupported file type' | bw
+	)"
+}
+
+function test__nav_keymap_j__resets_on_nn {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_j
+		mkdir /tmp/test__nav_keymap_j
+		cd /tmp/test__nav_keymap_j || return
+		echo 'one' > 1.txt
+		echo 'two' > 2.txt
+		nav_keymap_n > /dev/null
+		nav_keymap_j > /dev/null
+		nav_keymap_j > /dev/null  # cursor at 2 (end)
+		nav_keymap_n > /dev/null  # should reset cursor to 0
+		nav_keymap_j | bw         # should show 1.txt again
+		rm -rf /tmp/test__nav_keymap_j
+	)" "$(
+		cat <<-eof
+		"1.txt"
+
+		one
+		eof
+	)"
+}
+
+function test__nav_keymap_k {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_k
+		mkdir /tmp/test__nav_keymap_k
+		cd /tmp/test__nav_keymap_k || return
+		echo 'one' > 1.txt
+		echo 'two' > 2.txt
+		echo 'three' > 3.txt
+		nav_keymap_n > /dev/null
+		(nav_keymap_k; nav_keymap_k; nav_keymap_k) | bw
+		rm -rf /tmp/test__nav_keymap_k
+	)" "$(
+		cat <<-eof
+		"3.txt"
+
+		three
+		"2.txt"
+
+		two
+		"1.txt"
+
+		one
+		eof
+	)"
+}
+
+function test__nav_keymap_k__when_at_beginning {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_k
+		mkdir /tmp/test__nav_keymap_k
+		cd /tmp/test__nav_keymap_k || return
+		echo 'one' > 1.txt
+		nav_keymap_n > /dev/null
+		nav_keymap_k > /dev/null
+		nav_keymap_k | bw
+		rm -rf /tmp/test__nav_keymap_k
+	)" "$(red_bar 'Reached the beginning of file list' | bw)"
+}
+
+function test__nav_keymap_k__after_nj_decrements {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_k
+		mkdir /tmp/test__nav_keymap_k
+		cd /tmp/test__nav_keymap_k || return
+		echo 'one' > 1.txt
+		echo 'two' > 2.txt
+		echo 'three' > 3.txt
+		nav_keymap_n > /dev/null
+		nav_keymap_j > /dev/null  # cursor=1
+		nav_keymap_j > /dev/null  # cursor=2
+		nav_keymap_j > /dev/null  # cursor=3
+		nav_keymap_k | bw          # cursor=2 → 2.txt
+		rm -rf /tmp/test__nav_keymap_k
+	)" "$(
+		cat <<-eof
+		"2.txt"
+
+		two
+		eof
+	)"
+}
+
 function test__nav_keymap_m {
 	assert "$(nav_keymap_m > /dev/null; pwd)" "$HOME/Documents"
 }

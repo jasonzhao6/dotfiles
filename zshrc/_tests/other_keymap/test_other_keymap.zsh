@@ -374,10 +374,10 @@ function test__other_keymap_k__when_not_terminal_output {
 
 		echo 'not terminal output' | pbcopy
 		ZSHRC_UNDER_TESTING=1 other_keymap_k
-		ls -l $OTHER_KEYMAP_K_DIR | wc -l
+		ls $OTHER_KEYMAP_K_DIR 2>/dev/null | wc -l
 
 		other_keymap_k_reset
-	)" '       1'
+	)" '       0'
 }
 
 function test__other_keymap_kc {

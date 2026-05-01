@@ -59,6 +59,7 @@ function github_keymap_c {
 }
 
 GITHUB_DEFAULT_DOMAIN='github.marqeta.com'
+
 function github_keymap_domain {
 	local domain
 	domain="$(github_keymap_url 2> /dev/null | sed 's/.*[:/]\([^/]*\)\/.*\/.*/\1/')"

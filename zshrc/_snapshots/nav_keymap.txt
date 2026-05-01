@@ -3,7 +3,7 @@ Keymap: nav_keymap.zsh
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .  <p> <y>  |  <f> <g> <c> <r> <l>  /   =   \ 
      <a> (o) (e) (u)  i   |  (d) <h> (t) (n) (s)  - 
-      ;   q   j   k  <x>  |   b  <m> <w> <v> (z)
+      ;   q  <j> <k> <x>  |   b  <m> <w> <v> (z)
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
@@ -57,6 +57,9 @@ Keymap List
   $ n.f                        # Sort files by size
   $ n.g <levels>?              # Sort subfolders by size
   $ n.r                        # Sort files by recent
+
+  $ n.j                        # Show next file in args
+  $ n.k                        # Show prev file in args
 
   $ n.c                        # (Reserved: Netcat)
   $ n.l                        # (Reserved: Number lines)

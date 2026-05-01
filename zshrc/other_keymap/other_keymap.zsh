@@ -33,7 +33,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}uu <file 1>? <file 2>? # Side by side diff"
 	''
 	"${OTHER_DOT}t <command> # Time command execution"
-	"${OTHER_DOT}w <seconds> <command> # Loop command with sleep interval"
+	"${OTHER_DOT}w <seconds>? <command> # Loop command with sleep (Default: 1s)"
 	"${OTHER_DOT}f <start> <finish> (~~) # Run command sequence in foreground"
 	"${OTHER_DOT}b <start> <finish> (~~) # Run command sequence in background"
 	''
@@ -249,19 +249,18 @@ function other_keymap_j {
 }
 
 function other_keymap_k {
-	mkdir -p "$OTHER_KEYMAP_K_DIR"
-
 	# If pasteboard contains terminal output looking text, archive it
 	if [[ $(pbpaste | compact | strip | sed -n '$p') == \$* ]]; then
 		local filename; filename="$OTHER_KEYMAP_K_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt"
 
+		mkdir -p "$OTHER_KEYMAP_K_DIR"
 		pbpaste > "$filename"
 
 		# Taint the pasteboard, so that it doesn't get dumped again
 		printf "%s\n\n(Dumped to '%s')" "$(pbpaste)" "$filename" | pbcopy
 	fi
 
-	[[ -z $ZSHRC_UNDER_TESTING ]] && clear
+	[[ -z $ZSHRC_UNDER_TESTING ]] && clear && printf '\e[3J'
 }
 
 function other_keymap_kc {
@@ -356,14 +355,17 @@ function other_keymap_uu {
 }
 
 function other_keymap_w {
-	local seconds=$1; shift
+	local seconds=1
+	if [[ $1 =~ ^[0-9]+(\.[0-9]+)?$ ]]; then # Match integer or decimal
+		seconds=$1; shift
+	fi
 	local command=$*
 
 	local output
 	while true; do
 		output=$(eval "$command")
 
-		clear
+		clear && printf '\e[3J'
 		echo "$(yellow_fg '$') $command"
 		echo
 		echo "$output"

@@ -37,6 +37,9 @@ NAV_KEYMAP=(
 	"${NAV_DOT}g <levels>? # Sort subfolders by size"
 	"${NAV_DOT}r # Sort files by recent"
 	''
+	"${NAV_DOT}j # Show next file in args"
+	"${NAV_DOT}k # Show prev file in args"
+	''
 	"${NAV_DOT}c # (Reserved: Netcat)"
 	"${NAV_DOT}l # (Reserved: Number lines)"
 )
@@ -61,6 +64,11 @@ function nav_keymap {
 # Constants
 NAV_CLAUDE_PLANS_DIR="$HOME/GitHub/jasonzhao6/scratch/claude-plans"
 NAV_YANK_FILE="$ZSHRC_DATA_DIR/nav.yank.txt"
+
+# States
+NAV_CURSOR=0
+
+source "$ZSHRC_SRC_DIR/$NAV_NAMESPACE/nav_helpers.zsh"
 
 function nav_keymap_a {
 	local filters=("$@")
@@ -108,6 +116,38 @@ function nav_keymap_h {
 	cd ~/GitHub && nav_keymap_n "${filters[@]}" || true
 }
 
+NAV_RENDER_AS_TEXT='*.txt|*.log'
+NAV_RENDER_AS_MARKDOWN='*.md'
+
+function nav_keymap_j {
+	local size; size=$(args_size)
+
+	if [[ $NAV_CURSOR -ge $size ]]; then
+		red_bar 'Reached the end of file list'
+		return
+	fi
+
+	NAV_CURSOR=$((NAV_CURSOR + 1))
+	nav_show_arg
+}
+
+function nav_keymap_k {
+	local size; size=$(args_size)
+
+	if [[ $size -eq 0 || $NAV_CURSOR -eq 1 ]]; then
+		red_bar 'Reached the beginning of file list'
+		return
+	fi
+
+	if [[ $NAV_CURSOR -eq 0 ]]; then
+		NAV_CURSOR=$size
+	else
+		NAV_CURSOR=$((NAV_CURSOR - 1))
+	fi
+
+	nav_show_arg
+}
+
 function nav_keymap_m {
 	cd ~/Documents && nav_keymap_n || true
 }
@@ -116,6 +156,7 @@ function nav_keymap_m {
 function nav_keymap_n {
 	local filters=("$@")
 
+	NAV_CURSOR=0
 	echo
 	ls | args_keymap_s "${filters[@]}"
 }

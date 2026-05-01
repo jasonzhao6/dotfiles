@@ -54,7 +54,7 @@ Keymap List
   $ o.uu <file 1>? <file 2>?      # Side by side diff
 
   $ o.t <command>                 # Time command execution
-  $ o.w <seconds> <command>       # Loop command with sleep interval
+  $ o.w <seconds>? <command>      # Loop command with sleep (Default: 1s)
   $ o.f <start> <finish> (~~)     # Run command sequence in foreground
   $ o.b <start> <finish> (~~)     # Run command sequence in background
 

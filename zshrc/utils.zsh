@@ -18,7 +18,12 @@ function comma_num {
 function echo_eval {
 	local command=$*
 
-	echo "$command" >&2
+	# Color only when stderr is a tty; skip when captured (tests, pipes) so ANSI codes don't leak
+	if [[ -t 2 ]]; then
+		magenta_fg "$command" >&2
+	else
+		echo "$command" >&2
+	fi
 	eval "$command"
 }
 
