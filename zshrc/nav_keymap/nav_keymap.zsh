@@ -61,14 +61,17 @@ function nav_keymap {
 # Key mappings (Alphabetized)
 #
 
+# Sources
+source "$ZSHRC_SRC_DIR/$NAV_NAMESPACE/nav_helpers.zsh"
+
 # Constants
 NAV_CLAUDE_PLANS_DIR="$HOME/GitHub/jasonzhao6/scratch/claude-plans"
+NAV_RENDER_AS_MARKDOWN='*.md'
+NAV_RENDER_AS_TEXT='*.txt|*.log'
 NAV_YANK_FILE="$ZSHRC_DATA_DIR/nav.yank.txt"
 
 # States
 NAV_CURSOR=0
-
-source "$ZSHRC_SRC_DIR/$NAV_NAMESPACE/nav_helpers.zsh"
 
 function nav_keymap_a {
 	local filters=("$@")
@@ -115,9 +118,6 @@ function nav_keymap_h {
 
 	cd ~/GitHub && nav_keymap_n "${filters[@]}" || true
 }
-
-NAV_RENDER_AS_TEXT='*.txt|*.log'
-NAV_RENDER_AS_MARKDOWN='*.md'
 
 function nav_keymap_j {
 	local size; size=$(args_size)

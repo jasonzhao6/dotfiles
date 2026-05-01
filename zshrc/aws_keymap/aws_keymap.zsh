@@ -66,10 +66,20 @@ function aws_keymap {
 # Key mappings (Alphabetized)
 #
 
-export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
-AWS_URL="https://$AWS_DEFAULT_REGION.console.aws.amazon.com"
-
+# Sources
 source "$ZSHRC_SRC_DIR/$AWS_NAMESPACE/aws_helpers.zsh"
+
+# Constants
+AWS_ACCOUNTS_TSV="$HOME/GitHub/jasonzhao6/scratch/claude-config/skills/aws-accounts/accounts.tsv"
+AWS_BRITIVE=( # To be overwritten by `ZSHRC_SECRETS`
+	'role_name_1 request_page_url_1'
+	'role_name_2 request_page_url_2'
+)
+export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-'us-east-1'}
+AWS_KEYMAP_PP_STATUS='stageStates[-1].actionStates[-1].latestExecution.status'
+AWS_KEYMAP_PP_TIMESTAMP='stageStates[-1].actionStates[-1].latestExecution.lastStatusChange'
+AWS_KEYMAP_SC_REGEX="(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
+AWS_URL="https://$AWS_DEFAULT_REGION.console.aws.amazon.com"
 
 function aws_keymap_a {
 	local name=$1
@@ -92,8 +102,6 @@ function aws_keymap_b {
 		--parameters '{"command": ["sudo -i"]}' \
 		--target "$(aws_keymap_i "$id")"
 }
-
-AWS_KEYMAP_SC_REGEX="(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
 
 function aws_keymap_bb {
 	aws ssm start-session \
@@ -200,14 +208,6 @@ function aws_keymap_nn {
 	open "$AWS_URL/sns/v3/home?region=$AWS_DEFAULT_REGION#/topic/$arn"
 }
 
-# To be overwritten by `ZSHRC_SECRETS`
-AWS_BRITIVE=(
-	'role_name_1 request_page_url_1'
-	'role_name_2 request_page_url_2'
-)
-
-AWS_ACCOUNTS_TSV="$HOME/GitHub/jasonzhao6/scratch/claude-config/skills/aws-accounts/accounts.tsv"
-
 function aws_keymap_o {
 	local input=$1
 
@@ -227,9 +227,6 @@ function aws_keymap_p {
 		--output text |
 		args_keymap_s "$name"
 }
-
-AWS_KEYMAP_PP_STATUS='stageStates[-1].actionStates[-1].latestExecution.status'
-AWS_KEYMAP_PP_TIMESTAMP='stageStates[-1].actionStates[-1].latestExecution.lastStatusChange'
 
 function aws_keymap_pp {
 	local name=$1

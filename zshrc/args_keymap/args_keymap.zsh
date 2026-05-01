@@ -51,20 +51,21 @@ function args_keymap {
 # Key mappings (Alphabetized)
 #
 
+# Sources
+source "$ZSHRC_SRC_DIR/$ARGS_NAMESPACE/args_enumerators.zsh"
+source "$ZSHRC_SRC_DIR/$ARGS_NAMESPACE/args_helpers.zsh"
+source "$ZSHRC_SRC_DIR/$ARGS_NAMESPACE/args_history.zsh"; args_history_init
+source "$ZSHRC_SRC_DIR/$ARGS_NAMESPACE/args_numbers.zsh"
+
 # Constants
+ARGS_BACKGROUND_OUTPUTS_FILE="$ZSHRC_DATA_DIR/args.background-outputs.txt"
 ARGS_SOFT_SELECT='Soft-select the 1st column by inserting a `#` before the 2nd column'
 ARGS_YANK_FILE="$ZSHRC_DATA_DIR/args.yank.txt"
-ARGS_BACKGROUND_OUTPUTS_FILE="$ZSHRC_DATA_DIR/args.background-outputs.txt"
 
 # States
 # shellcheck disable=SC2034
 ARGS_PUSHED=
 ARGS_USED_TOP_ROW=
-
-source "$ZSHRC_SRC_DIR/$ARGS_NAMESPACE/args_enumerators.zsh"
-source "$ZSHRC_SRC_DIR/$ARGS_NAMESPACE/args_helpers.zsh"
-source "$ZSHRC_SRC_DIR/$ARGS_NAMESPACE/args_history.zsh"; args_history_init
-source "$ZSHRC_SRC_DIR/$ARGS_NAMESPACE/args_numbers.zsh"
 
 # shellcheck disable=SC2120
 function args_keymap_a {

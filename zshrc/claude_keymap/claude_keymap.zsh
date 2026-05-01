@@ -28,16 +28,18 @@ function claude_keymap {
 	keymap_show $CLAUDE_NAMESPACE $CLAUDE_ALIAS ${#CLAUDE_KEYMAP} "${CLAUDE_KEYMAP[@]}" "$@"
 }
 
-CLAUDE_KEYMAP_SCRATCH_DIR="$HOME/GitHub/jasonzhao6/scratch/claude-config"
-CLAUDE_KEYMAP_CONFIG_DIR="$HOME/.claude"
-CLAUDE_KEYMAP_FILES=(CLAUDE.md settings.json settings.local.json)
-CLAUDE_KEYMAP_FOLDERS=(skills)
-
 #
 # Key mappings (Alphabetized)
 #
 
+# Sources
 source "$ZSHRC_SRC_DIR/$CLAUDE_NAMESPACE/claude_helpers.zsh"
+
+# Constants
+CLAUDE_KEYMAP_CONFIG_DIR="$HOME/.claude"
+CLAUDE_KEYMAP_FILES=(CLAUDE.md settings.json settings.local.json)
+CLAUDE_KEYMAP_FOLDERS=(skills)
+CLAUDE_KEYMAP_SCRATCH_DIR="$HOME/GitHub/jasonzhao6/scratch/claude-config"
 
 function claude_keymap_c {
 	claude_keymap_check_docker

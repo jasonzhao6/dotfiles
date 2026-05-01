@@ -33,6 +33,7 @@ function q_keymap {
 # Key mappings (Alphabetized)
 #
 
+# Constants
 Q_KEYMAP_JCARD_DIR="$HOME/GitHub/transaction-engine/marqeta-jpos/jcard"
 Q_KEYMAP_HELM_DIR="$HOME/GitHub/transaction-engine/ccapi-marqkubed-helm"
 Q_KEYMAP_SCRATCH_DIR="$HOME/GitHub/jasonzhao6/scratch/kiro"

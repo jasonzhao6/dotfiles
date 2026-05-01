@@ -36,7 +36,20 @@ function zsh_keymap {
 # Key mappings (Alphabetized)
 #
 
+# Sources
 source "$ZSHRC_SRC_DIR/$ZSH_NAMESPACE/zsh_helpers.zsh"
+
+# Constants
+ZSH_OTHER_DOTFILES=(
+	colordiffrc
+	gitignore
+	shellcheckrc
+	terraformrc
+	tm_properties
+	zshrc
+)
+ZSHRC_SECRETS_DIR="$HOME/Documents/-backups/zsh.secrets"
+ZSHRC_SECRETS_LATEST="$ZSHRC_SECRETS_DIR/latest.txt"
 
 function zsh_keymap_0 {
 	unset -f zshaddhistory
@@ -88,18 +101,6 @@ function zsh_keymap_m {
 function zsh_keymap_mm {
 	mate "$ZSHRC_SECRETS"
 }
-
-ZSH_OTHER_DOTFILES=(
-	colordiffrc
-	gitignore
-	shellcheckrc
-	terraformrc
-	tm_properties
-	zshrc
-)
-
-ZSHRC_SECRETS_DIR="$HOME/Documents/-backups/zsh.secrets"
-ZSHRC_SECRETS_LATEST="$ZSHRC_SECRETS_DIR/latest.txt"
 
 function zsh_keymap_p {
 	for dotfile in "${ZSH_OTHER_DOTFILES[@]}"; do

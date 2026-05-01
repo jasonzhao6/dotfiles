@@ -65,12 +65,13 @@ function other_keymap {
 # Key mappings (Alphabetized)
 #
 
+# Sources
+source "$ZSHRC_SRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
+
 # Constants
+OTHER_BACKGROUND_OUTPUTS_FILE="$ZSHRC_DATA_DIR/other.background-outputs.txt"
 OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$ZSHRC_DATA_DIR/other.diff-1.txt"
 OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$ZSHRC_DATA_DIR/other.diff-2.txt"
-OTHER_BACKGROUND_OUTPUTS_FILE="$ZSHRC_DATA_DIR/other.background-outputs.txt"
-
-source "$ZSHRC_SRC_DIR/$OTHER_NAMESPACE/other_helpers.zsh"
 
 function other_keymap_0 {
 	echo -n > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"

@@ -50,6 +50,8 @@ function main_keymap {
 # Key mappings (Alphabetized)
 #
 
+# Sources
+# (There are more sources appear below, each inline with the function that consumes it)
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/main_helpers.quarantine.zsh"
 
@@ -72,13 +74,11 @@ function main_keymap_- {
 	echo "- $ZSHRC_LINE_COUNT lines total"
 }
 
-ALL_NAMESPACE="$MAIN_NAMESPACE.all_namespaces"
-ALL_KEYMAP_FILE="$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$ALL_NAMESPACE.zsh"
-
-source "$ALL_KEYMAP_FILE"
-
 # Includes custom zsh and non-zsh keymaps
 # But excludes default keyboard shortcuts
+ALL_NAMESPACE="$MAIN_NAMESPACE.all_namespaces"
+ALL_KEYMAP_FILE="$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$ALL_NAMESPACE.zsh"
+source "$ALL_KEYMAP_FILE"
 function main_keymap_a {
 	# Show the cached keymap-of-keymaps right away; append the shortcut namespaces for completeness
 	keymap_print_help "$ALL_NAMESPACE" '(no-op)' "${ALL_KEYMAP[@]}" "${SHORTCUT_NAMESPACES[@]}"

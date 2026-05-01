@@ -73,9 +73,11 @@ function git_keymap {
 # Key mappings (Alphabetized)
 #
 
-export EDITOR='mate --wait'
-
+# Sources
 source "$ZSHRC_SRC_DIR/$GIT_NAMESPACE/git_helpers.zsh"
+
+# Constants
+export EDITOR='mate --wait'
 
 function git_keymap_a {
 	local index=${1:-0}

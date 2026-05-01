@@ -41,7 +41,6 @@ TERRAFORM_KEYMAP=(
 keymap_init $TERRAFORM_NAMESPACE $TERRAFORM_ALIAS "${TERRAFORM_KEYMAP[@]}"
 
 source "$ZSHRC_SRC_DIR/$TERRAFORM_NAMESPACE/terraform_commands.zsh"
-
 function terraform_keymap {
 	# If the first arg is a `terraform` command, pass it through
 	for command in "${TERRAFORM_COMMANDS[@]}"; do
@@ -59,7 +58,14 @@ function terraform_keymap {
 # Key mappings (Alphabetized)
 #
 
+# Sources
 source "$ZSHRC_SRC_DIR/$TERRAFORM_NAMESPACE/terraform_helpers.zsh"
+
+# Constants
+TERRAFORM_VARS=( # To be overwritten by `ZSHRC_SECRETS`
+	'var_name_1 secret_name_1'
+	'var_name_2 secret_name_2'
+)
 
 function terraform_keymap_a {
 	local options=$1
@@ -78,12 +84,6 @@ function terraform_keymap_cc {
 function terraform_keymap_d {
 	terraform destroy
 }
-
-# To be overwritten by `ZSHRC_SECRETS`
-TERRAFORM_VARS=(
-	'var_name_1 secret_name_1'
-	'var_name_2 secret_name_2'
-)
 
 function terraform_keymap_e {
 	local fields

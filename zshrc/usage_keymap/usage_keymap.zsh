@@ -27,9 +27,11 @@ function usage_keymap {
 # Key mappings (Alphabetized)
 #
 
+# Sources
 source "$ZSHRC_SRC_DIR/$USAGE_NAMESPACE/usage_helpers.zsh"
 source "$ZSHRC_SRC_DIR/$USAGE_NAMESPACE/usage_zsh_hook.zsh"
 
+# Constants
 USAGE_KEYMAP_A_MAX_ROWS=15
 
 function usage_keymap_a {

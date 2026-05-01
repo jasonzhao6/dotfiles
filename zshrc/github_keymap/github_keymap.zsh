@@ -44,6 +44,11 @@ function github_keymap {
 # Key mappings (Alphabetized)
 #
 
+# Constants
+GITHUB_DEFAULT_DOMAIN='github.marqeta.com'
+GITHUB_DEFAULT_ORG='transaction-engine'
+GITHUB_ALL_REPOS="$ZSHRC_DATA_DIR/github.all.txt"
+
 function github_keymap_a {
 	open -a "GitHub Desktop" .
 }
@@ -57,8 +62,6 @@ function github_keymap_c {
 
 	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_repo)"/commit/"$sha"
 }
-
-GITHUB_DEFAULT_DOMAIN='github.marqeta.com'
 
 function github_keymap_domain {
 	local domain
@@ -99,8 +102,6 @@ function github_keymap_o {
 	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$repo"
 }
 
-GITHUB_DEFAULT_ORG='transaction-engine'
-
 function github_keymap_org {
 	local org
 	org="$(github_keymap_url 2> /dev/null | sed 's/.*[:/]\([^/]*\)\/.*/\1/')"
@@ -112,8 +113,6 @@ function github_keymap_org {
 function github_keymap_p {
 	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$(github_keymap_repo)"/pull/"$1"
 }
-
-GITHUB_ALL_REPOS="$ZSHRC_DATA_DIR/github.all.txt"
 
 function github_keymap_r {
 	local filters=("$@")
