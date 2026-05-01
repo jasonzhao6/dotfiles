@@ -203,6 +203,10 @@ function test__nav_keymap_h {
 	assert "$(nav_keymap_h > /dev/null; pwd)" "$HOME/GitHub"
 }
 
+function test__nav_keymap_i {
+	assert "$(nav_keymap_i > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/excalidraw"
+}
+
 function test__nav_keymap_j {
 	assert "$(
 		ZSHRC_UNDER_TESTING=1
@@ -614,7 +618,70 @@ function test__nav_keymap_w {
 }
 
 function test__nav_keymap_x {
-	assert "$(nav_keymap_x > /dev/null; pwd)" "$HOME/GitHub/jasonzhao6/excalidraw"
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_x
+		mkdir /tmp/test__nav_keymap_x
+		cd /tmp/test__nav_keymap_x || return
+		echo 'one' > 1.txt
+		echo 'two' > 2.txt
+		nav_keymap_n > /dev/null
+		nav_keymap_j > /dev/null  # cursor=1
+		nav_keymap_x | bw         # reprint 1.txt without moving cursor
+		rm -rf /tmp/test__nav_keymap_x
+	)" "$(
+		cat <<-eof
+		"1.txt"
+
+		one
+		eof
+	)"
+}
+
+function test__nav_keymap_x__when_no_current_file {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_x
+		mkdir /tmp/test__nav_keymap_x
+		cd /tmp/test__nav_keymap_x || return
+		echo 'one' > 1.txt
+		nav_keymap_n > /dev/null  # cursor=0, no current file
+		nav_keymap_x | bw
+		rm -rf /tmp/test__nav_keymap_x
+	)" "$(red_bar 'No current file in the list' | bw)"
+}
+
+function test__nav_keymap_x__when_empty {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_x
+		mkdir /tmp/test__nav_keymap_x
+		cd /tmp/test__nav_keymap_x || return
+		nav_keymap_n > /dev/null
+		nav_keymap_x | bw
+		rm -rf /tmp/test__nav_keymap_x
+	)" "$(red_bar 'No current file in the list' | bw)"
+}
+
+function test__nav_keymap_x__reflects_updated_content {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap_x
+		mkdir /tmp/test__nav_keymap_x
+		cd /tmp/test__nav_keymap_x || return
+		echo 'before' > 1.txt
+		nav_keymap_n > /dev/null
+		nav_keymap_j > /dev/null
+		echo 'after' > 1.txt
+		nav_keymap_x | bw
+		rm -rf /tmp/test__nav_keymap_x
+	)" "$(
+		cat <<-eof
+		"1.txt"
+
+		after
+		eof
+	)"
 }
 
 function test__nav_keymap_y {

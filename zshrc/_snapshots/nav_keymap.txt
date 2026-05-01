@@ -2,7 +2,7 @@ Keymap: nav_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .  <p> <y>  |  <f> <g> <c> <r> <l>  /   =   \ 
-     <a> (o) (e) (u)  i   |  (d) <h> (t) (n) (s)  - 
+     <a> (o) (e) (u) <i>  |  (d) <h> (t) (n) (s)  - 
       ;   q  <j> <k> <x>  |   b  <m> <w> <v> (z)
 
   `<>` key initials have one mapping
@@ -52,14 +52,15 @@ Keymap List
   $ n.ss                       # Go to scratch, open GitHub Desktop
   $ n.z                        # Go to scratch/claude-plans
   $ n.zz                       # Print latest claude plan with glow
-  $ n.x                        # Go to excalidraw
+  $ n.i                        # Go to excalidraw
 
   $ n.f                        # Sort files by size
   $ n.g <levels>?              # Sort subfolders by size
   $ n.r                        # Sort files by recent
 
-  $ n.j                        # Show next file in args
-  $ n.k                        # Show prev file in args
+  $ n.j                        # Print next file in the list
+  $ n.k                        # Print prev file in the list
+  $ n.x                        # Reprint current file in the list
 
   $ n.c                        # (Reserved: Netcat)
   $ n.l                        # (Reserved: Number lines)

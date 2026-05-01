@@ -116,7 +116,7 @@ function test__main_keymap_w__when_specifying_a_key {
 
 		  $ k.j <type> <name>             # Get resource as json & save copy
 		  $ k.jj                          # Get the copy of json
-		  $ n.j                           # Show next file in args
+		  $ n.j                           # Print next file in the list
 		  $ o.j <url> <regex> <num lines> # Curl json endpoint
 		  $ q.j                           # Vibe code in JCard repo
 

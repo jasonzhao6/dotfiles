@@ -31,14 +31,15 @@ NAV_KEYMAP=(
 	"${NAV_DOT}ss # Go to scratch, open GitHub Desktop"
 	"${NAV_DOT}z # Go to scratch/claude-plans"
 	"${NAV_DOT}zz # Print latest claude plan with glow"
-	"${NAV_DOT}x # Go to excalidraw"
+	"${NAV_DOT}i # Go to excalidraw"
 	''
 	"${NAV_DOT}f # Sort files by size"
 	"${NAV_DOT}g <levels>? # Sort subfolders by size"
 	"${NAV_DOT}r # Sort files by recent"
 	''
-	"${NAV_DOT}j # Show next file in args"
-	"${NAV_DOT}k # Show prev file in args"
+	"${NAV_DOT}j # Print next file in the list"
+	"${NAV_DOT}k # Print prev file in the list"
+	"${NAV_DOT}x # Reprint current file in the list"
 	''
 	"${NAV_DOT}c # (Reserved: Netcat)"
 	"${NAV_DOT}l # (Reserved: Number lines)"
@@ -117,6 +118,10 @@ function nav_keymap_h {
 	local filters=("$@")
 
 	cd ~/GitHub && nav_keymap_n "${filters[@]}" || true
+}
+
+function nav_keymap_i {
+	cd ~/GitHub/jasonzhao6/excalidraw && nav_keymap_n || true
 }
 
 function nav_keymap_j {
@@ -242,7 +247,14 @@ function nav_keymap_w {
 }
 
 function nav_keymap_x {
-	cd ~/GitHub/jasonzhao6/excalidraw && nav_keymap_n || true
+	local size; size=$(args_size)
+
+	if [[ $size -eq 0 || $NAV_CURSOR -eq 0 ]]; then
+		red_bar 'No current file in the list'
+		return
+	fi
+
+	nav_show_arg
 }
 
 function nav_keymap_y {
