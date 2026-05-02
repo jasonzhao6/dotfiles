@@ -560,6 +560,66 @@ function test__nav_keymap_t__with_invalid_path {
 	)" "$(red_bar 'Invalid path in pasteboard')"
 }
 
+function test__nav_keymap_t__with_tilde_dir {
+	assert "$(
+		echo '~/Documents' | pbcopy
+		nav_keymap_t > /dev/null
+		pwd
+	)" "$HOME/Documents"
+}
+
+function test__nav_keymap_t__with_tilde_file {
+	assert "$(
+		touch "$HOME/test__nav_keymap_t__with_tilde_file"
+		echo '~/test__nav_keymap_t__with_tilde_file' | pbcopy
+		nav_keymap_t > /dev/null
+		pwd
+		rm -f "$HOME/test__nav_keymap_t__with_tilde_file"
+	)" "$HOME"
+}
+
+function test__nav_keymap_t__with_trailing_metadata {
+	assert "$(
+		local repo=/tmp/test__nav_keymap_t__with_trailing_metadata
+		rm -rf "$repo"
+		mkdir -p "$repo"
+		echo "$repo #jz mq01-qa.team-transaction-engine-dev us-east-1" | pbcopy
+		nav_keymap_t > /dev/null
+		pwd
+		rm -rf "$repo"
+	)" '/tmp/test__nav_keymap_t__with_trailing_metadata'
+}
+
+function test__nav_keymap_t__with_path_containing_space_and_metadata {
+	assert "$(
+		local repo='/tmp/test__nav_keymap_t hello world #eou'
+		rm -rf "$repo"
+		mkdir -p "$repo"
+		echo "$repo mq01-qa.team-transaction-engine-dev us-east-1" | pbcopy
+		nav_keymap_t > /dev/null
+		pwd
+		rm -rf "$repo"
+	)" '/tmp/test__nav_keymap_t hello world #eou'
+}
+
+function test__nav_keymap_t__with_tilde_and_metadata {
+	assert "$(
+		echo '~/Documents #jz mq01-qa.team-transaction-engine-dev us-east-1' | pbcopy
+		nav_keymap_t > /dev/null
+		pwd
+	)" "$HOME/Documents"
+}
+
+function test__nav_keymap_t__with_file_and_metadata {
+	assert "$(
+		touch /tmp/test__nav_keymap_t__with_file_and_metadata
+		echo '/tmp/test__nav_keymap_t__with_file_and_metadata #jz us-east-1' | pbcopy
+		nav_keymap_t > /dev/null
+		pwd
+		rm -f /tmp/test__nav_keymap_t__with_file_and_metadata
+	)" '/tmp'
+}
+
 function test__nav_keymap_tt {
 	assert "$(
 		cd /tmp || return

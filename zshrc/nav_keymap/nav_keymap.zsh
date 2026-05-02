@@ -198,8 +198,20 @@ function nav_keymap_t {
 	# Note: Do not use `local path`- It will overwrite $PATH in subshell
 	local target_path; target_path=$(pbpaste)
 
-	# If it's not a file or folder path, error
-	if [[ ! -f $target_path && ! -d $target_path  ]]; then
+	# Expand leading `~` to $HOME
+	target_path=${target_path/#\~/$HOME}
+
+	# Strip trailing space-separated tokens (branch, AWS account, region, etc.)
+	# until what remains is a valid file or folder. Stops when no more spaces
+	# are left to trim, which correctly handles paths with embedded spaces.
+	local prev=''
+	while [[ -n $target_path && ! -f $target_path && ! -d $target_path && $target_path != $prev ]]; do
+		prev=$target_path
+		target_path=${target_path% *}
+	done
+
+	# If nothing remained valid, error
+	if [[ ! -f $target_path && ! -d $target_path ]]; then
 		red_bar 'Invalid path in pasteboard'
 		return
 	fi
