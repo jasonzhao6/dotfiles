@@ -50,7 +50,7 @@ AWS_KEYMAP=(
 keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
 
 function aws_keymap {
-	# If the input is a British role, assume it via `mqc`
+	# If the input is a Britive role, assume it via `mqc`
 	local input=$*
 	# shellcheck disable=SC2076 # Breaks regex
 	if [[ $input =~ '^([a-z0-9-]+)[[:space:]]+([a-z0-9-]+)' ]]; then

@@ -366,7 +366,7 @@ function other_keymap_w {
 	while true; do
 		output=$(eval "$command")
 
-		clear && printf '\e[3J'
+		other_keymap_k
 		echo "$(yellow_fg '$') $command"
 		echo
 		echo "$output"

@@ -3,6 +3,9 @@ ZSH_ALIAS='z'
 ZSH_DOT="${ZSH_ALIAS}${KEYMAP_DOT}"
 
 ZSH_KEYMAP=(
+	"${ZSH_ALIAS} <markdown file> # Clear screen and render with \`mdcat\`"
+	"${ZSH_DOT}z <markdown file> # Render with \`mdcat\`"
+	''
 	"${ZSH_DOT}e # Edit in IntelliJ"
 	"${ZSH_DOT}m # Edit in TextMate"
 	"${ZSH_DOT}mm # Edit secrets in TextMate"
@@ -12,7 +15,6 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}w <name> # Custom \`which\` lookup"
 	"${ZSH_DOT}a <match>* <-mismatch>* # List aliases & filter"
 	"${ZSH_DOT}f <match>* <-mismatch>* # List functions & filter"
-	"${ZSH_DOT}z <file> # Render markdown with \`mdcat\`"
 	''
 	"${ZSH_DOT}h <grep>? # List history"
 	"${ZSH_DOT}hc # Clear history"
@@ -29,6 +31,16 @@ ZSH_KEYMAP=(
 keymap_init $ZSH_NAMESPACE $ZSH_ALIAS "${ZSH_KEYMAP[@]}"
 
 function zsh_keymap {
+	# If the first arg is a file, clear and delegate to `zz`
+	local file=$1
+	if [[ -f $file ]]; then
+		other_keymap_k
+		magenta_fg "\"${file##*/}\""
+
+		zsh_keymap_z "$file"
+		return
+	fi
+
 	keymap_show $ZSH_NAMESPACE $ZSH_ALIAS ${#ZSH_KEYMAP} "${ZSH_KEYMAP[@]}" "$@"
 }
 

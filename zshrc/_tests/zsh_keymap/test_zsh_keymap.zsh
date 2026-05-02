@@ -7,6 +7,25 @@ function test__zsh_keymap {
 	)" '1'
 }
 
+function test__zsh_keymap__when_specifying_a_md_file_instead_of_key {
+	local md='/tmp/test__zsh_keymap__md_passthrough.md'
+	printf '# H1\n' > $md
+
+	# Avoid pasteboard archive side-effect from `other_keymap_k`
+	echo 'not terminal output' | pbcopy
+
+	assert "$(
+		ZSHRC_UNDER_TESTING=1 zsh_keymap $md | bw | compact
+	)" "$(
+		cat <<-eof
+			"test__zsh_keymap__md_passthrough.md"
+			# H1
+		eof
+	)"
+
+	rm $md
+}
+
 function test__zsh_keymap_a {
 	assert "$(
 		local count; count=$(zsh_keymap_a | wc -l)
