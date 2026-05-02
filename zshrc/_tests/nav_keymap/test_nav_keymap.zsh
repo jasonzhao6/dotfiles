@@ -638,17 +638,23 @@ function test__nav_keymap_x {
 	)"
 }
 
-function test__nav_keymap_x__when_no_current_file {
+function test__nav_keymap_x__on_fresh_list {
 	assert "$(
 		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_x
 		mkdir /tmp/test__nav_keymap_x
 		cd /tmp/test__nav_keymap_x || return
 		echo 'one' > 1.txt
-		nav_keymap_n > /dev/null  # cursor=0, no current file
-		nav_keymap_x | bw
+		nav_keymap_n > /dev/null  # cursor=0, fresh list
+		nav_keymap_x | bw         # should print first file like nj
 		rm -rf /tmp/test__nav_keymap_x
-	)" "$(red_bar 'No current file in the list' | bw)"
+	)" "$(
+		cat <<-eof
+		"1.txt"
+
+		one
+		eof
+	)"
 }
 
 function test__nav_keymap_x__when_empty {

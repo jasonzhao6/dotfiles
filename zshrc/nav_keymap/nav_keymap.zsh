@@ -249,9 +249,13 @@ function nav_keymap_w {
 function nav_keymap_x {
 	local size; size=$(args_size)
 
-	if [[ $size -eq 0 || $NAV_CURSOR -eq 0 ]]; then
+	if [[ $size -eq 0 ]]; then
 		red_bar 'No current file in the list'
 		return
+	fi
+
+	if [[ $NAV_CURSOR -eq 0 ]]; then
+		NAV_CURSOR=1
 	fi
 
 	nav_show_arg
