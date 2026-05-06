@@ -4,7 +4,8 @@ ZSH_DOT="${ZSH_ALIAS}${KEYMAP_DOT}"
 
 ZSH_KEYMAP=(
 	"${ZSH_ALIAS} <markdown file> # Clear screen and render with \`mdcat\`"
-	"${ZSH_DOT}z <markdown file> # Render with \`mdcat\`"
+	"${ZSH_DOT}z # Clear screen and render from pasteboard"
+	"${ZSH_DOT}v <markdown file> # Render with \`mdcat\`"
 	''
 	"${ZSH_DOT}e # Edit in IntelliJ"
 	"${ZSH_DOT}m # Edit in TextMate"
@@ -31,13 +32,13 @@ ZSH_KEYMAP=(
 keymap_init $ZSH_NAMESPACE $ZSH_ALIAS "${ZSH_KEYMAP[@]}"
 
 function zsh_keymap {
-	# If the first arg is a file, clear and delegate to `zz`
+	# If the first arg is a file, clear and delegate to `zv`
 	local file=$1
 	if [[ -f $file ]]; then
 		other_keymap_k
 		magenta_fg "\"${file##*/}\""
 
-		zsh_keymap_z "$file"
+		zsh_keymap_v "$file"
 		return
 	fi
 
@@ -149,6 +150,19 @@ function zsh_keymap_t {
 	zsh "$ZSHRC_SRC_DIR"/_tests.zsh "$@"
 }
 
+function zsh_keymap_v {
+	local file=$1
+
+	echo
+	# Override some of `mdcat`'s styling to match `glow`'s
+	mdcat --columns 80 "$file" | perl -pe '
+		s/\xe2\x94\x84/#/g;                                # Replace heading leading ┄ dashes with `#`
+		s/(#+)\e\[0m/$1 \e[0m/g;                           # Append trailing space after `#`
+		s/\e\[34m/\e[36m/g;                                # Swap heading dark blue (34) for cyan (36)
+		s/\e\[32m(?:\xe2\x94\x80)+\e\[0m/\e[33m```\e[0m/g; # Replace code fence ─ rules with ``` and swap green (32) for yellow (33)
+	'
+}
+
 function zsh_keymap_w {
 	local name=$1
 	[[ -z $name ]] && red_bar 'Required: <name>' && return
@@ -181,14 +195,20 @@ function zsh_keymap_w {
 }
 
 function zsh_keymap_z {
-	local file=$1
+	local file; file=$(pbpaste)
 
-	echo
-	# Override some of `mdcat`'s styling to match `glow`'s
-	mdcat --columns 80 "$file" | perl -pe '
-		s/\xe2\x94\x84/#/g;                                # Replace heading leading ┄ dashes with `#`
-		s/(#+)\e\[0m/$1 \e[0m/g;                           # Append trailing space after `#`
-		s/\e\[34m/\e[36m/g;                                # Swap heading dark blue (34) for cyan (36)
-		s/\e\[32m(?:\xe2\x94\x80)+\e\[0m/\e[33m```\e[0m/g; # Replace code fence ─ rules with ``` and swap green (32) for yellow (33)
-	'
+	if [[ ! -f $file ]]; then
+		if [[ -n $ZSH_KEYMAP_Z_LAST_FILE && -f $ZSH_KEYMAP_Z_LAST_FILE ]]; then
+			file=$ZSH_KEYMAP_Z_LAST_FILE
+		else
+			red_bar 'Invalid file path in pasteboard' && return
+		fi
+	fi
+
+	ZSH_KEYMAP_Z_LAST_FILE=$file
+
+	other_keymap_k
+	magenta_fg "\"${file##*/}\""
+
+	zsh_keymap_v "$file"
 }

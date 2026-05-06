@@ -87,7 +87,7 @@ function keymap_filter_entries {
 
 	# Print keymap entries matched
 	if [[ -z ${entries_matched[*]} ]]; then
-		red_bar "\`$description\` does not match any description"
+		red_bar "No match for \`$description\`"
 	else
 		echo
 		local is_zsh_keymap; keymap_has_dot_alias "${entries_matched[@]}" && is_zsh_keymap=1
@@ -137,7 +137,7 @@ function keymap_has_disjoint_dups {
 
 		# Otherwise, report on disjoint dups
 		else
-			red_bar "\`$namespace\` has duplicate \`$first_token\` entries"
+			red_bar "Duplicate \`$first_token\` in \`$namespace\`"
 			has_disjoint_dups=1
 		fi
 	done

@@ -248,7 +248,7 @@ function test__nav_keymap_j__when_at_end {
 	)" "$(red_bar 'Reached the end of file list' | bw)"
 }
 
-function test__nav_keymap_j__renders_md_with_zsh_keymap_z {
+function test__nav_keymap_j__renders_md_with_zsh_keymap_v {
 	assert "$(
 		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_j
@@ -256,7 +256,7 @@ function test__nav_keymap_j__renders_md_with_zsh_keymap_z {
 		cd /tmp/test__nav_keymap_j || return
 		echo '# Heading' > note.md
 		nav_keymap_n > /dev/null
-		# zsh_keymap_z output differs from cat; just check it does not error
+		# zsh_keymap_v output differs from cat; just check it does not error
 		# and that the file name is shown
 		nav_keymap_j 2>/dev/null | bw | grep -c '^"note.md"$'
 		rm -rf /tmp/test__nav_keymap_j
@@ -774,5 +774,5 @@ function test__nav_keymap_zz__with_no_plans {
 
 		rm -rf "$tmp_dir"
 		NAV_CLAUDE_PLANS_DIR=$orig
-	)" "$(red_bar 'No plans found')"
+	)" "$(red_bar 'No plans')"
 }

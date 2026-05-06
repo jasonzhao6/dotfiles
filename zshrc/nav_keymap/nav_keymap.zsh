@@ -286,11 +286,11 @@ function nav_keymap_zz {
 	latest=$(ls -t "$NAV_CLAUDE_PLANS_DIR"/*.md 2>/dev/null | head -1)
 
 	if [ -n "$latest" ]; then
-		echo
+		other_keymap_k
 		echo -n 'Plan: '
 		cyan_fg "${latest##*/}"
-		cd "$NAV_CLAUDE_PLANS_DIR" && zsh_keymap_z "$latest"
+		cd "$NAV_CLAUDE_PLANS_DIR" && zsh_keymap_v "$latest"
 	else
-		red_bar "No plans found"
+		red_bar "No plans"
 	fi
 }

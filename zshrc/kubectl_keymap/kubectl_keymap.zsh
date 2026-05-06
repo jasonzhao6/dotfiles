@@ -101,7 +101,7 @@ function kubectl_keymap_c {
 	esac
 
 	if [[ -z "$kubectl_cluster" ]]; then
-		red_bar "Error: \`\$kubectl_cluster\` local var is undefined"
+		red_bar "\`\$kubectl_cluster\` is not defined"
 		return 1
 	fi
 
@@ -109,7 +109,7 @@ function kubectl_keymap_c {
 	local aws_creds
 	aws_creds=$(aws configure export-credentials --format env 2>/dev/null)
 	if [[ -z "$aws_creds" ]]; then
-		red_bar "Error: Failed to export AWS credentials"
+		red_bar "Failed to export AWS credentials"
 		return 1
 	fi
 

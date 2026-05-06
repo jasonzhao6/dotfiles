@@ -6,7 +6,7 @@ function nav_helpers_show_arg {
 
 	case "$file" in
 		${~NAV_RENDER_AS_TEXT}) echo; cat "$file" ;;
-		${~NAV_RENDER_AS_MARKDOWN}) zsh_keymap_z "$file" ;;
+		${~NAV_RENDER_AS_MARKDOWN}) zsh_keymap_v "$file" ;;
 		*) red_bar 'Unsupported file type' ;;
 	esac
 }

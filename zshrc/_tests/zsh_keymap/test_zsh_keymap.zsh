@@ -162,6 +162,61 @@ function test__zsh_keymap_s__when_args_history_is_already_initialized {
 	args_history_reset
 }
 
+function test__zsh_keymap_v__replaces_heading_dashes_with_hashes {
+	local md='/tmp/test__zsh_keymap_v.md'
+	printf '# H1\n\n## H2\n' > $md
+
+	assert "$(zsh_keymap_v $md | bw | compact)" "$(
+		cat <<-eof
+			# H1
+			## H2
+		eof
+	)"
+
+	rm $md
+}
+
+function test__zsh_keymap_v__swaps_heading_blue_for_cyan {
+	local md='/tmp/test__zsh_keymap_v.md'
+	echo '# H1' > $md
+
+	# shellcheck disable=SC2076
+	assert "$(
+		local output; output=$(zsh_keymap_v $md)
+		[[ $output =~ $'\e\\[36m' ]] && [[ ! $output =~ $'\e\\[34m' ]] && echo 1
+	)" '1'
+
+	rm $md
+}
+
+function test__zsh_keymap_v__replaces_fence_dashes_with_backticks {
+	local md='/tmp/test__zsh_keymap_v.md'
+	printf '```\ncode\n```\n' > $md
+
+	assert "$(zsh_keymap_v $md | bw | compact)" "$(
+		cat <<-eof
+			\`\`\`
+			code
+			\`\`\`
+		eof
+	)"
+
+	rm $md
+}
+
+function test__zsh_keymap_v__swaps_fence_green_for_yellow {
+	local md='/tmp/test__zsh_keymap_v.md'
+	printf '```\ncode\n```\n' > $md
+
+	# shellcheck disable=SC2076
+	assert "$(
+		local output; output=$(zsh_keymap_v $md)
+		[[ $output =~ $'\e\\[33m```' ]] && [[ ! $output =~ $'\e\\[32m' ]] && echo 1
+	)" '1'
+
+	rm $md
+}
+
 function test__zsh_keymap_w {
 	assert "$(zsh_keymap_w)" "$(
 		cat <<-eof
@@ -210,57 +265,55 @@ function test__zsh_keymap_w__when_input_is_a_function {
 	)"
 }
 
-function test__zsh_keymap_z__replaces_heading_dashes_with_hashes {
+function test__zsh_keymap_z__renders_pasteboard_file {
 	local md='/tmp/test__zsh_keymap_z.md'
-	printf '# H1\n\n## H2\n' > $md
+	printf '# H1\n' > $md
 
-	assert "$(zsh_keymap_z $md | bw | compact)" "$(
+	# Avoid pasteboard archive side-effect from `other_keymap_k`
+	echo 'not terminal output' | pbcopy
+
+	assert "$(
+		echo "$md" | pbcopy
+		ZSHRC_UNDER_TESTING=1 zsh_keymap_z | bw | compact
+	)" "$(
 		cat <<-eof
+			"test__zsh_keymap_z.md"
 			# H1
-			## H2
 		eof
 	)"
 
 	rm $md
 }
 
-function test__zsh_keymap_z__swaps_heading_blue_for_cyan {
-	local md='/tmp/test__zsh_keymap_z.md'
-	echo '# H1' > $md
-
-	# shellcheck disable=SC2076
+function test__zsh_keymap_z__when_pasteboard_is_not_a_file {
 	assert "$(
-		local output; output=$(zsh_keymap_z $md)
-		[[ $output =~ $'\e\\[36m' ]] && [[ ! $output =~ $'\e\\[34m' ]] && echo 1
-	)" '1'
-
-	rm $md
-}
-
-function test__zsh_keymap_z__replaces_fence_dashes_with_backticks {
-	local md='/tmp/test__zsh_keymap_z.md'
-	printf '```\ncode\n```\n' > $md
-
-	assert "$(zsh_keymap_z $md | bw | compact)" "$(
+		ZSH_KEYMAP_Z_LAST_FILE=
+		echo 'not a file' | pbcopy
+		zsh_keymap_z
+	)" "$(
 		cat <<-eof
-			\`\`\`
-			code
-			\`\`\`
+			$(red_bar 'Invalid file path in pasteboard')
 		eof
 	)"
-
-	rm $md
 }
 
-function test__zsh_keymap_z__swaps_fence_green_for_yellow {
-	local md='/tmp/test__zsh_keymap_z.md'
-	printf '```\ncode\n```\n' > $md
+function test__zsh_keymap_z__when_pasteboard_is_not_a_file_but_last_file_exists {
+	local md='/tmp/test__zsh_keymap_z__fallback.md'
+	printf '# Fallback\n' > $md
 
-	# shellcheck disable=SC2076
+	# Avoid pasteboard archive side-effect from `other_keymap_k`
+	echo 'not terminal output' | pbcopy
+
 	assert "$(
-		local output; output=$(zsh_keymap_z $md)
-		[[ $output =~ $'\e\\[33m```' ]] && [[ ! $output =~ $'\e\\[32m' ]] && echo 1
-	)" '1'
+		ZSH_KEYMAP_Z_LAST_FILE=$md
+		echo 'not a file' | pbcopy
+		ZSHRC_UNDER_TESTING=1 zsh_keymap_z | bw | compact
+	)" "$(
+		cat <<-eof
+			"test__zsh_keymap_z__fallback.md"
+			# Fallback
+		eof
+	)"
 
 	rm $md
 }

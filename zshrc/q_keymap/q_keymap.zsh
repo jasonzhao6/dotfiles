@@ -45,7 +45,7 @@ function q_keymap_0 {
 	docker info 2> /dev/null |
 		grep 'Server Version' > /dev/null &&
 		green_bar 'Docker is running' ||
-		red_bar 'Docker is NOT running'
+		red_bar 'Docker is not running'
 
 	~/.local/bin/kiro-cli "$@"
 }

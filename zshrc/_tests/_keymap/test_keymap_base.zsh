@@ -69,7 +69,7 @@ function test__keymap_init__with_disjoint_duplicates {
 		keymap_init $TEST_NAMESPACE $TEST_ALIAS "${join_dups[@]}"
 	)" "$(
 		cat <<-eof
-			$(red_bar "\`$TEST_NAMESPACE\` has duplicate \`$TEST_ALIAS.a\` entries")
+			$(red_bar "Duplicate \`$TEST_ALIAS.a\` in \`$TEST_NAMESPACE\`")
 		eof
 	)"
 }
@@ -164,7 +164,7 @@ function test__keymap_show__with_multiple_words {
 function test__keymap_show__with_no_match {
 	assert "$(test_keymap z)" "$(
 		cat <<-eof
-			$(red_bar "\`z\` does not match any description")
+			$(red_bar "No match for \`z\`")
 		eof
 	)"
 }

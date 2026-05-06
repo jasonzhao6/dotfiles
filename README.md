@@ -214,10 +214,10 @@ $ t ini
 
 **Note:** Unlike `t ini`, `t init` would have recognized `init` as a native `terraform` command and passed it along instead of searching for "init" as a partial string in the keymap usage.
 
-### Example #4: Inspect the definition of `tiu` with `zz tiu`
+### Example #4: Inspect the definition of `tiu` with `zw tiu`
 
 ```
-$ zz tiu
+$ zw tiu
 
   # `tiu` is aliased to `terraform_keymap_iu`
 

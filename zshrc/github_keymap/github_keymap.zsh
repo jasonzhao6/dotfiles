@@ -180,7 +180,7 @@ function github_keymap_t {
 
 	# If pasteboard is empty, error
 	if [[ -z $repo ]]; then
-		red_bar 'Empty repo name in pasteboard'
+		red_bar 'No repo name in pasteboard'
 		return
 	fi
 
