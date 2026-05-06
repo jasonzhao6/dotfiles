@@ -44,10 +44,15 @@ function github_keymap {
 # Key mappings (Alphabetized)
 #
 
+# Sources
+source "$ZSHRC_SRC_DIR/$GITHUB_NAMESPACE/github_helpers.zsh"
+
 # Constants
 GITHUB_DEFAULT_DOMAIN='github.marqeta.com'
 GITHUB_DEFAULT_ORG='transaction-engine'
 GITHUB_ALL_REPOS="$ZSHRC_DATA_DIR/github.all.txt"
+GITHUB_MD_REGEX='^#{1,6} |^\*\*|^- |^```|^\[.+\]\(.+\)' # headings, bold, lists, code fences, links
+GITHUB_GIST_MIN_LINES=3 # minimum lines to detect CSV/TSV
 
 function github_keymap_a {
 	open -a "GitHub Desktop" .
@@ -72,14 +77,27 @@ function github_keymap_domain {
 }
 
 function github_keymap_g {
+	local content
+
 	# When invoked as standalone command
 	if [[ -t 0 ]]; then
-		pbpaste | gh gist create --web
+		content=$(pbpaste)
 
 	# When invoked after a pipe `|`
 	else
-		gh gist create --web
+		content=$(cat)
 	fi
+
+	local ext='txt'
+	if echo "$content" | grep -qE "$GITHUB_MD_REGEX"; then
+		ext='md'
+	elif github_keymap_is_delimited $'\t' "$content"; then
+		ext='tsv'
+	elif github_keymap_is_delimited ',' "$content"; then
+		ext='csv'
+	fi
+
+	echo "$content" | gh gist create --filename "gist.$ext" --web
 }
 
 function github_keymap_gg {
