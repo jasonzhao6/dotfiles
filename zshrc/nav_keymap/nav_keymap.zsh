@@ -37,6 +37,7 @@ NAV_KEYMAP=(
 	"${NAV_DOT}g <levels>? # Sort subfolders by size"
 	"${NAV_DOT}r # Sort files by recent"
 	''
+	"${NAV_DOT}q <position> # Print file at position in the list"
 	"${NAV_DOT}j # Print next file in the list"
 	"${NAV_DOT}k # Print prev file in the list"
 	"${NAV_DOT}x # Reprint current file in the list"
@@ -180,6 +181,21 @@ function nav_keymap_oo {
 
 function nav_keymap_p {
 	cd "$(<"$NAV_YANK_FILE")" && nav_keymap_n || true
+}
+
+function nav_keymap_q {
+	local position=$1
+
+	# If not a number, reverse-lookup its line number in the args list
+	if [[ ! $position =~ ^[0-9]+$ ]]; then
+		position=$(args_helpers_plain | sed 's/ *#.*//' | strip | grep -nFx "$position" | head -1 | cut -d: -f1)
+		if [[ -z $position ]]; then
+			return
+		fi
+	fi
+
+	NAV_CURSOR=$position
+	nav_helpers_show_arg
 }
 
 function nav_keymap_r {
