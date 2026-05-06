@@ -1,4 +1,4 @@
-function vimium_keymap_extract {
+function vimium_helpers_extract {
 	local keymap_name=$1
 
 	# Open keymap array

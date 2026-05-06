@@ -91,9 +91,9 @@ function github_keymap_g {
 	local ext='txt'
 	if echo "$content" | grep -qE "$GITHUB_MD_REGEX"; then
 		ext='md'
-	elif github_keymap_is_delimited $'\t' "$content"; then
+	elif github_helpers_is_delimited $'\t' "$content"; then
 		ext='tsv'
-	elif github_keymap_is_delimited ',' "$content"; then
+	elif github_helpers_is_delimited ',' "$content"; then
 		ext='csv'
 	fi
 

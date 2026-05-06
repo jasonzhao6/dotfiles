@@ -73,11 +73,11 @@ function args_keymap_a {
 
 	# If there is no `filters`, list args
 	if [[ -z "${filters[*]}" ]]; then
-		args_list
+		args_helpers_list
 
 	# Otherwise, apply `filters`, then list args
 	else
-		args_plain | args_filter "${filters[@]}" | args_keymap_s
+		args_helpers_plain | args_helpers_filter "${filters[@]}" | args_keymap_s
 	fi
 }
 
@@ -105,7 +105,7 @@ function args_keymap_c {
 	local string=$*
 
 	if [[ -z $string ]]; then
-		args_plain | pbcopy
+		args_helpers_plain | pbcopy
 	else
 		echo -n "$string" | pbcopy
 	fi
@@ -118,7 +118,7 @@ function args_keymap_d {
 function args_keymap_e {
 	local command=$*
 
-	args_keymap_n $((RANDOM % $(args_size) + 1)) "$command"
+	args_keymap_n $((RANDOM % $(args_helpers_size) + 1)) "$command"
 }
 
 function args_keymap_f {
@@ -164,7 +164,7 @@ function args_keymap_n {
 	local command=$*
 
 	if [[ -n $number && -n $command ]]; then
-		local arg; arg="$(args_plain | sed -n "${number}p" | sed 's/ *#.*//' | strip)"
+		local arg; arg="$(args_helpers_plain | sed -n "${number}p" | sed 's/ *#.*//' | strip)"
 
 		if [[ -e $arg ]]; then
 			echo_eval "$command \"$arg\""
@@ -186,7 +186,7 @@ function args_keymap_p {
 
 function args_keymap_r {
 	args_history_redo
-	args_list
+	args_helpers_list
 	args_history_redo_error_bar
 }
 
@@ -201,11 +201,11 @@ function args_keymap_s {
 
 	# When invoked as standalone command
 	if [[ -t 0 ]]; then
-		eval "$(prev_command)" | args_save "$is_soft_select" "${filters[@]}"
+		eval "$(prev_command)" | args_helpers_save "$is_soft_select" "${filters[@]}"
 
 	# When invoked after a pipe `|`
 	else
-		args_save "$is_soft_select" "${filters[@]}"
+		args_helpers_save "$is_soft_select" "${filters[@]}"
 	fi
 }
 
@@ -220,30 +220,30 @@ function args_keymap_t {
 }
 
 function args_keymap_u {
-	local column_size_before; column_size_before=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
+	local column_size_before; column_size_before=$(args_helpers_columns "$ARGS_USED_TOP_ROW" | strip)
 
 	args_history_undo
-	args_list
+	args_helpers_list
 	args_history_undo_error_bar
 
-	local column_size_after; column_size_after=$(args_columns "$ARGS_USED_TOP_ROW" | strip)
+	local column_size_after; column_size_after=$(args_helpers_columns "$ARGS_USED_TOP_ROW" | strip)
 
 	# If undoing a column selection, show the columns bar for convenience
 	if [[ -n $ARGS_USED_TOP_ROW && ${#column_size_before} -lt ${#column_size_after} ]]; then
-		args_columns_bar "$ARGS_USED_TOP_ROW"
+		args_helpers_columns_bar "$ARGS_USED_TOP_ROW"
 	fi
 }
 
 function args_keymap_v {
 	local index=$1
 
-	args_select_column 0 "$index"
+	args_helpers_select_column 0 "$index"
 }
 
 function args_keymap_w {
 	local index=$1
 
-	args_select_column 1 "$index"
+	args_helpers_select_column 1 "$index"
 }
 
 function args_keymap_y {
@@ -251,8 +251,8 @@ function args_keymap_y {
 }
 
 function args_keymap_z {
-	local columns; columns=$(args_columns 0 | strip_right)
+	local columns; columns=$(args_helpers_columns 0 | strip_right)
 	local last_column=${columns: -1}
 
-	args_select_column 0 "$last_column"
+	args_helpers_select_column 0 "$last_column"
 }

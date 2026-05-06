@@ -87,7 +87,7 @@ function git_keymap_a {
 
 function git_keymap_b {
 	local branches; branches=$(git branch)
-	local merged; merged=$(git_merged)
+	local merged; merged=$(git_helpers_merged)
 
 	if [[ -n $merged ]]; then
 		branches+="\n----------------\n$merged"
@@ -97,7 +97,7 @@ function git_keymap_b {
 }
 
 function git_keymap_bb {
-	git_merged | xargs -I {} zsh -c 'git branch --delete {}; git push --delete origin {}'
+	git_helpers_merged | xargs -I {} zsh -c 'git branch --delete {}; git push --delete origin {}'
 
 	echo
 	git_keymap_b

@@ -1,3 +1,3 @@
-function other_keymap_k_reset {
-	OTHER_KEYMAP_K_DIR="$ZSHRC_DATA_DIR/other.terminal-dump.d"
-}; other_keymap_k_reset
+function other_helpers_reset_terminal_dump_dir {
+	OTHER_TERMINAL_DUMP_DIR="$ZSHRC_DATA_DIR/other.terminal-dump.d"
+}; other_helpers_reset_terminal_dump_dir

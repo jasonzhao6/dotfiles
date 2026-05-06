@@ -302,16 +302,16 @@ function test__other_keymap_ii__when_when_invoked_after_pipe_and_specifying_only
 }
 
 function test__other_keymap_k {	assert "$(
-		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
-		rm -rf $OTHER_KEYMAP_K_DIR
+		OTHER_TERMINAL_DUMP_DIR="/tmp/test__other_keymap_k"
+		rm -rf $OTHER_TERMINAL_DUMP_DIR
 
 		echo '$' | pbcopy
 		ZSHRC_UNDER_TESTING=1 other_keymap_k
-		ls -l $OTHER_KEYMAP_K_DIR | wc -l
-		cat $OTHER_KEYMAP_K_DIR/*
+		ls -l $OTHER_TERMINAL_DUMP_DIR | wc -l
+		cat $OTHER_TERMINAL_DUMP_DIR/*
 
-		other_keymap_k_reset
-		rm -rf $OTHER_KEYMAP_K_DIR
+		other_helpers_reset_terminal_dump_dir
+		rm -rf $OTHER_TERMINAL_DUMP_DIR
 	)" "$(
 		cat <<-eof
 			       2
@@ -322,17 +322,17 @@ function test__other_keymap_k {	assert "$(
 
 function test__other_keymap_k__when_dumping_same_pasteboard_twice {
 	assert "$(
-		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
-		rm -rf $OTHER_KEYMAP_K_DIR
+		OTHER_TERMINAL_DUMP_DIR="/tmp/test__other_keymap_k"
+		rm -rf $OTHER_TERMINAL_DUMP_DIR
 
 		echo '$' | pbcopy
 		ZSHRC_UNDER_TESTING=1 other_keymap_k
 		ZSHRC_UNDER_TESTING=1 other_keymap_k
-		ls -l $OTHER_KEYMAP_K_DIR | wc -l
-		cat $OTHER_KEYMAP_K_DIR/*
+		ls -l $OTHER_TERMINAL_DUMP_DIR | wc -l
+		cat $OTHER_TERMINAL_DUMP_DIR/*
 
-		other_keymap_k_reset
-		rm -rf $OTHER_KEYMAP_K_DIR
+		other_helpers_reset_terminal_dump_dir
+		rm -rf $OTHER_TERMINAL_DUMP_DIR
 	)" "$(
 		cat <<-eof
 			       2
@@ -343,18 +343,18 @@ function test__other_keymap_k__when_dumping_same_pasteboard_twice {
 
 function test__other_keymap_k__when_dumping_two_different_pasteboards {
 	assert "$(
-		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
-		rm -rf $OTHER_KEYMAP_K_DIR
+		OTHER_TERMINAL_DUMP_DIR="/tmp/test__other_keymap_k"
+		rm -rf $OTHER_TERMINAL_DUMP_DIR
 
 		printf "pasteboard 1\n$\n" | pbcopy
 		ZSHRC_UNDER_TESTING=1 other_keymap_k
 		printf "pasteboard 2\n$\n" | pbcopy
 		ZSHRC_UNDER_TESTING=1 other_keymap_k
-		ls -l $OTHER_KEYMAP_K_DIR | wc -l
-		cat $OTHER_KEYMAP_K_DIR/*
+		ls -l $OTHER_TERMINAL_DUMP_DIR | wc -l
+		cat $OTHER_TERMINAL_DUMP_DIR/*
 
-		other_keymap_k_reset
-		rm -rf $OTHER_KEYMAP_K_DIR
+		other_helpers_reset_terminal_dump_dir
+		rm -rf $OTHER_TERMINAL_DUMP_DIR
 	)" "$(
 		cat <<-eof
 			       3
@@ -369,27 +369,27 @@ function test__other_keymap_k__when_dumping_two_different_pasteboards {
 function test__other_keymap_k__when_not_terminal_output {
 	assert "$(
 		# shellcheck disable=SC2030
-		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
-		rm -rf $OTHER_KEYMAP_K_DIR
+		OTHER_TERMINAL_DUMP_DIR="/tmp/test__other_keymap_k"
+		rm -rf $OTHER_TERMINAL_DUMP_DIR
 
 		echo 'not terminal output' | pbcopy
 		ZSHRC_UNDER_TESTING=1 other_keymap_k
-		ls $OTHER_KEYMAP_K_DIR 2>/dev/null | wc -l
+		ls $OTHER_TERMINAL_DUMP_DIR 2>/dev/null | wc -l
 
-		other_keymap_k_reset
+		other_helpers_reset_terminal_dump_dir
 	)" '       0'
 }
 
 function test__other_keymap_kc {
 	assert "$(
 		# shellcheck disable=SC2030
-		OTHER_KEYMAP_K_DIR="/tmp/test__other_keymap_k"
-		mkdir -p $OTHER_KEYMAP_K_DIR
+		OTHER_TERMINAL_DUMP_DIR="/tmp/test__other_keymap_k"
+		mkdir -p $OTHER_TERMINAL_DUMP_DIR
 
 		other_keymap_kc
-		[[ -e $OTHER_KEYMAP_K_DIR ]] && echo present || echo absent
+		[[ -e $OTHER_TERMINAL_DUMP_DIR ]] && echo present || echo absent
 
-		other_keymap_k_reset
+		other_helpers_reset_terminal_dump_dir
 	)" 'absent'
 }
 
@@ -401,7 +401,7 @@ function test__other_keymap_kk {
 	)" "$(
 		cat <<-eof
 
-			$OTHER_KEYMAP_K_DIR
+			$OTHER_TERMINAL_DUMP_DIR
 		eof
 	)"
 }

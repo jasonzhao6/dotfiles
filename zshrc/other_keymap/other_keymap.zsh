@@ -252,9 +252,9 @@ function other_keymap_j {
 function other_keymap_k {
 	# If pasteboard contains terminal output looking text, archive it
 	if [[ $(pbpaste | compact | strip | sed -n '$p') == \$* ]]; then
-		local filename; filename="$OTHER_KEYMAP_K_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt"
+		local filename; filename="$OTHER_TERMINAL_DUMP_DIR/$(gdate +'%Y-%m-%d_%H.%M.%S.%6N').txt"
 
-		mkdir -p "$OTHER_KEYMAP_K_DIR"
+		mkdir -p "$OTHER_TERMINAL_DUMP_DIR"
 		pbpaste > "$filename"
 
 		# Taint the pasteboard, so that it doesn't get dumped again
@@ -265,12 +265,12 @@ function other_keymap_k {
 }
 
 function other_keymap_kc {
-	rm -rf "$OTHER_KEYMAP_K_DIR"
+	rm -rf "$OTHER_TERMINAL_DUMP_DIR"
 }
 
 function other_keymap_kk {
-	mkdir -p "$OTHER_KEYMAP_K_DIR"
-	cd "$OTHER_KEYMAP_K_DIR" && nav_keymap_n || return
+	mkdir -p "$OTHER_TERMINAL_DUMP_DIR"
+	cd "$OTHER_TERMINAL_DUMP_DIR" && nav_keymap_n || return
 }
 
 function other_keymap_m {

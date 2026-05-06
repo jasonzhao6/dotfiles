@@ -70,7 +70,7 @@ TERRAFORM_VARS=( # To be overwritten by `ZSHRC_SECRETS`
 function terraform_keymap_a {
 	local options=$1
 
-	terraform_keymap_init "$options" && terraform apply -auto-approve
+	terraform_helpers_init "$options" && terraform apply -auto-approve
 }
 
 function terraform_keymap_c {
@@ -172,7 +172,7 @@ function terraform_keymap_o {
 function terraform_keymap_p {
 	local options=$1
 
-	terraform_keymap_init "$options" && terraform plan -out=tfplan
+	terraform_helpers_init "$options" && terraform plan -out=tfplan
 }
 
 function terraform_keymap_rm {
@@ -202,7 +202,7 @@ function terraform_keymap_u {
 function terraform_keymap_v {
 	local options=$1
 
-	terraform_keymap_init "$options" && terraform validate
+	terraform_helpers_init "$options" && terraform validate
 }
 
 function terraform_keymap_w {

@@ -1,5 +1,5 @@
-function nav_show_arg {
-	local file; file="$(args_plain | sed -n "${NAV_CURSOR}p" | sed 's/ *#.*//' | strip)"
+function nav_helpers_show_arg {
+	local file; file="$(args_helpers_plain | sed -n "${NAV_CURSOR}p" | sed 's/ *#.*//' | strip)"
 
 	other_keymap_k
 	magenta_fg "\"${file##*/}\""

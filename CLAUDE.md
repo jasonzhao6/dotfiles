@@ -85,6 +85,11 @@ Key conventions:
   - `<var>*` — takes zero or multiple variables
   - `(1-10)` — takes an exact value from the list
 
+### Helper Files (`*_helpers.zsh`)
+- Helper functions live in `*_helpers.zsh` files, **not** in the keymap file itself (structural tests scan keymap files for `^function` lines and will fail on non-keymap functions)
+- Helper functions use the naming convention `<namespace>_helpers_<name>` (e.g. `args_helpers_plain`, `git_helpers_merged`, `aws_helpers_ec2_args`)
+- Constants and the `source` line for helpers go inside the `# Key mappings (Alphabetized)` section, under `# Sources` and `# Constants` sub-headers
+
 ### App Defaults (`main_keymap.*.zsh`)
 Non-zsh shortcut reference files for external apps (e.g. Gmail, Terminal, Claude Code). Format:
 - Modifiers are lowercase and hyphen-separated: `cmd-shift-f`, `ctrl-g`, `alt-shift-{up}`

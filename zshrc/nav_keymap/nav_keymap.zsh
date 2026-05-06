@@ -125,7 +125,7 @@ function nav_keymap_i {
 }
 
 function nav_keymap_j {
-	local size; size=$(args_size)
+	local size; size=$(args_helpers_size)
 
 	if [[ $NAV_CURSOR -ge $size ]]; then
 		red_bar 'Reached the end of file list'
@@ -133,11 +133,11 @@ function nav_keymap_j {
 	fi
 
 	NAV_CURSOR=$((NAV_CURSOR + 1))
-	nav_show_arg
+	nav_helpers_show_arg
 }
 
 function nav_keymap_k {
-	local size; size=$(args_size)
+	local size; size=$(args_helpers_size)
 
 	if [[ $size -eq 0 || $NAV_CURSOR -eq 1 ]]; then
 		red_bar 'Reached the beginning of file list'
@@ -150,7 +150,7 @@ function nav_keymap_k {
 		NAV_CURSOR=$((NAV_CURSOR - 1))
 	fi
 
-	nav_show_arg
+	nav_helpers_show_arg
 }
 
 function nav_keymap_m {
@@ -259,7 +259,7 @@ function nav_keymap_w {
 }
 
 function nav_keymap_x {
-	local size; size=$(args_size)
+	local size; size=$(args_helpers_size)
 
 	if [[ $size -eq 0 ]]; then
 		red_bar 'No current file in the list'
@@ -270,7 +270,7 @@ function nav_keymap_x {
 		NAV_CURSOR=1
 	fi
 
-	nav_show_arg
+	nav_helpers_show_arg
 }
 
 function nav_keymap_y {

@@ -168,7 +168,7 @@ function zsh_keymap_w {
 		gray_fg "  # \`${definition/: aliased to /\` is aliased to \`}\`"
 
 		# If the zsh alias is a keymap key, show its usage
-		if zsh_keymap_does_key_exist "$key_regex"; then
+		if zsh_helpers_does_key_exist "$key_regex"; then
 			eval "${name:0:1} '$key_regex'"
 	 	fi
 		echo

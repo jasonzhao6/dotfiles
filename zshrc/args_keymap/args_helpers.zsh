@@ -2,7 +2,7 @@
 # Getters
 #
 
-function args_plain {
+function args_helpers_plain {
 	local input=$1
 
 	if [[ -z "$input" ]]; then
@@ -12,20 +12,20 @@ function args_plain {
 	fi
 }
 
-function args_list {
+function args_helpers_list {
 	# Strip any trailing whitespace added by `nl`
 	args_history_current | nl | strip_right
 }
 
-function args_list_plain {
+function args_helpers_list_plain {
 	args_history_current | nl | bw | expand
 }
 
-function args_size {
+function args_helpers_size {
 	args_history_current | wc -l
 }
 
-function args_columns {
+function args_helpers_columns {
 	local use_top_row=$1
 
 	# Skip the `nl` column, then start accumulating `columns` starting with `current_column`
@@ -35,9 +35,9 @@ function args_columns {
 
 	# Delimit columns using on the top row, or else use the bottom row
 	if [[ ${use_top_row} -eq 1 ]]; then
-		row=$(args_list_plain | head -1)
+		row=$(args_helpers_list_plain | head -1)
 	else
-		row=$(args_list_plain | tail -1)
+		row=$(args_helpers_list_plain | tail -1)
 	fi
 
 	# Iterate over each character in the row
@@ -60,25 +60,25 @@ function args_columns {
 	echo "$columns"
 }
 
-function args_columns_bar {
+function args_helpers_columns_bar {
 	local use_top_row=$1
 
-	green_bg "$(args_columns "$use_top_row")"
+	green_bg "$(args_helpers_columns "$use_top_row")"
 }
 
 #
 # Setters
 #
 
-function args_select_column {
+function args_helpers_select_column {
 	local use_top_row=$1
 	local selected_column=$2
 
 	if [[ -z $selected_column ]]; then
-		args_list
-		args_columns_bar "$use_top_row"
+		args_helpers_list
+		args_helpers_columns_bar "$use_top_row"
 	else
-		local columns; columns=$(args_columns "$use_top_row")
+		local columns; columns=$(args_helpers_columns "$use_top_row")
 		local first_column; first_column=$(index_of "$columns" a)
 		local target_column; target_column=$(index_of "$columns" "$selected_column")
 		local next_column; next_column=$(index_of "$columns" "$(next_ascii "$selected_column")")
@@ -86,11 +86,11 @@ function args_select_column {
 		local column_end; column_end=$([[ "$next_column" -ne 0 ]] && echo $((next_column - 1)))
 
 		# Select the specified column
-		args_list_plain | cut -c "$column_start"-"$column_end" | strip_right | args_keymap_s
+		args_helpers_list_plain | cut -c "$column_start"-"$column_end" | strip_right | args_keymap_s
 
 		# If selection was out of range and had no effect, show columns bar again for convenience
-		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args_columns "$use_top_row")" b) -ne 0 ]]; then
-			args_columns_bar "$use_top_row"
+		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args_helpers_columns "$use_top_row")" b) -ne 0 ]]; then
+			args_helpers_columns_bar "$use_top_row"
 		fi
 
 		# Set global states to be used by `u`
@@ -102,7 +102,7 @@ function args_select_column {
 # `|` Helpers
 #
 
-function args_save {
+function args_helpers_save {
 	# Get the piped input; if there is not any, abort
 	local new_args; new_args=$(head -10000 | compact)
 	[[ -z "$new_args" ]] && return
@@ -114,11 +114,11 @@ function args_save {
 	# If there are filters, apply them
 	local filters=("$@")
 	if [[ -n "${filters[*]}" ]]; then
-		new_args=$(echo "$new_args" | args_filter "${filters[@]}")
+		new_args=$(echo "$new_args" | args_helpers_filter "${filters[@]}")
 	fi
 
 	# If the new args are different than the current args, push the new args
-	if [[ $(args_plain "$new_args") != $(args_plain) ]]; then
+	if [[ $(args_helpers_plain "$new_args") != $(args_helpers_plain) ]]; then
 		args_history_push "$new_args"
 
 		# Set global states to be used by `n, nn, u`
@@ -134,10 +134,10 @@ function args_save {
 		ARGS_PUSHED=0
 	fi
 
-	args_list
+	args_helpers_list
 }
 
-function args_filter {
+function args_helpers_filter {
 	local filters=("$@")
 
 	# Expand each argument into a separate `grep` filter to allow matching out-of-order

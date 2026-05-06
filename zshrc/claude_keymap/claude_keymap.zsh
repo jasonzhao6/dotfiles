@@ -42,12 +42,12 @@ CLAUDE_KEYMAP_FOLDERS=(skills)
 CLAUDE_KEYMAP_SCRATCH_DIR="$HOME/GitHub/jasonzhao6/scratch/claude-config"
 
 function claude_keymap_c {
-	claude_keymap_check_docker
+	claude_helpers_check_docker
 	claude
 }
 
 function claude_keymap_l {
-	claude_keymap_check_docker
+	claude_helpers_check_docker
 	claude --resume "$*"
 }
 
@@ -124,7 +124,7 @@ function claude_keymap_oo {
 }
 
 function claude_keymap_r {
-	claude_keymap_check_docker
+	claude_helpers_check_docker
 	claude --continue
 }
 

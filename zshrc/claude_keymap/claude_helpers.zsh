@@ -1,4 +1,4 @@
-function claude_keymap_check_docker {
+function claude_helpers_check_docker {
 	# Check if Docker is running; Claude's MCP servers run on it
 	docker info 2> /dev/null |
 		grep 'Server Version' > /dev/null &&

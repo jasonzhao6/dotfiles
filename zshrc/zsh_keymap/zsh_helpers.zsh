@@ -1,7 +1,7 @@
-function zsh_keymap_does_key_exist {
+function zsh_helpers_does_key_exist {
 	local key=$1
 
-	local keymaps; keymaps=$(main_keymap_grep_keymap_names)
+	local keymaps; keymaps=$(main_helpers_grep_keymap_names)
 	local keymap_entries
 
 	# shellcheck disable=SC2034 # Used to define `keymap_entries`

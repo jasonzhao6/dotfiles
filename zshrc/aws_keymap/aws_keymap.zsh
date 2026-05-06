@@ -84,7 +84,7 @@ AWS_URL="https://$AWS_DEFAULT_REGION.console.aws.amazon.com"
 function aws_keymap_a {
 	local name=$1
 
-	ec2_args "Name=tag:aws:autoscaling:groupName, Values=*$name*"
+	aws_helpers_ec2_args "Name=tag:aws:autoscaling:groupName, Values=*$name*"
 }
 
 function aws_keymap_aa {
@@ -138,7 +138,7 @@ function aws_keymap_c1 {
 function aws_keymap_e {
 	local name=$1
 
-	ec2_args "Name=tag:Name, Values=*$name*"
+	aws_helpers_ec2_args "Name=tag:Name, Values=*$name*"
 }
 
 function aws_keymap_e1 {
@@ -159,7 +159,7 @@ function aws_keymap_i {
 	if [[ "$1" =~ ^(i-)?[a-z0-9]{17}$ ]]; then
 		[[ "$1" =~ ^i-.*$ ]] && echo "$1" || echo i-"$1"
 	else
-		[[ "$1" =~ ^[0-9\.]+$ ]] && ec2_ip_to_id "$1" || ec2_name_to_id "$1"
+		[[ "$1" =~ ^[0-9\.]+$ ]] && aws_helpers_ec2_ip_to_id "$1" || aws_helpers_ec2_name_to_id "$1"
 	fi
 }
 

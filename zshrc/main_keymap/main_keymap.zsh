@@ -56,21 +56,21 @@ source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/main_helpers.zsh"
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/main_helpers.quarantine.zsh"
 
 function main_keymap_- {
-	main_keymap_find_key_mappings
+	main_helpers_find_key_mappings
 
 	echo
 	echo Code stats:
 
-	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings`
+	# shellcheck disable=SC2154 # Assigned by `main_helpers_find_key_mappings`
 	echo "- ${#reply_zsh_mappings} zsh mappings"
 
-	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings`
+	# shellcheck disable=SC2154 # Assigned by `main_helpers_find_key_mappings`
 	echo "- ${#reply_non_zsh_mappings} non-zsh mappings"
 
-	ZSHRC_LINES_OF_CODE=$(main_keymap_count_lines_of_code)
+	ZSHRC_LINES_OF_CODE=$(main_helpers_count_lines_of_code)
 	echo "- $ZSHRC_LINES_OF_CODE lines of code"
 
-	ZSHRC_LINE_COUNT=$(main_keymap_count_lines)
+	ZSHRC_LINE_COUNT=$(main_helpers_count_lines)
 	echo "- $ZSHRC_LINE_COUNT lines total"
 }
 
@@ -85,7 +85,7 @@ function main_keymap_a {
 
 	# Generate a new keymap-of-keymaps; if different, show a red notice
 	cp "$ALL_KEYMAP_FILE" "$ALL_KEYMAP_FILE.bak"
-	main_keymap_extract_keymaps 'ALL_KEYMAP'
+	main_helpers_extract_keymaps 'ALL_KEYMAP'
 	if ! cmp --silent "$ALL_KEYMAP_FILE" "$ALL_KEYMAP_FILE.bak"; then
 		source "$ALL_KEYMAP_FILE"
 		red_bar "\`$ALL_NAMESPACE\` updated"
@@ -96,49 +96,49 @@ function main_keymap_a {
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.claude.zsh"
 function main_keymap_c {
 	local description=$*
-	main_keymap_show_default_keyboard_shortcuts 'claude_code' "$description"
+	main_helpers_show_default_keyboard_shortcuts 'claude_code' "$description"
 }
 
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.gmail.zsh"
 function main_keymap_g {
 	local description=$*
-	main_keymap_show_default_keyboard_shortcuts 'gmail' "$description"
+	main_helpers_show_default_keyboard_shortcuts 'gmail' "$description"
 }
 
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.github_desktop.zsh"
 function main_keymap_h {
 	local description=$*
-	main_keymap_show_default_keyboard_shortcuts 'github_desktop' "$description"
+	main_helpers_show_default_keyboard_shortcuts 'github_desktop' "$description"
 }
 
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.vi.zsh"
 function main_keymap_i {
 	local description=$*
-	main_keymap_show_default_keyboard_shortcuts 'vi' "$description"
+	main_helpers_show_default_keyboard_shortcuts 'vi' "$description"
 }
 
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.less.zsh"
 function main_keymap_l {
 	local description=$*
-	main_keymap_show_default_keyboard_shortcuts 'less' "$description"
+	main_helpers_show_default_keyboard_shortcuts 'less' "$description"
 }
 
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.textmate.zsh"
 function main_keymap_m {
 	local description=$*
-	main_keymap_show_default_keyboard_shortcuts 'textmate' "$description"
+	main_helpers_show_default_keyboard_shortcuts 'textmate' "$description"
 }
 
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.notion.zsh"
 function main_keymap_n {
 	local description=$*
-	main_keymap_show_default_keyboard_shortcuts 'notion' "$description"
+	main_helpers_show_default_keyboard_shortcuts 'notion' "$description"
 }
 
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.macos.zsh"
 function main_keymap_o {
 	local description=$*
-	main_keymap_show_default_keyboard_shortcuts 'macos' "$description"
+	main_helpers_show_default_keyboard_shortcuts 'macos' "$description"
 }
 
 # Includes custom zsh and non-zsh keymaps
@@ -146,27 +146,27 @@ function main_keymap_o {
 function main_keymap_r {
 	local description=$*
 
-	main_keymap_find_key_mappings "$description"
+	main_helpers_find_key_mappings "$description"
 
 	local is_zsh_keymap=1
-	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings`
-	main_keymap_print_key_mappings $is_zsh_keymap "${reply_zsh_mappings[@]}"
+	# shellcheck disable=SC2154 # Assigned by `main_helpers_find_key_mappings`
+	main_helpers_print_key_mappings $is_zsh_keymap "${reply_zsh_mappings[@]}"
 
 	is_zsh_keymap=0
-	# shellcheck disable=SC2154 # Assigned by `main_keymap_find_key_mappings`
-	main_keymap_print_key_mappings $is_zsh_keymap "${reply_non_zsh_mappings[@]}"
+	# shellcheck disable=SC2154 # Assigned by `main_helpers_find_key_mappings`
+	main_helpers_print_key_mappings $is_zsh_keymap "${reply_non_zsh_mappings[@]}"
 }
 
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.slack.zsh"
 function main_keymap_s {
 	local description=$*
-	main_keymap_show_default_keyboard_shortcuts 'slack' "$description"
+	main_helpers_show_default_keyboard_shortcuts 'slack' "$description"
 }
 
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.terminal.zsh"
 function main_keymap_t {
 	local description=$*
-	main_keymap_show_default_keyboard_shortcuts 'terminal' "$description"
+	main_helpers_show_default_keyboard_shortcuts 'terminal' "$description"
 }
 
 # Includes zsh keymaps following a `KEYMAP_DOT`, e.g `g.x`
@@ -182,7 +182,7 @@ function main_keymap_w {
 		entry=$(eval "echo $entry")
 		keymap_entries+=("$entry")
 	done < <(egrep "^\t\"[$]{[A-Z]+_DOT}$key" "$ZSHRC_SRC_DIR"/**/*_keymap.zsh | trim_column | bw)
-	main_keymap_print_key_mappings $is_zsh_keymap "${keymap_entries[@]}"
+	main_helpers_print_key_mappings $is_zsh_keymap "${keymap_entries[@]}"
 
 	# Find non-zsh keymap entries with matching `key`
 	keymap_entries=()
@@ -191,5 +191,5 @@ function main_keymap_w {
 		entry=$(eval "echo $entry")
 		keymap_entries+=("$entry")
 	done < <(egrep "^\t\".*$KEYMAP_DASH$key " "$ZSHRC_SRC_DIR"/**/*_keymap.zsh | trim_column | bw)
-	main_keymap_print_key_mappings $is_zsh_keymap "${keymap_entries[@]}"
+	main_helpers_print_key_mappings $is_zsh_keymap "${keymap_entries[@]}"
 }

@@ -5,16 +5,16 @@
 # One thing that these methods have in common is the presence of `**`. It may be the culprit to
 # IntelliJ's parsing confusion.
 
-function main_keymap_grep_keymap_names {
+function main_helpers_grep_keymap_names {
 	pgrep --only-matching "^[A-Z_]+_KEYMAP(?==\($)" "$ZSHRC_SRC_DIR"/**/*_keymap*.zsh |
 		bw |
 		sed 's/^[^:]*://'
 }
 
-function main_keymap_count_lines_of_code {
+function main_helpers_count_lines_of_code {
 	egrep --invert-match '^\s*(#|$)' "$ZSHRC_SRC_DIR"/**/*.zsh | wc -l | strip_left
 }
 
-function main_keymap_count_lines {
+function main_helpers_count_lines {
 	cat "$ZSHRC_SRC_DIR"/**/*.zsh | wc -l | strip_left
 }

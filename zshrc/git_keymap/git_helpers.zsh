@@ -1,3 +1,3 @@
-function git_merged {
+function git_helpers_merged {
 	git branch --merged | egrep --invert-match '^\*.*$|^  main$|^  master$'
 }

@@ -5,7 +5,7 @@ function all {
 
 	# Collect arg outputs in `ARGS_BACKGROUND_OUTPUTS_FILE` to print at the end
 	# Otherwise, arg outputs are interleaved with `&` outputs
-	for number in $(seq 1 "$(args_size)"); do
+	for number in $(seq 1 "$(args_helpers_size)"); do
 		args_keymap_n "$number" "$command" >> "$ARGS_BACKGROUND_OUTPUTS_FILE" &
 	done
 
@@ -18,7 +18,7 @@ function all {
 function each {
 	local command=$*
 
-	for number in $(seq 1 "$(args_size)"); do
+	for number in $(seq 1 "$(args_helpers_size)"); do
 		echo
 		args_keymap_n "$number" "$command"
 	done
@@ -30,7 +30,7 @@ function map {
 	local map=''
 	local arg
 
-	for number in $(seq 1 "$(args_size)"); do
+	for number in $(seq 1 "$(args_helpers_size)"); do
 		echo
 		arg=$(args_keymap_n "$number" "$command")
 		map+="$arg\n"

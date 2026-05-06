@@ -1,4 +1,4 @@
-function ec2_args {
+function aws_helpers_ec2_args {
 	local name="$1"
 
 	aws ec2 describe-instances \
@@ -11,7 +11,7 @@ function ec2_args {
 			args_keymap_so
 }
 
-function ec2_ip_to_id {
+function aws_helpers_ec2_ip_to_id {
 	local ip=$1
 
 	aws ec2 describe-instances \
@@ -21,7 +21,7 @@ function ec2_ip_to_id {
 		--output text
 }
 
-function ec2_name_to_id {
+function aws_helpers_ec2_name_to_id {
 	local name=$1
 
 	aws ec2 describe-instances \

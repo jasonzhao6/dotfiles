@@ -1,4 +1,4 @@
-function terraform_keymap_init {
+function terraform_helpers_init {
 	local options=$1
 	[[ -z $1 ]] && return
 
