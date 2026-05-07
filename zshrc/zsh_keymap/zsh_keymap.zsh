@@ -195,7 +195,7 @@ function zsh_keymap_w {
 }
 
 function zsh_keymap_z {
-	local file; file=$(pbpaste)
+	local file; file=$(zsh_helpers_pbpaste_file_path)
 
 	if [[ ! -f $file ]]; then
 		if [[ -n $ZSH_KEYMAP_Z_LAST_FILE && -f $ZSH_KEYMAP_Z_LAST_FILE ]]; then

@@ -1,3 +1,23 @@
+function zsh_helpers_pbpaste_file_path {
+	# Fast path: plain text clipboard (e.g. path copied from terminal)
+	local file; file=$(pbpaste | strip)
+
+	# Slow path: Finder copies files as URL references, not plain text,
+	# so `pbpaste` only returns the filename; use AppKit to get the full path
+	if [[ ! -f $file && -z $ZSHRC_UNDER_TESTING ]]; then
+		file=$(osascript -e '
+			use framework "AppKit"
+			set pb to current application'\''s NSPasteboard'\''s generalPasteboard()
+			set fileURLs to pb'\''s readObjectsForClasses:{current application'\''s NSURL} options:(missing value)
+			if (count of fileURLs) > 0 then
+				return ((item 1 of fileURLs)'\''s |path|()) as text
+			end if
+		' 2>/dev/null)
+	fi
+
+	echo "$file"
+}
+
 function zsh_helpers_does_key_exist {
 	local key=$1
 

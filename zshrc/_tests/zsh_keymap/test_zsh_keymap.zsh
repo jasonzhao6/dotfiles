@@ -289,7 +289,7 @@ function test__zsh_keymap_z__when_pasteboard_is_not_a_file {
 	assert "$(
 		ZSH_KEYMAP_Z_LAST_FILE=
 		echo 'not a file' | pbcopy
-		zsh_keymap_z
+		ZSHRC_UNDER_TESTING=1 zsh_keymap_z
 	)" "$(
 		cat <<-eof
 			$(red_bar 'Invalid file path in pasteboard')
