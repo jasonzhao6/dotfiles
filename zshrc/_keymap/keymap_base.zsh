@@ -87,7 +87,7 @@ function keymap_filter_entries {
 
 	# Print keymap entries matched
 	if [[ -z ${entries_matched[*]} ]]; then
-		red_bar "No match for \`$description\`"
+		red_bar "No description matches \`$description\`"
 	else
 		echo
 		local is_zsh_keymap; keymap_has_dot_alias "${entries_matched[@]}" && is_zsh_keymap=1

@@ -164,7 +164,7 @@ function test__keymap_show__with_multiple_words {
 function test__keymap_show__with_no_match {
 	assert "$(test_keymap z)" "$(
 		cat <<-eof
-			$(red_bar "No match for \`z\`")
+			$(red_bar "No description matches \`z\`")
 		eof
 	)"
 }

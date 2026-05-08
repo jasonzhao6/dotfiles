@@ -32,6 +32,49 @@ function test__nav_keymap__when_specifying_a_directory_instead_of_key {
 	)"
 }
 
+function test__nav_keymap__when_specifying_a_file_instead_of_key {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap__file
+		mkdir /tmp/test__nav_keymap__file
+		cd /tmp/test__nav_keymap__file || return
+		echo 'one' > 1.txt
+		echo 'two' > 2.txt
+		echo 'three' > 3.txt
+		nav_keymap_n > /dev/null
+		nav_keymap 2.txt | bw
+		rm -rf /tmp/test__nav_keymap__file
+	)" "$(
+		cat <<-eof
+		"2.txt"
+
+		two
+		eof
+	)"
+}
+
+function test__nav_keymap__when_specifying_a_file__nj_continues {
+	assert "$(
+		ZSHRC_UNDER_TESTING=1
+		rm -rf /tmp/test__nav_keymap__file_nj
+		mkdir /tmp/test__nav_keymap__file_nj
+		cd /tmp/test__nav_keymap__file_nj || return
+		echo 'one' > 1.txt
+		echo 'two' > 2.txt
+		echo 'three' > 3.txt
+		nav_keymap_n > /dev/null
+		nav_keymap 1.txt > /dev/null
+		nav_keymap_j | bw
+		rm -rf /tmp/test__nav_keymap__file_nj
+	)" "$(
+		cat <<-eof
+		"2.txt"
+
+		two
+		eof
+	)"
+}
+
 function test__nav_keymap_a {
 	assert "$(
 		rm -rf /tmp/test__nav_keymap_a

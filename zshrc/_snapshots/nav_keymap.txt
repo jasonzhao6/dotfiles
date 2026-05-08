@@ -3,7 +3,7 @@ Keymap: nav_keymap.zsh
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .  <p> <y>  |  <f> <g> <c> <r> <l>  /   =   \ 
      <a> (o) (e) (u) <i>  |  (d) <h> (t) (n) (s)  - 
-      ;  <q> <j> <k> <x>  |   b  <m> <w> <v> (z)
+      ;   q  <j> <k> <x>  |   b  <m> <w> <v> (z)
 
   `<>` key initials have one mapping
   `()` key initials have multiple mappings
@@ -31,7 +31,13 @@ Keymap List
   $ n.e <match>* <-mismatch>*  # List visible files
   $ n.ee <match>* <-mismatch>* # List hidden files
 
+  $ n <file>                   # Print text file
   $ n <directory>              # Go to directory
+
+  $ n.j                        # Print next file in the list
+  $ n.k                        # Print prev file in the list
+  $ n.x                        # Reprint current file in the list
+
   $ n.t                        # Go to directory in pasteboard
   $ n.tt <file>?               # Copy current path to pasteboard
   $ n.y                        # Yank current path
@@ -57,11 +63,6 @@ Keymap List
   $ n.f                        # Sort files by size
   $ n.g <levels>?              # Sort subfolders by size
   $ n.r                        # Sort files by recent
-
-  $ n.q <position>             # Print file at position in the list
-  $ n.j                        # Print next file in the list
-  $ n.k                        # Print prev file in the list
-  $ n.x                        # Reprint current file in the list
 
   $ n.c                        # (Reserved: Netcat)
   $ n.l                        # (Reserved: Number lines)
