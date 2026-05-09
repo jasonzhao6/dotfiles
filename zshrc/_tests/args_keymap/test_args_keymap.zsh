@@ -480,8 +480,10 @@ function test__args_keymap_o {
 
 function test__args_keymap_p {
 	assert "$(
+		cp "$ARGS_YANK_FILE" "$ARGS_YANK_FILE.bak" 2>/dev/null
 		seq 3 > "$ARGS_YANK_FILE"
 		args_keymap_p
+		mv "$ARGS_YANK_FILE.bak" "$ARGS_YANK_FILE" 2>/dev/null
 	)" "$(
 		cat <<-eof
 		     1	1
@@ -1043,10 +1045,12 @@ function test__args_keymap_w__with_one_column {
 
 function test__args_keymap_y {
 	assert "$(
+		cp "$ARGS_YANK_FILE" "$ARGS_YANK_FILE.bak" 2>/dev/null
 		echo "$test__input" | args_keymap_s > /dev/null
 		rm -f "$ARGS_YANK_FILE"
 		args_keymap_y
 		cat "$ARGS_YANK_FILE"
+		mv "$ARGS_YANK_FILE.bak" "$ARGS_YANK_FILE" 2>/dev/null
 	)" "$test__input"
 }
 

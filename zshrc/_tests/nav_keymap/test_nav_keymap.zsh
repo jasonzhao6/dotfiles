@@ -549,10 +549,99 @@ function test__nav_keymap_oo__with_filters {
 
 function test__nav_keymap_p {
 	assert "$(
-		echo "$HOME/Documents" > "$NAV_YANK_FILE"
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		echo "$HOME/Documents" > "$NAV_MRU_FILE"
 		nav_keymap_p > /dev/null
 		pwd
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$HOME/Documents"
+}
+
+function test__nav_keymap_p__when_empty {
+	assert "$(
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		rm -f "$NAV_MRU_FILE"
+		nav_keymap_p
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
+	)" "$(red_bar 'MRU queue is empty')"
+}
+
+function test__nav_keymap_p__uses_head_of_queue {
+	assert "$(
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		printf '%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" > "$NAV_MRU_FILE"
+		nav_keymap_p > /dev/null
+		pwd
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
+	)" "$HOME/Documents"
+}
+
+function test__nav_keymap_q {
+	assert "$(
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
+		nav_keymap_q | bw
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
+	)" "$(
+		cat <<-eof
+		     1	$HOME/Documents
+		     2	$HOME/Downloads
+		     3	$HOME/Desktop
+		eof
+	)"
+}
+
+function test__nav_keymap_q__with_filters {
+	assert "$(
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
+		nav_keymap_q Do | bw
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
+	)" "$(
+		cat <<-eof
+		     1	$HOME/Documents
+		     2	$HOME/Downloads
+		eof
+	)"
+}
+
+function test__nav_keymap_q__single_match_cds {
+	assert "$(
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
+		nav_keymap_q Down > /dev/null
+		pwd
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
+	)" "$HOME/Downloads"
+}
+
+function test__nav_keymap_q__single_match_moves_to_head {
+	assert "$(
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
+		nav_keymap_q Down > /dev/null
+		head -1 "$NAV_MRU_FILE"
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
+	)" "$HOME/Downloads"
+}
+
+function test__nav_keymap_q__empty {
+	assert "$(
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		rm -f "$NAV_MRU_FILE"
+		nav_keymap_q
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
+	)" "$(red_bar 'MRU queue is empty')"
+}
+
+function test__nav_keymap_qq {
+	assert "$(
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		echo "$HOME/Documents" > "$NAV_MRU_FILE"
+		nav_keymap_qq
+		[[ ! -f "$NAV_MRU_FILE" ]] && echo 'cleared'
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
+	)" 'cleared'
 }
 
 function test__nav_keymap_r {
@@ -795,11 +884,41 @@ function test__nav_keymap_x__reflects_updated_content {
 
 function test__nav_keymap_y {
 	assert "$(
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		rm -f "$NAV_MRU_FILE"
 		cd "$HOME/Documents" || return
-		rm -f "$NAV_YANK_FILE"
 		nav_keymap_y
-		cat "$NAV_YANK_FILE"
+		head -1 "$NAV_MRU_FILE"
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$HOME/Documents"
+}
+
+function test__nav_keymap_y__prepends_to_queue {
+	assert "$(
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		rm -f "$NAV_MRU_FILE"
+		cd "$HOME/Downloads" || return
+		nav_keymap_y
+		cd "$HOME/Documents" || return
+		nav_keymap_y
+		cat "$NAV_MRU_FILE"
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
+	)" "$(printf '%s\n%s' "$HOME/Documents" "$HOME/Downloads")"
+}
+
+function test__nav_keymap_y__dedupes_existing_entry {
+	assert "$(
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		rm -f "$NAV_MRU_FILE"
+		cd "$HOME/Downloads" || return
+		nav_keymap_y
+		cd "$HOME/Documents" || return
+		nav_keymap_y
+		cd "$HOME/Downloads" || return
+		nav_keymap_y
+		cat "$NAV_MRU_FILE"
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
+	)" "$(printf '%s\n%s' "$HOME/Downloads" "$HOME/Documents")"
 }
 
 function test__nav_keymap_z {

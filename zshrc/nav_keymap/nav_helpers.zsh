@@ -1,3 +1,18 @@
+function nav_helpers_mru_add {
+	local entry=$1
+	local existing=""
+
+	if [[ -f "$NAV_MRU_FILE" ]]; then
+		existing=$(grep -vFx "$entry" "$NAV_MRU_FILE" || true)
+	fi
+
+	if [[ -n "$existing" ]]; then
+		printf '%s\n%s\n' "$entry" "$existing" > "$NAV_MRU_FILE"
+	else
+		echo "$entry" > "$NAV_MRU_FILE"
+	fi
+}
+
 function nav_helpers_show_arg {
 	local file; file="$(args_helpers_plain | sed -n "${NAV_CURSOR}p" | sed 's/ *#.*//' | strip)"
 

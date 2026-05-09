@@ -19,8 +19,10 @@ NAV_KEYMAP=(
 	''
 	"${NAV_DOT}t # Go to directory in pasteboard"
 	"${NAV_DOT}tt <file>? # Copy current path to pasteboard"
-	"${NAV_DOT}y # Yank current path"
-	"${NAV_DOT}p # Put yanked path"
+	"${NAV_DOT}y # Yank current path to MRU queue"
+	"${NAV_DOT}p # Put latest path from MRU queue"
+	"${NAV_DOT}q <match>* <-mismatch>* # List MRU queue, \`cd\` if only one match"
+	"${NAV_DOT}qq # Clear MRU queue"
 	''
 	"${NAV_DOT}u # Go up one directory"
 	"${NAV_DOT}uu # Go up two directories"
@@ -83,7 +85,7 @@ source "$ZSHRC_SRC_DIR/$NAV_NAMESPACE/nav_helpers.zsh"
 NAV_CLAUDE_PLANS_DIR="$HOME/GitHub/jasonzhao6/scratch/claude-plans"
 NAV_RENDER_AS_MARKDOWN='*.md'
 NAV_RENDER_AS_TEXT='*.txt|*.log'
-NAV_YANK_FILE="$ZSHRC_DATA_DIR/nav.yank.txt"
+NAV_MRU_FILE="$ZSHRC_DATA_DIR/nav.mru.txt"
 
 # States
 NAV_CURSOR=0
@@ -193,7 +195,40 @@ function nav_keymap_oo {
 }
 
 function nav_keymap_p {
-	cd "$(<"$NAV_YANK_FILE")" && nav_keymap_n || true
+	local head; head=$(head -1 "$NAV_MRU_FILE" 2>/dev/null)
+	if [[ -z "$head" ]]; then
+		red_bar 'MRU queue is empty'
+		return
+	fi
+	cd "$head" && nav_keymap_n || true
+}
+
+function nav_keymap_q {
+	local filters=("$@")
+
+	if [[ ! -f "$NAV_MRU_FILE" || ! -s "$NAV_MRU_FILE" ]]; then
+		red_bar 'MRU queue is empty'
+		return
+	fi
+
+	if [[ -n "${filters[*]}" ]]; then
+		local filtered; filtered=$(cat "$NAV_MRU_FILE" | args_helpers_filter "${filters[@]}" 2>/dev/null)
+		if [[ -n "$filtered" ]]; then
+			local count; count=$(echo "$filtered" | wc -l | tr -d ' ')
+			if [[ $count -eq 1 ]]; then
+				local match_path; match_path=$(echo "$filtered" | bw | strip)
+				nav_helpers_mru_add "$match_path"
+				cd "$match_path" && nav_keymap_n || true
+				return
+			fi
+		fi
+	fi
+
+	cat "$NAV_MRU_FILE" | args_keymap_s "${filters[@]}"
+}
+
+function nav_keymap_qq {
+	rm -f "$NAV_MRU_FILE"
 }
 
 function nav_keymap_r {
@@ -288,7 +323,7 @@ function nav_keymap_x {
 }
 
 function nav_keymap_y {
-	pwd > "$NAV_YANK_FILE"
+	nav_helpers_mru_add "$(pwd)"
 }
 
 function nav_keymap_z {
