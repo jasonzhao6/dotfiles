@@ -7,25 +7,6 @@ function test__zsh_keymap {
 	)" '1'
 }
 
-function test__zsh_keymap__when_specifying_a_md_file_instead_of_key {
-	local md='/tmp/test__zsh_keymap__md_passthrough.md'
-	printf '# H1\n' > $md
-
-	# Avoid pasteboard archive side-effect from `other_keymap_k`
-	echo 'not terminal output' | pbcopy
-
-	assert "$(
-		ZSHRC_UNDER_TESTING=1 zsh_keymap $md | bw | compact
-	)" "$(
-		cat <<-eof
-			"test__zsh_keymap__md_passthrough.md"
-			# H1
-		eof
-	)"
-
-	rm $md
-}
-
 function test__zsh_keymap_a {
 	assert "$(
 		local count; count=$(zsh_keymap_a | wc -l)
@@ -162,72 +143,17 @@ function test__zsh_keymap_s__when_args_history_is_already_initialized {
 	args_history_reset
 }
 
-function test__zsh_keymap_v__replaces_heading_dashes_with_hashes {
-	local md='/tmp/test__zsh_keymap_v.md'
-	printf '# H1\n\n## H2\n' > $md
-
-	assert "$(zsh_keymap_v $md | bw | compact)" "$(
-		cat <<-eof
-			# H1
-			## H2
-		eof
-	)"
-
-	rm $md
-}
-
-function test__zsh_keymap_v__swaps_heading_blue_for_cyan {
-	local md='/tmp/test__zsh_keymap_v.md'
-	echo '# H1' > $md
-
-	# shellcheck disable=SC2076
-	assert "$(
-		local output; output=$(zsh_keymap_v $md)
-		[[ $output =~ $'\e\\[36m' ]] && [[ ! $output =~ $'\e\\[34m' ]] && echo 1
-	)" '1'
-
-	rm $md
-}
-
-function test__zsh_keymap_v__replaces_fence_dashes_with_backticks {
-	local md='/tmp/test__zsh_keymap_v.md'
-	printf '```\ncode\n```\n' > $md
-
-	assert "$(zsh_keymap_v $md | bw | compact)" "$(
-		cat <<-eof
-			\`\`\`
-			code
-			\`\`\`
-		eof
-	)"
-
-	rm $md
-}
-
-function test__zsh_keymap_v__swaps_fence_green_for_yellow {
-	local md='/tmp/test__zsh_keymap_v.md'
-	printf '```\ncode\n```\n' > $md
-
-	# shellcheck disable=SC2076
-	assert "$(
-		local output; output=$(zsh_keymap_v $md)
-		[[ $output =~ $'\e\\[33m```' ]] && [[ ! $output =~ $'\e\\[32m' ]] && echo 1
-	)" '1'
-
-	rm $md
-}
-
-function test__zsh_keymap_w {
-	assert "$(zsh_keymap_w)" "$(
+function test__zsh_keymap_z {
+	assert "$(zsh_keymap_z)" "$(
 		cat <<-eof
 			$(red_bar 'Required: <name>')
 		eof
 	)"
 }
 
-function test__zsh_keymap_w__when_program_is_not_found {
+function test__zsh_keymap_z__when_program_is_not_found {
 	assert "$(
-		zsh_keymap_w does_not_exist
+		zsh_keymap_z does_not_exist
 	)" "$(
 		cat <<-eof
 			$(red_bar '`does_not_exist` not found')
@@ -235,9 +161,9 @@ function test__zsh_keymap_w__when_program_is_not_found {
 	)"
 }
 
-function test__zsh_keymap_w__when_program_is_an_alias {
+function test__zsh_keymap_z__when_program_is_an_alias {
 	assert "$(
-		zsh_keymap_w z0 | bw
+		zsh_keymap_z z0 | bw
 	)" "$(
 		cat <<-eof
 
@@ -252,9 +178,9 @@ function test__zsh_keymap_w__when_program_is_an_alias {
 	)"
 }
 
-function test__zsh_keymap_w__when_input_is_a_function {
+function test__zsh_keymap_z__when_input_is_a_function {
 	assert "$(
-		zsh_keymap_w zsh_keymap_0
+		zsh_keymap_z zsh_keymap_0
 	)" "$(
 		cat <<-eof
 
@@ -265,55 +191,3 @@ function test__zsh_keymap_w__when_input_is_a_function {
 	)"
 }
 
-function test__zsh_keymap_z__renders_pasteboard_file {
-	local md='/tmp/test__zsh_keymap_z.md'
-	printf '# H1\n' > $md
-
-	# Avoid pasteboard archive side-effect from `other_keymap_k`
-	echo 'not terminal output' | pbcopy
-
-	assert "$(
-		echo "$md" | pbcopy
-		ZSHRC_UNDER_TESTING=1 zsh_keymap_z | bw | compact
-	)" "$(
-		cat <<-eof
-			"test__zsh_keymap_z.md"
-			# H1
-		eof
-	)"
-
-	rm $md
-}
-
-function test__zsh_keymap_z__when_pasteboard_is_not_a_file {
-	assert "$(
-		ZSH_KEYMAP_Z_LAST_FILE=
-		echo 'not a file' | pbcopy
-		ZSHRC_UNDER_TESTING=1 zsh_keymap_z
-	)" "$(
-		cat <<-eof
-			$(red_bar 'Invalid file path in pasteboard')
-		eof
-	)"
-}
-
-function test__zsh_keymap_z__when_pasteboard_is_not_a_file_but_last_file_exists {
-	local md='/tmp/test__zsh_keymap_z__fallback.md'
-	printf '# Fallback\n' > $md
-
-	# Avoid pasteboard archive side-effect from `other_keymap_k`
-	echo 'not terminal output' | pbcopy
-
-	assert "$(
-		ZSH_KEYMAP_Z_LAST_FILE=$md
-		echo 'not a file' | pbcopy
-		ZSHRC_UNDER_TESTING=1 zsh_keymap_z | bw | compact
-	)" "$(
-		cat <<-eof
-			"test__zsh_keymap_z__fallback.md"
-			# Fallback
-		eof
-	)"
-
-	rm $md
-}

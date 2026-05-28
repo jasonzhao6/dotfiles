@@ -46,7 +46,9 @@ function test__nav_keymap__when_specifying_a_file_instead_of_key {
 		rm -rf /tmp/test__nav_keymap__file
 	)" "$(
 		cat <<-eof
-		"2.txt"
+		─────
+		2.txt
+		─────
 
 		two
 		eof
@@ -68,11 +70,68 @@ function test__nav_keymap__when_specifying_a_file__nj_continues {
 		rm -rf /tmp/test__nav_keymap__file_nj
 	)" "$(
 		cat <<-eof
-		"2.txt"
+		─────
+		2.txt
+		─────
 
 		two
 		eof
 	)"
+}
+
+function test__nav_keymap__when_specifying_an_arbitrary_md_file {
+	local md='/tmp/test__nav_keymap__arbitrary_md.md'
+	printf '# H1\n\n```\ncode\n```\n' > $md
+
+	# Avoid pasteboard archive side-effect from `other_keymap_k`
+	echo 'not terminal output' | pbcopy
+
+	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
+
+	# Verify rendered content
+	assert "$(echo "$output" | bw | compact)" "$(
+		cat <<-eof
+			─────────────────────────────────
+			test__nav_keymap__arbitrary_md.md
+			─────────────────────────────────
+			# H1
+			\`\`\`
+			code
+			\`\`\`
+		eof
+	)"
+
+	# Verify heading color is cyan (36), not blue (34)
+	# shellcheck disable=SC2076
+	assert "$([[ $output =~ $'\e\\[36m' ]] && [[ ! $output =~ $'\e\\[34m' ]] && echo 1)" '1'
+
+	# Verify fence color is yellow (33), not green (32)
+	# shellcheck disable=SC2076
+	assert "$([[ $output =~ $'\e\\[33m' ]] && [[ ! $output =~ $'\e\\[32m' ]] && echo 1)" '1'
+
+	rm $md
+}
+
+function test__nav_keymap__when_specifying_an_arbitrary_txt_file {
+	local txt='/tmp/test__nav_keymap__arbitrary_txt.txt'
+	echo 'hello' > $txt
+
+	# Avoid pasteboard archive side-effect from `other_keymap_k`
+	echo 'not terminal output' | pbcopy
+
+	assert "$(
+		ZSHRC_UNDER_TESTING=1 nav_keymap $txt | bw
+	)" "$(
+		cat <<-eof
+		───────────────────────────────────
+		test__nav_keymap__arbitrary_txt.txt
+		───────────────────────────────────
+
+		hello
+		eof
+	)"
+
+	rm $txt
 }
 
 function test__nav_keymap_a {
@@ -128,6 +187,10 @@ function test__nav_keymap_a__with_filters {
 		     2	.3.hidden
 		eof
 	)"
+}
+
+function test__nav_keymap_b {
+	assert "$(nav_keymap_b > /dev/null; pwd)" "$HOME/Desktop"
 }
 
 function test__nav_keymap_d {
@@ -264,13 +327,19 @@ function test__nav_keymap_j {
 		rm -rf /tmp/test__nav_keymap_j
 	)" "$(
 		cat <<-eof
-		"1.txt"
+		─────
+		1.txt
+		─────
 
 		one
-		"2.txt"
+		─────
+		2.txt
+		─────
 
 		two
-		"3.txt"
+		─────
+		3.txt
+		─────
 
 		three
 		eof
@@ -291,7 +360,7 @@ function test__nav_keymap_j__when_at_end {
 	)" "$(red_bar 'Reached the end of file list' | bw)"
 }
 
-function test__nav_keymap_j__renders_md_with_zsh_keymap_v {
+function test__nav_keymap_j__renders_md_with_nav_helpers {
 	assert "$(
 		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_j
@@ -299,9 +368,9 @@ function test__nav_keymap_j__renders_md_with_zsh_keymap_v {
 		cd /tmp/test__nav_keymap_j || return
 		echo '# Heading' > note.md
 		nav_keymap_n > /dev/null
-		# zsh_keymap_v output differs from cat; just check it does not error
+		# nav_helpers_render_file output differs from cat; just check it does not error
 		# and that the file name is shown
-		nav_keymap_j 2>/dev/null | bw | grep -c '^"note.md"$'
+		nav_keymap_j 2>/dev/null | bw | grep -c '^note.md$'
 		rm -rf /tmp/test__nav_keymap_j
 	)" '1'
 }
@@ -318,26 +387,33 @@ function test__nav_keymap_j__cats_log {
 		rm -rf /tmp/test__nav_keymap_j
 	)" "$(
 		cat <<-eof
-		"app.log"
+		───────
+		app.log
+		───────
 
 		logged
 		eof
 	)"
 }
 
-function test__nav_keymap_j__rejects_unknown_type {
+function test__nav_keymap_j__cats_unknown_type {
 	assert "$(
 		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_j
 		mkdir /tmp/test__nav_keymap_j
 		cd /tmp/test__nav_keymap_j || return
-		touch unknown.bin
+		echo 'binary-ish' > unknown.bin
 		nav_keymap_n > /dev/null
 		nav_keymap_j | bw
 		rm -rf /tmp/test__nav_keymap_j
 	)" "$(
-		echo '"unknown.bin"'
-		red_bar 'Unsupported file type' | bw
+		cat <<-eof
+		───────────
+		unknown.bin
+		───────────
+
+		binary-ish
+		eof
 	)"
 }
 
@@ -357,7 +433,9 @@ function test__nav_keymap_j__resets_on_nn {
 		rm -rf /tmp/test__nav_keymap_j
 	)" "$(
 		cat <<-eof
-		"1.txt"
+		─────
+		1.txt
+		─────
 
 		one
 		eof
@@ -378,13 +456,19 @@ function test__nav_keymap_k {
 		rm -rf /tmp/test__nav_keymap_k
 	)" "$(
 		cat <<-eof
-		"3.txt"
+		─────
+		3.txt
+		─────
 
 		three
-		"2.txt"
+		─────
+		2.txt
+		─────
 
 		two
-		"1.txt"
+		─────
+		1.txt
+		─────
 
 		one
 		eof
@@ -422,7 +506,9 @@ function test__nav_keymap_k__after_nj_decrements {
 		rm -rf /tmp/test__nav_keymap_k
 	)" "$(
 		cat <<-eof
-		"2.txt"
+		─────
+		2.txt
+		─────
 
 		two
 		eof
@@ -801,8 +887,61 @@ function test__nav_keymap_uuu {
 	)" '/tmp/_nav_keymap_uuu'
 }
 
-function test__nav_keymap_v {
-	assert "$(nav_keymap_v > /dev/null; pwd)" "$HOME/Desktop"
+function test__nav_keymap_v__renders_pasteboard_file {
+	local md='/tmp/test__nav_keymap_v.md'
+	printf '# H1\n' > $md
+
+	# Avoid pasteboard archive side-effect from `other_keymap_k`
+	echo 'not terminal output' | pbcopy
+
+	assert "$(
+		echo "$md" | pbcopy
+		ZSHRC_UNDER_TESTING=1 nav_keymap_v | bw | compact
+	)" "$(
+		cat <<-eof
+			─────────────────────
+			test__nav_keymap_v.md
+			─────────────────────
+			# H1
+		eof
+	)"
+
+	rm $md
+}
+
+function test__nav_keymap_v__when_pasteboard_is_not_a_file {
+	assert "$(
+		NAV_V_LAST_FILE=
+		echo 'not a file' | pbcopy
+		ZSHRC_UNDER_TESTING=1 nav_keymap_v
+	)" "$(
+		cat <<-eof
+			$(red_bar 'Invalid file path in pasteboard')
+		eof
+	)"
+}
+
+function test__nav_keymap_v__when_pasteboard_is_not_a_file_but_last_file_exists {
+	local md='/tmp/test__nav_keymap_v__fallback.md'
+	printf '# Fallback\n' > $md
+
+	# Avoid pasteboard archive side-effect from `other_keymap_k`
+	echo 'not terminal output' | pbcopy
+
+	assert "$(
+		NAV_V_LAST_FILE=$md
+		echo 'not a file' | pbcopy
+		ZSHRC_UNDER_TESTING=1 nav_keymap_v | bw | compact
+	)" "$(
+		cat <<-eof
+			───────────────────────────────
+			test__nav_keymap_v__fallback.md
+			───────────────────────────────
+			# Fallback
+		eof
+	)"
+
+	rm $md
 }
 
 function test__nav_keymap_w {
@@ -823,7 +962,9 @@ function test__nav_keymap_x {
 		rm -rf /tmp/test__nav_keymap_x
 	)" "$(
 		cat <<-eof
-		"1.txt"
+		─────
+		1.txt
+		─────
 
 		one
 		eof
@@ -842,7 +983,9 @@ function test__nav_keymap_x__on_fresh_list {
 		rm -rf /tmp/test__nav_keymap_x
 	)" "$(
 		cat <<-eof
-		"1.txt"
+		─────
+		1.txt
+		─────
 
 		one
 		eof
@@ -875,7 +1018,9 @@ function test__nav_keymap_x__reflects_updated_content {
 		rm -rf /tmp/test__nav_keymap_x
 	)" "$(
 		cat <<-eof
-		"1.txt"
+		─────
+		1.txt
+		─────
 
 		after
 		eof

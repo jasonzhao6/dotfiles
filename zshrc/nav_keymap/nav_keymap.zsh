@@ -3,6 +3,9 @@ NAV_ALIAS='n'
 NAV_DOT="${NAV_ALIAS}${KEYMAP_DOT}"
 
 NAV_KEYMAP=(
+	"${NAV_ALIAS} <directory> # Go to directory"
+	"${NAV_ALIAS} <file> # Clear screen & render file"
+	''
 	"${NAV_DOT}n <match>* <-mismatch>* # List visible directories & files"
 	"${NAV_DOT}a <match>* <-mismatch>* # List hidden directories & files"
 	"${NAV_DOT}o <match>* <-mismatch>* # List visible directories"
@@ -10,40 +13,39 @@ NAV_KEYMAP=(
 	"${NAV_DOT}e <match>* <-mismatch>* # List visible files"
 	"${NAV_DOT}ee <match>* <-mismatch>* # List hidden files"
 	''
-	"${NAV_ALIAS} <file> # Print text file"
-	"${NAV_ALIAS} <directory> # Go to directory"
-	''
-	"${NAV_DOT}j # Print next file in the list"
-	"${NAV_DOT}k # Print prev file in the list"
-	"${NAV_DOT}x # Reprint current file in the list"
+	"${NAV_DOT}u # Go up one directory"
+	"${NAV_DOT}uu # Go up two directories"
+	"${NAV_DOT}uuu # Go up three directories"
 	''
 	"${NAV_DOT}t # Go to directory in pasteboard"
 	"${NAV_DOT}tt <file>? # Copy current path to pasteboard"
 	"${NAV_DOT}y # Yank current path to MRU queue"
 	"${NAV_DOT}p # Put latest path from MRU queue"
-	"${NAV_DOT}q <match>* <-mismatch>* # List MRU queue, \`cd\` if only one match"
+	"${NAV_DOT}q <match>* <-mismatch>* # List MRU queue, \`cd\` when only one match"
 	"${NAV_DOT}qq # Clear MRU queue"
 	''
-	"${NAV_DOT}u # Go up one directory"
-	"${NAV_DOT}uu # Go up two directories"
-	"${NAV_DOT}uuu # Go up three directories"
-	''
+	"${NAV_DOT}h <match>* <-mismatch>* # Go to GitHub"
+	"${NAV_DOT}i # Go to Excalidraw"
+	"${NAV_DOT}b # Go to Desktop"
 	"${NAV_DOT}m # Go to Documents"
 	"${NAV_DOT}w # Go to Downloads"
-	"${NAV_DOT}v # Go to Desktop"
 	''
-	"${NAV_DOT}h <match>* <-mismatch>* # Go to GitHub"
 	"${NAV_DOT}d # Go to dotfiles"
 	"${NAV_DOT}dd # Go to dotfiles, open GitHub Desktop"
 	"${NAV_DOT}s # Go to scratch"
 	"${NAV_DOT}ss # Go to scratch, open GitHub Desktop"
 	"${NAV_DOT}z # Go to scratch/claude-plans"
-	"${NAV_DOT}zz # Print latest claude plan with glow"
-	"${NAV_DOT}i # Go to excalidraw"
+	"${NAV_DOT}zz # Render latest claude plan"
 	''
-	"${NAV_DOT}f # Sort files by size"
 	"${NAV_DOT}g <levels>? # Sort subfolders by size"
+	"${NAV_DOT}f # Sort files by size"
 	"${NAV_DOT}r # Sort files by recent"
+	''
+	"${NAV_DOT}j # Clear screen & render next file in args"
+	"${NAV_DOT}k # Clear screen & render prev file in args"
+	"${NAV_DOT}x # Clear screen & rerender current file"
+	''
+	"${NAV_DOT}v # Clear screen & render file in pasteboard"
 	''
 	"${NAV_DOT}c # (Reserved: Netcat)"
 	"${NAV_DOT}l # (Reserved: Number lines)"
@@ -62,13 +64,15 @@ function nav_keymap {
 
 	# If the target is a file, set cursor and print it
 	if [[ -f "$target" ]]; then
-		local position
-		position=$(args_helpers_plain | sed 's/ *#.*//' | strip | grep -nFx "$target" | head -1 | cut -d: -f1)
-		if [[ -n $position ]]; then
-			NAV_CURSOR=$position
-			nav_helpers_show_arg
-			return
+		local cursor
+		cursor=$(args_helpers_plain | sed 's/ *#.*//' | strip | grep -nFx "$target" | head -1 | cut -d: -f1)
+		if [[ -n $cursor ]]; then
+			NAV_CURSOR=$cursor
+			nav_helpers_render_cursor_as_file
+		else
+			nav_helpers_render_file "$target"
 		fi
+		return
 	fi
 
 	keymap_show $NAV_NAMESPACE $NAV_ALIAS ${#NAV_KEYMAP} "${NAV_KEYMAP[@]}" "$@"
@@ -83,12 +87,12 @@ source "$ZSHRC_SRC_DIR/$NAV_NAMESPACE/nav_helpers.zsh"
 
 # Constants
 NAV_CLAUDE_PLANS_DIR="$HOME/GitHub/jasonzhao6/scratch/claude-plans"
-NAV_RENDER_AS_MARKDOWN='*.md'
-NAV_RENDER_AS_TEXT='*.txt|*.log'
+NAV_MD_FILE_EXTENSION='*.md'
 NAV_MRU_FILE="$ZSHRC_DATA_DIR/nav.mru.txt"
 
 # States
 NAV_CURSOR=0
+NAV_V_LAST_FILE=
 
 function nav_keymap_a {
 	local filters=("$@")
@@ -96,6 +100,10 @@ function nav_keymap_a {
 	setopt NULL_GLOB
 	ls -d .* | args_keymap_s "${filters[@]}"
 	unsetopt NULL_GLOB
+}
+
+function nav_keymap_b {
+	cd ~/Desktop && nav_keymap_n || true
 }
 
 function nav_keymap_d {
@@ -149,7 +157,7 @@ function nav_keymap_j {
 	fi
 
 	NAV_CURSOR=$((NAV_CURSOR + 1))
-	nav_helpers_show_arg
+	nav_helpers_render_cursor_as_file
 }
 
 function nav_keymap_k {
@@ -166,7 +174,7 @@ function nav_keymap_k {
 		NAV_CURSOR=$((NAV_CURSOR - 1))
 	fi
 
-	nav_helpers_show_arg
+	nav_helpers_render_cursor_as_file
 }
 
 function nav_keymap_m {
@@ -300,7 +308,20 @@ function nav_keymap_uuu {
 }
 
 function nav_keymap_v {
-	cd ~/Desktop && nav_keymap_n || true
+	local file; file=$(nav_helpers_pbpaste_file_path)
+
+	# Fall back to the last rendered file (allows re-rendering after edits)
+	if [[ ! -f $file ]]; then
+		if [[ -n $NAV_V_LAST_FILE && -f $NAV_V_LAST_FILE ]]; then
+			file=$NAV_V_LAST_FILE
+		else
+			red_bar 'Invalid file path in pasteboard' && return
+		fi
+	fi
+
+	NAV_V_LAST_FILE=$file
+
+	nav_helpers_render_file "$file"
 }
 
 function nav_keymap_w {
@@ -319,7 +340,7 @@ function nav_keymap_x {
 		NAV_CURSOR=1
 	fi
 
-	nav_helpers_show_arg
+	nav_helpers_render_cursor_as_file
 }
 
 function nav_keymap_y {
@@ -335,10 +356,7 @@ function nav_keymap_zz {
 	latest=$(ls -t "$NAV_CLAUDE_PLANS_DIR"/*.md 2>/dev/null | head -1)
 
 	if [ -n "$latest" ]; then
-		other_keymap_k
-		echo -n 'Plan: '
-		cyan_fg "${latest##*/}"
-		cd "$NAV_CLAUDE_PLANS_DIR" && zsh_keymap_v "$latest"
+		cd "$NAV_CLAUDE_PLANS_DIR" && nav_helpers_render_file "$latest"
 	else
 		red_bar "No plans"
 	fi

@@ -367,6 +367,7 @@ function other_keymap_w {
 		output=$(eval "$command")
 
 		other_keymap_k
+
 		echo "$(yellow_fg '$') $command"
 		echo
 		echo "$output"
