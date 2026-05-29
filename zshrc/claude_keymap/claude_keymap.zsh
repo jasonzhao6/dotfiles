@@ -37,7 +37,7 @@ source "$ZSHRC_SRC_DIR/$CLAUDE_NAMESPACE/claude_helpers.zsh"
 
 # Constants
 CLAUDE_KEYMAP_CONFIG_DIR="$HOME/.claude"
-CLAUDE_KEYMAP_FILES=(CLAUDE.md settings.json settings.local.json)
+CLAUDE_KEYMAP_FILES=(CLAUDE.md settings.json)
 CLAUDE_KEYMAP_FOLDERS=(skills)
 CLAUDE_KEYMAP_SCRATCH_DIR="$HOME/GitHub/jasonzhao6/scratch/claude-config"
 
