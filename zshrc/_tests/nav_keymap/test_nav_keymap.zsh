@@ -134,6 +134,45 @@ function test__nav_keymap__when_specifying_an_arbitrary_txt_file {
 	rm $txt
 }
 
+function test__nav_keymap__when_specifying_an_md_file_with_frontmatter {
+	local md='/tmp/test__nav_keymap__md_frontmatter.md'
+	printf -- '---\ntitle: Hello\n---\n# Heading\n' > $md
+
+	# Avoid pasteboard archive side-effect from `other_keymap_k`
+	echo 'not terminal output' | pbcopy
+
+	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
+
+	# Frontmatter renders as a header above the body, and the closing `---` is
+	# preserved verbatim (not collapsed into the `# Heading` as a setext rule)
+	assert "$(echo "$output" | bw | compact)" "$(
+		local name='test__nav_keymap__md_frontmatter.md'
+		local rule; rule=$(printf '%0.s─' $(seq 1 ${#name}))
+		printf '%s\n%s\n%s\n---\ntitle: Hello\n---\n# Heading' "$rule" "$name" "$rule"
+	)"
+
+	# Frontmatter delimiters and keys are colored yellow (33)
+	# shellcheck disable=SC2076
+	assert "$([[ $output =~ $'\e\\[33m' ]] && echo 1)" '1'
+
+	rm $md
+}
+
+function test__nav_keymap__when_md_frontmatter_is_unclosed {
+	local md='/tmp/test__nav_keymap__md_unclosed.md'
+	# Opening `---` with no closing delimiter: the body must not be swallowed
+	printf -- '---\nname: foo\nbodymarker line\n' > $md
+
+	# Avoid pasteboard archive side-effect from `other_keymap_k`
+	echo 'not terminal output' | pbcopy
+
+	assert "$(
+		ZSHRC_UNDER_TESTING=1 nav_keymap $md | bw | grep -c 'bodymarker'
+	)" '1'
+
+	rm $md
+}
+
 function test__nav_keymap_a {
 	assert "$(
 		rm -rf /tmp/test__nav_keymap_a

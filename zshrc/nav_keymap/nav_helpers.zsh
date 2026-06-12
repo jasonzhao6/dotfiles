@@ -32,6 +32,57 @@ function nav_helpers_mru_add {
 	fi
 }
 
+function nav_helpers_extract_frontmatter {
+	# The block, `---` delimiters included. Buffer and emit on the closing `---`,
+	# so an unclosed opener yields nothing.
+	awk '
+		NR==1 && !/^---$/ { exit }
+		NR==1             { buf=$0 ORS; next }
+		/^---$/           { printf "%s%s", buf, $0; exit }
+		                  { buf=buf $0 ORS }
+	' "$1"
+}
+
+function nav_helpers_strip_frontmatter {
+	# The body with a closed block removed; the whole file otherwise.
+	awk '
+		NR==1 && /^---$/ { infm=1; buf=$0 ORS; next }
+		infm && /^---$/  { infm=0; next }
+		infm             { buf=buf $0 ORS; next }
+		{ print }
+		END { if (infm) printf "%s", buf }
+	' "$1"
+}
+
+function nav_helpers_render_frontmatter {
+	# Render frontmatter as a metadata header: the `---` delimiters and each key
+	# (text before the first `:`) in yellow, values reflowed to mdcat's width. We
+	# render it ourselves rather than via mdcat, which draws ─ rules around code
+	# blocks and turns a bare `---` into a heading. Fold before coloring so fold
+	# ignores the escape bytes.
+	local frontmatter; frontmatter=$(nav_helpers_extract_frontmatter "$1")
+	[[ -z $frontmatter ]] && return
+
+	print -r -- "$frontmatter" | fold -s -w 80 | perl -pe '
+		s/^(---)$/\e[33m$1\e[0m/;         # delimiters
+		s/^([\w-]+)(:)/\e[33m$1\e[0m$2/;  # keys
+	'
+	echo
+}
+
+function nav_helpers_render_markdown {
+	# Render the body through mdcat, rewriting its box-drawing output back into
+	# markdown-ish glyphs (┄ heading prefix -> #, ─ code-fence rules -> ```) and
+	# recoloring headings cyan and code yellow.
+	nav_helpers_strip_frontmatter "$1" | mdcat --columns 80 | perl -pe '
+		s/\xe2\x94\x84/#/g;        # Replace heading leading ┄ dashes with `#`
+		s/(#+)\e\[0m/$1 \e[0m/g;   # Append trailing space after `#`
+		s/\e\[34m/\e[36m/g;        # Swap heading dark blue (34) for cyan (36)
+		s/(?:\xe2\x94\x80)+/```/g; # Replace code fence ─ rules with ```
+		s/\e\[32m/\e[33m/g;        # Swap code fence green (32) for yellow (33)
+	'
+}
+
 function nav_helpers_render_file {
 	local file=$1
 
@@ -45,13 +96,8 @@ function nav_helpers_render_file {
 
 	echo
 	if [[ "$file" == ${~NAV_MD_FILE_EXTENSION} ]]; then
-		mdcat --columns 80 "$file" | perl -pe '
-			s/\xe2\x94\x84/#/g;        # Replace heading leading ┄ dashes with `#`
-			s/(#+)\e\[0m/$1 \e[0m/g;   # Append trailing space after `#`
-			s/\e\[34m/\e[36m/g;        # Swap heading dark blue (34) for cyan (36)
-			s/(?:\xe2\x94\x80)+/```/g; # Replace code fence ─ rules with ```
-			s/\e\[32m/\e[33m/g;        # Swap code fence green (32) for yellow (33)
-		'
+		nav_helpers_render_frontmatter "$file"
+		nav_helpers_render_markdown "$file"
 	else
 		cat "$file"
 	fi
