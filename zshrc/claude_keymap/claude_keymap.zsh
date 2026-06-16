@@ -4,6 +4,7 @@ CLAUDE_DOT="${CLAUDE_ALIAS}${KEYMAP_DOT}"
 
 CLAUDE_KEYMAP=(
 	"${CLAUDE_DOT}n # Start new 5-hour token window"
+	"${CLAUDE_DOT}t # Show token window usage & reset"
 	''
 	"${CLAUDE_DOT}c # Start new session"
 	"${CLAUDE_DOT}r # Continue last session"
@@ -150,6 +151,10 @@ function claude_keymap_ss {
 		tell application "Terminal"
 			set background color of selected tab of front window to {6224, 6224, 6224}
 		end tell'
+}
+
+function claude_keymap_t {
+	claude -p "/usage" | grep -E --color=auto '[0-9]+% used|[0-9]{1,2}:[0-9]{2}(am|pm)'
 }
 
 function claude_keymap_u {
