@@ -505,7 +505,8 @@ function test__other_keymap_uu {
 function test__other_keymap_w {
 	local count; count=$(
 		{
-			other_keymap_w 0.05 echo test &
+			# Remove `ZSHRC_UNDER_TESTING=1` if test is still flaky (2026-06-15)
+			ZSHRC_UNDER_TESTING=1 other_keymap_w 0.05 echo test &
 			local pid=$!
 			sleep 0.3
 			kill $pid 2>/dev/null
