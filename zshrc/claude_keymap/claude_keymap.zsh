@@ -38,7 +38,8 @@ source "$ZSHRC_SRC_DIR/$CLAUDE_NAMESPACE/claude_helpers.zsh"
 # Constants
 CLAUDE_KEYMAP_CONFIG_DIR="$HOME/.claude"
 CLAUDE_KEYMAP_FILES=(CLAUDE.md settings.json)
-CLAUDE_KEYMAP_FOLDERS=(skills)
+# Note: `plans` and `skills` folders are already symlinked
+CLAUDE_KEYMAP_FOLDERS=()
 CLAUDE_KEYMAP_SCRATCH_DIR="$HOME/GitHub/jasonzhao6/scratch/claude-config"
 
 function claude_keymap_c {
