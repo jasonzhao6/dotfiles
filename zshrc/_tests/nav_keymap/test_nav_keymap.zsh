@@ -34,7 +34,6 @@ function test__nav_keymap__when_specifying_a_directory_instead_of_key {
 
 function test__nav_keymap__when_specifying_a_file_instead_of_key {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap__file
 		mkdir /tmp/test__nav_keymap__file
 		cd /tmp/test__nav_keymap__file || return
@@ -42,7 +41,7 @@ function test__nav_keymap__when_specifying_a_file_instead_of_key {
 		echo 'two' > 2.txt
 		echo 'three' > 3.txt
 		nav_keymap_n > /dev/null
-		nav_keymap 2.txt | bw
+		ZSHRC_UNDER_TESTING=1 nav_keymap 2.txt | bw
 		rm -rf /tmp/test__nav_keymap__file
 	)" "$(
 		cat <<-eof
@@ -57,7 +56,6 @@ function test__nav_keymap__when_specifying_a_file_instead_of_key {
 
 function test__nav_keymap__when_specifying_a_file__nj_continues {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap__file_nj
 		mkdir /tmp/test__nav_keymap__file_nj
 		cd /tmp/test__nav_keymap__file_nj || return
@@ -66,7 +64,7 @@ function test__nav_keymap__when_specifying_a_file__nj_continues {
 		echo 'three' > 3.txt
 		nav_keymap_n > /dev/null
 		nav_keymap 1.txt > /dev/null
-		nav_keymap_j | bw
+		ZSHRC_UNDER_TESTING=1 nav_keymap_j | bw
 		rm -rf /tmp/test__nav_keymap__file_nj
 	)" "$(
 		cat <<-eof
@@ -83,9 +81,6 @@ function test__nav_keymap__when_specifying_an_arbitrary_md_file {
 	local md='/tmp/test__nav_keymap__arbitrary_md.md'
 	printf '# H1\n\n```\ncode\n```\n' > $md
 
-	# Avoid pasteboard archive side-effect from `other_keymap_k`
-	echo 'not terminal output' | pbcopy
-
 	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
 
 	# Verify rendered content
@@ -95,19 +90,32 @@ function test__nav_keymap__when_specifying_an_arbitrary_md_file {
 			test__nav_keymap__arbitrary_md.md
 			─────────────────────────────────
 			# H1
-			\`\`\`
+			───
 			code
-			\`\`\`
+			───
 		eof
 	)"
 
-	# Verify heading color is cyan (36), not blue (34)
-	# shellcheck disable=SC2076
-	assert "$([[ $output =~ $'\e\\[36m' ]] && [[ ! $output =~ $'\e\\[34m' ]] && echo 1)" '1'
+	# Verify heading color is cyan (36)
+	assert "$([[ $output =~ $'\e\\[36m' ]] && echo 1)" '1'
 
-	# Verify fence color is yellow (33), not green (32)
-	# shellcheck disable=SC2076
-	assert "$([[ $output =~ $'\e\\[33m' ]] && [[ ! $output =~ $'\e\\[32m' ]] && echo 1)" '1'
+	# Verify code delimiter color is green (32)
+	assert "$([[ $output =~ $'\e\\[32m───' ]] && echo 1)" '1'
+
+	# Verify code body color is also green (32)
+	assert "$([[ $output =~ $'\e\\[32mcode' ]] && echo 1)" '1'
+
+	rm $md
+}
+
+function test__nav_keymap__when_md_has_inline_code {
+	local md='/tmp/test__nav_keymap__md_inline_code.md'
+	printf 'prose `inline` then:\n\n```\nblock\n```\n' > $md
+
+	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
+
+	# Only block code is green (32); inline code is default yellow (33)
+	assert "$([[ $output =~ $'\e\\[33m inline' ]] && [[ $output =~ $'\e\\[32mblock' ]] && echo 1)" '1'
 
 	rm $md
 }
@@ -115,9 +123,6 @@ function test__nav_keymap__when_specifying_an_arbitrary_md_file {
 function test__nav_keymap__when_specifying_an_arbitrary_txt_file {
 	local txt='/tmp/test__nav_keymap__arbitrary_txt.txt'
 	echo 'hello' > $txt
-
-	# Avoid pasteboard archive side-effect from `other_keymap_k`
-	echo 'not terminal output' | pbcopy
 
 	assert "$(
 		ZSHRC_UNDER_TESTING=1 nav_keymap $txt | bw
@@ -138,22 +143,18 @@ function test__nav_keymap__when_specifying_an_md_file_with_frontmatter {
 	local md='/tmp/test__nav_keymap__md_frontmatter.md'
 	printf -- '---\ntitle: Hello\n---\n# Heading\n' > $md
 
-	# Avoid pasteboard archive side-effect from `other_keymap_k`
-	echo 'not terminal output' | pbcopy
-
 	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
 
-	# Frontmatter renders as a header above the body, and the closing `---` is
-	# preserved verbatim (not collapsed into the `# Heading` as a setext rule)
+	# Frontmatter renders as a header above the body; its `---` delimiters become
+	# ─── rules and the closing one is not collapsed into `# Heading` as a setext rule
 	assert "$(echo "$output" | bw | compact)" "$(
 		local name='test__nav_keymap__md_frontmatter.md'
 		local rule; rule=$(printf '%0.s─' $(seq 1 ${#name}))
-		printf '%s\n%s\n%s\n---\ntitle: Hello\n---\n# Heading' "$rule" "$name" "$rule"
+		printf '%s\n%s\n%s\n───\ntitle: Hello\n───\n# Heading' "$rule" "$name" "$rule"
 	)"
 
-	# Frontmatter delimiters and keys are colored yellow (33)
-	# shellcheck disable=SC2076
-	assert "$([[ $output =~ $'\e\\[33m' ]] && echo 1)" '1'
+	# Frontmatter delimiters and keys are colored green (32)
+	assert "$([[ $output =~ $'\e\\[32m' ]] && echo 1)" '1'
 
 	rm $md
 }
@@ -163,11 +164,8 @@ function test__nav_keymap__when_md_frontmatter_is_unclosed {
 	# Opening `---` with no closing delimiter: the body must not be swallowed
 	printf -- '---\nname: foo\nbodymarker line\n' > $md
 
-	# Avoid pasteboard archive side-effect from `other_keymap_k`
-	echo 'not terminal output' | pbcopy
-
 	assert "$(
-		ZSHRC_UNDER_TESTING=1 nav_keymap $md | bw | grep -c 'bodymarker'
+		nav_keymap $md | bw | grep -c 'bodymarker'
 	)" '1'
 
 	rm $md
@@ -354,7 +352,6 @@ function test__nav_keymap_i {
 
 function test__nav_keymap_j {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_j
 		mkdir /tmp/test__nav_keymap_j
 		cd /tmp/test__nav_keymap_j || return
@@ -362,7 +359,7 @@ function test__nav_keymap_j {
 		echo 'two' > 2.txt
 		echo 'three' > 3.txt
 		nav_keymap_n > /dev/null
-		(nav_keymap_j; nav_keymap_j; nav_keymap_j) | bw
+		(ZSHRC_UNDER_TESTING=1; nav_keymap_j; nav_keymap_j; nav_keymap_j) | bw
 		rm -rf /tmp/test__nav_keymap_j
 	)" "$(
 		cat <<-eof
@@ -387,7 +384,6 @@ function test__nav_keymap_j {
 
 function test__nav_keymap_j__when_at_end {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_j
 		mkdir /tmp/test__nav_keymap_j
 		cd /tmp/test__nav_keymap_j || return
@@ -401,7 +397,6 @@ function test__nav_keymap_j__when_at_end {
 
 function test__nav_keymap_j__renders_md_with_nav_helpers {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_j
 		mkdir /tmp/test__nav_keymap_j
 		cd /tmp/test__nav_keymap_j || return
@@ -416,13 +411,12 @@ function test__nav_keymap_j__renders_md_with_nav_helpers {
 
 function test__nav_keymap_j__cats_log {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_j
 		mkdir /tmp/test__nav_keymap_j
 		cd /tmp/test__nav_keymap_j || return
 		echo 'logged' > app.log
 		nav_keymap_n > /dev/null
-		nav_keymap_j | bw
+		ZSHRC_UNDER_TESTING=1 nav_keymap_j | bw
 		rm -rf /tmp/test__nav_keymap_j
 	)" "$(
 		cat <<-eof
@@ -437,13 +431,12 @@ function test__nav_keymap_j__cats_log {
 
 function test__nav_keymap_j__cats_unknown_type {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_j
 		mkdir /tmp/test__nav_keymap_j
 		cd /tmp/test__nav_keymap_j || return
 		echo 'binary-ish' > unknown.bin
 		nav_keymap_n > /dev/null
-		nav_keymap_j | bw
+		ZSHRC_UNDER_TESTING=1 nav_keymap_j | bw
 		rm -rf /tmp/test__nav_keymap_j
 	)" "$(
 		cat <<-eof
@@ -458,7 +451,6 @@ function test__nav_keymap_j__cats_unknown_type {
 
 function test__nav_keymap_j__resets_on_nn {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_j
 		mkdir /tmp/test__nav_keymap_j
 		cd /tmp/test__nav_keymap_j || return
@@ -468,7 +460,7 @@ function test__nav_keymap_j__resets_on_nn {
 		nav_keymap_j > /dev/null
 		nav_keymap_j > /dev/null  # cursor at 2 (end)
 		nav_keymap_n > /dev/null  # should reset cursor to 0
-		nav_keymap_j | bw         # should show 1.txt again
+		ZSHRC_UNDER_TESTING=1 nav_keymap_j | bw  # should show 1.txt again
 		rm -rf /tmp/test__nav_keymap_j
 	)" "$(
 		cat <<-eof
@@ -483,7 +475,6 @@ function test__nav_keymap_j__resets_on_nn {
 
 function test__nav_keymap_k {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_k
 		mkdir /tmp/test__nav_keymap_k
 		cd /tmp/test__nav_keymap_k || return
@@ -491,7 +482,7 @@ function test__nav_keymap_k {
 		echo 'two' > 2.txt
 		echo 'three' > 3.txt
 		nav_keymap_n > /dev/null
-		(nav_keymap_k; nav_keymap_k; nav_keymap_k) | bw
+		(ZSHRC_UNDER_TESTING=1; nav_keymap_k; nav_keymap_k; nav_keymap_k) | bw
 		rm -rf /tmp/test__nav_keymap_k
 	)" "$(
 		cat <<-eof
@@ -516,7 +507,6 @@ function test__nav_keymap_k {
 
 function test__nav_keymap_k__when_at_beginning {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_k
 		mkdir /tmp/test__nav_keymap_k
 		cd /tmp/test__nav_keymap_k || return
@@ -530,7 +520,6 @@ function test__nav_keymap_k__when_at_beginning {
 
 function test__nav_keymap_k__after_nj_decrements {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_k
 		mkdir /tmp/test__nav_keymap_k
 		cd /tmp/test__nav_keymap_k || return
@@ -541,7 +530,7 @@ function test__nav_keymap_k__after_nj_decrements {
 		nav_keymap_j > /dev/null  # cursor=1
 		nav_keymap_j > /dev/null  # cursor=2
 		nav_keymap_j > /dev/null  # cursor=3
-		nav_keymap_k | bw          # cursor=2 → 2.txt
+		ZSHRC_UNDER_TESTING=1 nav_keymap_k | bw  # cursor=2 → 2.txt
 		rm -rf /tmp/test__nav_keymap_k
 	)" "$(
 		cat <<-eof
@@ -930,9 +919,6 @@ function test__nav_keymap_v__renders_pasteboard_file {
 	local md='/tmp/test__nav_keymap_v.md'
 	printf '# H1\n' > $md
 
-	# Avoid pasteboard archive side-effect from `other_keymap_k`
-	echo 'not terminal output' | pbcopy
-
 	assert "$(
 		echo "$md" | pbcopy
 		ZSHRC_UNDER_TESTING=1 nav_keymap_v | bw | compact
@@ -964,9 +950,6 @@ function test__nav_keymap_v__when_pasteboard_is_not_a_file_but_last_file_exists 
 	local md='/tmp/test__nav_keymap_v__fallback.md'
 	printf '# Fallback\n' > $md
 
-	# Avoid pasteboard archive side-effect from `other_keymap_k`
-	echo 'not terminal output' | pbcopy
-
 	assert "$(
 		NAV_V_LAST_FILE=$md
 		echo 'not a file' | pbcopy
@@ -989,7 +972,6 @@ function test__nav_keymap_w {
 
 function test__nav_keymap_x {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_x
 		mkdir /tmp/test__nav_keymap_x
 		cd /tmp/test__nav_keymap_x || return
@@ -997,7 +979,7 @@ function test__nav_keymap_x {
 		echo 'two' > 2.txt
 		nav_keymap_n > /dev/null
 		nav_keymap_j > /dev/null  # cursor=1
-		nav_keymap_x | bw         # reprint 1.txt without moving cursor
+		ZSHRC_UNDER_TESTING=1 nav_keymap_x | bw  # reprint 1.txt without moving cursor
 		rm -rf /tmp/test__nav_keymap_x
 	)" "$(
 		cat <<-eof
@@ -1012,13 +994,12 @@ function test__nav_keymap_x {
 
 function test__nav_keymap_x__on_fresh_list {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_x
 		mkdir /tmp/test__nav_keymap_x
 		cd /tmp/test__nav_keymap_x || return
 		echo 'one' > 1.txt
 		nav_keymap_n > /dev/null  # cursor=0, fresh list
-		nav_keymap_x | bw         # should print first file like nj
+		ZSHRC_UNDER_TESTING=1 nav_keymap_x | bw  # should print first file like nj
 		rm -rf /tmp/test__nav_keymap_x
 	)" "$(
 		cat <<-eof
@@ -1033,7 +1014,6 @@ function test__nav_keymap_x__on_fresh_list {
 
 function test__nav_keymap_x__when_empty {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_x
 		mkdir /tmp/test__nav_keymap_x
 		cd /tmp/test__nav_keymap_x || return
@@ -1045,7 +1025,6 @@ function test__nav_keymap_x__when_empty {
 
 function test__nav_keymap_x__reflects_updated_content {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1
 		rm -rf /tmp/test__nav_keymap_x
 		mkdir /tmp/test__nav_keymap_x
 		cd /tmp/test__nav_keymap_x || return
@@ -1053,7 +1032,7 @@ function test__nav_keymap_x__reflects_updated_content {
 		nav_keymap_n > /dev/null
 		nav_keymap_j > /dev/null
 		echo 'after' > 1.txt
-		nav_keymap_x | bw
+		ZSHRC_UNDER_TESTING=1 nav_keymap_x | bw
 		rm -rf /tmp/test__nav_keymap_x
 	)" "$(
 		cat <<-eof

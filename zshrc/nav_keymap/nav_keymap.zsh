@@ -308,7 +308,7 @@ function nav_keymap_uuu {
 }
 
 function nav_keymap_v {
-	local file; file=$(nav_helpers_pbpaste_file_path)
+	local file; file=$(nav_helpers_copied_file_path)
 
 	# Fall back to the last rendered file (allows re-rendering after edits)
 	if [[ ! -f $file ]]; then

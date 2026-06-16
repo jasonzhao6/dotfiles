@@ -1,8 +1,8 @@
-function nav_helpers_pbpaste_file_path {
-	# Try `pbpaste` first (works for paths copied as text)
+function nav_helpers_copied_file_path {
+	# When a file path is copied as plain text
 	local file; file=$(pbpaste | strip)
 
-	# Fall back to AppKit for Finder copies (which are URL references, not text)
+	# When a file path is copied as a Finder file reference
 	if [[ ! -f $file && -z $ZSHRC_UNDER_TESTING ]]; then
 		file=$(osascript -e '
 			use framework "AppKit"
@@ -33,8 +33,7 @@ function nav_helpers_mru_add {
 }
 
 function nav_helpers_extract_frontmatter {
-	# The block, `---` delimiters included. Buffer and emit on the closing `---`,
-	# so an unclosed opener yields nothing.
+	# Extract frontmatter block with `---` delimiters included; guard against unclosed blocks
 	awk '
 		NR==1 && !/^---$/ { exit }
 		NR==1             { buf=$0 ORS; next }
@@ -44,7 +43,7 @@ function nav_helpers_extract_frontmatter {
 }
 
 function nav_helpers_strip_frontmatter {
-	# The body with a closed block removed; the whole file otherwise.
+	# Strip frontmatter block if present
 	awk '
 		NR==1 && /^---$/ { infm=1; buf=$0 ORS; next }
 		infm && /^---$/  { infm=0; next }
@@ -55,31 +54,29 @@ function nav_helpers_strip_frontmatter {
 }
 
 function nav_helpers_render_frontmatter {
-	# Render frontmatter as a metadata header: the `---` delimiters and each key
-	# (text before the first `:`) in yellow, values reflowed to mdcat's width. We
-	# render it ourselves rather than via mdcat, which draws ─ rules around code
-	# blocks and turns a bare `---` into a heading. Fold before coloring so fold
-	# ignores the escape bytes.
 	local frontmatter; frontmatter=$(nav_helpers_extract_frontmatter "$1")
 	[[ -z $frontmatter ]] && return
 
+	# Customize how frontmatter is rendered
 	print -r -- "$frontmatter" | fold -s -w 80 | perl -pe '
-		s/^(---)$/\e[33m$1\e[0m/;         # delimiters
-		s/^([\w-]+)(:)/\e[33m$1\e[0m$2/;  # keys
+		s/^---$/\e[32m───\e[0m/;				 # Color delimiters green (32), replace "-" with "─"
+		s/^([\w-]+)(:)/\e[32m$1\e[0m$2/; # Color keys green (32)
 	'
 	echo
 }
 
 function nav_helpers_render_markdown {
-	# Render the body through mdcat, rewriting its box-drawing output back into
-	# markdown-ish glyphs (┄ heading prefix -> #, ─ code-fence rules -> ```) and
-	# recoloring headings cyan and code yellow.
+	# Customize how markdown is rendered
 	nav_helpers_strip_frontmatter "$1" | mdcat --columns 80 | perl -pe '
-		s/\xe2\x94\x84/#/g;        # Replace heading leading ┄ dashes with `#`
-		s/(#+)\e\[0m/$1 \e[0m/g;   # Append trailing space after `#`
-		s/\e\[34m/\e[36m/g;        # Swap heading dark blue (34) for cyan (36)
-		s/(?:\xe2\x94\x80)+/```/g; # Replace code fence ─ rules with ```
-		s/\e\[32m/\e[33m/g;        # Swap code fence green (32) for yellow (33)
+		s/\xe2\x94\x84/#/g;      # Replace "┄" heading with "#"
+		s/(#+)\e\[0m/$1 \e[0m/g; # Add a space after "#" headings
+		s/\e\[34m/\e[36m/g;      # Color "#" headings cyan (36), was blue (34)
+
+		# Shorten code delimiter length to 3; identify code delimiter via color green (32)
+		s/\e\[32m(?:\xe2\x94\x80)+\e\[0m/\e[32m───\e[0m/g;
+
+		# Color code body green (32), was yellow (33)
+		if (/\e\[32m───\e\[0m/) { $in = !$in } elsif ($in) { s/\e\[33m/\e[32m/g }
 	'
 }
 
