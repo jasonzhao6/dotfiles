@@ -40,7 +40,7 @@ CLAUDE_KEYMAP_CONFIG_DIR="$HOME/.claude"
 CLAUDE_KEYMAP_FILES=(CLAUDE.md settings.json)
 # Note: `plans` and `skills` folders are already symlinked
 CLAUDE_KEYMAP_FOLDERS=()
-CLAUDE_KEYMAP_SCRATCH_DIR="$HOME/GitHub/jasonzhao6/scratch/claude-config"
+CLAUDE_KEYMAP_SCRATCH_DIR="$HOME/GitHub/jasonzhao6/scratch/claude/config"
 
 function claude_keymap_c {
 	claude_helpers_check_docker

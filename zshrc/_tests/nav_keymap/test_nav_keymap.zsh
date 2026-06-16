@@ -1085,7 +1085,7 @@ function test__nav_keymap_y__dedupes_existing_entry {
 }
 
 function test__nav_keymap_z {
-	assert "$(nav_keymap_z > /dev/null; pwd)" "$NAV_CLAUDE_PLANS_DIR"
+	assert "$(nav_keymap_z > /dev/null; pwd)" "$NAV_CLAUDE_DIR"
 }
 
 function test__nav_keymap_zz__with_no_plans {

@@ -34,7 +34,7 @@ NAV_KEYMAP=(
 	"${NAV_DOT}dd # Go to dotfiles, open GitHub Desktop"
 	"${NAV_DOT}s # Go to scratch"
 	"${NAV_DOT}ss # Go to scratch, open GitHub Desktop"
-	"${NAV_DOT}z # Go to scratch/claude-plans"
+	"${NAV_DOT}z # Go to scratch/claude"
 	"${NAV_DOT}zz # Render latest claude plan"
 	''
 	"${NAV_DOT}g <levels>? # Sort subfolders by size"
@@ -86,7 +86,8 @@ function nav_keymap {
 source "$ZSHRC_SRC_DIR/$NAV_NAMESPACE/nav_helpers.zsh"
 
 # Constants
-NAV_CLAUDE_PLANS_DIR="$HOME/GitHub/jasonzhao6/scratch/claude-plans"
+NAV_CLAUDE_DIR="$HOME/GitHub/jasonzhao6/scratch/claude"
+NAV_CLAUDE_PLANS_DIR="$NAV_CLAUDE_DIR/plans"
 NAV_MD_FILE_EXTENSION='*.md'
 NAV_MRU_FILE="$ZSHRC_DATA_DIR/nav.mru.txt"
 
@@ -348,7 +349,7 @@ function nav_keymap_y {
 }
 
 function nav_keymap_z {
-	cd "$NAV_CLAUDE_PLANS_DIR" && nav_keymap_n || true
+	cd "$NAV_CLAUDE_DIR" && nav_keymap_n || true
 }
 
 function nav_keymap_zz {

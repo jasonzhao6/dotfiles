@@ -70,7 +70,7 @@ function aws_keymap {
 source "$ZSHRC_SRC_DIR/$AWS_NAMESPACE/aws_helpers.zsh"
 
 # Constants
-AWS_ACCOUNTS_TSV="$HOME/GitHub/jasonzhao6/scratch/claude-config/skills/aws-accounts/accounts.tsv"
+AWS_ACCOUNTS_TSV="$HOME/GitHub/jasonzhao6/scratch/claude/skills/map--aws-account-id/accounts.tsv"
 AWS_BRITIVE=( # To be overwritten by `ZSHRC_SECRETS`
 	'role_name_1 request_page_url_1'
 	'role_name_2 request_page_url_2'

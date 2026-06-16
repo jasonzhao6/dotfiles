@@ -55,7 +55,7 @@ Keymap List
   $ n.dd                       # Go to dotfiles, open GitHub Desktop
   $ n.s                        # Go to scratch
   $ n.ss                       # Go to scratch, open GitHub Desktop
-  $ n.z                        # Go to scratch/claude-plans
+  $ n.z                        # Go to scratch/claude
   $ n.zz                       # Render latest claude plan
 
   $ n.g <levels>?              # Sort subfolders by size
