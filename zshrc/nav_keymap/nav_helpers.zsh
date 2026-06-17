@@ -65,9 +65,21 @@ function nav_helpers_render_frontmatter {
 	echo
 }
 
+function nav_helpers_dedent_tables {
+	# mdcat 2.7.1 (its final release; the formula is deprecated) panics on a table
+	# nested inside a list item, taking the rest of the document down with it. Dedent
+	# table rows (lines starting with `|`, outside code fences) to the margin so mdcat
+	# renders them as top-level tables it can handle.
+	perl -ne '
+		if (/^\s*```/) { $fence = !$fence; print; next }
+		s/^\s+(\|)/$1/ unless $fence;
+		print;
+	'
+}
+
 function nav_helpers_render_markdown {
 	# Customize how markdown is rendered
-	nav_helpers_strip_frontmatter "$1" | mdcat --columns 80 | perl -pe '
+	nav_helpers_strip_frontmatter "$1" | nav_helpers_dedent_tables | mdcat --columns 80 | perl -pe '
 		s/\xe2\x94\x84/#/g;      # Replace "┄" heading with "#"
 		s/(#+)\e\[0m/$1 \e[0m/g; # Add a space after "#" headings
 		s/\e\[34m/\e[36m/g;      # Color "#" headings cyan (36), was blue (34)

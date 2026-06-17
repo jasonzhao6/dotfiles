@@ -120,6 +120,25 @@ function test__nav_keymap__when_md_has_inline_code {
 	rm $md
 }
 
+function test__nav_keymap__when_md_has_table_nested_in_a_list {
+	local md='/tmp/test__nav_keymap__md_table_in_list.md'
+	# A table nested inside a list item crashes mdcat 2.7.1 (panic, exit 101), which
+	# drops the table and everything after it. The dedent preprocessing in
+	# nav_helpers_render_markdown promotes the table to the margin so the whole file,
+	# including the trailing prose, renders.
+	printf -- '# H1\n\n- a bullet:\n\n  | alpha | beta |\n  |---|---|\n  | one | two |\n\nAfter the table.\n' > $md
+
+	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md 2>/dev/null | bw)
+
+	# The nested table renders (cells present), not a crash dump
+	assert "$([[ $output == *alpha* && $output == *beta* && $output == *one* && $output == *two* ]] && echo 1)" '1'
+
+	# Content after the table is not dropped
+	assert "$([[ $output == *'After the table.'* ]] && echo 1)" '1'
+
+	rm $md
+}
+
 function test__nav_keymap__when_specifying_an_arbitrary_txt_file {
 	local txt='/tmp/test__nav_keymap__arbitrary_txt.txt'
 	echo 'hello' > $txt
