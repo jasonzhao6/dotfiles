@@ -168,3 +168,36 @@ function test__keymap_show__with_no_match {
 		eof
 	)"
 }
+
+function test__keymap_print_map__does_not_count_word_aliases {
+	local entries=(
+		"${TEST_DOT}o # Dot key binds `o`"
+		'0 <command> # Single-char bareword still counts'
+		'each <command> # Word alias on `e`'
+		'all <command> # Word alias on `a`'
+	)
+
+	local map; map=$(keymap_print_map "$TEST_NAMESPACE" "${entries[@]}" | bw)
+
+	# The dot key `o` and the single-char bareword `0` are real bindings
+	assert "$([[ $map == *'<o>'* && $map == *'<0>'* ]] && echo 1)" '1'
+
+	# `each`/`all` are word aliases, not single-key bindings, so they must not
+	# mark their initials `e`/`a` as used
+	assert "$([[ $map != *'<e>'* && $map != *'(e)'* ]] && echo 1)" '1'
+	assert "$([[ $map != *'<a>'* && $map != *'(a)'* ]] && echo 1)" '1'
+}
+
+function test__keymap_print_map__counts_multichar_keys_in_non_zsh_keymaps {
+	# A keymap with no dot aliases is a keyboard-shortcut reference (e.g. Vimium),
+	# where multi-char bare tokens like `gg` are real key sequences, not word
+	# aliases, so they must still count. The `is_zsh_keymap` guard ensures this.
+	local entries=(
+		'gg # Vimium-style multi-char key'
+		'j # Single key'
+	)
+
+	local map; map=$(keymap_print_map 'non_zsh_demo' "${entries[@]}" | bw)
+
+	assert "$([[ $map == *'<g>'* && $map == *'<j>'* ]] && echo 1)" '1'
+}

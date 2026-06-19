@@ -264,6 +264,7 @@ function keymap_print_map {
 	local first_token
 	local key_initial
 	local escaped_initial
+	local is_zsh_keymap; keymap_has_dot_alias "${keymap_entries[@]}" && is_zsh_keymap=1
 
 	# Identify the key initial for each entry
 	# - If it follows a `KEYMAP_DOT`, it's a key mapping- use the first character after `KEYMAP_DOT`
@@ -288,6 +289,11 @@ function keymap_print_map {
 		elif [[ $first_token == *$KEYMAP_DOT* ]]; then
 			key_initial=${${first_token#*$KEYMAP_DOT}:0:1}
 		else
+			# In zsh keymaps, top-level word aliases (e.g. `each`, `all`, `map`) are
+			# full command words, not single-key bindings, so don't count them toward
+			# a key initial. Single-char bare tokens (the namespace alias, `0`) still count.
+			# In non-zsh keymaps (e.g Vimium `gg`), still count top-level word aliases.
+			[[ $is_zsh_keymap -eq 1 && ${#first_token} -gt 1 ]] && continue
 			key_initial=${first_token:0:1}
 		fi
 
