@@ -22,6 +22,7 @@ NAV_KEYMAP=(
 	"${NAV_DOT}y # Yank current path to MRU queue"
 	"${NAV_DOT}p # Put latest path from MRU queue"
 	"${NAV_DOT}q <match>* <-mismatch>* # List MRU queue, \`cd\` when only one match"
+	"${NAV_DOT}qk <count> # Keep top N entries of MRU queue"
 	"${NAV_DOT}qq # Clear MRU queue"
 	''
 	"${NAV_DOT}h <match>* <-mismatch>* # Go to GitHub"
@@ -236,6 +237,24 @@ function nav_keymap_q {
 	fi
 
 	cat "$NAV_MRU_FILE" | args_keymap_s "${filters[@]}"
+}
+
+function nav_keymap_qk {
+	local count=$1
+
+	if [[ ! $count =~ ^[1-9][0-9]*$ ]]; then
+		red_bar 'Usage: nqk <count>'
+		return
+	fi
+
+	if [[ ! -f "$NAV_MRU_FILE" || ! -s "$NAV_MRU_FILE" ]]; then
+		red_bar 'MRU queue is empty'
+		return
+	fi
+
+	local kept; kept=$(head -n "$count" "$NAV_MRU_FILE")
+	printf '%s\n' "$kept" > "$NAV_MRU_FILE"
+	nav_keymap_q
 }
 
 function nav_keymap_qq {

@@ -779,6 +779,50 @@ function test__nav_keymap_q__prunes_to_empty {
 	)" "$(red_bar 'MRU queue is empty')"
 }
 
+function test__nav_keymap_qk {
+	# Wrap in a subshell so the re-list's in-memory `ARGS_HISTORY` mutation does
+	# not leak into sibling tests
+	assert "$(
+		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
+		nav_keymap_qk 2 > /dev/null
+		cat "$NAV_MRU_FILE" # Only the top N entries remain
+	)" "$(printf '%s\n%s' "$HOME/Documents" "$HOME/Downloads")"
+}
+
+function test__nav_keymap_qk__relists {
+	assert "$(
+		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
+		nav_keymap_qk 2 | bw
+	)" "$(
+		cat <<-eof
+		     1	$HOME/Documents
+		     2	$HOME/Downloads
+		eof
+	)"
+}
+
+function test__nav_keymap_qk__count_exceeds_size {
+	assert "$(
+		printf '%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" > "$NAV_MRU_FILE"
+		nav_keymap_qk 9 > /dev/null
+		cat "$NAV_MRU_FILE" # Keeping more than exist is a safe no-op
+	)" "$(printf '%s\n%s' "$HOME/Documents" "$HOME/Downloads")"
+}
+
+function test__nav_keymap_qk__usage_error {
+	assert "$(
+		printf '%s\n' "$HOME/Documents" > "$NAV_MRU_FILE"
+		nav_keymap_qk
+	)" "$(red_bar 'Usage: nqk <count>')"
+}
+
+function test__nav_keymap_qk__empty {
+	assert "$(
+		rm -f "$NAV_MRU_FILE"
+		nav_keymap_qk 2
+	)" "$(red_bar 'MRU queue is empty')"
+}
+
 function test__nav_keymap_qq {
 	assert "$(
 		echo "$HOME/Documents" > "$NAV_MRU_FILE"
