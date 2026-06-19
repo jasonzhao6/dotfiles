@@ -767,6 +767,39 @@ function test__nav_keymap_q__empty {
 	)" "$(red_bar 'MRU queue is empty')"
 }
 
+function test__nav_keymap_q__prunes_missing_dirs {
+	local gone=/tmp/test__nav_keymap_q__prunes_missing_dirs
+	rm -rf "$gone"
+
+	cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+	printf '%s\n%s\n%s\n' "$HOME/Documents" "$gone" "$HOME/Downloads" > "$NAV_MRU_FILE"
+
+	# Missing dir is dropped from the listing
+	assert "$(nav_keymap_q | bw)" "$(
+		cat <<-eof
+		     1	$HOME/Documents
+		     2	$HOME/Downloads
+		eof
+	)"
+
+	# Missing dir is removed from the MRU file
+	assert "$(cat "$NAV_MRU_FILE")" "$(printf '%s\n%s' "$HOME/Documents" "$HOME/Downloads")"
+
+	mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
+}
+
+function test__nav_keymap_q__prunes_to_empty {
+	local gone=/tmp/test__nav_keymap_q__prunes_to_empty
+	rm -rf "$gone"
+
+	assert "$(
+		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
+		printf '%s\n' "$gone" > "$NAV_MRU_FILE"
+		nav_keymap_q
+		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
+	)" "$(red_bar 'MRU queue is empty')"
+}
+
 function test__nav_keymap_qq {
 	assert "$(
 		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null

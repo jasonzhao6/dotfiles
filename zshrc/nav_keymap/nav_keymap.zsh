@@ -215,6 +215,9 @@ function nav_keymap_p {
 function nav_keymap_q {
 	local filters=("$@")
 
+	# Drop entries whose directory no longer exists
+	nav_helpers_mru_prune
+
 	if [[ ! -f "$NAV_MRU_FILE" || ! -s "$NAV_MRU_FILE" ]]; then
 		red_bar 'MRU queue is empty'
 		return

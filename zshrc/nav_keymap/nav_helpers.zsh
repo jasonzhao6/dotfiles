@@ -32,6 +32,21 @@ function nav_helpers_mru_add {
 	fi
 }
 
+function nav_helpers_mru_prune {
+	[[ -f "$NAV_MRU_FILE" ]] || return
+
+	local kept="" line
+	while IFS= read -r line || [[ -n "$line" ]]; do
+		[[ -d "$line" ]] && kept+="$line"$'\n'
+	done < "$NAV_MRU_FILE"
+
+	if [[ -n "$kept" ]]; then
+		printf '%s' "$kept" > "$NAV_MRU_FILE"
+	else
+		rm -f "$NAV_MRU_FILE"
+	fi
+}
+
 function nav_helpers_extract_frontmatter {
 	# Extract frontmatter block with `---` delimiters included; guard against unclosed blocks
 	awk '
