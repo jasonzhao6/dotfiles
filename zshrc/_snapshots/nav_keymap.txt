@@ -65,7 +65,6 @@ Keymap List
   $ n.j                        # Clear screen & render next file in args
   $ n.k                        # Clear screen & render prev file in args
   $ n.x                        # Clear screen & rerender current file
-
   $ n.v                        # Clear screen & render file in pasteboard
 
   $ n.c                        # (Reserved: Netcat)

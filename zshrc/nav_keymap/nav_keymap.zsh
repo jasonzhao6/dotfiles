@@ -44,7 +44,6 @@ NAV_KEYMAP=(
 	"${NAV_DOT}j # Clear screen & render next file in args"
 	"${NAV_DOT}k # Clear screen & render prev file in args"
 	"${NAV_DOT}x # Clear screen & rerender current file"
-	''
 	"${NAV_DOT}v # Clear screen & render file in pasteboard"
 	''
 	"${NAV_DOT}c # (Reserved: Netcat)"

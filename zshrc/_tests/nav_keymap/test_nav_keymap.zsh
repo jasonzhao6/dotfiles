@@ -682,39 +682,31 @@ function test__nav_keymap_oo__with_filters {
 
 function test__nav_keymap_p {
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		echo "$HOME/Documents" > "$NAV_MRU_FILE"
 		nav_keymap_p > /dev/null
 		pwd
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$HOME/Documents"
 }
 
 function test__nav_keymap_p__when_empty {
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		rm -f "$NAV_MRU_FILE"
 		nav_keymap_p
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$(red_bar 'MRU queue is empty')"
 }
 
 function test__nav_keymap_p__uses_head_of_queue {
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		printf '%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" > "$NAV_MRU_FILE"
 		nav_keymap_p > /dev/null
 		pwd
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$HOME/Documents"
 }
 
 function test__nav_keymap_q {
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
 		nav_keymap_q | bw
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$(
 		cat <<-eof
 		     1	$HOME/Documents
@@ -726,10 +718,8 @@ function test__nav_keymap_q {
 
 function test__nav_keymap_q__with_filters {
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
 		nav_keymap_q Do | bw
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$(
 		cat <<-eof
 		     1	$HOME/Documents
@@ -740,30 +730,24 @@ function test__nav_keymap_q__with_filters {
 
 function test__nav_keymap_q__single_match_cds {
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
 		nav_keymap_q Down > /dev/null
 		pwd
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$HOME/Downloads"
 }
 
 function test__nav_keymap_q__single_match_moves_to_head {
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
 		nav_keymap_q Down > /dev/null
 		head -1 "$NAV_MRU_FILE"
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$HOME/Downloads"
 }
 
 function test__nav_keymap_q__empty {
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		rm -f "$NAV_MRU_FILE"
 		nav_keymap_q
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$(red_bar 'MRU queue is empty')"
 }
 
@@ -771,7 +755,6 @@ function test__nav_keymap_q__prunes_missing_dirs {
 	local gone=/tmp/test__nav_keymap_q__prunes_missing_dirs
 	rm -rf "$gone"
 
-	cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 	printf '%s\n%s\n%s\n' "$HOME/Documents" "$gone" "$HOME/Downloads" > "$NAV_MRU_FILE"
 
 	# Missing dir is dropped from the listing
@@ -784,8 +767,6 @@ function test__nav_keymap_q__prunes_missing_dirs {
 
 	# Missing dir is removed from the MRU file
 	assert "$(cat "$NAV_MRU_FILE")" "$(printf '%s\n%s' "$HOME/Documents" "$HOME/Downloads")"
-
-	mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 }
 
 function test__nav_keymap_q__prunes_to_empty {
@@ -793,20 +774,16 @@ function test__nav_keymap_q__prunes_to_empty {
 	rm -rf "$gone"
 
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		printf '%s\n' "$gone" > "$NAV_MRU_FILE"
 		nav_keymap_q
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$(red_bar 'MRU queue is empty')"
 }
 
 function test__nav_keymap_qq {
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		echo "$HOME/Documents" > "$NAV_MRU_FILE"
 		nav_keymap_qq
 		[[ ! -f "$NAV_MRU_FILE" ]] && echo 'cleared'
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" 'cleared'
 }
 
@@ -1099,31 +1076,26 @@ function test__nav_keymap_x__reflects_updated_content {
 
 function test__nav_keymap_y {
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		rm -f "$NAV_MRU_FILE"
 		cd "$HOME/Documents" || return
 		nav_keymap_y
 		head -1 "$NAV_MRU_FILE"
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$HOME/Documents"
 }
 
 function test__nav_keymap_y__prepends_to_queue {
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		rm -f "$NAV_MRU_FILE"
 		cd "$HOME/Downloads" || return
 		nav_keymap_y
 		cd "$HOME/Documents" || return
 		nav_keymap_y
 		cat "$NAV_MRU_FILE"
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$(printf '%s\n%s' "$HOME/Documents" "$HOME/Downloads")"
 }
 
 function test__nav_keymap_y__dedupes_existing_entry {
 	assert "$(
-		cp "$NAV_MRU_FILE" "$NAV_MRU_FILE.bak" 2>/dev/null
 		rm -f "$NAV_MRU_FILE"
 		cd "$HOME/Downloads" || return
 		nav_keymap_y
@@ -1132,7 +1104,6 @@ function test__nav_keymap_y__dedupes_existing_entry {
 		cd "$HOME/Downloads" || return
 		nav_keymap_y
 		cat "$NAV_MRU_FILE"
-		mv "$NAV_MRU_FILE.bak" "$NAV_MRU_FILE" 2>/dev/null
 	)" "$(printf '%s\n%s' "$HOME/Downloads" "$HOME/Documents")"
 }
 
