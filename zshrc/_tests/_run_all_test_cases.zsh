@@ -31,6 +31,7 @@ function run_all_test_cases_section {
 			OTHER_BACKGROUND_OUTPUTS_FILE="$tmpdir/$base.other_bg"
 			OTHER_KEYMAP_DEFAULT_DIFF_FILE_1="$tmpdir/$base.other_diff1"
 			OTHER_KEYMAP_DEFAULT_DIFF_FILE_2="$tmpdir/$base.other_diff2"
+			KEYMAP_USAGE_FILE="$tmpdir/$base.usage"
 
 			# Override `pass`/`fail` from `_test_harness.zsh` to stream dots via fd 3,
 			# bypassing the subshell's `/dev/null` redirect on stdout

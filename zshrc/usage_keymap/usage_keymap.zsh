@@ -54,7 +54,6 @@ function usage_keymap_a {
 		'{total[$2]++} END {for (a in total) printf "%s\t%d\n", a, total[a]}' \
 		| sort -t$'\t' -k2 -rn)
 
-	local grand_total=0
 	local rows=()
 	local max_alias_len=0
 	local max_desc_len=0
@@ -90,7 +89,6 @@ function usage_keymap_a {
 				fi
 			done
 		fi
-		grand_total=$((grand_total + count))
 		[[ ${#rows} -ge $USAGE_KEYMAP_A_MAX_ROWS ]] && continue
 		rows+=("${a}	${display_alias}	${desc}	${count}")
 
@@ -239,7 +237,6 @@ function usage_keymap_n {
 		'{total[substr($2,1,1)]++} END {for (a in total) printf "%s\t%d\n", a, total[a]}' \
 		| sort -t$'\t' -k2 -rn)
 
-	local grand_total=0
 	local rows=()
 	local max_name_len=0
 	local max_count_len=0
@@ -254,7 +251,6 @@ function usage_keymap_n {
 		fi
 
 		rows+=("${ns_alias}	${display_name}	${count}")
-		grand_total=$((grand_total + count))
 		[[ ${#display_name} -gt $max_name_len ]] && max_name_len=${#display_name}
 		count_len=${#count}
 		[[ $count_len -gt $max_count_len ]] && max_count_len=$count_len
