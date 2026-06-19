@@ -30,7 +30,7 @@ Keymap List
   $ a.a <match>* <-mismatch>*       # List args & filter
 
   $ a.o <command>                   # Use first arg
-  $ a.e <command>                   # Use a random arg
+  $ a.e <command>                   # Use last arg
   $ 0 <command>                     # Use last arg
   $ (1-100) <command>               # Use an arg by number up to 100
   $ a.n <number> <command>          # Use an arg by number beyond 100

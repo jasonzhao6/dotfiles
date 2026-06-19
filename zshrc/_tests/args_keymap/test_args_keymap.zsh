@@ -188,16 +188,12 @@ function test__args_keymap_d {
 
 function test__args_keymap_e {
 	assert "$(
-		echo "$test__input_short" | args_keymap_s > /dev/null
-		other_keymap_f 1 $(($(args_helpers_size) * 5)) args_keymap_e echo 2>&1 | sort --unique
+		echo "$test__input" | args_keymap_s > /dev/null
+		args_keymap_e echo 2>&1
 	)" "$(
 		cat <<-eof
-
-			args_keymap_e echo
-			echo terraform-application-region-shared-1
-			echo terraform-application-region-shared-2
-			terraform-application-region-shared-1
-			terraform-application-region-shared-2
+			echo terraform-application-region-program-B
+			terraform-application-region-program-B
 		eof
 	)"
 }

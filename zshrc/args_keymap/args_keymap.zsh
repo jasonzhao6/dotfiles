@@ -9,7 +9,7 @@ ARGS_KEYMAP=(
 	"${ARGS_DOT}a <match>* <-mismatch>* # List args & filter"
 	''
 	"${ARGS_DOT}o <command> # Use first arg"
-	"${ARGS_DOT}e <command> # Use a random arg"
+	"${ARGS_DOT}e <command> # Use last arg"
 	'0 <command> # Use last arg'
 	'(1-100) <command> # Use an arg by number up to 100'
 	"${ARGS_DOT}n <number> <command> # Use an arg by number beyond 100"
@@ -118,7 +118,7 @@ function args_keymap_d {
 function args_keymap_e {
 	local command=$*
 
-	args_keymap_n $((RANDOM % $(args_helpers_size) + 1)) "$command"
+	args_keymap_n '$' "$command"
 }
 
 function args_keymap_f {
