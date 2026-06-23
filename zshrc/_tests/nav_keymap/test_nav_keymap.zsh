@@ -728,6 +728,14 @@ function test__nav_keymap_q__with_filters {
 	)"
 }
 
+function test__nav_keymap_q__single_entry_cds {
+	assert "$(
+		printf '%s\n' "$HOME/Downloads" > "$NAV_MRU_FILE"
+		nav_keymap_q > /dev/null
+		pwd
+	)" "$HOME/Downloads"
+}
+
 function test__nav_keymap_q__single_match_cds {
 	assert "$(
 		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
