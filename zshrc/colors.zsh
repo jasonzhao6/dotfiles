@@ -14,16 +14,16 @@ export JQ_COLORS='1;35:1;35:1;35:1;35:1;32:1;33:1;33:1;36' # v1.7+
 function color {
 	alias diff='colordiff'
 	alias grep='grep --color=always'
-	alias egrep='egrep --color=always'
-	alias pgrep='pcregrep --color=always'
+	alias grepE='grep -E --color=always'
+	alias grepP='pcregrep --color=always'
 	alias ls='ls --color=always'
 };
 
 function no_color {
 	unalias diff
 	unalias grep
-	unalias egrep
-	unalias pgrep
+	unalias grepE
+	unalias grepP
 	unalias ls
 }
 

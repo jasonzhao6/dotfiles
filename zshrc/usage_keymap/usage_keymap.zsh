@@ -63,6 +63,7 @@ function usage_keymap_a {
 	while IFS=$'\t' read -r a count; do
 		ns_alias="${a:0:1}"
 		key="${a:1}"
+		# shellcheck disable=SC2154 # aliases is a zsh builtin (the alias table)
 		ns="${aliases[$ns_alias]}"
 		if [[ -n $key ]]; then
 			display_alias="${ns_alias}.${key}"
@@ -76,6 +77,7 @@ function usage_keymap_a {
 		fi
 
 		# Look up description from the keymap array
+		# shellcheck disable=SC2034 # Read on the next line via zsh ${(P@)} indirect expansion
 		upper_ns="${ns:u}"
 		entries=("${(P@)upper_ns}")
 		desc=''
@@ -243,6 +245,7 @@ function usage_keymap_n {
 
 	local display_name count_len
 	while IFS=$'\t' read -r ns_alias count; do
+		# shellcheck disable=SC2154 # aliases is a zsh builtin (the alias table)
 		display_name="${aliases[$ns_alias]%%_*}"
 
 		# Filter by match if specified
@@ -327,6 +330,7 @@ function usage_keymap_t {
 	local real_aliases=()
 	local a
 	for a in "${(@k)aliases}"; do
+		# shellcheck disable=SC2154 # aliases is a zsh builtin (the alias table)
 		[[ ${aliases[$a]} == *_keymap* ]] && real_aliases+=("$a")
 	done
 
@@ -377,7 +381,7 @@ function usage_keymap_u {
 	# Generate sparkline
 	local sparkline_output
 	sparkline_output=$(echo "$filtered" | usage_helpers_sparklines "$sparkline_width" all)
-	# Parse: "all\tsparkline", "_labels\tdate_range", "_gran\tgranularity"
+	# Parse: "all \t sparkline", "_labels \t date_range", "_gran \t granularity"
 	local -A uu_map
 	while IFS=$'\t' read -r key val; do
 		uu_map[$key]="$val"

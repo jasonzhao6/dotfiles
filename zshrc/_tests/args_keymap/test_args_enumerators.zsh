@@ -17,6 +17,7 @@ test__input_with_comments=$(
 )
 
 function test__all {
+	# shellcheck disable=SC2317 # invoked by name via `all` (the enumerator under test), not called directly
 	function test__all__sleep_and_echo { sleep "$@"; echo "$@"; }
 
 	# Note: Needed to widen gaps in order to parallelize test executions

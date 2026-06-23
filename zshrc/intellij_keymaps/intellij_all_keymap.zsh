@@ -7,6 +7,7 @@ INTELLIJ_ALL_ALIAS='i'
 # Note: Intentionally dropping the `_KEYMAP` suffix from this name to avoid it getting picked up by
 # meta programming regex. Otherwise, all the key mappings in this list getting included twice.
 # Also note: This name in lower case must match `INTELLIJ_ALL_NAMESPACE='~'` and `function ~ {}`.
+# shellcheck disable=SC2206 # Intentionally unquoted to drop the empty-string separator lines
 INTELLIJ_ALL=(
 	${INTELLIJ_CMD_KEYMAP[@]}
 	${INTELLIJ_CTRL_KEYMAP[@]}

@@ -1,5 +1,6 @@
 # Extracted from `docker -help`
 
+# shellcheck disable=SC2034 # Used by `docker_keymap.zsh`
 DOCKER_COMMANDS=(
 	run
 	exec

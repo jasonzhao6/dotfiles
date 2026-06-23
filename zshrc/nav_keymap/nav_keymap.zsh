@@ -88,7 +88,6 @@ source "$ZSHRC_SRC_DIR/$NAV_NAMESPACE/nav_helpers.zsh"
 # Constants
 NAV_CLAUDE_DIR="$HOME/GitHub/jasonzhao6/scratch/claude"
 NAV_CLAUDE_PLANS_DIR="$NAV_CLAUDE_DIR/plans"
-NAV_MD_FILE_EXTENSION='*.md'
 NAV_MRU_FILE="$ZSHRC_DATA_DIR/nav.mru.txt"
 
 # States
@@ -212,12 +211,14 @@ function nav_keymap_p {
 	cd "$head" && nav_keymap_n || true
 }
 
+# shellcheck disable=SC2120 # `filters` is an optional arg
 function nav_keymap_q {
 	local filters=("$@")
 
 	# Drop entries whose directory no longer exists
 	nav_helpers_mru_prune
 
+	# Short circuit if MRU queue is empty
 	if [[ ! -f "$NAV_MRU_FILE" || ! -s "$NAV_MRU_FILE" ]]; then
 		red_bar 'MRU queue is empty'
 		return
@@ -226,9 +227,9 @@ function nav_keymap_q {
 	# Narrow to matching entries; with no filters, every entry matches
 	local matched
 	if [[ -n "${filters[*]}" ]]; then
-		matched=$(cat "$NAV_MRU_FILE" | args_helpers_filter "${filters[@]}" 2>/dev/null)
+		matched=$(args_helpers_filter "${filters[@]}" < "$NAV_MRU_FILE" 2>/dev/null)
 	else
-		matched=$(cat "$NAV_MRU_FILE")
+		matched=$(< "$NAV_MRU_FILE")
 	fi
 
 	# `cd` when exactly one entry matches
@@ -242,7 +243,7 @@ function nav_keymap_q {
 		fi
 	fi
 
-	cat "$NAV_MRU_FILE" | args_keymap_s "${filters[@]}"
+	args_keymap_s "${filters[@]}" < "$NAV_MRU_FILE"
 }
 
 function nav_keymap_qk {
@@ -286,11 +287,11 @@ function nav_keymap_t {
 	# Expand leading `~` to $HOME
 	target_path=${target_path/#\~/$HOME}
 
-	# Strip trailing space-separated tokens (branch, AWS account, region, etc.)
-	# until what remains is a valid file or folder. Stops when no more spaces
-	# are left to trim, which correctly handles paths with embedded spaces.
+	# Pasted paths can have trailing space-separated tokens (git branch, AWS
+	# account, region, etc.). Strip the last token repeatedly until what remains
+	# is a valid file or folder, or no valid path was found.
 	local prev=''
-	while [[ -n $target_path && ! -f $target_path && ! -d $target_path && $target_path != $prev ]]; do
+	while [[ -n $target_path && ! -f $target_path && ! -d $target_path && $target_path != "$prev" ]]; do
 		prev=$target_path
 		target_path=${target_path% *}
 	done
@@ -303,11 +304,11 @@ function nav_keymap_t {
 
 	# If it's a file path, go to its parent folder
 	if [[ -f $target_path ]]; then
-		target_path=${${target_path}%/*}
+		target_path=${target_path%/*}
 	fi
 
 	# Go to folder
-	cd $target_path && nav_keymap_n || true
+	cd "$target_path" && nav_keymap_n || true
 }
 
 function nav_keymap_tt {

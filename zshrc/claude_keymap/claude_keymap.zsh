@@ -137,7 +137,7 @@ function claude_keymap_s {
 			set background color of selected tab of front window to {6224, 6224, 11224}
 		end tell'
 
-	cd "$HOME/GitHub/jasonzhao6/scratch"
+	cd "$HOME/GitHub/jasonzhao6/scratch" || exit
 	# Notify Terminal.app of new cwd so Claude's tab title shows 'scratch'
 	printf '\e]7;file://%s%s\a' "$HOST" "$PWD"
 	claude_keymap_c
@@ -166,14 +166,14 @@ function claude_keymap_u {
 	local copy_status=0
 
 	# Copy files; strip leading dot so dot files are visible in scratch repo
-	for file in $CLAUDE_KEYMAP_FILES; do
+	for file in "${CLAUDE_KEYMAP_FILES[@]}"; do
 		if [ -f "$CLAUDE_KEYMAP_CONFIG_DIR/$file" ]; then
 			cp "$CLAUDE_KEYMAP_CONFIG_DIR/$file" "$CLAUDE_KEYMAP_SCRATCH_DIR/${file#.}" || copy_status=1
 		fi
 	done
 
 	# Copy folders as-is
-	for folder in $CLAUDE_KEYMAP_FOLDERS; do
+	for folder in "${CLAUDE_KEYMAP_FOLDERS[@]}"; do
 		if [ -d "$CLAUDE_KEYMAP_CONFIG_DIR/$folder" ]; then
 			cp -r "$CLAUDE_KEYMAP_CONFIG_DIR/$folder" "$CLAUDE_KEYMAP_SCRATCH_DIR/" || copy_status=1
 		fi
@@ -198,16 +198,16 @@ function claude_keymap_U {
 		local copy_status=0
 
 		# Copy files; restore leading dot for dot files
-		for file in $CLAUDE_KEYMAP_FILES; do
+		for file in "${CLAUDE_KEYMAP_FILES[@]}"; do
 			if [ -f "$CLAUDE_KEYMAP_SCRATCH_DIR/${file#.}" ]; then
 				cp "$CLAUDE_KEYMAP_SCRATCH_DIR/${file#.}" "$CLAUDE_KEYMAP_CONFIG_DIR/$file" || copy_status=1
 			fi
 		done
 
 		# Copy folders; remove target first so deletions in source are reflected
-		for folder in $CLAUDE_KEYMAP_FOLDERS; do
+		for folder in "${CLAUDE_KEYMAP_FOLDERS[@]}"; do
 			if [ -d "$CLAUDE_KEYMAP_SCRATCH_DIR/$folder" ]; then
-				rm -rf "$CLAUDE_KEYMAP_CONFIG_DIR/$folder"
+				rm -rf "${CLAUDE_KEYMAP_CONFIG_DIR:?}/$folder"
 				cp -r "$CLAUDE_KEYMAP_SCRATCH_DIR/$folder" "$CLAUDE_KEYMAP_CONFIG_DIR/" || copy_status=1
 			fi
 		done

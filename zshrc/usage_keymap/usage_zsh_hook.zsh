@@ -3,6 +3,7 @@ zmodload zsh/datetime # Use $EPOCHSECONDS (to avoid forking `gdate` on every inv
 
 function keymap_track_usage {
 	local first_word="${1%% *}"
+	# shellcheck disable=SC2154 # aliases is a zsh builtin (the alias table)
 	[[ ${aliases[$first_word]} == *_keymap* ]] || return
 
 	printf '%s\t%s\n' "$EPOCHSECONDS" "$first_word" >> "$KEYMAP_USAGE_FILE"

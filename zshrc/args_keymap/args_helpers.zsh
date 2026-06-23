@@ -50,7 +50,7 @@ function args_helpers_columns {
 				columns+=' '
 			else
 				columns+=$current_column
-				current_column=$(next_ascii $current_column)
+				current_column=$(next_ascii "$current_column")
 			fi
 		else
 			columns+=' '
@@ -118,7 +118,7 @@ function args_helpers_save {
 	fi
 
 	# If the new args are different than the current args, push the new args
-	if [[ $(args_helpers_plain "$new_args") != $(args_helpers_plain) ]]; then
+	if [[ $(args_helpers_plain "$new_args") != "$(args_helpers_plain)" ]]; then
 		args_history_push "$new_args"
 
 		# Set global states to be used by `n, nn, u`
@@ -149,10 +149,9 @@ function args_helpers_filter {
 	# Do not add coloring yet as coloring from a previous `grep` can mess up the next `grep`
 	greps=${greps//grep/grep --color=never --ignore-case}
 
-	# shellcheck disable=SC2296,SC2298 # Allow zsh-specific param expansion
 	# Now that filtering is done, add coloring for all positive matches
 	local positive_filters=${${(j: :)filters:#-*}// /|}
-	greps+=" | egrep --color=always --ignore-case '$positive_filters'"
+	greps+=" | grepE --color=always --ignore-case '$positive_filters'"
 
 	eval "$greps"
 }

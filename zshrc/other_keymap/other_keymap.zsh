@@ -153,7 +153,7 @@ function other_keymap_d {
 	local url=$*
 	[[ -z "$1" ]] && return
 
-	# shellcheck disable=SC2298,SC2299 # Strip protocol and path
+	# Strip protocol and path
 	local domain=${${${url}#*://}%%/*}
 
 	if [[ -z $ZSHRC_UNDER_TESTING ]]; then
@@ -325,7 +325,7 @@ function other_keymap_r {
 	[[ -z $before || -z $after ]] && return
 
 	for file in *"$before"*; do
-		mv "$file" "${file//$before/$after}"
+		mv "$file" "${file//"$before"/$after}"
 	done
 }
 

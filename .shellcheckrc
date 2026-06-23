@@ -1,0 +1,60 @@
+# Some files are sourced via computed paths ($ZSHRC_SRC_DIR/$NAMESPACE/...),
+# which ShellCheck can't statically follow. That's OK, a broken path fails to
+# load the next shell / breaks `zt`, so we don't need the lint to catch it:
+#
+#   SC1090 - can't follow non-constant source
+
+disable=SC1090
+
+# ShellCheck reads an array subscript as arithmetic and advises dropping the `$`
+# (`arr[$i]` -> `arr[i]`), which is fine for indexed arrays. But zsh's built-in
+# associative params (e.g. `aliases`) carry no `-A` for ShellCheck to see, so it
+# misreads them as indexed; taking the advice turns `aliases[$x]` into a
+# literal-key lookup `aliases[x]`, a bug:
+#
+#   SC2004 - $/${} is unnecessary on arithmetic variables
+
+disable=SC2004
+
+# Keymaps list files for interactive display via `ls` (aliased to
+# `ls --color=always`), relying on its color and human-readable size/time
+# sorting. `find` can't replicate that, and pathological filenames aren't a
+# concern when browsing one's own directories:
+#
+#   SC2012 - use find instead of ls
+
+disable=SC2012
+
+# `&& ... ||` is used throughout as deliberate idiom: navigate-and-list helpers
+# end in `|| true` / `|| return` to never fail, and one-line ternaries
+# `[[ cond ]] && a || b` have side-effect-free branches (echo/assignment). The
+# footgun SC2015 warns about (C running when A succeeds) doesn't apply here:
+#
+#   SC2015 - A && B || C is not if-then-else
+
+disable=SC2015
+
+# Single quotes with literal backticks are intentional throughout keymap
+# descriptions/legends:
+#
+#   SC2016 - expressions don't expand in single quotes
+
+disable=SC2016
+
+# zsh's `echo` expands backslash escapes (`\e`, `\n`, ...) with no `-e` flag; the
+# color helpers and a few others rely on this. ShellCheck assumes bash/sh `echo`,
+# which doesn't:
+#
+#   SC2028 - echo may not expand escape sequences
+
+disable=SC2028
+
+# This repo is zsh. ShellCheck has no zsh mode, so it flags these valid zsh-only
+# parameter expansions as errors:
+#
+#   SC2066 - "${(@k)m}" still splits per key despite the quotes (loop per key)
+#   SC2296 - ${~var} / ${(flags)var} (zsh expansion flags)
+#   SC2298 - ${${x}} (nested, e.g. ${${x}%/*})
+#   SC2299 - nested parameter expansions
+
+disable=SC2066,SC2296,SC2298,SC2299

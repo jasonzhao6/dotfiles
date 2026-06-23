@@ -159,42 +159,42 @@ function test__encode_url {
 
 function test__extract_urls {
 	local url='http://example.com'
-	assert "$(echo $url | extract_urls)" "$(pgrep_color "$url")"
+	assert "$(echo $url | extract_urls)" "$(grepP_color "$url")"
 }
 
 function test__extract_urls__with_subdomain {
 	local url='http://my.example.com'
-	assert "$(echo $url | extract_urls)" "$(pgrep_color "$url")"
+	assert "$(echo $url | extract_urls)" "$(grepP_color "$url")"
 }
 
 function test__extract_urls__with_www {
 	local url='http://www.example.com'
-	assert "$(echo $url | extract_urls)" "$(pgrep_color "$url")"
+	assert "$(echo $url | extract_urls)" "$(grepP_color "$url")"
 }
 
 function test__extract_urls__with_http {
 	local url='http://www.example.com'
-	assert "$(echo $url | extract_urls)" "$(pgrep_color "$url")"
+	assert "$(echo $url | extract_urls)" "$(grepP_color "$url")"
 }
 
 function test__extract_urls__with_https {
 	local url='https://www.example.com'
-	assert "$(echo $url | extract_urls)" "$(pgrep_color "$url")"
+	assert "$(echo $url | extract_urls)" "$(grepP_color "$url")"
 }
 
 function test__extract_urls__with_path {
 	local url='https://www.example.com/path'
-	assert "$(echo $url | extract_urls)" "$(pgrep_color "$url")"
+	assert "$(echo $url | extract_urls)" "$(grepP_color "$url")"
 }
 
 function test__extract_urls__with_query {
 	local url='https://www.example.com/path?key=value'
-	assert "$(echo "$url" | extract_urls)" "$(pgrep_color "$url")"
+	assert "$(echo "$url" | extract_urls)" "$(grepP_color "$url")"
 }
 
 function test__extract_urls__with_fragment {
 	local url='https://www.example.com/path?key=value#heading'
-	assert "$(echo "$url" | extract_urls)" "$(pgrep_color "$url")"
+	assert "$(echo "$url" | extract_urls)" "$(grepP_color "$url")"
 }
 
 function test__extract_urls__with_multiple_urls {
@@ -202,8 +202,8 @@ function test__extract_urls__with_multiple_urls {
 		echo '2 urls https://www.example.com/path?key=value#heading, https://www.google.com' | extract_urls
 	)" "$(
 		cat <<-eof
-			$(pgrep_color 'https://www.example.com/path?key=value#heading')
-			$(pgrep_color 'https://www.google.com')
+			$(grepP_color 'https://www.example.com/path?key=value#heading')
+			$(grepP_color 'https://www.google.com')
 		eof
 	)"
 }

@@ -42,7 +42,6 @@ source "$ZSHRC_SRC_DIR/$ZSH_NAMESPACE/zsh_helpers.zsh"
 ZSH_OTHER_DOTFILES=(
 	colordiffrc
 	gitignore
-	shellcheckrc
 	terraformrc
 	tm_properties
 	zshrc
@@ -55,10 +54,12 @@ function zsh_keymap_0 {
 }
 
 function zsh_keymap_1 {
+	# shellcheck disable=SC2317 # zshaddhistory is a zsh history hook invoked by the shell
 	function zshaddhistory { return 1; }
 }
 
 function zsh_keymap_2 {
+	# shellcheck disable=SC2317 # zshaddhistory is a zsh history hook invoked by the shell
 	function zshaddhistory { return 2; }
 }
 
@@ -76,7 +77,7 @@ function zsh_keymap_f {
 	local filters=("$@")
 
 	# Identify functions by the ` () {` suffix, then trim it
-	typeset -f | egrep '^\S+ \() {$' | trim 0 5 | args_keymap_s "${filters[@]}"
+	typeset -f | grepE '^\S+ \() {$' | trim 0 5 | args_keymap_s "${filters[@]}"
 }
 
 function zsh_keymap_h {

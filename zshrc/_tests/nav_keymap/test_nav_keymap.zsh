@@ -16,7 +16,7 @@ function test__nav_keymap__when_specifying_a_directory_instead_of_key {
 		mkdir .1.hidden
 		touch 1.log 2.log 3.txt
 		touch .2.hidden .3.hidden
-		cd /tmp
+		cd /tmp || return
 		nav_keymap test__nav_keymap__when_specifying_a_directory_instead_of_key | bw
 		rm -rf /tmp/test__nav_keymap__when_specifying_a_directory_instead_of_key
 	)" "$(
@@ -184,7 +184,7 @@ function test__nav_keymap__when_md_frontmatter_is_unclosed {
 	printf -- '---\nname: foo\nbodymarker line\n' > $md
 
 	assert "$(
-		nav_keymap $md | bw | grep -c 'bodymarker'
+		nav_keymap $md | bw | grep --count 'bodymarker'
 	)" '1'
 
 	rm $md
@@ -423,7 +423,7 @@ function test__nav_keymap_j__renders_md_with_nav_helpers {
 		nav_keymap_n > /dev/null
 		# nav_helpers_render_file output differs from cat; just check it does not error
 		# and that the file name is shown
-		nav_keymap_j 2>/dev/null | bw | grep -c '^note.md$'
+		nav_keymap_j 2>/dev/null | bw | grep --count '^note.md$'
 		rm -rf /tmp/test__nav_keymap_j
 	)" '1'
 }
@@ -501,6 +501,7 @@ function test__nav_keymap_k {
 		echo 'two' > 2.txt
 		echo 'three' > 3.txt
 		nav_keymap_n > /dev/null
+		# shellcheck disable=SC2034 # ZSHRC_UNDER_TESTING is the global test flag; read by the sourced keymap code, not here
 		(ZSHRC_UNDER_TESTING=1; nav_keymap_k; nav_keymap_k; nav_keymap_k) | bw
 		rm -rf /tmp/test__nav_keymap_k
 	)" "$(
@@ -889,6 +890,7 @@ function test__nav_keymap_t__with_invalid_path {
 
 function test__nav_keymap_t__with_tilde_dir {
 	assert "$(
+		# shellcheck disable=SC2088 # Literal ~ is intentional test input (a pasted path)
 		echo '~/Documents' | pbcopy
 		nav_keymap_t > /dev/null
 		pwd
@@ -898,6 +900,7 @@ function test__nav_keymap_t__with_tilde_dir {
 function test__nav_keymap_t__with_tilde_file {
 	assert "$(
 		touch "$HOME/test__nav_keymap_t__with_tilde_file"
+		# shellcheck disable=SC2088 # Literal ~ is intentional test input (a pasted path)
 		echo '~/test__nav_keymap_t__with_tilde_file' | pbcopy
 		nav_keymap_t > /dev/null
 		pwd
@@ -931,6 +934,7 @@ function test__nav_keymap_t__with_path_containing_space_and_metadata {
 
 function test__nav_keymap_t__with_tilde_and_metadata {
 	assert "$(
+		# shellcheck disable=SC2088 # Literal ~ is intentional test input (a pasted path)
 		echo '~/Documents #jz mq01-qa.team-transaction-engine-dev us-east-1' | pbcopy
 		nav_keymap_t > /dev/null
 		pwd
@@ -1032,6 +1036,7 @@ function test__nav_keymap_v__when_pasteboard_is_not_a_file_but_last_file_exists 
 	printf '# Fallback\n' > $md
 
 	assert "$(
+		# shellcheck disable=SC2034 # read by nav_keymap_v in the sourced nav_keymap.zsh, not here
 		NAV_V_LAST_FILE=$md
 		echo 'not a file' | pbcopy
 		ZSHRC_UNDER_TESTING=1 nav_keymap_v | bw | compact

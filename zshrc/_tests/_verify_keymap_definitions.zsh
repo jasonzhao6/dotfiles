@@ -17,7 +17,7 @@ function verify_keymap_definitions_section {
 function verify_keymap_definitions {
 	local keymap_file=$1
 
-	namespace=$(pgrep --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$keymap_file" | bw)
+	namespace=$(grepP --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$keymap_file" | bw)
 
 	# Find all keymap keys
 	local keymap_keys; keymap_keys=$(
@@ -25,7 +25,7 @@ function verify_keymap_definitions {
 		grep --invert-match '^#' "$keymap_file" |
 			grep --invert-match '(Reserved' |
 			# Extract keymap keys
-			pgrep --only-matching "(?<=_DOT})[^$\*]+?(?=\s)" | bw | sort --unique
+			grepP --only-matching "(?<=_DOT})[^$\*]+?(?=\s)" | bw | sort --unique
 	)
 
 	# Generate all expected mapping functions
@@ -36,7 +36,7 @@ function verify_keymap_definitions {
 
 	# Find all actual mapping functions
 	local actual_functions; actual_functions=$(
-		pgrep --only-matching "^function .+(?= {)" "$keymap_file" | bw | sort --unique
+		grepP --only-matching "^function .+(?= {)" "$keymap_file" | bw | sort --unique
 	)
 
 	# Compare keys and mapping functions; note that `diff` returns nothing if the files are identical

@@ -72,7 +72,6 @@ function keymap_filter_entries {
 	local namespace=$1; shift
 	local description=$*
 
-	# shellcheck disable=SC2296 # Allow zsh-specific param expansion
 	# Find keymap entries with matching description
 	local entries=("${(P)$(echo "$namespace" | upcase)[@]}")
 	local entries_matched=()
@@ -119,7 +118,6 @@ function keymap_has_disjoint_dups {
 		# Get the first token while ignoring any leading "(|)? " pattern
 		# Note: This is inlined and repeated b/c calling a function in a loop is slow
 		[[ $entry == "$KEYMAP_PIPE_PATTERN"* ]] && entry="${entry#\(\|\)\? }"
-		# shellcheck disable=SC2296,SC2298 # Allow zsh-specific param expansion
 		[[ $entry == *\ * ]] && first_token=${${(z)entry}[1]} || first_token=$entry
 
 		# If it is the same as the last entry, allow it
@@ -169,14 +167,13 @@ function keymap_set_dot_aliases {
 		# Get the first token while ignoring any leading "(|)? " pattern
 		# Note: This is inlined and repeated b/c calling a function in a loop is slow
 		[[ $entry == "$KEYMAP_PIPE_PATTERN"* ]] && entry="${entry#\(\|\)\? }"
-		# shellcheck disable=SC2296,SC2298 # Allow zsh-specific param expansion
 		[[ $entry == *\ * ]] && first_token=${${(z)entry}[1]} || first_token=$entry
 
 		# Set alias only for `key`s preceded by `KEYMAP_DOT`s
 		[[ $first_token != *$KEYMAP_DOT* ]] && continue
 
 		# Extract `key` from `entry`
-		key="${first_token#*$KEYMAP_DOT}"
+		key="${first_token#*"$KEYMAP_DOT"}"
 
 		# Alias each `key` once
 		if [[ -z ${seen[$key]} ]]; then
@@ -210,7 +207,7 @@ function keymap_print_help {
 	else
 		# Interpolate `alias` into `KEYMAP_USAGE`
 		for entry in "${KEYMAP_USAGE[@]}"; do
-			keymap_usage+=("${entry/$KEYMAP_ALIAS/$alias}")
+			keymap_usage+=("${entry/"$KEYMAP_ALIAS"/$alias}")
 		done
 
 		max_command_size=$(keymap_get_max_command_size "${keymap_usage[@]}" "${keymap_entries[@]}")
@@ -280,14 +277,13 @@ function keymap_print_map {
 		# Get the first token while ignoring any leading "(|)? " pattern
 		# Note: This is inlined and repeated b/c calling a function in a loop is slow
 		[[ $entry == "$KEYMAP_PIPE_PATTERN"* ]] && entry="${entry#\(\|\)\? }"
-		# shellcheck disable=SC2296,SC2298 # Allow zsh-specific param expansion
 		[[ $entry == *\ * ]] && first_token=${${(z)entry}[1]} || first_token=$entry
 
 		# Check `KEYMAP_DASH` before `KEYMAP_DOT` to account for keyboard shortcuts like `cmd-.`
 		if [[ $first_token == *$KEYMAP_DASH* ]]; then
 			key_initial=${first_token: -1}
 		elif [[ $first_token == *$KEYMAP_DOT* ]]; then
-			key_initial=${${first_token#*$KEYMAP_DOT}:0:1}
+			key_initial=${${first_token#*"$KEYMAP_DOT"}:0:1}
 		else
 			# In zsh keymaps, top-level word aliases (e.g. `each`, `all`, `map`) are
 			# full command words, not single-key bindings, so don't count them toward
@@ -317,7 +313,6 @@ function keymap_print_map {
 		row_input=KEYMAP_PRINT_ROW_${i}
 		row_output+="\n"
 
-		# shellcheck disable=SC2296 # Allow zsh-specific param expansion
 		for char in ${(P)row_input}; do
 			escaped_initial="$KEYMAP_ESCAPE$char"
 
@@ -344,7 +339,7 @@ function keymap_print_map {
 	# - `<>` is used to enclose keymap variables, e.g `<command>`
 	#   - Also used to indicate key initials with one mapping
 	# - `()` is used to enclose keymap literals, e.g `(i,iu,ir,im,e)`
-	#   - Also used to indicate key initials with mulitple mappings
+	#   - Also used to indicate key initials with multiple mappings
 	#   - Also used in keymap descriptions to enclose clarifications
 	# - `{}` is used to enclose keyboard keys, e.g `{esc}`
 	#   - Cannot reuse `<>` b/c `"${${(z)...}[1]}"` splits on `<`

@@ -110,7 +110,6 @@ function aws_keymap_bb {
 }
 
 function aws_keymap_bc {
-	# shellcheck disable=SC2296 # Allow zsh-specific param expansion
 	local command=${(j: :)@[1,-2]}
 	local id="$*[-1]"
 
@@ -119,7 +118,7 @@ function aws_keymap_bc {
 		--document-name 'AWS-StartNonInteractiveCommand' \
 		--parameters "{\"command\": [\"$command\"]}" \
 		--target "$(aws_keymap_i "$id")" |
-		pgrep --multiline --ignore-case --invert-match "$AWS_KEYMAP_SC_REGEX"
+		grepP --multiline --ignore-case --invert-match "$AWS_KEYMAP_SC_REGEX"
 }
 
 function aws_keymap_c {

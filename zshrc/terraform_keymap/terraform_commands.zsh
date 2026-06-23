@@ -1,5 +1,6 @@
 # Extracted from `terraform -help`
 
+# shellcheck disable=SC2034 # Used by `terraform_keymap.zsh`
 TERRAFORM_COMMANDS=(
 	init
 	validate

@@ -171,7 +171,7 @@ function test__keymap_show__with_no_match {
 
 function test__keymap_print_map__does_not_count_word_aliases {
 	local entries=(
-		"${TEST_DOT}o # Dot key binds `o`"
+		"${TEST_DOT}o # Dot key binds \`o\`"
 		'0 <command> # Single-char bareword still counts'
 		'each <command> # Word alias on `e`'
 		'all <command> # Word alias on `a`'

@@ -1,3 +1,4 @@
+# shellcheck disable=SC2030,SC2031 # Tests override AWS_ACCOUNTS_TSV inside each $(...) for isolation; subshell-local is intended
 function test__aws_keymap {
 	assert "$(
 		local show_this_help; show_this_help=$(aws_keymap | grep 'Show this keymap' | bw)

@@ -9,8 +9,10 @@
 
 DOTFILES_DIR="$HOME/GitHub/jasonzhao6/dotfiles"
 ZSHRC_SRC_DIR="$DOTFILES_DIR/zshrc"
-ZSHRC_DATA_DIR="$HOME/Documents/zshrc-data"
 ZSHRC_SECRETS="$HOME/.zshrc.secrets"
+
+# shellcheck disable=SC2034 # Used by keymaps sourced below
+ZSHRC_DATA_DIR="$HOME/Documents/zshrc-data"
 
 # Set color aliases early so that they can expand in function definitions
 source "$ZSHRC_SRC_DIR/colors.zsh"; color

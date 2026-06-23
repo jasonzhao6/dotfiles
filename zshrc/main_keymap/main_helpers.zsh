@@ -7,7 +7,6 @@ function main_helpers_show_default_keyboard_shortcuts {
 	local namespace; namespace=$(echo "${name}_KEYMAP" | upcase)
 
 	local keymap_entries
-	# shellcheck disable=SC2296 # Allow zsh-specific param expansion
 	keymap_entries=("${(P)$(echo "$namespace")[@]}")
 
 	if [[ -z $description ]]; then
@@ -63,7 +62,7 @@ function main_helpers_extract_keymaps {
 	extracted+=')'
 
 	# Refresh extracted keymap
-	echo $extracted > "$ALL_KEYMAP_FILE"
+	echo "$extracted" > "$ALL_KEYMAP_FILE"
 }
 
 function main_helpers_find_keys {
@@ -76,10 +75,10 @@ function main_helpers_find_keys {
 
 	while IFS= read -r file; do
 		# Zsh keymaps have a `_DOT` variable used by key mappings
-		is_zsh_keymap=$(egrep --only-matching "[A-Z]+_DOT=\"" "$file")
+		is_zsh_keymap=$(grepE --only-matching "[A-Z]+_DOT=\"" "$file")
 
-		current_namespace=$(pgrep --color=never --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$file")
-		current_alias=$(pgrep --color=never --only-matching "(?<=_ALIAS=')\w+(?=')" "$file")
+		current_namespace=$(grepP --color=never --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$file")
+		current_alias=$(grepP --color=never --only-matching "(?<=_ALIAS=')\w+(?=')" "$file")
 
 		if [[ -n $is_zsh_keymap ]]; then
 			# shellcheck disable=SC2030
@@ -104,7 +103,6 @@ function main_helpers_find_key_mappings {
 	# shellcheck disable=SC2034 # Used to define `keymap_entries`
 	while IFS= read -r keymap; do
 		# shellcheck disable=SC2206 # Adding double quote breaks array expansion
-		# shellcheck disable=SC2296 # Allow zsh-specific param expansion
 		keymap_entries=(${(P)keymap})
 
 		# Find keymap keymap_entries with matching description

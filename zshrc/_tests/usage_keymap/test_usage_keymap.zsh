@@ -1,3 +1,4 @@
+# shellcheck disable=SC2030,SC2031 # Tests override COLUMNS inside each $(...) for isolation; subshell-local is intended
 function test__usage_keymap {
 	assert "$(
 		local show_this_help; show_this_help=$(usage_keymap | grep 'Show this keymap' | bw)
@@ -32,7 +33,7 @@ function test__usage_keymap_a__with_match {
 		printf '%s\tnn\n' "$now" >> "$KEYMAP_USAGE_FILE"
 
 		# Match 'nn' should only show nav_keymap n
-		local lines; lines=$(usage_keymap_a nn | bw | grep -c 'n\.n')
+		local lines; lines=$(usage_keymap_a nn | bw | grep --count 'n\.n')
 		echo "$lines"
 	)" '1'
 }
@@ -83,7 +84,7 @@ function test__usage_keymap_a__row_limit {
 		done
 
 		# Should show at most USAGE_KEYMAP_A_MAX_ROWS alias rows
-		local alias_rows; alias_rows=$(usage_keymap_a | bw | grep '^ *g\.' | wc -l | tr -d ' ')
+		local alias_rows; alias_rows=$(usage_keymap_a | bw | grep --count '^ *g\.')
 		echo "$alias_rows"
 	)" "$USAGE_KEYMAP_A_MAX_ROWS"
 }
@@ -164,7 +165,7 @@ function test__usage_keymap_d__shows_all_7_days {
 		printf '%s\tgd\n' "$mon" > "$KEYMAP_USAGE_FILE"
 
 		# Should still show all 7 day rows
-		usage_keymap_d | bw | grep -c '^\s*\(Mon\|Tue\|Wed\|Thu\|Fri\|Sat\|Sun\)'
+		usage_keymap_d | bw | grep --count '^\s*\(Mon\|Tue\|Wed\|Thu\|Fri\|Sat\|Sun\)'
 	)" '7'
 }
 
@@ -208,7 +209,7 @@ function test__usage_keymap_h__shows_all_24_hours {
 		printf '%s\tgd\n' "$h09" > "$KEYMAP_USAGE_FILE"
 
 		# Should still show all 24 hour rows
-		usage_keymap_h | bw | grep -c '^\s*[0-9][0-9]\s'
+		usage_keymap_h | bw | grep --count '^\s*[0-9][0-9]\s'
 	)" '24'
 }
 
@@ -239,7 +240,7 @@ function test__usage_keymap_n__with_match {
 		printf '%s\tgd\n' "$now" > "$KEYMAP_USAGE_FILE"
 		printf '%s\tnn\n' "$now" >> "$KEYMAP_USAGE_FILE"
 
-		usage_keymap_n nav | bw | grep -c 'nav'
+		usage_keymap_n nav | bw | grep --count 'nav'
 	)" '1'
 }
 
@@ -291,7 +292,7 @@ function test__usage_keymap_t {
 		printf '%s\tgd\n' "$now" > "$KEYMAP_USAGE_FILE"
 
 		# Verify message
-		usage_keymap_t 3 | bw | ruby_strip | grep -c 'Backed up, generated .* for 3 days'
+		usage_keymap_t 3 | bw | ruby_strip | grep --count 'Backed up, generated .* for 3 days'
 
 		# Verify backup was created
 		[[ -f ${KEYMAP_USAGE_FILE}.bak ]] && echo 'backup exists'
@@ -315,10 +316,10 @@ function test__usage_keymap_t__repeated {
 		usage_keymap_t 3 > /dev/null
 
 		# Run ut again; backup should not be overwritten
-		usage_keymap_t 5 | bw | ruby_strip | grep -c 'Kept backup, generated .* for 5 days'
+		usage_keymap_t 5 | bw | ruby_strip | grep --count 'Kept backup, generated .* for 5 days'
 
 		# Verify backup still contains original real data
-		grep -c 'gd' "${KEYMAP_USAGE_FILE}.bak"
+		grep --count 'gd' "${KEYMAP_USAGE_FILE}.bak"
 	)" "$(
 		cat <<-eof
 			1
@@ -354,7 +355,7 @@ function test__usage_keymap_tt {
 		[[ ! -f ${KEYMAP_USAGE_FILE}.bak ]] && echo 'backup removed'
 
 		# Verify real data was restored
-		grep -c 'gd' "$KEYMAP_USAGE_FILE"
+		grep --count 'gd' "$KEYMAP_USAGE_FILE"
 	)" "$(
 		cat <<-eof
 			Restored real data from backup
@@ -391,7 +392,7 @@ function test__usage_keymap_u__stats {
 		printf '%s\tgd\n' "$now" > "$KEYMAP_USAGE_FILE"
 		printf '%s\tgc\n' "$now" >> "$KEYMAP_USAGE_FILE"
 
-		usage_keymap_u | bw | grep -c 'Namespaces: 1  |  Aliases: 2'
+		usage_keymap_u | bw | grep --count 'Namespaces: 1  |  Aliases: 2'
 	)" '1'
 }
 
@@ -415,7 +416,7 @@ function test__usage_keymap_u__auto_granularity_daily {
 		# Create data spanning 1 day; should auto-pick daily (/day)
 		printf '%s\tgd\n' "$now" > "$KEYMAP_USAGE_FILE"
 
-		usage_keymap_u | bw | grep -c '/day'
+		usage_keymap_u | bw | grep --count '/day'
 	)" '1'
 }
 
@@ -501,5 +502,3 @@ function test__usage_keymap_u__auto_granularity_yearly {
 		[[ $sparkline_len -le 4 ]] && echo 1
 	)" '1'
 }
-
-

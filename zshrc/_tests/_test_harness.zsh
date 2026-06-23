@@ -42,6 +42,9 @@ function print_summary {
 	echo
 	echo "($message)"
 	[[ $passes -ne $total ]] && echo "$failed" "$debug"
+
+	# Surface pass/fail as exit status so callers can branch on it
+	return $(( passes != total ))
 }
 
 #
@@ -78,4 +81,4 @@ function fail {
 
 # Emulate `grep` color codes
 function grep_color { echo "\e[1;32m\e[K$*\e[m\e[K"; }
-function pgrep_color { echo "\e[1;32m$*\e[00m"; }
+function grepP_color { echo "\e[1;32m$*\e[00m"; }

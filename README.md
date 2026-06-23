@@ -351,7 +351,6 @@ vimium/                     # Vimium keymaps for browser navigation
 *.txt                       # Non-zsh dotfiles
 ├── colordiffrc.txt
 ├── gitignore.txt
-├── shellcheckrc.txt
 ├── terraformrc.txt
 └── tm_properties.txt
 

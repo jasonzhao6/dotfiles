@@ -181,7 +181,7 @@ function main_keymap_w {
 	while IFS= read -r entry; do
 		entry=$(eval "echo $entry")
 		keymap_entries+=("$entry")
-	done < <(egrep "^\t\"[$]{[A-Z]+_DOT}$key" "$ZSHRC_SRC_DIR"/**/*_keymap.zsh | trim_column | bw)
+	done < <(grepE "^\t\"[$]{[A-Z]+_DOT}$key" "$ZSHRC_SRC_DIR"/**/*_keymap.zsh | trim_column | bw)
 	main_helpers_print_key_mappings $is_zsh_keymap "${keymap_entries[@]}"
 
 	# Find non-zsh keymap entries with matching `key`
@@ -190,6 +190,6 @@ function main_keymap_w {
 	while IFS= read -r entry; do
 		entry=$(eval "echo $entry")
 		keymap_entries+=("$entry")
-	done < <(egrep "^\t\".*$KEYMAP_DASH$key " "$ZSHRC_SRC_DIR"/**/*_keymap.zsh | trim_column | bw)
+	done < <(grepE "^\t\".*$KEYMAP_DASH$key " "$ZSHRC_SRC_DIR"/**/*_keymap.zsh | trim_column | bw)
 	main_helpers_print_key_mappings $is_zsh_keymap "${keymap_entries[@]}"
 }

@@ -1,3 +1,4 @@
+# shellcheck disable=SC2030,SC2031 # Tests override HISTFILE inside each $(...) for isolation; subshell-local is intended
 function test__zsh_keymap {
 	assert "$(
 		local show_this_help; show_this_help=$(zsh_keymap | grep 'Show this keymap' | bw)

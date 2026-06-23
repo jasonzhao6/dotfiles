@@ -11,7 +11,7 @@ function usage_helpers_horizontal_bars {
 	local max_label_len=0
 	local max_count_len=0
 
-	# First pass: Collect data and track max widths for propertions
+	# First pass: Collect data and track max widths for proportions
 	local count_len
 	while IFS=':' read -r label count; do
 		count="${count# }" # Strip space after ':'
@@ -43,7 +43,7 @@ function usage_helpers_sparklines {
 	#   group: "all" | "alias" | "namespace"
 	# Stdin: raw usage data lines (timestamp\talias), pre-filtered by calendar_days
 	# Stdout:
-	#   group_key\tsparkline per group (one line each, colored)
+	#   group_key \t sparkline per group (one line each, colored)
 	#   Date range + granularity label on last two lines
 	local sparkline_width=$1
 	local group_by=$2
@@ -87,7 +87,7 @@ function usage_helpers_sparklines {
 		date_fmt='%Y'; label_fmt='%Y'
 	fi
 
-	# Bucket by group and time, fill gaps for all granularities
+	# Bucket by group and time, fill gaps for all granularity
 	local bucket_result
 	bucket_result=$(printf '%s\n' "${lines[@]}" | gawk -F'\t' \
 		-v total_days="$total_days" -v date_fmt="$date_fmt" -v label_fmt="$label_fmt" \
@@ -155,6 +155,7 @@ function usage_helpers_sparklines {
 			last_label="${rest#*	}"
 			continue
 		fi
+		# shellcheck disable=SC2034 # Read in the next block via zsh (@k)/(@s) expansions
 		group_counts[$group_key]="$rest"
 		for count in ${(s:	:)rest}; do
 			[[ $count -gt $global_max ]] && global_max=$count
@@ -247,7 +248,7 @@ function usage_helpers_stats {
 	local avg=$(( total / num_days ))
 
 	# Align pipe separators between the two stats lines
-	local col1a="Total: $(comma_num "$total")"
+	local col1a; col1a="Total: $(comma_num "$total")"
 	local col1b="Namespaces: ${unique_ns}"
 	local col2a="Avg: ${avg}/day"
 	local col2b="Aliases: ${unique_keys}"

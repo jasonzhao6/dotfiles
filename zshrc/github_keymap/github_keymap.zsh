@@ -32,7 +32,7 @@ keymap_init $GITHUB_NAMESPACE $GITHUB_ALIAS "${GITHUB_KEYMAP[@]}"
 function github_keymap {
 	# If the first arg is a repo in the current org, delegate to `github_keymap_o`
 	local repo=$1
-	if grep --quiet "^$repo$" $ZSHRC_DATA_DIR/github/"$(github_keymap_org)".txt 2> /dev/null; then
+	if grep --quiet "^$repo$" "$ZSHRC_DATA_DIR"/github/"$(github_keymap_org)".txt 2> /dev/null; then
 		github_keymap_o "$repo"
 		return
 	fi
@@ -52,7 +52,6 @@ GITHUB_DEFAULT_DOMAIN='github.marqeta.com'
 GITHUB_DEFAULT_ORG='transaction-engine'
 GITHUB_ALL_REPOS="$ZSHRC_DATA_DIR/github.all.txt"
 GITHUB_MD_REGEX='^#{1,6} |^\*\*|^- |^```|^\[.+\]\(.+\)' # headings, bold, lists, code fences, links
-GITHUB_GIST_MIN_LINES=3 # minimum lines to detect CSV/TSV
 
 function github_keymap_a {
 	open -a "GitHub Desktop" .
@@ -107,7 +106,7 @@ function github_keymap_gg {
 function github_keymap_h {
 	local filters=("$@")
 
-	cd ~/GitHub && echo && ls -d */* | args_keymap_s "${filters[@]}"
+	cd ~/GitHub && echo && ls -d -- */* | args_keymap_s "${filters[@]}"
 }
 
 function github_keymap_n {
@@ -135,7 +134,7 @@ function github_keymap_p {
 function github_keymap_r {
 	local filters=("$@")
 
-	args_keymap_s "${filters[@]}" < $GITHUB_ALL_REPOS
+	args_keymap_s "${filters[@]}" < "$GITHUB_ALL_REPOS"
 }
 
 function github_keymap_repo {
@@ -147,9 +146,9 @@ function github_keymap_rr {
 	orgs=(~/GitHub/*/)
 
 	# Reset local cache
-	rm -rf $ZSHRC_DATA_DIR/github
-	mkdir -p $ZSHRC_DATA_DIR/github
-	: > $GITHUB_ALL_REPOS
+	rm -rf "$ZSHRC_DATA_DIR"/github
+	mkdir -p "$ZSHRC_DATA_DIR"/github
+	: > "$GITHUB_ALL_REPOS"
 
 	# Iterate over each org and fetch its repos
 	for org in "${orgs[@]}"; do
@@ -169,8 +168,9 @@ function github_keymap_rr {
 		repos=$(GH_HOST=$hostname gh repo list "$org" --no-archived --limit 1000 --json name 2> /dev/null |
 			jq --raw-output '.[].name')
 		if [[ -z $repos ]]; then echo ' ... skipped'; continue; fi
-		echo "$repos" > $ZSHRC_DATA_DIR/github/"$org".txt
-		echo "$repos" | sed "s|^|$org/|" >> $GITHUB_ALL_REPOS
+		echo "$repos" > "$ZSHRC_DATA_DIR"/github/"$org".txt
+		# shellcheck disable=SC2001 # More readable as sed than parameter expansion
+		echo "$repos" | sed "s|^|$org/|" >> "$GITHUB_ALL_REPOS"
 		echo " ... $(echo "$repos" | wc -l | tr -d ' ') repos"
 	done
 }

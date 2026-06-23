@@ -1,3 +1,4 @@
+# shellcheck disable=SC2030,SC2031 # Tests override Q_KEYMAP_* config inside each $(...) for isolation; subshell-local is intended
 function test__q_keymap {
 	assert "$(
 		local show_this_help; show_this_help=$(q_keymap | grep 'Show this keymap' | bw)

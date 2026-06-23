@@ -1,3 +1,7 @@
+# shellcheck disable=SC2034,SC2317 # test-harness false positives:
+# SC2317 — test fns + the pass/fail/pbcopy overrides run via dynamic dispatch (eval)
+# SC2034 — subshell isolation vars (ARGS_YANK_FILE, ...) are read by the sourced test files
+
 function run_all_test_cases_section {
 	local section_number=$1
 
@@ -9,16 +13,17 @@ function run_all_test_cases_section {
 
 	pasteboard=$(pbpaste) # Save pasteboard value since some tests overwrite it
 
-	local tmpdir=$(mktemp -d)
+	local tmpdir; tmpdir=$(mktemp -d)
 	local pids=()
 	local files=()
+	local base # declared once: re-declaring `local` per loop iteration makes zsh echo it
 
 	# Save stdout for streaming dots from subshells
 	exec 3>&1
 
 	#	Parallelize test executions by file
 	for test in $(find_test_files); do
-		local base=$(basename "$test")
+		base=$(basename "$test")
 		files+=("$base")
 
 		(
@@ -70,11 +75,11 @@ function run_all_test_cases_section {
 
 	local p t
 	for ((i = 1; i <= ${#files[@]}; i++)); do
-		wait ${pids[$i]}
-		local base=${files[$i]}
+		wait "${pids[$i]}"
+		base=${files[$i]}
 
 		# Accumulate pass/total counts
-		read p t < "$tmpdir/$base.result"
+		read -r p t < "$tmpdir/$base.result"
 		((passes += p))
 		((total += t))
 
@@ -89,4 +94,7 @@ function run_all_test_cases_section {
 
 	echo "$pasteboard" | pbcopy # Restore saved pasteboard value
 	rm -rf "$tmpdir"
+
+	# Surface pass/fail as exit status
+	return $(( passes != total ))
 }

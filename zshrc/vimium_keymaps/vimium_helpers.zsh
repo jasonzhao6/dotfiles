@@ -34,5 +34,5 @@ function vimium_helpers_extract {
 	extracted+=')'
 
 	# Refresh extracted keymap
-	echo $extracted > "$VIMIUM_KEYMAP_FILE"
+	echo "$extracted" > "$VIMIUM_KEYMAP_FILE"
 }

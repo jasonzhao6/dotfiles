@@ -31,7 +31,8 @@ function verify_description_length {
 	[[ $dirname != "$basename" ]] && return
 
 	local namespace
-	namespace=$(pgrep --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$keymap_file" | bw)
+	namespace=$(grepP --only-matching "(?<=_NAMESPACE=')\w+(?=')" "$keymap_file" | bw)
+	# shellcheck disable=SC2034 # Read on the next line via zsh ${(P@)} indirect expansion
 	local upper_ns="${namespace:u}"
 	local entries=("${(P@)upper_ns}")
 

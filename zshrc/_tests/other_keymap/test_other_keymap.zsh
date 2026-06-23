@@ -511,7 +511,7 @@ function test__other_keymap_w {
 			sleep 0.3
 			kill $pid 2>/dev/null
 			wait $pid 2>/dev/null # Flush pipe output before grep
-		} | grep -c 'test'
+		} | grep --count 'test'
 	)
 
 	assert "$([[ $count -gt 1 ]] && echo 1)" '1'

@@ -8,13 +8,6 @@ test__input=$(
 	eof
 )
 
-test__input_short=$(
-	cat <<-eof
-		terraform-application-region-shared-1
-		terraform-application-region-shared-2
-	eof
-)
-
 test__input_with_whitespace=$(
 	cat <<-eof
 		  terraform-application-region-shared-1

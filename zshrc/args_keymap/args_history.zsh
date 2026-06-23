@@ -35,13 +35,13 @@ function args_history_reset {
 
 function args_history_push {
 	# Move `index` and `head` forward together
-	ARGS_HISTORY_INDEX=$(args_history_increment $ARGS_HISTORY_INDEX)
+	ARGS_HISTORY_INDEX=$(args_history_increment "$ARGS_HISTORY_INDEX")
 	ARGS_HISTORY_HEAD=$ARGS_HISTORY_INDEX
 	ARGS_HISTORY[$ARGS_HISTORY_INDEX]=$1
 
 	# When reaching `tail`, move `tail` forward, so it stays one step ahead
 	if [[ $ARGS_HISTORY_INDEX -eq $ARGS_HISTORY_TAIL ]]; then
-		ARGS_HISTORY_TAIL=$(args_history_increment $ARGS_HISTORY_TAIL)
+		ARGS_HISTORY_TAIL=$(args_history_increment "$ARGS_HISTORY_TAIL")
 	fi
 
 	# Because array size is fixed, wrap around at the end
@@ -164,5 +164,5 @@ function args_history_decrement {
 	local index=$1
 	local args_history_decrement; args_history_decrement=$(($1 - 1))
 	[[ $args_history_decrement -eq 0 ]] && args_history_decrement=$ARGS_HISTORY_MAX
-	echo $args_history_decrement
+	echo "$args_history_decrement"
 }

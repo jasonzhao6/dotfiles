@@ -60,11 +60,11 @@ function nav_helpers_extract_frontmatter {
 function nav_helpers_strip_frontmatter {
 	# Strip frontmatter block if present
 	awk '
-		NR==1 && /^---$/ { infm=1; buf=$0 ORS; next }
-		infm && /^---$/  { infm=0; next }
-		infm             { buf=buf $0 ORS; next }
+		NR==1 && /^---$/ { in_fm=1; buf=$0 ORS; next }
+		in_fm && /^---$/  { in_fm=0; next }
+		in_fm             { buf=buf $0 ORS; next }
 		{ print }
-		END { if (infm) printf "%s", buf }
+		END { if (in_fm) printf "%s", buf }
 	' "$1"
 }
 
@@ -119,7 +119,7 @@ function nav_helpers_render_file {
 	magenta_fg "$rule"
 
 	echo
-	if [[ "$file" == ${~NAV_MD_FILE_EXTENSION} ]]; then
+	if [[ "$file" == *.md ]]; then
 		nav_helpers_render_frontmatter "$file"
 		nav_helpers_render_markdown "$file"
 	else

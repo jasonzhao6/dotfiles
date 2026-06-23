@@ -151,12 +151,12 @@ function kubectl_keymap_e2 {
 function kubectl_keymap_f {
 	local filters=("$@")
 
-	args_keymap_s "${filters[@]}" < $ZSHRC_DATA_DIR/k8s.api-resources.txt
+	args_keymap_s "${filters[@]}" < "$ZSHRC_DATA_DIR"/k8s.api-resources.txt
 }
 
 function kubectl_keymap_ff {
 	# Save a copy for offline lookup
-	kubectl api-resources > $ZSHRC_DATA_DIR/k8s.api-resources.txt
+	kubectl api-resources > "$ZSHRC_DATA_DIR"/k8s.api-resources.txt
 }
 
 function kubectl_keymap_g {
@@ -199,11 +199,11 @@ function kubectl_keymap_j {
 	local params=("$@")
 
 	# Save a copy in case original params is not deterministic b/c it references an arg number
-	[[ -n ${params[*]} ]] && kubectl get "${params[@]}" --output json | tee $ZSHRC_DATA_DIR/k8s.get-output.json | jq
+	[[ -n ${params[*]} ]] && kubectl get "${params[@]}" --output json | tee "$ZSHRC_DATA_DIR"/k8s.get-output.json | jq
 }
 
 function kubectl_keymap_jj {
-	cat $ZSHRC_DATA_DIR/k8s.get-output.json
+	cat "$ZSHRC_DATA_DIR"/k8s.get-output.json
 }
 
 function kubectl_keymap_k {
@@ -315,9 +315,9 @@ function kubectl_keymap_y {
 	local params=("$@")
 
 	# Save a copy in case original params is not deterministic b/c it references an arg number
-	[[ -n ${params[*]} ]] && kubectl get "${params[@]}" --output yaml | tee $ZSHRC_DATA_DIR/k8s.get-output.yaml | cat
+	[[ -n ${params[*]} ]] && kubectl get "${params[@]}" --output yaml | tee "$ZSHRC_DATA_DIR"/k8s.get-output.yaml | cat
 }
 
 function kubectl_keymap_yy {
-	cat $ZSHRC_DATA_DIR/k8s.get-output.yaml
+	cat "$ZSHRC_DATA_DIR"/k8s.get-output.yaml
 }

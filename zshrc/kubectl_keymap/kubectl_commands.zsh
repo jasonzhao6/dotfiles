@@ -1,5 +1,6 @@
 # Extracted from `kubectl --help`
 
+# shellcheck disable=SC2034 # Used by `kubectl_keymap.zsh`
 KUBECTL_COMMANDS=(
 	create
 	expose

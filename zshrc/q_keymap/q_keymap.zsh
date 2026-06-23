@@ -95,7 +95,7 @@ function q_keymap_p {
 	mkdir -p "$Q_KEYMAP_SCRATCH_DIR"
 
 	local copy_status=0
-	for subfolder in $Q_KEYMAP_SUB_DIRS; do
+	for subfolder in "${Q_KEYMAP_SUB_DIRS[@]}"; do
 		if [ -d "$Q_KEYMAP_CONFIG_DIR/$subfolder" ]; then
 			cp -r "$Q_KEYMAP_CONFIG_DIR/$subfolder" "$Q_KEYMAP_SCRATCH_DIR/" || copy_status=1
 		fi
@@ -113,9 +113,9 @@ function q_keymap_P {
 
 	if [ -d "$Q_KEYMAP_SCRATCH_DIR" ]; then
 		local copy_status=0
-		for subfolder in $Q_KEYMAP_SUB_DIRS; do
+		for subfolder in "${Q_KEYMAP_SUB_DIRS[@]}"; do
 			if [ -d "$Q_KEYMAP_SCRATCH_DIR/$subfolder" ]; then
-				rm -rf "$Q_KEYMAP_CONFIG_DIR/$subfolder"
+				rm -rf "${Q_KEYMAP_CONFIG_DIR:?}/$subfolder"
 				cp -r "$Q_KEYMAP_SCRATCH_DIR/$subfolder" "$Q_KEYMAP_CONFIG_DIR/" || copy_status=1
 			fi
 		done
