@@ -20,6 +20,17 @@ function test__keymap_track_usage__timestamp_format {
 	)" 'valid'
 }
 
+function test__keymap_track_usage__offset_format {
+	assert "$(
+		: > "$KEYMAP_USAGE_FILE"
+
+		keymap_track_usage 'gd'
+
+		# Field 3 should be a timezone offset like -0700 or +0900
+		awk -F'\t' '$3 ~ /^[+-][0-9]{4}$/ {print "valid"}' "$KEYMAP_USAGE_FILE"
+	)" 'valid'
+}
+
 function test__keymap_track_usage__non_keymap {
 	assert "$(
 		: > "$KEYMAP_USAGE_FILE"

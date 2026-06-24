@@ -38,6 +38,63 @@ function usage_helpers_horizontal_bars {
 	done
 }
 
+function usage_helpers_dow_chart {
+	# Args: <zone_mode>  (respect | ignore)
+	# Stdin: filtered usage data (epoch \t alias \t offset)
+	# Renders a 7-row day-of-week bar chart (Mon..Sun).
+	#   respect: bucket by wall-clock day at capture (epoch shifted by stored %z)
+	#   ignore:  bucket by day in the machine's current zone (offset discarded)
+	# Rows lacking an offset (pre-offset data) fall back to the current zone.
+	local zone_mode=$1
+
+	local day_names=('Mon' 'Tue' 'Wed' 'Thu' 'Fri' 'Sat' 'Sun')
+	gawk -F'\t' -v zone_mode="$zone_mode" '
+	function dow_of(ts, z,    sign, hh, mm, os) {
+		if (zone_mode == "ignore" || z !~ /^[+-][0-9][0-9][0-9][0-9]$/)
+			return strftime("%u", ts)
+		sign = (substr(z, 1, 1) == "-") ? -1 : 1
+		hh = substr(z, 2, 2) + 0
+		mm = substr(z, 4, 2) + 0
+		os = sign * (hh * 3600 + mm * 60)
+		return strftime("%u", ts + os, 1)
+	}
+	{ counts[dow_of($1, $3)]++ }
+	END {
+		for (i = 1; i <= 7; i++) {
+			printf "%d: %d\n", i, counts[i] + 0
+		}
+	}' | while IFS=':' read -r dow count; do
+		printf "%s: %s\n" "${day_names[$dow]}" "${count# }"
+	done | usage_helpers_horizontal_bars
+}
+
+function usage_helpers_hour_chart {
+	# Args: <zone_mode>  (respect | ignore)
+	# Stdin: filtered usage data (epoch \t alias \t offset)
+	# Renders a 24-row hour-of-day bar chart.
+	#   respect: bucket by wall-clock hour at capture (epoch shifted by stored %z)
+	#   ignore:  bucket by hour in the machine's current zone (offset discarded)
+	# Rows lacking an offset (pre-offset data) fall back to the current zone.
+	local zone_mode=$1
+
+	gawk -F'\t' -v zone_mode="$zone_mode" '
+	function hour_of(ts, z,    sign, hh, mm, os) {
+		if (zone_mode == "ignore" || z !~ /^[+-][0-9][0-9][0-9][0-9]$/)
+			return strftime("%H", ts)
+		sign = (substr(z, 1, 1) == "-") ? -1 : 1
+		hh = substr(z, 2, 2) + 0
+		mm = substr(z, 4, 2) + 0
+		os = sign * (hh * 3600 + mm * 60)
+		return strftime("%H", ts + os, 1)
+	}
+	{ counts[hour_of($1, $3)]++ }
+	END {
+		for (i = 0; i < 24; i++) {
+			printf "%02d: %d\n", i, counts[sprintf("%02d", i)] + 0
+		}
+	}' | usage_helpers_horizontal_bars
+}
+
 function usage_helpers_sparklines {
 	# Args: <sparkline_width> <group>
 	#   group: "all" | "alias" | "namespace"

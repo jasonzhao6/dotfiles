@@ -128,20 +128,26 @@ function test__usage_keymap_c__when_no_file {
 function test__usage_keymap_d {
 	assert "$(
 
-		# Use gdate to get a known Monday and Friday epoch
-		local mon=1772470800  # 2026-03-02 12:00 (Monday)
-		local fri=1772816400  # 2026-03-06 12:00 (Friday)
-		printf '%s\tgd\n' "$mon" > "$KEYMAP_USAGE_FILE"
-		printf '%s\tgd\n' "$mon" >> "$KEYMAP_USAGE_FILE"
-		printf '%s\tgc\n' "$fri" >> "$KEYMAP_USAGE_FILE"
+		# 2026-03-01 20:00 UTC is a Sunday; +0900 shifts it to Mon 05:00 at capture.
+		# UTC-anchored so the expected weekday is independent of the test machine's zone.
+		local utc; utc=$(gdate -u -d '2026-03-01 20:00:00' +%s)
+		printf '%s\tgd\t+0900\n' "$utc" > "$KEYMAP_USAGE_FILE"
+		printf '%s\tgd\t+0900\n' "$utc" >> "$KEYMAP_USAGE_FILE"
 
 		usage_keymap_d | bw | awk '$1 ~ /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)$/ && $2 > 0 {print $1, $2}'
-	)" "$(
-		cat <<-eof
-			Mon 2
-			Fri 1
-		eof
-	)"
+	)" 'Mon 2'
+}
+
+function test__usage_keymap_d__falls_back_when_no_zone {
+	assert "$(
+
+		# Pre-offset row (no third column) renders in the current zone.
+		# Epoch generated as a local Monday, so it renders as Mon on any machine.
+		local mon; mon=$(gdate -d '2026-03-02 12:00:00' +%s)
+		printf '%s\tgd\n' "$mon" > "$KEYMAP_USAGE_FILE"
+
+		usage_keymap_d | bw | awk '$1 ~ /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)$/ && $2 > 0 {print $1, $2}'
+	)" 'Mon 1'
 }
 
 function test__usage_keymap_d__with_n_days {
@@ -169,23 +175,49 @@ function test__usage_keymap_d__shows_all_7_days {
 	)" '7'
 }
 
+function test__usage_keymap_dd {
+	assert "$(
+
+		# Offset column present, but `dd` ignores it and uses the current zone:
+		# epochs generated as a local Monday / Friday render as Mon / Fri despite +0900.
+		local mon; mon=$(gdate -d '2026-03-02 12:00:00' +%s)
+		local fri; fri=$(gdate -d '2026-03-06 12:00:00' +%s)
+		printf '%s\tgd\t+0900\n' "$mon" > "$KEYMAP_USAGE_FILE"
+		printf '%s\tgd\t+0900\n' "$mon" >> "$KEYMAP_USAGE_FILE"
+		printf '%s\tgc\t+0900\n' "$fri" >> "$KEYMAP_USAGE_FILE"
+
+		usage_keymap_dd | bw | awk '$1 ~ /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)$/ && $2 > 0 {print $1, $2}'
+	)" "$(
+		cat <<-eof
+			Mon 2
+			Fri 1
+		eof
+	)"
+}
+
 function test__usage_keymap_h {
 	assert "$(
 
-		# Use gdate to get known hour epochs in local time
-		local h09; h09=$(gdate -d '2026-03-02 09:00:00' +%s)
-		local h14; h14=$(gdate -d '2026-03-02 14:00:00' +%s)
-		printf '%s\tgd\n' "$h09" > "$KEYMAP_USAGE_FILE"
-		printf '%s\tgd\n' "$h09" >> "$KEYMAP_USAGE_FILE"
-		printf '%s\tgc\n' "$h14" >> "$KEYMAP_USAGE_FILE"
+		# 00:00 UTC stamped with a +0900 offset => 09:00 wall-clock at capture.
+		# Anchored in UTC so the expected hour is independent of the test machine's zone.
+		local utc0; utc0=$(gdate -u -d '2026-03-02 00:00:00' +%s)
+		printf '%s\tgd\t+0900\n' "$utc0" > "$KEYMAP_USAGE_FILE"
+		printf '%s\tgd\t+0900\n' "$utc0" >> "$KEYMAP_USAGE_FILE"
 
 		usage_keymap_h | bw | awk '$1 ~ /^[0-9][0-9]$/ && $2 > 0 {print $1, $2}'
-	)" "$(
-		cat <<-eof
-			09 2
-			14 1
-		eof
-	)"
+	)" '09 2'
+}
+
+function test__usage_keymap_h__falls_back_when_no_zone {
+	assert "$(
+
+		# Pre-offset row (no third column) renders in the current zone.
+		# Epoch generated as local 09:00, so it renders as 09 on any machine.
+		local h09; h09=$(gdate -d '2026-03-02 09:00:00' +%s)
+		printf '%s\tgd\n' "$h09" > "$KEYMAP_USAGE_FILE"
+
+		usage_keymap_h | bw | awk '$1 ~ /^[0-9][0-9]$/ && $2 > 0 {print $1, $2}'
+	)" '09 1'
 }
 
 function test__usage_keymap_h__with_n_days {
@@ -211,6 +243,26 @@ function test__usage_keymap_h__shows_all_24_hours {
 		# Should still show all 24 hour rows
 		usage_keymap_h | bw | grep --count '^\s*[0-9][0-9]\s'
 	)" '24'
+}
+
+function test__usage_keymap_hh {
+	assert "$(
+
+		# Offset column present, but `hh` ignores it and uses the current zone:
+		# epochs generated as local 09:00 / 14:00 render as 09 / 14 despite +0900.
+		local h09; h09=$(gdate -d '2026-03-02 09:00:00' +%s)
+		local h14; h14=$(gdate -d '2026-03-02 14:00:00' +%s)
+		printf '%s\tgd\t+0900\n' "$h09" > "$KEYMAP_USAGE_FILE"
+		printf '%s\tgd\t+0900\n' "$h09" >> "$KEYMAP_USAGE_FILE"
+		printf '%s\tgc\t+0900\n' "$h14" >> "$KEYMAP_USAGE_FILE"
+
+		usage_keymap_hh | bw | awk '$1 ~ /^[0-9][0-9]$/ && $2 > 0 {print $1, $2}'
+	)" "$(
+		cat <<-eof
+			09 2
+			14 1
+		eof
+	)"
 }
 
 function test__usage_keymap_m__when_no_file {

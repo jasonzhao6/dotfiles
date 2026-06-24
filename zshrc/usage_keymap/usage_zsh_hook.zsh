@@ -6,7 +6,10 @@ function keymap_track_usage {
 	# shellcheck disable=SC2154 # aliases is a zsh builtin (the alias table)
 	[[ ${aliases[$first_word]} == *_keymap* ]] || return
 
-	printf '%s\t%s\n' "$EPOCHSECONDS" "$first_word" >> "$KEYMAP_USAGE_FILE"
+	# `%z` offset (e.g. -0700) lets `uh` recover the wall-clock hour at capture.
+	# Computed via the `strftime` builtin to keep the no-fork rationale above.
+	local offset; strftime -s offset '%z' "$EPOCHSECONDS"
+	printf '%s\t%s\t%s\n' "$EPOCHSECONDS" "$first_word" "$offset" >> "$KEYMAP_USAGE_FILE"
 }
 
 if [[ -z $ZSHRC_UNDER_TESTING ]]; then

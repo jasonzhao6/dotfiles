@@ -4,8 +4,10 @@ USAGE_DOT="${USAGE_ALIAS}${KEYMAP_DOT}"
 
 USAGE_KEYMAP=(
 	"${USAGE_DOT}u <n>? # Usage overview (Default: All days)"
-	"${USAGE_DOT}d <n>? # By day of week (Default: All days)"
-	"${USAGE_DOT}h <n>? # By hour of day (Default: All days)"
+	"${USAGE_DOT}d <n>? # By day of week (logged zone)"
+	"${USAGE_DOT}dd <n>? # By day of week (current zone)"
+	"${USAGE_DOT}h <n>? # By hour of day (logged zone)"
+	"${USAGE_DOT}hh <n>? # By hour of day (current zone)"
 	''
 	"${USAGE_DOT}n <n OR match>? # Top namespaces (Default: All days)"
 	"${USAGE_DOT}a <n OR match>? # Top aliases (Default: All days)"
@@ -168,6 +170,8 @@ function usage_keymap_c {
 }
 
 function usage_keymap_d {
+	# Respect the capture-time zone: shift each epoch by its stored `%z` offset so a
+	# day worked abroad lands on the weekday you actually worked it.
 	local num_days=$1
 	local filtered; filtered=$(usage_helpers_filter_by_calendar_days "$num_days")
 
@@ -175,22 +179,25 @@ function usage_keymap_d {
 	echo "$filtered" | usage_helpers_stats
 	echo
 
-	local day_names=('Mon' 'Tue' 'Wed' 'Thu' 'Fri' 'Sat' 'Sun')
-	echo "$filtered" | gawk -F'\t' '
-	{
-		dow = strftime("%u", $1)
-		counts[dow]++
-	}
-	END {
-		for (i = 1; i <= 7; i++) {
-			printf "%d: %d\n", i, counts[i] + 0
-		}
-	}' | while IFS=':' read -r dow count; do
-		printf "%s: %s\n" "${day_names[$dow]}" "${count# }"
-	done | usage_helpers_horizontal_bars
+	echo "$filtered" | usage_helpers_dow_chart respect
+}
+
+function usage_keymap_dd {
+	# Ignore the stored offset: render every epoch in the machine's current zone
+	# (the pre-offset behavior), so a day abroad maps onto the local weekday.
+	local num_days=$1
+	local filtered; filtered=$(usage_helpers_filter_by_calendar_days "$num_days")
+
+	echo
+	echo "$filtered" | usage_helpers_stats
+	echo
+
+	echo "$filtered" | usage_helpers_dow_chart ignore
 }
 
 function usage_keymap_h {
+	# Respect the capture-time zone: shift each epoch by its stored `%z` offset
+	# so hours abroad land on the wall-clock hour you actually worked.
 	local num_days=$1
 	local filtered; filtered=$(usage_helpers_filter_by_calendar_days "$num_days")
 
@@ -198,16 +205,20 @@ function usage_keymap_h {
 	echo "$filtered" | usage_helpers_stats
 	echo
 
-	echo "$filtered" | gawk -F'\t' '
-	{
-		hour = strftime("%H", $1)
-		counts[hour]++
-	}
-	END {
-		for (i = 0; i < 24; i++) {
-			printf "%02d: %d\n", i, counts[sprintf("%02d", i)] + 0
-		}
-	}' | usage_helpers_horizontal_bars
+	echo "$filtered" | usage_helpers_hour_chart respect
+}
+
+function usage_keymap_hh {
+	# Ignore the stored offset: render every epoch in the machine's current zone
+	# (the pre-offset behavior), so hours abroad map onto local clock positions.
+	local num_days=$1
+	local filtered; filtered=$(usage_helpers_filter_by_calendar_days "$num_days")
+
+	echo
+	echo "$filtered" | usage_helpers_stats
+	echo
+
+	echo "$filtered" | usage_helpers_hour_chart ignore
 }
 
 function usage_keymap_m {
@@ -335,6 +346,7 @@ function usage_keymap_t {
 	done
 
 	local now; now=$(gdate +%s)
+	local offset; strftime -s offset '%z' "$now" # Synthetic rows use the current zone
 	local day_seconds=86400
 	local midnight; midnight=$(gdate -d "today 00:00:00" +%s)
 	local seconds_today=$(( now - midnight ))
@@ -351,7 +363,7 @@ function usage_keymap_t {
 		for (( j = 0; j < count; j++ )); do
 			local ts=$(( base_ts + RANDOM % range ))
 			local alias_pick=${real_aliases[$(( RANDOM % num_aliases + 1 ))]}
-			printf '%s\t%s\n' "$ts" "$alias_pick" >> "$KEYMAP_USAGE_FILE"
+			printf '%s\t%s\t%s\n' "$ts" "$alias_pick" "$offset" >> "$KEYMAP_USAGE_FILE"
 		done
 	done
 	sort -t$'\t' -k1 -n -o "$KEYMAP_USAGE_FILE" "$KEYMAP_USAGE_FILE"
