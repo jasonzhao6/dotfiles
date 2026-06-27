@@ -1,9 +1,12 @@
 # This section (2) counts every entry with a `# ` description.
-# Sections 3/4 count implementation functions instead.
+# Sections 3 and 4 count implementation functions instead.
 # The extra ones here come from entries that have descriptions but no
-# corresponding function: reserved entries, joint duplicates (same key,
-# different args like `a.w` / `a.w <letter>`), and bare alias entries
-# (using `_ALIAS` instead of `_DOT`).
+# corresponding function:
+# - Reserved entries, e.g. `"${DOCKER_DOT}u # (Reserved: Disk usage)"`
+# - Joint duplicates (same key, different args), e.g. `${ARGS_DOT}w` and
+#   `${ARGS_DOT}w <letter>`, which map to one function
+# - Bare/alias entries with no `_DOT` key, e.g. `"each <command> # ..."`
+#   or `"${GIT_ALIAS} <branch> # ..."`
 
 function verify_description_length_section {
 	local section_number=$1
