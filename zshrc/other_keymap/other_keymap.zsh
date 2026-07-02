@@ -18,6 +18,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}cc # Copy last command"
 	"${OTHER_DOT}y # Alias for \`pbcopy\`"
 	"${OTHER_DOT}p # Alias for \`pbpaste\`"
+	"${OTHER_DOT}v # Speak pasteboard at rate 300"
 	''
 	"${OTHER_DOT}k # Clear terminal"
 	"${OTHER_DOT}kk # Show archived terminal outputs"
@@ -353,6 +354,10 @@ function other_keymap_uu {
 	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
 
 	diff --side-by-side --suppress-common-lines "$file_1" "$file_2"
+}
+
+function other_keymap_v {
+	pbpaste | say -r 300
 }
 
 function other_keymap_w {
