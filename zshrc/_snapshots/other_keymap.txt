@@ -39,7 +39,7 @@ Keymap List
   $ o.cc                          # Copy last command
   $ o.y                           # Alias for `pbcopy`
   $ o.p                           # Alias for `pbpaste`
-  $ o.v                           # Speak pasteboard at rate 300
+  $ o.v                           # Speak stripped pasteboard at rate 300
 
   $ o.k                           # Clear terminal
   $ o.kk                          # Show archived terminal outputs

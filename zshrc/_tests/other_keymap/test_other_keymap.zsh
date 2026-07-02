@@ -502,6 +502,93 @@ function test__other_keymap_uu {
 	)"
 }
 
+function test__other_keymap_v {
+	assert "$(
+		echo 'Hello world, plain text passes through.' | pbcopy
+		ZSHRC_UNDER_TESTING=1 other_keymap_v
+	)" 'Hello world, plain text passes through.'
+}
+
+function test__other_keymap_v__with_urls {
+	assert "$(
+		pbcopy <<-'eof'
+			See [this PR](https://github.com/foo/bar/pull/99) and https://example.com/a/b?c=d for details.
+		eof
+		ZSHRC_UNDER_TESTING=1 other_keymap_v
+	)" 'See this PR and link for details.'
+}
+
+function test__other_keymap_v__with_code_block {
+	assert "$(
+		pbcopy <<-'eof'
+			Run this:
+
+			```zsh
+			echo secret
+			```
+
+			Then stop.
+		eof
+		ZSHRC_UNDER_TESTING=1 other_keymap_v
+	)" "$(
+		cat <<-eof
+			Run this:
+
+			code block.
+
+			Then stop.
+		eof
+	)"
+}
+
+function test__other_keymap_v__with_paths_and_hashes {
+	assert "$(
+		pbcopy <<-'eof'
+			Edit ~/GitHub/jasonzhao6/dotfiles/zshrc/other_keymap/other_keymap.zsh at commit 2ce4712.
+			Request 550e8400-e29b-41d4-a716-446655440000 kept the ratio 1/2 on 2026/07/01.
+		eof
+		ZSHRC_UNDER_TESTING=1 other_keymap_v
+	)" "$(
+		cat <<-eof
+			Edit other_keymap.zsh at commit hash.
+			Request ID kept the ratio 1/2 on 2026/07/01.
+		eof
+	)"
+}
+
+function test__other_keymap_v__with_markdown_noise {
+	assert "$(
+		pbcopy <<-'eof'
+			## Deploy Plan 🚀
+
+			- **Step 1**: run `zt` now
+			> Note: EW goes first
+
+			| Program | Status |
+			|---------|--------|
+			| sqr     | done   |
+
+			---
+
+			├── zshrc/other_keymap/other_helpers.zsh
+		eof
+		ZSHRC_UNDER_TESTING=1 other_keymap_v
+	)" "$(
+		cat <<-eof
+			Deploy Plan
+
+			Step 1: run zt now
+			Note: EW goes first
+
+			Program, Status
+
+			sqr, done
+
+			other_helpers.zsh
+		eof
+	)"
+}
+
 function test__other_keymap_w {
 	local count; count=$(
 		{

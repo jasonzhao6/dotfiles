@@ -18,7 +18,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}cc # Copy last command"
 	"${OTHER_DOT}y # Alias for \`pbcopy\`"
 	"${OTHER_DOT}p # Alias for \`pbpaste\`"
-	"${OTHER_DOT}v # Speak pasteboard at rate 300"
+	"${OTHER_DOT}v # Speak stripped pasteboard at rate 300"
 	''
 	"${OTHER_DOT}k # Clear terminal"
 	"${OTHER_DOT}kk # Show archived terminal outputs"
@@ -357,7 +357,11 @@ function other_keymap_uu {
 }
 
 function other_keymap_v {
-	pbpaste | say -r 300
+	if [[ -z $ZSHRC_UNDER_TESTING ]]; then
+		pbpaste | other_helpers_speakable | say -r 300
+	else
+		pbpaste | other_helpers_speakable
+	fi
 }
 
 function other_keymap_w {
