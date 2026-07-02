@@ -23,6 +23,7 @@ TERRAFORM_KEYMAP=(
 	"${TERRAFORM_DOT}f <path>? # Format"
 	"${TERRAFORM_DOT}g # Upload gist"
 	"${TERRAFORM_DOT}o # Show output"
+	"${TERRAFORM_DOT}x # Extract plan diff from pasteboard"
 	"${TERRAFORM_DOT}z # Unlock"
 	''
 	"${TERRAFORM_DOT}l <name> # List states"
@@ -208,6 +209,25 @@ function terraform_keymap_w {
 	local filters=("$@")
 
 	ls -- **/main.tf | trim 0 8 | args_keymap_s "${filters[@]}"
+}
+
+function terraform_keymap_x {
+	local plan; plan=$(pbpaste)
+
+	if [[ -z $plan ]]; then
+		red_bar 'No plan in pasteboard'
+		return
+	fi
+
+	local diff; diff=$(echo "$plan" | terraform_helpers_diff)
+
+	if [[ -z $diff ]]; then
+		red_bar 'No diff found in pasteboard'
+		return
+	fi
+
+	echo "$diff" | pbcopy
+	green_bar 'Plan diff copied to pasteboard'
 }
 
 function terraform_keymap_z {
