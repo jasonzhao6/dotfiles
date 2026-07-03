@@ -94,9 +94,35 @@ function nav_helpers_dedent_tables {
 
 function nav_helpers_render_markdown {
 	# Customize how markdown is rendered
-	nav_helpers_strip_frontmatter "$1" | nav_helpers_dedent_tables | mdcat --columns 80 | perl -pe '
+	nav_helpers_strip_frontmatter "$1" | nav_helpers_dedent_tables | mdcat --columns 80 | PHYS_PWD=${PWD:A} perl -pe '
 		s/\xe2\x94\x84/#/g;      # Replace "┄" heading with "#"
 		s/(#+)\e\[0m/$1 \e[0m/g; # Add a space after "#" headings
+
+		# Render links as "label <url>", label magenta (35) and url gray (90).
+		# Drop the OSC 8 hyperlinks that Terminal.app ignores. Autolinks render as
+		# just the gray URL (their text is the URL, modulo mdcat adding a trailing
+		# slash), and file:// URLs (mdcat-resolved relative links) shorten back to
+		# relative paths. rel() matches against PHYS_PWD (${PWD:A}) because mdcat
+		# emits physical paths while $PWD stays logical under a symlinked cwd.
+		# Links arrive blue (34) like headings, so recolor them before the heading
+		# recolor below claims the remaining blues.
+		sub rel { my ($u) = @_; $u =~ s,^file://[^/]*\Q$ENV{PHYS_PWD}\E/,,; $u }
+		s{\e\]8;;([^\e]+)\e\\(.*?)\e\]8;;\e\\}{
+			my ($u, $body) = ($1, $2); $u = rel($u); # copy $2 before rel() resets captures
+			(my $plain = $body) =~ s/\e\[[0-9;]*m//g;
+			if ($plain eq $u || "$plain/" eq $u) { $body =~ s/\e\[34m/\e[90m/g; $body }
+			else { $body =~ s/\e\[34m/\e[35m/g; "$body \e[90m<$u>\e[0m" }
+		}ge;
+
+		# A link wrapped across lines leaves its OSC 8 open/close on different lines,
+		# beyond the reach of the substitution above, so handle its tokens statefully.
+		# (A wrapped autolink lands here too and renders its URL twice; rare, accepted.)
+		$_ = join "", map {
+			if (/^\e\]8;;([^\e]+)\e\\$/) { $url = rel($1); "" }
+			elsif (/^\e\]8;;\e\\$/)      { my $t = " \e[90m<$url>\e[0m"; $url = ""; $t }
+			else                         { s/\e\[34m/\e[35m/g if $url; $_ }
+		} split /(\e\]8;;[^\e]*\e\\)/;
+
 		s/\e\[34m/\e[36m/g;      # Color "#" headings cyan (36), was blue (34)
 
 		# Shorten code delimiter length to 3; identify code delimiter via color green (32)

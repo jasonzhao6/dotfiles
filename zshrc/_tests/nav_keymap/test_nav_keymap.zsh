@@ -120,6 +120,40 @@ function test__nav_keymap__when_md_has_inline_code {
 	rm $md
 }
 
+function test__nav_keymap__when_md_has_links {
+	local md='/tmp/test__nav_keymap__md_links.md'
+	printf '# H1\n\na [link](https://example.com) here\n\nSee [other doc](./other.md) links.\n\nBare <https://example.com/bar> stays single.\n\nFiller words here to push the boundary [a very long link label that should definitely wrap at eighty columns somewhere](https://example.com/foo) end.\n' > $md
+
+	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
+	local plain; plain=$(echo "$output" | bw)
+
+	# A link renders as "label <url>": label magenta (35), url gray (90)
+	assert "$([[ $plain == *'link <https://example.com/>'* ]] && echo 1)" '1'
+	assert "$([[ $output =~ $'\e\\[35mlink' ]] && echo 1)" '1'
+	assert "$([[ $output =~ $'\e\\[90m<https://example.com/>' ]] && echo 1)" '1'
+
+	# A relative link renders as a relative path, not a resolved file:// URL
+	assert "$([[ $plain == *'other doc <other.md>'* ]] && echo 1)" '1'
+
+	# Still a relative path from a symlinked cwd (/tmp -> /private/tmp), where
+	# mdcat emits the physical path while $PWD stays logical
+	local sym_plain; sym_plain=$(cd /tmp && ZSHRC_UNDER_TESTING=1 nav_keymap $md | bw)
+	assert "$([[ $sym_plain == *'other doc <other.md>'* ]] && echo 1)" '1'
+
+	# An autolink is not duplicated and stays gray (90); its text is already the URL
+	assert "$([[ $plain == *' https://example.com/bar stays'* ]] && echo 1)" '1'
+	assert "$([[ $output =~ $'\e\\[90mhttps://example.com/bar' ]] && echo 1)" '1'
+
+	# A wrapped link stays magenta on its continuation line, closed by "<url>"
+	assert "$([[ $output =~ $'\e\\[35mdefinitely wrap' ]] && echo 1)" '1'
+	assert "$([[ $plain == *'somewhere <https://example.com/foo>'* ]] && echo 1)" '1'
+
+	# Headings are still cyan (36)
+	assert "$([[ $output =~ $'\e\\[36mH1' ]] && echo 1)" '1'
+
+	rm $md
+}
+
 function test__nav_keymap__when_md_has_table_nested_in_a_list {
 	local md='/tmp/test__nav_keymap__md_table_in_list.md'
 	# A table nested inside a list item crashes mdcat 2.7.1 (panic, exit 101), which
