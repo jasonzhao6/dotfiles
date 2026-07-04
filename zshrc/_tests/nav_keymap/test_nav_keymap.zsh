@@ -77,6 +77,84 @@ function test__nav_keymap__when_specifying_a_file__nj_continues {
 	)"
 }
 
+function test__nav_keymap__when_specifying_a_file_in_another_folder {
+	# Renders the file, then stays in its containing folder
+	assert "$(
+		rm -rf /tmp/test__nav_keymap__file_cd
+		mkdir /tmp/test__nav_keymap__file_cd
+		echo 'hello' > /tmp/test__nav_keymap__file_cd/note.txt
+		cd /tmp || return
+		ZSHRC_UNDER_TESTING=1 nav_keymap test__nav_keymap__file_cd/note.txt > /dev/null
+		pwd
+		cd /tmp && rm -rf /tmp/test__nav_keymap__file_cd
+	)" '/tmp/test__nav_keymap__file_cd'
+}
+
+function test__nav_keymap__when_specifying_a_file_in_another_folder__nj_continues {
+	# The folder is listed and the cursor set, so `nj` renders the next sibling
+	assert "$(
+		rm -rf /tmp/test__nav_keymap__file_cd_nj
+		mkdir /tmp/test__nav_keymap__file_cd_nj
+		echo 'one' > /tmp/test__nav_keymap__file_cd_nj/1.txt
+		echo 'two' > /tmp/test__nav_keymap__file_cd_nj/2.txt
+		ZSHRC_UNDER_TESTING=1 nav_keymap /tmp/test__nav_keymap__file_cd_nj/1.txt > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_j | bw
+		cd /tmp && rm -rf /tmp/test__nav_keymap__file_cd_nj
+	)" "$(
+		cat <<-eof
+		─────
+		2.txt
+		─────
+
+		two
+		eof
+	)"
+}
+
+function test__nav_keymap__when_specifying_a_file_not_in_args {
+	# The current folder is listed and the cursor set, so `nj` renders the next file
+	assert "$(
+		rm -rf /tmp/test__nav_keymap__file_not_in_args
+		mkdir /tmp/test__nav_keymap__file_not_in_args
+		echo 'one' > /tmp/test__nav_keymap__file_not_in_args/1.txt
+		echo 'two' > /tmp/test__nav_keymap__file_not_in_args/2.txt
+		cd /tmp/test__nav_keymap__file_not_in_args || return
+		args_history_reset
+		ZSHRC_UNDER_TESTING=1 nav_keymap 1.txt > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_j | bw
+		cd /tmp && rm -rf /tmp/test__nav_keymap__file_not_in_args
+	)" "$(
+		cat <<-eof
+		─────
+		2.txt
+		─────
+
+		two
+		eof
+	)"
+}
+
+function test__nav_keymap__when_specifying_a_hidden_file {
+	# A hidden file gets the hidden listing, so the cursor can still be set
+	assert "$(
+		rm -rf /tmp/test__nav_keymap__hidden
+		mkdir /tmp/test__nav_keymap__hidden
+		echo 'one' > /tmp/test__nav_keymap__hidden/.1.hidden
+		echo 'two' > /tmp/test__nav_keymap__hidden/.2.hidden
+		ZSHRC_UNDER_TESTING=1 nav_keymap /tmp/test__nav_keymap__hidden/.1.hidden > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_j | bw
+		cd /tmp && rm -rf /tmp/test__nav_keymap__hidden
+	)" "$(
+		cat <<-eof
+		─────────
+		.2.hidden
+		─────────
+
+		two
+		eof
+	)"
+}
+
 function test__nav_keymap__when_specifying_an_arbitrary_md_file {
 	local md='/tmp/test__nav_keymap__arbitrary_md.md'
 	printf '# H1\n\n```\ncode\n```\n' > $md
@@ -900,7 +978,7 @@ function test__nav_keymap_s {
 function test__nav_keymap_t__with_dir {
 	assert "$(
 		echo "$HOME/Documents" | pbcopy
-		nav_keymap_t > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_t > /dev/null
 		pwd
 	)" "$HOME/Documents"
 }
@@ -909,7 +987,7 @@ function test__nav_keymap_t__with_file {
 	assert "$(
 		touch /tmp/test__nav_keymap_t__with_file
 		echo '/tmp/test__nav_keymap_t__with_file' | pbcopy
-		nav_keymap_t > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_t > /dev/null
 		pwd
 		rm -f /tmp/test__nav_keymap_t__with_file
 	)" '/tmp'
@@ -918,7 +996,7 @@ function test__nav_keymap_t__with_file {
 function test__nav_keymap_t__with_invalid_path {
 	assert "$(
 		echo 'does not exist' | pbcopy
-		nav_keymap_t
+		ZSHRC_UNDER_TESTING=1 nav_keymap_t
 	)" "$(red_bar 'Invalid path in pasteboard')"
 }
 
@@ -926,7 +1004,7 @@ function test__nav_keymap_t__with_tilde_dir {
 	assert "$(
 		# shellcheck disable=SC2088 # Literal ~ is intentional test input (a pasted path)
 		echo '~/Documents' | pbcopy
-		nav_keymap_t > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_t > /dev/null
 		pwd
 	)" "$HOME/Documents"
 }
@@ -936,7 +1014,7 @@ function test__nav_keymap_t__with_tilde_file {
 		touch "$HOME/test__nav_keymap_t__with_tilde_file"
 		# shellcheck disable=SC2088 # Literal ~ is intentional test input (a pasted path)
 		echo '~/test__nav_keymap_t__with_tilde_file' | pbcopy
-		nav_keymap_t > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_t > /dev/null
 		pwd
 		rm -f "$HOME/test__nav_keymap_t__with_tilde_file"
 	)" "$HOME"
@@ -948,7 +1026,7 @@ function test__nav_keymap_t__with_trailing_metadata {
 		rm -rf "$repo"
 		mkdir -p "$repo"
 		echo "$repo #jz mq01-qa.team-transaction-engine-dev us-east-1" | pbcopy
-		nav_keymap_t > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_t > /dev/null
 		pwd
 		rm -rf "$repo"
 	)" '/tmp/test__nav_keymap_t__with_trailing_metadata'
@@ -960,7 +1038,7 @@ function test__nav_keymap_t__with_path_containing_space_and_metadata {
 		rm -rf "$repo"
 		mkdir -p "$repo"
 		echo "$repo mq01-qa.team-transaction-engine-dev us-east-1" | pbcopy
-		nav_keymap_t > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_t > /dev/null
 		pwd
 		rm -rf "$repo"
 	)" '/tmp/test__nav_keymap_t hello world #eou'
@@ -970,7 +1048,7 @@ function test__nav_keymap_t__with_tilde_and_metadata {
 	assert "$(
 		# shellcheck disable=SC2088 # Literal ~ is intentional test input (a pasted path)
 		echo '~/Documents #jz mq01-qa.team-transaction-engine-dev us-east-1' | pbcopy
-		nav_keymap_t > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_t > /dev/null
 		pwd
 	)" "$HOME/Documents"
 }
@@ -979,10 +1057,65 @@ function test__nav_keymap_t__with_file_and_metadata {
 	assert "$(
 		touch /tmp/test__nav_keymap_t__with_file_and_metadata
 		echo '/tmp/test__nav_keymap_t__with_file_and_metadata #jz us-east-1' | pbcopy
-		nav_keymap_t > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_t > /dev/null
 		pwd
 		rm -f /tmp/test__nav_keymap_t__with_file_and_metadata
 	)" '/tmp'
+}
+
+function test__nav_keymap_t__with_surrounding_whitespace {
+	# The resolver strips surrounding whitespace before validating the path
+	assert "$(
+		touch /tmp/test__nav_keymap_t__whitespace.txt
+		printf '  /tmp/test__nav_keymap_t__whitespace.txt  ' | pbcopy
+		ZSHRC_UNDER_TESTING=1 nav_keymap_t > /dev/null
+		pwd
+		rm -f /tmp/test__nav_keymap_t__whitespace.txt
+	)" '/tmp'
+}
+
+function test__nav_keymap_t__with_file_sets_cursor {
+	# The cursor lands on the pasted file, so `nx` renders it
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_t__cursor
+		mkdir /tmp/test__nav_keymap_t__cursor
+		echo 'one' > /tmp/test__nav_keymap_t__cursor/1.txt
+		echo 'two' > /tmp/test__nav_keymap_t__cursor/2.txt
+		echo '/tmp/test__nav_keymap_t__cursor/2.txt' | pbcopy
+		ZSHRC_UNDER_TESTING=1 nav_keymap_t > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_x | bw
+		cd /tmp && rm -rf /tmp/test__nav_keymap_t__cursor
+	)" "$(
+		cat <<-eof
+		─────
+		2.txt
+		─────
+
+		two
+		eof
+	)"
+}
+
+function test__nav_keymap_t__with_hidden_file_sets_cursor {
+	# A pasted hidden file gets the hidden listing, so the cursor can still be set
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_t__hidden
+		mkdir /tmp/test__nav_keymap_t__hidden
+		echo 'one' > /tmp/test__nav_keymap_t__hidden/.1.hidden
+		echo 'two' > /tmp/test__nav_keymap_t__hidden/.2.hidden
+		echo '/tmp/test__nav_keymap_t__hidden/.2.hidden' | pbcopy
+		ZSHRC_UNDER_TESTING=1 nav_keymap_t > /dev/null
+		ZSHRC_UNDER_TESTING=1 nav_keymap_x | bw
+		cd /tmp && rm -rf /tmp/test__nav_keymap_t__hidden
+	)" "$(
+		cat <<-eof
+		─────────
+		.2.hidden
+		─────────
+
+		two
+		eof
+	)"
 }
 
 function test__nav_keymap_tt {
@@ -1055,7 +1188,6 @@ function test__nav_keymap_v__renders_pasteboard_file {
 
 function test__nav_keymap_v__when_pasteboard_is_not_a_file {
 	assert "$(
-		NAV_V_LAST_FILE=
 		echo 'not a file' | pbcopy
 		ZSHRC_UNDER_TESTING=1 nav_keymap_v
 	)" "$(
@@ -1065,25 +1197,53 @@ function test__nav_keymap_v__when_pasteboard_is_not_a_file {
 	)"
 }
 
-function test__nav_keymap_v__when_pasteboard_is_not_a_file_but_last_file_exists {
-	local md='/tmp/test__nav_keymap_v__fallback.md'
-	printf '# Fallback\n' > $md
-
+function test__nav_keymap_v__goes_to_folder_and_sets_cursor {
+	# Like \`n <file>\`: cd to the folder and set the cursor, so \`nj\` continues
 	assert "$(
-		# shellcheck disable=SC2034 # read by nav_keymap_v in the sourced nav_keymap.zsh, not here
-		NAV_V_LAST_FILE=$md
-		echo 'not a file' | pbcopy
-		ZSHRC_UNDER_TESTING=1 nav_keymap_v | bw | compact
+		rm -rf /tmp/test__nav_keymap_v__cursor
+		mkdir /tmp/test__nav_keymap_v__cursor
+		echo 'one' > /tmp/test__nav_keymap_v__cursor/1.txt
+		echo 'two' > /tmp/test__nav_keymap_v__cursor/2.txt
+		echo '/tmp/test__nav_keymap_v__cursor/1.txt' | pbcopy
+		ZSHRC_UNDER_TESTING=1 nav_keymap_v > /dev/null
+		pwd
+		ZSHRC_UNDER_TESTING=1 nav_keymap_j | bw
+		cd /tmp && rm -rf /tmp/test__nav_keymap_v__cursor
 	)" "$(
 		cat <<-eof
-			───────────────────────────────
-			test__nav_keymap_v__fallback.md
-			───────────────────────────────
-			# Fallback
+		/tmp/test__nav_keymap_v__cursor
+		─────
+		2.txt
+		─────
+
+		two
 		eof
 	)"
+}
 
-	rm $md
+function test__nav_keymap_v__with_tilde_path {
+	local txt="$HOME/test__nav_keymap_v__tilde.txt"
+	echo 'tilde works' > "$txt"
+
+	assert "$(
+		# shellcheck disable=SC2088 # Literal ~ is intentional test input (a pasted path)
+		echo '~/test__nav_keymap_v__tilde.txt' | pbcopy
+		ZSHRC_UNDER_TESTING=1 nav_keymap_v | bw | tail -1
+	)" 'tilde works'
+
+	rm -f "$txt"
+}
+
+function test__nav_keymap_v__with_trailing_metadata {
+	local txt='/tmp/test__nav_keymap_v__metadata.txt'
+	echo 'metadata works' > "$txt"
+
+	assert "$(
+		echo "$txt #jz us-east-1" | pbcopy
+		ZSHRC_UNDER_TESTING=1 nav_keymap_v | bw | tail -1
+	)" 'metadata works'
+
+	rm -f "$txt"
 }
 
 function test__nav_keymap_w {
@@ -1200,6 +1360,24 @@ function test__nav_keymap_y__dedupes_existing_entry {
 
 function test__nav_keymap_z {
 	assert "$(nav_keymap_z > /dev/null; pwd)" "$NAV_CLAUDE_DIR"
+}
+
+function test__nav_keymap_zz__goes_to_plans_and_sets_cursor {
+	local tmp_dir; tmp_dir=$(mktemp -d)
+
+	# The cursor lands on the latest plan (not the first listed), so `nx` rerenders it
+	assert "$(
+		NAV_CLAUDE_PLANS_DIR=$tmp_dir
+		printf '# Old\n' > "$tmp_dir/a-old.md"
+		touch -t 202501010000 "$tmp_dir/a-old.md"
+		printf '# New\n' > "$tmp_dir/z-new.md"
+
+		ZSHRC_UNDER_TESTING=1 nav_keymap_zz > /dev/null
+		pwd
+		ZSHRC_UNDER_TESTING=1 nav_keymap_x | bw | compact | head -2 | tail -1
+	)" "$(printf '%s\n%s' "$tmp_dir" 'z-new.md')"
+
+	rm -rf "$tmp_dir"
 }
 
 function test__nav_keymap_zz__with_no_plans {

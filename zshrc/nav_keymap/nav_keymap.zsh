@@ -4,7 +4,7 @@ NAV_DOT="${NAV_ALIAS}${KEYMAP_DOT}"
 
 NAV_KEYMAP=(
 	"${NAV_ALIAS} <directory> # Go to directory"
-	"${NAV_ALIAS} <file> # Clear screen & render file"
+	"${NAV_ALIAS} <file> # Clear screen, cd to folder & render file"
 	''
 	"${NAV_DOT}n <match>* <-mismatch>* # List visible directories & files"
 	"${NAV_DOT}a <match>* <-mismatch>* # List hidden directories & files"
@@ -64,8 +64,19 @@ function nav_keymap {
 
 	# If the target is a file, set cursor and print it
 	if [[ -f "$target" ]]; then
-		local cursor
-		cursor=$(args_helpers_plain | sed 's/ *#.*//' | strip | grep -nFx "$target" | head -1 | cut -d: -f1)
+		local cursor; cursor=$(nav_helpers_find_cursor "$target")
+
+		# When the file is not in args, go to its folder and list it, so the
+		# cursor can be set
+		if [[ -z $cursor ]]; then
+			if [[ "$target" == */* ]]; then
+				cd "${target:h}" || return
+				target=${target:t}
+			fi
+			nav_helpers_list_siblings "$target" > /dev/null
+			cursor=$(nav_helpers_find_cursor "$target")
+		fi
+
 		if [[ -n $cursor ]]; then
 			NAV_CURSOR=$cursor
 			nav_helpers_render_cursor_as_file
@@ -92,7 +103,6 @@ NAV_MRU_FILE="$ZSHRC_DATA_DIR/nav.mru.txt"
 
 # States
 NAV_CURSOR=0
-NAV_V_LAST_FILE=
 
 function nav_keymap_a {
 	local filters=("$@")
@@ -281,34 +291,27 @@ function nav_keymap_ss {
 }
 
 function nav_keymap_t {
-	# Note: Do not use `local path`- It will overwrite $PATH in subshell
-	local target_path; target_path=$(pbpaste)
+	local target_path; target_path=$(nav_helpers_copied_path)
 
-	# Expand leading `~` to $HOME
-	target_path=${target_path/#\~/$HOME}
-
-	# Pasted paths can have trailing space-separated tokens (git branch, AWS
-	# account, region, etc.). Strip the last token repeatedly until what remains
-	# is a valid file or folder, or no valid path was found.
-	local prev=''
-	while [[ -n $target_path && ! -f $target_path && ! -d $target_path && $target_path != "$prev" ]]; do
-		prev=$target_path
-		target_path=${target_path% *}
-	done
-
-	# If nothing remained valid, error
 	if [[ ! -f $target_path && ! -d $target_path ]]; then
 		red_bar 'Invalid path in pasteboard'
 		return
 	fi
 
-	# If it's a file path, go to its parent folder
+	# For a file path, go to its parent folder and set the cursor, so `nx` renders it
 	if [[ -f $target_path ]]; then
-		target_path=${target_path%/*}
+		local file=${target_path:t}
+		cd "${target_path:h}" && nav_helpers_list_siblings "$file" || return
+
+		local cursor; cursor=$(nav_helpers_find_cursor "$file")
+		if [[ -n $cursor ]]; then
+			NAV_CURSOR=$cursor
+		fi
+		return
 	fi
 
 	# Go to folder
-	cd "$target_path" && nav_keymap_n || true
+	cd "$target_path" && nav_keymap_n || return
 }
 
 function nav_keymap_tt {
@@ -337,20 +340,13 @@ function nav_keymap_uuu {
 }
 
 function nav_keymap_v {
-	local file; file=$(nav_helpers_copied_file_path)
+	local file; file=$(nav_helpers_copied_path)
 
-	# Fall back to the last rendered file (allows re-rendering after edits)
 	if [[ ! -f $file ]]; then
-		if [[ -n $NAV_V_LAST_FILE && -f $NAV_V_LAST_FILE ]]; then
-			file=$NAV_V_LAST_FILE
-		else
-			red_bar 'Invalid file path in pasteboard' && return
-		fi
+		red_bar 'Invalid file path in pasteboard' && return
 	fi
 
-	NAV_V_LAST_FILE=$file
-
-	nav_helpers_render_file "$file"
+	nav_keymap "$file"
 }
 
 function nav_keymap_w {
@@ -385,7 +381,7 @@ function nav_keymap_zz {
 	latest=$(ls -t "$NAV_CLAUDE_PLANS_DIR"/*.md 2>/dev/null | head -1)
 
 	if [ -n "$latest" ]; then
-		cd "$NAV_CLAUDE_PLANS_DIR" && nav_helpers_render_file "$latest"
+		nav_keymap "$latest"
 	else
 		red_bar "No plans"
 	fi

@@ -25,7 +25,7 @@ Keymap Usage
 Keymap List
 
   $ n <directory>              # Go to directory
-  $ n <file>                   # Clear screen & render file
+  $ n <file>                   # Clear screen, cd to folder & render file
 
   $ n.n <match>* <-mismatch>*  # List visible directories & files
   $ n.a <match>* <-mismatch>*  # List hidden directories & files

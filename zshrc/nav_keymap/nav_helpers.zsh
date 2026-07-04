@@ -1,10 +1,23 @@
-function nav_helpers_copied_file_path {
-	# When a file path is copied as plain text
-	local file; file=$(pbpaste | strip)
+function nav_helpers_copied_path {
+	# When a path is copied as plain text
+	# Note: Do not use `local path`- It will overwrite $PATH in subshell
+	local target_path; target_path=$(pbpaste | strip)
 
-	# When a file path is copied as a Finder file reference
-	if [[ ! -f $file && -z $ZSHRC_UNDER_TESTING ]]; then
-		file=$(osascript -e '
+	# Expand leading `~` to $HOME
+	target_path=${target_path/#\~/$HOME}
+
+	# Pasted paths can have trailing space-separated tokens (git branch, AWS
+	# account, region, etc.). Strip the last token repeatedly until what remains
+	# is a valid file or folder, or no valid path was found.
+	local prev=''
+	while [[ -n $target_path && ! -e $target_path && $target_path != "$prev" ]]; do
+		prev=$target_path
+		target_path=${target_path% *}
+	done
+
+	# When a file or folder is copied as a Finder reference
+	if [[ ! -e $target_path && -z $ZSHRC_UNDER_TESTING ]]; then
+		target_path=$(osascript -e '
 			use framework "AppKit"
 			set pb to current application'\''s NSPasteboard'\''s generalPasteboard()
 			set fileURLs to pb'\''s readObjectsForClasses:{current application'\''s NSURL} options:(missing value)
@@ -14,7 +27,23 @@ function nav_helpers_copied_file_path {
 		' 2>/dev/null)
 	fi
 
-	echo "$file"
+	echo "$target_path"
+}
+
+function nav_helpers_list_siblings {
+	local file=$1
+
+	if [[ "$file" == .* ]]; then
+		nav_keymap_a
+	else
+		nav_keymap_n
+	fi
+}
+
+function nav_helpers_find_cursor {
+	local file=$1
+
+	args_helpers_plain | sed 's/ *#.*//' | strip | grep -nFx "$file" | head -1 | cut -d: -f1
 }
 
 function nav_helpers_mru_add {
