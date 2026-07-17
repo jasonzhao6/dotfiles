@@ -96,7 +96,7 @@ function terraform_keymap_e {
 		var_name="TF_VAR_${fields[1]}"
 		secret_name="${fields[2]}"
 
-		echo_eval "export $var_name=\$(aws_keymap_m $secret_name)"
+		echo_eval "export $var_name=\$(aws_keymap_mg $secret_name)"
 
 		# If env var was not set, exit with error
 		[[ -z ${(P)var_name} ]] && return 1

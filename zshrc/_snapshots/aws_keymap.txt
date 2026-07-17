@@ -47,7 +47,8 @@ Keymap List
 
   $ s.t <message>               # STS decode
 
-  $ s.m <name> <version>?       # Secret Manager get by version
+  $ s.m <name>                  # Secret Manager search
+  $ s.mg <name> <version>?      # Secret Manager get by version
   $ s.md <name>                 # Secret Manager delete
 
   $ s.n <name>                  # SNS search

@@ -26,7 +26,8 @@ AWS_KEYMAP=(
 	''
 	"${AWS_DOT}t <message> # STS decode"
 	''
-	"${AWS_DOT}m <name> <version>? # Secret Manager get by version"
+	"${AWS_DOT}m <name> # Secret Manager search"
+	"${AWS_DOT}mg <name> <version>? # Secret Manager get by version"
 	"${AWS_DOT}md <name> # Secret Manager delete"
 	''
 	"${AWS_DOT}n <name> # SNS search"
@@ -164,6 +165,27 @@ function aws_keymap_i {
 
 function aws_keymap_m {
 	local name=$1
+
+	# `Key=all` matches word-prefixes in name/description/tags, same as console search
+	aws secretsmanager list-secrets \
+		--region "$AWS_DEFAULT_REGION" \
+		--filters "Key=all,Values=$name" \
+		--query 'SecretList[].[Name]' \
+		--output text |
+		args_keymap_s
+}
+
+function aws_keymap_md {
+	local name=$1
+
+	aws secretsmanager delete-secret \
+		--region "$AWS_DEFAULT_REGION" \
+		--secret-id "$name" \
+		--force-delete-without-recovery
+}
+
+function aws_keymap_mg {
+	local name=$1
 	local version=$2
 
 	# If `version` is specified, get by version
@@ -181,15 +203,6 @@ function aws_keymap_m {
 
 	# If output contains json, prettify with `jq`
 	[[ "$secret" == \{*\} ]] && echo "$secret" | jq || echo "$secret"
-}
-
-function aws_keymap_md {
-	local name=$1
-
-	aws secretsmanager delete-secret \
-		--region "$AWS_DEFAULT_REGION" \
-		--secret-id "$name" \
-		--force-delete-without-recovery
 }
 
 function aws_keymap_n {
