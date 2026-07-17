@@ -20,6 +20,65 @@ function test__aws_keymap_c {	assert "$(
 	)"
 }
 
+function test__aws_keymap_mg__with_mysql_cred {
+	assert "$(
+		function aws { echo '{"engine":"mysql","host":"db.example.com","port":3306,"username":"admin","password":"hunter2"}'; }
+		aws_keymap_mg my-secret
+	)" "$(
+		cat <<-eof
+			{
+			  "engine": "mysql",
+			  "host": "db.example.com",
+			  "port": 3306,
+			  "username": "admin",
+			  "password": "hunter2"
+			}
+
+			mysql -h db.example.com -P 3306 -u admin -p
+		eof
+	)"
+}
+
+function test__aws_keymap_mg__with_mysql_cred_defaults {
+	assert "$(
+		function aws { echo '{"host":"db.example.com","username":"admin","password":"hunter2"}'; }
+		aws_keymap_mg my-secret
+	)" "$(
+		cat <<-eof
+			{
+			  "host": "db.example.com",
+			  "username": "admin",
+			  "password": "hunter2"
+			}
+
+			mysql -h db.example.com -P 3306 -u admin -p
+		eof
+	)"
+}
+
+function test__aws_keymap_mg__with_non_mysql_engine {
+	assert "$(
+		function aws { echo '{"engine":"postgres","host":"db.example.com","port":5432,"username":"admin"}'; }
+		aws_keymap_mg my-secret
+	)" "$(
+		cat <<-eof
+			{
+			  "engine": "postgres",
+			  "host": "db.example.com",
+			  "port": 5432,
+			  "username": "admin"
+			}
+		eof
+	)"
+}
+
+function test__aws_keymap_mg__with_plain_text_secret {
+	assert "$(
+		function aws { echo 'hunter2'; }
+		aws_keymap_mg my-secret
+	)" 'hunter2'
+}
+
 function test__aws_keymap_o__with_numeric_input {
 	assert "$(
 		local orig=$AWS_ACCOUNTS_TSV

@@ -30,3 +30,21 @@ function aws_helpers_ec2_name_to_id {
 		--query 'Reservations[].Instances[].InstanceId' \
 		--output text
 }
+
+function aws_helpers_mysql_string {
+	local secret=$1
+
+	# A MySQL cred is json with `host` & `username` whose `engine` (if present) is `mysql`
+	local host port user
+	echo "$secret" | jq --raw-output '
+		select((.engine // "mysql") == "mysql") |
+		select(.host and .username) |
+		"\(.host)\t\(.port // 3306)\t\(.username)"
+	' 2>/dev/null | IFS=$'\t' read -r host port user
+
+	[[ -z $host ]] && return
+
+	# Leave `-p` bare so mysql prompts for the password interactively
+	echo
+	echo "mysql -h $host -P $port -u $user -p"
+}

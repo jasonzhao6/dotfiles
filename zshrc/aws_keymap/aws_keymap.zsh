@@ -203,6 +203,9 @@ function aws_keymap_mg {
 
 	# If output contains json, prettify with `jq`
 	[[ "$secret" == \{*\} ]] && echo "$secret" | jq || echo "$secret"
+
+	# If it's a MySQL cred, also output a connection string
+	aws_helpers_mysql_string "$secret"
 }
 
 function aws_keymap_n {
