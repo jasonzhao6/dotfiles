@@ -159,6 +159,8 @@ function nav_keymap_i {
 }
 
 function nav_keymap_j {
+	nav_helpers_populate_args_when_empty
+
 	local size; size=$(args_helpers_size)
 
 	if [[ $NAV_CURSOR -ge $size ]]; then
@@ -171,6 +173,8 @@ function nav_keymap_j {
 }
 
 function nav_keymap_k {
+	nav_helpers_populate_args_when_empty
+
 	local size; size=$(args_helpers_size)
 
 	if [[ $size -eq 0 || $NAV_CURSOR -eq 1 ]]; then
@@ -354,6 +358,8 @@ function nav_keymap_w {
 }
 
 function nav_keymap_x {
+	nav_helpers_populate_args_when_empty
+
 	local size; size=$(args_helpers_size)
 
 	if [[ $size -eq 0 ]]; then

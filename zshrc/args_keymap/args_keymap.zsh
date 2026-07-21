@@ -164,6 +164,13 @@ function args_keymap_n {
 	local command=$*
 
 	if [[ -n $number && -n $command ]]; then
+		# For file commands (`n`, `cat`) in a fresh shell with no args yet, act
+		# on the cwd listing, as if `nn` had just run
+		local first_word=${command%% *}
+		if [[ $first_word == 'n' || $first_word == 'cat' ]]; then
+			nav_helpers_populate_args_when_empty
+		fi
+
 		local arg; arg="$(args_helpers_plain | sed -n "${number}p" | sed 's/ *#.*//' | strip)"
 
 		if [[ -e $arg ]]; then

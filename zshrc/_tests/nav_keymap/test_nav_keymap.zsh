@@ -421,6 +421,29 @@ function test__nav_keymap_j {
 	)"
 }
 
+function test__nav_keymap_j__populates_empty_args {
+	# In a fresh shell with no args yet, list the cwd first, then render file 1
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_j
+		mkdir /tmp/test__nav_keymap_j
+		cd /tmp/test__nav_keymap_j || return
+		echo 'one' > 1.txt
+		echo 'two' > 2.txt
+		args_history_reset
+		NAV_CURSOR=0
+		ZSHRC_UNDER_TESTING=1 nav_keymap_j | bw
+		rm -rf /tmp/test__nav_keymap_j
+	)" "$(
+		cat <<-eof
+		─────
+		1.txt
+		─────
+
+		one
+		eof
+	)"
+}
+
 function test__nav_keymap_j__when_at_end {
 	assert "$(
 		rm -rf /tmp/test__nav_keymap_j
@@ -571,6 +594,29 @@ function test__nav_keymap_k__after_nj_decrements {
 		nav_keymap_j > /dev/null  # cursor=2
 		nav_keymap_j > /dev/null  # cursor=3
 		ZSHRC_UNDER_TESTING=1 nav_keymap_k | bw  # cursor=2 → 2.txt
+		rm -rf /tmp/test__nav_keymap_k
+	)" "$(
+		cat <<-eof
+		─────
+		2.txt
+		─────
+
+		two
+		eof
+	)"
+}
+
+function test__nav_keymap_k__populates_empty_args {
+	# In a fresh shell with no args yet, list the cwd first, then wrap to the last file
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_k
+		mkdir /tmp/test__nav_keymap_k
+		cd /tmp/test__nav_keymap_k || return
+		echo 'one' > 1.txt
+		echo 'two' > 2.txt
+		args_history_reset
+		NAV_CURSOR=0
+		ZSHRC_UNDER_TESTING=1 nav_keymap_k | bw
 		rm -rf /tmp/test__nav_keymap_k
 	)" "$(
 		cat <<-eof
@@ -1209,6 +1255,29 @@ function test__nav_keymap_x__when_empty {
 		nav_keymap_x | bw
 		rm -rf /tmp/test__nav_keymap_x
 	)" "$(red_bar 'No current file in the list' | bw)"
+}
+
+function test__nav_keymap_x__populates_empty_args {
+	# In a fresh shell with no args yet, list the cwd first, then render file 1
+	assert "$(
+		rm -rf /tmp/test__nav_keymap_x
+		mkdir /tmp/test__nav_keymap_x
+		cd /tmp/test__nav_keymap_x || return
+		echo 'one' > 1.txt
+		echo 'two' > 2.txt
+		args_history_reset
+		NAV_CURSOR=0
+		ZSHRC_UNDER_TESTING=1 nav_keymap_x | bw
+		rm -rf /tmp/test__nav_keymap_x
+	)" "$(
+		cat <<-eof
+		─────
+		1.txt
+		─────
+
+		one
+		eof
+	)"
 }
 
 function test__nav_keymap_x__reflects_updated_content {

@@ -76,6 +76,13 @@ function nav_helpers_mru_prune {
 	fi
 }
 
+function nav_helpers_populate_args_when_empty {
+	# In a fresh shell with no args yet, act as if `nn` had just run
+	[[ $(args_helpers_size) -eq 0 ]] || return 0
+
+	nav_keymap_n > /dev/null
+}
+
 function nav_helpers_render_markdown {
 	# Customize how markdown is rendered
 	# `--ansi` is required: mdcat sees the pipe to perl (not the terminal) as its

@@ -393,6 +393,46 @@ function test__args_keymap_n {
 	)"
 }
 
+function test__args_keymap_n__populates_empty_args_for_n {
+	# In a fresh shell with no args yet, `<number> n` acts on the cwd listing
+	assert "$(
+		rm -rf /tmp/test__args_keymap_n
+		mkdir /tmp/test__args_keymap_n
+		cd /tmp/test__args_keymap_n || return
+		echo 'one' > 1.txt
+		echo 'two' > 2.txt
+		args_history_reset
+		ZSHRC_UNDER_TESTING=1 args_keymap_n 2 n | bw | grep --count '^2.txt$'
+		cd /tmp && rm -rf /tmp/test__args_keymap_n
+	)" '1'
+}
+
+function test__args_keymap_n__populates_empty_args_for_cat {
+	assert "$(
+		rm -rf /tmp/test__args_keymap_n
+		mkdir /tmp/test__args_keymap_n
+		cd /tmp/test__args_keymap_n || return
+		echo 'one' > 1.txt
+		echo 'two' > 2.txt
+		args_history_reset
+		args_keymap_n 2 cat | bw | grep --count '^two$'
+		cd /tmp && rm -rf /tmp/test__args_keymap_n
+	)" '1'
+}
+
+function test__args_keymap_n__does_not_populate_empty_args_for_other_commands {
+	assert "$(
+		rm -rf /tmp/test__args_keymap_n
+		mkdir /tmp/test__args_keymap_n
+		cd /tmp/test__args_keymap_n || return
+		echo 'one' > 1.txt
+		args_history_reset
+		args_keymap_n 1 echo > /dev/null
+		args_helpers_size | strip
+		cd /tmp && rm -rf /tmp/test__args_keymap_n
+	)" '0'
+}
+
 function test__args_keymap_n__with_whitespace {
 	assert "$(
 		echo "$test__input_with_whitespace" | args_keymap_s > /dev/null
