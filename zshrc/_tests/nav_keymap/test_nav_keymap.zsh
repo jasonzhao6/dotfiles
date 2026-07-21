@@ -155,98 +155,38 @@ function test__nav_keymap__when_specifying_a_hidden_file {
 	)"
 }
 
-function test__nav_keymap__when_specifying_an_arbitrary_md_file {
-	local md='/tmp/test__nav_keymap__arbitrary_md.md'
-	printf '# H1\n\n```\ncode\n```\n' > $md
-
-	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
-
-	# Verify rendered content
-	assert "$(echo "$output" | bw | compact)" "$(
-		cat <<-eof
-			─────────────────────────────────
-			test__nav_keymap__arbitrary_md.md
-			─────────────────────────────────
-			# H1
-			───
-			code
-			───
-		eof
-	)"
-
-	# Verify heading color is cyan (36)
-	assert "$([[ $output =~ $'\e\\[36m' ]] && echo 1)" '1'
-
-	# Verify code delimiter color is green (32)
-	assert "$([[ $output =~ $'\e\\[32m───' ]] && echo 1)" '1'
-
-	# Verify code body color is also green (32)
-	assert "$([[ $output =~ $'\e\\[32mcode' ]] && echo 1)" '1'
-
-	rm $md
-}
-
-function test__nav_keymap__when_md_has_inline_code {
-	local md='/tmp/test__nav_keymap__md_inline_code.md'
-	printf 'prose `inline` then:\n\n```\nblock\n```\n' > $md
-
-	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
-
-	# Only block code is green (32); inline code is default yellow (33)
-	assert "$([[ $output =~ $'\e\\[33m inline' ]] && [[ $output =~ $'\e\\[32mblock' ]] && echo 1)" '1'
-
-	rm $md
-}
-
-function test__nav_keymap__when_md_has_links {
-	local md='/tmp/test__nav_keymap__md_links.md'
-	printf '# H1\n\na [link](https://example.com) here\n\nSee [other doc](./other.md) links.\n\nBare <https://example.com/bar> stays single.\n\nFiller words here to push the boundary [a very long link label that should definitely wrap at eighty columns somewhere](https://example.com/foo) end.\n' > $md
+function test__nav_keymap__renders_md_headings_with_hash_prefixes {
+	local md='/tmp/test__nav_keymap__raw_md_headings.md'
+	printf '# One\n\n## Two\n\n###### Six\n' > $md
 
 	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
 	local plain; plain=$(echo "$output" | bw)
 
-	# A link renders as "label <url>": label magenta (35), url gray (90)
-	assert "$([[ $plain == *'link <https://example.com/>'* ]] && echo 1)" '1'
-	assert "$([[ $output =~ $'\e\\[35mlink' ]] && echo 1)" '1'
-	assert "$([[ $output =~ $'\e\\[90m<https://example.com/>' ]] && echo 1)" '1'
+	# Headings render as `#` prefixes at every level, incl. the H1 banner
+	assert "$([[ $plain == *'# One'* && $plain == *'## Two'* && $plain == *'###### Six'* ]] && echo 1)" '1'
 
-	# A relative link renders as a relative path, not a resolved file:// URL
-	assert "$([[ $plain == *'other doc <other.md>'* ]] && echo 1)" '1'
+	# Headings are magenta (35)
+	assert "$([[ $output =~ $'\e\\[35m# One' ]] && echo 1)" '1'
+	assert "$([[ $output =~ $'\e\\[35m## ' ]] && echo 1)" '1'
 
-	# Still a relative path from a symlinked cwd (/tmp -> /private/tmp), where
-	# mdcat emits the physical path while $PWD stays logical
-	local sym_plain; sym_plain=$(cd /tmp && ZSHRC_UNDER_TESTING=1 nav_keymap $md | bw)
-	assert "$([[ $sym_plain == *'other doc <other.md>'* ]] && echo 1)" '1'
-
-	# An autolink is not duplicated and stays gray (90); its text is already the URL
-	assert "$([[ $plain == *' https://example.com/bar stays'* ]] && echo 1)" '1'
-	assert "$([[ $output =~ $'\e\\[90mhttps://example.com/bar' ]] && echo 1)" '1'
-
-	# A wrapped link stays magenta on its continuation line, closed by "<url>"
-	assert "$([[ $output =~ $'\e\\[35mdefinitely wrap' ]] && echo 1)" '1'
-	assert "$([[ $plain == *'somewhere <https://example.com/foo>'* ]] && echo 1)" '1'
-
-	# Headings are still cyan (36)
-	assert "$([[ $output =~ $'\e\\[36mH1' ]] && echo 1)" '1'
+	# Blocks are separated by single blank lines, never runs of them
+	assert "$([[ $plain != *$'\n\n\n'* ]] && echo 1)" '1'
 
 	rm $md
 }
 
-function test__nav_keymap__when_md_has_table_nested_in_a_list {
-	local md='/tmp/test__nav_keymap__md_table_in_list.md'
-	# A table nested inside a list item crashes mdcat 2.7.1 (panic, exit 101), which
-	# drops the table and everything after it. The dedent preprocessing in
-	# nav_helpers_render_markdown promotes the table to the margin so the whole file,
-	# including the trailing prose, renders.
-	printf -- '# H1\n\n- a bullet:\n\n  | alpha | beta |\n  |---|---|\n  | one | two |\n\nAfter the table.\n' > $md
+function test__nav_keymap__renders_md_link_labels_cyan {
+	local md='/tmp/test__nav_keymap__raw_md_links.md'
+	printf 'a [link](https://example.com) here, wrapped by filler words pushing this [long link label across the eighty column boundary](https://example.com/foo) end\n' > $md
 
-	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md 2>/dev/null | bw)
+	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
 
-	# The nested table renders (cells present), not a crash dump
-	assert "$([[ $output == *alpha* && $output == *beta* && $output == *one* && $output == *two* ]] && echo 1)" '1'
+	# Link labels are cyan (36), including a wrapped label's continuation line
+	assert "$([[ $output =~ $'\e\\[36mlink' ]] && echo 1)" '1'
+	assert "$([[ $output =~ $'\e\\[36meighty column boundary' ]] && echo 1)" '1'
 
-	# Content after the table is not dropped
-	assert "$([[ $output == *'After the table.'* ]] && echo 1)" '1'
+	# OSC 8 hyperlink escapes are kept
+	assert "$([[ $output == *$'\e]8;;https://example.com/'* ]] && echo 1)" '1'
 
 	rm $md
 }
@@ -268,38 +208,6 @@ function test__nav_keymap__when_specifying_an_arbitrary_txt_file {
 	)"
 
 	rm $txt
-}
-
-function test__nav_keymap__when_specifying_an_md_file_with_frontmatter {
-	local md='/tmp/test__nav_keymap__md_frontmatter.md'
-	printf -- '---\ntitle: Hello\n---\n# Heading\n' > $md
-
-	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
-
-	# Frontmatter renders as a header above the body; its `---` delimiters become
-	# ─── rules and the closing one is not collapsed into `# Heading` as a setext rule
-	assert "$(echo "$output" | bw | compact)" "$(
-		local name='test__nav_keymap__md_frontmatter.md'
-		local rule; rule=$(printf '%0.s─' $(seq 1 ${#name}))
-		printf '%s\n%s\n%s\n───\ntitle: Hello\n───\n# Heading' "$rule" "$name" "$rule"
-	)"
-
-	# Frontmatter delimiters and keys are colored green (32)
-	assert "$([[ $output =~ $'\e\\[32m' ]] && echo 1)" '1'
-
-	rm $md
-}
-
-function test__nav_keymap__when_md_frontmatter_is_unclosed {
-	local md='/tmp/test__nav_keymap__md_unclosed.md'
-	# Opening `---` with no closing delimiter: the body must not be swallowed
-	printf -- '---\nname: foo\nbodymarker line\n' > $md
-
-	assert "$(
-		nav_keymap $md | bw | grep --count 'bodymarker'
-	)" '1'
-
-	rm $md
 }
 
 function test__nav_keymap_a {

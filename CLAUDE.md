@@ -99,7 +99,7 @@ Non-zsh shortcut reference files for external apps (e.g. Gmail, Terminal, Claude
 ### Test Framework (`zshrc/_tests/`)
 - `_test_harness.zsh` — `init`, `assert`, `pass`, `fail`, `run_tests`, `print_summary`
 - Test files live in `_tests/<namespace>/test_<name>.zsh`. A `test_<name>.zsh` maps to the subject `<name>.zsh` (section 5 enforces matching function order), so every `test__*` name must reduce (drop `test__`, then everything from the first `__`) to a function defined in that subject file.
-- Keymap helpers (`*_helpers.zsh`) are tested **through their keymap functions**, not directly; do not add a `test_*_helpers.zsh`. For example, frontmatter handling in `nav_helpers.zsh` is tested via `nav_keymap <md-file>` in `test_nav_keymap.zsh`. By contrast, standalone modules (e.g. `utils.zsh`, `colors.zsh`, `is_reserved.zsh`, `args_numbers.zsh`) each get their own direct `test_<module>.zsh`.
+- Keymap helpers (`*_helpers.zsh`) are tested **through their keymap functions**, not directly; do not add a `test_*_helpers.zsh`. For example, markdown rendering in `nav_helpers.zsh` is tested via `nav_keymap <md-file>` in `test_nav_keymap.zsh`. By contrast, standalone modules (e.g. `utils.zsh`, `colors.zsh`, `is_reserved.zsh`, `args_numbers.zsh`) each get their own direct `test_<module>.zsh`.
 - Tests are shuffled before execution to catch ordering dependencies
 - 5 test sections:
   1. Unit tests (`_run_all_test_cases.zsh`)

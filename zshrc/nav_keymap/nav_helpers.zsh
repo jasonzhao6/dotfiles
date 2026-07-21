@@ -76,89 +76,31 @@ function nav_helpers_mru_prune {
 	fi
 }
 
-function nav_helpers_extract_frontmatter {
-	# Extract frontmatter block with `---` delimiters included; guard against unclosed blocks
-	awk '
-		NR==1 && !/^---$/ { exit }
-		NR==1             { buf=$0 ORS; next }
-		/^---$/           { printf "%s%s", buf, $0; exit }
-		                  { buf=buf $0 ORS }
-	' "$1"
-}
-
-function nav_helpers_strip_frontmatter {
-	# Strip frontmatter block if present
-	awk '
-		NR==1 && /^---$/ { in_fm=1; buf=$0 ORS; next }
-		in_fm && /^---$/  { in_fm=0; next }
-		in_fm             { buf=buf $0 ORS; next }
-		{ print }
-		END { if (in_fm) printf "%s", buf }
-	' "$1"
-}
-
-function nav_helpers_render_frontmatter {
-	local frontmatter; frontmatter=$(nav_helpers_extract_frontmatter "$1")
-	[[ -z $frontmatter ]] && return
-
-	# Customize how frontmatter is rendered
-	print -r -- "$frontmatter" | fold -s -w 80 | perl -pe '
-		s/^---$/\e[32m───\e[0m/;				 # Color delimiters green (32), replace "-" with "─"
-		s/^([\w-]+)(:)/\e[32m$1\e[0m$2/; # Color keys green (32)
-	'
-	echo
-}
-
-function nav_helpers_dedent_tables {
-	# mdcat 2.7.1 (its final release; the formula is deprecated) panics on a table
-	# nested inside a list item, taking the rest of the document down with it. Dedent
-	# table rows (lines starting with `|`, outside code fences) to the margin so mdcat
-	# renders them as top-level tables it can handle.
-	perl -ne '
-		if (/^\s*```/) { $fence = !$fence; print; next }
-		s/^\s+(\|)/$1/ unless $fence;
-		print;
-	'
-}
-
 function nav_helpers_render_markdown {
 	# Customize how markdown is rendered
-	nav_helpers_strip_frontmatter "$1" | nav_helpers_dedent_tables | mdcat --columns 80 | PHYS_PWD=${PWD:A} perl -pe '
-		s/\xe2\x94\x84/#/g;      # Replace "┄" heading with "#"
-		s/(#+)\e\[0m/$1 \e[0m/g; # Add a space after "#" headings
+	# `--ansi` is required: mdcat sees the pipe to perl (not the terminal) as its
+	# stdout and would otherwise emit plain text with no escapes for perl to match
+	mdcat --ansi "$1" | perl -pe '
+		# Normalize vertical spacing: drop leading blank lines to avoid doubling
+		# the banner/content separator `render_file` already printed, and
+		# collapse blank runs to a single line
+		if (/^$/) { $_ = "" if $blank || !$seen; $blank = 1 } else { $seen = 1; $blank = 0 }
 
-		# Render links as "label <url>", label magenta (35) and url gray (90).
-		# Drop the OSC 8 hyperlinks that Terminal.app ignores. Autolinks render as
-		# just the gray URL (their text is the URL, modulo mdcat adding a trailing
-		# slash), and file:// URLs (mdcat-resolved relative links) shorten back to
-		# relative paths. rel() matches against PHYS_PWD (${PWD:A}) because mdcat
-		# emits physical paths while $PWD stays logical under a symlinked cwd.
-		# Links arrive blue (34) like headings, so recolor them before the heading
-		# recolor below claims the remaining blues.
-		sub rel { my ($u) = @_; $u =~ s,^file://[^/]*\Q$ENV{PHYS_PWD}\E/,,; $u }
-		s{\e\]8;;([^\e]+)\e\\(.*?)\e\]8;;\e\\}{
-			my ($u, $body) = ($1, $2); $u = rel($u); # copy $2 before rel() resets captures
-			(my $plain = $body) =~ s/\e\[[0-9;]*m//g;
-			if ($plain eq $u || "$plain/" eq $u) { $body =~ s/\e\[34m/\e[90m/g; $body }
-			else { $body =~ s/\e\[34m/\e[35m/g; "$body \e[90m<$u>\e[0m" }
-		}ge;
+		# Restyle headings as magenta (35) `#` prefixes, one rule per level: H1
+		# is a padded banner on a blue background (104); H2-H6 each use a
+		# distinct marker glyph and color, flush left with a trailing space
+		s/^\e\[94m\e\[104m \e\[0m\e\[1m\e\[97m\e\[104m(.*)\e\[0m\e\[94m\e\[104m \e\[0m/\e[1m\e[35m# $1\e[0m/; # H1 banner
+		s/^\e\[1m\e\[34m\xe2\x94\x81\xe2\x94\x81 \e\[0m\e\[1m\e\[34m/\e[1m\e[35m## \e[0m\e[1m\e[35m/;        # H2 ━━
+		s/^\e\[1m\e\[36m\xe2\x94\x80\xe2\x94\x80 \e\[0m\e\[1m\e\[36m/\e[1m\e[35m### \e[0m\e[1m\e[35m/;       # H3 ──
+		s/^\e\[1m\e\[32m\xe2\x94\x84 \e\[0m\e\[1m\e\[32m/\e[1m\e[35m#### \e[0m\e[1m\e[35m/;                  # H4 ┄
+		s/^\e\[1m\e\[33m\xe2\x95\x8c \e\[0m\e\[1m\e\[33m/\e[1m\e[35m##### \e[0m\e[1m\e[35m/;                 # H5 ╌
+		s/^\e\[1m\e\[35m\xc2\xb7 \e\[0m\e\[1m\e\[35m/\e[1m\e[35m###### \e[0m\e[1m\e[35m/;                    # H6 · (already magenta)
 
-		# A link wrapped across lines leaves its OSC 8 open/close on different lines,
-		# beyond the reach of the substitution above, so handle its tokens statefully.
-		# (A wrapped autolink lands here too and renders its URL twice; rare, accepted.)
-		$_ = join "", map {
-			if (/^\e\]8;;([^\e]+)\e\\$/) { $url = rel($1); "" }
-			elsif (/^\e\]8;;\e\\$/)      { my $t = " \e[90m<$url>\e[0m"; $url = ""; $t }
-			else                         { s/\e\[34m/\e[35m/g if $url; $_ }
-		} split /(\e\]8;;[^\e]*\e\\)/;
-
-		s/\e\[34m/\e[36m/g;      # Color "#" headings cyan (36), was blue (34)
-
-		# Shorten code delimiter length to 3; identify code delimiter via color green (32)
-		s/\e\[32m(?:\xe2\x94\x80)+\e\[0m/\e[32m───\e[0m/g;
-
-		# Color code body green (32), was yellow (33)
-		if (/\e\[32m───\e\[0m/) { $in = !$in } elsif ($in) { s/\e\[33m/\e[32m/g }
+		# Recolor link labels cyan (36), was blue (34); after the heading
+		# rules above, links (incl. wrapped continuation lines) are the only
+		# remaining blue text. OSC 8 hyperlinks are kept: Terminal.app ignores
+		# them, hyperlink-capable terminals make labels clickable
+		s/\e\[34m/\e[36m/g;
 	'
 }
 
@@ -175,7 +117,6 @@ function nav_helpers_render_file {
 
 	echo
 	if [[ "$file" == *.md ]]; then
-		nav_helpers_render_frontmatter "$file"
 		nav_helpers_render_markdown "$file"
 	else
 		cat "$file"
