@@ -19,6 +19,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}y # Alias for \`pbcopy\`"
 	"${OTHER_DOT}p # Alias for \`pbpaste\`"
 	"${OTHER_DOT}v # Speak stripped pasteboard at rate 300"
+	"${OTHER_DOT}l # Encrypt pasteboard + print decrypt cmd"
 	''
 	"${OTHER_DOT}k # Clear terminal"
 	"${OTHER_DOT}kk # Show archived terminal outputs"
@@ -272,6 +273,30 @@ function other_keymap_kc {
 function other_keymap_kk {
 	mkdir -p "$OTHER_TERMINAL_DUMP_DIR"
 	cd "$OTHER_TERMINAL_DUMP_DIR" && nav_keymap_n || return
+}
+
+function other_keymap_l {
+	local temp_file; temp_file=$(mktemp)
+
+	# Write ciphertext to a temp file instead of capturing stdout
+	# Capturing `$(pbpaste | openssl ...)` breaks the password prompt (`bad password read`)
+	if ! pbpaste | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -a -out "temp_file"; then
+		# Delete temp file in case of errors, e.g mismatched passwords
+		rm -f "temp_file"
+		return 1
+	fi
+
+	# Embed the ciphertext in a decrypt one-liner that recipients run as-is.
+	# Single quotes can hold multi-line base64, which never contains `'`
+	# The leading `echo` prints a blank line before the password prompt
+	# The `awk` prints one after it (by waiting for output) and supplies the final newline
+	local decrypt_command; decrypt_command="echo; echo '$(< "temp_file")' | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -a -d | awk 'NR==1{print \"\"}1'"
+	rm -f "temp_file"
+
+	echo
+	echo "$decrypt_command"
+	echo -n "$decrypt_command" | pbcopy
+	green_bar 'Copied to pasteboard'
 }
 
 function other_keymap_m {
