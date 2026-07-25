@@ -24,12 +24,12 @@ hh: https://app.datadoghq.com/orchestration/explorer/pod?query=%s%20kube_namespa
 i: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aprod%2Cservice%3A%s-ccapi Datadog Infrastructure (Prod)
 ii: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aqa%2Cservice%3A%s-ccapi Datadog Infrastructure (QA)
 
-j: https://marqeta.atlassian.net/issues/%s Jira Ticket
+j: https://marqeta.atlassian.net/browse/%s Jira Ticket
 jb: https://marqeta.atlassian.net/jira/software/c/projects/TENGF/boards/1033/backlog?text=%s Jira Backlog
-jc: https://marqeta.atlassian.net/issues/CHANGE-%s Jira Ticket (CHANGE)
-jj: https://marqeta.atlassian.net/issues/INCI-%s Jira Ticket (INCI)
+jc: https://marqeta.atlassian.net/browse/CHANGE-%s Jira Ticket (CHANGE)
+jf: https://marqeta.atlassian.net/browse/TENGF-%s Jira Ticket (TENGF)
+jj: https://marqeta.atlassian.net/browse/INCI-%s Jira Ticket (INCI)
 js: https://marqeta.atlassian.net/jira/software/c/projects/TENGF/boards/1033?search=%s Jira Sprint
-jt: https://marqeta.atlassian.net/browse/TENGF-%s Jira Ticket (TENGF)
 
 l: https://app.datadoghq.com/logs?query=env%3Aprod%20%s Datadog Logs (Prod)
 ll: https://app.datadoghq.com/logs?query=env%3Aqa%20%s Datadog Logs (QA)
