@@ -44,7 +44,7 @@ Keymap List
   $ t.f <path>?               # Format
   $ t.g                       # Upload gist
   $ t.o                       # Show output
-  $ t.x                       # Extract plan diff from pasteboard
+  $ t.x                       # Open plan diff from pasteboard
   $ t.z                       # Unlock
 
   $ t.l <name>                # List states

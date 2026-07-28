@@ -88,6 +88,8 @@ function test__terraform_keymap_w {
 
 function test__terraform_keymap_x__with_diff {
 	assert "$(
+		function mate { cat; }
+
 		cat <<-eof | pbcopy
 			Terraform will perform the following actions:
 
@@ -104,8 +106,7 @@ function test__terraform_keymap_x__with_diff {
 			Plan: 1 to add, 0 to change, 1 to destroy.
 		eof
 
-		terraform_keymap_x > /dev/null
-		pbpaste
+		terraform_keymap_x
 	)" "$(
 		cat <<-eof
 			  # aws_instance.foo will be created
@@ -125,6 +126,8 @@ function test__terraform_keymap_x__with_diff {
 
 function test__terraform_keymap_x__with_nested_attribute_diff {
 	assert "$(
+		function mate { cat; }
+
 		cat <<-eof | pbcopy
 			Terraform will perform the following actions:
 
@@ -140,8 +143,7 @@ function test__terraform_keymap_x__with_nested_attribute_diff {
 			Plan: 0 to add, 1 to change, 0 to destroy.
 		eof
 
-		terraform_keymap_x > /dev/null
-		pbpaste
+		terraform_keymap_x
 	)" "$(
 		cat <<-eof
 			  # aws_instance.foo will be updated in-place
@@ -160,6 +162,8 @@ function test__terraform_keymap_x__with_nested_attribute_diff {
 
 function test__terraform_keymap_x__with_drift {
 	assert "$(
+		function mate { cat; }
+
 		cat <<-eof | pbcopy
 			Note: Objects have changed outside of Terraform
 
@@ -191,8 +195,7 @@ function test__terraform_keymap_x__with_drift {
 			Plan: 0 to add, 1 to change, 0 to destroy.
 		eof
 
-		terraform_keymap_x > /dev/null
-		pbpaste
+		terraform_keymap_x
 	)" "$(
 		cat <<-eof
 			Note: Objects have changed outside of Terraform
@@ -217,11 +220,22 @@ function test__terraform_keymap_x__with_drift {
 
 function test__terraform_keymap_x__with_no_changes {
 	assert "$(
+		function mate { cat; }
+
 		echo 'No changes. Your infrastructure matches the configuration.' | pbcopy
 
-		terraform_keymap_x > /dev/null
-		pbpaste
+		terraform_keymap_x
 	)" 'No changes. Your infrastructure matches the configuration.'
+}
+
+function test__terraform_keymap_x__with_mate_args {
+	assert "$(
+		function mate { echo "mate $*"; cat > /dev/null; }
+
+		echo 'No changes. Your infrastructure matches the configuration.' | pbcopy
+
+		terraform_keymap_x
+	)" 'mate -m tfplan -t source.terraform'
 }
 
 function test__terraform_keymap_x__with_empty_pasteboard {

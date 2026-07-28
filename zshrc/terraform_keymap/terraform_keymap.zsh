@@ -23,7 +23,7 @@ TERRAFORM_KEYMAP=(
 	"${TERRAFORM_DOT}f <path>? # Format"
 	"${TERRAFORM_DOT}g # Upload gist"
 	"${TERRAFORM_DOT}o # Show output"
-	"${TERRAFORM_DOT}x # Extract plan diff from pasteboard"
+	"${TERRAFORM_DOT}x # Open plan diff from pasteboard"
 	"${TERRAFORM_DOT}z # Unlock"
 	''
 	"${TERRAFORM_DOT}l <name> # List states"
@@ -226,8 +226,7 @@ function terraform_keymap_x {
 		return
 	fi
 
-	echo "$diff" | pbcopy
-	green_bar 'Plan diff copied to pasteboard'
+	echo "$diff" | mate -m tfplan -t source.terraform
 }
 
 function terraform_keymap_z {
