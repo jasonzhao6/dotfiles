@@ -14,6 +14,7 @@ Keymap List
   aa  # Datadog App APM (QA)
 
   c   # Github Code Search (TENGF)
+  cd  # Github Code Search (DBE)
   cc  # Github Code Search
 
   d   # Datadog DB APM (Prod)
@@ -52,6 +53,7 @@ Keymap List
   o   # Go Links
 
   r   # Github Repo Search (TENGF)
+  rd  # Github Repo Search (DBE)
   rr  # Github Repo Search
 
   se  # AWS EC2

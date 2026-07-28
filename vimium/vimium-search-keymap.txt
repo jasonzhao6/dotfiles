@@ -2,6 +2,7 @@ a: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources
 aa: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=qa Datadog App APM (QA)
 
 c: https://github.marqeta.com/search?q=org%3Atransaction-engine+%s&type=code Github Code Search (TENGF)
+cd: https://github.marqeta.com/search?q=org%3Adb-engineering+%s&type=code Github Code Search (DBE)
 cc: https://github.marqeta.com/search?q=%s&type=code Github Code Search
 
 d: https://app.datadoghq.com/apm/services/%s-mysql/operations/iso.8583/resources?env=prod Datadog DB APM (Prod)
@@ -40,6 +41,7 @@ ms: https://app.datadoghq.com/metric/summary?filter=%s Datadog Metrics Summary (
 o: https://golinks.io/%s Go Links
 
 r: https://github.marqeta.com/orgs/transaction-engine/repositories?q=%s Github Repo Search (TENGF)
+rd: https://github.marqeta.com/orgs/db-engineering/repositories?q=%s Github Repo Search (DBE)
 rr: https://github.marqeta.com/search?q=%s&type=repositories Github Repo Search
 
 se: https://us-east-1.console.aws.amazon.com/ec2/home#Instances:instanceState=running;search=%s AWS EC2

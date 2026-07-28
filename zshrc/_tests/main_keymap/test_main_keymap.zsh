@@ -66,8 +66,10 @@ function test__main_keymap_r__when_specifying_a_description {
 			  all: h                      # Shell shortcuts: github_keymap.zsh
 			  github_desktop: cmd-shift-g # View on GitHub
 			  vimium_search: c            # Github Code Search (TENGF)
+			  vimium_search: cd           # Github Code Search (DBE)
 			  vimium_search: cc           # Github Code Search
 			  vimium_search: r            # Github Repo Search (TENGF)
+			  vimium_search: rd           # Github Repo Search (DBE)
 			  vimium_search: rr           # Github Repo Search
 		eof
 	)"
