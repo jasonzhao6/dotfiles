@@ -8,6 +8,109 @@ function test__terraform_keymap {
 	)" '1'
 }
 
+function test__terraform_keymap_a__with_tfplan {
+	assert "$(
+		local home=$HOME
+		HOME="/tmp/test__terraform_keymap_a__with_tfplan"
+		mkdir -p $HOME/project
+		touch $HOME/project/tfplan
+
+		function terraform { echo "terraform $*"; }
+
+		cd $HOME/project || return
+
+		# Match the seconds loosely, so a slow test run cannot flake
+		local output; output=$(terraform_keymap_a | bw)
+		# shellcheck disable=SC2076
+		[[ $output =~ "tfplan is 0m [0-9]+s old" ]] && echo age_shown
+		# shellcheck disable=SC2076
+		[[ $output =~ 'terraform apply tfplan' ]] && echo applied
+
+		rm -rf $HOME
+		HOME=$home
+	)" "$(
+		cat <<-eof
+			age_shown
+			applied
+		eof
+	)"
+}
+
+function test__terraform_keymap_a__with_stale_tfplan {
+	assert "$(
+		local home=$HOME
+		HOME="/tmp/test__terraform_keymap_a__with_stale_tfplan"
+		mkdir -p $HOME/project
+		touch $HOME/project/tfplan
+		touch -A -001000 $HOME/project/tfplan # Backdate by 10 minutes
+
+		function terraform { echo "terraform $*"; }
+
+		cd $HOME/project || return
+
+		local output; output=$(terraform_keymap_a | bw)
+		# shellcheck disable=SC2076
+		[[ $output =~ "tfplan is 10m [0-9]+s old" ]] && echo age_shown
+		# shellcheck disable=SC2076
+		[[ $output =~ "tfplan is stale \(max 5m\)" ]] && echo stale
+		# shellcheck disable=SC2076
+		[[ ! $output =~ 'terraform apply' ]] && echo not_applied
+
+		rm -rf $HOME
+		HOME=$home
+	)" "$(
+		cat <<-eof
+			age_shown
+			stale
+			not_applied
+		eof
+	)"
+}
+
+function test__terraform_keymap_a__with_max_age {
+	assert "$(
+		local home=$HOME
+		HOME="/tmp/test__terraform_keymap_a__with_max_age"
+		mkdir -p $HOME/project
+		touch $HOME/project/tfplan
+		touch -A -001000 $HOME/project/tfplan # Backdate by 10 minutes
+
+		function terraform { echo "terraform $*"; }
+
+		cd $HOME/project || return
+
+		local output; output=$(terraform_keymap_a 20 | bw)
+		# shellcheck disable=SC2076
+		[[ $output =~ "tfplan is 10m [0-9]+s old" ]] && echo age_shown
+		# shellcheck disable=SC2076
+		[[ $output =~ 'terraform apply tfplan' ]] && echo applied
+
+		rm -rf $HOME
+		HOME=$home
+	)" "$(
+		cat <<-eof
+			age_shown
+			applied
+		eof
+	)"
+}
+
+function test__terraform_keymap_a__without_tfplan {
+	assert "$(
+		local home=$HOME
+		HOME="/tmp/test__terraform_keymap_a__without_tfplan"
+		mkdir -p $HOME/project
+
+		function terraform { echo "terraform $*"; }
+
+		cd $HOME/project || return
+		terraform_keymap_a
+
+		rm -rf $HOME
+		HOME=$home
+	)" "$(red_bar 'No tfplan to apply')"
+}
+
 function test__terraform_keymap_c {
 	assert "$(
 		local home=$HOME
@@ -57,6 +160,29 @@ function test__terraform_keymap_cc {
 			terraform_absent
 			d_absent
 			cache_absent
+		eof
+	)"
+}
+
+function test__terraform_keymap_p__drops_stale_tfplan {
+	assert "$(
+		local home=$HOME
+		HOME="/tmp/test__terraform_keymap_p__drops_stale_tfplan"
+		mkdir -p $HOME/project
+		touch $HOME/project/tfplan
+
+		function terraform { echo "terraform $*"; }
+
+		cd $HOME/project || return
+		terraform_keymap_p
+		[[ -e tfplan ]] && echo tfplan_present || echo tfplan_absent
+
+		rm -rf $HOME
+		HOME=$home
+	)" "$(
+		cat <<-eof
+			terraform plan -out=tfplan
+			tfplan_absent
 		eof
 	)"
 }
@@ -230,12 +356,21 @@ function test__terraform_keymap_x__with_no_changes {
 
 function test__terraform_keymap_x__with_mate_args {
 	assert "$(
-		function mate { echo "mate $*"; cat > /dev/null; }
+		# Print one arg per line, so the quoted display name stays one arg
+		function mate { print -l mate "$@"; cat > /dev/null; }
 
 		echo 'No changes. Your infrastructure matches the configuration.' | pbcopy
 
 		terraform_keymap_x
-	)" 'mate -m tfplan -t source.terraform'
+	)" "$(
+		cat <<-eof
+			mate
+			-m
+			pasted plan
+			-t
+			source.terraform
+		eof
+	)"
 }
 
 function test__terraform_keymap_x__with_empty_pasteboard {

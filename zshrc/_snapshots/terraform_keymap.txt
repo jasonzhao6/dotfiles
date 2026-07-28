@@ -36,7 +36,7 @@ Keymap List
 
   $ t.v (i,iu,ir,im,e)?       # Validate
   $ t.p (i,iu,ir,im,e)?       # Plan
-  $ t.a (i,iu,ir,im,e)?       # Apply & auto-approve
+  $ t.a <max age in min>?     # Apply plan from t.p
 
   $ t.c                       # Clean
   $ t.cc                      # Clean & clear plugin cache
