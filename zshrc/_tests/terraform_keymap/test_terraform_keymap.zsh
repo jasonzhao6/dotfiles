@@ -286,6 +286,37 @@ function test__terraform_keymap_x__with_nested_attribute_diff {
 	)"
 }
 
+function test__terraform_keymap_x__with_forget {
+	assert "$(
+		function mate { cat; }
+
+		# Forget actions render with a 1-space gutter, unlike other actions
+		cat <<-eof | pbcopy
+			Terraform will perform the following actions:
+
+			 # aws_instance.foo will no longer be managed by Terraform, but will not be destroyed
+			 # (destroy = false is set in the configuration)
+			 . resource "aws_instance" "foo" {
+			        id = "i-0123456789"
+			    }
+
+			Plan: 0 to add, 0 to change, 0 to destroy.
+		eof
+
+		terraform_keymap_x
+	)" "$(
+		cat <<-eof
+			 # aws_instance.foo will no longer be managed by Terraform, but will not be destroyed
+			 # (destroy = false is set in the configuration)
+			 . resource "aws_instance" "foo" {
+			        id = "i-0123456789"
+			    }
+
+			Plan: 0 to add, 0 to change, 0 to destroy.
+		eof
+	)"
+}
+
 function test__terraform_keymap_x__with_drift {
 	assert "$(
 		function mate { cat; }

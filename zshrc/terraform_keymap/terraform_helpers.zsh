@@ -4,6 +4,11 @@ function terraform_helpers_diff {
 	# values) are always indented deeper, so that column alone marks the
 	# block's end without tracking brace depth
 	#
+	# Forget actions ("no longer managed... but not destroyed") render their
+	# header and symbol with a 1-space gutter instead of 2, so match either
+	# width; they are also absent from the `Plan:` counts, making the block
+	# itself the only trace of a resource dropping out of state
+	#
 	# Drift (changes made outside of Terraform) renders with the same header/
 	# brace shape as planned actions, just under a different banner; keep
 	# Terraform's own banner lines so a drifted resource isn't mistaken for
@@ -19,9 +24,9 @@ function terraform_helpers_diff {
 			if (drift) { print; print ""; drift=0 }
 			next
 		}
-		/^  # / { capture=1 }
+		/^ {1,2}# / { capture=1 }
 		capture { print }
-		/^    }$/ { capture=0; print "" }
+		/^    }$/ { if (capture) { capture=0; print "" } }
 		/^No changes\./ { print }
 		/^Plan: / { print }
 	'
