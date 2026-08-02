@@ -3,7 +3,7 @@ GITHUB_ALIAS='h'
 GITHUB_DOT="${GITHUB_ALIAS}${KEYMAP_DOT}"
 
 GITHUB_KEYMAP=(
-	"${GITHUB_DOT}h <match>* <-mismatch>* # Go to GitHub & list repos & filter"
+	"${GITHUB_DOT}h <match>* <-mismatch>* # Go to GitHub, \`cd\` when only one match"
 	"${GITHUB_DOT}t # Go to repo in pasteboard"
 	"${GITHUB_DOT}tt # Copy current repo to pasteboard"
 	''
@@ -106,7 +106,18 @@ function github_keymap_gg {
 function github_keymap_h {
 	local filters=("$@")
 
-	cd ~/GitHub && echo && ls -d -- */* | args_keymap_s "${filters[@]}"
+	cd ~/GitHub || return
+
+	local repos; repos=$(ls -d -- */*)
+
+	# `cd` when only one repo matches
+	local match_path; match_path=$(echo "$repos" | args_helpers_only_match "${filters[@]}")
+	if [[ -n $match_path ]]; then
+		cd "$match_path" && nav_keymap_n || true
+		return
+	fi
+
+	echo && echo "$repos" | args_keymap_s "${filters[@]}"
 }
 
 function github_keymap_n {

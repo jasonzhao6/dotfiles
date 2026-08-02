@@ -238,23 +238,12 @@ function nav_keymap_q {
 		return
 	fi
 
-	# Narrow to matching entries; with no filters, every entry matches
-	local matched
-	if [[ -n "${filters[*]}" ]]; then
-		matched=$(args_helpers_filter "${filters[@]}" < "$NAV_MRU_FILE" 2>/dev/null)
-	else
-		matched=$(< "$NAV_MRU_FILE")
-	fi
-
-	# `cd` when exactly one entry matches
-	if [[ -n "$matched" ]]; then
-		local count; count=$(echo "$matched" | wc -l | tr -d ' ')
-		if [[ $count -eq 1 ]]; then
-			local match_path; match_path=$(echo "$matched" | bw | strip)
-			nav_helpers_mru_add "$match_path"
-			cd "$match_path" && nav_keymap_n || true
-			return
-		fi
+	# `cd` when only one entry matches
+	local match_path; match_path=$(args_helpers_only_match "${filters[@]}" < "$NAV_MRU_FILE")
+	if [[ -n $match_path ]]; then
+		nav_helpers_mru_add "$match_path"
+		cd "$match_path" && nav_keymap_n || true
+		return
 	fi
 
 	args_keymap_s "${filters[@]}" < "$NAV_MRU_FILE"

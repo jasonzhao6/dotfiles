@@ -24,7 +24,7 @@ Keymap Usage
 
 Keymap List
 
-  $ h.h <match>* <-mismatch>* # Go to GitHub & list repos & filter
+  $ h.h <match>* <-mismatch>* # Go to GitHub, `cd` when only one match
   $ h.t                       # Go to repo in pasteboard
   $ h.tt                      # Copy current repo to pasteboard
 

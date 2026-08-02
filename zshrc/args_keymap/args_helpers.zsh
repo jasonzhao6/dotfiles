@@ -155,3 +155,19 @@ function args_helpers_filter {
 
 	eval "$greps"
 }
+
+function args_helpers_only_match {
+	local filters=("$@")
+
+	# Narrow the piped input; with no filters, every entry matches
+	local matched; matched=$(cat)
+	if [[ -n "${filters[*]}" ]]; then
+		matched=$(echo "$matched" | args_helpers_filter "${filters[@]}" 2> /dev/null)
+	fi
+
+	# Echo nothing unless exactly one entry matched
+	# Note: Check for emptiness first- `wc -l` counts an empty string as one line
+	[[ -n $matched && $(echo "$matched" | wc -l | tr -d ' ') -eq 1 ]] || return
+
+	echo "$matched" | bw | strip
+}
