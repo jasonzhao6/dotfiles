@@ -3,19 +3,19 @@ GITHUB_ALIAS='h'
 GITHUB_DOT="${GITHUB_ALIAS}${KEYMAP_DOT}"
 
 GITHUB_KEYMAP=(
-	"${GITHUB_DOT}h <match>* <-mismatch>* # Go to GitHub, \`cd\` when only one match"
+	"${GITHUB_ALIAS} <path> # Open repo at path"
+	"${GITHUB_DOT}o <path>? # Open repo (Default: current)"
+	''
+	"${GITHUB_DOT}h <match>* <-mismatch>* # List ~/GitHub, \`cd\` when only one match"
 	"${GITHUB_DOT}t # Go to repo in pasteboard"
 	"${GITHUB_DOT}tt # Copy current repo to pasteboard"
 	''
 	"${GITHUB_DOT}a # Open current repo in GitHub Desktop"
 	"${GITHUB_DOT}n # Create new PR & open it"
-	"${KEYMAP_PIPE_PATTERN}${GITHUB_DOT}g # Create new gist & open it"
-	"${GITHUB_DOT}gg # Open tab to create gist"
-	''
-	"${GITHUB_ALIAS} <repo> # Open specified repo"
-	"${GITHUB_DOT}o # Open current repo"
 	"${GITHUB_DOT}p <pr>? # Open PRs (or a specific PR)"
 	"${GITHUB_DOT}c <sha>? # Open a commit (Default: Pasteboard)"
+	"${KEYMAP_PIPE_PATTERN}${GITHUB_DOT}g # Create new gist & open it"
+	"${GITHUB_DOT}gg # Open tab to create gist"
 	''
 	"${GITHUB_DOT}r <match>* <-mismatch>* # List remote repos & filter"
 	"${GITHUB_DOT}rr # Save copy of remote repos"
@@ -30,10 +30,9 @@ GITHUB_KEYMAP=(
 keymap_init $GITHUB_NAMESPACE $GITHUB_ALIAS "${GITHUB_KEYMAP[@]}"
 
 function github_keymap {
-	# If the first arg is a repo in the current org, delegate to `github_keymap_o`
-	local repo=$1
-	if grep --quiet "^$repo$" "$ZSHRC_DATA_DIR"/github/"$(github_keymap_org)".txt 2> /dev/null; then
-		github_keymap_o "$repo"
+	# If the first arg is a path to a repo, delegate to `github_keymap_o`
+	if github_helpers_is_repo_root "$1"; then
+		github_keymap_o "$1"
 		return
 	fi
 
@@ -125,9 +124,22 @@ function github_keymap_n {
 }
 
 function github_keymap_o {
-	local repo=${*:-$(github_keymap_repo 2> /dev/null)}
+	local target=$*
 
-	open https://"$(github_keymap_domain)"/"$(github_keymap_org)"/"$repo"
+	# When the arg is a path to a repo, read its remote instead of the current one
+	if github_helpers_is_repo_root "$target"; then
+		( cd "$target" && github_keymap_o )
+		return
+	fi
+
+	local repo=${target:-$(github_keymap_repo 2> /dev/null)}
+	local url="https://$(github_keymap_domain)/$(github_keymap_org)/$repo"
+
+	if [[ -z $ZSHRC_UNDER_TESTING ]]; then
+		open "$url"
+	else
+		echo "$url"
+	fi
 }
 
 function github_keymap_org {
@@ -156,10 +168,10 @@ function github_keymap_rr {
 	local orgs org hostname repos count=0
 	orgs=(~/GitHub/*/)
 
-	# Reset local cache
-	rm -rf "$ZSHRC_DATA_DIR"/github
-	mkdir -p "$ZSHRC_DATA_DIR"/github
-	: > "$GITHUB_ALL_REPOS"
+	# Accumulate in a temp file, so an interrupted run leaves the existing cache intact
+	# Note: Keep it beside the cache, so the final `mv` is an atomic same-filesystem rename
+	local temp_file="$GITHUB_ALL_REPOS.tmp"
+	: > "$temp_file"
 
 	# Iterate over each org and fetch its repos
 	for org in "${orgs[@]}"; do
@@ -175,15 +187,23 @@ function github_keymap_rr {
 		# Avoid rate limiting, wait a second in between orgs
 		sleep 1
 
-		# Fetch repos and save to per-org and combined files
+		# Fetch repos and save to the combined file
 		repos=$(GH_HOST=$hostname gh repo list "$org" --no-archived --limit 1000 --json name 2> /dev/null |
 			jq --raw-output '.[].name')
 		if [[ -z $repos ]]; then echo ' ... skipped'; continue; fi
-		echo "$repos" > "$ZSHRC_DATA_DIR"/github/"$org".txt
 		# shellcheck disable=SC2001 # More readable as sed than parameter expansion
-		echo "$repos" | sed "s|^|$org/|" >> "$GITHUB_ALL_REPOS"
+		echo "$repos" | sed "s|^|$org/|" >> "$temp_file"
 		echo " ... $(echo "$repos" | wc -l | tr -d ' ') repos"
 	done
+
+	# Keep the existing cache when a run fetches nothing, e.g. offline or `gh` not authed
+	if [[ ! -s $temp_file ]]; then
+		rm -f "$temp_file"
+		red_bar 'Fetched no repos, keeping existing cache'
+		return 1
+	fi
+
+	mv "$temp_file" "$GITHUB_ALL_REPOS"
 }
 
 function github_keymap_t {

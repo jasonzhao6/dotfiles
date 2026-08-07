@@ -24,19 +24,19 @@ Keymap Usage
 
 Keymap List
 
-  $ h.h <match>* <-mismatch>* # Go to GitHub, `cd` when only one match
+  $ h <path>                  # Open repo at path
+  $ h.o <path>?               # Open repo (Default: current)
+
+  $ h.h <match>* <-mismatch>* # List ~/GitHub, `cd` when only one match
   $ h.t                       # Go to repo in pasteboard
   $ h.tt                      # Copy current repo to pasteboard
 
   $ h.a                       # Open current repo in GitHub Desktop
   $ h.n                       # Create new PR & open it
-  $ (|)? h.g                  # Create new gist & open it
-  $ h.gg                      # Open tab to create gist
-
-  $ h <repo>                  # Open specified repo
-  $ h.o                       # Open current repo
   $ h.p <pr>?                 # Open PRs (or a specific PR)
   $ h.c <sha>?                # Open a commit (Default: Pasteboard)
+  $ (|)? h.g                  # Create new gist & open it
+  $ h.gg                      # Open tab to create gist
 
   $ h.r <match>* <-mismatch>* # List remote repos & filter
   $ h.rr                      # Save copy of remote repos

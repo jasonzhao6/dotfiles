@@ -54,7 +54,7 @@ function test__main_keymap_r__when_specifying_a_description {
 		cat <<-eof
 
 			  $ g.h                       # (Reserved: GitHub CLI)
-			  $ h.h <match>* <-mismatch>* # Go to GitHub, \`cd\` when only one match
+			  $ h.h <match>* <-mismatch>* # List ~/GitHub, \`cd\` when only one match
 			  $ h.a                       # Open current repo in GitHub Desktop
 			  $ m.h <regex>?              # Show GitHub Desktop shortcuts
 			  $ n.h <match>* <-mismatch>* # Go to GitHub
