@@ -46,7 +46,7 @@ ZSH_OTHER_DOTFILES=(
 	tm_properties
 	zshrc
 )
-ZSHRC_SECRETS_DIR="$HOME/Documents/-backups/zsh.secrets"
+ZSHRC_SECRETS_DIR="$HOME/Documents/backups/zsh.secrets"
 ZSHRC_SECRETS_LATEST="$ZSHRC_SECRETS_DIR/latest.txt"
 
 function zsh_keymap_0 {
@@ -167,4 +167,3 @@ function zsh_keymap_z {
 
 	echo "$definition" | args_keymap_s
 }
-
