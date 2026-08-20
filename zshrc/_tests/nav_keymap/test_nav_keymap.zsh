@@ -157,7 +157,7 @@ function test__nav_keymap__when_specifying_a_hidden_file {
 
 function test__nav_keymap__renders_md_headings_with_hash_prefixes {
 	local md='/tmp/test__nav_keymap__raw_md_headings.md'
-	printf '# One\n\n## Two\n\n###### Six\n' > $md
+	printf '# One `span` and *em* tail\n\n## Two\n\n##### Five `code`\n\n###### Six\n' > $md
 
 	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
 	local plain; plain=$(echo "$output" | bw)
@@ -169,6 +169,19 @@ function test__nav_keymap__renders_md_headings_with_hash_prefixes {
 	assert "$([[ $output =~ $'\e\\[35m# One' ]] && echo 1)" '1'
 	assert "$([[ $output =~ $'\e\\[35m## ' ]] && echo 1)" '1'
 
+	# A code span keeps its own color (33), an emphasized span keeps its italic
+	# (3), and neither leaves the rest of the heading in mdcat's color
+	assert "$([[ $output =~ $'\e\\[33mspan' ]] && echo 1)" '1'
+	assert "$([[ $output =~ $'\e\\[3m\e\\[35mem' ]] && echo 1)" '1'
+	assert "$([[ $output =~ $'\e\\[35m tail' ]] && echo 1)" '1'
+
+	# Same at H5, the one level whose own color is the code span's yellow (33)
+	assert "$([[ $output =~ $'\e\\[35m##### ' ]] && echo 1)" '1'
+	assert "$([[ $output =~ $'\e\\[33mcode' ]] && echo 1)" '1'
+
+	# The H1 banner background (104) is gone, incl. behind an inline span
+	assert "$([[ $output != *$'\e[104m'* ]] && echo 1)" '1'
+
 	# Blocks are separated by single blank lines, never runs of them
 	assert "$([[ $plain != *$'\n\n\n'* ]] && echo 1)" '1'
 
@@ -177,13 +190,16 @@ function test__nav_keymap__renders_md_headings_with_hash_prefixes {
 
 function test__nav_keymap__renders_md_link_labels_cyan {
 	local md='/tmp/test__nav_keymap__raw_md_links.md'
-	printf 'a [link](https://example.com) here, wrapped by filler words pushing this [long link label across the eighty column boundary](https://example.com/foo) end\n' > $md
+	printf 'a [link](https://example.com) here, wrapped by filler words pushing this [long link label across the eighty column boundary](https://example.com/foo) end\n\n## Two [inside](https://example.com) tail\n' > $md
 
 	local output; output=$(ZSHRC_UNDER_TESTING=1 nav_keymap $md)
 
 	# Link labels are cyan (36), including a wrapped label's continuation line
 	assert "$([[ $output =~ $'\e\\[36mlink' ]] && echo 1)" '1'
 	assert "$([[ $output =~ $'\e\\[36meighty column boundary' ]] && echo 1)" '1'
+
+	# A label inside a heading stays cyan, and the text after it is magenta
+	assert "$([[ $output =~ $'\e\\[36minside' && $output =~ $'\e\\[35m tail' ]] && echo 1)" '1'
 
 	# OSC 8 hyperlink escapes are kept
 	assert "$([[ $output == *$'\e]8;;https://example.com/'* ]] && echo 1)" '1'
@@ -398,6 +414,7 @@ function test__nav_keymap_j {
 		echo 'two' > 2.txt
 		echo 'three' > 3.txt
 		nav_keymap_n > /dev/null
+		# shellcheck disable=SC2034 # Read by the sourced keymap code, not here
 		(ZSHRC_UNDER_TESTING=1; nav_keymap_j; nav_keymap_j; nav_keymap_j) | bw
 		rm -rf /tmp/test__nav_keymap_j
 	)" "$(
@@ -462,13 +479,20 @@ function test__nav_keymap_j__renders_md_with_nav_helpers {
 		rm -rf /tmp/test__nav_keymap_j
 		mkdir /tmp/test__nav_keymap_j
 		cd /tmp/test__nav_keymap_j || return
-		echo '# Heading' > note.md
+		printf '# Heading\n\n- item\n' > note.md
 		nav_keymap_n > /dev/null
-		# nav_helpers_render_file output differs from cat; just check it does not error
-		# and that the file name is shown
-		nav_keymap_j 2>/dev/null | bw | grep --count '^note.md$'
+		# The `•` proves mdcat rendered the file, rather than `cat` printing it
+		ZSHRC_UNDER_TESTING=1 nav_keymap_j | bw | compact
 		rm -rf /tmp/test__nav_keymap_j
-	)" '1'
+	)" "$(
+		cat <<-eof
+		───────
+		note.md
+		───────
+		# Heading
+		• item
+		eof
+	)"
 }
 
 function test__nav_keymap_j__cats_log {
@@ -544,7 +568,7 @@ function test__nav_keymap_k {
 		echo 'two' > 2.txt
 		echo 'three' > 3.txt
 		nav_keymap_n > /dev/null
-		# shellcheck disable=SC2034 # ZSHRC_UNDER_TESTING is the global test flag; read by the sourced keymap code, not here
+		# shellcheck disable=SC2034 # Read by the sourced keymap code, not here
 		(ZSHRC_UNDER_TESTING=1; nav_keymap_k; nav_keymap_k; nav_keymap_k) | bw
 		rm -rf /tmp/test__nav_keymap_k
 	)" "$(
@@ -1152,7 +1176,7 @@ function test__nav_keymap_v__when_pasteboard_is_not_a_file {
 }
 
 function test__nav_keymap_v__goes_to_folder_and_sets_cursor {
-	# Like \`n <file>\`: cd to the folder and set the cursor, so \`nj\` continues
+	# Like `n <file>`: cd to the folder and set the cursor, so `nj` continues
 	assert "$(
 		rm -rf /tmp/test__nav_keymap_v__cursor
 		mkdir /tmp/test__nav_keymap_v__cursor
@@ -1360,13 +1384,11 @@ function test__nav_keymap_zz__goes_to_plans_and_sets_cursor {
 function test__nav_keymap_zz__with_no_plans {
 	assert "$(
 		local tmp_dir; tmp_dir=$(mktemp -d)
-		local orig=$NAV_CLAUDE_PLANS_DIR
 		NAV_CLAUDE_PLANS_DIR=$tmp_dir
 
-		# Empty dir should show error
+		# An empty plans folder shows an error
 		nav_keymap_zz 2>/dev/null
 
 		rm -rf "$tmp_dir"
-		NAV_CLAUDE_PLANS_DIR=$orig
 	)" "$(red_bar 'No plans')"
 }

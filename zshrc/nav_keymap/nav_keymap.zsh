@@ -99,6 +99,7 @@ source "$ZSHRC_SRC_DIR/$NAV_NAMESPACE/nav_helpers.zsh"
 # Constants
 NAV_CLAUDE_DIR="$HOME/GitHub/jasonzhao6/scratch/claude"
 NAV_CLAUDE_PLANS_DIR="$NAV_CLAUDE_DIR/plans"
+NAV_MDCAT_CONFIG_HOME="$ZSHRC_SRC_DIR/$NAV_NAMESPACE" # Holds `mdcat/config.toml`
 NAV_MRU_FILE="$ZSHRC_DATA_DIR/nav.mru.txt"
 
 # States

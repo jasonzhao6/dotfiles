@@ -84,30 +84,23 @@ function nav_helpers_populate_args_when_empty {
 }
 
 function nav_helpers_render_markdown {
-	# Customize how markdown is rendered
+	# Customize how markdown is rendered: `mdcat/config.toml` restyles headings
+	# as magenta (35) `#` prefixes and link labels as cyan (36); perl handles the
+	# rest. OSC 8 hyperlinks are kept: Terminal.app ignores them, hyperlink-
+	# capable terminals make labels clickable
 	# `--ansi` is required: mdcat sees the pipe to perl (not the terminal) as its
 	# stdout and would otherwise emit plain text with no escapes for perl to match
-	mdcat --ansi "$1" | perl -pe '
+	XDG_CONFIG_HOME="$NAV_MDCAT_CONFIG_HOME" mdcat --ansi "$1" | perl -pe '
 		# Normalize vertical spacing: drop leading blank lines to avoid doubling
 		# the banner/content separator `render_file` already printed, and
 		# collapse blank runs to a single line
 		if (/^$/) { $_ = "" if $blank || !$seen; $blank = 1 } else { $seen = 1; $blank = 0 }
 
-		# Restyle headings as magenta (35) `#` prefixes, one rule per level: H1
-		# is a padded banner on a blue background (104); H2-H6 each use a
-		# distinct marker glyph and color, flush left with a trailing space
-		s/^\e\[94m\e\[104m \e\[0m\e\[1m\e\[97m\e\[104m(.*)\e\[0m\e\[94m\e\[104m \e\[0m/\e[1m\e[35m# $1\e[0m/; # H1 banner
-		s/^\e\[1m\e\[34m\xe2\x94\x81\xe2\x94\x81 \e\[0m\e\[1m\e\[34m/\e[1m\e[35m## \e[0m\e[1m\e[35m/;        # H2 ━━
-		s/^\e\[1m\e\[36m\xe2\x94\x80\xe2\x94\x80 \e\[0m\e\[1m\e\[36m/\e[1m\e[35m### \e[0m\e[1m\e[35m/;       # H3 ──
-		s/^\e\[1m\e\[32m\xe2\x94\x84 \e\[0m\e\[1m\e\[32m/\e[1m\e[35m#### \e[0m\e[1m\e[35m/;                  # H4 ┄
-		s/^\e\[1m\e\[33m\xe2\x95\x8c \e\[0m\e\[1m\e\[33m/\e[1m\e[35m##### \e[0m\e[1m\e[35m/;                 # H5 ╌
-		s/^\e\[1m\e\[35m\xc2\xb7 \e\[0m\e\[1m\e\[35m/\e[1m\e[35m###### \e[0m\e[1m\e[35m/;                    # H6 · (already magenta)
-
-		# Recolor link labels cyan (36), was blue (34); after the heading
-		# rules above, links (incl. wrapped continuation lines) are the only
-		# remaining blue text. OSC 8 hyperlinks are kept: Terminal.app ignores
-		# them, hyperlink-capable terminals make labels clickable
-		s/\e\[34m/\e[36m/g;
+		# H1 is the one heading `config.toml` cannot mark up, as mdcat takes a
+		# marker for H2-H6 only. It renders a banner instead, padding the
+		# heading with a space on either side of a background color (104).
+		# Swap the leading pad for a `#` prefix, then drop the rest
+		s/\e\[104m//g if s/^\e\[94m\e\[104m \e\[0m\e\[1m\e\[35m\e\[104m(.*)\e\[0m\e\[94m\e\[104m \e\[0m$/\e[1m\e[35m# $1\e[0m/;
 	'
 }
 

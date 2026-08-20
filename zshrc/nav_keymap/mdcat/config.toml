@@ -1,0 +1,13 @@
+# Read by `nav_helpers_render_markdown`, which points `$XDG_CONFIG_HOME` at the
+# parent folder so these overrides apply to `nav` only, not to mdcat everywhere.
+# `bright-blue` pins the H1 banner colors the theme would otherwise pick, so the
+# escapes `nav_helpers_render_markdown` rewrites stay the same in any terminal
+
+[theme.styles]
+h1_text = { fg = "magenta", bg = "bright-blue", modifiers = ["bold"] }
+h2 = { fg = "magenta", modifiers = ["bold"], text = "## " }
+h3 = { fg = "magenta", modifiers = ["bold"], text = "### " }
+h4 = { fg = "magenta", modifiers = ["bold"], text = "#### " }
+h5 = { fg = "magenta", modifiers = ["bold"], text = "##### " }
+h6 = { fg = "magenta", modifiers = ["bold"], text = "###### " }
+link = { fg = "cyan" }
