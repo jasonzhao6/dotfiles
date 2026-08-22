@@ -14,6 +14,9 @@ Q_KEYMAP=(
 	"${Q_DOT}j # Vibe code in JCard repo"
 	"${Q_DOT}k # Vibe code in K8s Helm repo"
 	''
+	"${Q_DOT}r # Resume last session"
+	"${Q_DOT}l # List prior sessions"
+	''
 	"${Q_DOT}0 <command>? # Invoke \`q\`"
 	"${Q_DOT}4 <command>? # Invoke \`q chat\` with \`claude-opus-4.5\`"
 	''
@@ -80,6 +83,10 @@ function q_keymap_k {
 	q_keymap_4 --agent code
 }
 
+function q_keymap_l {
+	q_keymap_0 --list
+}
+
 function q_keymap_m {
 	mate "$Q_KEYMAP_CONFIG_DIR"
 }
@@ -132,6 +139,10 @@ function q_keymap_P {
 
 function q_keymap_q {
 	q_keymap_4 --agent q
+}
+
+function q_keymap_r {
+	q_keymap_0 --resume
 }
 
 function q_keymap_s {

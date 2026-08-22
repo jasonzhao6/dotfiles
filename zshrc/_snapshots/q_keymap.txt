@@ -1,7 +1,7 @@
 Keymap: q_keymap.zsh
 
   `   1   2   3  <4>  5   |   6   7   8   9  <0>  [   ] 
-      '   ,   .  <p>  y   |   f   g  <c>  r   l   /   =   \ 
+      '   ,   .  <p>  y   |   f   g  <c> <r> <l>  /   =   \ 
      <a> <o>  e   u   i   |  <d> <h> <t>  n  <s>  - 
       ;  <q> <j> <k>  x   |   b  <m>  w   v   z 
 
@@ -34,6 +34,9 @@ Keymap List
   $ q.c            # Vibe code in current repo
   $ q.j            # Vibe code in JCard repo
   $ q.k            # Vibe code in K8s Helm repo
+
+  $ q.r            # Resume last session
+  $ q.l            # List prior sessions
 
   $ q.0 <command>? # Invoke `q`
   $ q.4 <command>? # Invoke `q chat` with `claude-opus-4.5`
