@@ -1056,18 +1056,55 @@ function test__args_keymap_w {
 }
 
 function test__args_keymap_w__with_one_column {
-	assert "$(
+	# Capture state before test for debugging intermittent failures
+	local pre_state
+	pre_state=$(cat <<-eof
+		ARGS_HISTORY_MAX=$ARGS_HISTORY_MAX
+		ARGS_HISTORY_INDEX=$ARGS_HISTORY_INDEX
+		ARGS_HISTORY_HEAD=$ARGS_HISTORY_HEAD
+		ARGS_HISTORY_TAIL=$ARGS_HISTORY_TAIL
+		ARGS_HISTORY size=${#ARGS_HISTORY[@]}
+	eof
+	)
+
+	local actual
+	actual=$(
 		echo "$test__input" | args_keymap_s > /dev/null
 		args_keymap_w a
-	)" "$(
-		cat <<-eof
+	)
+
+	# Capture state after test
+	local post_state
+	post_state=$(cat <<-eof
+		ARGS_HISTORY_MAX=$ARGS_HISTORY_MAX
+		ARGS_HISTORY_INDEX=$ARGS_HISTORY_INDEX
+		ARGS_HISTORY_HEAD=$ARGS_HISTORY_HEAD
+		ARGS_HISTORY_TAIL=$ARGS_HISTORY_TAIL
+		ARGS_HISTORY size=${#ARGS_HISTORY[@]}
+		ARGS_PUSHED=$ARGS_PUSHED
+	eof
+	)
+
+	local expected
+	expected=$(cat <<-eof
 		     1	terraform-application-region-shared-1
 		     2	terraform-application-region-shared-2
 		     3	terraform-application-region-shared-3
 		     4	terraform-application-region-program-A
 		     5	terraform-application-region-program-B
-		eof
-	)"
+	eof
+	)
+
+	if [[ $actual != "$expected" ]]; then
+		echo "=== FAILURE DEBUG INFO ===" >&2
+		echo "Pre-test state:" >&2
+		echo "$pre_state" >&2
+		echo "Post-test state:" >&2
+		echo "$post_state" >&2
+		echo "=== END DEBUG INFO ===" >&2
+	fi
+
+	assert "$actual" "$expected"
 }
 
 function test__args_keymap_y {
