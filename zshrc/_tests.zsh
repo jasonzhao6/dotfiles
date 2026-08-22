@@ -19,7 +19,10 @@ ZSHRC_TESTS_SECTION_FILTER=$([[ $1 -ge 1 && $1 -le 5 ]] && echo "$1")
 ZSHRC_TESTS_NAME_FILTER=$([[ -z $ZSHRC_TESTS_SECTION_FILTER && -n $1 ]] && echo "$1")
 
 # Source test subjects
-ZSHRC_UNDER_TESTING=1 source ~/.zshrc
+# Set globally (not just for this line) so it also covers side-effecting calls
+# made by tests as setup steps, not only the one call each test asserts on
+ZSHRC_UNDER_TESTING=1
+source ~/.zshrc
 
 # Source test harness
 source "$ZSHRC_SRC_DIR"/_tests/_test_harness.zsh

@@ -31,7 +31,7 @@ function test__other_keymap_b {
 }
 
 function test__other_keymap_d {	assert "$(
-		ZSHRC_UNDER_TESTING=1 other_keymap_d www.google.com
+		other_keymap_d www.google.com
 	)" "$(
 		cat <<-eof
 		     1	test output for
@@ -41,12 +41,12 @@ function test__other_keymap_d {	assert "$(
 }
 
 function test__other_keymap_d__without_input {
-	assert "$(ZSHRC_UNDER_TESTING=1 other_keymap_d)" ''
+	assert "$(other_keymap_d)" ''
 }
 
 function test__other_keymap_d__with_protocol {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1 other_keymap_d https://www.google.com
+		other_keymap_d https://www.google.com
 	)" "$(
 		cat <<-eof
 		     1	test output for
@@ -57,7 +57,7 @@ function test__other_keymap_d__with_protocol {
 
 function test__other_keymap_d__with_protocol_and_path {
 	assert "$(
-		ZSHRC_UNDER_TESTING=1 other_keymap_d https://www.google.com/path/to/page
+		other_keymap_d https://www.google.com/path/to/page
 	)" "$(
 		cat <<-eof
 		     1	test output for
@@ -306,7 +306,7 @@ function test__other_keymap_k {	assert "$(
 		rm -rf $OTHER_TERMINAL_DUMP_DIR
 
 		echo '$' | pbcopy
-		ZSHRC_UNDER_TESTING=1 other_keymap_k
+		other_keymap_k
 		ls -l $OTHER_TERMINAL_DUMP_DIR | wc -l
 		cat $OTHER_TERMINAL_DUMP_DIR/*
 
@@ -326,8 +326,8 @@ function test__other_keymap_k__when_dumping_same_pasteboard_twice {
 		rm -rf $OTHER_TERMINAL_DUMP_DIR
 
 		echo '$' | pbcopy
-		ZSHRC_UNDER_TESTING=1 other_keymap_k
-		ZSHRC_UNDER_TESTING=1 other_keymap_k
+		other_keymap_k
+		other_keymap_k
 		ls -l $OTHER_TERMINAL_DUMP_DIR | wc -l
 		cat $OTHER_TERMINAL_DUMP_DIR/*
 
@@ -347,9 +347,9 @@ function test__other_keymap_k__when_dumping_two_different_pasteboards {
 		rm -rf $OTHER_TERMINAL_DUMP_DIR
 
 		printf "pasteboard 1\n$\n" | pbcopy
-		ZSHRC_UNDER_TESTING=1 other_keymap_k
+		other_keymap_k
 		printf "pasteboard 2\n$\n" | pbcopy
-		ZSHRC_UNDER_TESTING=1 other_keymap_k
+		other_keymap_k
 		ls -l $OTHER_TERMINAL_DUMP_DIR | wc -l
 		cat $OTHER_TERMINAL_DUMP_DIR/*
 
@@ -373,7 +373,7 @@ function test__other_keymap_k__when_not_terminal_output {
 		rm -rf $OTHER_TERMINAL_DUMP_DIR
 
 		echo 'not terminal output' | pbcopy
-		ZSHRC_UNDER_TESTING=1 other_keymap_k
+		other_keymap_k
 		ls $OTHER_TERMINAL_DUMP_DIR 2>/dev/null | wc -l
 
 		other_helpers_reset_terminal_dump_dir
@@ -505,7 +505,7 @@ function test__other_keymap_uu {
 function test__other_keymap_v {
 	assert "$(
 		echo 'Hello world, plain text passes through.' | pbcopy
-		ZSHRC_UNDER_TESTING=1 other_keymap_v
+		other_keymap_v
 	)" 'Hello world, plain text passes through.'
 }
 
@@ -514,7 +514,7 @@ function test__other_keymap_v__with_urls {
 		pbcopy <<-'eof'
 			See [this PR](https://github.com/foo/bar/pull/99) and https://example.com/a/b?c=d for details.
 		eof
-		ZSHRC_UNDER_TESTING=1 other_keymap_v
+		other_keymap_v
 	)" 'See this PR and link for details.'
 }
 
@@ -529,7 +529,7 @@ function test__other_keymap_v__with_code_block {
 
 			Then stop.
 		eof
-		ZSHRC_UNDER_TESTING=1 other_keymap_v
+		other_keymap_v
 	)" "$(
 		cat <<-eof
 			Run this:
@@ -547,7 +547,7 @@ function test__other_keymap_v__with_paths_and_hashes {
 			Edit ~/GitHub/jasonzhao6/dotfiles/zshrc/other_keymap/other_keymap.zsh at commit 2ce4712.
 			Request 550e8400-e29b-41d4-a716-446655440000 kept the ratio 1/2 on 2026/07/01.
 		eof
-		ZSHRC_UNDER_TESTING=1 other_keymap_v
+		other_keymap_v
 	)" "$(
 		cat <<-eof
 			Edit other_keymap.zsh at commit hash.
@@ -572,7 +572,7 @@ function test__other_keymap_v__with_markdown_noise {
 
 			├── zshrc/other_keymap/other_helpers.zsh
 		eof
-		ZSHRC_UNDER_TESTING=1 other_keymap_v
+		other_keymap_v
 	)" "$(
 		cat <<-eof
 			Deploy Plan
@@ -592,8 +592,7 @@ function test__other_keymap_v__with_markdown_noise {
 function test__other_keymap_w {
 	local count; count=$(
 		{
-			# Remove `ZSHRC_UNDER_TESTING=1` if test is still flaky (2026-06-15)
-			ZSHRC_UNDER_TESTING=1 other_keymap_w 0.05 echo test &
+			other_keymap_w 0.05 echo test &
 			local pid=$!
 			sleep 0.3
 			kill $pid 2>/dev/null
