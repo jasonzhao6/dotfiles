@@ -121,6 +121,19 @@ function nav_helpers_render_file {
 	else
 		cat "$file"
 	fi
+
+	nav_helpers_scroll_to_top
+}
+
+function nav_helpers_scroll_to_top {
+	# Simulates Cmd+Up (Cocoa's "scroll to top of document"), so long files
+	# don't leave the terminal scrolled to their tail. Requires Terminal to
+	# be granted Accessibility access under System Settings
+	[[ -n $ZSHRC_UNDER_TESTING ]] && return
+
+	if ! osascript -e 'tell application "System Events" to key code 126 using {command down}' &> /dev/null; then
+		red_bar 'System Settings → Privacy & Security → Accessibility → Terminal: On'
+	fi
 }
 
 function nav_helpers_render_cursor_as_file {
