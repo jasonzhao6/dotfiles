@@ -21,6 +21,7 @@ RESERVED[grm]=0
 RESERVED[mg]=0
 RESERVED[nm]=0
 RESERVED[od]=0
+RESERVED[rs]=0
 RESERVED[sa]=0
 
 # This list was copied from https://zsh.sourceforge.io/Doc/Release/Shell-Grammar.html#Reserved-Words
@@ -1517,7 +1518,6 @@ RESERVED[rpc.statd]=1
 RESERVED[rpcbind]=1
 RESERVED[rpcgen]=1
 RESERVED[rpcinfo]=1
-RESERVED[rs]=1
 RESERVED[rst2man.py]=1
 RESERVED[rst2odt.py]=1
 RESERVED[rst2s5.py]=1

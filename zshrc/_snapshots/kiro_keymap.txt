@@ -1,0 +1,44 @@
+Keymap: kiro_keymap.zsh
+
+  `   1   2   3   4   5   |   6   7   8   9  <0>  [   ] 
+      '   ,   .  <p>  y   |   f   g  <c> <r> <l>  /   =   \ 
+     <a> <o>  e   u   i   |  <d> <h> <t>  n  <s>  - 
+      ;   q   j   k   x   |   b  <m> <w>  v   z 
+
+  `<>` key initials have one mapping
+  `()` key initials have multiple mappings
+
+Keymap Usage
+
+  $ r              # Show this keymap
+  $ r <regex>      # Search this keymap
+
+  $ r.<key>        # This mapping takes no variable
+  $ r.<key> <var>  # This mapping takes one variable
+  $ r.<key> <var>? # This mapping takes zero or one variable
+  $ r.<key> <var>* # This mapping takes zero or multiple variables
+  $ r.<key> (1-10) # This mapping takes an exact value from the list
+
+     ^             # The `.` is only for documentation
+                   # Omit it when invoking a mapping
+
+Keymap List
+
+  $ r.c            # Code in current repo
+  $ r.r            # Resume last session
+  $ r.l            # List prior sessions
+
+  $ r.a            # Chat with Atlassian MCP
+  $ r.d            # Chat with Datadog MCP
+  $ r.h            # Chat with GitHub MCP
+  $ r.s            # Chat with SDLC MCP
+  $ r.t            # Chat with Trancache context
+
+  $ r.w            # Edit config in TextMate (`rm` reserved)
+  $ r.p            # Push `kiro` folder to `scratch` repo
+  $ r.P            # Pull `kiro` folder from `scratch` repo
+
+  $ r.0 <command>? # Invoke `kiro-cli` plain
+  $ r.o <command>? # Invoke `kiro-cli` with best model
+
+  $ r.m            # (Reserved: Remove files)

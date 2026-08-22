@@ -56,11 +56,11 @@ function test__main_keymap_r__when_specifying_a_description {
 			  $ g.h                       # (Reserved: GitHub CLI)
 			  $ h.h <match>* <-mismatch>* # List ~/GitHub, \`cd\` when only one match
 			  $ h.a                       # Open current repo in GitHub Desktop
+			  $ r.h                       # Chat with GitHub MCP
 			  $ m.h <regex>?              # Show GitHub Desktop shortcuts
 			  $ n.h <match>* <-mismatch>* # Go to GitHub
 			  $ n.dd                      # Go to dotfiles, open GitHub Desktop
 			  $ n.ss                      # Go to scratch, open GitHub Desktop
-			  $ q.h                       # Chat with GitHub MCP
 
 			  intellij_alt: alt-o         # Open on GitHub
 			  all: h                      # Shell shortcuts: github_keymap.zsh
@@ -120,7 +120,6 @@ function test__main_keymap_w__when_specifying_a_key {
 		  $ k.jj                          # Get the copy of json
 		  $ n.j                           # Clear screen & render next file in args
 		  $ o.j <url> <regex> <num lines> # Curl json endpoint
-		  $ q.j                           # Vibe code in JCard repo
 
 		  alt-j # Step over
 		  cmd-j # Join lines

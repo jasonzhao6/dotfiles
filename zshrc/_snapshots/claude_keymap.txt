@@ -28,8 +28,8 @@ Keymap List
   $ c.t            # Show token window usage & reset
 
   $ c.c            # Start new session
-  $ c.r            # Continue last session
-  $ c.l <match>?   # Find matching session
+  $ c.r            # Resume last session
+  $ c.l <match>?   # List matching session
   $ c.s            # Start scratch session
   $ c.ss           # Reset tab background color
 

@@ -7,8 +7,8 @@ CLAUDE_KEYMAP=(
 	"${CLAUDE_DOT}t # Show token window usage & reset"
 	''
 	"${CLAUDE_DOT}c # Start new session"
-	"${CLAUDE_DOT}r # Continue last session"
-	"${CLAUDE_DOT}l <match>? # Find matching session"
+	"${CLAUDE_DOT}r # Resume last session"
+	"${CLAUDE_DOT}l <match>? # List matching session"
 	"${CLAUDE_DOT}s # Start scratch session"
 	"${CLAUDE_DOT}ss # Reset tab background color"
 	''

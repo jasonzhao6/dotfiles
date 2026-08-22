@@ -107,11 +107,11 @@ All Namespaces
   $ d  # Keymap: docker_keymap.zsh
   $ g  # Keymap: git_keymap.zsh
   $ h  # Keymap: github_keymap.zsh
+  $ r  # Keymap: kiro_keymap.zsh
   $ k  # Keymap: kubectl_keymap.zsh
   $ m  # Keymap: main_keymap.zsh
   $ n  # Keymap: nav_keymap.zsh
   $ o  # Keymap: other_keymap.zsh
-  $ q  # Keymap: q_keymap.zsh
   $ t  # Keymap: terraform_keymap.zsh
   $ z  # Keymap: zsh_keymap.zsh
 
@@ -329,11 +329,11 @@ zshrc/
 │   ├── git_keymap/
 │   ├── github_keymap/
 │   ├── intellij_keymaps/
+│   ├── kiro_keymap/
 │   ├── kubectl_keymap/
 │   ├── main_keymap/
 │   ├── nav_keymap/
 │   ├── other_keymap/
-│   ├── q_keymap/
 │   ├── terraform_keymap/
 │   ├── vimium_keymaps/
 │   └── zsh_keymap/
