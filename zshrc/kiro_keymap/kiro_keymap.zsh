@@ -9,6 +9,7 @@ KIRO_KEYMAP=(
 	''
 	"${KIRO_DOT}a # Chat with Atlassian MCP"
 	"${KIRO_DOT}d # Chat with Datadog MCP"
+	"${KIRO_DOT}e # Chat with Snowflake MCP"
 	"${KIRO_DOT}h # Chat with GitHub MCP"
 	"${KIRO_DOT}s # Chat with SDLC MCP"
 	"${KIRO_DOT}t # Chat with Trancache context"
@@ -58,6 +59,10 @@ function kiro_keymap_c {
 
 function kiro_keymap_d {
 	kiro_keymap_o --agent datadog
+}
+
+function kiro_keymap_e {
+	kiro_keymap_o --agent snowflake
 }
 
 function kiro_keymap_h {

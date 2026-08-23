@@ -2,7 +2,7 @@ Keymap: kiro_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9  <0>  [   ] 
       '   ,   .  <p>  y   |   f   g  <c> <r> <l>  /   =   \ 
-     <a> <o>  e   u   i   |  <d> <h> <t>  n  <s>  - 
+     <a> <o> <e>  u   i   |  <d> <h> <t>  n  <s>  - 
       ;   q   j   k   x   |   b  <m> <w>  v   z 
 
   `<>` key initials have one mapping
@@ -30,6 +30,7 @@ Keymap List
 
   $ r.a            # Chat with Atlassian MCP
   $ r.d            # Chat with Datadog MCP
+  $ r.e            # Chat with Snowflake MCP
   $ r.h            # Chat with GitHub MCP
   $ r.s            # Chat with SDLC MCP
   $ r.t            # Chat with Trancache context
