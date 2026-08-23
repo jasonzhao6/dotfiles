@@ -61,6 +61,7 @@ Keymap List
   $ o.b <start> <finish> (~~)     # Run command sequence in background
 
   $ (|)? o.i <file>? <col index>? # CSV: Sort lines by column index
+  $ (|)? o.id <file>? <col index> # CSV: Drop column by index
   $ (|)? o.ii <file>? <i1> <i2>?  # CSV: Swap columns by indexes
   $ o.x <file 1>? <file 2>?       # CSV: Keep lines matching 1st column
   $ o.xx <file 1>? <file 2>?      # CSV: Drop lines matching 1st column

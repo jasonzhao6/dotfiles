@@ -213,6 +213,66 @@ function test__other_keymap_i__when_invoked_after_pipe_and_no_column_index {
 	)"
 }
 
+function test__other_keymap_id {
+	local file; file=$(
+		cat <<-eof
+			a,10,x1
+			b,20,x2
+			c,30,x3
+		eof
+	)
+
+	assert "$(
+		echo "$file" | other_keymap_id 2
+	)" "$(
+		cat <<-eof
+			a,x1
+			b,x2
+			c,x3
+		eof
+	)"
+}
+
+function test__other_keymap_id__drop_first_column {
+	local file; file=$(
+		cat <<-eof
+			a,10,x1
+			b,20,x2
+			c,30,x3
+		eof
+	)
+
+	assert "$(
+		echo "$file" | other_keymap_id 1
+	)" "$(
+		cat <<-eof
+			10,x1
+			20,x2
+			30,x3
+		eof
+	)"
+}
+
+function test__other_keymap_id__drop_last_column {
+	local file; file=$(
+		cat <<-eof
+			a,10,x1
+			b,20,x2
+			c,30,x3
+		eof
+	)
+
+	assert "$(
+		echo "$file" | other_keymap_id 3
+	)" "$(
+		cat <<-eof
+			a,10
+			b,20
+			c,30
+		eof
+	)"
+}
+
 function test__other_keymap_ii {
 	local file; file=$(
 		cat <<-eof

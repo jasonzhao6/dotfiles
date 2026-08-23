@@ -40,6 +40,7 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}b <start> <finish> (~~) # Run command sequence in background"
 	''
 	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}i <file>? <col index>? # CSV: Sort lines by column index"
+	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}id <file>? <col index> # CSV: Drop column by index"
 	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}ii <file>? <i1> <i2>? # CSV: Swap columns by indexes"
 	"${OTHER_DOT}x <file 1>? <file 2>? # CSV: Keep lines matching 1st column"
 	"${OTHER_DOT}xx <file 1>? <file 2>? # CSV: Drop lines matching 1st column"
@@ -203,6 +204,36 @@ function other_keymap_i {
 		column_index=${1:-1}
 
 		sort --field-separator=, --key="$column_index,$column_index" --version-sort
+	fi
+}
+
+function other_keymap_id {
+	local file
+	local column_index
+
+	local awk_script='{
+		for (i = 1; i <= NF; i++) {
+			if (i != col) {
+				printf "%s%s", (sep ? "," : ""), $i
+				sep = 1
+			}
+		}
+		sep = 0
+		print ""
+	}'
+
+	# When invoked as standalone command
+	if [[ -t 0 ]]; then
+		file=$1
+		column_index=$2
+
+		awk -F, -v col="$column_index" "$awk_script" "$file"
+
+	# When invoked after a pipe `|`
+	else
+		column_index=$1
+
+		awk -F, -v col="$column_index" "$awk_script"
 	fi
 }
 
