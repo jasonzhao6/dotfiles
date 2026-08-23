@@ -22,8 +22,9 @@ NAV_KEYMAP=(
 	"${NAV_DOT}y # Yank current path to MRU queue"
 	"${NAV_DOT}p # Put latest path from MRU queue"
 	"${NAV_DOT}q <match>* <-mismatch>* # List MRU queue, \`cd\` when only one match"
-	"${NAV_DOT}qk <count> # Keep top N entries of MRU queue"
-	"${NAV_DOT}qq # Clear MRU queue"
+	"${NAV_DOT}qc # Clear MRU queue"
+	"${NAV_DOT}qd <path> # Delete MRU entry by path"
+	"${NAV_DOT}qt <count> # Keep only top N entries of MRU queue"
 	''
 	"${NAV_DOT}h <match>* <-mismatch>* # Go to GitHub"
 	"${NAV_DOT}i # Go to Excalidraw"
@@ -250,11 +251,42 @@ function nav_keymap_q {
 	args_keymap_s "${filters[@]}" < "$NAV_MRU_FILE"
 }
 
-function nav_keymap_qk {
+function nav_keymap_qc {
+	rm -f "$NAV_MRU_FILE"
+}
+
+function nav_keymap_qd {
+	local target=$1
+
+	if [[ -z $target ]]; then
+		red_bar 'Usage: nqd <path>'
+		return
+	fi
+
+	if [[ ! -f "$NAV_MRU_FILE" || ! -s "$NAV_MRU_FILE" ]]; then
+		red_bar 'MRU queue is empty'
+		return
+	fi
+
+	local remaining; remaining=$(grep -Fxv "$target" "$NAV_MRU_FILE" || true)
+	local original; original=$(cat "$NAV_MRU_FILE")
+
+	if [[ "$remaining" == "$original" ]]; then
+		red_bar "Path not found in MRU queue"
+		return
+	fi
+
+	printf '%s\n' "$remaining" > "$NAV_MRU_FILE"
+
+	echo
+	nav_keymap_q
+}
+
+function nav_keymap_qt {
 	local count=$1
 
 	if [[ ! $count =~ ^[1-9][0-9]*$ ]]; then
-		red_bar 'Usage: nqk <count>'
+		red_bar 'Usage: nqt <count>'
 		return
 	fi
 
@@ -266,10 +298,6 @@ function nav_keymap_qk {
 	local kept; kept=$(head -n "$count" "$NAV_MRU_FILE")
 	printf '%s\n' "$kept" > "$NAV_MRU_FILE"
 	nav_keymap_q
-}
-
-function nav_keymap_qq {
-	rm -f "$NAV_MRU_FILE"
 }
 
 function nav_keymap_r {

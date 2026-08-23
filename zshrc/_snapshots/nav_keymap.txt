@@ -43,8 +43,9 @@ Keymap List
   $ n.y                        # Yank current path to MRU queue
   $ n.p                        # Put latest path from MRU queue
   $ n.q <match>* <-mismatch>*  # List MRU queue, `cd` when only one match
-  $ n.qk <count>               # Keep top N entries of MRU queue
-  $ n.qq                       # Clear MRU queue
+  $ n.qc                       # Clear MRU queue
+  $ n.qd <path>                # Delete MRU entry by path
+  $ n.qt <count>               # Keep only top N entries of MRU queue
 
   $ n.h <match>* <-mismatch>*  # Go to GitHub
   $ n.i                        # Go to Excalidraw

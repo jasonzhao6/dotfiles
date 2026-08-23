@@ -876,20 +876,70 @@ function test__nav_keymap_q__prunes_to_empty {
 	)" "$(red_bar 'MRU queue is empty')"
 }
 
-function test__nav_keymap_qk {
+function test__nav_keymap_qc {
+	assert "$(
+		echo "$HOME/Documents" > "$NAV_MRU_FILE"
+		nav_keymap_qc
+		[[ ! -f "$NAV_MRU_FILE" ]] && echo 'cleared'
+	)" 'cleared'
+}
+
+function test__nav_keymap_qd {
+	assert "$(
+		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
+		nav_keymap_qd "$HOME/Downloads" > /dev/null
+		cat "$NAV_MRU_FILE"
+	)" "$(printf '%s\n%s' "$HOME/Documents" "$HOME/Desktop")"
+}
+
+function test__nav_keymap_qd__relists {
+	assert "$(
+		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
+		nav_keymap_qd "$HOME/Downloads" | bw
+	)" "$(
+		cat <<-eof
+
+		     1	$HOME/Documents
+		     2	$HOME/Desktop
+		eof
+	)"
+}
+
+function test__nav_keymap_qd__not_found {
+	assert "$(
+		printf '%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" > "$NAV_MRU_FILE"
+		nav_keymap_qd "$HOME/Desktop"
+	)" "$(red_bar 'Path not found in MRU queue')"
+}
+
+function test__nav_keymap_qd__usage_error {
+	assert "$(
+		printf '%s\n' "$HOME/Documents" > "$NAV_MRU_FILE"
+		nav_keymap_qd
+	)" "$(red_bar 'Usage: nqd <path>')"
+}
+
+function test__nav_keymap_qd__empty {
+	assert "$(
+		rm -f "$NAV_MRU_FILE"
+		nav_keymap_qd "$HOME/Documents"
+	)" "$(red_bar 'MRU queue is empty')"
+}
+
+function test__nav_keymap_qt {
 	# Wrap in a subshell so the re-list's in-memory `ARGS_HISTORY` mutation does
 	# not leak into sibling tests
 	assert "$(
 		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
-		nav_keymap_qk 2 > /dev/null
+		nav_keymap_qt 2 > /dev/null
 		cat "$NAV_MRU_FILE" # Only the top N entries remain
 	)" "$(printf '%s\n%s' "$HOME/Documents" "$HOME/Downloads")"
 }
 
-function test__nav_keymap_qk__relists {
+function test__nav_keymap_qt__relists {
 	assert "$(
 		printf '%s\n%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" "$HOME/Desktop" > "$NAV_MRU_FILE"
-		nav_keymap_qk 2 | bw
+		nav_keymap_qt 2 | bw
 	)" "$(
 		cat <<-eof
 		     1	$HOME/Documents
@@ -898,34 +948,26 @@ function test__nav_keymap_qk__relists {
 	)"
 }
 
-function test__nav_keymap_qk__count_exceeds_size {
+function test__nav_keymap_qt__count_exceeds_size {
 	assert "$(
 		printf '%s\n%s\n' "$HOME/Documents" "$HOME/Downloads" > "$NAV_MRU_FILE"
-		nav_keymap_qk 9 > /dev/null
+		nav_keymap_qt 9 > /dev/null
 		cat "$NAV_MRU_FILE" # Keeping more than exist is a safe no-op
 	)" "$(printf '%s\n%s' "$HOME/Documents" "$HOME/Downloads")"
 }
 
-function test__nav_keymap_qk__usage_error {
+function test__nav_keymap_qt__usage_error {
 	assert "$(
 		printf '%s\n' "$HOME/Documents" > "$NAV_MRU_FILE"
-		nav_keymap_qk
-	)" "$(red_bar 'Usage: nqk <count>')"
+		nav_keymap_qt
+	)" "$(red_bar 'Usage: nqt <count>')"
 }
 
-function test__nav_keymap_qk__empty {
+function test__nav_keymap_qt__empty {
 	assert "$(
 		rm -f "$NAV_MRU_FILE"
-		nav_keymap_qk 2
+		nav_keymap_qt 2
 	)" "$(red_bar 'MRU queue is empty')"
-}
-
-function test__nav_keymap_qq {
-	assert "$(
-		echo "$HOME/Documents" > "$NAV_MRU_FILE"
-		nav_keymap_qq
-		[[ ! -f "$NAV_MRU_FILE" ]] && echo 'cleared'
-	)" 'cleared'
 }
 
 function test__nav_keymap_r {
