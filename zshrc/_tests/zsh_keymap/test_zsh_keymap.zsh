@@ -121,29 +121,43 @@ function test__zsh_keymap_hc {
 	)" 'absent'
 }
 
-function test__zsh_keymap_s__when_args_history_is_not_initialized {
+function test__zsh_keymap_r__when_args_history_is_not_initialized {
 	args_history_init
 	local args_history_max=$ARGS_HISTORY_MAX
 
 	assert "$(
 		ARGS_HISTORY_MAX=
-		zsh_keymap_s
+		zsh_keymap_r
 		echo "$ARGS_HISTORY_MAX"
 	)" "$args_history_max"
 
 	args_history_reset
 }
 
-function test__zsh_keymap_s__when_args_history_is_already_initialized {
+function test__zsh_keymap_r__when_args_history_is_already_initialized {
 	local overwrite='<overwrite>'
 
 	assert "$(
 		ARGS_HISTORY_MAX=$overwrite
-		zsh_keymap_s
+		zsh_keymap_r
 		echo $ARGS_HISTORY_MAX
 	)" "$overwrite"
 
 	args_history_reset
+}
+
+function test__zsh_keymap_s {
+	assert "$(
+		zsh_keymap_s
+		[[ -f "$ZSHRC_SRC_DIR/_snapshots/_code_stats.txt" ]] && echo 'code stats exists'
+		[[ -f "$ZSHRC_SRC_DIR/_snapshots/args_keymap.txt" ]] && echo 'keymap snapshot exists'
+	)" "$(
+		cat <<-eof
+			$(green_bar 'Snapshots updated')
+			code stats exists
+			keymap snapshot exists
+		eof
+	)"
 }
 
 # Stub `zsh_keymap_t` to assert the pasteboard plumbing without recursing into a

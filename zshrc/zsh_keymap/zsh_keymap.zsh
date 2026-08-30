@@ -6,11 +6,13 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}e # Edit dotfiles in IntelliJ"
 	"${ZSH_DOT}m # Edit dotfiles in TextMate"
 	"${ZSH_DOT}mm # Edit secrets in TextMate"
-	"${ZSH_DOT}s # Source .zshrc file"
+	''
+	"${ZSH_DOT}r # Re-source .zshrc file"
+	"${ZSH_DOT}s # Update keymap snapshots"
 	"${ZSH_DOT}t <match OR 1-5>? # Run tests by name or section"
 	"${ZSH_DOT}tt # Run tests by name in pasteboard"
 	''
-	"${ZSH_DOT}z <name> # Custom \`which\` lookup"
+	"${ZSH_DOT}z <name> # Custom \`which\`"
 	"${ZSH_DOT}a <match>* <-mismatch>* # List aliases & filter"
 	"${ZSH_DOT}f <match>* <-mismatch>* # List functions & filter"
 	''
@@ -130,8 +132,25 @@ function zsh_keymap_P {
 	cp "$ZSHRC_SECRETS_LATEST" "$ZSHRC_SECRETS"
 }
 
-function zsh_keymap_s {
+function zsh_keymap_r {
 	source ~/.zshrc
+}
+
+function zsh_keymap_s {
+	# Snapshot code stats
+	main_keymap_- | ruby_strip > "$ZSHRC_SRC_DIR"/_snapshots/_code_stats.txt
+
+	# Snapshot keymaps
+	main_keymap_a | grep '\$' | bw | while read -r line; do
+		local command; command=$(echo "$line" | awk '{print $2}')
+		local file; file=$(echo "$line" | awk '{print $NF}' | sed 's/\.zsh$/.txt/')
+
+		if [[ -n $command && -n $file ]]; then
+			eval "$command" | ruby_strip | bw > "$ZSHRC_SRC_DIR/_snapshots/$file"
+		fi
+	done
+
+	green_bar 'Snapshots updated'
 }
 
 function zsh_keymap_t {

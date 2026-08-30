@@ -1,7 +1,7 @@
 Keymap: zsh_keymap.zsh
 
   `  <1> <2>  3   4   5   |   6   7   8   9  <0>  [   ] 
-      '   ,   .  <p>  y   |  <f>  g   c   r   l   /   =   \ 
+      '   ,   .  <p>  y   |  <f>  g   c  <r>  l   /   =   \ 
      <a>  o  <e>  u   i   |   d  (h) (t)  n  <s>  - 
       ;   q   j   k   x   |   b  (m)  w   v  <z>
 
@@ -28,11 +28,13 @@ Keymap List
   $ z.e                       # Edit dotfiles in IntelliJ
   $ z.m                       # Edit dotfiles in TextMate
   $ z.mm                      # Edit secrets in TextMate
-  $ z.s                       # Source .zshrc file
+
+  $ z.r                       # Re-source .zshrc file
+  $ z.s                       # Update keymap snapshots
   $ z.t <match OR 1-5>?       # Run tests by name or section
   $ z.tt                      # Run tests by name in pasteboard
 
-  $ z.z <name>                # Custom `which` lookup
+  $ z.z <name>                # Custom `which`
   $ z.a <match>* <-mismatch>* # List aliases & filter
   $ z.f <match>* <-mismatch>* # List functions & filter
 

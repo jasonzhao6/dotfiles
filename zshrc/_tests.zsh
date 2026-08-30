@@ -27,8 +27,8 @@ source ~/.zshrc
 # Source test harness
 source "$ZSHRC_SRC_DIR"/_tests/_test_harness.zsh
 
-# Update stats
-source "$ZSHRC_SRC_DIR"/_tests/_update_snapshots.zsh
+# Update snapshots in the background so testing can start right away
+zsh_keymap_s &> /dev/null &
 
 #
 # Test: Start
