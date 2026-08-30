@@ -137,18 +137,24 @@ function zsh_keymap_r {
 }
 
 function zsh_keymap_s {
-	# Snapshot code stats
-	main_keymap_- | ruby_strip > "$ZSHRC_SRC_DIR"/_snapshots/_code_stats.txt
+	# Subshell suppresses job control messages from background tasks
+	(
+		# Snapshot code stats
+		main_keymap_- | ruby_strip > "$ZSHRC_SRC_DIR"/_snapshots/_code_stats.txt &
 
-	# Snapshot keymaps
-	main_keymap_a | grep '\$' | bw | while read -r line; do
-		local command; command=$(echo "$line" | awk '{print $2}')
-		local file; file=$(echo "$line" | awk '{print $NF}' | sed 's/\.zsh$/.txt/')
+		# Snapshot keymaps in parallel
+		local command file
+		main_keymap_a | grep '\$' | bw | while read -r line; do
+			command=$(echo "$line" | awk '{print $2}')
+			file=$(echo "$line" | awk '{print $NF}' | sed 's/\.zsh$/.txt/')
 
-		if [[ -n $command && -n $file ]]; then
-			eval "$command" | ruby_strip | bw > "$ZSHRC_SRC_DIR/_snapshots/$file"
-		fi
-	done
+			if [[ -n $command && -n $file ]]; then
+				eval "$command" | ruby_strip | bw > "$ZSHRC_SRC_DIR/_snapshots/$file" &
+			fi
+		done
+
+		wait
+	)
 
 	green_bar 'Snapshots updated'
 }
