@@ -10,9 +10,9 @@ NAV_KEYMAP=(
 	"${NAV_DOT}nf <match>* <-mismatch>* # List visible files"
 	"${NAV_DOT}nd <match>* <-mismatch>* # List visible dirs"
 	''
-	"${NAV_DOT}a <match>* <-mismatch>* # List invisible files & dirs"
-	"${NAV_DOT}af <match>* <-mismatch>* # List invisible files"
-	"${NAV_DOT}ad <match>* <-mismatch>* # List invisible dirs"
+	"${NAV_DOT}a <match>* <-mismatch>* # List hidden files & dirs"
+	"${NAV_DOT}af <match>* <-mismatch>* # List hidden files"
+	"${NAV_DOT}ad <match>* <-mismatch>* # List hidden dirs"
 	''
 	"${NAV_DOT}u <levels>? # Go up 1+ directories (Default 1)"
 	''

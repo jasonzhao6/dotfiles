@@ -32,9 +32,9 @@ Keymap List
   $ n.nf <match>* <-mismatch>* # List visible files
   $ n.nd <match>* <-mismatch>* # List visible dirs
 
-  $ n.a <match>* <-mismatch>*  # List invisible files & dirs
-  $ n.af <match>* <-mismatch>* # List invisible files
-  $ n.ad <match>* <-mismatch>* # List invisible dirs
+  $ n.a <match>* <-mismatch>*  # List hidden files & dirs
+  $ n.af <match>* <-mismatch>* # List hidden files
+  $ n.ad <match>* <-mismatch>* # List hidden dirs
 
   $ n.u <levels>?              # Go up 1+ directories (Default 1)
 
