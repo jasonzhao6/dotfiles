@@ -51,7 +51,7 @@ function aws_keymap {
 	# If the input is a Britive role, assume it via `mqc`
 	local input=$*
 
-	# shellcheck disable=SC2076 # Breaks regex
+	# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 	if [[ $input =~ '^([a-z0-9-]+)[[:space:]]+([a-z0-9-]+)' ]]; then
 		# shellcheck disable=SC2154 # `match` is defined by `=~`
 		mqc --account-name "${match[1]}" --role-name "${match[2]}" --region-name us-east-1

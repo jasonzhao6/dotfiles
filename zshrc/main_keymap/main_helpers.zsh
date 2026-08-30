@@ -109,7 +109,7 @@ function main_helpers_find_key_mappings {
 		setopt nocasematch
 		if keymap_has_dot_alias "${keymap_entries[@]}"; then
 			for entry in "${keymap_entries[@]}"; do
-				# shellcheck disable=SC2076
+				# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 				if [[ -z $description || $entry =~ ".* # .*$description.*" ]]; then
 					reply_zsh_mappings+=("$entry")
 				fi
@@ -119,7 +119,7 @@ function main_helpers_find_key_mappings {
 			non_zsh_name=$(echo "${keymap%_KEYMAP}" | downcase)
 
 			for entry in "${keymap_entries[@]}"; do
-				# shellcheck disable=SC2076
+				# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 				if [[ -z $description || $entry =~ ".* # .*$description.*" ]]; then
 					reply_non_zsh_mappings+=("$non_zsh_name: $entry")
 				fi

@@ -51,7 +51,7 @@ function verify_keymap_definitions {
 
 	# Verify subject and test functions are defined in the same order
 	while IFS= read -r diff; do
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		if [[ $diff =~ '^ ?function' || $diff == "+function $namespace" ]]; then
 			pass
 		elif [[ $diff =~ '^[-+]function' ]]; then

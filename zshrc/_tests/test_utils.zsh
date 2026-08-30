@@ -64,7 +64,7 @@ function test__epoch {
 
 function test__epoch__when_specifying_0_decimal {
 	assert "$(
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ ! $(epoch) =~ '\.' ]] && echo 1
 	)" '1'
 }

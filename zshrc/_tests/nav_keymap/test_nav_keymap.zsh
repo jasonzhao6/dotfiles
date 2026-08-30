@@ -2,7 +2,7 @@ function test__nav_keymap {
 	assert "$(
 		local show_this_help; show_this_help=$(nav_keymap | grep 'Show this keymap' | bw)
 
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $show_this_help =~ "^  \\$ $NAV_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
 }

@@ -52,7 +52,7 @@ function test__args_keymap {
 	assert "$(
 		local show_this_help; show_this_help=$(args_keymap | grep 'Show this keymap' | bw)
 
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $show_this_help =~ "^  \\$ $ARGS_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
 }

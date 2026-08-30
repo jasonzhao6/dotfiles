@@ -2,7 +2,7 @@ function test__other_keymap {
 	assert "$(
 		local show_this_help; show_this_help=$(other_keymap | grep 'Show this keymap' | bw)
 
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $show_this_help =~ "^  \\$ $OTHER_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
 }
@@ -690,7 +690,7 @@ function test__other_keymap_r {
 function test__other_keymap_t {
 	assert "$(
 		local output; output=$(other_keymap_t sleep 0.1| bw)
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $output =~ 'Command executed in .[0-9][0-9] seconds$' ]] && echo 1 || echo 2
 	)" '1'
 }

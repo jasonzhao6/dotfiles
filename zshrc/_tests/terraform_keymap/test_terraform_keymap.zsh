@@ -3,7 +3,7 @@ function test__terraform_keymap {
 	assert "$(
 		local show_this_help; show_this_help=$(terraform_keymap | grep 'Show this keymap' | bw)
 
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $show_this_help =~ "^  \\$ $TERRAFORM_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
 }
@@ -21,9 +21,9 @@ function test__terraform_keymap_a__with_tfplan {
 
 		# Match the seconds loosely, so a slow test run cannot flake
 		local output; output=$(terraform_keymap_a | bw)
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $output =~ "tfplan is 0m [0-9]+s old" ]] && echo age_shown
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $output =~ 'terraform apply tfplan' ]] && echo applied
 
 		rm -rf $HOME
@@ -49,11 +49,11 @@ function test__terraform_keymap_a__with_stale_tfplan {
 		cd $HOME/project || return
 
 		local output; output=$(terraform_keymap_a | bw)
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $output =~ "tfplan is 10m [0-9]+s old" ]] && echo age_shown
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $output =~ "tfplan is stale \(max 5m\)" ]] && echo stale
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ ! $output =~ 'terraform apply' ]] && echo not_applied
 
 		rm -rf $HOME
@@ -80,9 +80,9 @@ function test__terraform_keymap_a__with_max_age {
 		cd $HOME/project || return
 
 		local output; output=$(terraform_keymap_a 20 | bw)
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $output =~ "tfplan is 10m [0-9]+s old" ]] && echo age_shown
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $output =~ 'terraform apply tfplan' ]] && echo applied
 
 		rm -rf $HOME

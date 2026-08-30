@@ -146,7 +146,7 @@ function keymap_has_dot_alias {
 	local keymap_entries=("$@")
 
 	for entry in "${keymap_entries[@]}"; do
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $entry =~ ".+\\$KEYMAP_DOT.+ # .+" ]] && return 0
 	done
 

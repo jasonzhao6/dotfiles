@@ -40,7 +40,7 @@ function verify_test_ordering {
 
 	# Verify subject and test functions are defined in the same order
 	while IFS= read -r diff; do
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		if [[ $diff =~ '^ ?function' ]]; then
 			pass
 		elif [[ $diff =~ '^\+function' ]]; then

@@ -3,7 +3,7 @@ function test__aws_keymap {
 	assert "$(
 		local show_this_help; show_this_help=$(aws_keymap | grep 'Show this keymap' | bw)
 
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $show_this_help =~ "^  \\$ $AWS_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
 }

@@ -3,7 +3,7 @@ function test__claude_keymap {
 	assert "$(
 		local show_this_help; show_this_help=$(claude_keymap | grep 'Show this keymap' | bw)
 
-		# shellcheck disable=SC2076
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
 		[[ $show_this_help =~ "^  \\$ $CLAUDE_ALIAS +# Show this keymap$" ]] && echo 1
 	)" '1'
 }
