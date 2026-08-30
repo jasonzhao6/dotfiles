@@ -28,7 +28,7 @@ Keymap List
   $ o <path>                        # Open path in Finder
   $ o <url>                         # Open url in browser
   $ o.o                             # Open current dir in Finder
-  $ o.e <path>?                     # Open IntelliJ (Default: CWD)
+  $ o.e <path>?                     # Open IntelliJ (Default: Repo root / CWD)
   $ o.m <path>?                     # Open TextMate (Default: CWD)
 
   $ o.a                             # Stay awake

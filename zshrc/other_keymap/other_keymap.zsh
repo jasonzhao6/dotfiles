@@ -6,7 +6,7 @@ OTHER_KEYMAP=(
 	"${OTHER_ALIAS} <path> # Open path in Finder"
 	"${OTHER_ALIAS} <url> # Open url in browser"
 	"${OTHER_DOT}o # Open current dir in Finder"
-	"${OTHER_DOT}e <path>? # Open IntelliJ (Default: CWD)"
+	"${OTHER_DOT}e <path>? # Open IntelliJ (Default: Repo root / CWD)"
 	"${OTHER_DOT}m <path>? # Open TextMate (Default: CWD)"
 	''
 	"${OTHER_DOT}a # Stay awake"
@@ -161,6 +161,12 @@ function other_keymap_df {
 
 function other_keymap_e {
 	local target_path=${*:-.}
+
+	# If in a git repo and no path specified, open from repo root
+	if [[ $target_path == '.' ]]; then
+		local repo_root; repo_root=$(git rev-parse --show-toplevel 2> /dev/null)
+		[[ -n $repo_root ]] && target_path=$repo_root
+	fi
 
 	open -na 'IntelliJ IDEA.app' --args "$target_path"
 }
