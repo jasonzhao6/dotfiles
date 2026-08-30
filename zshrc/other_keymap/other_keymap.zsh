@@ -3,54 +3,50 @@ OTHER_ALIAS='o'
 OTHER_DOT="${OTHER_ALIAS}${KEYMAP_DOT}"
 
 OTHER_KEYMAP=(
-	"${OTHER_ALIAS} <url> # Open specified url"
-	"${OTHER_ALIAS} <path> # Open specified path in Finder"
+	"${OTHER_ALIAS} <path> # Open path in Finder"
+	"${OTHER_ALIAS} <url> # Open url in browser"
+	"${OTHER_DOT}o # Open current dir in Finder"
+	"${OTHER_DOT}e <path>? # Open IntelliJ (Default: CWD)"
+	"${OTHER_DOT}m <path>? # Open TextMate (Default: CWD)"
 	''
-	"${OTHER_DOT}o # Open current directory in Finder"
-	"${OTHER_DOT}e <path>? # Open IntelliJ (Default: Current dir)"
-	"${OTHER_DOT}m <path>? # Open TextMate (Default: Current dir)"
-	''
-	"${OTHER_DOT}s # Sleep"
 	"${OTHER_DOT}a # Stay awake"
-	"${OTHER_DOT}n # Stay on task"
+	"${OTHER_DOT}s # Sleep"
 	''
-	"${OTHER_DOT}c # Copy last output"
-	"${OTHER_DOT}cc # Copy last command"
+	"${OTHER_DOT}cc # Copy command"
+	"${OTHER_DOT}c # Copy output"
+	"${OTHER_DOT}v # Speak pasteboard"
 	"${OTHER_DOT}y # Alias for \`pbcopy\`"
 	"${OTHER_DOT}p # Alias for \`pbpaste\`"
-	"${OTHER_DOT}v # Speak stripped pasteboard at rate 300"
-	"${OTHER_DOT}l # Encrypt pasteboard + print decrypt cmd"
+	''
+	"${OTHER_DOT}1 ${KEYMAP_PIPE_PATTERN} # Save pasteboard value to \`diff.1.txt\`"
+	"${OTHER_DOT}2 ${KEYMAP_PIPE_PATTERN} # Save pasteboard value to \`diff.2.txt\`"
+	"${OTHER_DOT}u <file 1>? <file 2>? # Unified diff"
+	"${OTHER_DOT}uu <file 1>? <file 2>? # Side by side diff"
+	"${OTHER_DOT}12 # Open diff files in TextMate"
+	"${OTHER_DOT}0 # Empty \`diff.1.txt\` and \`diff.2.txt\`"
+	''
+	"${OTHER_DOT}i <index> <file>? ${KEYMAP_PIPE_PATTERN} # CSV: Keep column by index"
+	"${OTHER_DOT}id <index> <file>? ${KEYMAP_PIPE_PATTERN} # CSV: Delete column by index"
+	"${OTHER_DOT}ii <index> <file>? ${KEYMAP_PIPE_PATTERN} # CSV: Sort lines by column"
+	"${OTHER_DOT}ix <i1> <i2> <file>? ${KEYMAP_PIPE_PATTERN} # CSV: Swap columns"
+	"${OTHER_DOT}x <file 1>? <file 2>? # CSV: Keep lines matching 1st column"
+	"${OTHER_DOT}xx <file 1>? <file 2>? # CSV: Delete lines matching 1st column"
+	''
+	"${OTHER_DOT}t <command> # Time a command"
+	"${OTHER_DOT}w <seconds>? <command> # Watch a command (Default: 1s)"
+	"${OTHER_DOT}f <start> <finish> (~~) # Run a command sequence in foreground"
+	"${OTHER_DOT}b <start> <finish> (~~) # Run a command sequence in background"
 	''
 	"${OTHER_DOT}k # Clear terminal"
 	"${OTHER_DOT}kk # Show archived terminal outputs"
 	"${OTHER_DOT}kc # Clear archived terminal outputs"
 	''
-	"${OTHER_DOT}12 # Open diff files in TextMate"
-	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}1 # Save pasteboard value to \`diff.1.txt\`"
-	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}2 # Save pasteboard value to \`diff.2.txt\`"
-	"${OTHER_DOT}11 # Save last output to \`diff.1.txt\`"
-	"${OTHER_DOT}22 # Save last output to \`diff.2.txt\`"
-	"${OTHER_DOT}0 # Empty \`diff.1.txt\` and \`diff.2.txt\`"
-	"${OTHER_DOT}u <file 1>? <file 2>? # Unified diff"
-	"${OTHER_DOT}uu <file 1>? <file 2>? # Side by side diff"
-	''
-	"${OTHER_DOT}t <command> # Time command execution"
-	"${OTHER_DOT}w <seconds>? <command> # Loop command with sleep (Default: 1s)"
-	"${OTHER_DOT}f <start> <finish> (~~) # Run command sequence in foreground"
-	"${OTHER_DOT}b <start> <finish> (~~) # Run command sequence in background"
-	''
-	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}i <file>? <col index>? # CSV: Sort lines by column index"
-	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}id <file>? <col index> # CSV: Drop column by index"
-	"${KEYMAP_PIPE_PATTERN}${OTHER_DOT}ii <file>? <i1> <i2>? # CSV: Swap columns by indexes"
-	"${OTHER_DOT}x <file 1>? <file 2>? # CSV: Keep lines matching 1st column"
-	"${OTHER_DOT}xx <file 1>? <file 2>? # CSV: Drop lines matching 1st column"
-	''
 	"${OTHER_DOT}8 # Use Java 8"
-	"${OTHER_DOT}d <url> # DNS dig"
+	"${OTHER_DOT}d <url>? # DNS dig (Default: Pasteboard)"
 	"${OTHER_DOT}df # DNS flush"
-	"${OTHER_DOT}j <url> <regex> <num lines> # Curl json endpoint"
-	"${OTHER_DOT}q # Format sql query from stdin"
-	"${OTHER_DOT}q '<sql>' # Format sql query from cli arg"
+	"${OTHER_DOT}j <url> <regex>? <num lines>? # Curl json endpoint"
+	"${OTHER_DOT}n # Encrypt pasteboard + print decrypt cmd"
+	"${OTHER_DOT}q '<sql>'? ${KEYMAP_PIPE_PATTERN} # Format a sql query (Default: Pasteboard)"
 	"${OTHER_DOT}r <before> <after> # Rename files in current directory"
 )
 
@@ -92,10 +88,6 @@ function other_keymap_1 {
 	fi
 }
 
-function other_keymap_11 {
-	eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1"
-}
-
 function other_keymap_12 {
 	mate "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1" "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 }
@@ -109,10 +101,6 @@ function other_keymap_2 {
 	else
 		bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 	fi
-}
-
-function other_keymap_22 {
-	eval "$(prev_command)" | bw > "$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2"
 }
 
 function other_keymap_8 {
@@ -153,8 +141,8 @@ function other_keymap_cc {
 }
 
 function other_keymap_d {
-	local url=$*
-	[[ -z "$1" ]] && return
+	local url=${*:-$(pbpaste)}
+	[[ -z $url ]] && return
 
 	# Strip protocol and path
 	local domain=${${${url}#*://}%%/*}
@@ -189,81 +177,55 @@ function other_keymap_f {
 }
 
 function other_keymap_i {
-	local file
-	local column_index
+	local index=$1
+	local file=$2
 
-	# When invoked as standalone command
-	if [[ -t 0 ]]; then
-		file=$1
-		column_index=${2:-1}
+	other_helpers_validate_indexes 'Usage: oi <index> <file>?' "$index" || return
+	other_helpers_validate_file "$file" || return
 
-		sort --field-separator=, --key="$column_index,$column_index" --version-sort "$file"
-
-	# When invoked after a pipe `|`
-	else
-		column_index=${1:-1}
-
-		sort --field-separator=, --key="$column_index,$column_index" --version-sort
-	fi
+	# `-f` names the column
+	# `${file:+...}` adds no arg when there is no file, so `mlr` reads the pipe
+	other_helpers_mlr cut -f "$index" ${file:+"$file"}
 }
 
 function other_keymap_id {
-	local file
-	local column_index
+	local index=$1
+	local file=$2
 
-	local awk_script='{
-		for (i = 1; i <= NF; i++) {
-			if (i != col) {
-				printf "%s%s", (sep ? "," : ""), $i
-				sep = 1
-			}
-		}
-		sep = 0
-		print ""
-	}'
+	other_helpers_validate_indexes 'Usage: oid <index> <file>?' "$index" || return
+	other_helpers_validate_file "$file" || return
 
-	# When invoked as standalone command
-	if [[ -t 0 ]]; then
-		file=$1
-		column_index=$2
-
-		awk -F, -v col="$column_index" "$awk_script" "$file"
-
-	# When invoked after a pipe `|`
-	else
-		column_index=$1
-
-		awk -F, -v col="$column_index" "$awk_script"
-	fi
+	# `-f` names the column
+	# `${file:+...}` adds no arg when there is no file, so `mlr` reads the pipe
+	other_helpers_mlr cut --complement -f "$index" ${file:+"$file"}
 }
 
 function other_keymap_ii {
-	local file=$1
-	local column_1=$2
-	local column_2=${3:-1}
+	local index=$1
+	local file=$2
 
-	local awk_script='{
-		tmp = $c1;
-		$c1 = $c2;
-		$c2 = tmp;
-		print $0
-	}'
+	other_helpers_validate_indexes 'Usage: oii <index> <file>?' "$index" || return
+	other_helpers_validate_file "$file" || return
 
-	# When invoked as standalone command
-	if [[ -t 0 ]]; then
-		file=$1
-		column_1=$2
-		column_2=${3:-1}
+	# `-t` is natural sort, so `x9` lands before `x10`
+	# `${file:+...}` adds no arg when there is no file, so `mlr` reads the pipe
+	other_helpers_mlr sort -t "$index" ${file:+"$file"}
+}
 
-		awk -F, -v c1="$column_1" -v c2="$column_2" "$awk_script" OFS=, "$file"
+function other_keymap_ix {
+	local column_1=$1
+	local column_2=$2
+	local file=$3
 
-	# When invoked after a pipe `|`
-	else
-		column_1=$1
-		column_2=${2:-1}
+	other_helpers_validate_indexes 'Usage: oix <i1> <i2> <file>?' "$column_1" "$column_2" || return
+	other_helpers_validate_file "$file" || return
 
-		awk -F, -v c1="$column_1" -v c2="$column_2" "$awk_script" OFS=,
-	fi
+	# `$[[[n]]]` is the value of column `n`
+	local mlr_script='tmp = $[[[@c1]]]; $[[[@c1]]] = $[[[@c2]]]; $[[[@c2]]] = tmp'
+
+	# `-s` passes the indexes in as `@c1` and `@c2` for `mlr_script` to use
+	# `${file:+...}` adds no arg when there is no file, so `mlr` reads the pipe
+	other_helpers_mlr put -s c1="$column_1" -s c2="$column_2" "$mlr_script" ${file:+"$file"}
 }
 
 function other_keymap_j {
@@ -306,7 +268,13 @@ function other_keymap_kk {
 	cd "$OTHER_TERMINAL_DUMP_DIR" && nav_keymap_n || return
 }
 
-function other_keymap_l {
+function other_keymap_m {
+	local target_path=${*:-.}
+
+	mate "$target_path"
+}
+
+function other_keymap_n {
 	local temp_file; temp_file=$(mktemp)
 
 	# Write ciphertext to a temp file instead of capturing stdout
@@ -330,25 +298,15 @@ function other_keymap_l {
 	green_bar 'Copied to pasteboard'
 }
 
-function other_keymap_m {
-	local target_path=${*:-.}
-
-	mate "$target_path"
-}
-
-function other_keymap_n {
-	~/GitHub/jasonzhao6/tt/tt.rb "$@"
-}
-
 function other_keymap_o {
-	local target=$*
+	local target_path=$*
 
 	# If target is empty, open the current directory
-	[[ -z $target ]] && open . && return
+	[[ -z $target_path ]] && open . && return
 
 	# If target is a local directory or file, open it
-	[[ -d $target ]] && open "$target" && return
-	[[ -f $target ]] && open "$target" && return
+	[[ -d $target_path ]] && open "$target_path" && return
+	[[ -f $target_path ]] && open "$target_path" && return
 
 	# If target is a list of urls, open them
 	local has_urls
@@ -357,7 +315,7 @@ function other_keymap_o {
 
 		has_urls=1
 		open "$url"
-	done < <(echo "$target" | extract_urls | bw)
+	done < <(echo "$target_path" | extract_urls | bw)
 	[[ -n $has_urls ]] && return
 
 	# If we didn't open anything, return exit code `1`
@@ -369,7 +327,20 @@ function other_keymap_p {
 }
 
 function other_keymap_q {
-	local sql=$*
+	local sql
+
+	# When invoked after a pipe `|`
+	if [[ ! -t 0 ]]; then
+		sql=$(cat)
+
+	# When invoked with a cli arg
+	elif [[ -n $* ]]; then
+		sql=$*
+
+	# When invoked as standalone command
+	else
+		sql=$(pbpaste)
+	fi
 
 	# shellcheck disable=SC2086 # Empty quotes break Ruby's `gets` method
 	ruby ~/GitHub/jasonzhao6/sql_formatter.rb/run.rb $sql
@@ -448,14 +419,23 @@ function other_keymap_x {
 	local file_1=${1:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1}
 	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
 
-	awk -F, 'NR==FNR{found[$1]; next} $1 in found' "$file_2" "$file_1"
+	other_helpers_validate_file "$file_1" || return
+	other_helpers_validate_file "$file_2" || return
+
+	# Inner join file 1 with file 2's distinct 1st-column values
+	# `compact` drops the inner call's leading blank, else it joins as an empty key
+	other_helpers_mlr join -j 1 -f <(other_helpers_mlr uniq -g 1 "$file_2" | compact) "$file_1"
 }
 
 function other_keymap_xx {
 	local file_1=${1:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1}
 	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
 
-	awk -F, 'NR==FNR{found[$1]; next} !($1 in found)' "$file_2" "$file_1"
+	other_helpers_validate_file "$file_1" || return
+	other_helpers_validate_file "$file_2" || return
+
+	# Anti join file 1 with file 2's 1st-column values
+	other_helpers_mlr join --np --ur -j 1 -f "$file_2" "$file_1"
 }
 
 function other_keymap_y {

@@ -37,6 +37,5 @@ function map {
 		echo "$arg"
 	done
 
-	echo
 	echo "$map" | args_keymap_s
 }

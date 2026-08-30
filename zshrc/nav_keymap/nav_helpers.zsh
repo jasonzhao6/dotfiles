@@ -30,13 +30,10 @@ function nav_helpers_copied_path {
 	echo "$target_path"
 }
 
-function nav_helpers_list_siblings {
-	local file=$1
-
-	if [[ "$file" == .* ]]; then
-		nav_keymap_a
-	else
-		nav_keymap_n
+function nav_helpers_cd_if_only_match {
+	if [[ $(args_history_current | wc -l | tr -d ' ') -eq 1 ]]; then
+		echo; dashes 5
+		cd "$(args_history_current | bw)" && nav_keymap_n || true
 	fi
 }
 
@@ -46,33 +43,42 @@ function nav_helpers_find_cursor {
 	args_helpers_plain | sed 's/ *#.*//' | strip | grep -nFx "$file" | head -1 | cut -d: -f1
 }
 
-function nav_helpers_mru_add {
+function nav_helpers_history_add {
 	local entry=$1
-	local existing=""
 
-	if [[ -f "$NAV_MRU_FILE" ]]; then
-		existing=$(grep -vFx "$entry" "$NAV_MRU_FILE" || true)
+	# Skip if same as last entry
+	if [[ -f "$NAV_HISTORY_FILE" ]]; then
+		local last; last=$(tail -1 "$NAV_HISTORY_FILE")
+		if [[ "$last" == "$entry" ]]; then
+			return
+		fi
 	fi
 
-	if [[ -n "$existing" ]]; then
-		printf '%s\n%s\n' "$entry" "$existing" > "$NAV_MRU_FILE"
-	else
-		echo "$entry" > "$NAV_MRU_FILE"
+	# Append entry
+	echo "$entry" >> "$NAV_HISTORY_FILE"
+
+	# Trim to max entries if needed (keep newest)
+	if [[ -f "$NAV_HISTORY_FILE" ]]; then
+		local count; count=$(wc -l < "$NAV_HISTORY_FILE" | tr -d ' ')
+		if [[ $count -gt $NAV_HISTORY_MAX ]]; then
+			local kept; kept=$(tail -n "$NAV_HISTORY_MAX" "$NAV_HISTORY_FILE")
+			printf '%s\n' "$kept" > "$NAV_HISTORY_FILE"
+		fi
 	fi
 }
 
-function nav_helpers_mru_prune {
-	[[ -f "$NAV_MRU_FILE" ]] || return
+function nav_helpers_shortlist_prune {
+	[[ -f "$NAV_SHORTLIST_FILE" ]] || return
 
 	local kept="" line
 	while IFS= read -r line || [[ -n "$line" ]]; do
 		[[ -d "$line" ]] && kept+="$line"$'\n'
-	done < "$NAV_MRU_FILE"
+	done < "$NAV_SHORTLIST_FILE"
 
 	if [[ -n "$kept" ]]; then
-		printf '%s' "$kept" > "$NAV_MRU_FILE"
+		printf '%s' "$kept" > "$NAV_SHORTLIST_FILE"
 	else
-		rm -f "$NAV_MRU_FILE"
+		rm -f "$NAV_SHORTLIST_FILE"
 	fi
 }
 
@@ -83,46 +89,74 @@ function nav_helpers_populate_args_when_empty {
 	nav_keymap_n > /dev/null
 }
 
-function nav_helpers_render_markdown {
-	# Customize how markdown is rendered: `mdcat/config.toml` restyles headings
-	# as magenta (35) `#` prefixes and link labels as cyan (36); perl handles the
-	# rest. OSC 8 hyperlinks are kept: Terminal.app ignores them, hyperlink-
-	# capable terminals make labels clickable
-	# `--ansi` is required: mdcat sees the pipe to perl (not the terminal) as its
-	# stdout and would otherwise emit plain text with no escapes for perl to match
-	XDG_CONFIG_HOME="$NAV_MDCAT_CONFIG_HOME" mdcat --ansi "$1" | perl -pe '
-		# Normalize vertical spacing: drop leading blank lines to avoid doubling
-		# the banner/content separator `render_file` already printed, and
-		# collapse blank runs to a single line
-		if (/^$/) { $_ = "" if $blank || !$seen; $blank = 1 } else { $seen = 1; $blank = 0 }
-
-		# H1 is the one heading `config.toml` cannot mark up, as mdcat takes a
-		# marker for H2-H6 only. It renders a banner instead, padding the
-		# heading with a space on either side of a background color (104).
-		# Swap the leading pad for a `#` prefix, then drop the rest
-		s/\e\[104m//g if s/^\e\[94m\e\[104m \e\[0m\e\[1m\e\[35m\e\[104m(.*)\e\[0m\e\[94m\e\[104m \e\[0m$/\e[1m\e[35m# $1\e[0m/;
-	'
-}
-
-function nav_helpers_render_file {
+function nav_helpers_render_csv {
 	local file=$1
 
-	other_keymap_k
+	perl -e '
+		my (@rows, @width);
 
-	local name=${file##*/}
-	local rule; rule=$(printf '%0.s─' $(seq 1 ${#name}))
-	magenta_fg "$rule"
-	magenta_fg "$name"
-	magenta_fg "$rule"
+		# Bytes stay bytes, so a cell in a non-UTF-8 encoding renders as-is;
+		# `width` counts characters instead, skipping the continuation bytes
+		# (0x80-0xBF) that tail a multi-byte character rather than being one
+		sub width { my $count = () = $_[0] =~ /[^\x80-\xBF]/g; $count }
 
-	echo
-	if [[ "$file" == *.md ]]; then
-		nav_helpers_render_markdown "$file"
-	else
-		cat "$file"
-	fi
+		while (my $line = <STDIN>) {
+			chomp $line;
 
-	nav_helpers_scroll_to_top
+			# Split on commas outside double quotes, unquoting a quoted cell
+			my @cells;
+			while ($line =~ /\G(?:"((?:[^"]|"")*)"|([^,]*))(,|\z)/gc) {
+				push @cells, defined $1 ? $1 =~ s/""/"/gr : $2;
+				last if $3 eq "";
+			}
+
+			for my $i (0 .. $#cells) {
+				$width[$i] = width($cells[$i]) if width($cells[$i]) > ($width[$i] // 0);
+			}
+
+			push @rows, \@cells;
+		}
+
+		exit unless @rows;
+
+		# Pad each cell to its column, so one holding spaces or commas still
+		# reads as a single value; pad each row out to the widest, so a short
+		# row still shows its empty cells
+		my @padded = map {
+			my @cells = @$_;
+			push @cells, "" while @cells < @width;
+			join " │ ", map { $cells[$_] . " " x ($width[$_] - width($cells[$_])) } 0 .. $#width;
+		} @rows;
+
+		my $rule = join "─┼─", map { "─" x $_ } @width;
+
+		for my $i (0 .. $#padded) {
+			my $line = $padded[$i];
+			$line =~ s/ +$//;
+
+			# Row 1 is the header: gray (90) cells and separators.
+			# Every other row leaves its cells the terminal color
+			if ($i == 0) {
+				$line =~ s/│/\e[90m│\e[90m/g;
+				print "\e[90m$line\e[0m\n\e[90m$rule\e[0m\n";
+			} else {
+				$line =~ s/│/\e[90m│\e[0m/g;
+				print "$line\n";
+			}
+		}
+	' < "$file"
+}
+
+function nav_helpers_render_markdown {
+  # Render markdown via mdcat, with custom styling from `mdcat/config.toml`
+	XDG_CONFIG_HOME="$NAV_MDCAT_CONFIG_HOME" mdcat --ansi "$1" | perl -pe '
+		# Drop leading blank lines; also collapse consecutive blank lines to one
+		if (/^$/) { $_ = "" if $blank || !$seen; $blank = 1 } else { $seen = 1; $blank = 0 }
+
+		# `config.toml` can configure H2-H6 styles, but not H1
+		# Convert H1 style from banner to a simple `# <heading>`
+		s/\e\[104m//g if s/^\e\[94m\e\[104m \e\[0m\e\[1m\e\[35m\e\[104m(.*)\e\[0m\e\[94m\e\[104m \e\[0m$/\e[1m\e[35m# $1\e[0m/;
+	'
 }
 
 function nav_helpers_scroll_to_top {
@@ -136,8 +170,29 @@ function nav_helpers_scroll_to_top {
 	fi
 }
 
+# Uses NAV_CURSOR, instead of local arg, so nv/nj/nk/nr can navigate from the same position
 function nav_helpers_render_cursor_as_file {
+	local scroll_to_top=${1:-true}
 	local file; file="$(args_helpers_plain | sed -n "${NAV_CURSOR}p" | sed 's/ *#.*//' | strip)"
 
-	nav_helpers_render_file "$file"
+	other_keymap_k
+
+	local name=${file##*/}
+	local rule; rule=$(printf '%0.s─' $(seq 1 ${#name}))
+	magenta_fg "$rule"
+	magenta_fg "$name"
+	magenta_fg "$rule"
+
+	echo
+	if [[ "$file" == *.csv ]]; then
+		nav_helpers_render_csv "$file"
+	elif [[ "$file" == *.json ]]; then
+		jq '.' "$file"
+	elif [[ "$file" == *.md ]]; then
+		nav_helpers_render_markdown "$file"
+	else
+		cat "$file"
+	fi
+
+	[[ $scroll_to_top == true ]] && nav_helpers_scroll_to_top
 }

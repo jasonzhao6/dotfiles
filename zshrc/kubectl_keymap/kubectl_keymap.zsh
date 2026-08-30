@@ -3,48 +3,48 @@ KUBECTL_ALIAS='k'
 KUBECTL_DOT="${KUBECTL_ALIAS}${KEYMAP_DOT}"
 
 KUBECTL_KEYMAP=(
-	"${KUBECTL_ALIAS} <kubectl command>"
-	''
-	"${KUBECTL_DOT}u # Run unit tests and update snapshots"
-	"${KUBECTL_DOT}p <yaml file> # Print spec from yaml file locally"
-	''
-	"${KUBECTL_DOT}e1 <namespace>? # Set QA namespace, region & kubeconfig"
-	"${KUBECTL_DOT}e2 <namespace>? # Set QA namespace, region & kubeconfig"
-	"${KUBECTL_DOT}w2 <namespace>? # Set QA namespace, region & kubeconfig"
-	"${KUBECTL_DOT}n <namespace>? # Set QA namespace to default org"
-	''
-	"${KUBECTL_DOT}h <match>* <-mismatch>* # Get pods as args"
-	"${KUBECTL_DOT}hh <match>* <-mismatch>* # Get unready pods as args"
-	"${KUBECTL_DOT}m <pod> # Edit pod in TextMate" #
-	''
-	"${KUBECTL_DOT}t <match>* <-mismatch>* # Get deployments as args"
-	"${KUBECTL_DOT}w <deployment> # Edit deployment in TextMate" #
-	''
-	"${KUBECTL_DOT}k <type> <match>* <-mismatch>* # Get resources as args"
-	"${KUBECTL_DOT}v <type> <name> # Edit resource in TextMate" #
+	"${KUBECTL_ALIAS} <kubectl command> # Pass through"
 	''
 	"${KUBECTL_DOT}c (e11,e12,e21,w21,c11)? # Copy Prod helpers and history bindings"
-	"${KUBECTL_DOT}b <pod> # Exec into bash"
-	"${KUBECTL_DOT}bc <command> <pod> # Exec a command"
-	"${KUBECTL_DOT}l <pod> # Show logs"
-	"${KUBECTL_DOT}ll <pod> # Tail logs"
-	"${KUBECTL_DOT}lp <pod> # Show previous logs"
 	''
-	"${KUBECTL_DOT}r <deployment> # Restart deployment"
-	"${KUBECTL_DOT}rd <daemon set> # Restart daemon set"
-	"${KUBECTL_DOT}rs <stateful set> # Restart stateful set"
-	"${KUBECTL_DOT}rm <pod> # Remove pod"
-	"${KUBECTL_DOT}s <count> <deployment> # Scale deployment"
+	"${KUBECTL_DOT}e1 <namespace>? # Set QA namespace & region & kubeconfig"
+	"${KUBECTL_DOT}e2 <namespace>? # Set QA namespace & region & kubeconfig"
+	"${KUBECTL_DOT}w2 <namespace>? # Set QA namespace & region & kubeconfig"
+	"${KUBECTL_DOT}n <namespace>? # Set QA namespace"
+	''
+	# Intentional: Use Dvorak rest keys 't' (deployments) and 'h' (pods) instead of 'd' and 'p'
+	"${KUBECTL_DOT}t <match>* <-mismatch>* # Get deployments as args"
+	"${KUBECTL_DOT}tt <deployment> # Edit deployment in TextMate"
+	"${KUBECTL_DOT}tr <deployment> # Restart deployment"
+	"${KUBECTL_DOT}ts <count> <deployment> # Scale deployment"
+	''
+	"${KUBECTL_DOT}h <match>* <-mismatch>* # Get pods as args"
+	"${KUBECTL_DOT}H <match>* <-mismatch>* # Get unready pods as args"
+	"${KUBECTL_DOT}hh <pod> # Edit pod in TextMate" #
+	"${KUBECTL_DOT}hd <pod> # Remove pod"
+	''
+	"${KUBECTL_DOT}o <pod> # Exec into bash"
+	"${KUBECTL_DOT}oc <command> <pod> # Exec a command"
+	"${KUBECTL_DOT}l <pod> # Tail logs"
+	"${KUBECTL_DOT}ll <pod> # Show logs"
+	"${KUBECTL_DOT}lp <pod> # Show previous logs"
 	''
 	"${KUBECTL_DOT}f <match>* <-mismatch>* # List resource types & filter"
 	"${KUBECTL_DOT}ff # Save copy of resource types"
-	"${KUBECTL_DOT}d <type> <name> # Describe resources"
+	''
+	"${KUBECTL_DOT}k <type> <match>* <-mismatch>* # Get resources as args"
 	"${KUBECTL_DOT}g <type> <name> # Get resources"
 	"${KUBECTL_DOT}gg <type> <name> # Get resources with \`-o wide\`"
+	"${KUBECTL_DOT}d <type> <name> # Describe resources"
+	"${KUBECTL_DOT}m <type> <name> # Edit resource in TextMate" #
+	''
 	"${KUBECTL_DOT}j <type> <name> # Get resource as json & save copy"
 	"${KUBECTL_DOT}jj # Get the copy of json"
 	"${KUBECTL_DOT}y <type> <name> # Get resource as yaml & save copy"
 	"${KUBECTL_DOT}yy # Get the copy of yaml"
+	''
+	"${KUBECTL_DOT}u # Run unit tests and update snapshots"
+	"${KUBECTL_DOT}p <yaml file> # Print spec from yaml file locally"
 )
 
 keymap_init $KUBECTL_NAMESPACE $KUBECTL_ALIAS "${KUBECTL_KEYMAP[@]}"
@@ -65,19 +65,6 @@ function kubectl_keymap {
 #
 # Key mappings (Alphabetized)
 #
-
-function kubectl_keymap_b {
-	local pod="$1"
-
-	kubectl exec -it "$pod" -- bash
-}
-
-function kubectl_keymap_bc {
-	local command=("${@[1,-2]}")
-	local pod="${*[-1]}"
-
-	kubectl exec "$pod" -- "${command[@]}"
-}
 
 function kubectl_keymap_c {
 	local option=$1
@@ -171,15 +158,7 @@ function kubectl_keymap_gg {
 	kubectl get "${params[@]}" --output wide
 }
 
-function kubectl_keymap_h {
-	[[ -z $1 ]] && return
-
-	local filters=("$@")
-
-	kubectl get pod | args_keymap_so "${filters[@]}"
-}
-
-function kubectl_keymap_hh {
+function kubectl_keymap_H {
 	local filters=("$@")
 	local columns="\
 		NAME:.metadata.name,\
@@ -193,6 +172,26 @@ function kubectl_keymap_hh {
 		awk 'NR==1 {print; next} /False/ {gsub(/true/, "Ready"); gsub(/false/, "Unready"); gsub(/False/, "Unregistered"); print}' |
 		column -t |
 		args_keymap_so "${filters[@]}"
+}
+
+function kubectl_keymap_h {
+	[[ -z $1 ]] && return
+
+	local filters=("$@")
+
+	kubectl get pod | args_keymap_so "${filters[@]}"
+}
+
+function kubectl_keymap_hd {
+	local pod="$1"
+
+	kubectl delete pod "$pod"
+}
+
+function kubectl_keymap_hh {
+	local pod="$1"
+
+	kubectl edit pods "$pod"
 }
 
 function kubectl_keymap_j {
@@ -218,13 +217,13 @@ function kubectl_keymap_k {
 function kubectl_keymap_l {
 	local pod="$1"
 
-	kubectl logs "$pod"
+	kubectl logs -f "$pod"
 }
 
 function kubectl_keymap_ll {
 	local pod="$1"
 
-	kubectl logs -f "$pod"
+	kubectl logs "$pod"
 }
 
 function kubectl_keymap_lp {
@@ -234,9 +233,9 @@ function kubectl_keymap_lp {
 }
 
 function kubectl_keymap_m {
-	local pod="$1"
+	local params=("$@")
 
-	kubectl edit pods "$pod"
+	kubectl edit "${params[@]}"
 }
 
 function kubectl_keymap_n {
@@ -245,41 +244,23 @@ function kubectl_keymap_n {
 	kubectl config set-context --current --namespace "$namespace"
 }
 
+function kubectl_keymap_o {
+	local pod="$1"
+
+	kubectl exec -it "$pod" -- bash
+}
+
+function kubectl_keymap_oc {
+	local command=("${@[1,-2]}")
+	local pod="${*[-1]}"
+
+	kubectl exec "$pod" -- "${command[@]}"
+}
+
 function kubectl_keymap_p {
 	local yaml_file="$1"
 
 	helm template -f "$yaml_file" .
-}
-
-function kubectl_keymap_r {
-	local resource_name="$1"
-
-	kubectl rollout restart deployments "$resource_name"
-}
-
-function kubectl_keymap_rd {
-	local resource_name="$1"
-
-	kubectl rollout restart daemonsets "$resource_name"
-}
-
-function kubectl_keymap_rm {
-	local pod="$1"
-
-	kubectl delete pod "$pod"
-}
-
-function kubectl_keymap_rs {
-	local resource_name="$1"
-
-	kubectl rollout restart statefulsets "$resource_name"
-}
-
-function kubectl_keymap_s {
-	local replica_count="$1"
-	local deployment_name="$2"
-
-	kubectl scale --replicas="$replica_count" deployments "$deployment_name"
 }
 
 function kubectl_keymap_t {
@@ -290,20 +271,27 @@ function kubectl_keymap_t {
 	kubectl get deployments | args_keymap_so "${filters[@]}"
 }
 
-function kubectl_keymap_u {
-	helm unittest --update-snapshot --file 'tests/*.yaml' .
+function kubectl_keymap_tr {
+	local resource_name="$1"
+
+	kubectl rollout restart deployments "$resource_name"
 }
 
-function kubectl_keymap_v {
-	local params=("$@")
+function kubectl_keymap_ts {
+	local replica_count="$1"
+	local deployment_name="$2"
 
-	kubectl edit "${params[@]}"
+	kubectl scale --replicas="$replica_count" deployments "$deployment_name"
 }
 
-function kubectl_keymap_w {
+function kubectl_keymap_tt {
 	local deployment="$1"
 
 	kubectl edit deployments "$deployment"
+}
+
+function kubectl_keymap_u {
+	helm unittest --update-snapshot --file 'tests/*.yaml' .
 }
 
 function kubectl_keymap_w2 {

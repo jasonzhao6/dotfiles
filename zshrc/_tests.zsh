@@ -11,7 +11,7 @@ ZSHRC_TESTS_START_TIME=$(gdate +%s.%2N)
 # Test setup
 #
 
-# Allow filtering test sections by number (1-4)
+# Allow filtering test sections by number (1-5)
 ZSHRC_TESTS_SECTION_FILTER=$([[ $1 -ge 1 && $1 -le 5 ]] && echo "$1")
 
 # Allow filtering tests by substring match

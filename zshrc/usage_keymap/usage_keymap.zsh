@@ -4,13 +4,14 @@ USAGE_DOT="${USAGE_ALIAS}${KEYMAP_DOT}"
 
 USAGE_KEYMAP=(
 	"${USAGE_DOT}u <n>? # Usage overview (Default: All days)"
+	''
+	"${USAGE_DOT}n <n OR match>? # Top namespaces (Default: All days)"
+	"${USAGE_DOT}a <n OR match>? # Top aliases (Default: All days)"
+	''
 	"${USAGE_DOT}d <n>? # By day of week (logged zone)"
 	"${USAGE_DOT}dd <n>? # By day of week (current zone)"
 	"${USAGE_DOT}h <n>? # By hour of day (logged zone)"
 	"${USAGE_DOT}hh <n>? # By hour of day (current zone)"
-	''
-	"${USAGE_DOT}n <n OR match>? # Top namespaces (Default: All days)"
-	"${USAGE_DOT}a <n OR match>? # Top aliases (Default: All days)"
 	''
 	"${USAGE_DOT}m # Open usage in TextMate"
 	"${USAGE_DOT}c # Clear usage file"

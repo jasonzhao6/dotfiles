@@ -7,7 +7,8 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}m # Edit dotfiles in TextMate"
 	"${ZSH_DOT}mm # Edit secrets in TextMate"
 	"${ZSH_DOT}s # Source .zshrc file"
-	"${ZSH_DOT}t <match OR 1-5>? # Run tests by name or section #"
+	"${ZSH_DOT}t <match OR 1-5>? # Run tests by name or section"
+	"${ZSH_DOT}tt # Run tests by name in pasteboard"
 	''
 	"${ZSH_DOT}z <name> # Custom \`which\` lookup"
 	"${ZSH_DOT}a <match>* <-mismatch>* # List aliases & filter"
@@ -137,6 +138,10 @@ function zsh_keymap_t {
 	zsh "$ZSHRC_SRC_DIR"/_tests.zsh "$@"
 }
 
+function zsh_keymap_tt {
+	zsh_keymap_t "$(pbpaste)"
+}
+
 function zsh_keymap_z {
 	local name=$1
 	[[ -z $name ]] && red_bar 'Required: <name>' && return
@@ -148,18 +153,13 @@ function zsh_keymap_z {
 	# Prepare regex to match keys in keymaps
 	local key_regex; key_regex="^${name:0:1}[.]${name:1} "
 
-	echo
-
-	# If `name` is a zsh alias, show the alias definition
+	# If `name` is a zsh alias, show the alias definition and resolve to function
 	local is_alias="^$name: aliased to (.+)$"
 	if [[ $definition =~ $is_alias ]]; then
-		gray_fg "  # \`${definition/: aliased to /\` is aliased to \`}\`"
-
 		# If the zsh alias is a keymap key, show its usage
 		if zsh_helpers_does_key_exist "$key_regex"; then
 			eval "${name:0:1} '$key_regex'"
 	 	fi
-		echo
 
 		# shellcheck disable=SC2154 # `match` is defined by `=~`
 		definition=$(which "${match[1]}")

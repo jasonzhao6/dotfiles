@@ -3,12 +3,10 @@ DOCKER_ALIAS='d'
 DOCKER_DOT="${DOCKER_ALIAS}${KEYMAP_DOT}"
 
 DOCKER_KEYMAP=(
-	"${DOCKER_ALIAS} <docker command>"
+	"${DOCKER_ALIAS} <docker command> # Pass through"
 	''
 	"${DOCKER_DOT}s # Login with AWS credentials"
 	''
-	"${DOCKER_DOT}c # (Reserved: Desk calculator)"
-	"${DOCKER_DOT}d # (Reserved: Data duplicator)"
 	"${DOCKER_DOT}f # (Reserved: Disk free)"
 	"${DOCKER_DOT}o # (Reserved: Shell keyword)"
 	"${DOCKER_DOT}u # (Reserved: Disk usage)"

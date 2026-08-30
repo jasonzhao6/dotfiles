@@ -11,6 +11,13 @@ function callee {
 	echo "${funcstack[2]}"
 }
 
+function check_docker {
+	docker info 2> /dev/null |
+		grep 'Server Version' > /dev/null &&
+		green_bar 'Docker is running' ||
+		red_bar 'Docker is not running'
+}
+
 function comma_num {
 	printf "%'d" "$1" 2>/dev/null || echo "$1"
 }
@@ -102,6 +109,11 @@ function bw {
 
 function compact {
 	sed '/^$/d'
+}
+
+function dashes {
+	local spaces=${1:-0}
+	printf "%${spaces}s----------------\n" ''
 }
 
 function downcase {

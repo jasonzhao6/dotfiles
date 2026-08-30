@@ -2,25 +2,26 @@ Keymap: zsh_keymap.zsh
 
   `  <1> <2>  3   4   5   |   6   7   8   9  <0>  [   ] 
       '   ,   .  <p>  y   |  <f>  g   c   r   l   /   =   \ 
-     <a>  o  <e>  u   i   |   d  (h) <t>  n  <s>  - 
+     <a>  o  <e>  u   i   |   d  (h) (t)  n  <s>  - 
       ;   q   j   k   x   |   b  (m)  w   v  <z>
 
-  `<>` key initials have one mapping
-  `()` key initials have multiple mappings
+  `<>` initials have only one key mapping
+  `()` initials have multiple key mappings
 
 Keymap Usage
 
   $ z                         # Show this keymap
   $ z <regex>                 # Search this keymap
 
-  $ z.<key>                   # This mapping takes no variable
-  $ z.<key> <var>             # This mapping takes one variable
-  $ z.<key> <var>?            # This mapping takes zero or one variable
-  $ z.<key> <var>*            # This mapping takes zero or multiple variables
-  $ z.<key> (1-10)            # This mapping takes an exact value from the list
+  $ z.<key>                   # Key takes no variable
+  $ z.<key> <var>             # Key takes one variable
+  $ z.<key> <var>?            # Key takes zero or one variable
+  $ z.<key> <var>*            # Key takes zero or more variables
+  $ z.<key> (1-10)            # Key takes a value from inside list
+  $ z.<key> (^|)?             # Key can be piped to: ... | z.<key>
 
-     ^                        # The `.` is only for documentation
-                              # Omit it when invoking a mapping
+     ^                        # The `.` is for visual clarity
+                              # Omit it when invoking a key
 
 Keymap List
 
@@ -28,7 +29,8 @@ Keymap List
   $ z.m                       # Edit dotfiles in TextMate
   $ z.mm                      # Edit secrets in TextMate
   $ z.s                       # Source .zshrc file
-  $ z.t <match OR 1-5>?       # Run tests by name or section #
+  $ z.t <match OR 1-5>?       # Run tests by name or section
+  $ z.tt                      # Run tests by name in pasteboard
 
   $ z.z <name>                # Custom `which` lookup
   $ z.a <match>* <-mismatch>* # List aliases & filter

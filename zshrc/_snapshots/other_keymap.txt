@@ -1,75 +1,72 @@
 Keymap: other_keymap.zsh
 
-  `  (1) (2)  3   4   5   |   6   7  <8>  9  <0>  [   ] 
-      '   ,   .  <p> <y>  |  <f>  g  (c) <r> <l>  /   =   \ 
+  `  (1) <2>  3   4   5   |   6   7  <8>  9  <0>  [   ] 
+      '   ,   .  <p> <y>  |  <f>  g  (c) <r>  l   /   =   \ 
      <a> (o) <e> (u) (i)  |  (d)  h  <t> <n> <s>  - 
-      ;  (q) <j> (k) (x)  |  <b> <m> <w> <v>  z 
+      ;  <q> <j> (k) (x)  |  <b> <m> <w> <v>  z 
 
-  `<>` key initials have one mapping
-  `()` key initials have multiple mappings
+  `<>` initials have only one key mapping
+  `()` initials have multiple key mappings
 
 Keymap Usage
 
-  $ o                             # Show this keymap
-  $ o <regex>                     # Search this keymap
+  $ o                               # Show this keymap
+  $ o <regex>                       # Search this keymap
 
-  $ o.<key>                       # This mapping takes no variable
-  $ o.<key> <var>                 # This mapping takes one variable
-  $ o.<key> <var>?                # This mapping takes zero or one variable
-  $ o.<key> <var>*                # This mapping takes zero or multiple variables
-  $ o.<key> (1-10)                # This mapping takes an exact value from the list
+  $ o.<key>                         # Key takes no variable
+  $ o.<key> <var>                   # Key takes one variable
+  $ o.<key> <var>?                  # Key takes zero or one variable
+  $ o.<key> <var>*                  # Key takes zero or more variables
+  $ o.<key> (1-10)                  # Key takes a value from inside list
+  $ o.<key> (^|)?                   # Key can be piped to: ... | o.<key>
 
-     ^                            # The `.` is only for documentation
-                                  # Omit it when invoking a mapping
+     ^                              # The `.` is for visual clarity
+                                    # Omit it when invoking a key
 
 Keymap List
 
-  $ o <url>                       # Open specified url
-  $ o <path>                      # Open specified path in Finder
+  $ o <path>                        # Open path in Finder
+  $ o <url>                         # Open url in browser
+  $ o.o                             # Open current dir in Finder
+  $ o.e <path>?                     # Open IntelliJ (Default: CWD)
+  $ o.m <path>?                     # Open TextMate (Default: CWD)
 
-  $ o.o                           # Open current directory in Finder
-  $ o.e <path>?                   # Open IntelliJ (Default: Current dir)
-  $ o.m <path>?                   # Open TextMate (Default: Current dir)
+  $ o.a                             # Stay awake
+  $ o.s                             # Sleep
 
-  $ o.s                           # Sleep
-  $ o.a                           # Stay awake
-  $ o.n                           # Stay on task
+  $ o.cc                            # Copy command
+  $ o.c                             # Copy output
+  $ o.v                             # Speak pasteboard
+  $ o.y                             # Alias for `pbcopy`
+  $ o.p                             # Alias for `pbpaste`
 
-  $ o.c                           # Copy last output
-  $ o.cc                          # Copy last command
-  $ o.y                           # Alias for `pbcopy`
-  $ o.p                           # Alias for `pbpaste`
-  $ o.v                           # Speak stripped pasteboard at rate 300
-  $ o.l                           # Encrypt pasteboard + print decrypt cmd
+  $ o.1 (^|)?                       # Save pasteboard value to `diff.1.txt`
+  $ o.2 (^|)?                       # Save pasteboard value to `diff.2.txt`
+  $ o.u <file 1>? <file 2>?         # Unified diff
+  $ o.uu <file 1>? <file 2>?        # Side by side diff
+  $ o.12                            # Open diff files in TextMate
+  $ o.0                             # Empty `diff.1.txt` and `diff.2.txt`
 
-  $ o.k                           # Clear terminal
-  $ o.kk                          # Show archived terminal outputs
-  $ o.kc                          # Clear archived terminal outputs
+  $ o.i <index> <file>? (^|)?       # CSV: Keep column by index
+  $ o.id <index> <file>? (^|)?      # CSV: Delete column by index
+  $ o.ii <index> <file>? (^|)?      # CSV: Sort lines by column
+  $ o.ix <i1> <i2> <file>? (^|)?    # CSV: Swap columns
+  $ o.x <file 1>? <file 2>?         # CSV: Keep lines matching 1st column
+  $ o.xx <file 1>? <file 2>?        # CSV: Delete lines matching 1st column
 
-  $ o.12                          # Open diff files in TextMate
-  $ (|)? o.1                      # Save pasteboard value to `diff.1.txt`
-  $ (|)? o.2                      # Save pasteboard value to `diff.2.txt`
-  $ o.11                          # Save last output to `diff.1.txt`
-  $ o.22                          # Save last output to `diff.2.txt`
-  $ o.0                           # Empty `diff.1.txt` and `diff.2.txt`
-  $ o.u <file 1>? <file 2>?       # Unified diff
-  $ o.uu <file 1>? <file 2>?      # Side by side diff
+  $ o.t <command>                   # Time a command
+  $ o.w <seconds>? <command>        # Watch a command (Default: 1s)
+  $ o.f <start> <finish> (~~)       # Run a command sequence in foreground
+  $ o.b <start> <finish> (~~)       # Run a command sequence in background
 
-  $ o.t <command>                 # Time command execution
-  $ o.w <seconds>? <command>      # Loop command with sleep (Default: 1s)
-  $ o.f <start> <finish> (~~)     # Run command sequence in foreground
-  $ o.b <start> <finish> (~~)     # Run command sequence in background
+  $ o.k                             # Clear terminal
+  $ o.kk                            # Show archived terminal outputs
+  $ o.kc                            # Clear archived terminal outputs
 
-  $ (|)? o.i <file>? <col index>? # CSV: Sort lines by column index
-  $ (|)? o.id <file>? <col index> # CSV: Drop column by index
-  $ (|)? o.ii <file>? <i1> <i2>?  # CSV: Swap columns by indexes
-  $ o.x <file 1>? <file 2>?       # CSV: Keep lines matching 1st column
-  $ o.xx <file 1>? <file 2>?      # CSV: Drop lines matching 1st column
-
-  $ o.8                           # Use Java 8
-  $ o.d <url>                     # DNS dig
-  $ o.df                          # DNS flush
-  $ o.j <url> <regex> <num lines> # Curl json endpoint
-  $ o.q                           # Format sql query from stdin
-  $ o.q '<sql>'                   # Format sql query from cli arg
-  $ o.r <before> <after>          # Rename files in current directory
+  $ o.8                             # Use Java 8
+  $ o.d <url>?                      # DNS dig (Default: Pasteboard)
+  $ o.df                            # DNS flush
+  $ o.j <url> <regex>? <num lines>? # Curl json endpoint
+  $ o.n                             # Encrypt pasteboard + print decrypt cmd
+  $ o.q '<sql>'? (^|)?              # Format a sql query (Default: Pasteboard)
+  $ o.r <before> <after>            # Rename files in current directory

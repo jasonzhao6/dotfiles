@@ -3,17 +3,14 @@ CLAUDE_ALIAS='c'
 CLAUDE_DOT="${CLAUDE_ALIAS}${KEYMAP_DOT}"
 
 CLAUDE_KEYMAP=(
-	"${CLAUDE_DOT}n # Start new 5-hour token window"
-	"${CLAUDE_DOT}t # Show token window usage & reset"
 	''
 	"${CLAUDE_DOT}c # Start new session"
 	"${CLAUDE_DOT}r # Resume last session"
-	"${CLAUDE_DOT}l <match>? # List matching session"
+	"${CLAUDE_DOT}l <match>? # List matching sessions"
+	''
 	"${CLAUDE_DOT}s # Start scratch session"
 	"${CLAUDE_DOT}ss # Reset tab background color"
-	''
-	"${CLAUDE_DOT}o # Print local settings"
-	"${CLAUDE_DOT}oo # Move local settings to global"
+	"${CLAUDE_DOT}n # Start new 5-hour token window"
 	''
 	"${CLAUDE_DOT}m # Edit config folder in TextMate"
 	"${CLAUDE_DOT}u # Push config to \`scratch\` (\`cp\` reserved)"
@@ -44,17 +41,20 @@ CLAUDE_KEYMAP_FOLDERS=()
 CLAUDE_KEYMAP_SCRATCH_DIR="$HOME/GitHub/jasonzhao6/scratch/claude/config"
 
 function claude_keymap_c {
-	claude_helpers_check_docker
+	check_docker
+
 	claude
 }
 
 function claude_keymap_l {
-	claude_helpers_check_docker
+	check_docker
+
 	claude --resume "$*"
 }
 
 function claude_keymap_m {
 	mate "$CLAUDE_KEYMAP_CONFIG_DIR"
+	mate "$CLAUDE_KEYMAP_CONFIG_DIR/settings.json" "$CLAUDE_KEYMAP_CONFIG_DIR/CLAUDE.md"
 }
 
 function claude_keymap_n {
@@ -74,59 +74,9 @@ function claude_keymap_n {
 	} & disown # Background and disown so zsh forgets about this job entirely (no done message).
 }
 
-function claude_keymap_o {
-	local local_settings='.claude/settings.local.json'
-
-	if [ -f "$local_settings" ]; then
-		cat "$local_settings"
-	else
-		red_bar "No local settings"
-	fi
-}
-
-function claude_keymap_oo {
-	local local_settings='.claude/settings.local.json'
-	local global_settings="$CLAUDE_KEYMAP_CONFIG_DIR/settings.json"
-
-	if [ ! -f "$local_settings" ]; then
-		red_bar "No local settings"
-		return 1
-	fi
-
-	# Extract local permissions
-	local local_perms
-	local_perms=$(jq -r '.permissions.allow // [] | .[]' "$local_settings" 2>/dev/null)
-
-	if [ -z "$local_perms" ]; then
-		red_bar "No local permissions"
-		return 1
-	fi
-
-	# Merge local permissions into global settings
-	jq --argjson new "$(jq '.permissions.allow // []' "$local_settings")" \
-		'.permissions.allow = ([.permissions.allow // [], $new] | flatten | unique | sort)' \
-		"$global_settings" > "${global_settings}.tmp" &&
-		mv "${global_settings}.tmp" "$global_settings"
-
-	# Remove permissions from local settings
-	local updated
-	updated=$(jq 'del(.permissions.allow) | if .permissions == {} then del(.permissions) else . end' "$local_settings")
-
-	if [ "$(echo "$updated" | jq 'length')" -eq 0 ]; then
-		rm "$local_settings"
-		green_bar "Moved to global"
-	else
-		echo "$updated" > "$local_settings"
-		green_bar "Moved to global; kept local"
-	fi
-
-	# Push updated global config to scratch repo
-	echo
-	claude_keymap_u
-}
-
 function claude_keymap_r {
-	claude_helpers_check_docker
+	check_docker
+
 	claude --continue
 }
 
@@ -153,11 +103,9 @@ function claude_keymap_ss {
 		end tell'
 }
 
-function claude_keymap_t {
-	claude -p "/usage" | grep -E --color=auto '[0-9]+% used|[0-9]{1,2}:[0-9]{2}(am|pm)'
-}
-
 function claude_keymap_u {
+	claude_helpers_move_local_to_global
+
 	echo "Pushing Claude config to 'scratch' repository..."
 
 	rm -rf "$CLAUDE_KEYMAP_SCRATCH_DIR"

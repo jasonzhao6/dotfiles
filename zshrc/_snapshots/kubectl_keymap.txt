@@ -1,68 +1,68 @@
 Keymap: kubectl_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .  <p> (y)  |  (f) (g) <c> (r) (l)  /   =   \ 
-      a   o  (e) <u>  i   |  <d> (h) <t> <n> <s>  - 
-      ;   q  (j) (k)  x   |  (b) <m> (w) <v>  z 
+      '   ,   .  <p> (y)  |  (f) (g) <c>  r  (l)  /   =   \ 
+      a  (o) (e) <u>  i   |  <d> (h) (t) <n>  s   - 
+      ;   q  (j) (k)  x   |   b  <m> <w>  v   z 
 
-  `<>` key initials have one mapping
-  `()` key initials have multiple mappings
+  `<>` initials have only one key mapping
+  `()` initials have multiple key mappings
 
 Keymap Usage
 
   $ k                                # Show this keymap
   $ k <regex>                        # Search this keymap
 
-  $ k.<key>                          # This mapping takes no variable
-  $ k.<key> <var>                    # This mapping takes one variable
-  $ k.<key> <var>?                   # This mapping takes zero or one variable
-  $ k.<key> <var>*                   # This mapping takes zero or multiple variables
-  $ k.<key> (1-10)                   # This mapping takes an exact value from the list
+  $ k.<key>                          # Key takes no variable
+  $ k.<key> <var>                    # Key takes one variable
+  $ k.<key> <var>?                   # Key takes zero or one variable
+  $ k.<key> <var>*                   # Key takes zero or more variables
+  $ k.<key> (1-10)                   # Key takes a value from inside list
+  $ k.<key> (^|)?                    # Key can be piped to: ... | k.<key>
 
-     ^                               # The `.` is only for documentation
-                                     # Omit it when invoking a mapping
+     ^                               # The `.` is for visual clarity
+                                     # Omit it when invoking a key
 
 Keymap List
 
-  $ k <kubectl command>              
-
-  $ k.u                              # Run unit tests and update snapshots
-  $ k.p <yaml file>                  # Print spec from yaml file locally
-
-  $ k.e1 <namespace>?                # Set QA namespace, region & kubeconfig
-  $ k.e2 <namespace>?                # Set QA namespace, region & kubeconfig
-  $ k.w2 <namespace>?                # Set QA namespace, region & kubeconfig
-  $ k.n <namespace>?                 # Set QA namespace to default org
-
-  $ k.h <match>* <-mismatch>*        # Get pods as args
-  $ k.hh <match>* <-mismatch>*       # Get unready pods as args
-  $ k.m <pod>                        # Edit pod in TextMate
-
-  $ k.t <match>* <-mismatch>*        # Get deployments as args
-  $ k.w <deployment>                 # Edit deployment in TextMate
-
-  $ k.k <type> <match>* <-mismatch>* # Get resources as args
-  $ k.v <type> <name>                # Edit resource in TextMate
+  $ k <kubectl command>              # Pass through
 
   $ k.c (e11,e12,e21,w21,c11)?       # Copy Prod helpers and history bindings
-  $ k.b <pod>                        # Exec into bash
-  $ k.bc <command> <pod>             # Exec a command
-  $ k.l <pod>                        # Show logs
-  $ k.ll <pod>                       # Tail logs
-  $ k.lp <pod>                       # Show previous logs
 
-  $ k.r <deployment>                 # Restart deployment
-  $ k.rd <daemon set>                # Restart daemon set
-  $ k.rs <stateful set>              # Restart stateful set
-  $ k.rm <pod>                       # Remove pod
-  $ k.s <count> <deployment>         # Scale deployment
+  $ k.e1 <namespace>?                # Set QA namespace & region & kubeconfig
+  $ k.e2 <namespace>?                # Set QA namespace & region & kubeconfig
+  $ k.w2 <namespace>?                # Set QA namespace & region & kubeconfig
+  $ k.n <namespace>?                 # Set QA namespace
+
+  $ k.t <match>* <-mismatch>*        # Get deployments as args
+  $ k.tt <deployment>                # Edit deployment in TextMate
+  $ k.tr <deployment>                # Restart deployment
+  $ k.ts <count> <deployment>        # Scale deployment
+
+  $ k.h <match>* <-mismatch>*        # Get pods as args
+  $ k.H <match>* <-mismatch>*        # Get unready pods as args
+  $ k.hh <pod>                       # Edit pod in TextMate
+  $ k.hd <pod>                       # Remove pod
+
+  $ k.o <pod>                        # Exec into bash
+  $ k.oc <command> <pod>             # Exec a command
+  $ k.l <pod>                        # Tail logs
+  $ k.ll <pod>                       # Show logs
+  $ k.lp <pod>                       # Show previous logs
 
   $ k.f <match>* <-mismatch>*        # List resource types & filter
   $ k.ff                             # Save copy of resource types
-  $ k.d <type> <name>                # Describe resources
+
+  $ k.k <type> <match>* <-mismatch>* # Get resources as args
   $ k.g <type> <name>                # Get resources
   $ k.gg <type> <name>               # Get resources with `-o wide`
+  $ k.d <type> <name>                # Describe resources
+  $ k.m <type> <name>                # Edit resource in TextMate
+
   $ k.j <type> <name>                # Get resource as json & save copy
   $ k.jj                             # Get the copy of json
   $ k.y <type> <name>                # Get resource as yaml & save copy
   $ k.yy                             # Get the copy of yaml
+
+  $ k.u                              # Run unit tests and update snapshots
+  $ k.p <yaml file>                  # Print spec from yaml file locally

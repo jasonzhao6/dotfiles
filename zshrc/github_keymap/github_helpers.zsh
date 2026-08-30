@@ -6,10 +6,10 @@ function github_helpers_is_delimited {
 		'NR==1{n=NF} NF!=n || NF<2{exit 1} END{if(NR<min) exit 1}'
 }
 
-# Only a repo root counts, so subdirs don't shadow repo names or keymap searches
+# Only a repo root counts, so sub-dirs don't shadow repo names or keymap searches
 function github_helpers_is_repo_root {
-	local target=$1
-	[[ -n $target ]] || return
+	local target_path=$1
+	[[ -n $target_path ]] || return
 
-	[[ $(git -C "$target" rev-parse --show-toplevel 2> /dev/null) == ${target:A} ]]
+	[[ $(git -C "$target_path" rev-parse --show-toplevel 2> /dev/null) == "${target_path:A}" ]]
 }

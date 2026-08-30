@@ -149,6 +149,14 @@ function test__compact {
 	)"
 }
 
+function test__dashes {
+	assert "$(dashes)" '----------------'
+}
+
+function test__dashes__with_indent {
+	assert "$(dashes 5)" '     ----------------'
+}
+
 function test__downcase {
 	assert "$(echo 'HELLO world FoO BaR' | downcase)" 'hello world foo bar'
 }
@@ -353,6 +361,7 @@ function test__keys {
 		echo "$input" | keys
 	)" "$(
 		cat <<-eof
+
 		     1	key1
 		     2	key2
 		     3	key3

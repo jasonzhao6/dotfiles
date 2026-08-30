@@ -3,42 +3,39 @@ ARGS_ALIAS='a'
 ARGS_DOT="${ARGS_ALIAS}${KEYMAP_DOT}"
 
 ARGS_KEYMAP=(
-	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}s <match>* <-mismatch>* # Save as args & filter"
-	"${KEYMAP_PIPE_PATTERN}${ARGS_DOT}so <match>* <-mismatch>* # Save, soft-select 1st column & filter"
-	''
 	"${ARGS_DOT}a <match>* <-mismatch>* # List args & filter"
+	"${ARGS_DOT}s <match>* <-mismatch>* ${KEYMAP_PIPE_PATTERN} # Save as args & filter"
+	"${ARGS_DOT}so <match>* <-mismatch>* ${KEYMAP_PIPE_PATTERN} # Save & filter & soft-select 1st column"
 	''
 	"${ARGS_DOT}o <command> # Use first arg"
 	"${ARGS_DOT}e <command> # Use last arg"
+	'(1-100) <command> # Use an arg by number, up to 100'
+	"${ARGS_DOT}n <number> <command> # Use an arg by number, beyond 100"
 	'0 <command> # Use last arg'
-	'(1-100) <command> # Use an arg by number up to 100'
-	"${ARGS_DOT}n <number> <command> # Use an arg by number beyond 100"
 	''
-	"${ARGS_DOT}c <number>? # Copy args (or a specific arg)"
-	"${ARGS_DOT}y # Yank args"
-	"${ARGS_DOT}p # Put args (in a different tab)"
-	''
-	"${ARGS_DOT}u # Undo \"Filter args\" or \"Select a column\""
-	"${ARGS_DOT}r # Redo \"Filter args\" or \"Select a column\""
-	"${ARGS_DOT}h # List history entries"
-	"${ARGS_DOT}h <history index> # Select entry by index"
-	"${ARGS_DOT}hc # Clear history entries"
-	''
-	"each <command> # Use each arg in series"
-	"all <command> # Use all args in parallel"
 	"map <command> # Map args, e.g \`map echo '\$((~~ * 10))'\`"
+	"each <command> # Use each arg in foreground"
+	"all <command> # Use all args in background"
 	"${ARGS_DOT}f <start> <finish> <command> # Use selected args in foreground"
 	"${ARGS_DOT}b <start> <finish> <command> # Use selected args in background"
 	''
-	"${ARGS_DOT}i <column index>? # Sort by column index"
-	"${ARGS_DOT}d # Dedupe by all columns"
+	"${ARGS_DOT}i # Delimit columns by letters"
+	"${ARGS_DOT}i <letter> # Select a column"
+	"${ARGS_DOT}ii <letter> # Sort by a column"
 	''
 	"${ARGS_DOT}t # Tabulate columns"
-	"${ARGS_DOT}w # Delimit columns by top row"
-	"${ARGS_DOT}w <letter> # Select column by top row"
-	"${ARGS_DOT}v # Delimit columns by bottom row"
-	"${ARGS_DOT}v <letter> # Select column by bottom row"
-	"${ARGS_DOT}z # Select last column by bottom row"
+	"${ARGS_DOT}r # Reverse args"
+	"${ARGS_DOT}d # Dedupe args"
+	''
+	"${ARGS_DOT}u # Go back to prev list of args"
+	"${ARGS_DOT}uu # Go forward to next list of args"
+	"${ARGS_DOT}h # List history entries"
+	"${ARGS_DOT}h <history index> # Select an entry by index"
+	"${ARGS_DOT}hc # Clear history entries"
+	''
+	"${ARGS_DOT}y # Yank args to file (in one tab)"
+	"${ARGS_DOT}p # Put args from file (in another tab)"
+	"${ARGS_DOT}c <arg>? # Copy an arg (Default: All) to pasteboard"
 )
 
 keymap_init $ARGS_NAMESPACE $ARGS_ALIAS "${ARGS_KEYMAP[@]}"
@@ -64,8 +61,7 @@ ARGS_YANK_FILE="$ZSHRC_DATA_DIR/args.yank.txt"
 
 # States
 # shellcheck disable=SC2034
-ARGS_PUSHED=
-ARGS_USED_TOP_ROW=
+
 
 # shellcheck disable=SC2120
 function args_keymap_a {
@@ -154,9 +150,50 @@ function args_keymap_hc {
 }
 
 function args_keymap_i {
-	local column_index=${1:-1}
+	local selected_column=$1
 
-	args_history_current | sort --key="$column_index,$column_index" --version-sort | args_keymap_s
+	# If no column specified, show columns bar
+	if [[ -z $selected_column ]]; then
+		args_helpers_list
+		args_helpers_columns_bar
+		return
+	fi
+
+	# Report when letter is out of range
+	if [[ $(index_of "$(args_helpers_columns)" "$selected_column") -eq 0 ]]; then
+		red_bar "Column '$selected_column' is out of range"
+		return
+	fi
+
+	# Select the specified column
+	args_helpers_column_slice "$selected_column" | strip_right | args_keymap_s
+}
+
+function args_keymap_ii {
+	local selected_column=$1
+
+	# If no column specified, show columns bar
+	if [[ -z $selected_column ]]; then
+		args_helpers_list
+		args_helpers_columns_bar
+		return
+	fi
+
+	# Report when letter is out of range
+	if [[ $(index_of "$(args_helpers_columns)" "$selected_column") -eq 0 ]]; then
+		red_bar "Column '$selected_column' is out of range"
+		return
+	fi
+
+	# `paste` prepends the column as a tab-separated sort key
+	# `sort` orders by that key alone
+	# `cut` drops it again, leaving the rows untouched
+	paste \
+		<(args_helpers_column_slice "$selected_column" | strip) \
+		<(args_history_current) |
+		sort --field-separator=$'\t' --key=1,1 --version-sort --stable |
+		cut -f2- |
+		args_keymap_s
 }
 
 function args_keymap_n {
@@ -192,9 +229,7 @@ function args_keymap_p {
 }
 
 function args_keymap_r {
-	args_history_redo
-	args_helpers_list
-	args_history_redo_error_bar
+	args_history_current | tail -r | args_keymap_s
 }
 
 # shellcheck disable=SC2120
@@ -227,39 +262,17 @@ function args_keymap_t {
 }
 
 function args_keymap_u {
-	local column_size_before; column_size_before=$(args_helpers_columns "$ARGS_USED_TOP_ROW" | strip)
-
 	args_history_undo
 	args_helpers_list
 	args_history_undo_error_bar
-
-	local column_size_after; column_size_after=$(args_helpers_columns "$ARGS_USED_TOP_ROW" | strip)
-
-	# If undoing a column selection, show the columns bar for convenience
-	if [[ -n $ARGS_USED_TOP_ROW && ${#column_size_before} -lt ${#column_size_after} ]]; then
-		args_helpers_columns_bar "$ARGS_USED_TOP_ROW"
-	fi
 }
 
-function args_keymap_v {
-	local index=$1
-
-	args_helpers_select_column 0 "$index"
-}
-
-function args_keymap_w {
-	local index=$1
-
-	args_helpers_select_column 1 "$index"
+function args_keymap_uu {
+	args_history_redo
+	args_helpers_list
+	args_history_redo_error_bar
 }
 
 function args_keymap_y {
 	args_history_current > "$ARGS_YANK_FILE"
-}
-
-function args_keymap_z {
-	local columns; columns=$(args_helpers_columns 0 | strip_right)
-	local last_column=${columns: -1}
-
-	args_helpers_select_column 0 "$last_column"
 }

@@ -2,61 +2,59 @@ Keymap: args_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9  <0>  [   ] 
       '   ,   .  <p> <y>  |  <f>  g  <c> <r>  l   /   =   \ 
-     <a> <o> <e> <u> <i>  |  <d> (h) <t> <n> (s)  - 
-      ;   q   j   k   x   |  <b>  m  (w) (v) <z>
+     <a> <o> <e> (u) (i)  |  <d> (h) <t> <n> (s)  - 
+      ;   q   j   k   x   |  <b>  m   w   v   z 
 
-  `<>` key initials have one mapping
-  `()` key initials have multiple mappings
+  `<>` initials have only one key mapping
+  `()` initials have multiple key mappings
 
 Keymap Usage
 
-  $ a                               # Show this keymap
-  $ a <regex>                       # Search this keymap
+  $ a                                # Show this keymap
+  $ a <regex>                        # Search this keymap
 
-  $ a.<key>                         # This mapping takes no variable
-  $ a.<key> <var>                   # This mapping takes one variable
-  $ a.<key> <var>?                  # This mapping takes zero or one variable
-  $ a.<key> <var>*                  # This mapping takes zero or multiple variables
-  $ a.<key> (1-10)                  # This mapping takes an exact value from the list
+  $ a.<key>                          # Key takes no variable
+  $ a.<key> <var>                    # Key takes one variable
+  $ a.<key> <var>?                   # Key takes zero or one variable
+  $ a.<key> <var>*                   # Key takes zero or more variables
+  $ a.<key> (1-10)                   # Key takes a value from inside list
+  $ a.<key> (^|)?                    # Key can be piped to: ... | a.<key>
 
-     ^                              # The `.` is only for documentation
-                                    # Omit it when invoking a mapping
+     ^                               # The `.` is for visual clarity
+                                     # Omit it when invoking a key
 
 Keymap List
 
-  $ (|)? a.s <match>* <-mismatch>*  # Save as args & filter
-  $ (|)? a.so <match>* <-mismatch>* # Save, soft-select 1st column & filter
+  $ a.a <match>* <-mismatch>*        # List args & filter
+  $ a.s <match>* <-mismatch>* (^|)?  # Save as args & filter
+  $ a.so <match>* <-mismatch>* (^|)? # Save & filter & soft-select 1st column
 
-  $ a.a <match>* <-mismatch>*       # List args & filter
+  $ a.o <command>                    # Use first arg
+  $ a.e <command>                    # Use last arg
+  $ (1-100) <command>                # Use an arg by number, up to 100
+  $ a.n <number> <command>           # Use an arg by number, beyond 100
+  $ 0 <command>                      # Use last arg
 
-  $ a.o <command>                   # Use first arg
-  $ a.e <command>                   # Use last arg
-  $ 0 <command>                     # Use last arg
-  $ (1-100) <command>               # Use an arg by number up to 100
-  $ a.n <number> <command>          # Use an arg by number beyond 100
+  $ map <command>                    # Map args, e.g `map echo '$((~~ * 10))'`
+  $ each <command>                   # Use each arg in foreground
+  $ all <command>                    # Use all args in background
+  $ a.f <start> <finish> <command>   # Use selected args in foreground
+  $ a.b <start> <finish> <command>   # Use selected args in background
 
-  $ a.c <number>?                   # Copy args (or a specific arg)
-  $ a.y                             # Yank args
-  $ a.p                             # Put args (in a different tab)
+  $ a.i                              # Delimit columns by letters
+  $ a.i <letter>                     # Select a column
+  $ a.ii <letter>                    # Sort by a column
 
-  $ a.u                             # Undo "Filter args" or "Select a column"
-  $ a.r                             # Redo "Filter args" or "Select a column"
-  $ a.h                             # List history entries
-  $ a.h <history index>             # Select entry by index
-  $ a.hc                            # Clear history entries
+  $ a.t                              # Tabulate columns
+  $ a.r                              # Reverse args
+  $ a.d                              # Dedupe args
 
-  $ each <command>                  # Use each arg in series
-  $ all <command>                   # Use all args in parallel
-  $ map <command>                   # Map args, e.g `map echo '$((~~ * 10))'`
-  $ a.f <start> <finish> <command>  # Use selected args in foreground
-  $ a.b <start> <finish> <command>  # Use selected args in background
+  $ a.u                              # Go back to prev list of args
+  $ a.uu                             # Go forward to next list of args
+  $ a.h                              # List history entries
+  $ a.h <history index>              # Select an entry by index
+  $ a.hc                             # Clear history entries
 
-  $ a.i <column index>?             # Sort by column index
-  $ a.d                             # Dedupe by all columns
-
-  $ a.t                             # Tabulate columns
-  $ a.w                             # Delimit columns by top row
-  $ a.w <letter>                    # Select column by top row
-  $ a.v                             # Delimit columns by bottom row
-  $ a.v <letter>                    # Select column by bottom row
-  $ a.z                             # Select last column by bottom row
+  $ a.y                              # Yank args to file (in one tab)
+  $ a.p                              # Put args from file (in another tab)
+  $ a.c <arg>?                       # Copy an arg (Default: All) to pasteboard

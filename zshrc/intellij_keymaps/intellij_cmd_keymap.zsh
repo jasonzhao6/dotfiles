@@ -30,7 +30,7 @@ INTELLIJ_CMD_KEYMAP=(
 	"^cmd-+ # Expand all"
 	"cmd-\; # Find (Toggle bottom panel)"
 	"cmd-shift-\; # Terminal (Default)"
-	"shift-{esc} # Hide all tool windows (default)"
+	"shift-{esc} # Hide all tool windows (Default)"
 	''
 	"cmd-{1-8} # Select tabs #1-8 (convention)"
 	"cmd-9 # Select last tab (Convention)"

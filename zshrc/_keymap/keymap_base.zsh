@@ -3,18 +3,19 @@ KEYMAP_ALIAS='_PLACEHOLDER_'
 KEYMAP_DASH='-'
 KEYMAP_DOT='.'
 KEYMAP_DOT_POINTER='^'
-KEYMAP_PIPE_PATTERN="(|)? "
+KEYMAP_PIPE_PATTERN="(^|)?"
 KEYMAP_ESCAPE="\\\\" # Escape twice to avoid special chars like `\n`
 
 KEYMAP_USAGE=(
 	"${KEYMAP_ALIAS} # Show this keymap"
 	"${KEYMAP_ALIAS} <regex> # Search this keymap"
 	''
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # This mapping takes no variable"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <var> # This mapping takes one variable"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <var>? # This mapping takes zero or one variable"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <var>* # This mapping takes zero or multiple variables"
-	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> (1-10) # This mapping takes an exact value from the list"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> # Key takes no variable"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <var> # Key takes one variable"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <var>? # Key takes zero or one variable"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> <var>* # Key takes zero or more variables"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> (1-10) # Key takes a value from inside list"
+	"${KEYMAP_ALIAS}${KEYMAP_DOT}<key> ${KEYMAP_PIPE_PATTERN} # Key can be piped to: ... | ${KEYMAP_ALIAS}${KEYMAP_DOT}<key>"
 )
 
 function keymap_init {
@@ -115,9 +116,7 @@ function keymap_has_disjoint_dups {
 	declare -A seen
 
 	for entry in "${keymap_entries[@]}"; do
-		# Get the first token while ignoring any leading "(|)? " pattern
-		# Note: This is inlined and repeated b/c calling a function in a loop is slow
-		[[ $entry == "$KEYMAP_PIPE_PATTERN"* ]] && entry="${entry#\(\|\)\? }"
+		# Get the first token
 		[[ $entry == *\ * ]] && first_token=${${(z)entry}[1]} || first_token=$entry
 
 		# If it is the same as the last entry, allow it
@@ -164,9 +163,7 @@ function keymap_set_dot_aliases {
 	declare -A seen
 
 	for entry in "${keymap_entries[@]}"; do
-		# Get the first token while ignoring any leading "(|)? " pattern
-		# Note: This is inlined and repeated b/c calling a function in a loop is slow
-		[[ $entry == "$KEYMAP_PIPE_PATTERN"* ]] && entry="${entry#\(\|\)\? }"
+		# Get the first token
 		[[ $entry == *\ * ]] && first_token=${${(z)entry}[1]} || first_token=$entry
 
 		# Set alias only for `key`s preceded by `KEYMAP_DOT`s
@@ -207,7 +204,7 @@ function keymap_print_help {
 	else
 		# Interpolate `alias` into `KEYMAP_USAGE`
 		for entry in "${KEYMAP_USAGE[@]}"; do
-			keymap_usage+=("${entry/"$KEYMAP_ALIAS"/$alias}")
+			keymap_usage+=("${entry//"$KEYMAP_ALIAS"/$alias}")
 		done
 
 		max_command_size=$(keymap_get_max_command_size "${keymap_usage[@]}" "${keymap_entries[@]}")
@@ -332,8 +329,8 @@ function keymap_print_map {
 
 	# Print keymap legend
 	echo
-	gray_fg '  `<>` key initials have one mapping'
-	gray_fg '  `()` key initials have multiple mappings'
+	gray_fg '  `<>` initials have only one key mapping'
+	gray_fg '  `()` initials have multiple key mappings'
 
 	# Notes on `<>, (), {}, []` usage
 	# - `<>` is used to enclose keymap variables, e.g `<command>`
@@ -407,13 +404,13 @@ function keymap_annotate_the_dot {
 		"$(gray_fg "$KEYMAP_DOT_POINTER")" \
 		"$((command_size - ${#alias} - ${#KEYMAP_DOT_POINTER}))" \
 		'' \
-		"$(gray_fg "# The \`$KEYMAP_DOT\` is only for documentation")"
+		"$(gray_fg "# The \`$KEYMAP_DOT\` is for visual clarity")"
 	printf "%-*s%-*s %s\n" \
 		$(($(echo -n "$KEYMAP_PROMPT" | bw | wc -c) + ${#alias})) \
 		'' \
 		"$((command_size - ${#alias}))" \
 		'' \
-		"$(gray_fg "# Omit it when invoking a mapping")"
+		"$(gray_fg "# Omit it when invoking a key")"
 }
 
 # Includes custom zsh and non-zsh keymaps

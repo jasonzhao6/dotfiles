@@ -1,11 +1,12 @@
 TERRAFORM_NAMESPACE='terraform_keymap'
 TERRAFORM_ALIAS='t'
 TERRAFORM_DOT="${TERRAFORM_ALIAS}${KEYMAP_DOT}"
+TERRAFORM_PLAN_MAX_AGE=5 # In minutes; override with `t.a <max age>`
 
 TERRAFORM_KEYMAP=(
-	"${TERRAFORM_ALIAS} <terraform command>"
+	"${TERRAFORM_ALIAS} <terraform command> # Pass through"
 	''
-	"${TERRAFORM_DOT}w <match>* <-mismatch>* # List manifests & filter"
+	"${TERRAFORM_DOT}t <match>* <-mismatch>* # List manifests & filter"
 	''
 	"${TERRAFORM_DOT}i # Init"
 	"${TERRAFORM_DOT}iu # Init & upgrade"
@@ -15,26 +16,26 @@ TERRAFORM_KEYMAP=(
 	''
 	"${TERRAFORM_DOT}v (i,iu,ir,im,e)? # Validate"
 	"${TERRAFORM_DOT}p (i,iu,ir,im,e)? # Plan"
-	"${TERRAFORM_DOT}a <max age in min>? # Apply plan from t.p"
+	"${TERRAFORM_DOT}g # Upload 'tfplan' as a gist"
+	"${TERRAFORM_DOT}a <max age in min>? # Apply 'tfplan' (Default: ${TERRAFORM_PLAN_MAX_AGE})"
+	''
+	"${TERRAFORM_DOT}s <match>* <-mismatch>* # List states & filter"
+	"${TERRAFORM_DOT}sd <state> # Delete state"
+	"${TERRAFORM_DOT}sr <before> <after> # Rename state"
+	"${TERRAFORM_DOT}ss <state> # Show state"
+	"${TERRAFORM_DOT}st <state> # Taint state"
+	"${TERRAFORM_DOT}su <state> # Untaint state"
 	''
 	"${TERRAFORM_DOT}c # Clean"
 	"${TERRAFORM_DOT}cc # Clean & clear plugin cache"
 	"${TERRAFORM_DOT}d # Destroy"
-	"${TERRAFORM_DOT}f <path>? # Format"
-	"${TERRAFORM_DOT}g # Upload gist"
+	"${TERRAFORM_DOT}f <path>? # Format (Default: CWD)"
+	"${TERRAFORM_DOT}n <var name>? # Start console or print var in CWD"
+	"${TERRAFORM_DOT}nn <var name>? # Start console or print var in 'tf-debug'"
 	"${TERRAFORM_DOT}o # Show output"
-	"${TERRAFORM_DOT}x # Open plan diff from pasteboard"
-	"${TERRAFORM_DOT}z # Unlock"
+	"${TERRAFORM_DOT}u <lock id>? # Unlock (Default: Pasteboard)"
 	''
-	"${TERRAFORM_DOT}l <name> # List states"
-	"${TERRAFORM_DOT}s <name> # Show state"
-	"${TERRAFORM_DOT}t <name> # Taint state"
-	"${TERRAFORM_DOT}u <name> # Untaint state"
-	"${TERRAFORM_DOT}m <before> <after> # Move state"
-	"${TERRAFORM_DOT}rm <name> # Remove state"
-	''
-	"${TERRAFORM_DOT}n <var name>? # Console"
-	"${TERRAFORM_DOT}h <var name>? # Scratch"
+	"${TERRAFORM_DOT}m # Open diff from pasteboard in TextMate"
 	''
 	"${TERRAFORM_DOT}r # (Reserved: Translate chars)"
 )
@@ -63,7 +64,6 @@ function terraform_keymap {
 source "$ZSHRC_SRC_DIR/$TERRAFORM_NAMESPACE/terraform_helpers.zsh"
 
 # Constants
-TERRAFORM_PLAN_MAX_AGE=5 # In minutes; override per call with `t.a <max age>`
 TERRAFORM_VARS=( # To be overwritten by `ZSHRC_SECRETS`
 	'var_name_1 secret_name_1'
 	'var_name_2 secret_name_2'
@@ -131,20 +131,6 @@ function terraform_keymap_g {
 	terraform show -bw tfplan | sed 's/user_data.*/user_data [REDACTED]/' | gh gist create --web
 }
 
-function terraform_keymap_h {
-	local var=$1
-
-	pushd ~/GitHub/jasonzhao6/scratch/tf-debug > /dev/null || return
-
-	if [[ -z $var ]]; then
-		terraform console
-	else
-		echo "local.$var" | terraform console
-	fi
-
-	popd > /dev/null || return
-}
-
 function terraform_keymap_i {
 	mkdir -p ~/.terraform.cache; terraform init
 }
@@ -161,74 +147,7 @@ function terraform_keymap_iu {
 	terraform init -upgrade
 }
 
-function terraform_keymap_l {
-	local filters=("$@")
-
-	terraform state list | sed "s/.*/'&'/" | args_keymap_s "${filters[@]}"
-}
-
 function terraform_keymap_m {
-	terraform state mv "$1" "$2"
-}
-
-function terraform_keymap_n {
-	local var=$1
-
-	if [[ -z $var ]]; then
-		terraform console
-	else
-		echo "local.$var" | terraform console
-	fi
-}
-
-function terraform_keymap_o {
-	terraform output
-}
-
-function terraform_keymap_p {
-	local options=$1
-
-	# Drop any stale plan first, so `tfplan` exists only if this plan succeeded
-	terraform_helpers_init "$options" && rm -f tfplan && terraform plan -out=tfplan
-}
-
-function terraform_keymap_rm {
-	local state=$1
-
-	terraform state rm "$state"
-}
-
-function terraform_keymap_s {
-	local state=$1
-
-	terraform state show "$state"
-}
-
-function terraform_keymap_t {
-	local state=$1
-
-	terraform taint "$state"
-}
-
-function terraform_keymap_u {
-	local state=$1
-
-	terraform untaint "$state"
-}
-
-function terraform_keymap_v {
-	local options=$1
-
-	terraform_helpers_init "$options" && terraform validate
-}
-
-function terraform_keymap_w {
-	local filters=("$@")
-
-	ls -- **/main.tf | trim 0 8 | args_keymap_s "${filters[@]}"
-}
-
-function terraform_keymap_x {
 	local plan; plan=$(pbpaste)
 
 	if [[ -z $plan ]]; then
@@ -247,8 +166,81 @@ function terraform_keymap_x {
 	echo "$diff" | mate -m 'pasted plan' -t source.terraform
 }
 
-function terraform_keymap_z {
-	local id=$1
+function terraform_keymap_n {
+	local var=$1
+
+	if [[ -z $var ]]; then
+		terraform console
+	else
+		echo "local.$var" | terraform console
+	fi
+}
+
+function terraform_keymap_nn {
+	pushd ~/GitHub/jasonzhao6/scratch/tf-debug > /dev/null || return
+	terraform_keymap_n "$@"
+	popd > /dev/null || return
+}
+
+function terraform_keymap_o {
+	terraform output
+}
+
+function terraform_keymap_p {
+	local options=$1
+
+	# Drop any stale plan first, so `tfplan` exists only if this plan succeeded
+	terraform_helpers_init "$options" && rm -f tfplan && terraform plan -out=tfplan
+}
+
+function terraform_keymap_s {
+	local filters=("$@")
+
+	terraform state list | sed "s/.*/'&'/" | args_keymap_s "${filters[@]}"
+}
+
+function terraform_keymap_sd {
+	local state=$1
+
+	terraform state rm "$state"
+}
+
+function terraform_keymap_sr {
+	terraform state mv "$1" "$2"
+}
+
+function terraform_keymap_ss {
+	local state=$1
+
+	terraform state show "$state"
+}
+
+function terraform_keymap_st {
+	local state=$1
+
+	terraform taint "$state"
+}
+
+function terraform_keymap_su {
+	local state=$1
+
+	terraform untaint "$state"
+}
+
+function terraform_keymap_t {
+	local filters=("$@")
+
+	ls -- **/main.tf | trim 0 8 | args_keymap_s "${filters[@]}"
+}
+
+function terraform_keymap_u {
+	local id=${1:-$(pbpaste)}
 
 	terraform force-unlock "$id"
+}
+
+function terraform_keymap_v {
+	local options=$1
+
+	terraform_helpers_init "$options" && terraform validate
 }

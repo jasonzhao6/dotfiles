@@ -119,7 +119,7 @@ Non-zsh shortcut reference files for external apps (e.g. Gmail, Terminal, Claude
 
 ### Style Conventions
 - For success/error messages, use `green_bar`/`red_bar` (which include left and right padding), not `green_bg`/`red_bg`.
-- Prefer giving function args a descriptive local name (e.g. `local position=$1`) instead of referencing by index (`$1`, `$2`).
+- Prefer giving function args a descriptive local name (e.g. `local position=$1`) instead of referencing by index (`$1`, `$2`). For generic names like `target`, include a type suffix (e.g. `target_path`, `target_dir`).
 
 ### Helper Files
 - `zshrc/utils.zsh` — Shared utilities: `bw` (strip ANSI), `strip`, `upcase`, `paste_when_empty`, `echo_eval`, etc.

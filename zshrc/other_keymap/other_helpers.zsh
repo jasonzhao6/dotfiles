@@ -1,3 +1,12 @@
+# `--icsv --ocsv` reads and writes CSV, parsing a quoted cell holding a comma
+# `--implicit-csv-header` names the columns `1, 2, 3...`, so no row is a header
+# `--headerless-csv-output` writes the values back without those names
+# `--allow-ragged-csv-input` takes a row with too few or too many cells
+function other_helpers_mlr {
+	echo
+	mlr --icsv --ocsv --implicit-csv-header --headerless-csv-output --allow-ragged-csv-input "$@"
+}
+
 function other_helpers_reset_terminal_dump_dir {
 	# shellcheck disable=SC2034 # Used by `other_keymap.zsh`
 	OTHER_TERMINAL_DUMP_DIR="$ZSHRC_DATA_DIR/other.terminal-dump.d"
@@ -52,4 +61,29 @@ function other_helpers_speakable {
 		s/[ \t]+$//gm;
 		s/\n{3,}/\n\n/g;
 	'
+}
+
+# Indexes should be integers >= 1
+function other_helpers_validate_indexes {
+	local usage=$1; shift
+
+	local index
+	for index in "$@"; do
+		if [[ ! $index =~ ^[1-9][0-9]*$ ]]; then
+			red_bar "$usage"
+			return 1
+		fi
+	done
+}
+
+# Check for readability, not `-f`: a process substitution is a `/dev/fd/N` pipe,
+# which `mlr` can read, but `-f` rejects. Also reject directories because they
+# cause `mlr` to hang rather than error.
+function other_helpers_validate_file {
+	local file=$1
+
+	if [[ -n $file ]] && [[ ! -r $file || -d $file ]]; then
+		red_bar "Invalid file: $file"
+		return 1
+	fi
 }

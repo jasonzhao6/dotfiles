@@ -1,3 +1,11 @@
+function aws_helpers_copy_history_bindings {
+	cat <<-eof | pbcopy
+
+		bind '"\e[A": history-search-backward'
+		bind '"\e[B": history-search-forward'
+	eof
+}
+
 function aws_helpers_ec2_args {
 	local name="$1"
 

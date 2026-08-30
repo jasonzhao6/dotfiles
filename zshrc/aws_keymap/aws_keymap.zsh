@@ -6,9 +6,6 @@ AWS_KEYMAP=(
 	"${AWS_DOT}s <match>* <-mismatch>* # List Britive roles & filter"
 	"${AWS_ALIAS} <role> # Assume specified role"
 	''
-	"${AWS_DOT}o <account id OR name> # Account ID ↔ name lookup"
-	"${AWS_DOT}i <ec2 ip OR name> # EC2 ID ↔ ip ↔ name lookup"
-	''
 	"${AWS_DOT}e1 # Use us-east-1 region"
 	"${AWS_DOT}e2 # Use us-east-2 region"
 	"${AWS_DOT}w2 # Use us-west-2 region"
@@ -18,13 +15,12 @@ AWS_KEYMAP=(
 	"${AWS_DOT}aa <asg id> # ASG open in new tab"
 	"${AWS_DOT}e <name> # EC2 search"
 	"${AWS_DOT}ee <ec2 id OR ip OR name> # EC2 open in new tab"
+	"${AWS_DOT}o # SSM start session with \`sudo -i\`"
+	"${AWS_DOT}oc # SSM start session with command"
+	"${AWS_DOT}oo # SSM start session"
 	''
-	"${AWS_DOT}c # Copy history bindings"
-	"${AWS_DOT}b # SSM start session with \`sudo -i\`"
-	"${AWS_DOT}bc # SSM start session with command"
-	"${AWS_DOT}bb # SSM start session"
-	''
-	"${AWS_DOT}t <message> # STS decode"
+	"${AWS_DOT}c <name> # Code Pipeline search"
+	"${AWS_DOT}cc <name> # Code Pipeline get latest status"
 	''
 	"${AWS_DOT}m <name> # Secret Manager search"
 	"${AWS_DOT}mg <name> <version>? # Secret Manager get by version"
@@ -37,12 +33,13 @@ AWS_KEYMAP=(
 	"${AWS_DOT}qq <queue url> # SQS open in new tab"
 	"${AWS_DOT}qg <queue url> # SQS get stats"
 	"${AWS_DOT}qr <queue url> <count>? # SQS receive message"
-	"${AWS_DOT}qpurge <queue url> # SQS purge"
+	"${AWS_DOT}qp <queue url> # SQS purge"
 	''
-	"${AWS_DOT}p <name> # Code Pipeline search"
-	"${AWS_DOT}pp <name> # Code Pipeline get latest status"
+	"${AWS_DOT}p <name> # Parameter Store get latest version"
 	''
-	"${AWS_DOT}ps <name> # Parameter Store get latest version"
+	"${AWS_DOT}t <message> # STS decode"
+	''
+	"${AWS_DOT}w <id, ip, name>? # Which acct or EC2? (Default: Pasteboard)"
 	''
 	"${AWS_DOT}h # (Reserved: Shell)"
 	"${AWS_DOT}u # (Reserved: Switch user)"
@@ -53,10 +50,11 @@ keymap_init $AWS_NAMESPACE $AWS_ALIAS "${AWS_KEYMAP[@]}"
 function aws_keymap {
 	# If the input is a Britive role, assume it via `mqc`
 	local input=$*
+
 	# shellcheck disable=SC2076 # Breaks regex
 	if [[ $input =~ '^([a-z0-9-]+)[[:space:]]+([a-z0-9-]+)' ]]; then
 		# shellcheck disable=SC2154 # `match` is defined by `=~`
-		mqc --account-name "${match[1]}" --role-name "${match[2]}"
+		mqc --account-name "${match[1]}" --role-name "${match[2]}" --region-name us-east-1
 		return
 	fi
 
@@ -94,45 +92,28 @@ function aws_keymap_aa {
 	open "$AWS_URL/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$id"
 }
 
-function aws_keymap_b {
-	local id=$1
-
-	aws ssm start-session \
-		--region "$AWS_DEFAULT_REGION" \
-		--document-name 'AWS-StartInteractiveCommand' \
-		--parameters '{"command": ["sudo -i"]}' \
-		--target "$(aws_keymap_i "$id")"
-}
-
-function aws_keymap_bb {
-	aws ssm start-session \
-		--region "$AWS_DEFAULT_REGION" \
-		--target "$(aws_keymap_i "$@")"
-}
-
-function aws_keymap_bc {
-	local command=${(j: :)@[1,-2]}
-	local id="$*[-1]"
-
-	aws ssm start-session \
-		--region "$AWS_DEFAULT_REGION" \
-		--document-name 'AWS-StartNonInteractiveCommand' \
-		--parameters "{\"command\": [\"$command\"]}" \
-		--target "$(aws_keymap_i "$id")" |
-		grepP --multiline --ignore-case --invert-match "$AWS_KEYMAP_SC_REGEX"
-}
-
 function aws_keymap_c {
-	cat <<-eof | pbcopy
-		bind '"\e[A": history-search-backward'
-		bind '"\e[B": history-search-forward'
-	eof
+	local name=$1
 
-	green_bar 'History bindings copied to pasteboard'
+	aws codepipeline list-pipelines \
+		--region "$AWS_DEFAULT_REGION" \
+		--query "pipelines[?contains(name, '$name')].[name]" \
+		--output text |
+		args_keymap_s "$name"
 }
 
 function aws_keymap_c1 {
 	echo_eval 'export AWS_DEFAULT_REGION=eu-central-1'
+}
+
+function aws_keymap_cc {
+	local name=$1
+
+	aws codepipeline get-pipeline-state \
+		--region "$AWS_DEFAULT_REGION" \
+		--name "$name" \
+		--query "[pipelineName, $AWS_KEYMAP_PP_STATUS, $AWS_KEYMAP_PP_TIMESTAMP]" \
+		--output text
 }
 
 function aws_keymap_e {
@@ -150,17 +131,9 @@ function aws_keymap_e2 {
 }
 
 function aws_keymap_ee {
-	local id; id=$(aws_keymap_i "$@")
+	local id; id=$(aws_keymap_w "$@")
 
 	open "$AWS_URL/ec2/home?region=$AWS_DEFAULT_REGION#InstanceDetails:instanceId=$id"
-}
-
-function aws_keymap_i {
-	if [[ "$1" =~ ^(i-)?[a-z0-9]{17}$ ]]; then
-		[[ "$1" =~ ^i-.*$ ]] && echo "$1" || echo i-"$1"
-	else
-		[[ "$1" =~ ^[0-9\.]+$ ]] && aws_helpers_ec2_ip_to_id "$1" || aws_helpers_ec2_name_to_id "$1"
-	fi
 }
 
 function aws_keymap_m {
@@ -224,36 +197,38 @@ function aws_keymap_nn {
 }
 
 function aws_keymap_o {
-	local input=$1
+	local id=$1
 
-	if [[ "$input" =~ ^[0-9]+$ ]]; then
-		awk -F'\t' -v val="$input" '$2 ~ val { print $2 "\t" $1 }' "$AWS_ACCOUNTS_TSV"
-	else
-		awk -F'\t' -v val="$input" '$1 ~ val { print $2 "\t" $1 }' "$AWS_ACCOUNTS_TSV"
-	fi
+	aws_helpers_copy_history_bindings
+	aws ssm start-session \
+		--region "$AWS_DEFAULT_REGION" \
+		--document-name 'AWS-StartInteractiveCommand' \
+		--parameters '{"command": ["sudo -i"]}' \
+		--target "$(aws_keymap_w "$id")"
+}
+
+function aws_keymap_oc {
+	local command=${(j: :)@[1,-2]}
+	local id="$*[-1]"
+
+	aws ssm start-session \
+		--region "$AWS_DEFAULT_REGION" \
+		--document-name 'AWS-StartNonInteractiveCommand' \
+		--parameters "{\"command\": [\"$command\"]}" \
+		--target "$(aws_keymap_w "$id")" |
+		grepP --multiline --ignore-case --invert-match "$AWS_KEYMAP_SC_REGEX"
+}
+
+function aws_keymap_oo {
+	local id=$1
+
+	aws_helpers_copy_history_bindings
+	aws ssm start-session \
+		--region "$AWS_DEFAULT_REGION" \
+		--target "$(aws_keymap_w "$id")"
 }
 
 function aws_keymap_p {
-	local name=$1
-
-	aws codepipeline list-pipelines \
-		--region "$AWS_DEFAULT_REGION" \
-		--query "pipelines[?contains(name, '$name')].[name]" \
-		--output text |
-		args_keymap_s "$name"
-}
-
-function aws_keymap_pp {
-	local name=$1
-
-	aws codepipeline get-pipeline-state \
-		--region "$AWS_DEFAULT_REGION" \
-		--name "$name" \
-		--query "[pipelineName, $AWS_KEYMAP_PP_STATUS, $AWS_KEYMAP_PP_TIMESTAMP]" \
-		--output text
-}
-
-function aws_keymap_ps {
 	local name=$1
 
 	local parameter; parameter=$(
@@ -285,7 +260,7 @@ function aws_keymap_qg {
 		--attribute-names ApproximateNumberOfMessages ApproximateNumberOfMessagesNotVisible | jq
 }
 
-function aws_keymap_qpurge {
+function aws_keymap_qp {
 	local url=$1
 
 	aws sqs purge-queue \
@@ -327,6 +302,28 @@ function aws_keymap_t {
 		--region "$AWS_DEFAULT_REGION" \
 		--encoded-message "$message" --output text |
 		jq .
+}
+
+function aws_keymap_w {
+	local input=${1:-$(pbpaste)}
+
+	# Account ID → name
+	if [[ $input =~ ^[0-9]{12}$ ]]; then
+		awk -F'\t' -v val="$input" '$2 ~ val { print $2 "\t" $1 }' "$AWS_ACCOUNTS_TSV"
+
+	# EC2 instance ID → normalized
+	elif [[ $input =~ ^(i-)?[a-z0-9]{17}$ ]]; then
+		[[ $input == i-* ]] && echo "$input" || echo "i-$input"
+
+	# EC2 IP → ID
+	elif [[ $input =~ ^[0-9.]+$ ]]; then
+		aws_helpers_ec2_ip_to_id "$input"
+
+	# Name → account ID or EC2 ID
+	else
+		local account; account=$(awk -F'\t' -v val="$input" '$1 ~ val { print $2 "\t" $1 }' "$AWS_ACCOUNTS_TSV")
+		[[ -n $account ]] && echo "$account" || aws_helpers_ec2_name_to_id "$input"
+	fi
 }
 
 function aws_keymap_w2 {

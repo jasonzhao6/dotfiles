@@ -13,8 +13,13 @@ function args_helpers_plain {
 }
 
 function args_helpers_list {
+	local content; content=$(args_history_current)
+	[[ -z $content ]] && return
+
+	echo
+
 	# Strip any trailing whitespace added by `nl`
-	args_history_current | nl | strip_right
+	echo "$content" | nl | strip_right
 }
 
 function args_helpers_list_plain {
@@ -26,21 +31,16 @@ function args_helpers_size {
 }
 
 function args_helpers_columns {
-	local use_top_row=$1
-
 	# Skip the `nl` column, then start accumulating `columns` starting with `current_column`
 	local skip_nl_column=1
 	local columns=''
 	local current_column=a
 
-	# Delimit columns using on the top row, or else use the bottom row
-	if [[ ${use_top_row} -eq 1 ]]; then
-		row=$(args_helpers_list_plain | head -1)
-	else
-		row=$(args_helpers_list_plain | tail -1)
-	fi
+	# Delimit columns using the bottom row
+	local row; row=$(args_helpers_list_plain | tail -1)
 
 	# Iterate over each character in the row
+	local i
 	for i in $(seq 1 ${#row}); do
 		# A new column starts when transitioning from a space to a non-space character
 		if [[ ${row[$i-1]} == ' ' && ${row[$i]} != ' ' ]]; then
@@ -61,41 +61,52 @@ function args_helpers_columns {
 }
 
 function args_helpers_columns_bar {
-	local use_top_row=$1
-
-	green_bg "$(args_helpers_columns "$use_top_row")"
+	green_bg "$(args_helpers_columns)"
 }
 
-#
-# Setters
-#
+# `columns` is the bar under the list: each letter sits at its column's start char
+# `index_of` turns a letter back into that position, or 0 when the letter is absent
+# So a column runs from its own letter to just before the next, open at the last
+function args_helpers_column_range {
+	local selected_column=$1
 
-function args_helpers_select_column {
-	local use_top_row=$1
-	local selected_column=$2
+	local columns; columns=$(args_helpers_columns)
+	local first_column; first_column=$(index_of "$columns" a)
+	local target_column; target_column=$(index_of "$columns" "$selected_column")
+	local next_column; next_column=$(index_of "$columns" "$(next_ascii "$selected_column")")
 
-	if [[ -z $selected_column ]]; then
-		args_helpers_list
-		args_helpers_columns_bar "$use_top_row"
-	else
-		local columns; columns=$(args_helpers_columns "$use_top_row")
-		local first_column; first_column=$(index_of "$columns" a)
-		local target_column; target_column=$(index_of "$columns" "$selected_column")
-		local next_column; next_column=$(index_of "$columns" "$(next_ascii "$selected_column")")
-		local column_start; column_start=$([[ "$target_column" -ne 0 ]] && echo "$target_column" || echo "$first_column")
-		local column_end; column_end=$([[ "$next_column" -ne 0 ]] && echo $((next_column - 1)))
+	local column_start; column_start=$([[ "$target_column" -ne 0 ]] && echo "$target_column" || echo "$first_column")
+	local column_end; column_end=$([[ "$next_column" -ne 0 ]] && echo $((next_column - 1)))
 
-		# Select the specified column
-		args_helpers_list_plain | cut -c "$column_start"-"$column_end" | strip_right | args_keymap_s
+	echo "${column_start}-${column_end}"
+}
 
-		# If selection was out of range and had no effect, show columns bar again for convenience
-		if [[ $ARGS_PUSHED -eq 0 && $(index_of "$(args_helpers_columns "$use_top_row")" b) -ne 0 ]]; then
-			args_helpers_columns_bar "$use_top_row"
-		fi
+# Slice one column out of every row. Boundaries come from the bottom row, so a row
+# holding a wider value starts left of them (`ls -l` right-aligns sizes) or runs
+# past them; when the slice cuts a token, take the rest of that token too
+function args_helpers_column_slice {
+	local selected_column=$1
 
-		# Set global states to be used by `u`
-		ARGS_USED_TOP_ROW=$use_top_row
-	fi
+	local range; range=$(args_helpers_column_range "$selected_column")
+
+	args_helpers_list_plain | awk -v lo="${range%-*}" -v hi="${range#*-}" '
+		{
+			last = length($0)
+
+			# A row too short to reach the column has no value in it; without this,
+			# widening walks back over the off-the-end gap and grabs the last token
+			if (lo > last) { print ""; next }
+
+			end = (hi == "" || hi > last) ? last : hi
+
+			# Widen only when a token straddles the edge, so a blank column stays blank
+			start = lo
+			while (start > 1 && substr($0, start, 1) != " " && substr($0, start - 1, 1) != " ") start--
+			while (end < last && substr($0, end, 1) != " " && substr($0, end + 1, 1) != " ") end++
+
+			print substr($0, start, end - start + 1)
+		}
+	'
 }
 
 #
@@ -121,17 +132,9 @@ function args_helpers_save {
 	if [[ $(args_helpers_plain "$new_args") != "$(args_helpers_plain)" ]]; then
 		args_history_push "$new_args"
 
-		# Set global states to be used by `n, nn, u`
-		ARGS_PUSHED=1
-		# shellcheck disable=SC2034
-		ARGS_USED_TOP_ROW=
-
 	# Otherwise, replace the current args because `grep` coloring could have changed
 	else
 		args_history_replace_current "$new_args"
-
-		# Set global states to be used by `n, nn`
-		ARGS_PUSHED=0
 	fi
 
 	args_helpers_list
@@ -154,20 +157,4 @@ function args_helpers_filter {
 	greps+=" | grepE --color=always --ignore-case '$positive_filters'"
 
 	eval "$greps"
-}
-
-function args_helpers_only_match {
-	local filters=("$@")
-
-	# Narrow the piped input; with no filters, every entry matches
-	local matched; matched=$(cat)
-	if [[ -n "${filters[*]}" ]]; then
-		matched=$(echo "$matched" | args_helpers_filter "${filters[@]}" 2> /dev/null)
-	fi
-
-	# Echo nothing unless exactly one entry matched
-	# Note: Check for emptiness first- `wc -l` counts an empty string as one line
-	[[ -n $matched && $(echo "$matched" | wc -l | tr -d ' ') -eq 1 ]] || return
-
-	echo "$matched" | bw | strip
 }

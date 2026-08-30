@@ -10,6 +10,7 @@ test__input=$(
 
 test__input_with_comments=$(
 	cat <<-eof
+
 		10.0.0.1	# 2023-06-21T20:25:00+00:00	webhook-asg
 		10.0.0.2	# 2023-06-21T20:25:00+00:00	webhook-asg
 		10.0.0.3	# 2023-06-21T20:24:59+00:00	webhook-asg
@@ -22,14 +23,14 @@ function test__all {
 
 	# Note: Needed to widen gaps in order to parallelize test executions
 	assert "$(
-		printf '0.01\n0.10\n0.20' | args_keymap_s > /dev/null
+		printf '0.03\n0.10\n0.30' | args_keymap_s > /dev/null
 		all test__all__sleep_and_echo 2> /dev/null
 	)" "$(
 		cat <<-eof
 
-			0.01
+			0.03
 			0.10
-			0.20
+			0.30
 		eof
 	)"
 }

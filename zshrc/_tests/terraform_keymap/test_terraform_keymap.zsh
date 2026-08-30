@@ -164,55 +164,7 @@ function test__terraform_keymap_cc {
 	)"
 }
 
-function test__terraform_keymap_p__drops_stale_tfplan {
-	assert "$(
-		local home=$HOME
-		HOME="/tmp/test__terraform_keymap_p__drops_stale_tfplan"
-		mkdir -p $HOME/project
-		touch $HOME/project/tfplan
-
-		function terraform { echo "terraform $*"; }
-
-		cd $HOME/project || return
-		terraform_keymap_p
-		[[ -e tfplan ]] && echo tfplan_present || echo tfplan_absent
-
-		rm -rf $HOME
-		HOME=$home
-	)" "$(
-		cat <<-eof
-			terraform plan -out=tfplan
-			tfplan_absent
-		eof
-	)"
-}
-
-function test__terraform_keymap_w {
-	assert "$(
-		local home=$HOME
-		local pwd=$PWD
-		HOME="/tmp/test__f"
-		mkdir -p $HOME/project/module/.terraform
-
-		touch $HOME/project/main.tf
-		touch $HOME/project/module/main.tf
-		touch $HOME/project/module/.terraform/main.tf
-
-		cd $HOME || return
-		terraform_keymap_w
-
-		rm -rf $HOME
-		HOME=$home
-		cd "$pwd" || return
-	)" "$(
-		cat <<-eof
-		     1	project
-		     2	project/module
-		eof
-	)"
-}
-
-function test__terraform_keymap_x__with_diff {
+function test__terraform_keymap_m__with_diff {
 	assert "$(
 		function mate { cat; }
 
@@ -232,7 +184,7 @@ function test__terraform_keymap_x__with_diff {
 			Plan: 1 to add, 0 to change, 1 to destroy.
 		eof
 
-		terraform_keymap_x
+		terraform_keymap_m
 	)" "$(
 		cat <<-eof
 			  # aws_instance.foo will be created
@@ -250,7 +202,7 @@ function test__terraform_keymap_x__with_diff {
 	)"
 }
 
-function test__terraform_keymap_x__with_nested_attribute_diff {
+function test__terraform_keymap_m__with_nested_attribute_diff {
 	assert "$(
 		function mate { cat; }
 
@@ -269,7 +221,7 @@ function test__terraform_keymap_x__with_nested_attribute_diff {
 			Plan: 0 to add, 1 to change, 0 to destroy.
 		eof
 
-		terraform_keymap_x
+		terraform_keymap_m
 	)" "$(
 		cat <<-eof
 			  # aws_instance.foo will be updated in-place
@@ -286,7 +238,7 @@ function test__terraform_keymap_x__with_nested_attribute_diff {
 	)"
 }
 
-function test__terraform_keymap_x__with_forget {
+function test__terraform_keymap_m__with_forget {
 	assert "$(
 		function mate { cat; }
 
@@ -303,7 +255,7 @@ function test__terraform_keymap_x__with_forget {
 			Plan: 0 to add, 0 to change, 0 to destroy.
 		eof
 
-		terraform_keymap_x
+		terraform_keymap_m
 	)" "$(
 		cat <<-eof
 			 # aws_instance.foo will no longer be managed by Terraform, but will not be destroyed
@@ -317,7 +269,7 @@ function test__terraform_keymap_x__with_forget {
 	)"
 }
 
-function test__terraform_keymap_x__with_drift {
+function test__terraform_keymap_m__with_drift {
 	assert "$(
 		function mate { cat; }
 
@@ -352,7 +304,7 @@ function test__terraform_keymap_x__with_drift {
 			Plan: 0 to add, 1 to change, 0 to destroy.
 		eof
 
-		terraform_keymap_x
+		terraform_keymap_m
 	)" "$(
 		cat <<-eof
 			Note: Objects have changed outside of Terraform
@@ -375,24 +327,24 @@ function test__terraform_keymap_x__with_drift {
 	)"
 }
 
-function test__terraform_keymap_x__with_no_changes {
+function test__terraform_keymap_m__with_no_changes {
 	assert "$(
 		function mate { cat; }
 
 		echo 'No changes. Your infrastructure matches the configuration.' | pbcopy
 
-		terraform_keymap_x
+		terraform_keymap_m
 	)" 'No changes. Your infrastructure matches the configuration.'
 }
 
-function test__terraform_keymap_x__with_mate_args {
+function test__terraform_keymap_m__with_textmate_args {
 	assert "$(
 		# Print one arg per line, so the quoted display name stays one arg
 		function mate { print -l mate "$@"; cat > /dev/null; }
 
 		echo 'No changes. Your infrastructure matches the configuration.' | pbcopy
 
-		terraform_keymap_x
+		terraform_keymap_m
 	)" "$(
 		cat <<-eof
 			mate
@@ -404,16 +356,65 @@ function test__terraform_keymap_x__with_mate_args {
 	)"
 }
 
-function test__terraform_keymap_x__with_empty_pasteboard {
+function test__terraform_keymap_m__with_empty_pasteboard {
 	assert "$(
 		echo '' | pbcopy
-		terraform_keymap_x
+		terraform_keymap_m
 	)" "$(red_bar 'No plan in pasteboard')"
 }
 
-function test__terraform_keymap_x__with_no_diff_found {
+function test__terraform_keymap_m__with_no_diff_found {
 	assert "$(
 		echo 'hello world' | pbcopy
-		terraform_keymap_x
+		terraform_keymap_m
 	)" "$(red_bar 'No diff found in pasteboard')"
+}
+
+function test__terraform_keymap_p__drops_stale_tfplan {
+	assert "$(
+		local home=$HOME
+		HOME="/tmp/test__terraform_keymap_p__drops_stale_tfplan"
+		mkdir -p $HOME/project
+		touch $HOME/project/tfplan
+
+		function terraform { echo "terraform $*"; }
+
+		cd $HOME/project || return
+		terraform_keymap_p
+		[[ -e tfplan ]] && echo tfplan_present || echo tfplan_absent
+
+		rm -rf $HOME
+		HOME=$home
+	)" "$(
+		cat <<-eof
+			terraform plan -out=tfplan
+			tfplan_absent
+		eof
+	)"
+}
+
+function test__terraform_keymap_t {
+	assert "$(
+		local home=$HOME
+		local pwd=$PWD
+		HOME="/tmp/test__f"
+		mkdir -p $HOME/project/module/.terraform
+
+		touch $HOME/project/main.tf
+		touch $HOME/project/module/main.tf
+		touch $HOME/project/module/.terraform/main.tf
+
+		cd $HOME || return
+		terraform_keymap_t
+
+		rm -rf $HOME
+		HOME=$home
+		cd "$pwd" || return
+	)" "$(
+		cat <<-eof
+
+		     1	project
+		     2	project/module
+		eof
+	)"
 }

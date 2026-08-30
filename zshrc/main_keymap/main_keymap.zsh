@@ -4,22 +4,22 @@ MAIN_DOT="${MAIN_ALIAS}${KEYMAP_DOT}"
 
 MAIN_KEYMAP=(
 	"${MAIN_DOT}a # List all keymap namespaces"
-	"${MAIN_DOT}r <description>* # List keymap entries & filter"
 	"${MAIN_DOT}w <key> # Filter keymap entries by key"
+	"${MAIN_DOT}r <description>* # List keymap entries & filter"
 	"${MAIN_DOT}- # Show stats"
 	''
 	# The following are default keyboard shortcuts as opposed to custom keymaps
 	# Note: Keep the following in sync with `SHORTCUT_NAMESPACES`
+	"${MAIN_DOT}ac <regex>? # Show macOS shortcuts"
 	"${MAIN_DOT}c <regex>? # Show Claude Code shortcuts"
 	"${MAIN_DOT}g <regex>? # Show Gmail shortcuts"
 	"${MAIN_DOT}h <regex>? # Show GitHub Desktop shortcuts"
-	"${MAIN_DOT}i <regex>? # Show vi shortcuts"
 	"${MAIN_DOT}l <regex>? # Show less shortcuts"
 	"${MAIN_DOT}m <regex>? # Show TextMate shortcuts"
 	"${MAIN_DOT}n <regex>? # Show Notion shortcuts"
-	"${MAIN_DOT}o <regex>? # Show macOS shortcuts"
 	"${MAIN_DOT}s <regex>? # Show Slack shortcuts"
 	"${MAIN_DOT}t <regex>? # Show Terminal shortcuts"
+	"${MAIN_DOT}vi <regex>? # Show vi shortcuts (\`mv\` reserved)"
 	''
 	"${MAIN_DOT}q # (Reserved: Message queue)"
 	"${MAIN_DOT}v # (Reserved: Move files)"
@@ -28,16 +28,16 @@ MAIN_KEYMAP=(
 # Note: Keep the following in sync with their counterparts in `MAIN_KEYMAP`
 SHORTCUT_NAMESPACES=(
 	''
+	"${MAIN_ALIAS}ac # App defaults: main_keymap.macos.zsh"
 	"${MAIN_ALIAS}c # App defaults: main_keymap.claude.zsh"
 	"${MAIN_ALIAS}g # App defaults: main_keymap.gmail.zsh"
 	"${MAIN_ALIAS}h # App defaults: main_keymap.github_desktop.zsh"
-	"${MAIN_ALIAS}i # App defaults: main_keymap.vi.zsh"
 	"${MAIN_ALIAS}l # App defaults: main_keymap.less.zsh"
 	"${MAIN_ALIAS}m # App defaults: main_keymap.textmate.zsh"
 	"${MAIN_ALIAS}n # App defaults: main_keymap.notion.zsh"
-	"${MAIN_ALIAS}o # App defaults: main_keymap.macos.zsh"
 	"${MAIN_ALIAS}s # App defaults: main_keymap.slack.zsh"
 	"${MAIN_ALIAS}t # App defaults: main_keymap.terminal.zsh"
+	"${MAIN_ALIAS}vi # App defaults: main_keymap.vi.zsh"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
@@ -93,6 +93,12 @@ function main_keymap_a {
 	rm "$ALL_KEYMAP_FILE.bak"
 }
 
+source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.macos.zsh"
+function main_keymap_ac {
+	local description=$*
+	main_helpers_show_default_keyboard_shortcuts 'macos' "$description"
+}
+
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.claude.zsh"
 function main_keymap_c {
 	local description=$*
@@ -111,12 +117,6 @@ function main_keymap_h {
 	main_helpers_show_default_keyboard_shortcuts 'github_desktop' "$description"
 }
 
-source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.vi.zsh"
-function main_keymap_i {
-	local description=$*
-	main_helpers_show_default_keyboard_shortcuts 'vi' "$description"
-}
-
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.less.zsh"
 function main_keymap_l {
 	local description=$*
@@ -133,12 +133,6 @@ source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.notion.zsh"
 function main_keymap_n {
 	local description=$*
 	main_helpers_show_default_keyboard_shortcuts 'notion' "$description"
-}
-
-source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.macos.zsh"
-function main_keymap_o {
-	local description=$*
-	main_helpers_show_default_keyboard_shortcuts 'macos' "$description"
 }
 
 # Includes custom zsh and non-zsh keymaps
@@ -167,6 +161,12 @@ source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.terminal.zsh"
 function main_keymap_t {
 	local description=$*
 	main_helpers_show_default_keyboard_shortcuts 'terminal' "$description"
+}
+
+source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.vi.zsh"
+function main_keymap_vi {
+	local description=$*
+	main_helpers_show_default_keyboard_shortcuts 'vi' "$description"
 }
 
 # Includes zsh keymaps following a `KEYMAP_DOT`, e.g `g.x`

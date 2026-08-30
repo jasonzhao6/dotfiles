@@ -1,25 +1,34 @@
 Keymap: vimium_search_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .   p  (y)  |   f  (g) (c) (r) (l)  /   =   \ 
-     (a) <o> (e)  u  (i)  |  (d) (h) (t)  n  (s) <->
-      ;   q  (j)  k   x   |   b  (m) (w)  v  (z)
+      '   ,   .   p   y   |   f  (g) (c) (r) (l)  /   =   \ 
+     (a) <o> (e)  u   i   |  (d) (h) (t)  n  (s) <->
+      ;   q  (j)  k   x   |   b  (m)  w   v  (z)
 
-  `<>` key initials have one mapping
-  `()` key initials have multiple mappings
+  `<>` initials have only one key mapping
+  `()` initials have multiple key mappings
 
 Keymap List
 
-  a   # Datadog App APM (Prod)
-  aa  # Datadog App APM (QA)
+  o   # Go Links
 
   c   # Github Code Search (TENGF)
   cd  # Github Code Search (DBE)
   cc  # Github Code Search
+  r   # Github Repo Search (TENGF)
+  rd  # Github Repo Search (DBE)
+  rr  # Github Repo Search
 
+  a   # Datadog App APM (Prod)
+  aa  # Datadog App APM (QA)
   d   # Datadog DB APM (Prod)
   dd  # Datadog DB APM (QA)
+  l   # Datadog Logs (Prod)
+  ll  # Datadog Logs (QA)
+
   dl  # Datadog Dashboard Lists (go/dl)
+  mm  # Datadog Manage Monitors (go/mm)
+  ms  # Datadog Metrics Summary (go/ms)
 
   -   # ECR (rel-2025.{MM.DD})
   e   # ECR (Prod)
@@ -33,33 +42,6 @@ Keymap List
 
   h   # Datadog K8s Pods (Prod)
   hh  # Datadog K8s Pods (QA)
-
-  i   # Datadog Infrastructure (Prod)
-  ii  # Datadog Infrastructure (QA)
-
-  j   # Jira Ticket
-  jb  # Jira Backlog
-  jc  # Jira Ticket (CHANGE)
-  jf  # Jira Ticket (TENGF)
-  jj  # Jira Ticket (INCI)
-  js  # Jira Sprint
-
-  l   # Datadog Logs (Prod)
-  ll  # Datadog Logs (QA)
-
-  mm  # Datadog Manage Monitors (go/mm)
-  ms  # Datadog Metrics Summary (go/ms)
-
-  o   # Go Links
-
-  r   # Github Repo Search (TENGF)
-  rd  # Github Repo Search (DBE)
-  rr  # Github Repo Search
-
-  se  # AWS EC2
-  sl  # AWS Load Balancers
-  sm  # AWS Secrets Manager
-
   t   # Datadog K8s Deployments (Prod)
   tt  # Datadog K8s Deployments (QA)
   te  # Datadog K8s Deployment Events (Prod)
@@ -67,11 +49,17 @@ Keymap List
   tl  # Datadog K8s Deployment Logs (Prod)
   tll # Datadog K8s Deployment Logs (QA)
 
-  w   # Confluence (TENGF)
-  ww  # Confluence
+  j   # Jira Ticket
+  jj  # Jira Ticket (INCI)
+  jc  # Jira Ticket (CHANGE)
+  jt  # Jira Ticket (TENGF)
 
-  y   # Yelp
-  yt  # YouTube
+  js  # Jira Sprint
+  jb  # Jira Backlog
+
+  se  # AWS EC2
+  sl  # AWS Load Balancers
+  sm  # AWS Secrets Manager
 
   z   # E.ggtimer (10m)
   zz  # E.ggtimer (1m)

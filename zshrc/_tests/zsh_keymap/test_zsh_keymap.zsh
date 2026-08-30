@@ -19,7 +19,7 @@ function test__zsh_keymap_a {
 
 function test__zsh_keymap_a__when_counting_greps {
 	assert "$(
-		local count; count=$(zsh_keymap_a grep | wc -l)
+		local count; count=$(zsh_keymap_a grep | grep -v '^$' | wc -l)
 		local actual_count; actual_count=$(grep --count '^\talias.*grep' "$ZSHRC_SRC_DIR"/colors.zsh)
 
 		[[ $count -eq actual_count ]] && echo 1
@@ -66,6 +66,7 @@ function test__zsh_keymap_h {
 		HISTFILE=$histfile
 	)" "$(
 		cat <<-eof
+
 		     1	echo 1
 		     2	echo 2
 		     3	echo 3
@@ -100,6 +101,7 @@ function test__zsh_keymap_h__when_filtering {
 		HISTFILE=$histfile
 	)" "$(
 		cat <<-eof
+
 		     1	echo $(grep_color 3)
 		eof
 	)"
@@ -144,6 +146,16 @@ function test__zsh_keymap_s__when_args_history_is_already_initialized {
 	args_history_reset
 }
 
+# Stub `zsh_keymap_t` to assert the pasteboard plumbing without recursing into a
+# nested test run
+function test__zsh_keymap_tt {
+	assert "$(
+		function zsh_keymap_t { echo "filter: $1"; }
+		echo 'test__foo' | pbcopy
+		zsh_keymap_tt
+	)" 'filter: test__foo'
+}
+
 function test__zsh_keymap_z {
 	assert "$(zsh_keymap_z)" "$(
 		cat <<-eof
@@ -167,8 +179,6 @@ function test__zsh_keymap_z__when_program_is_an_alias {
 		zsh_keymap_z z0 | bw
 	)" "$(
 		cat <<-eof
-
-			  # \`z0\` is aliased to \`zsh_keymap_0\`
 
 			  $ z.0 # Session history in memory & file
 

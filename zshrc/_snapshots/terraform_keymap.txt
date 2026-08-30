@@ -1,32 +1,33 @@
 Keymap: terraform_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .  <p>  y   |  <f> <g> (c) (r) <l>  /   =   \ 
-     <a> <o> <e> <u> (i)  |  <d> <h> (t) <n> <s>  - 
-      ;   q   j   k  <x>  |   b  <m> <w> <v> <z>
+      '   ,   .  <p>  y   |  <f> <g> (c) <r>  l   /   =   \ 
+     <a> <o> <e> <u> (i)  |  <d>  h  (t) (n) (s)  - 
+      ;   q   j   k   x   |   b  <m>  w  <v>  z 
 
-  `<>` key initials have one mapping
-  `()` key initials have multiple mappings
+  `<>` initials have only one key mapping
+  `()` initials have multiple key mappings
 
 Keymap Usage
 
   $ t                         # Show this keymap
   $ t <regex>                 # Search this keymap
 
-  $ t.<key>                   # This mapping takes no variable
-  $ t.<key> <var>             # This mapping takes one variable
-  $ t.<key> <var>?            # This mapping takes zero or one variable
-  $ t.<key> <var>*            # This mapping takes zero or multiple variables
-  $ t.<key> (1-10)            # This mapping takes an exact value from the list
+  $ t.<key>                   # Key takes no variable
+  $ t.<key> <var>             # Key takes one variable
+  $ t.<key> <var>?            # Key takes zero or one variable
+  $ t.<key> <var>*            # Key takes zero or more variables
+  $ t.<key> (1-10)            # Key takes a value from inside list
+  $ t.<key> (^|)?             # Key can be piped to: ... | t.<key>
 
-     ^                        # The `.` is only for documentation
-                              # Omit it when invoking a mapping
+     ^                        # The `.` is for visual clarity
+                              # Omit it when invoking a key
 
 Keymap List
 
-  $ t <terraform command>     
+  $ t <terraform command>     # Pass through
 
-  $ t.w <match>* <-mismatch>* # List manifests & filter
+  $ t.t <match>* <-mismatch>* # List manifests & filter
 
   $ t.i                       # Init
   $ t.iu                      # Init & upgrade
@@ -36,25 +37,25 @@ Keymap List
 
   $ t.v (i,iu,ir,im,e)?       # Validate
   $ t.p (i,iu,ir,im,e)?       # Plan
-  $ t.a <max age in min>?     # Apply plan from t.p
+  $ t.g                       # Upload 'tfplan' as a gist
+  $ t.a <max age in min>?     # Apply 'tfplan' (Default: 5)
+
+  $ t.s <match>* <-mismatch>* # List states & filter
+  $ t.sd <state>              # Delete state
+  $ t.sr <before> <after>     # Rename state
+  $ t.ss <state>              # Show state
+  $ t.st <state>              # Taint state
+  $ t.su <state>              # Untaint state
 
   $ t.c                       # Clean
   $ t.cc                      # Clean & clear plugin cache
   $ t.d                       # Destroy
-  $ t.f <path>?               # Format
-  $ t.g                       # Upload gist
+  $ t.f <path>?               # Format (Default: CWD)
+  $ t.n <var name>?           # Start console or print var in CWD
+  $ t.nn <var name>?          # Start console or print var in 'tf-debug'
   $ t.o                       # Show output
-  $ t.x                       # Open plan diff from pasteboard
-  $ t.z                       # Unlock
+  $ t.u <lock id>?            # Unlock (Default: Pasteboard)
 
-  $ t.l <name>                # List states
-  $ t.s <name>                # Show state
-  $ t.t <name>                # Taint state
-  $ t.u <name>                # Untaint state
-  $ t.m <before> <after>      # Move state
-  $ t.rm <name>               # Remove state
-
-  $ t.n <var name>?           # Console
-  $ t.h <var name>?           # Scratch
+  $ t.m                       # Open diff from pasteboard in TextMate
 
   $ t.r                       # (Reserved: Translate chars)

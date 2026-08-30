@@ -55,10 +55,9 @@ function test__main_keymap_r__when_specifying_a_description {
 
 			  $ g.h                       # (Reserved: GitHub CLI)
 			  $ h.h <match>* <-mismatch>* # List ~/GitHub, \`cd\` when only one match
-			  $ h.a                       # Open current repo in GitHub Desktop
-			  $ r.h                       # Chat with GitHub MCP
+			  $ h.a <repo>?               # Open GitHub app (Default: Current repo)
+			  $ r.h                       # Agent with GitHub MCP
 			  $ m.h <regex>?              # Show GitHub Desktop shortcuts
-			  $ n.h <match>* <-mismatch>* # Go to GitHub
 			  $ n.dd                      # Go to dotfiles, open GitHub Desktop
 			  $ n.ss                      # Go to scratch, open GitHub Desktop
 
@@ -81,8 +80,8 @@ function test__main_keymap_r__when_specifying_a_zsh_only_description {
 	)" "$(
 		cat <<-eof
 
-			  $ o.f <start> <finish> (~~) # Run command sequence in foreground
-			  $ o.b <start> <finish> (~~) # Run command sequence in background
+			  $ o.f <start> <finish> (~~) # Run a command sequence in foreground
+			  $ o.b <start> <finish> (~~) # Run a command sequence in background
 		eof
 	)"
 }
@@ -116,10 +115,10 @@ function test__main_keymap_w__when_specifying_a_key {
 	)" "$(
 		cat <<-eof
 
-		  $ k.j <type> <name>             # Get resource as json & save copy
-		  $ k.jj                          # Get the copy of json
-		  $ n.j                           # Clear screen & render next file in args
-		  $ o.j <url> <regex> <num lines> # Curl json endpoint
+		  $ k.j <type> <name>               # Get resource as json & save copy
+		  $ k.jj                            # Get the copy of json
+		  $ n.j                             # Clear screen & render next file in args
+		  $ o.j <url> <regex>? <num lines>? # Curl json endpoint
 
 		  alt-j # Step over
 		  cmd-j # Join lines

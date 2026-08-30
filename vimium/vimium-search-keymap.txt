@@ -1,13 +1,22 @@
-a: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=prod Datadog App APM (Prod)
-aa: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=qa Datadog App APM (QA)
+o: https://golinks.io/%s Go Links
 
 c: https://github.marqeta.com/search?q=org%3Atransaction-engine+%s&type=code Github Code Search (TENGF)
 cd: https://github.marqeta.com/search?q=org%3Adb-engineering+%s&type=code Github Code Search (DBE)
 cc: https://github.marqeta.com/search?q=%s&type=code Github Code Search
+r: https://github.marqeta.com/orgs/transaction-engine/repositories?q=%s Github Repo Search (TENGF)
+rd: https://github.marqeta.com/orgs/db-engineering/repositories?q=%s Github Repo Search (DBE)
+rr: https://github.marqeta.com/search?q=%s&type=repositories Github Repo Search
 
+a: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=prod Datadog App APM (Prod)
+aa: https://app.datadoghq.com/apm/services/%s-ccapi/operations/iso.8583/resources?env=qa Datadog App APM (QA)
 d: https://app.datadoghq.com/apm/services/%s-mysql/operations/iso.8583/resources?env=prod Datadog DB APM (Prod)
 dd: https://app.datadoghq.com/apm/services/%s-mysql/operations/iso.8583/resources?env=qa Datadog DB APM (QA)
+l: https://app.datadoghq.com/logs?query=env%3Aprod%20%s Datadog Logs (Prod)
+ll: https://app.datadoghq.com/logs?query=env%3Aqa%20%s Datadog Logs (QA)
+
 dl: https://app.datadoghq.com/dashboard/lists?q=%s Datadog Dashboard Lists (go/dl)
+mm: https://app.datadoghq.com/monitors/manage?q=%s%20tag%3A%22owner%3Atransaction-engine%22 Datadog Manage Monitors (go/mm)
+ms: https://app.datadoghq.com/metric/summary?filter=%s Datadog Metrics Summary (go/ms)
 
 -: https://ecr-ui.marqeta.com/us-east-1/repositories/transaction-engine/marqeta-jpos/jcard-marqkubed/rel-2025.%s ECR (rel-2025.{MM.DD})
 e: https://ecr-ui.marqeta.com/?search=%s ECR (Prod)
@@ -21,33 +30,6 @@ gm: https://www.google.com/maps?q=%s Google Maps
 
 h: https://app.datadoghq.com/orchestration/explorer/pod?query=%s%20kube_namespace%3Atransaction-engine%20kube_cluster_name%3Amkprod-%2A Datadog K8s Pods (Prod)
 hh: https://app.datadoghq.com/orchestration/explorer/pod?query=%s%20kube_namespace%3Atransaction-engine%20kube_cluster_name%3Amkqa-%2A Datadog K8s Pods (QA)
-
-i: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aprod%2Cservice%3A%s-ccapi Datadog Infrastructure (Prod)
-ii: https://app.datadoghq.com/infrastructure?groups=role&sort=group%2Casc&tags=env%3Aqa%2Cservice%3A%s-ccapi Datadog Infrastructure (QA)
-
-j: https://marqeta.atlassian.net/browse/%s Jira Ticket
-jb: https://marqeta.atlassian.net/jira/software/c/projects/TENGF/boards/1033/backlog?text=%s Jira Backlog
-jc: https://marqeta.atlassian.net/browse/CHANGE-%s Jira Ticket (CHANGE)
-jf: https://marqeta.atlassian.net/browse/TENGF-%s Jira Ticket (TENGF)
-jj: https://marqeta.atlassian.net/browse/INCI-%s Jira Ticket (INCI)
-js: https://marqeta.atlassian.net/jira/software/c/projects/TENGF/boards/1033?search=%s Jira Sprint
-
-l: https://app.datadoghq.com/logs?query=env%3Aprod%20%s Datadog Logs (Prod)
-ll: https://app.datadoghq.com/logs?query=env%3Aqa%20%s Datadog Logs (QA)
-
-mm: https://app.datadoghq.com/monitors/manage?q=%s%20tag%3A%22owner%3Atransaction-engine%22 Datadog Manage Monitors (go/mm)
-ms: https://app.datadoghq.com/metric/summary?filter=%s Datadog Metrics Summary (go/ms)
-
-o: https://golinks.io/%s Go Links
-
-r: https://github.marqeta.com/orgs/transaction-engine/repositories?q=%s Github Repo Search (TENGF)
-rd: https://github.marqeta.com/orgs/db-engineering/repositories?q=%s Github Repo Search (DBE)
-rr: https://github.marqeta.com/search?q=%s&type=repositories Github Repo Search
-
-se: https://us-east-1.console.aws.amazon.com/ec2/home#Instances:instanceState=running;search=%s AWS EC2
-sl: https://us-east-1.console.aws.amazon.com/ec2/home#LoadBalancers:search=%s;sort=name AWS Load Balancers
-sm: https://us-east-1.console.aws.amazon.com/secretsmanager/listsecrets?region=us-east-1&search=all%3D%s AWS Secrets Manager
-
 t: https://app.datadoghq.com/orchestration/explorer/deployment?query=%s%20kube_namespace%3Atransaction-engine%20kube_cluster_name%3Amkprod-%2A Datadog K8s Deployments (Prod)
 tt: https://app.datadoghq.com/orchestration/explorer/deployment?query=%s%20kube_namespace%3Atransaction-engine%20kube_cluster_name%3Amkqa-%2A Datadog K8s Deployments (QA)
 te: https://app.datadoghq.com/event/explorer?query=service%3A%s-ccapi%20source%3Achange_tracking%20kube_cluster%3Amkprod-%2A Datadog K8s Deployment Events (Prod)
@@ -55,11 +37,17 @@ tee: https://app.datadoghq.com/event/explorer?query=service%3A%s-ccapi%20source%
 tl: https://app.datadoghq.com/logs?query=kube_job%3A%s-ccapi-job%20kube_cluster_name%3Amkprod-%2A Datadog K8s Deployment Logs (Prod)
 tll: https://app.datadoghq.com/logs?query=kube_job%3A%s-ccapi-job%20kube_cluster_name%3Amkqa-%2A Datadog K8s Deployment Logs (QA)
 
-w: https://marqeta.atlassian.net/wiki/search?text=%s&spaces=TF Confluence (TENGF)
-ww: https://marqeta.atlassian.net/wiki/search?text=%s Confluence
+j: https://marqeta.atlassian.net/browse/%s Jira Ticket
+jj: https://marqeta.atlassian.net/browse/INCI-%s Jira Ticket (INCI)
+jc: https://marqeta.atlassian.net/browse/CHANGE-%s Jira Ticket (CHANGE)
+jt: https://marqeta.atlassian.net/browse/TENGF-%s Jira Ticket (TENGF)
 
-y: https://www.yelp.com/search?find_desc=%s Yelp
-yt: https://www.youtube.com/results?search_query=%s YouTube
+js: https://marqeta.atlassian.net/jira/software/c/projects/TENGF/boards/1033?search=%s Jira Sprint
+jb: https://marqeta.atlassian.net/jira/software/c/projects/TENGF/boards/1033/backlog?text=%s Jira Backlog
+
+se: https://us-east-1.console.aws.amazon.com/ec2/home#Instances:instanceState=running;search=%s AWS EC2
+sl: https://us-east-1.console.aws.amazon.com/ec2/home#LoadBalancers:search=%s;sort=name AWS Load Balancers
+sm: https://us-east-1.console.aws.amazon.com/secretsmanager/listsecrets?region=us-east-1&search=all%3D%s AWS Secrets Manager
 
 z: https://e.ggtimer.com/%s0m E.ggtimer (10m)
 zz: https://e.ggtimer.com/%sm E.ggtimer (1m)

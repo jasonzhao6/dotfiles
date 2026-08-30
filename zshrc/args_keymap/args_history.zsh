@@ -112,9 +112,9 @@ function args_history_entries {
 	# Print from head to tail, inclusive
 	while true; do
 		echo
-		echo '----------------------------------------'
+		dashes
 		echo "Index $index"
-		echo '----------------------------------------'
+		dashes
 		echo "${ARGS_HISTORY[index]}"
 
 		[[ $index -eq $ARGS_HISTORY_TAIL ]] && break

@@ -1,10 +1,25 @@
 unmapAll
 
-map a LinkHints.activateMode
-map ; LinkHints.activateModeToOpenInNewTab
 map o Vomnibar.activateInNewTab
-map q Vomnibar.activateBookmarksInNewTab
-map i enterInsertMode
+map O Vomnibar.activateBookmarksInNewTab
+map e enterInsertMode
+map - focusInput
+
+map a LinkHints.activateMode
+map A LinkHints.activateModeToOpenInNewForegroundTab
+map ; LinkHints.activateModeToOpenInNewTab
+map : LinkHints.activateModeWithQueue
+map i LinkHints.activateModeToOpenIncognito
+
+map Y LinkHints.activateModeToCopyLinkUrl
+map y copyCurrentUrl
+map p openCopiedUrlInNewTab
+map d duplicateTab
+map r reload
+map u goUp
+map U goToRoot
+map c removeTab
+map C closeTabsOnRight
 
 map h scrollPageUp
 map t scrollPageDown
@@ -24,12 +39,3 @@ map N moveTabLeft
 map S moveTabRight
 map v goBack
 map z goForward
-
-map c removeTab
-map C closeTabsOnRight
-map r reload
-map d duplicateTab
-map p openCopiedUrlInNewTab
-map y copyCurrentUrl
-
-map - focusInput

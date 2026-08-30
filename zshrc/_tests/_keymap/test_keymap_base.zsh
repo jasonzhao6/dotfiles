@@ -10,7 +10,7 @@ TEST_KEYMAP=(
 	"${TEST_DOT}c # Third without args"
 	"${TEST_DOT}c <arg 1> <arg 2> # Third with args"
 	"${TEST_DOT}d"
-	"${KEYMAP_PIPE_PATTERN}${TEST_DOT}e"
+	"${TEST_DOT}e ${KEYMAP_PIPE_PATTERN}"
 	''
 	"<1-9> # #1-9"
 	"cmd-\` # Backtick"
@@ -106,22 +106,23 @@ function test__keymap_show {
 			     (a)  o  <e>  u   i   |  <d>  h   t   n   s   -
 			      ;   q   j   k   x   |  <b>  m   w   v   z
 
-			  \`<>\` key initials have one mapping
-			  \`()\` key initials have multiple mappings
+			  \`<>\` initials have only one key mapping
+			  \`()\` initials have multiple key mappings
 
 			Keymap Usage
 
 			  $ test__                   # Show this keymap
 			  $ test__ <regex>           # Search this keymap
 
-			  $ test__.<key>             # This mapping takes no variable
-			  $ test__.<key> <var>       # This mapping takes one variable
-			  $ test__.<key> <var>?      # This mapping takes zero or one variable
-			  $ test__.<key> <var>*      # This mapping takes zero or multiple variables
-			  $ test__.<key> (1-10)      # This mapping takes an exact value from the list
+			  $ test__.<key>             # Key takes no variable
+			  $ test__.<key> <var>       # Key takes one variable
+			  $ test__.<key> <var>?      # Key takes zero or one variable
+			  $ test__.<key> <var>*      # Key takes zero or more variables
+			  $ test__.<key> (1-10)      # Key takes a value from inside list
+			  $ test__.<key> (^|)?       # Key can be piped to: ... | test__.<key>
 
-			          ^                  # The \`.\` is only for documentation
-			                             # Omit it when invoking a mapping
+			          ^                  # The \`.\` is for visual clarity
+			                             # Omit it when invoking a key
 
 			Keymap List
 
@@ -132,7 +133,7 @@ function test__keymap_show {
 			  $ test__.c                 # Third without args
 			  $ test__.c <arg 1> <arg 2> # Third with args
 			  $ test__.d
-			  $ (|)? test__.e
+			  $ test__.e (^|)?
 
 			  $ <1-9>                    # #1-9
 			  $ cmd-\`                    # Backtick

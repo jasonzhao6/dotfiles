@@ -1,35 +1,34 @@
 Keymap: docker_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .   p   y   |  <f>  g  <c>  r   l   /   =   \ 
-      a  <o>  e  <u>  i   |  (d)  h   t   n  <s>  - 
+      '   ,   .   p   y   |  <f>  g   c   r   l   /   =   \ 
+      a  <o>  e  <u>  i   |  <d>  h   t   n  <s>  - 
       ;   q   j   k   x   |   b   m   w   v   z 
 
-  `<>` key initials have one mapping
-  `()` key initials have multiple mappings
+  `<>` initials have only one key mapping
+  `()` initials have multiple key mappings
 
 Keymap Usage
 
   $ d                  # Show this keymap
   $ d <regex>          # Search this keymap
 
-  $ d.<key>            # This mapping takes no variable
-  $ d.<key> <var>      # This mapping takes one variable
-  $ d.<key> <var>?     # This mapping takes zero or one variable
-  $ d.<key> <var>*     # This mapping takes zero or multiple variables
-  $ d.<key> (1-10)     # This mapping takes an exact value from the list
+  $ d.<key>            # Key takes no variable
+  $ d.<key> <var>      # Key takes one variable
+  $ d.<key> <var>?     # Key takes zero or one variable
+  $ d.<key> <var>*     # Key takes zero or more variables
+  $ d.<key> (1-10)     # Key takes a value from inside list
+  $ d.<key> (^|)?      # Key can be piped to: ... | d.<key>
 
-     ^                 # The `.` is only for documentation
-                       # Omit it when invoking a mapping
+     ^                 # The `.` is for visual clarity
+                       # Omit it when invoking a key
 
 Keymap List
 
-  $ d <docker command> 
+  $ d <docker command> # Pass through
 
   $ d.s                # Login with AWS credentials
 
-  $ d.c                # (Reserved: Desk calculator)
-  $ d.d                # (Reserved: Data duplicator)
   $ d.f                # (Reserved: Disk free)
   $ d.o                # (Reserved: Shell keyword)
   $ d.u                # (Reserved: Disk usage)

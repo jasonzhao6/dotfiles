@@ -6,28 +6,16 @@ NAV_KEYMAP=(
 	"${NAV_ALIAS} <directory> # Go to directory"
 	"${NAV_ALIAS} <file> # Clear screen, cd to folder & render file"
 	''
-	"${NAV_DOT}n <match>* <-mismatch>* # List visible directories & files"
-	"${NAV_DOT}a <match>* <-mismatch>* # List hidden directories & files"
-	"${NAV_DOT}o <match>* <-mismatch>* # List visible directories"
-	"${NAV_DOT}oo <match>* <-mismatch>* # List hidden directories"
-	"${NAV_DOT}e <match>* <-mismatch>* # List visible files"
-	"${NAV_DOT}ee <match>* <-mismatch>* # List hidden files"
+	"${NAV_DOT}n <match>* <-mismatch>* # List visible files & dirs"
+	"${NAV_DOT}nf <match>* <-mismatch>* # List visible files"
+	"${NAV_DOT}nd <match>* <-mismatch>* # List visible dirs"
 	''
-	"${NAV_DOT}u # Go up one directory"
-	"${NAV_DOT}uu # Go up two directories"
-	"${NAV_DOT}uuu # Go up three directories"
+	"${NAV_DOT}a <match>* <-mismatch>* # List invisible files & dirs"
+	"${NAV_DOT}af <match>* <-mismatch>* # List invisible files"
+	"${NAV_DOT}ad <match>* <-mismatch>* # List invisible dirs"
 	''
-	"${NAV_DOT}t # Go to directory in pasteboard"
-	"${NAV_DOT}tt <file>? # Copy current path to pasteboard"
-	"${NAV_DOT}y # Yank current path to MRU queue"
-	"${NAV_DOT}p # Put latest path from MRU queue"
-	"${NAV_DOT}q <match>* <-mismatch>* # List MRU queue, \`cd\` when only one match"
-	"${NAV_DOT}qc # Clear MRU queue"
-	"${NAV_DOT}qd <path> # Delete MRU entry by path"
-	"${NAV_DOT}qt <count> # Keep only top N entries of MRU queue"
+	"${NAV_DOT}u <levels>? # Go up 1+ directories (Default 1)"
 	''
-	"${NAV_DOT}h <match>* <-mismatch>* # Go to GitHub"
-	"${NAV_DOT}i # Go to Excalidraw"
 	"${NAV_DOT}b # Go to Desktop"
 	"${NAV_DOT}m # Go to Documents"
 	"${NAV_DOT}w # Go to Downloads"
@@ -37,16 +25,27 @@ NAV_KEYMAP=(
 	"${NAV_DOT}s # Go to scratch"
 	"${NAV_DOT}ss # Go to scratch, open GitHub Desktop"
 	"${NAV_DOT}z # Go to scratch/claude"
-	"${NAV_DOT}zz # Render latest claude plan"
 	''
-	"${NAV_DOT}g <levels>? # Sort subfolders by size"
-	"${NAV_DOT}f # Sort files by size"
-	"${NAV_DOT}r # Sort files by recent"
+	"${NAV_DOT}y <path>? # Copy path to pasteboard (Default: \`pwd\`)"
+	"${NAV_DOT}p # Go to dir from pasteboard path"
+	''
+	"${NAV_DOT}t <match>* <-mismatch>* # Show shortlist, \`cd\` when only one match"
+	"${NAV_DOT}tt <dir>? # Add to shortlist, \`cd\` if not CWD"
+	"${NAV_DOT}td <dir> # Delete from shortlist"
+	"${NAV_DOT}tc # Clear shortlist"
+	''
+	"${NAV_DOT}h <match>* <-mismatch>* # Show history, \`cd\` when only one match"
+	"${NAV_DOT}hc # Clear history"
+	''
+	"${NAV_DOT}o # Order files and dirs chronologically"
+	"${NAV_DOT}of # Order files by size"
+	"${NAV_DOT}od <levels>? # Order dirs by size"
 	''
 	"${NAV_DOT}j # Clear screen & render next file in args"
 	"${NAV_DOT}k # Clear screen & render prev file in args"
-	"${NAV_DOT}x # Clear screen & rerender current file"
 	"${NAV_DOT}v # Clear screen & render file in pasteboard"
+	"${NAV_DOT}r # Clear screen & re-render last file"
+	"${NAV_DOT}rr # Same as \`nr\` without scrolling to top"
 	''
 	"${NAV_DOT}c # (Reserved: Netcat)"
 	"${NAV_DOT}l # (Reserved: Number lines)"
@@ -55,39 +54,38 @@ NAV_KEYMAP=(
 keymap_init $NAV_NAMESPACE $NAV_ALIAS "${NAV_KEYMAP[@]}"
 
 function nav_keymap {
-	local target=$1
+	local target_path=$1
 
-	# If the target is a directory, go to it
-	if [[ -d "$target" ]]; then
-		cd "$target" && nav_keymap_n || return
-		return
-	fi
+	# If target is a directory, go into it
+	if [[ -d "$target_path" ]]; then
+		cd "$target_path" && nav_keymap_n || return
+	# If target is a file, print it
+	elif [[ -f "$target_path" ]]; then
+		# If file is already in args, use current cursor
+		local cursor; cursor=$(nav_helpers_find_cursor "$target_path")
 
-	# If the target is a file, set cursor and print it
-	if [[ -f "$target" ]]; then
-		local cursor; cursor=$(nav_helpers_find_cursor "$target")
-
-		# When the file is not in args, go to its folder and list it, so the
-		# cursor can be set
+		# Otherwise, find file in its parent dir and set cursor
 		if [[ -z $cursor ]]; then
-			if [[ "$target" == */* ]]; then
-				cd "${target:h}" || return
-				target=${target:t}
+			if [[ "$target_path" == */* ]]; then
+				cd "${target_path:h}" || return
+				target_path=${target_path:t}
 			fi
-			nav_helpers_list_siblings "$target" > /dev/null
-			cursor=$(nav_helpers_find_cursor "$target")
+
+			# List siblings (hidden vs visible), so the cursor can be set
+			if [[ "$target_path" == .* ]]; then
+				nav_keymap_a > /dev/null
+			else
+				nav_keymap_n > /dev/null
+			fi
+
+			cursor=$(nav_helpers_find_cursor "$target_path")
 		fi
 
-		if [[ -n $cursor ]]; then
-			NAV_CURSOR=$cursor
-			nav_helpers_render_cursor_as_file
-		else
-			nav_helpers_render_file "$target"
-		fi
-		return
+		NAV_CURSOR=$cursor
+		nav_helpers_render_cursor_as_file
+	else
+		keymap_show $NAV_NAMESPACE $NAV_ALIAS ${#NAV_KEYMAP} "${NAV_KEYMAP[@]}" "$@"
 	fi
-
-	keymap_show $NAV_NAMESPACE $NAV_ALIAS ${#NAV_KEYMAP} "${NAV_KEYMAP[@]}" "$@"
 }
 
 #
@@ -98,20 +96,34 @@ function nav_keymap {
 source "$ZSHRC_SRC_DIR/$NAV_NAMESPACE/nav_helpers.zsh"
 
 # Constants
-NAV_CLAUDE_DIR="$HOME/GitHub/jasonzhao6/scratch/claude"
-NAV_CLAUDE_PLANS_DIR="$NAV_CLAUDE_DIR/plans"
+NAV_HISTORY_FILE="$ZSHRC_DATA_DIR/nav.history.txt"
+NAV_HISTORY_MAX=1000
 NAV_MDCAT_CONFIG_HOME="$ZSHRC_SRC_DIR/$NAV_NAMESPACE" # Holds `mdcat/config.toml`
-NAV_MRU_FILE="$ZSHRC_DATA_DIR/nav.mru.txt"
+NAV_SHORTLIST_FILE="$ZSHRC_DATA_DIR/nav.shortlist.txt"
 
 # States
 NAV_CURSOR=0
 
+# shellcheck disable=SC2120 # `filters` is an optional arg
 function nav_keymap_a {
 	local filters=("$@")
 
 	setopt NULL_GLOB
 	ls -d .* | args_keymap_s "${filters[@]}"
 	unsetopt NULL_GLOB
+}
+
+function nav_keymap_ad {
+	local filters=("$@")
+
+	ls -d .*/ | args_keymap_s "${filters[@]}"
+}
+
+function nav_keymap_af {
+	local filters=("$@")
+
+	# shellcheck disable=SC2010
+	ls -pd .* | grep -v '/' | args_keymap_s "${filters[@]}"
 }
 
 function nav_keymap_b {
@@ -126,38 +138,28 @@ function nav_keymap_dd {
 	nav_keymap_d && github_keymap_a
 }
 
-function nav_keymap_e {
-	local filters=("$@")
-
-	# shellcheck disable=SC2010
-	ls -p | grep -v '/' | args_keymap_s "${filters[@]}"
-}
-
-function nav_keymap_ee {
-	local filters=("$@")
-
-	# shellcheck disable=SC2010
-	ls -pd .* | grep -v '/' | args_keymap_s "${filters[@]}"
-}
-
-function nav_keymap_f {
-	ls -lhSr | tail -n +2
-}
-
-function nav_keymap_g {
-	local levels="${1:-1}"
-
-	du -hd "$levels" | sort -h
-}
-
 function nav_keymap_h {
 	local filters=("$@")
 
-	cd ~/GitHub && nav_keymap_n "${filters[@]}" || true
+	if [[ ! -f "$NAV_HISTORY_FILE" || ! -s "$NAV_HISTORY_FILE" ]]; then
+		red_bar 'Navigation history is empty'
+		return
+	fi
+
+	args_keymap_s "${filters[@]}" < "$NAV_HISTORY_FILE"
+
+	nav_helpers_cd_if_only_match
 }
 
-function nav_keymap_i {
-	cd ~/GitHub/jasonzhao6/excalidraw && nav_keymap_n || true
+function nav_keymap_hc {
+	if [[ ! -f "$NAV_HISTORY_FILE" ]]; then
+		red_bar 'Navigation history is empty'
+		return
+	fi
+
+	local count; count=$(wc -l < "$NAV_HISTORY_FILE" | tr -d ' ')
+	rm -f "$NAV_HISTORY_FILE"
+	green_bar "Cleared $count history entries"
 }
 
 function nav_keymap_j {
@@ -202,117 +204,41 @@ function nav_keymap_n {
 	local filters=("$@")
 
 	NAV_CURSOR=0
-	echo
+	nav_helpers_history_add "$(pwd)"
+
 	ls | args_keymap_s "${filters[@]}"
 }
 
-function nav_keymap_o {
+function nav_keymap_nd {
 	local filters=("$@")
 
 	ls -d -- */ | args_keymap_s "${filters[@]}"
 }
 
-function nav_keymap_oo {
+function nav_keymap_nf {
 	local filters=("$@")
 
-	ls -d .*/ | args_keymap_s "${filters[@]}"
+	# shellcheck disable=SC2010
+	ls -p | grep -v '/' | args_keymap_s "${filters[@]}"
+}
+
+function nav_keymap_o {
+	# `-A` lists dotfiles while omitting `.` and `..`
+	ls -lhtrA | tail -n +2
+}
+
+function nav_keymap_od {
+	local levels="${1:-1}"
+
+	du -hd "$levels" | sort -h
+}
+
+function nav_keymap_of {
+	# `-A` lists dotfiles while omitting `.` and `..`; `grep` drops the dirs
+	ls -lhSrA | tail -n +2 | grep -v '^d'
 }
 
 function nav_keymap_p {
-	local head; head=$(head -1 "$NAV_MRU_FILE" 2>/dev/null)
-	if [[ -z "$head" ]]; then
-		red_bar 'MRU queue is empty'
-		return
-	fi
-	cd "$head" && nav_keymap_n || true
-}
-
-# shellcheck disable=SC2120 # `filters` is an optional arg
-function nav_keymap_q {
-	local filters=("$@")
-
-	# Drop entries whose directory no longer exists
-	nav_helpers_mru_prune
-
-	# Short circuit if MRU queue is empty
-	if [[ ! -f "$NAV_MRU_FILE" || ! -s "$NAV_MRU_FILE" ]]; then
-		red_bar 'MRU queue is empty'
-		return
-	fi
-
-	# `cd` when only one entry matches
-	local match_path; match_path=$(args_helpers_only_match "${filters[@]}" < "$NAV_MRU_FILE")
-	if [[ -n $match_path ]]; then
-		nav_helpers_mru_add "$match_path"
-		cd "$match_path" && nav_keymap_n || true
-		return
-	fi
-
-	args_keymap_s "${filters[@]}" < "$NAV_MRU_FILE"
-}
-
-function nav_keymap_qc {
-	rm -f "$NAV_MRU_FILE"
-}
-
-function nav_keymap_qd {
-	local target=$1
-
-	if [[ -z $target ]]; then
-		red_bar 'Usage: nqd <path>'
-		return
-	fi
-
-	if [[ ! -f "$NAV_MRU_FILE" || ! -s "$NAV_MRU_FILE" ]]; then
-		red_bar 'MRU queue is empty'
-		return
-	fi
-
-	local remaining; remaining=$(grep -Fxv "$target" "$NAV_MRU_FILE" || true)
-	local original; original=$(cat "$NAV_MRU_FILE")
-
-	if [[ "$remaining" == "$original" ]]; then
-		red_bar "Path not found in MRU queue"
-		return
-	fi
-
-	printf '%s\n' "$remaining" > "$NAV_MRU_FILE"
-
-	echo
-	nav_keymap_q
-}
-
-function nav_keymap_qt {
-	local count=$1
-
-	if [[ ! $count =~ ^[1-9][0-9]*$ ]]; then
-		red_bar 'Usage: nqt <count>'
-		return
-	fi
-
-	if [[ ! -f "$NAV_MRU_FILE" || ! -s "$NAV_MRU_FILE" ]]; then
-		red_bar 'MRU queue is empty'
-		return
-	fi
-
-	local kept; kept=$(head -n "$count" "$NAV_MRU_FILE")
-	printf '%s\n' "$kept" > "$NAV_MRU_FILE"
-	nav_keymap_q
-}
-
-function nav_keymap_r {
-	ls -lhtr | tail -n +2
-}
-
-function nav_keymap_s {
-	cd ~/GitHub/jasonzhao6/scratch && nav_keymap_n || true
-}
-
-function nav_keymap_ss {
-	nav_keymap_s && github_keymap_a
-}
-
-function nav_keymap_t {
 	local target_path; target_path=$(nav_helpers_copied_path)
 
 	if [[ ! -f $target_path && ! -d $target_path ]]; then
@@ -320,62 +246,17 @@ function nav_keymap_t {
 		return
 	fi
 
-	# For a file path, go to its parent folder and set the cursor, so `nx` renders it
+	# For a file path, go to its parent folder
 	if [[ -f $target_path ]]; then
-		local file=${target_path:t}
-		cd "${target_path:h}" && nav_helpers_list_siblings "$file" || return
-
-		local cursor; cursor=$(nav_helpers_find_cursor "$file")
-		if [[ -n $cursor ]]; then
-			NAV_CURSOR=$cursor
-		fi
-		return
-	fi
-
-	# Go to folder
-	cd "$target_path" && nav_keymap_n || return
-}
-
-function nav_keymap_tt {
-	local file="$1"
-
-	if [[ -n $file ]]; then
-		echo -n "$(pwd)/$file" | pbcopy
+		cd "${target_path:h}" && nav_keymap_n || return
 	else
-		pwd | tr -d '\n' | pbcopy
+		cd "$target_path" && nav_keymap_n || return
 	fi
 }
 
-function nav_keymap_u {
-	cd ..
-	nav_keymap_n
-}
+function nav_keymap_r {
+	local scroll_to_top=${1:-true}
 
-function nav_keymap_uu {
-	cd ../..
-	nav_keymap_n
-}
-
-function nav_keymap_uuu {
-	cd ../../..
-	nav_keymap_n
-}
-
-function nav_keymap_v {
-	local file; file=$(nav_helpers_copied_path)
-
-	if [[ ! -f $file ]]; then
-		red_bar 'Invalid file path in pasteboard' && return
-	fi
-
-	nav_keymap "$file"
-}
-
-function nav_keymap_w {
-	cd ~/Downloads && nav_keymap_n || true
-}
-
-function nav_keymap_x {
 	nav_helpers_populate_args_when_empty
 
 	local size; size=$(args_helpers_size)
@@ -389,24 +270,132 @@ function nav_keymap_x {
 		NAV_CURSOR=1
 	fi
 
-	nav_helpers_render_cursor_as_file
+	nav_helpers_render_cursor_as_file "$scroll_to_top"
+}
+
+function nav_keymap_rr {
+	nav_keymap_r false
+}
+
+function nav_keymap_s {
+	cd ~/GitHub/jasonzhao6/scratch && nav_keymap_n || true
+}
+
+function nav_keymap_ss {
+	nav_keymap_s && github_keymap_a
+}
+
+# shellcheck disable=SC2120 # `filters` is an optional arg
+function nav_keymap_t {
+	local filters=("$@")
+
+	nav_helpers_shortlist_prune
+
+	if [[ ! -f "$NAV_SHORTLIST_FILE" || ! -s "$NAV_SHORTLIST_FILE" ]]; then
+		red_bar 'Path shortlist is empty'
+		return
+	fi
+
+	args_keymap_s "${filters[@]}" < "$NAV_SHORTLIST_FILE"
+
+	nav_helpers_cd_if_only_match
+}
+
+function nav_keymap_tc {
+	rm -f "$NAV_SHORTLIST_FILE"
+}
+
+function nav_keymap_td {
+	local target_dir=$1
+
+	if [[ -z $target_dir ]]; then
+		red_bar 'Usage: ntd <dir>'
+		return
+	fi
+
+	if [[ ! -f "$NAV_SHORTLIST_FILE" || ! -s "$NAV_SHORTLIST_FILE" ]]; then
+		red_bar 'Path shortlist is empty'
+		return
+	fi
+
+	local remaining; remaining=$(grep -Fxv "$target_dir" "$NAV_SHORTLIST_FILE" || true)
+	local original; original=$(cat "$NAV_SHORTLIST_FILE")
+
+	if [[ "$remaining" == "$original" ]]; then
+		red_bar "Path not found in shortlist"
+		return
+	fi
+
+	printf '%s\n' "$remaining" > "$NAV_SHORTLIST_FILE"
+
+	nav_keymap_t
+}
+
+function nav_keymap_tt {
+	local target_dir=${1:-$(pwd)}
+
+	# Resolve to an absolute path, which also validates the dir
+	local full_path
+	full_path=$(cd "$target_dir" 2>/dev/null && pwd) || {
+		red_bar "Invalid dir: $target_dir"
+		return
+	}
+
+	# Add to shortlist (sorted) if not already present
+	if [[ ! -f "$NAV_SHORTLIST_FILE" ]]; then
+		echo "$full_path" > "$NAV_SHORTLIST_FILE"
+	elif ! grep -qFx "$full_path" "$NAV_SHORTLIST_FILE"; then
+		echo "$full_path" >> "$NAV_SHORTLIST_FILE"
+		sort -o "$NAV_SHORTLIST_FILE" "$NAV_SHORTLIST_FILE"
+	fi
+
+	# Follow the dir just added, unless already there
+	[[ $full_path == "$(pwd)" ]] && return
+	cd "$full_path" && nav_keymap_n || true
+}
+
+function nav_keymap_u {
+	local levels=${1:-1}
+	local target_path=''
+
+	if [[ ! $levels =~ ^[1-9][0-9]*$ ]]; then
+		red_bar 'Usage: nu <levels>'
+		return
+	fi
+
+	local i
+	for ((i = 0; i < levels; i++)); do
+		target_path+='../'
+	done
+
+	cd "$target_path" || return
+	nav_keymap_n
+}
+
+function nav_keymap_v {
+	local target_path; target_path=$(nav_helpers_copied_path)
+
+	if [[ ! -f $target_path ]]; then
+		red_bar 'Invalid file path in pasteboard' && return
+	fi
+
+	nav_keymap "$target_path"
+}
+
+function nav_keymap_w {
+	cd ~/Downloads && nav_keymap_n || true
 }
 
 function nav_keymap_y {
-	nav_helpers_mru_add "$(pwd)"
+	local file="$1"
+
+	if [[ -n $file ]]; then
+		echo -n "$(pwd)/$file" | pbcopy
+	else
+		pwd | tr -d '\n' | pbcopy
+	fi
 }
 
 function nav_keymap_z {
-	cd "$NAV_CLAUDE_DIR" && nav_keymap_n || true
-}
-
-function nav_keymap_zz {
-	local latest
-	latest=$(ls -t "$NAV_CLAUDE_PLANS_DIR"/*.md 2>/dev/null | head -1)
-
-	if [ -n "$latest" ]; then
-		nav_keymap "$latest"
-	else
-		red_bar "No plans"
-	fi
+	cd ~/GitHub/jasonzhao6/scratch/claude && nav_keymap_n || true
 }
