@@ -360,10 +360,10 @@ README.md                   # This file
 
 ### Add a New Keymap
 
-1. **Add keymap definition file**: `<my>_keymap/<my>_keymap.zsh`
-1. **Add keymap test file**: `_tests/<my>_keymap/test_<my>_keymap.zsh`
-1. **Add this line in [main.zsh](./zshrc/main.zsh)**: `source "$ZSHRC_SRC_DIR/<my>_keymap/<my>_keymap.zsh"`
-1. **Update this README**: E.g [Usage](#usage) and [Project Structure](#project-structure) sections
+1. **Add keymap ([template](#keymap-template))**: `<my>_keymap/<my>_keymap.zsh`
+1. **Add keymap test ([template](#keymap-test-template))**: `_tests/<my>_keymap/test_<my>_keymap.zsh`
+1. **Add line in [main.zsh](./zshrc/main.zsh)**: `source "$ZSHRC_SRC_DIR/<my>_keymap/<my>_keymap.zsh"`
+1. **Update README**: Keymap lists in [Usage](#usage) and [Project Structure](#project-structure) sections
 
 ### Keymap Template
 ```
@@ -372,8 +372,8 @@ README.md                   # This file
 <MY>_DOT="${<MY>_ALIAS}${KEYMAP_DOT}"
 
 <MY>_KEYMAP=(
-	"${<MY>_DOT}<key1> # <description1>"
-	"${<MY>_DOT}<key2> # <description2>"
+	"${<MY>_DOT}<key1> # Say hello"
+	"${<MY>_DOT}<key2> <name>? # Greet by name (Default: 'buddy')"
 )
 
 keymap_init $<MY>_NAMESPACE $<MY>_ALIAS "${<MY>_KEYMAP[@]}"
@@ -387,11 +387,46 @@ function <my>_keymap {
 #
 
 function <my>_keymap_<key1> {
-	<...>
+	echo 'Hello, world!'
 }
 
 function <my>_keymap_<key2> {
-	<...>
+	local name=${1:-buddy}
+
+	echo "Hey, $name!"
+}
+```
+
+### Keymap Test Template
+```
+function test__<my>_keymap {
+	assert "$(
+		local show_this_help; show_this_help=$(<my>_keymap | grep 'Show this keymap' | bw)
+
+		# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
+		[[ $show_this_help =~ "^  \\$ $<MY>_ALIAS +# Show this keymap$" ]] && echo 1
+	)" '1'
+}
+
+function test__<my>_keymap_<key1> {
+	assert "$(<my>_keymap_<key1>)" 'Hello, world!'
+}
+
+function test__<my>_keymap_<key1>__when_called_twice {
+	assert "$(<my>_keymap_<key1>; <my>_keymap_<key1>)" "$(
+		cat <<-eof
+			Hello, world!
+			Hello, world!
+		eof
+	)"
+}
+
+function test__<my>_keymap_<key2> {
+	assert "$(<my>_keymap_<key2> 'Alice')" 'Hey, Alice!'
+}
+
+function test__<my>_keymap_<key2>__with_no_name {
+	assert "$(<my>_keymap_<key2>)" 'Hey, buddy!'
 }
 ```
 
