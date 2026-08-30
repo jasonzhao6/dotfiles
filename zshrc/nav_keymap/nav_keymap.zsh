@@ -14,7 +14,8 @@ NAV_KEYMAP=(
 	"${NAV_DOT}af <match>* <-mismatch>* # List hidden files"
 	"${NAV_DOT}ad <match>* <-mismatch>* # List hidden dirs"
 	''
-	"${NAV_DOT}u <levels>? # Go up 1+ directories (Default 1)"
+	"${NAV_DOT}u <levels>? # Go up 1+ directories (Default: 1)"
+	"${NAV_DOT}uu # Go up to git repo root"
 	''
 	"${NAV_DOT}b # Go to Desktop"
 	"${NAV_DOT}m # Go to Documents"
@@ -369,6 +370,18 @@ function nav_keymap_u {
 	done
 
 	cd "$target_path" || return
+	nav_keymap_n
+}
+
+function nav_keymap_uu {
+	local repo_root; repo_root=$(git rev-parse --show-toplevel 2> /dev/null)
+
+	if [[ -z $repo_root ]]; then
+		red_bar 'Not in a git repo'
+		return
+	fi
+
+	cd "$repo_root" || return
 	nav_keymap_n
 }
 

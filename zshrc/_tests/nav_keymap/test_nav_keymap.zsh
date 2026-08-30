@@ -1450,6 +1450,21 @@ function test__nav_keymap_u__with_invalid_levels {
 	)"
 }
 
+function test__nav_keymap_uu {
+	assert "$(
+		cd ~/GitHub/jasonzhao6/dotfiles/zshrc/_tests || return
+		nav_keymap_uu > /dev/null
+		pwd
+	)" "$HOME/GitHub/jasonzhao6/dotfiles"
+}
+
+function test__nav_keymap_uu__when_not_in_repo {
+	assert "$(
+		cd /tmp || return
+		nav_keymap_uu
+	)" "$(red_bar 'Not in a git repo')"
+}
+
 function test__nav_keymap_v__renders_pasteboard_file {
 	local md='/tmp/test__nav_keymap_v.md'
 	printf '# H1\n' > $md
