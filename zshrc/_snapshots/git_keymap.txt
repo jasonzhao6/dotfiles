@@ -1,9 +1,9 @@
 Keymap: git_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .  (p)  y   |  (f) (g) (c) (r) (l)  /   =   \ 
-     <a> <o> (e) <u> <i>  |  <d> <h> (t) <n> <s>  - 
-      ;   q   j   k   x   |  (b) (m) (w)  v  (z)
+      '   ,   .  (p) (y)  |  (f) (g) (c) (r) (l)  /   =   \ 
+     <a> <o> (e) <u>  i   |  <d> <h> <t> <n> <s>  - 
+      ;   q   j   k   x   |  (b) <m> <w> (v) (z)
 
   `<>` initials have only one key mapping
   `()` initials have multiple key mappings
@@ -33,17 +33,17 @@ Keymap List
   $ g.bb            # Delete merged branches
   $ g.bd <branch>   # Delete specified branch
 
-  $ g.i             # Status
+  $ g.t             # Status
   $ g.d             # Diff
   $ g.s <message>?  # Stash
   $ g.a <index>?    # Apply a stash (Default: Latest)
   $ g.l             # List stashes
   $ g.lc            # Clear stashes
 
-  $ g.w             # Write a new commit
-  $ g.ww            # Write a new commit, allow empty
+  $ g.c             # Create a new commit
+  $ g.cc            # Create a new commit, allow empty
   $ g.m             # Amend previous commit, no edit
-  $ g.mm            # Amend previous commit
+  $ g.w             # Amend previous commit, rewrite message
 
   $ g.u <number>?   # Undo last N commits (Default: 1)
   $ g.z <number>?   # Discard changes & N commits (Default: 0)
@@ -55,16 +55,16 @@ Keymap List
   $ g.ec            # Rebase continue
   $ g.ea            # Rebase abort
 
-  $ g.c <sha>?      # Cherry pick (Default: Pasteboard)
-  $ g.cc            # Cherry pick continue
-  $ g.ca            # Cherry pick abort
+  $ g.y <sha>?      # Cherry pick (Default: Pasteboard)
+  $ g.yy            # Cherry pick continue
+  $ g.ya            # Cherry pick abort
 
-  $ g.t <sha>?      # Revert commit (Default: Pasteboard)
-  $ g.tc            # Revert continue
-  $ g.ta            # Revert abort
+  $ g.v <sha>?      # Revert commit (Default: Pasteboard)
+  $ g.vc            # Revert continue
+  $ g.va            # Revert abort
 
-  $ g.pp            # Pull
   $ g.p             # Push
+  $ g.pp            # Pull
   $ g.f             # Force push with lease
   $ g.ff            # Force push
 

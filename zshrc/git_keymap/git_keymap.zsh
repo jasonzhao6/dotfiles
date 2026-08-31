@@ -11,17 +11,17 @@ GIT_KEYMAP=(
 	"${GIT_DOT}bb # Delete merged branches"
 	"${GIT_DOT}bd <branch> # Delete specified branch"
 	''
-	"${GIT_DOT}i # Status"
+	"${GIT_DOT}t # Status"
 	"${GIT_DOT}d # Diff"
 	"${GIT_DOT}s <message>? # Stash"
 	"${GIT_DOT}a <index>? # Apply a stash (Default: Latest)"
 	"${GIT_DOT}l # List stashes"
 	"${GIT_DOT}lc # Clear stashes"
 	''
-	"${GIT_DOT}w # Write a new commit"
-	"${GIT_DOT}ww # Write a new commit, allow empty"
+	"${GIT_DOT}c # Create a new commit"
+	"${GIT_DOT}cc # Create a new commit, allow empty"
 	"${GIT_DOT}m # Amend previous commit, no edit"
-	"${GIT_DOT}mm # Amend previous commit"
+	"${GIT_DOT}w # Amend previous commit, rewrite message"
 	''
 	"${GIT_DOT}u <number>? # Undo last N commits (Default: 1)"
 	"${GIT_DOT}z <number>? # Discard changes & N commits (Default: 0)"
@@ -33,16 +33,16 @@ GIT_KEYMAP=(
 	"${GIT_DOT}ec # Rebase continue"
 	"${GIT_DOT}ea # Rebase abort"
 	''
-	"${GIT_DOT}c <sha>? # Cherry pick (Default: Pasteboard)"
-	"${GIT_DOT}cc # Cherry pick continue"
-	"${GIT_DOT}ca # Cherry pick abort"
+	"${GIT_DOT}y <sha>? # Cherry pick (Default: Pasteboard)"
+	"${GIT_DOT}yy # Cherry pick continue"
+	"${GIT_DOT}ya # Cherry pick abort"
 	''
-	"${GIT_DOT}t <sha>? # Revert commit (Default: Pasteboard)"
-	"${GIT_DOT}tc # Revert continue"
-	"${GIT_DOT}ta # Revert abort"
+	"${GIT_DOT}v <sha>? # Revert commit (Default: Pasteboard)"
+	"${GIT_DOT}vc # Revert continue"
+	"${GIT_DOT}va # Revert abort"
 	''
-	"${GIT_DOT}pp # Pull"
 	"${GIT_DOT}p # Push"
+	"${GIT_DOT}pp # Pull"
 	"${GIT_DOT}f # Force push with lease"
 	"${GIT_DOT}ff # Force push"
 	''
@@ -121,18 +121,12 @@ function git_keymap_bd {
 }
 
 function git_keymap_c {
-	local sha; sha=$(paste_when_empty "$1")
-
-	git cherry-pick "$sha"
-}
-
-function git_keymap_ca {
-	git cherry-pick --abort
+	git add --all
+	git commit
 }
 
 function git_keymap_cc {
-	git add --all
-	git cherry-pick --continue
+	git commit --allow-empty -m 're-run: Empty commit to trigger build'
 }
 
 function git_keymap_d {
@@ -203,10 +197,6 @@ function git_keymap_g {
 	git status
 }
 
-function git_keymap_i {
-	git status
-}
-
 function git_keymap_l {
 	git stash list --pretty=format:'%C(yellow)%gd %C(magenta)%as %C(green)%s'
 }
@@ -218,11 +208,6 @@ function git_keymap_lc {
 function git_keymap_m {
 	git add --all
 	git commit --amend --no-edit
-}
-
-function git_keymap_mm {
-	git add --all
-	git commit --amend
 }
 
 function git_keymap_n {
@@ -261,18 +246,7 @@ function git_keymap_s {
 }
 
 function git_keymap_t {
-	local sha; sha=$(paste_when_empty "$1")
-
-	git revert "$sha"
-}
-
-function git_keymap_ta {
-	git revert --abort
-}
-
-function git_keymap_tc {
-	git add --all
-	git revert --continue
+	git status
 }
 
 function git_keymap_u {
@@ -281,13 +255,39 @@ function git_keymap_u {
 	git reset --soft HEAD~"$number"
 }
 
-function git_keymap_w {
-	git add --all
-	git commit
+function git_keymap_v {
+	local sha; sha=$(paste_when_empty "$1")
+
+	git revert "$sha"
 }
 
-function git_keymap_ww {
-	git commit --allow-empty -m 're-run: Empty commit to trigger build'
+function git_keymap_va {
+	git revert --abort
+}
+
+function git_keymap_vc {
+	git add --all
+	git revert --continue
+}
+
+function git_keymap_w {
+	git add --all
+	git commit --amend
+}
+
+function git_keymap_y {
+	local sha; sha=$(paste_when_empty "$1")
+
+	git cherry-pick "$sha"
+}
+
+function git_keymap_ya {
+	git cherry-pick --abort
+}
+
+function git_keymap_yy {
+	git add --all
+	git cherry-pick --continue
 }
 
 function git_keymap_z {
