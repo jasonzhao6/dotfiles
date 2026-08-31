@@ -34,14 +34,14 @@ GIT_KEYMAP=(
 	"${GIT_DOT}ea # Rebase abort"
 	''
 	"${GIT_DOT}c <sha>? # Cherry pick (Default: Pasteboard)"
-	"${GIT_DOT}C # Cherry pick continue (\`gcc\` reserved)"
+	"${GIT_DOT}cc # Cherry pick continue"
 	"${GIT_DOT}ca # Cherry pick abort"
 	''
 	"${GIT_DOT}t <sha>? # Revert commit (Default: Pasteboard)"
 	"${GIT_DOT}tc # Revert continue"
 	"${GIT_DOT}ta # Revert abort"
 	''
-	"${GIT_DOT}P # Pull"
+	"${GIT_DOT}pp # Pull"
 	"${GIT_DOT}p # Push"
 	"${GIT_DOT}f # Force push with lease"
 	"${GIT_DOT}ff # Force push"
@@ -120,11 +120,6 @@ function git_keymap_bd {
 	git_keymap_b
 }
 
-function git_keymap_C {
-	git add --all
-	git cherry-pick --continue
-}
-
 function git_keymap_c {
 	local sha; sha=$(paste_when_empty "$1")
 
@@ -133,6 +128,11 @@ function git_keymap_c {
 
 function git_keymap_ca {
 	git cherry-pick --abort
+}
+
+function git_keymap_cc {
+	git add --all
+	git cherry-pick --continue
 }
 
 function git_keymap_d {
@@ -234,7 +234,7 @@ function git_keymap_p {
 	git push
 }
 
-function git_keymap_P {
+function git_keymap_pp {
 	git pull
 }
 

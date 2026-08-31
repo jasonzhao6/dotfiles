@@ -13,8 +13,8 @@ CLAUDE_KEYMAP=(
 	"${CLAUDE_DOT}n # Start new 5-hour token window"
 	''
 	"${CLAUDE_DOT}m # Edit config folder in TextMate"
-	"${CLAUDE_DOT}u # Push config to \`scratch\` (\`cp\` reserved)"
-	"${CLAUDE_DOT}U # Pull config from \`scratch\` repo"
+	"${CLAUDE_DOT}P # Push config to \`scratch\` (\`cp\` reserved)"
+	"${CLAUDE_DOT}PP # Pull config from \`scratch\` repo"
 	''
 	"${CLAUDE_DOT}d # (Reserved: Change directory)"
 	"${CLAUDE_DOT}p # (Reserved: Copy files)"
@@ -74,36 +74,7 @@ function claude_keymap_n {
 	} & disown # Background and disown so zsh forgets about this job entirely (no done message).
 }
 
-function claude_keymap_r {
-	check_docker
-
-	claude --continue
-}
-
-function claude_keymap_s {
-	# Tint the tab blue to signal scratch mode
-	osascript -e '
-		tell application "Terminal"
-			set background color of selected tab of front window to {6224, 6224, 11224}
-		end tell'
-
-	cd "$HOME/GitHub/jasonzhao6/scratch" || exit
-	# Notify Terminal.app of new cwd so Claude's tab title shows 'scratch'
-	printf '\e]7;file://%s%s\a' "$HOST" "$PWD"
-	claude_keymap_c
-
-	# Restore original background color
-	claude_keymap_ss
-}
-
-function claude_keymap_ss {
-	osascript -e '
-		tell application "Terminal"
-			set background color of selected tab of front window to {6224, 6224, 6224}
-		end tell'
-}
-
-function claude_keymap_u {
+function claude_keymap_P {
 	claude_helpers_move_local_to_global
 
 	echo "Pushing Claude config to 'scratch' repository..."
@@ -139,7 +110,7 @@ function claude_keymap_u {
 	fi
 }
 
-function claude_keymap_U {
+function claude_keymap_PP {
 	echo "Pulling Claude config from 'scratch' repository..."
 
 	if [ -d "$CLAUDE_KEYMAP_SCRATCH_DIR" ]; then
@@ -173,4 +144,33 @@ function claude_keymap_U {
 	else
 		echo "Error: 'claude' folder not found in 'scratch' repository."
 	fi
+}
+
+function claude_keymap_r {
+	check_docker
+
+	claude --continue
+}
+
+function claude_keymap_s {
+	# Tint the tab blue to signal scratch mode
+	osascript -e '
+		tell application "Terminal"
+			set background color of selected tab of front window to {6224, 6224, 11224}
+		end tell'
+
+	cd "$HOME/GitHub/jasonzhao6/scratch" || exit
+	# Notify Terminal.app of new cwd so Claude's tab title shows 'scratch'
+	printf '\e]7;file://%s%s\a' "$HOST" "$PWD"
+	claude_keymap_c
+
+	# Restore original background color
+	claude_keymap_ss
+}
+
+function claude_keymap_ss {
+	osascript -e '
+		tell application "Terminal"
+			set background color of selected tab of front window to {6224, 6224, 6224}
+		end tell'
 }

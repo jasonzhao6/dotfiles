@@ -11,11 +11,11 @@ KIRO_KEYMAP=(
 	"${KIRO_DOT}d # Agent with Datadog MCP"
 	"${KIRO_DOT}h # Agent with GitHub MCP"
 	"${KIRO_DOT}s # Agent with Snowflake MCP"
-	"${KIRO_DOT}S # Agent with SDLC MCP"
+	"${KIRO_DOT}ss # Agent with SDLC MCP"
 	''
 	"${KIRO_DOT}M # Edit config in TextMate (\`rm\` reserved)"
 	"${KIRO_DOT}p # Push \`kiro\` folder to \`scratch\` repo"
-	"${KIRO_DOT}P # Pull \`kiro\` folder from \`scratch\` repo"
+	"${KIRO_DOT}pp # Pull \`kiro\` folder from \`scratch\` repo"
 	''
 	"${KIRO_DOT}0 <command>? # Invoke \`kiro-cli\` plain"
 	"${KIRO_DOT}1 <command>? # Invoke \`kiro-cli\` with best model"
@@ -97,7 +97,7 @@ function kiro_keymap_p {
 	fi
 }
 
-function kiro_keymap_P {
+function kiro_keymap_pp {
 	echo "Pulling 'kiro' folder from 'scratch' repository..."
 
 	if [ -d "$KIRO_KEYMAP_SCRATCH_DIR" ]; then
@@ -127,6 +127,6 @@ function kiro_keymap_s {
 	kiro_keymap_1 --agent snowflake
 }
 
-function kiro_keymap_S {
+function kiro_keymap_ss {
 	kiro_keymap_1 --agent sdlc
 }

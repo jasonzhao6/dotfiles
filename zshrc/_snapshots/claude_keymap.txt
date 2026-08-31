@@ -2,7 +2,7 @@ Keymap: claude_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .  <p>  y   |   f   g  <c> <r> <l>  /   =   \ 
-      a   o   e  <u>  i   |  <d>  h   t  <n> (s)  - 
+      a   o   e   u   i   |  <d>  h   t  <n> (s)  - 
       ;   q   j   k   x   |   b  <m>  w   v   z 
 
   `<>` initials have only one key mapping
@@ -35,8 +35,8 @@ Keymap List
   $ c.n            # Start new 5-hour token window
 
   $ c.m            # Edit config folder in TextMate
-  $ c.u            # Push config to `scratch` (`cp` reserved)
-  $ c.U            # Pull config from `scratch` repo
+  $ c.P            # Push config to `scratch` (`cp` reserved)
+  $ c.PP           # Pull config from `scratch` repo
 
   $ c.d            # (Reserved: Change directory)
   $ c.p            # (Reserved: Copy files)

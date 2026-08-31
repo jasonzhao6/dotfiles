@@ -1,7 +1,7 @@
 Keymap: git_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .  <p>  y   |  (f) (g) (c) (r) (l)  /   =   \ 
+      '   ,   .  (p)  y   |  (f) (g) (c) (r) (l)  /   =   \ 
      <a> <o> (e) <u> <i>  |  <d> <h> (t) <n> <s>  - 
       ;   q   j   k   x   |  (b) (m) (w)  v  (z)
 
@@ -56,14 +56,14 @@ Keymap List
   $ g.ea            # Rebase abort
 
   $ g.c <sha>?      # Cherry pick (Default: Pasteboard)
-  $ g.C             # Cherry pick continue (`gcc` reserved)
+  $ g.cc            # Cherry pick continue
   $ g.ca            # Cherry pick abort
 
   $ g.t <sha>?      # Revert commit (Default: Pasteboard)
   $ g.tc            # Revert continue
   $ g.ta            # Revert abort
 
-  $ g.P             # Pull
+  $ g.pp            # Pull
   $ g.p             # Push
   $ g.f             # Force push with lease
   $ g.ff            # Force push

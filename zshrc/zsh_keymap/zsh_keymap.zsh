@@ -25,7 +25,7 @@ ZSH_KEYMAP=(
 	"${ZSH_DOT}0 # Session history in memory & file"
 	''
 	"${ZSH_DOT}p # Push other dotfiles to this repo"
-	"${ZSH_DOT}P # Pull other dotfiles from this repo"
+	"${ZSH_DOT}pp # Pull other dotfiles from this repo"
 )
 
 keymap_init $ZSH_NAMESPACE $ZSH_ALIAS "${ZSH_KEYMAP[@]}"
@@ -124,7 +124,7 @@ function zsh_keymap_p {
 	fi
 }
 
-function zsh_keymap_P {
+function zsh_keymap_pp {
 	for dotfile in "${ZSH_OTHER_DOTFILES[@]}"; do
 		cp "$DOTFILES_DIR/$dotfile.txt" "$HOME/.$dotfile"
 	done

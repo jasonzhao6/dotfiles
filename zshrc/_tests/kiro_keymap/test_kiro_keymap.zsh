@@ -38,25 +38,25 @@ function test__kiro_keymap_p {
 	)"
 }
 
-function test__kiro_keymap_P {
+function test__kiro_keymap_pp {
 	assert "$(
 		local orig_config=$KIRO_KEYMAP_CONFIG_DIR
 		local orig_scratch=$KIRO_KEYMAP_SCRATCH_DIR
 		local orig_dirs=("${KIRO_KEYMAP_SUB_DIRS[@]}")
 
-		KIRO_KEYMAP_CONFIG_DIR=/tmp/test__kiro_keymap_P/config
-		KIRO_KEYMAP_SCRATCH_DIR=/tmp/test__kiro_keymap_P/scratch
+		KIRO_KEYMAP_CONFIG_DIR=/tmp/test__kiro_keymap_pp/config
+		KIRO_KEYMAP_SCRATCH_DIR=/tmp/test__kiro_keymap_pp/scratch
 		KIRO_KEYMAP_SUB_DIRS=(agents)
 
 		mkdir -p "$KIRO_KEYMAP_CONFIG_DIR"
 		mkdir -p "$KIRO_KEYMAP_SCRATCH_DIR/agents"
 		echo 'pulled_agent' > "$KIRO_KEYMAP_SCRATCH_DIR/agents/a1.txt"
 
-		kiro_keymap_P
+		kiro_keymap_pp
 
 		cat "$KIRO_KEYMAP_CONFIG_DIR/agents/a1.txt"
 
-		rm -rf /tmp/test__kiro_keymap_P
+		rm -rf /tmp/test__kiro_keymap_pp
 		KIRO_KEYMAP_CONFIG_DIR=$orig_config
 		KIRO_KEYMAP_SCRATCH_DIR=$orig_scratch
 		KIRO_KEYMAP_SUB_DIRS=("${orig_dirs[@]}")

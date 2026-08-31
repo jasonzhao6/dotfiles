@@ -19,7 +19,7 @@ KUBECTL_KEYMAP=(
 	"${KUBECTL_DOT}ts <count> <deployment> # Scale deployment"
 	''
 	"${KUBECTL_DOT}h <match>* <-mismatch>* # Get pods as args"
-	"${KUBECTL_DOT}H <match>* <-mismatch>* # Get unready pods as args"
+	"${KUBECTL_DOT}hu <match>* <-mismatch>* # Get unready pods as args"
 	"${KUBECTL_DOT}hh <pod> # Edit pod in TextMate" #
 	"${KUBECTL_DOT}hd <pod> # Remove pod"
 	''
@@ -158,22 +158,6 @@ function kubectl_keymap_gg {
 	kubectl get "${params[@]}" --output wide
 }
 
-function kubectl_keymap_H {
-	local filters=("$@")
-	local columns="\
-		NAME:.metadata.name,\
-		STATUS:.status.phase,\
-		READY:.status.containerStatuses[0].ready,\
-		READINESS GATES:.status.conditions[?(@.type=='Ready')].status,\
-		CREATED AT:.metadata.creationTimestamp,\
-		RESTARTED AT:.status.containerStatuses[0].lastState.terminated.finishedAt"
-
-	kubectl get pods -o custom-columns="$columns" |
-		awk 'NR==1 {print; next} /False/ {gsub(/true/, "Ready"); gsub(/false/, "Unready"); gsub(/False/, "Unregistered"); print}' |
-		column -t |
-		args_keymap_so "${filters[@]}"
-}
-
 function kubectl_keymap_h {
 	[[ -z $1 ]] && return
 
@@ -192,6 +176,22 @@ function kubectl_keymap_hh {
 	local pod="$1"
 
 	kubectl edit pods "$pod"
+}
+
+function kubectl_keymap_hu {
+	local filters=("$@")
+	local columns="\
+		NAME:.metadata.name,\
+		STATUS:.status.phase,\
+		READY:.status.containerStatuses[0].ready,\
+		READINESS GATES:.status.conditions[?(@.type=='Ready')].status,\
+		CREATED AT:.metadata.creationTimestamp,\
+		RESTARTED AT:.status.containerStatuses[0].lastState.terminated.finishedAt"
+
+	kubectl get pods -o custom-columns="$columns" |
+		awk 'NR==1 {print; next} /False/ {gsub(/true/, "Ready"); gsub(/false/, "Unready"); gsub(/False/, "Unregistered"); print}' |
+		column -t |
+		args_keymap_so "${filters[@]}"
 }
 
 function kubectl_keymap_j {

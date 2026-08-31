@@ -40,7 +40,7 @@ Keymap List
   $ k.ts <count> <deployment>        # Scale deployment
 
   $ k.h <match>* <-mismatch>*        # Get pods as args
-  $ k.H <match>* <-mismatch>*        # Get unready pods as args
+  $ k.hu <match>* <-mismatch>*       # Get unready pods as args
   $ k.hh <pod>                       # Edit pod in TextMate
   $ k.hd <pod>                       # Remove pod
 

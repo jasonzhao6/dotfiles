@@ -8,15 +8,15 @@ function test__claude_keymap {
 	)" '1'
 }
 
-function test__claude_keymap_u {
+function test__claude_keymap_P {
 	assert "$(
 		local orig_config=$CLAUDE_KEYMAP_CONFIG_DIR
 		local orig_scratch=$CLAUDE_KEYMAP_SCRATCH_DIR
 		local orig_files=("${CLAUDE_KEYMAP_FILES[@]}")
 		local orig_folders=("${CLAUDE_KEYMAP_FOLDERS[@]}")
 
-		CLAUDE_KEYMAP_CONFIG_DIR=/tmp/test__claude_keymap_u/config
-		CLAUDE_KEYMAP_SCRATCH_DIR=/tmp/test__claude_keymap_u/scratch
+		CLAUDE_KEYMAP_CONFIG_DIR=/tmp/test__claude_keymap_P/config
+		CLAUDE_KEYMAP_SCRATCH_DIR=/tmp/test__claude_keymap_P/scratch
 		CLAUDE_KEYMAP_FILES=(test.json)
 		CLAUDE_KEYMAP_FOLDERS=(subdir)
 
@@ -24,12 +24,12 @@ function test__claude_keymap_u {
 		echo '{"key":"val"}' > "$CLAUDE_KEYMAP_CONFIG_DIR/test.json"
 		echo 'file1' > "$CLAUDE_KEYMAP_CONFIG_DIR/subdir/file.txt"
 
-		claude_keymap_u
+		claude_keymap_P
 
 		cat "$CLAUDE_KEYMAP_SCRATCH_DIR/test.json"
 		cat "$CLAUDE_KEYMAP_SCRATCH_DIR/subdir/file.txt"
 
-		rm -rf /tmp/test__claude_keymap_u
+		rm -rf /tmp/test__claude_keymap_P
 		CLAUDE_KEYMAP_CONFIG_DIR=$orig_config
 		CLAUDE_KEYMAP_SCRATCH_DIR=$orig_scratch
 		CLAUDE_KEYMAP_FILES=("${orig_files[@]}")
@@ -44,15 +44,15 @@ function test__claude_keymap_u {
 	)"
 }
 
-function test__claude_keymap_U {
+function test__claude_keymap_PP {
 	assert "$(
 		local orig_config=$CLAUDE_KEYMAP_CONFIG_DIR
 		local orig_scratch=$CLAUDE_KEYMAP_SCRATCH_DIR
 		local orig_files=("${CLAUDE_KEYMAP_FILES[@]}")
 		local orig_folders=("${CLAUDE_KEYMAP_FOLDERS[@]}")
 
-		CLAUDE_KEYMAP_CONFIG_DIR=/tmp/test__claude_keymap_U/config
-		CLAUDE_KEYMAP_SCRATCH_DIR=/tmp/test__claude_keymap_U/scratch
+		CLAUDE_KEYMAP_CONFIG_DIR=/tmp/test__claude_keymap_PP/config
+		CLAUDE_KEYMAP_SCRATCH_DIR=/tmp/test__claude_keymap_PP/scratch
 		CLAUDE_KEYMAP_FILES=(test.json)
 		CLAUDE_KEYMAP_FOLDERS=(subdir)
 
@@ -61,12 +61,12 @@ function test__claude_keymap_U {
 		echo '{"pulled":"yes"}' > "$CLAUDE_KEYMAP_SCRATCH_DIR/test.json"
 		echo 'pulled_file' > "$CLAUDE_KEYMAP_SCRATCH_DIR/subdir/file.txt"
 
-		claude_keymap_U
+		claude_keymap_PP
 
 		cat "$CLAUDE_KEYMAP_CONFIG_DIR/test.json"
 		cat "$CLAUDE_KEYMAP_CONFIG_DIR/subdir/file.txt"
 
-		rm -rf /tmp/test__claude_keymap_U
+		rm -rf /tmp/test__claude_keymap_PP
 		CLAUDE_KEYMAP_CONFIG_DIR=$orig_config
 		CLAUDE_KEYMAP_SCRATCH_DIR=$orig_scratch
 		CLAUDE_KEYMAP_FILES=("${orig_files[@]}")

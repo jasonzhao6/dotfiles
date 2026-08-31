@@ -19,7 +19,7 @@ MAIN_KEYMAP=(
 	"${MAIN_DOT}n <regex>? # Show Notion shortcuts"
 	"${MAIN_DOT}s <regex>? # Show Slack shortcuts"
 	"${MAIN_DOT}t <regex>? # Show Terminal shortcuts"
-	"${MAIN_DOT}vi <regex>? # Show vi shortcuts (\`mv\` reserved)"
+	"${MAIN_DOT}V <regex>? # Show vi shortcuts (\`mv\` reserved)"
 	''
 	"${MAIN_DOT}q # (Reserved: Message queue)"
 	"${MAIN_DOT}v # (Reserved: Move files)"
@@ -164,7 +164,7 @@ function main_keymap_t {
 }
 
 source "$ZSHRC_SRC_DIR/$MAIN_NAMESPACE/$MAIN_NAMESPACE.vi.zsh"
-function main_keymap_vi {
+function main_keymap_V {
 	local description=$*
 	main_helpers_show_default_keyboard_shortcuts 'vi' "$description"
 }
