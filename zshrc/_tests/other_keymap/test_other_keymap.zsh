@@ -858,7 +858,7 @@ function test__other_keymap_w {
 	#	Append to temp file
 	other_keymap_w 0.1 "date +%s%N >> $log" &
 	local pid=$!
-	sleep 0.35
+	sleep 0.4
 	kill $pid 2>/dev/null
 	wait $pid 2>/dev/null
 

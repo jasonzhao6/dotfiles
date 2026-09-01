@@ -132,6 +132,7 @@ function test__main_keymap_w__when_specifying_a_special_char {
 	)" "$(
 		cat <<-eof
 
+		  $ s.- # SSM: Copy history bindings
 		  $ m.- # Show stats
 
 		  ^cmd--       # Collapse all

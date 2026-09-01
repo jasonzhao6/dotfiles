@@ -130,7 +130,7 @@ All Namespaces
   $ mn  # App defaults: main_keymap.notion.zsh
   $ ms  # App defaults: main_keymap.slack.zsh
   $ mt  # App defaults: main_keymap.terminal.zsh
-  $ mvi # App defaults: main_keymap.vi.zsh
+  $ mV  # App defaults: main_keymap.vi.zsh
 ```
 
 ### Example #2: Print the Terraform keymap usage with `t`

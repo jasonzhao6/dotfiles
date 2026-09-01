@@ -2,7 +2,7 @@ Keymap: aws_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .  <p>  y   |   f   g  (c)  r   l   /   =   \ 
-     (a) (o) (e) <u>  i   |   d  <h> <t> (n) (s)  - 
+     (a) (o) (e) <u>  i   |   d  <h> <t> (n) (s) <->
       ;  (q)  j   k   x   |   b  (m) (w)  v   z 
 
   `<>` initials have only one key mapping
@@ -40,6 +40,7 @@ Keymap List
   $ s.o                         # SSM start session with `sudo -i`
   $ s.oc                        # SSM start session with command
   $ s.oo                        # SSM start session
+  $ s.-                         # SSM: Copy history bindings
 
   $ s.c <name>                  # Code Pipeline search
   $ s.cc <name>                 # Code Pipeline get latest status

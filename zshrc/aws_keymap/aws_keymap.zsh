@@ -18,6 +18,7 @@ AWS_KEYMAP=(
 	"${AWS_DOT}o # SSM start session with \`sudo -i\`"
 	"${AWS_DOT}oc # SSM start session with command"
 	"${AWS_DOT}oo # SSM start session"
+	"${AWS_DOT}- # SSM: Copy history bindings"
 	''
 	"${AWS_DOT}c <name> # Code Pipeline search"
 	"${AWS_DOT}cc <name> # Code Pipeline get latest status"
@@ -79,6 +80,10 @@ AWS_KEYMAP_PP_STATUS='stageStates[-1].actionStates[-1].latestExecution.status'
 AWS_KEYMAP_PP_TIMESTAMP='stageStates[-1].actionStates[-1].latestExecution.lastStatusChange'
 AWS_KEYMAP_SC_REGEX="(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
 AWS_URL="https://$AWS_DEFAULT_REGION.console.aws.amazon.com"
+
+function aws_keymap_- {
+	aws_helpers_copy_history_bindings
+}
 
 function aws_keymap_a {
 	local name=$1

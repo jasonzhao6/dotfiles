@@ -37,7 +37,7 @@ SHORTCUT_NAMESPACES=(
 	"${MAIN_ALIAS}n # App defaults: main_keymap.notion.zsh"
 	"${MAIN_ALIAS}s # App defaults: main_keymap.slack.zsh"
 	"${MAIN_ALIAS}t # App defaults: main_keymap.terminal.zsh"
-	"${MAIN_ALIAS}vi # App defaults: main_keymap.vi.zsh"
+	"${MAIN_ALIAS}V # App defaults: main_keymap.vi.zsh"
 )
 
 keymap_init $MAIN_NAMESPACE $MAIN_ALIAS "${MAIN_KEYMAP[@]}"
