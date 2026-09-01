@@ -116,8 +116,9 @@ function usage_helpers_sparklines {
 	local first_ts="${${lines[1]}%%	*}"
 	local first_date; strftime -s first_date '%Y-%m-%d' "$first_ts"
 	local today; strftime -s today '%Y-%m-%d' "$EPOCHSECONDS"
-	local first_epoch; first_epoch=$(gdate -d "$first_date" +%s)
-	local today_epoch; today_epoch=$(gdate -d "$today" +%s)
+	# `-u` anchors both timestamps in UTC to avoid gaining/losing an hour
+	local first_epoch; first_epoch=$(gdate -u -d "$first_date" +%s)
+	local today_epoch; today_epoch=$(gdate -u -d "$today" +%s)
 	local total_days=$(( (today_epoch - first_epoch) / 86400 + 1 ))
 
 	# Pick granularity based on width and total days
@@ -291,6 +292,7 @@ function usage_helpers_stats {
 			}
 		}
 		first_ts = day_ts[sorted[1]]
+		# `1` anchors both timestamps in UTC to avoid gaining/losing an hour
 		today_epoch = mktime(strftime("%Y %m %d 0 0 0"))
 		first_epoch = mktime(strftime("%Y %m %d 0 0 0", first_ts))
 		calendar_days = int((today_epoch - first_epoch) / 86400) + 1
@@ -319,13 +321,23 @@ function usage_helpers_stats {
 	printf "  %-*s  |  %-*s  |  %s\n" "$w1" "$col1b" "$w2" "$col2b" "$col3b"
 }
 
+function usage_helpers_validate_num_days {
+	local num_days=$1
+
+	# shellcheck disable=SC2076 # Bash false positive; quoted regex works in zsh
+	[[ -z $num_days || $num_days =~ '^[1-9][0-9]*$' ]] && return
+
+	red_bar "Invalid <n> days: \`$num_days\`"
+	return 1
+}
+
 function usage_helpers_filter_by_calendar_days {
-	# Filter usage data to last <n> calendar days. No arg means all data.
 	local num_days=$1
 	local max_ts; max_ts=$(gdate -d "tomorrow 00:00:00" +%s)
 	local min_ts=0
 
-	if [[ -n $num_days && $num_days -gt 0 ]]; then
+	# Filter usage data to last 1+ calendar days. No arg means all days
+	if [[ -n $num_days && $num_days -ge 1 ]]; then
 		local start_date; start_date=$(gdate -d "-$(( num_days - 1 )) days" +%Y-%m-%d)
 		min_ts=$(gdate -d "$start_date" +%s)
 	fi

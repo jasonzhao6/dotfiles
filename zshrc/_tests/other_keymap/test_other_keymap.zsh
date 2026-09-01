@@ -30,7 +30,8 @@ function test__other_keymap_b {
 	)"
 }
 
-function test__other_keymap_d {	assert "$(
+function test__other_keymap_d {
+	assert "$(
 		other_keymap_d www.google.com
 	)" "$(
 		cat <<-eof
@@ -76,7 +77,8 @@ function test__other_keymap_d__with_protocol_and_path {
 	)"
 }
 
-function test__other_keymap_f {	assert "$(
+function test__other_keymap_f {
+	assert "$(
 		other_keymap_f 3 4 echo ~~ 2>&1
 	)" "$(
 		cat <<-eof
@@ -565,7 +567,8 @@ function test__other_keymap_ix__with_a_quoted_cell {
 	)"
 }
 
-function test__other_keymap_k {	assert "$(
+function test__other_keymap_k {
+	assert "$(
 		OTHER_TERMINAL_DUMP_DIR="/tmp/test__other_keymap_k"
 		rm -rf $OTHER_TERMINAL_DUMP_DIR
 
@@ -869,6 +872,7 @@ function test__other_keymap_w {
 }
 
 function test__other_keymap_x {
+	# Expect to see file1's 2nd column in output
 	local file1; file1=$(
 		cat <<-eof
 			a,10
@@ -878,10 +882,11 @@ function test__other_keymap_x {
 		eof
 	)
 
+	# Expect to not see file2's 2nd column in output
 	local file2; file2=$(
 		cat <<-eof
-			b
-			d
+			b,200
+			d,400
 		eof
 	)
 

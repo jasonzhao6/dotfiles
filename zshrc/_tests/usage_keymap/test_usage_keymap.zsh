@@ -163,6 +163,19 @@ function test__usage_keymap_d__with_n_days {
 	)" '1'
 }
 
+function test__usage_keymap_d__with_a_non_numeric_arg {
+	assert "$(
+		local now; now=$EPOCHSECONDS
+
+		printf '%s\tgc\n' "$(( now - 9 * 86400 ))" > "$KEYMAP_USAGE_FILE"
+		printf '%s\tgd\n' "$now" >> "$KEYMAP_USAGE_FILE"
+
+		# `usage_helpers_validate_num_days` holds the guard, so `d`, `dd`, `h`, `hh`
+		# and `u` all reject a malformed `<n>` from one place
+		usage_keymap_d 5x
+	)" "$(red_bar 'Invalid <n> days: `5x`')"
+}
+
 function test__usage_keymap_d__shows_all_7_days {
 	assert "$(
 
@@ -261,6 +274,21 @@ function test__usage_keymap_hh {
 		cat <<-eof
 			09 2
 			14 1
+		eof
+	)"
+}
+
+function test__usage_keymap_m {
+	assert "$(
+		function mate { print -l mate "$@"; }
+
+		printf '1000000000\tgd\n' > "$KEYMAP_USAGE_FILE"
+
+		usage_keymap_m
+	)" "$(
+		cat <<-eof
+			mate
+			$KEYMAP_USAGE_FILE
 		eof
 	)"
 }
@@ -461,6 +489,19 @@ function test__usage_keymap_u__with_n_days {
 	)" '1'
 }
 
+function test__usage_keymap_u__with_a_non_numeric_arg {
+	assert "$(
+		local now; now=$EPOCHSECONDS
+
+		printf '%s\tgc\n' "$(( now - 9 * 86400 ))" > "$KEYMAP_USAGE_FILE"
+		printf '%s\tgd\n' "$now" >> "$KEYMAP_USAGE_FILE"
+
+		# Errors rather than silently reporting all days, since `<n>` has no second
+		# meaning here, unlike `u.a`/`u.n` where a string is a match filter
+		usage_keymap_u 5x
+	)" "$(red_bar 'Invalid <n> days: `5x`')"
+}
+
 function test__usage_keymap_u__auto_granularity_daily {
 	assert "$(
 		local now; now=$EPOCHSECONDS
@@ -500,57 +541,50 @@ function test__usage_keymap_u__auto_granularity_weekly {
 	assert "$(
 		local now; now=$EPOCHSECONDS
 
-		# 10 days of data with COLUMNS=12 (width=8); 10 > 8 forces weekly
+		# 10 days with COLUMNS=12 (width=7); 10 days > 7, but 2 weeks <= 7
 		export COLUMNS=12
 		printf '%s\tgd\n' "$(( now - 9 * 86400 ))" > "$KEYMAP_USAGE_FILE"
 		printf '%s\tgd\n' "$now" >> "$KEYMAP_USAGE_FILE"
 
-		local sparkline_len; sparkline_len=$(usage_keymap_u | bw | grep -v '^ *$' | tail -3 | head -1 | sed 's/^ *//' | wc -m | tr -d ' ')
-		[[ $sparkline_len -lt 10 ]] && echo 1
-	)" '1'
+		usage_keymap_u | bw | tail -1 | awk '{print $2}'
+	)" 'weekly'
 }
 
 function test__usage_keymap_u__auto_granularity_monthly {
 	assert "$(
 		local now; now=$EPOCHSECONDS
 
-		# 60 days of data with COLUMNS=10 (width=6); 60 days > 6, ~9 weeks > 6, but ~2 months <= 6
+		# 60 days with COLUMNS=10 (width=5); 60 days and 9 weeks both > 5, but 3 months <= 5
 		export COLUMNS=10
 		printf '%s\tgd\n' "$(( now - 59 * 86400 ))" > "$KEYMAP_USAGE_FILE"
 		printf '%s\tgd\n' "$now" >> "$KEYMAP_USAGE_FILE"
 
-		local sparkline_len; sparkline_len=$(usage_keymap_u | bw | grep -v '^ *$' | tail -3 | head -1 | sed 's/^ *//' | wc -m | tr -d ' ')
-		[[ $sparkline_len -le 6 ]] && echo 1
-	)" '1'
+		usage_keymap_u | bw | tail -1 | awk '{print $2}'
+	)" 'monthly'
 }
 
 function test__usage_keymap_u__auto_granularity_quarterly {
 	assert "$(
 		local now; now=$EPOCHSECONDS
 
-		# 400 days of data with COLUMNS=6 (width=2); 400 days, ~13 months > 2, but ~5 quarters > 2, need tighter
-		# Use COLUMNS=7 (width=3); ~13 months > 3, ~5 quarters > 3, ~2 years <= 3... no
-		# Better: 200 days with COLUMNS=8 (width=4); ~7 months > 4, ~3 quarters <= 4
+		# 200 days with COLUMNS=8 (width=3); 7 months > 3, but 3 quarters <= 3
 		export COLUMNS=8
 		printf '%s\tgd\n' "$(( now - 199 * 86400 ))" > "$KEYMAP_USAGE_FILE"
 		printf '%s\tgd\n' "$now" >> "$KEYMAP_USAGE_FILE"
 
-		# Sparkline should have <= 4 chars (quarterly buckets)
-		local sparkline_len; sparkline_len=$(usage_keymap_u | bw | grep -v '^ *$' | tail -3 | head -1 | sed 's/^ *//' | wc -m | tr -d ' ')
-		[[ $sparkline_len -le 6 ]] && echo 1
-	)" '1'
+		usage_keymap_u | bw | tail -1 | awk '{print $2}'
+	)" 'quarterly'
 }
 
 function test__usage_keymap_u__auto_granularity_yearly {
 	assert "$(
 		local now; now=$EPOCHSECONDS
 
-		# 400 days of data with COLUMNS=5 (width=1); forces yearly
+		# 400 days with COLUMNS=5 (width clamps to 1); 5 quarters > 1 forces yearly
 		export COLUMNS=5
 		printf '%s\tgd\n' "$(( now - 399 * 86400 ))" > "$KEYMAP_USAGE_FILE"
 		printf '%s\tgd\n' "$now" >> "$KEYMAP_USAGE_FILE"
 
-		local sparkline_len; sparkline_len=$(usage_keymap_u | bw | grep -v '^ *$' | tail -3 | head -1 | sed 's/^ *//' | wc -m | tr -d ' ')
-		[[ $sparkline_len -le 4 ]] && echo 1
-	)" '1'
+		usage_keymap_u | bw | tail -1 | awk '{print $2}'
+	)" 'yearly'
 }

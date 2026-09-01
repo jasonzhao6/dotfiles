@@ -32,6 +32,18 @@ function test__1 {
 	)"
 }
 
+function test__4 {
+	assert "$(
+		echo "$test__input" | args_keymap_s > /dev/null
+		4 echo 2>&1
+	)" "$(
+		cat <<-eof
+			echo terraform-application-region-program-A
+			terraform-application-region-program-A
+		eof
+	)"
+}
+
 function test__5 {
 	assert "$(
 		echo "$test__input" | args_keymap_s > /dev/null

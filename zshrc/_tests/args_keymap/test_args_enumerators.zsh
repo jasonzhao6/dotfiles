@@ -23,14 +23,14 @@ function test__all {
 
 	# Note: Needed to widen gaps in order to parallelize test executions
 	assert "$(
-		printf '0.03\n0.10\n0.30' | args_keymap_s > /dev/null
+		printf '0.05\n0.20\n0.40' | args_keymap_s > /dev/null
 		all test__all__sleep_and_echo 2> /dev/null
 	)" "$(
 		cat <<-eof
 
-			0.03
-			0.10
-			0.30
+			0.05
+			0.20
+			0.40
 		eof
 	)"
 }

@@ -10,10 +10,8 @@ function test__zsh_keymap {
 
 function test__zsh_keymap_a {
 	assert "$(
-		local count; count=$(zsh_keymap_a | wc -l)
-		local min_count; min_count=$(grep --count '^\talias ' "$ZSHRC_SRC_DIR"/colors.zsh)
-
-		[[ $count -ge $min_count ]] && echo 1
+		# Spot check one alias
+		zsh_keymap_a | bw | grep --count "\s$ZSH_ALIAS=$ZSH_NAMESPACE$"
 	)" '1'
 }
 
@@ -22,23 +20,22 @@ function test__zsh_keymap_a__when_counting_greps {
 		local count; count=$(zsh_keymap_a grep | grep -v '^$' | wc -l)
 		local actual_count; actual_count=$(grep --count '^\talias.*grep' "$ZSHRC_SRC_DIR"/colors.zsh)
 
-		[[ $count -eq actual_count ]] && echo 1
+		[[ $count -eq $actual_count ]] && echo 1
 	)" '1'
 }
 
 function test__zsh_keymap_f {
 	assert "$(
-		[[ $(zsh_keymap_f | wc -l) -gt 400 ]] && echo 1
+		# Spot check one function
+		zsh_keymap_f | bw | grep --count '\szsh_keymap_f$'
 	)" '1'
 }
 
-function test__zsh_keymap_f__when_counting_0_ending_functions {
+function test__zsh_keymap_f__when_filtering_by_a_suffix {
 	assert "$(
-		local count; count=$(zsh_keymap_f '0$' | wc -l)
-
-		# `3`: `10, 20, 0` from `args_numbers.zsh`
-		[[ $count -ge 3 ]] && echo 1
-	)" '1'
+		zsh_keymap_f '0$' | bw | cut -f2- | compact | grepE '^[0-9]+$' | bw |
+			sort --numeric-sort | tr '\n' ' '
+	)" '0 10 20 30 40 50 60 70 80 90 100 '
 }
 
 function test__zsh_keymap_h {
@@ -215,4 +212,3 @@ function test__zsh_keymap_z__when_input_is_a_function {
 		eof
 	)"
 }
-

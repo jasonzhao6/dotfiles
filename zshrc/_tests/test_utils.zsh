@@ -166,7 +166,7 @@ function test__encode_url {
 }
 
 function test__extract_urls {
-	local url='http://example.com'
+	local url='https://example.com'
 	assert "$(echo $url | extract_urls)" "$(grepP_color "$url")"
 }
 
@@ -181,7 +181,7 @@ function test__extract_urls__with_www {
 }
 
 function test__extract_urls__with_http {
-	local url='http://www.example.com'
+	local url='http://example.com'
 	assert "$(echo $url | extract_urls)" "$(grepP_color "$url")"
 }
 

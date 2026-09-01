@@ -174,6 +174,8 @@ function usage_keymap_d {
 	# Respect the capture-time zone: shift each epoch by its stored `%z` offset so a
 	# day worked abroad lands on the weekday you actually worked it.
 	local num_days=$1
+	usage_helpers_validate_num_days "$num_days" || return
+
 	local filtered; filtered=$(usage_helpers_filter_by_calendar_days "$num_days")
 
 	echo
@@ -187,6 +189,8 @@ function usage_keymap_dd {
 	# Ignore the stored offset: render every epoch in the machine's current zone
 	# (the pre-offset behavior), so a day abroad maps onto the local weekday.
 	local num_days=$1
+	usage_helpers_validate_num_days "$num_days" || return
+
 	local filtered; filtered=$(usage_helpers_filter_by_calendar_days "$num_days")
 
 	echo
@@ -200,6 +204,8 @@ function usage_keymap_h {
 	# Respect the capture-time zone: shift each epoch by its stored `%z` offset
 	# so hours abroad land on the wall-clock hour you actually worked.
 	local num_days=$1
+	usage_helpers_validate_num_days "$num_days" || return
+
 	local filtered; filtered=$(usage_helpers_filter_by_calendar_days "$num_days")
 
 	echo
@@ -213,6 +219,8 @@ function usage_keymap_hh {
 	# Ignore the stored offset: render every epoch in the machine's current zone
 	# (the pre-offset behavior), so hours abroad map onto local clock positions.
 	local num_days=$1
+	usage_helpers_validate_num_days "$num_days" || return
+
 	local filtered; filtered=$(usage_helpers_filter_by_calendar_days "$num_days")
 
 	echo
@@ -385,7 +393,7 @@ function usage_keymap_tt {
 
 function usage_keymap_u {
 	local num_days=$1
-	[[ -n $num_days && $num_days -le 0 ]] && num_days=''
+	usage_helpers_validate_num_days "$num_days" || return
 
 	local filtered; filtered=$(usage_helpers_filter_by_calendar_days "$num_days")
 	local sparkline_width=$(( COLUMNS - 5 ))

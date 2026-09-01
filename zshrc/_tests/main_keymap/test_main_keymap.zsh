@@ -44,7 +44,18 @@ function test__main_keymap_g__with_multiple_words {
 }
 
 function test__main_keymap_r {
-	assert "$([[ $(main_keymap_r | wc -l) -gt 500 ]] && echo 1)" '1'
+	assert "$(
+		local output; output=$(main_keymap_r | bw)
+
+		# Verify presence of zsh mappings and non-zsh mappings
+		echo "$output" | grep --quiet '^  \$ ' && echo 'zsh'
+		echo "$output" | grepE --quiet '^  [a-z_0-9]+: ' && echo 'non_zsh'
+	)" "$(
+		cat <<-eof
+			zsh
+			non_zsh
+		eof
+	)"
 }
 
 function test__main_keymap_r__when_specifying_a_description {

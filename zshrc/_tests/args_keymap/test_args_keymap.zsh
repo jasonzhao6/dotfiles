@@ -1207,7 +1207,7 @@ function test__args_keymap_u__when_undoing_then_redoing_then_undoing_again_with_
 	)"
 }
 
-function test__args_keymap_uu__when_undoing_empty_history {
+function test__args_keymap_uu__when_redoing_empty_history {
 	assert "$(
 		args_keymap_hc
 		args_keymap_uu
