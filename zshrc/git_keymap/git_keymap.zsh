@@ -59,17 +59,20 @@ function git_keymap {
 	local branch=$1
 
 	# If arg is a branch in a git repo, check it out
-	if [[ -n $branch ]] && git status > /dev/null 2>&1; then
-	  # If single-branch clone, fix to allow fetching all branches
-  	if [[ $(git config --get remote.origin.fetch) != *'*'* ]]; then
-			git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+	if [[ -n $branch ]] && git rev-parse --git-dir > /dev/null 2>&1; then
+		# Fetch only when the branch is not local yet; a fetch is a ~800ms round trip
+		if ! git rev-parse --verify --quiet "refs/heads/$branch" > /dev/null; then
+			# If single-branch clone, fix to allow fetching all branches
+			if [[ $(git config --get remote.origin.fetch) != *'*'* ]]; then
+				git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+			fi
+
+			git fetch origin "$branch" 2> /dev/null
 		fi
 
-		# Fetch the specific branch and checkout
-		if git fetch origin "$branch" 2> /dev/null; then
-			if git checkout "$branch" 2> /dev/null; then
-				return
-			fi
+		# Checkout, whether the branch is remote-only or local-only
+		if git checkout "$branch" 2> /dev/null; then
+			return
 		fi
 	fi
 
