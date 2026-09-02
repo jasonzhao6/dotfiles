@@ -10,6 +10,8 @@ function test__terraform_keymap {
 
 function test__terraform_keymap_a__with_tfplan {
 	assert "$(
+		function read { return 0; }
+
 		local home=$HOME
 		HOME="/tmp/test__terraform_keymap_a__with_tfplan"
 		mkdir -p $HOME/project
@@ -69,6 +71,8 @@ function test__terraform_keymap_a__with_stale_tfplan {
 
 function test__terraform_keymap_a__with_max_age {
 	assert "$(
+		function read { return 0; }
+
 		local home=$HOME
 		HOME="/tmp/test__terraform_keymap_a__with_max_age"
 		mkdir -p $HOME/project
@@ -162,6 +166,29 @@ function test__terraform_keymap_cc {
 			cache_absent
 		eof
 	)"
+}
+
+function test__terraform_keymap_d__with_confirmed {
+	assert "$(
+		function read { return 0; }
+		function terraform { echo "terraform $*"; }
+
+		terraform_keymap_d 2>&1
+	)" "$(
+		echo
+		echo
+		echo
+		echo 'terraform destroy'
+	)"
+}
+
+function test__terraform_keymap_d__with_denied {
+	assert "$(
+		function read { return 1; }
+		function terraform { echo 'SHOULD NOT BE CALLED'; }
+
+		terraform_keymap_d 2>&1
+	)" ''
 }
 
 function test__terraform_keymap_m__with_diff {
@@ -391,6 +418,29 @@ function test__terraform_keymap_p__drops_stale_tfplan {
 			tfplan_absent
 		eof
 	)"
+}
+
+function test__terraform_keymap_sd__with_confirmed {
+	assert "$(
+		function read { return 0; }
+		function terraform { echo "terraform $*"; }
+
+		terraform_keymap_sd 'aws_instance.foo' 2>&1
+	)" "$(
+		echo
+		echo
+		echo
+		echo 'terraform state rm aws_instance.foo'
+	)"
+}
+
+function test__terraform_keymap_sd__with_denied {
+	assert "$(
+		function read { return 1; }
+		function terraform { echo 'SHOULD NOT BE CALLED'; }
+
+		terraform_keymap_sd 'aws_instance.foo' 2>&1
+	)" ''
 }
 
 function test__terraform_keymap_t {

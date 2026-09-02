@@ -79,6 +79,7 @@ function terraform_keymap_a {
 	fi
 
 	local age=$(( $(date +%s) - $(stat -f %m tfplan) ))
+	echo
 	gray_fg "tfplan is $(( age / 60 ))m $(( age % 60 ))s old"
 
 	# Reject a plan left idle too long, as it may no longer match reality
@@ -86,6 +87,8 @@ function terraform_keymap_a {
 		red_bar "tfplan is stale (max ${max_age}m)"
 		return 1
 	fi
+
+	confirm 'Apply tfplan' || return 1
 
 	terraform apply tfplan
 }
@@ -99,6 +102,8 @@ function terraform_keymap_cc {
 }
 
 function terraform_keymap_d {
+	confirm 'Terraform destroy' || return 1
+
 	terraform destroy
 }
 
@@ -201,6 +206,8 @@ function terraform_keymap_s {
 
 function terraform_keymap_sd {
 	local state=$1
+
+	confirm "Delete state '$state'" || return 1
 
 	terraform state rm "$state"
 }

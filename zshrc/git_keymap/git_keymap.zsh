@@ -186,6 +186,8 @@ function git_keymap_f {
 }
 
 function git_keymap_ff {
+	confirm 'Force push' || return 1
+
 	git push --force
 }
 
@@ -205,6 +207,8 @@ function git_keymap_l {
 }
 
 function git_keymap_lc {
+	confirm 'Clear all stashes' || return 1
+
 	git stash clear
 }
 
@@ -295,6 +299,10 @@ function git_keymap_yy {
 
 function git_keymap_z {
 	local number=$1
+
+	local action='Discard changes'
+	[[ -n $number ]] && action+=" and $number commit(s)"
+	confirm "$action" || return 1
 
 	if [[ -n $number ]]; then
 		git_keymap_u "$number"

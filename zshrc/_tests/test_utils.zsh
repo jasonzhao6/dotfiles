@@ -12,6 +12,30 @@ test__ls_dash_l=$(
 	eof
 )
 
+function test__confirm__with_yes {
+	assert "$(
+		function read { return 0; }
+		confirm 'Delete everything' && echo 'confirmed'
+	)" "$(
+		echo
+		echo
+		echo
+		echo 'confirmed'
+	)"
+}
+
+function test__confirm__with_no {
+	assert "$(
+		function read { return 1; }
+		confirm 'Delete everything' || echo 'denied'
+	)" "$(
+		echo
+		echo
+		echo
+		echo 'denied'
+	)"
+}
+
 function test__caller {
 	assert "$(caller)" '(eval)'
 }

@@ -4,12 +4,7 @@ function aws_helpers_confirm_if_prod {
 	aws_helpers_is_prod || return 0
 
 	red_bar "PROD ($AWS_PROFILE)"
-	echo
-	read -q "REPLY?$action? [y/N] "
-	local confirmed=$?
-	echo
-
-	return $confirmed
+	confirm "$action"
 }
 
 function aws_helpers_copy_history_bindings {

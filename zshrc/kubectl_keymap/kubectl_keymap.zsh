@@ -169,6 +169,8 @@ function kubectl_keymap_h {
 function kubectl_keymap_hd {
 	local pod="$1"
 
+	confirm "Delete pod '$pod'" || return 1
+
 	kubectl delete pod "$pod"
 }
 

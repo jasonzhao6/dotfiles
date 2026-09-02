@@ -2,6 +2,21 @@
 # Utils
 #
 
+# Generic confirmation prompt for destructive actions
+# Returns 0 (success) if confirmed, 1 (failure) if denied
+function confirm {
+	local action=$*
+
+	echo
+	# shellcheck disable=SC2162 # `read -q` is the zsh-specific single-char read, -r is not needed
+	read -q "REPLY?$action? [y/N] "
+	local confirmed=$?
+	echo
+	echo
+
+	return $confirmed
+}
+
 function caller {
 	# shellcheck disable=SC2154 # Allow zsh-specific special var
 	echo "${funcstack[3]}"

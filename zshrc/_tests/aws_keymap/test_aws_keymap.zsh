@@ -27,6 +27,7 @@ function test__aws_keymap_md__with_prod_confirmed {
 		red_bar 'PROD (acme-prod.some-role)'
 		echo
 		echo
+		echo
 		echo 'deleted'
 	)"
 }
@@ -48,6 +49,7 @@ function test__aws_keymap_md__with_prod_denied {
 		AWS_PROFILE=$orig_profile
 	)" "$(
 		red_bar 'PROD (acme-prod.some-role)'
+		echo
 		echo
 		echo
 	)"
@@ -131,11 +133,12 @@ function test__aws_keymap_qp__with_prod_confirmed {
 		red_bar 'PROD (acme-prod.some-role)'
 		echo
 		echo
+		echo
 		echo 'purged'
 	)"
 }
 
-function test__aws_keymap_qp__with_prod_denied {
+function test__aws_keymap_qp__with_denied {
 	assert "$(
 		local orig=$AWS_ACCOUNTS_TSV
 		AWS_ACCOUNTS_TSV=/tmp/test__aws_keymap_qp.tsv
@@ -152,6 +155,7 @@ function test__aws_keymap_qp__with_prod_denied {
 		AWS_PROFILE=$orig_profile
 	)" "$(
 		red_bar 'PROD (acme-prod.some-role)'
+		echo
 		echo
 		echo
 	)"
