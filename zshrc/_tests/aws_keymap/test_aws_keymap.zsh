@@ -8,6 +8,51 @@ function test__aws_keymap {
 	)" '1'
 }
 
+function test__aws_keymap_md__with_prod_confirmed {
+	assert "$(
+		local orig=$AWS_ACCOUNTS_TSV
+		AWS_ACCOUNTS_TSV=/tmp/test__aws_keymap_md.tsv
+		printf 'acme-prod\t111111111111\tprod\n' > "$AWS_ACCOUNTS_TSV"
+		local orig_profile=$AWS_PROFILE
+		AWS_PROFILE=acme-prod.some-role
+
+		function read { return 0; }
+		function aws { echo 'deleted'; }
+		aws_keymap_md my-secret
+
+		rm -f "$AWS_ACCOUNTS_TSV"
+		AWS_ACCOUNTS_TSV=$orig
+		AWS_PROFILE=$orig_profile
+	)" "$(
+		red_bar 'PROD (acme-prod.some-role)'
+		echo
+		echo
+		echo 'deleted'
+	)"
+}
+
+function test__aws_keymap_md__with_prod_denied {
+	assert "$(
+		local orig=$AWS_ACCOUNTS_TSV
+		AWS_ACCOUNTS_TSV=/tmp/test__aws_keymap_md.tsv
+		printf 'acme-prod\t111111111111\tprod\n' > "$AWS_ACCOUNTS_TSV"
+		local orig_profile=$AWS_PROFILE
+		AWS_PROFILE=acme-prod.some-role
+
+		function read { return 1; }
+		function aws { echo 'SHOULD NOT BE CALLED'; }
+		aws_keymap_md my-secret
+
+		rm -f "$AWS_ACCOUNTS_TSV"
+		AWS_ACCOUNTS_TSV=$orig
+		AWS_PROFILE=$orig_profile
+	)" "$(
+		red_bar 'PROD (acme-prod.some-role)'
+		echo
+		echo
+	)"
+}
+
 function test__aws_keymap_mg__with_mysql_cred {
 	assert "$(
 		function aws { echo '{"engine":"mysql","host":"db.example.com","port":3306,"username":"admin","password":"hunter2"}'; }
@@ -65,6 +110,51 @@ function test__aws_keymap_mg__with_plain_text_secret {
 		function aws { echo 'hunter2'; }
 		aws_keymap_mg my-secret
 	)" 'hunter2'
+}
+
+function test__aws_keymap_qp__with_prod_confirmed {
+	assert "$(
+		local orig=$AWS_ACCOUNTS_TSV
+		AWS_ACCOUNTS_TSV=/tmp/test__aws_keymap_qp.tsv
+		printf 'acme-prod\t111111111111\tprod\n' > "$AWS_ACCOUNTS_TSV"
+		local orig_profile=$AWS_PROFILE
+		AWS_PROFILE=acme-prod.some-role
+
+		function read { return 0; }
+		function aws { echo 'purged'; }
+		aws_keymap_qp my-queue-url
+
+		rm -f "$AWS_ACCOUNTS_TSV"
+		AWS_ACCOUNTS_TSV=$orig
+		AWS_PROFILE=$orig_profile
+	)" "$(
+		red_bar 'PROD (acme-prod.some-role)'
+		echo
+		echo
+		echo 'purged'
+	)"
+}
+
+function test__aws_keymap_qp__with_prod_denied {
+	assert "$(
+		local orig=$AWS_ACCOUNTS_TSV
+		AWS_ACCOUNTS_TSV=/tmp/test__aws_keymap_qp.tsv
+		printf 'acme-prod\t111111111111\tprod\n' > "$AWS_ACCOUNTS_TSV"
+		local orig_profile=$AWS_PROFILE
+		AWS_PROFILE=acme-prod.some-role
+
+		function read { return 1; }
+		function aws { echo 'SHOULD NOT BE CALLED'; }
+		aws_keymap_qp my-queue-url
+
+		rm -f "$AWS_ACCOUNTS_TSV"
+		AWS_ACCOUNTS_TSV=$orig
+		AWS_PROFILE=$orig_profile
+	)" "$(
+		red_bar 'PROD (acme-prod.some-role)'
+		echo
+		echo
+	)"
 }
 
 function test__aws_keymap_s {

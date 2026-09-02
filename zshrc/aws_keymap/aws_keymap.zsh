@@ -156,6 +156,8 @@ function aws_keymap_m {
 function aws_keymap_md {
 	local name=$1
 
+	aws_helpers_confirm_if_prod "Delete secret '$name'" || return 1
+
 	aws secretsmanager delete-secret \
 		--region "$AWS_DEFAULT_REGION" \
 		--secret-id "$name" \
@@ -267,6 +269,8 @@ function aws_keymap_qg {
 
 function aws_keymap_qp {
 	local url=$1
+
+	aws_helpers_confirm_if_prod "Purge queue '$url'" || return 1
 
 	aws sqs purge-queue \
 		--region "$AWS_DEFAULT_REGION" \

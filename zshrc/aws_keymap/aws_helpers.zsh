@@ -1,9 +1,25 @@
+function aws_helpers_confirm_if_prod {
+	local action=$*
+
+	aws_helpers_is_prod || return 0
+
+	red_bar "PROD ($AWS_PROFILE)"
+	echo
+	read -q "REPLY?$action? [y/N] "
+	local confirmed=$?
+	echo
+
+	return $confirmed
+}
+
 function aws_helpers_copy_history_bindings {
 	cat <<-eof | pbcopy
 
 		bind '"\e[A": history-search-backward'
 		bind '"\e[B": history-search-forward'
 	eof
+
+	green_bar 'History bindings copied to pasteboard'
 }
 
 function aws_helpers_ec2_args {
@@ -37,6 +53,14 @@ function aws_helpers_ec2_name_to_id {
 		--filters "Name=tag:Name, Values=$name" \
 		--query 'Reservations[].Instances[].InstanceId' \
 		--output text
+}
+
+function aws_helpers_is_prod {
+	local account_name=${AWS_PROFILE%%.*}
+	[[ -z $account_name ]] && return 1
+
+	local env; env=$(awk -F'\t' -v name="$account_name" '$1 == name { print $3 }' "$AWS_ACCOUNTS_TSV")
+	[[ $env == 'prod' ]]
 }
 
 function aws_helpers_mysql_string {

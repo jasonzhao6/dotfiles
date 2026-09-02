@@ -1,6 +1,6 @@
 Test stats:
-- 492/492 keymap tests passed
+- 496/496 keymap tests passed
 - 321/321 keymap descriptions are at most 40 characters
 - 309/309 keymap entries and implementations matched
 - 309/309 implementations are alphabetized
-- 166/166 implementations and tests are in same order
+- 168/168 implementations and tests are in same order
