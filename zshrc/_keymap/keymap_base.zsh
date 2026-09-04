@@ -362,9 +362,11 @@ function keymap_print_entry {
 	# If command is a non-zsh keymap that contains `\` escape char, do not print it
 	command=${command/-\\/-}
 
-	# Print with color
+	# Print each line with inline gray fg to avoid with forking a subshell per line
+	local colored_comment=$'\e[90m'"$comment"$'\e[0m'
+
 	if [[ -n $command || -n $comment ]]; then
-		printf "%s%-*s %s\n" "$prompt" "$command_size" "$command" "$(gray_fg "$comment")"
+		printf "%s%-*s %s\n" "$prompt" "$command_size" "$command" "$colored_comment"
 
 	# Allow empty line as separators between different sections of a keymap
 	else
