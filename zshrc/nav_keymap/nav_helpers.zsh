@@ -32,7 +32,7 @@ function nav_helpers_copied_path {
 
 function nav_helpers_cd_if_only_match {
 	if [[ $(args_history_current | wc -l | tr -d ' ') -eq 1 ]]; then
-		echo; dashes 5
+		echo; echo "$(yellow_fg '$') 1 n"
 		cd "$(args_history_current | bw)" && nav_keymap_n || true
 	fi
 }
