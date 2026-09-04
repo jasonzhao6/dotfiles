@@ -18,21 +18,43 @@ test__input_with_comments=$(
 )
 
 function test__all {
-	# shellcheck disable=SC2317 # invoked by name via `all` (the enumerator under test), not called directly
-	function test__all__sleep_and_echo { sleep "$@"; echo "$@"; }
+	local sync_dir; sync_dir=$(mktemp -d)
 
-	# Note: Needed to widen gaps in order to parallelize test executions
+	# Fix for flaky test / race condition: instead of racing 3 independent
+	# `sleep` wake-ups, chain each release to the prior turn's actual completion
+	(
+		while [[ ! -f "$sync_dir/1.done" ]]; do sleep 0.01; done
+		touch "$sync_dir/2"
+		while [[ ! -f "$sync_dir/2.done" ]]; do sleep 0.01; done
+		touch "$sync_dir/3"
+	) &
+	local releaser_pid=$!
+
+	# shellcheck disable=SC2317 # invoked by name via `all` (the enumerator under test), not directly
+	function test__all__wait_for_turn {
+		local turn=$1
+
+		# The first turn isn't gated; it just marks itself done when finished
+		[[ $turn != 1 ]] && while [[ ! -f "$sync_dir/$turn" ]]; do sleep 0.01; done
+
+		echo "$turn"
+		touch "$sync_dir/$turn.done"
+	}
+
 	assert "$(
-		printf '0.05\n0.20\n0.40' | args_keymap_s > /dev/null
-		all test__all__sleep_and_echo 2> /dev/null
+		printf '1\n2\n3' | args_keymap_s > /dev/null
+		all test__all__wait_for_turn 2> /dev/null
 	)" "$(
 		cat <<-eof
 
-			0.05
-			0.20
-			0.40
+			1
+			2
+			3
 		eof
 	)"
+
+	wait $releaser_pid 2>/dev/null
+	rm -rf "$sync_dir"
 }
 
 function test__each {

@@ -861,12 +861,19 @@ function test__other_keymap_w {
 	#	Append to temp file
 	other_keymap_w 0.1 "date +%s%N >> $log" &
 	local pid=$!
-	sleep 0.4
+
+	# Fix for flaky test / race condition: instead of sleeping a fixed window,
+	# poll for 2 appends with a 5s (50 * 0.1s) timeout
+	local tries=0
+	while [[ $(wc -l < "$log" | tr -d ' ') -lt 2 && $tries -lt 50 ]]; do
+		sleep 0.1
+		((tries++))
+	done
 	kill $pid 2>/dev/null
 	wait $pid 2>/dev/null
 
 	# Expect it to have appended at least twice
-	local count; count=$(wc -l < "$log")
+	local count; count=$(wc -l < "$log" | tr -d ' ')
 	rm "$log"
 	assert "$([[ $count -ge 2 ]] && echo 1)" '1'
 }
