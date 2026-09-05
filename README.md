@@ -15,23 +15,24 @@
 
 ## Motivation
 
-Moving from web development to infrastructure engineering put me in the terminal full time. I found myself retyping the same long commands and looking up the same reference material over and over.
+Moving from web development to infrastructure engineering put me in the terminal full time. I found myself looking up the same syntax and retyping similar sequences of commands over and over.
 
-So over one Christmas break, I built this: a zsh keymap system that puts those commands behind short aliases and loads fast enough to stay out of the way.
+So over one Christmas break, I built this: a zsh keymap system that puts those commands behind short aliases.
 
 ## Overview
 
-Two kinds of things live here: shell commands I run constantly and keyboard shortcuts I want at a glance.
+**For shell commands**, keymaps are available for tools like [AWS](./zshrc/_snapshots/aws_keymap.txt), [Git](./zshrc/_snapshots/git_keymap.txt), [Kubectl](./zshrc/_snapshots/kubectl_keymap.txt), and [Terraform](./zshrc/_snapshots/terraform_keymap.txt).
 
-**For shell commands**, keymaps are available for tools like [AWS](./zshrc/_snapshots/aws_keymap.txt), [Git](./zshrc/_snapshots/git_keymap.txt), [Kubectl](./zshrc/_snapshots/kubectl_keymap.txt), and [Terraform](./zshrc/_snapshots/terraform_keymap.txt). I've also built custom workflows. For instance, [Args](./zshrc/_snapshots/args_keymap.txt) converts the previous output into a numbered list for quick referencing in subsequent commands, while [Nav](./zshrc/_snapshots/nav_keymap.txt) browses the filesystem and pretty-prints CSV, JSON, and Markdown files.
+**For custom workflows**, [Args keymap](./zshrc/_snapshots/args_keymap.txt) converts the previous output into a numbered list for quick referencing in subsequent commands, while [Nav keymap](./zshrc/_snapshots/nav_keymap.txt) browses the filesystem and pretty-prints CSV, JSON, and Markdown files. See [Usage](#usage) for examples.
 
-**For keyboard shortcuts**, it catalogs defaults for [MacOS](./zshrc/_snapshots/main_keymap.macos.txt), [Gmail](./zshrc/_snapshots/main_keymap.gmail.txt), [Slack](./zshrc/_snapshots/main_keymap.slack.txt), and more, alongside my bindings for IntelliJ ([cmd](./zshrc/_snapshots/intellij_cmd_keymap.txt), [ctrl](./zshrc/_snapshots/intellij_ctrl_keymap.txt), [alt](./zshrc/_snapshots/intellij_alt_keymap.txt)) and Vimium ([browser navigation](./zshrc/_snapshots/vimium_keymap.txt), [search](./zshrc/_snapshots/vimium_search_keymap.txt)).
+**For keyboard shortcuts**, it catalogs defaults for apps like [MacOS](./zshrc/_snapshots/main_keymap.macos.txt), [Gmail](./zshrc/_snapshots/main_keymap.gmail.txt), [Slack](./zshrc/_snapshots/main_keymap.slack.txt) alongside my bindings for IntelliJ ([cmd](./zshrc/_snapshots/intellij_cmd_keymap.txt), [ctrl](./zshrc/_snapshots/intellij_ctrl_keymap.txt), [alt](./zshrc/_snapshots/intellij_alt_keymap.txt)) and Vimium ([browser navigation](./zshrc/_snapshots/vimium_keymap.txt), [search](./zshrc/_snapshots/vimium_search_keymap.txt)).
 
 ## Features
 
-- **Namespaced aliases**: Each keymap claims [one letter](#example-1-list-all-keymap-namespaces-with-ma), e.g. `t` for Terraform
-- **Fast discovery**: Type an alias to [list its keys](#example-2-print-the-terraform-keymap-usage-with-t), or add a regex to [search them](#example-3-search-the-terraform-keymap-usage-with-t-ini)
-- **Short invocation**: [`<ALIAS><KEY>`](#example-5-invoke-the-terraform-init--upgrade-mapping-with-tiu) is usually 2 to 3 letters
+- **Composability**: Every listing is numbered by Args, and that number becomes an argument to the next command
+- **Namespaced aliases**: Each keymap claims [one letter](./zshrc/_snapshots), e.g. `n` for Nav
+- **Short invocation**: `<ALIAS><KEY>` is usually 2 to 3 letters, e.g. `nn`
+- **Fast discovery**: Type an alias to [list its keys](#syntax-reference), or add a regex to [search them](#example-3-search-the-nav-keymap-usage-with-n-dotfiles)
 - **Conflict prevention**: Any alias that would overwrite a shell built-in or common CLI is rejected unless [explicitly allowed](./zshrc/_keymap/is_reserved.zsh)
 
 ## Installation
@@ -80,161 +81,154 @@ Two kinds of things live here: shell commands I run constantly and keyboard shor
 
 ## Usage
 
-### Example #1: List all keymap namespaces with `ma`
+### Example #1: Chain Nav and Args into a workflow with `nn` and `1 n`
 
-(I use the [Dvorak](https://en.wikipedia.org/wiki/Dvorak_keyboard_layout#:~:text=August%20Dvorak%20studied%20letter%20frequencies%20and%20the%20physiology%20of%20the%20hand) layout rather than [QWERTY](https://en.wikipedia.org/wiki/QWERTY), so the key positions may look unfamiliar.)
+`nn` lists the current directory, and every Nav listing is piped straight into Args, which numbers it. That numbering is what lets any command reach back and act on a listed entry, so `1 n` reads as "run `n` on arg #1":
 
 ```
-$ ma
+$ nn
 
-Keymap: main_keymap.all_namespaces.zsh
+     1	CLAUDE.md
+     2	colordiffrc.txt
+     3	gitignore.txt
+     4	README.md
+     5	terraformrc.txt
+     6	tm_properties.txt
+     7	vimium
+     8	zshrc
+     9	zshrc.txt
+
+$ 1 n
+
+n "CLAUDE.md"
+─────────
+CLAUDE.md
+─────────
+
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working
+with code in this repository.
+
+## Alias Shorthand
+...
+```
+
+`1 n` first echoes the command it resolved to, `n "CLAUDE.md"`, then runs it. Nav rendered the file through `mdcat` because of its extension; a `.csv` or `.json` arg would have rendered through Nav's own CSV parser or `jq` instead. The same `1 <command>` pattern works after any Args-backed listing, not just Nav's, e.g. `1 cat`, `1 rm`, or `1 open`.
+
+### Example #2: Inspect why it composes with `zz nn`
+
+```
+$ zz nn
+
+  $ n.n <match>* <-mismatch>* # List visible files & dirs
+
+     1	nav_keymap_n () {
+     2		local filters=("$@")
+     3		NAV_CURSOR=0
+     4		nav_helpers_history_add "$(pwd)"
+     5		ls --color=always | args_keymap_s "${filters[@]}"
+     6	}
+```
+
+This is the workflow from Example #1 laid bare: `nn` is just `ls` piped into Args keymap, which is why every Nav listing arrives pre-numbered and ready for a follow-up command like `1 n`.
+
+### Example #3: Search the Nav keymap usage with `n dotfiles`
+
+```
+$ n dotfiles
+
+  $ n.d  # Go to dotfiles
+  $ n.dd # Go to dotfiles, open GitHub Desktop
+```
+
+**Note:** `n dotfiles` searches Nav's own keymap because no file or directory named `dotfiles` exists in the CWD. Had one existed, it would have taken precedence, since `n <file>` and `n <directory>` are real Nav commands, not search terms.
+
+### Syntax Reference
+
+(I use the [Dvorak](https://en.wikipedia.org/wiki/Dvorak_keyboard_layout#:~:text=August%20Dvorak%20studied%20letter%20frequencies%20and%20the%20physiology%20of%20the%20hand) layout rather than [QWERTY](https://en.wikipedia.org/wiki/QWERTY), so the key positions below may look unfamiliar.)
+
+Run `ma` to list every keymap namespace, or run any single alias bare to print that keymap's own usage and syntax legend. Every keymap listed by `ma` has its own snapshot under [`_snapshots/`](./zshrc/_snapshots). Nav's, for example:
+
+```
+$ n
+
+Keymap: nav_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ]
-      '   ,   .   p   y   |   f  <g> <c> <r>  l   /   =   \
-     <a> <o>  e  <u> (i)  |  <d> <h> <t> <n> <s>  -
-      ;   q   j  <k>  x   |   b  (m)  w  (v) <z>
-
-  `<>` initials have only one key mapping
-  `()` initials have multiple key mappings
-
-All Namespaces
-
-  $ a   # Shell shortcuts: args_keymap.zsh
-  $ s   # Shell shortcuts: aws_keymap.zsh
-  $ c   # Shell shortcuts: claude_keymap.zsh
-  $ d   # Shell shortcuts: docker_keymap.zsh
-  $ g   # Shell shortcuts: git_keymap.zsh
-  $ h   # Shell shortcuts: github_keymap.zsh
-  $ r   # Shell shortcuts: kiro_keymap.zsh
-  $ k   # Shell shortcuts: kubectl_keymap.zsh
-  $ m   # Shell shortcuts: main_keymap.zsh
-  $ n   # Shell shortcuts: nav_keymap.zsh
-  $ o   # Shell shortcuts: other_keymap.zsh
-  $ t   # Shell shortcuts: terraform_keymap.zsh
-  $ u   # Shell shortcuts: usage_keymap.zsh
-  $ z   # Shell shortcuts: zsh_keymap.zsh
-
-  $ i   # App shortcuts: intellij_all.zsh
-  $ ia  # App shortcuts: intellij_alt_keymap.zsh
-  $ ic  # App shortcuts: intellij_cmd_keymap.zsh
-  $ it  # App shortcuts: intellij_ctrl_keymap.zsh
-  $ vv  # App shortcuts: vimium_keymap.zsh
-  $ v   # App shortcuts: vimium_search_keymap.zsh
-
-  $ mac # App defaults: main_keymap.macos.zsh
-  $ mc  # App defaults: main_keymap.claude.zsh
-  $ mg  # App defaults: main_keymap.gmail.zsh
-  $ mh  # App defaults: main_keymap.github_desktop.zsh
-  $ ml  # App defaults: main_keymap.less.zsh
-  $ mm  # App defaults: main_keymap.textmate.zsh
-  $ mn  # App defaults: main_keymap.notion.zsh
-  $ ms  # App defaults: main_keymap.slack.zsh
-  $ mt  # App defaults: main_keymap.terminal.zsh
-  $ mV  # App defaults: main_keymap.vi.zsh
-```
-
-### Example #2: Print the Terraform keymap usage with `t`
-
-```
-$ t
-
-Keymap: terraform_keymap.zsh
-
-  `   1   2   3   4   5   |   6   7   8   9   0   [   ]
-      '   ,   .  <p>  y   |  <f> <g> (c) <r>  l   /   =   \
-     <a> <o> <e> <u> (i)  |  <d>  h  (t) (n) (s)  -
-      ;   q   j   k   x   |   b  <m>  w  <v>  z
+      '   ,   .  <p> <y>  |   f   g  <c> (r) <l>  /   =   \
+     (a) (o) (e) (u)  i   |  (d) (h) (t) (n) (s)  -
+      ;   q  <j> <k>  x   |  <b> <m> <w> <v> <z>
 
   `<>` initials have only one key mapping
   `()` initials have multiple key mappings
 
 Keymap Usage
 
-  $ t                         # Show this keymap
-  $ t <regex>                 # Search this keymap
+  $ n                          # Show this keymap
+  $ n <regex>                  # Search this keymap
 
-  $ t.<key>                   # Key takes no variable
-  $ t.<key> <var>             # Key takes one variable
-  $ t.<key> <var>?            # Key takes zero or one variable
-  $ t.<key> <var>*            # Key takes zero or more variables
-  $ t.<key> (1-10)            # Key takes a value from inside list
-  $ t.<key> (^|)?             # Key can be piped to: ... | t.<key>
+  $ n.<key>                    # Key takes no variable
+  $ n.<key> <var>              # Key takes one variable
+  $ n.<key> <var>?             # Key takes zero or one variable
+  $ n.<key> <var>*             # Key takes zero or more variables
+  $ n.<key> (1-10)             # Key takes a value from inside list
+  $ n.<key> (^|)?              # Key can be piped to: ... | n.<key>
 
-     ^                        # The `.` is for visual clarity
-                              # Omit it when invoking a key
+     ^                         # The `.` is for visual clarity
+                               # Omit it when invoking a key
 
 Keymap List
 
-  $ t <terraform command>     # Pass through
+  $ n <directory>              # Go to directory
+  $ n <file>                   # Clear screen, cd to folder & render file
 
-  $ t.t <match>* <-mismatch>* # List manifests & filter
+  $ n.n <match>* <-mismatch>*  # List visible files & dirs
+  $ n.nf <match>* <-mismatch>* # List visible files
+  $ n.nd <match>* <-mismatch>* # List visible dirs
 
-  $ t.i                       # Init
-  $ t.iu                      # Init & upgrade
-  $ t.ir                      # Init & reconfigure
-  $ t.im                      # Init & migrate state
-  $ t.e                       # Load secret env vars
+  $ n.a <match>* <-mismatch>*  # List hidden files & dirs
+  $ n.af <match>* <-mismatch>* # List hidden files
+  $ n.ad <match>* <-mismatch>* # List hidden dirs
 
-  $ t.v (i,iu,ir,im,e)?       # Validate
-  $ t.p (i,iu,ir,im,e)?       # Plan
-  $ t.g                       # Upload 'tfplan' as a gist
-  $ t.a <max age in min>?     # Apply 'tfplan' (Default: 5)
+  $ n.u <levels>?              # Go up 1+ directories (Default: 1)
+  $ n.uu                       # Go up to git repo root
 
-  $ t.s <match>* <-mismatch>* # List states & filter
-  $ t.sd <state>              # Delete state
-  $ t.sr <before> <after>     # Rename state
-  $ t.ss <state>              # Show state
-  $ t.st <state>              # Taint state
-  $ t.su <state>              # Untaint state
+  $ n.b                        # Go to Desktop
+  $ n.m                        # Go to Documents
+  $ n.w                        # Go to Downloads
 
-  $ t.c                       # Clean
-  $ t.cc                      # Clean & clear plugin cache
-  $ t.d                       # Destroy
-  $ t.f <path>?               # Format (Default: CWD)
-  $ t.n <var name>?           # Start console or print var in CWD
-  $ t.nn <var name>?          # Start console or print var in 'tf-debug'
-  $ t.o                       # Show output
-  $ t.u <lock id>?            # Unlock (Default: Pasteboard)
+  $ n.d                        # Go to dotfiles
+  $ n.dd                       # Go to dotfiles, open GitHub Desktop
+  $ n.s                        # Go to scratch
+  $ n.ss                       # Go to scratch, open GitHub Desktop
+  $ n.z                        # Go to scratch/claude
+  $ n.e <match>* <-mismatch>*  # List ephemeral dirs, `cd; cc` if 1 match
+  $ n.ee <dir name>            # Create ephemeral dir, `cd; cc`
 
-  $ t.m                       # Open diff from pasteboard in TextMate
+  $ n.y <path>?                # Copy path to pasteboard (Default: `pwd`)
+  $ n.p                        # Go to dir from pasteboard path
 
-  $ t.r                       # (Reserved: Translate chars)
-```
+  $ n.t <match>* <-mismatch>*  # Show shortlist, `cd` if 1 match
+  $ n.tt <dir>?                # Add to shortlist, `cd` if not CWD
+  $ n.td <dir>                 # Delete from shortlist
+  $ n.tc                       # Clear shortlist
 
-### Example #3: Search the Terraform keymap usage with `t ini`
+  $ n.h <match>* <-mismatch>*  # Show history, `cd` if 1 match
+  $ n.hc                       # Clear history
 
-```
-$ t ini
+  $ n.o                        # Order files and dirs chronologically
+  $ n.of                       # Order files by size
+  $ n.od <levels>?             # Order dirs by size
 
-  $ t.i  # Init
-  $ t.iu # Init & upgrade
-  $ t.ir # Init & reconfigure
-  $ t.im # Init & migrate state
-```
+  $ n.j                        # Clear screen & render next file in args
+  $ n.k                        # Clear screen & render prev file in args
+  $ n.v                        # Clear screen & render file in pasteboard
+  $ n.r                        # Clear screen & re-render last file
+  $ n.rr                       # Same as `nr` without scrolling to top
 
-**Note:** `t init` would behave differently. Since `init` is a real `terraform` command, it gets passed through rather than treated as a search term.
-
-### Example #4: Inspect the definition of `tiu` with `zz tiu`
-
-```
-$ zz tiu
-
-  $ t.iu # Init & upgrade
-
-     1	terraform_keymap_iu () {
-     2		terraform init -upgrade
-     3	}
-```
-
-### Example #5: Invoke the `tiu` mapping
-
-```
-$ tiu
-
-Initializing the backend...
-Upgrading modules...
-
-Terraform has been successfully initialized!
+  $ n.c                        # (Reserved: Netcat)
+  $ n.l                        # (Reserved: Number lines)
 ```
 
 ## Testing
