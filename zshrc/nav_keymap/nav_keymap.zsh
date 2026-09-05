@@ -97,6 +97,7 @@ function nav_keymap {
 source "$ZSHRC_SRC_DIR/$NAV_NAMESPACE/nav_helpers.zsh"
 
 # Constants
+zmodload zsh/datetime # Use $EPOCHSECONDS (to avoid forking `gdate` on every `cd`)
 NAV_HISTORY_FILE="$ZSHRC_DATA_DIR/nav.history.txt"
 NAV_HISTORY_MAX=1000
 NAV_MDCAT_CONFIG_HOME="$ZSHRC_SRC_DIR/$NAV_NAMESPACE" # Holds `mdcat/config.toml`
@@ -147,7 +148,7 @@ function nav_keymap_h {
 		return
 	fi
 
-	args_keymap_s "${filters[@]}" < "$NAV_HISTORY_FILE"
+	nav_helpers_history_format < "$NAV_HISTORY_FILE" | args_keymap_s "${filters[@]}"
 
 	nav_helpers_cd_if_only_match
 }

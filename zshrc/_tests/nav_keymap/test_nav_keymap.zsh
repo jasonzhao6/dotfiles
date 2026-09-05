@@ -491,6 +491,32 @@ function test__nav_keymap_h__oldest_first {
 	)" "$HOME/Desktop"
 }
 
+function test__nav_keymap_h__shows_capture_time {
+	assert "$(
+		rm -f "$NAV_HISTORY_FILE"
+		nav_helpers_history_add "$HOME/Documents"
+		nav_keymap_h | bw | grep -v '^$' | grep -cE '# [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}$'
+	)" '1'
+}
+
+function test__nav_keymap_h__aligns_capture_times {
+	assert "$(
+		rm -f "$NAV_HISTORY_FILE"
+		nav_helpers_history_add "$HOME/Documents"
+		nav_helpers_history_add "$HOME/a"
+		nav_keymap_h | bw | grep -v '^$' | awk '{print index($0, "#")}' | sort -u | wc -l | tr -d ' '
+	)" '1'
+}
+
+function test__nav_keymap_h__single_match_cds_with_capture_time {
+	assert "$(
+		rm -f "$NAV_HISTORY_FILE"
+		nav_helpers_history_add "$HOME/Documents"
+		nav_keymap_h > /dev/null
+		pwd
+	)" "$HOME/Documents"
+}
+
 function test__nav_keymap_h__skips_consecutive_duplicates {
 	assert "$(
 		rm -f "$NAV_HISTORY_FILE"
@@ -514,7 +540,7 @@ function test__nav_keymap_h__trims_to_max_entries {
 			nav_helpers_history_add "$HOME/dir$dir"
 		done
 
-		cat "$NAV_HISTORY_FILE"
+		sed 's/ #.*//' "$NAV_HISTORY_FILE"
 	)" "$(
 		cat <<-eof
 			$HOME/dir3

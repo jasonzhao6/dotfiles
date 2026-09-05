@@ -32,8 +32,8 @@ function nav_helpers_copied_path {
 
 function nav_helpers_cd_if_only_match {
 	if [[ $(args_history_current | wc -l | tr -d ' ') -eq 1 ]]; then
-		echo; echo "$(yellow_fg '$') 1 n"
-		cd "$(args_history_current | bw)" && nav_keymap_n || true
+		echo
+		1 n
 	fi
 }
 
@@ -46,16 +46,17 @@ function nav_helpers_find_cursor {
 function nav_helpers_history_add {
 	local entry=$1
 
-	# Skip if same as last entry
+	# Skip if same as last entry (ignoring its captured time)
 	if [[ -f "$NAV_HISTORY_FILE" ]]; then
-		local last; last=$(tail -1 "$NAV_HISTORY_FILE")
+		local last; last=$(tail -1 "$NAV_HISTORY_FILE" | sed 's/ *#.*//')
 		if [[ "$last" == "$entry" ]]; then
 			return
 		fi
 	fi
 
-	# Append entry
-	echo "$entry" >> "$NAV_HISTORY_FILE"
+	# Append entry with its capture time (epoch seconds), soft-selected via `#`
+	# so only the path is used when `cd`-ing into a history entry
+	echo "$entry # $EPOCHSECONDS" >> "$NAV_HISTORY_FILE"
 
 	# Trim to max entries if needed (keep newest)
 	if [[ -f "$NAV_HISTORY_FILE" ]]; then
@@ -65,6 +66,24 @@ function nav_helpers_history_add {
 			printf '%s\n' "$kept" > "$NAV_HISTORY_FILE"
 		fi
 	fi
+}
+
+# Converts each "<path> # <epoch>" line to "<path> # <local time>", aligning
+# the `#` across all lines. Lines without a captured time pass through as-is.
+function nav_helpers_history_format {
+	gawk -F' # ' '
+		{
+			paths[NR] = $1
+			times[NR] = (NF > 1) ? strftime("%Y-%m-%d %H:%M", $2) : ""
+			if (length($1) > max) max = length($1)
+		}
+		END {
+			for (i = 1; i <= NR; i++) {
+				if (times[i] == "") print paths[i]
+				else printf "%-*s # %s\n", max, paths[i], times[i]
+			}
+		}
+	'
 }
 
 function nav_helpers_shortlist_prune {
