@@ -47,12 +47,12 @@ Keymap List
   $ o.12                            # Open diff files in TextMate
   $ o.0                             # Empty `diff.1.txt` and `diff.2.txt`
 
-  $ o.i <index> <file>? (^|)?       # CSV: Keep column by index
-  $ o.id <index> <file>? (^|)?      # CSV: Delete column by index
-  $ o.ii <index> <file>? (^|)?      # CSV: Sort lines by column
-  $ o.ix <i1> <i2> <file>? (^|)?    # CSV: Swap columns
-  $ o.x <file 1>? <file 2>?         # CSV: Keep lines matching 1st column
-  $ o.xx <file 1>? <file 2>?        # CSV: Delete lines matching 1st column
+  $ o.i -? <index> <file>? (^|)?    # CSV: Keep column by index
+  $ o.id -? <index> <file>? (^|)?   # CSV: Delete column by index
+  $ o.ii -? <index> <file>? (^|)?   # CSV: Sort lines by column
+  $ o.ix -? <i1> <i2> <file>? (^|)? # CSV: Swap columns
+  $ o.x -? <file 1>? <file 2>?      # CSV: Keep lines matching 1st column
+  $ o.xx -? <file 1>? <file 2>?     # CSV: Delete lines matching 1st column
 
   $ o.t <command>                   # Time a command
   $ o.w <seconds>? <command>        # Watch a command (Default: 1s)

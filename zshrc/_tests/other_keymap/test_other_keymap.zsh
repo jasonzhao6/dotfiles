@@ -153,7 +153,7 @@ function test__other_keymap_i__when_no_column_index {
 	assert "$(
 		printf 'a,10,x1\n' | other_keymap_i
 	)" "$(
-		red_bar 'Usage: oi <index> <file>?'
+		red_bar 'Usage: oi -? <index> <file>?'
 	)"
 }
 
@@ -198,6 +198,35 @@ function test__other_keymap_i__with_a_quoted_cell {
 			"bar, baz"
 		eof
 	)"
+}
+
+function test__other_keymap_i__with_no_header_flag {
+	assert "$(
+		printf 'a,10,x1\nb,20,x2\n' | other_keymap_i - 2
+	)" "$(
+		cat <<-eof
+
+			10
+			20
+		eof
+	)"
+}
+
+function test__other_keymap_i__with_no_header_flag_and_a_file {
+	local csv='/tmp/test__other_keymap_i__with_no_header_flag_and_a_file.csv'
+	printf 'a,10,x1\nb,20,x2\n' > $csv
+
+	assert "$(
+		other_keymap_i - 2 $csv
+	)" "$(
+		cat <<-eof
+
+			10
+			20
+		eof
+	)"
+
+	rm $csv
 }
 
 function test__other_keymap_id {
@@ -279,7 +308,7 @@ function test__other_keymap_id__when_no_column_index {
 	assert "$(
 		printf 'a,10,x1\n' | other_keymap_id
 	)" "$(
-		red_bar 'Usage: oid <index> <file>?'
+		red_bar 'Usage: oid -? <index> <file>?'
 	)"
 }
 
@@ -290,7 +319,7 @@ function test__other_keymap_id__with_an_invalid_column_index {
 		done
 	)" "$(
 		for _ in $(seq 5); do
-			red_bar 'Usage: oid <index> <file>?'
+			red_bar 'Usage: oid -? <index> <file>?'
 		done
 	)"
 }
@@ -351,7 +380,121 @@ function test__other_keymap_id__with_a_row_missing_cells {
 	)"
 }
 
+function test__other_keymap_id__with_no_header_flag {
+	assert "$(
+		printf 'a,10,x1\nb,20,x2\n' | other_keymap_id - 2
+	)" "$(
+		cat <<-eof
+
+			a,x1
+			b,x2
+		eof
+	)"
+}
+
+function test__other_keymap_id__with_no_header_flag_and_a_file {
+	local csv='/tmp/test__other_keymap_id__with_no_header_flag_and_a_file.csv'
+	printf 'a,10,x1\nb,20,x2\n' > $csv
+
+	assert "$(
+		other_keymap_id - 2 $csv
+	)" "$(
+		cat <<-eof
+
+			a,x1
+			b,x2
+		eof
+	)"
+
+	rm $csv
+}
+
 function test__other_keymap_ii {
+	local file; file=$(
+		cat <<-eof
+			name,age
+			c,30
+			a,10
+			b,20
+		eof
+	)
+
+	assert "$(
+		echo "$file" | other_keymap_ii 2
+	)" "$(
+		cat <<-eof
+
+			name,age
+			a,10
+			b,20
+			c,30
+		eof
+	)"
+}
+
+function test__other_keymap_ii__when_no_column_index {
+	assert "$(
+		printf 'name,age\nb,20\n' | other_keymap_ii
+	)" "$(
+		red_bar 'Usage: oii -? <index> <file>?'
+	)"
+}
+
+function test__other_keymap_ii__with_an_invalid_file {
+	assert "$(
+		for file in /tmp/test__other_keymap__no_such.csv /tmp; do
+			printf 'name,age\n' | other_keymap_ii 2 "$file"
+		done
+	)" "$(
+		red_bar 'Invalid file: /tmp/test__other_keymap__no_such.csv'
+		red_bar 'Invalid file: /tmp'
+	)"
+}
+
+function test__other_keymap_ii__with_a_file {
+	local csv='/tmp/test__other_keymap_ii__with_a_file.csv'
+	printf 'name,age\nc,30\na,10\nb,20\n' > $csv
+
+	assert "$(
+		other_keymap_ii 2 $csv
+	)" "$(
+		cat <<-eof
+
+			name,age
+			a,10
+			b,20
+			c,30
+		eof
+	)"
+
+	rm $csv
+}
+
+function test__other_keymap_ii__with_a_process_substitution {
+	assert "$(
+		other_keymap_ii 2 <(printf 'name,age\nc,30\na,10\n')
+	)" "$(
+		cat <<-eof
+
+			name,age
+			a,10
+			c,30
+		eof
+	)"
+}
+
+function test__other_keymap_ii__with_only_a_header_row {
+	assert "$(
+		printf 'name,age\n' | other_keymap_ii 2
+	)" "$(
+		cat <<-eof
+
+			name,age
+		eof
+	)"
+}
+
+function test__other_keymap_ii__with_no_header_flag {
 	local file; file=$(
 		cat <<-eof
 			a,50
@@ -362,7 +505,7 @@ function test__other_keymap_ii {
 	)
 
 	assert "$(
-		echo "$file" | other_keymap_ii 2
+		echo "$file" | other_keymap_ii - 2
 	)" "$(
 		cat <<-eof
 
@@ -374,33 +517,12 @@ function test__other_keymap_ii {
 	)"
 }
 
-function test__other_keymap_ii__when_no_column_index {
-	assert "$(
-		printf 'a,50\nb,20\n' | other_keymap_ii
-	)" "$(
-		red_bar 'Usage: oii <index> <file>?'
-	)"
-}
-
-# `1,2` is a valid `mlr` field list, but not the single index the keymap takes
-function test__other_keymap_ii__with_an_invalid_column_index {
-	assert "$(
-		for column_index in 0 -1 abc 2.5 1,2; do
-			printf 'a,50\nb,20\n' | other_keymap_ii "$column_index"
-		done
-	)" "$(
-		for _ in $(seq 5); do
-			red_bar 'Usage: oii <index> <file>?'
-		done
-	)"
-}
-
-function test__other_keymap_ii__with_a_file {
-	local csv='/tmp/test__other_keymap_ii__with_a_file.csv'
+function test__other_keymap_ii__with_no_header_flag_and_a_file {
+	local csv='/tmp/test__other_keymap_ii__with_no_header_flag_and_a_file.csv'
 	printf 'a,50\nb,20\nc,70\nd,40\n' > $csv
 
 	assert "$(
-		other_keymap_ii 2 $csv
+		other_keymap_ii - 2 $csv
 	)" "$(
 		cat <<-eof
 
@@ -414,13 +536,26 @@ function test__other_keymap_ii__with_a_file {
 	rm $csv
 }
 
-function test__other_keymap_ii__with_an_invalid_file {
+# `1,2` is a valid `mlr` field list, but not the single index the keymap takes
+function test__other_keymap_ii__with_no_header_flag__with_an_invalid_column_index {
+	assert "$(
+		for column_index in 0 -1 abc 2.5 1,2; do
+			printf 'a,50\nb,20\n' | other_keymap_ii - "$column_index"
+		done
+	)" "$(
+		for _ in $(seq 5); do
+			red_bar 'Usage: oii -? <index> <file>?'
+		done
+	)"
+}
+
+function test__other_keymap_ii__with_no_header_flag__with_an_invalid_file {
 	assert "$(
 		# Stubbed so a broken guard fails here, as `mlr` hangs on a dir
 		function other_helpers_mlr { echo 'mlr was reached'; }
 
 		for file in /tmp/test__other_keymap__no_such.csv /tmp; do
-			printf 'a,50\n' | other_keymap_ii 2 "$file"
+			printf 'a,50\n' | other_keymap_ii - 2 "$file"
 		done
 	)" "$(
 		red_bar 'Invalid file: /tmp/test__other_keymap__no_such.csv'
@@ -429,9 +564,9 @@ function test__other_keymap_ii__with_an_invalid_file {
 }
 
 # A `/dev/fd/N` pipe is not a `-f` regular file, but `mlr` reads it all the same
-function test__other_keymap_ii__with_a_process_substitution {
+function test__other_keymap_ii__with_no_header_flag__with_a_process_substitution {
 	assert "$(
-		other_keymap_ii 2 <(printf 'a,50\nb,20\n')
+		other_keymap_ii - 2 <(printf 'a,50\nb,20\n')
 	)" "$(
 		cat <<-eof
 
@@ -441,9 +576,9 @@ function test__other_keymap_ii__with_a_process_substitution {
 	)"
 }
 
-function test__other_keymap_ii__with_windows_line_endings {
+function test__other_keymap_ii__with_no_header_flag__with_windows_line_endings {
 	assert "$(
-		printf 'a,10,x3\r\nb,20,x1\r\nc,30,x2\r\n' | other_keymap_ii 3
+		printf 'a,10,x3\r\nb,20,x1\r\nc,30,x2\r\n' | other_keymap_ii - 3
 	)" "$(
 		cat <<-eof
 
@@ -455,9 +590,9 @@ function test__other_keymap_ii__with_windows_line_endings {
 }
 
 # `sort -t,` read ` baz"` as the 2nd column here and ordered this row last
-function test__other_keymap_ii__with_a_quoted_cell {
+function test__other_keymap_ii__with_no_header_flag__with_a_quoted_cell {
 	assert "$(
-		printf '"bar, baz",1\nfoo,9\n' | other_keymap_ii 2
+		printf '"bar, baz",1\nfoo,9\n' | other_keymap_ii - 2
 	)" "$(
 		cat <<-eof
 
@@ -494,7 +629,7 @@ function test__other_keymap_ix__when_specifying_only_one_column {
 	assert "$(
 		printf 'a,10,x1\n' | other_keymap_ix 2
 	)" "$(
-		red_bar 'Usage: oix <i1> <i2> <file>?'
+		red_bar 'Usage: oix -? <i1> <i2> <file>?'
 	)"
 }
 
@@ -507,7 +642,7 @@ function test__other_keymap_ix__with_an_invalid_column_index {
 		done
 	)" "$(
 		for _ in $(seq 10); do
-			red_bar 'Usage: oix <i1> <i2> <file>?'
+			red_bar 'Usage: oix -? <i1> <i2> <file>?'
 		done
 	)"
 }
@@ -565,6 +700,35 @@ function test__other_keymap_ix__with_a_quoted_cell {
 			"bar, baz",note,22
 		eof
 	)"
+}
+
+function test__other_keymap_ix__with_no_header_flag {
+	assert "$(
+		printf 'a,10,x1\nb,20,x2\n' | other_keymap_ix - 2 3
+	)" "$(
+		cat <<-eof
+
+			a,x1,10
+			b,x2,20
+		eof
+	)"
+}
+
+function test__other_keymap_ix__with_no_header_flag_and_a_file {
+	local csv='/tmp/test__other_keymap_ix__with_no_header_flag_and_a_file.csv'
+	printf 'a,10,x1\nb,20,x2\n' > $csv
+
+	assert "$(
+		other_keymap_ix - 2 3 $csv
+	)" "$(
+		cat <<-eof
+
+			a,x1,10
+			b,x2,20
+		eof
+	)"
+
+	rm $csv
 }
 
 function test__other_keymap_k {
@@ -879,6 +1043,67 @@ function test__other_keymap_w {
 }
 
 function test__other_keymap_x {
+	local file1; file1=$(
+		cat <<-eof
+			id,status
+			a,ok
+			b,fail
+		eof
+	)
+
+	local file2; file2=$(
+		cat <<-eof
+			id
+			b
+		eof
+	)
+
+	assert "$(
+		other_keymap_x <(echo "$file1") <(echo "$file2")
+	)" "$(
+		cat <<-eof
+
+			id,status
+			b,fail
+		eof
+	)"
+}
+
+function test__other_keymap_x__with_no_matches {
+	assert "$(
+		other_keymap_x <(printf 'id,status\na,ok\n') <(printf 'id\nz\n')
+	)" "$(
+		cat <<-eof
+
+			id,status
+		eof
+	)"
+}
+
+function test__other_keymap_x__with_only_a_header_row {
+	assert "$(
+		other_keymap_x <(printf 'id,status\n') <(printf 'id\na\n')
+	)" "$(
+		cat <<-eof
+
+			id,status
+		eof
+	)"
+}
+
+# Either file arg is validated, and a dir has to be caught before `mlr` sees it
+function test__other_keymap_x__with_an_invalid_file {
+	assert "$(
+		for file in /tmp/test__other_keymap__no_such.csv /tmp; do
+			other_keymap_x "$file" <(printf 'id\n')
+		done
+	)" "$(
+		red_bar 'Invalid file: /tmp/test__other_keymap__no_such.csv'
+		red_bar 'Invalid file: /tmp'
+	)"
+}
+
+function test__other_keymap_x__with_no_header_flag {
 	# Expect to see file1's 2nd column in output
 	local file1; file1=$(
 		cat <<-eof
@@ -898,7 +1123,7 @@ function test__other_keymap_x {
 	)
 
 	assert "$(
-		other_keymap_x <(echo "$file1") <(echo "$file2")
+		other_keymap_x - <(echo "$file1") <(echo "$file2")
 	)" "$(
 		cat <<-eof
 
@@ -908,7 +1133,7 @@ function test__other_keymap_x {
 	)"
 }
 
-function test__other_keymap_x__when_file_1_has_only_1_column {
+function test__other_keymap_x__with_no_header_flag__when_file_1_has_only_1_column {
 	local file1; file1=$(
 		cat <<-eof
 			a
@@ -926,7 +1151,7 @@ function test__other_keymap_x__when_file_1_has_only_1_column {
 	)
 
 	assert "$(
-		other_keymap_x <(echo "$file1") <(echo "$file2")
+		other_keymap_x - <(echo "$file1") <(echo "$file2")
 	)" "$(
 		cat <<-eof
 
@@ -936,7 +1161,7 @@ function test__other_keymap_x__when_file_1_has_only_1_column {
 	)"
 }
 
-function test__other_keymap_x__when_file_2_has_only_1_column {
+function test__other_keymap_x__with_no_header_flag__when_file_2_has_only_1_column {
 	local file1; file1=$(
 		cat <<-eof
 			a,10
@@ -954,7 +1179,7 @@ function test__other_keymap_x__when_file_2_has_only_1_column {
 	)
 
 	assert "$(
-		other_keymap_x <(echo "$file1") <(echo "$file2")
+		other_keymap_x - <(echo "$file1") <(echo "$file2")
 	)" "$(
 		cat <<-eof
 
@@ -964,7 +1189,7 @@ function test__other_keymap_x__when_file_2_has_only_1_column {
 	)"
 }
 
-function test__other_keymap_x__when_both_files_have_only_1_column {
+function test__other_keymap_x__with_no_header_flag__when_both_files_have_only_1_column {
 	local file1; file1=$(
 		cat <<-eof
 			a
@@ -982,7 +1207,7 @@ function test__other_keymap_x__when_both_files_have_only_1_column {
 	)
 
 	assert "$(
-		other_keymap_x <(echo "$file1") <(echo "$file2")
+		other_keymap_x - <(echo "$file1") <(echo "$file2")
 	)" "$(
 		cat <<-eof
 
@@ -994,9 +1219,9 @@ function test__other_keymap_x__when_both_files_have_only_1_column {
 
 # Miller reads the `\r` line endings; unhandled, the keys are `b\r` and `d\r`
 # and nothing matches
-function test__other_keymap_x__with_windows_line_endings {
+function test__other_keymap_x__with_no_header_flag__with_windows_line_endings {
 	assert "$(
-		other_keymap_x <(printf 'a,10\nb,20\nc,30\nd,40\n') <(printf 'b\r\nd\r\n')
+		other_keymap_x - <(printf 'a,10\nb,20\nc,30\nd,40\n') <(printf 'b\r\nd\r\n')
 	)" "$(
 		cat <<-eof
 
@@ -1006,14 +1231,25 @@ function test__other_keymap_x__with_windows_line_endings {
 	)"
 }
 
+function test__other_keymap_x__with_no_header_flag__with_a_file_appended {
+	assert "$(
+		other_keymap_x - <(printf 'a,10\nb,20\n') <(printf 'b,200\n')
+	)" "$(
+		cat <<-eof
+
+			b,20
+		eof
+	)"
+}
+
 # Either file arg is validated, and a dir has to be caught before `mlr` sees it
-function test__other_keymap_x__with_an_invalid_file {
+function test__other_keymap_x__with_no_header_flag__with_an_invalid_file {
 	assert "$(
 		# Stubbed so a broken guard fails here, as `mlr` hangs on a dir
 		function other_helpers_mlr { echo 'mlr was reached'; }
 
-		other_keymap_x /tmp/test__other_keymap__no_such.csv <(printf 'a\n')
-		other_keymap_x <(printf 'a,1\n') /tmp
+		other_keymap_x - /tmp/test__other_keymap__no_such.csv <(printf 'a\n')
+		other_keymap_x - <(printf 'a,1\n') /tmp
 	)" "$(
 		red_bar 'Invalid file: /tmp/test__other_keymap__no_such.csv'
 		red_bar 'Invalid file: /tmp'
@@ -1021,9 +1257,9 @@ function test__other_keymap_x__with_an_invalid_file {
 }
 
 # `awk -F,` read `"bar` as the 1st column of both rows and kept both
-function test__other_keymap_x__with_a_quoted_cell {
+function test__other_keymap_x__with_no_header_flag__with_a_quoted_cell {
 	assert "$(
-		other_keymap_x <(printf '"bar, baz",1\n"bar, qux",2\n') <(printf '"bar, baz"\n')
+		other_keymap_x - <(printf '"bar, baz",1\n"bar, qux",2\n') <(printf '"bar, baz"\n')
 	)" "$(
 		cat <<-eof
 
@@ -1033,9 +1269,9 @@ function test__other_keymap_x__with_a_quoted_cell {
 }
 
 # Undeduped, `join` emits the row it matches once per repeat of the key
-function test__other_keymap_x__with_a_repeated_key {
+function test__other_keymap_x__with_no_header_flag__with_a_repeated_key {
 	assert "$(
-		other_keymap_x <(printf 'a,1\nb,2\n') <(printf 'a\na\n')
+		other_keymap_x - <(printf 'a,1\nb,2\n') <(printf 'a\na\n')
 	)" "$(
 		cat <<-eof
 
@@ -1045,9 +1281,9 @@ function test__other_keymap_x__with_a_repeated_key {
 }
 
 # Uncompacted, the inner call's leading blank pairs with this row's empty 1st cell
-function test__other_keymap_x__with_an_empty_1st_column {
+function test__other_keymap_x__with_no_header_flag__with_an_empty_1st_column {
 	assert "$(
-		other_keymap_x <(printf ',99\nc,30\n') <(printf 'c,98\n')
+		other_keymap_x - <(printf ',99\nc,30\n') <(printf 'c,98\n')
 	)" "$(
 		cat <<-eof
 
@@ -1057,6 +1293,66 @@ function test__other_keymap_x__with_an_empty_1st_column {
 }
 
 function test__other_keymap_xx {
+	local file1; file1=$(
+		cat <<-eof
+			id,status
+			a,ok
+			b,fail
+		eof
+	)
+
+	local file2; file2=$(
+		cat <<-eof
+			id
+			a
+		eof
+	)
+
+	assert "$(
+		other_keymap_xx <(echo "$file1") <(echo "$file2")
+	)" "$(
+		cat <<-eof
+
+			id,status
+			b,fail
+		eof
+	)"
+}
+
+function test__other_keymap_xx__with_all_matched {
+	assert "$(
+		other_keymap_xx <(printf 'id,status\na,ok\n') <(printf 'id\na\n')
+	)" "$(
+		cat <<-eof
+
+			id,status
+		eof
+	)"
+}
+
+function test__other_keymap_xx__with_only_a_header_row {
+	assert "$(
+		other_keymap_xx <(printf 'id,status\n') <(printf 'id\na\n')
+	)" "$(
+		cat <<-eof
+
+			id,status
+		eof
+	)"
+}
+
+function test__other_keymap_xx__with_an_invalid_file {
+	assert "$(
+		for file in /tmp/test__other_keymap__no_such.csv /tmp; do
+			other_keymap_xx "$file" <(printf 'id\n')
+		done
+	)" "$(
+		red_bar 'Invalid file: /tmp/test__other_keymap__no_such.csv'
+		red_bar 'Invalid file: /tmp'
+	)"
+}
+
+function test__other_keymap_xx__with_no_header_flag {
 	local file1; file1=$(
 		cat <<-eof
 			a,10
@@ -1074,7 +1370,7 @@ function test__other_keymap_xx {
 	)
 
 	assert "$(
-		other_keymap_xx <(echo "$file1") <(echo "$file2")
+		other_keymap_xx - <(echo "$file1") <(echo "$file2")
 	)" "$(
 		cat <<-eof
 
@@ -1086,9 +1382,9 @@ function test__other_keymap_xx {
 
 # Miller reads the `\r` line endings; unhandled, the keys are `a\r` and `c\r`
 # and nothing is dropped
-function test__other_keymap_xx__with_windows_line_endings {
+function test__other_keymap_xx__with_no_header_flag__with_windows_line_endings {
 	assert "$(
-		other_keymap_xx <(printf 'a,10\nb,20\nc,30\nd,40\n') <(printf 'a\r\nc\r\n')
+		other_keymap_xx - <(printf 'a,10\nb,20\nc,30\nd,40\n') <(printf 'a\r\nc\r\n')
 	)" "$(
 		cat <<-eof
 
@@ -1100,9 +1396,9 @@ function test__other_keymap_xx__with_windows_line_endings {
 
 # Unpaired-right output carries no column from `file_2`, so its extra ones are
 # moot and it needs no cut down to the 1st column
-function test__other_keymap_xx__when_file_2_has_more_columns {
+function test__other_keymap_xx__with_no_header_flag__when_file_2_has_more_columns {
 	assert "$(
-		other_keymap_xx <(printf 'a,10\nb,20\nc,30\n') <(printf 'a,99\nc,98\n')
+		other_keymap_xx - <(printf 'a,10\nb,20\nc,30\n') <(printf 'a,99\nc,98\n')
 	)" "$(
 		cat <<-eof
 
@@ -1111,13 +1407,24 @@ function test__other_keymap_xx__when_file_2_has_more_columns {
 	)"
 }
 
-function test__other_keymap_xx__with_an_invalid_file {
+function test__other_keymap_xx__with_no_header_flag__with_a_file_appended {
+	assert "$(
+		other_keymap_xx - <(printf 'a,10\nb,20\n') <(printf 'a\n')
+	)" "$(
+		cat <<-eof
+
+			b,20
+		eof
+	)"
+}
+
+function test__other_keymap_xx__with_no_header_flag__with_an_invalid_file {
 	assert "$(
 		# Stubbed so a broken guard fails here, as `mlr` hangs on a dir
 		function other_helpers_mlr { echo 'mlr was reached'; }
 
-		other_keymap_xx /tmp/test__other_keymap__no_such.csv <(printf 'a\n')
-		other_keymap_xx <(printf 'a,1\n') /tmp
+		other_keymap_xx - /tmp/test__other_keymap__no_such.csv <(printf 'a\n')
+		other_keymap_xx - <(printf 'a,1\n') /tmp
 	)" "$(
 		red_bar 'Invalid file: /tmp/test__other_keymap__no_such.csv'
 		red_bar 'Invalid file: /tmp'
@@ -1125,9 +1432,9 @@ function test__other_keymap_xx__with_an_invalid_file {
 }
 
 # `awk -F,` read `"bar` as the 1st column of both rows and dropped both
-function test__other_keymap_xx__with_a_quoted_cell {
+function test__other_keymap_xx__with_no_header_flag__with_a_quoted_cell {
 	assert "$(
-		other_keymap_xx <(printf '"bar, baz",1\n"bar, qux",2\n') <(printf '"bar, baz"\n')
+		other_keymap_xx - <(printf '"bar, baz",1\n"bar, qux",2\n') <(printf '"bar, baz"\n')
 	)" "$(
 		cat <<-eof
 

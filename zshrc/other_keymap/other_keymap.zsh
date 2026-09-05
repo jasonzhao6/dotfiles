@@ -25,12 +25,12 @@ OTHER_KEYMAP=(
 	"${OTHER_DOT}12 # Open diff files in TextMate"
 	"${OTHER_DOT}0 # Empty \`diff.1.txt\` and \`diff.2.txt\`"
 	''
-	"${OTHER_DOT}i <index> <file>? ${KEYMAP_PIPE_PATTERN} # CSV: Keep column by index"
-	"${OTHER_DOT}id <index> <file>? ${KEYMAP_PIPE_PATTERN} # CSV: Delete column by index"
-	"${OTHER_DOT}ii <index> <file>? ${KEYMAP_PIPE_PATTERN} # CSV: Sort lines by column"
-	"${OTHER_DOT}ix <i1> <i2> <file>? ${KEYMAP_PIPE_PATTERN} # CSV: Swap columns"
-	"${OTHER_DOT}x <file 1>? <file 2>? # CSV: Keep lines matching 1st column"
-	"${OTHER_DOT}xx <file 1>? <file 2>? # CSV: Delete lines matching 1st column"
+	"${OTHER_DOT}i -? <index> <file>? ${KEYMAP_PIPE_PATTERN} # CSV: Keep column by index"
+	"${OTHER_DOT}id -? <index> <file>? ${KEYMAP_PIPE_PATTERN} # CSV: Delete column by index"
+	"${OTHER_DOT}ii -? <index> <file>? ${KEYMAP_PIPE_PATTERN} # CSV: Sort lines by column"
+	"${OTHER_DOT}ix -? <i1> <i2> <file>? ${KEYMAP_PIPE_PATTERN} # CSV: Swap columns"
+	"${OTHER_DOT}x -? <file 1>? <file 2>? # CSV: Keep lines matching 1st column"
+	"${OTHER_DOT}xx -? <file 1>? <file 2>? # CSV: Delete lines matching 1st column"
 	''
 	"${OTHER_DOT}t <command> # Time a command"
 	"${OTHER_DOT}w <seconds>? <command> # Watch a command (Default: 1s)"
@@ -183,55 +183,64 @@ function other_keymap_f {
 }
 
 function other_keymap_i {
+	local has_header=1
+	[[ $1 == '-' ]] && { has_header=0; shift }
+
 	local index=$1
 	local file=$2
 
-	other_helpers_validate_indexes 'Usage: oi <index> <file>?' "$index" || return
+	other_helpers_validate_indexes 'Usage: oi -? <index> <file>?' "$index" || return
 	other_helpers_validate_file "$file" || return
 
 	# `-f` names the column
-	# `${file:+...}` adds no arg when there is no file, so `mlr` reads the pipe
-	other_helpers_mlr cut -f "$index" ${file:+"$file"}
+	other_helpers_mlr_col_op "$has_header" "$file" cut -f "$index"
 }
 
 function other_keymap_id {
+	local has_header=1
+	[[ $1 == '-' ]] && { has_header=0; shift }
+
 	local index=$1
 	local file=$2
 
-	other_helpers_validate_indexes 'Usage: oid <index> <file>?' "$index" || return
+	other_helpers_validate_indexes 'Usage: oid -? <index> <file>?' "$index" || return
 	other_helpers_validate_file "$file" || return
 
+	# `--complement` deletes the named column instead of keeping it
 	# `-f` names the column
-	# `${file:+...}` adds no arg when there is no file, so `mlr` reads the pipe
-	other_helpers_mlr cut --complement -f "$index" ${file:+"$file"}
+	other_helpers_mlr_col_op "$has_header" "$file" cut --complement -f "$index"
 }
 
 function other_keymap_ii {
+	local has_header=1
+	[[ $1 == '-' ]] && { has_header=0; shift }
+
 	local index=$1
 	local file=$2
 
-	other_helpers_validate_indexes 'Usage: oii <index> <file>?' "$index" || return
+	other_helpers_validate_indexes 'Usage: oii -? <index> <file>?' "$index" || return
 	other_helpers_validate_file "$file" || return
 
 	# `-t` is natural sort, so `x9` lands before `x10`
-	# `${file:+...}` adds no arg when there is no file, so `mlr` reads the pipe
-	other_helpers_mlr sort -t "$index" ${file:+"$file"}
+	other_helpers_mlr_row_op "$has_header" "$file" sort -t "$index"
 }
 
 function other_keymap_ix {
+	local has_header=1
+	[[ $1 == '-' ]] && { has_header=0; shift }
+
 	local column_1=$1
 	local column_2=$2
 	local file=$3
 
-	other_helpers_validate_indexes 'Usage: oix <i1> <i2> <file>?' "$column_1" "$column_2" || return
+	other_helpers_validate_indexes 'Usage: oix -? <i1> <i2> <file>?' "$column_1" "$column_2" || return
 	other_helpers_validate_file "$file" || return
 
 	# `$[[[n]]]` is the value of column `n`
 	local mlr_script='tmp = $[[[@c1]]]; $[[[@c1]]] = $[[[@c2]]]; $[[[@c2]]] = tmp'
 
 	# `-s` passes the indexes in as `@c1` and `@c2` for `mlr_script` to use
-	# `${file:+...}` adds no arg when there is no file, so `mlr` reads the pipe
-	other_helpers_mlr put -s c1="$column_1" -s c2="$column_2" "$mlr_script" ${file:+"$file"}
+	other_helpers_mlr_col_op "$has_header" "$file" put -s c1="$column_1" -s c2="$column_2" "$mlr_script"
 }
 
 function other_keymap_j {
@@ -422,26 +431,48 @@ function other_keymap_w {
 }
 
 function other_keymap_x {
+	local has_header=1
+	[[ $1 == '-' ]] && { has_header=0; shift }
+
 	local file_1=${1:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1}
 	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
 
 	other_helpers_validate_file "$file_1" || return
 	other_helpers_validate_file "$file_2" || return
 
-	# Inner join file 1 with file 2's distinct 1st-column values
-	# `compact` drops the inner call's leading blank, else it joins as an empty key
-	other_helpers_mlr join -j 1 -f <(other_helpers_mlr uniq -g 1 "$file_2" | compact) "$file_1"
+	# Keep file 1's rows that have a 1st-column match in file 2
+	# `-j 1` joins on column 1
+	# `-f` specifies file 2
+	# `uniq -g 1` collapses file 2's 1st-column to distinct values
+	if [[ $has_header == 1 ]]; then
+		# `filter 'NR > 1'` skips file 2's header row before the `uniq`
+		other_helpers_mlr_row_op 1 "$file_1" join -j 1 -f <(other_helpers_mlr filter 'NR > 1' then uniq -g 1 "$file_2")
+	else
+		other_helpers_mlr_row_op 0 "$file_1" join -j 1 -f <(other_helpers_mlr uniq -g 1 "$file_2")
+	fi
 }
 
 function other_keymap_xx {
+	local has_header=1
+	[[ $1 == '-' ]] && { has_header=0; shift }
+
 	local file_1=${1:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_1}
 	local file_2=${2:-$OTHER_KEYMAP_DEFAULT_DIFF_FILE_2}
 
 	other_helpers_validate_file "$file_1" || return
 	other_helpers_validate_file "$file_2" || return
 
-	# Anti join file 1 with file 2's 1st-column values
-	other_helpers_mlr join --np --ur -j 1 -f "$file_2" "$file_1"
+	# Drop file 1's rows that have a 1st-column match in file 2
+	# `-j 1` joins on column 1
+	# `-f` specifies file 2
+	# `--np` deactivates printing of matched rows
+	# `--ur` activates printing of unmatched rows
+	if [[ $has_header == 1 ]]; then
+		# `filter 'NR > 1'` skips file 2's header row before the join
+		other_helpers_mlr_row_op 1 "$file_1" join --np --ur -j 1 -f <(other_helpers_mlr filter 'NR > 1' "$file_2")
+	else
+		other_helpers_mlr_row_op 0 "$file_1" join --np --ur -j 1 -f "$file_2"
+	fi
 }
 
 function other_keymap_y {

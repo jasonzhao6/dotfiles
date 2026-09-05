@@ -110,8 +110,10 @@ function nav_helpers_populate_args_when_empty {
 
 function nav_helpers_render_csv {
 	local file=$1
+	local has_header=${2:-1}
 
 	perl -e '
+		my $has_header = $ARGV[0];
 		my (@rows, @width);
 
 		# Bytes stay bytes, so a cell in a non-UTF-8 encoding renders as-is;
@@ -153,17 +155,18 @@ function nav_helpers_render_csv {
 			my $line = $padded[$i];
 			$line =~ s/ +$//;
 
-			# Row 1 is the header: gray (90) cells and separators.
-			# Every other row leaves its cells the terminal color
-			if ($i == 0) {
+			# Render header row in gray color
+			if ($has_header && $i == 0) {
 				$line =~ s/│/\e[90m│\e[90m/g;
 				print "\e[90m$line\e[0m\n\e[90m$rule\e[0m\n";
+
+			# Render body rows in normal color
 			} else {
 				$line =~ s/│/\e[90m│\e[0m/g;
 				print "$line\n";
 			}
 		}
-	' < "$file"
+	' "$has_header" < "${file:-/dev/stdin}"
 }
 
 function nav_helpers_render_markdown {

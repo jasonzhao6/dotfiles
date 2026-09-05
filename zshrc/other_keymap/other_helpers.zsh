@@ -1,10 +1,43 @@
-# `--icsv --ocsv` reads and writes CSV, parsing a quoted cell holding a comma
-# `--implicit-csv-header` names the columns `1, 2, 3...`, so no row is a header
-# `--headerless-csv-output` writes the values back without those names
-# `--allow-ragged-csv-input` takes a row with too few or too many cells
-function other_helpers_mlr {
+function other_helpers_maybe_render_csv {
+	local has_header=$1
+
 	echo
+
+	# Whet stdout is going to interactive terminal
+	if [[ -t 1 ]]; then
+		nav_helpers_render_csv '' "$has_header"
+
+	# When stdout is redirected to a file or piped to another command
+	else
+		cat
+	fi
+}
+
+# `--icsv --ocsv` reads and writes CSV, so a quoted cell can safely hold a comma
+# `--implicit-csv-header` names columns by position (one-indexed) instead of by label
+# `--headerless-csv-output` omits the implicit positional header row from output
+# `--allow-ragged-csv-input` accepts a row with too few or too many cells
+function other_helpers_mlr {
 	mlr --icsv --ocsv --implicit-csv-header --headerless-csv-output --allow-ragged-csv-input "$@"
+}
+
+# For a column-transforming verb (`cut`, `put`): header row rides along with body rows
+function other_helpers_mlr_col_op {
+	local has_header=$1; shift
+	local file=$1; shift
+
+	other_helpers_mlr "$@" < "${file:-/dev/stdin}" | other_helpers_maybe_render_csv "$has_header"
+}
+
+# For a row-transforming verb (`sort`, `join`): header row is held out then reattached
+function other_helpers_mlr_row_op {
+	local has_header=$1; shift
+	local file=$1; shift
+
+	{
+		[[ $has_header == 1 ]] && { local header; IFS= read -r header; echo "$header"; }
+		other_helpers_mlr "$@"
+	} < "${file:-/dev/stdin}" | other_helpers_maybe_render_csv "$has_header"
 }
 
 function other_helpers_reset_terminal_dump_dir {
