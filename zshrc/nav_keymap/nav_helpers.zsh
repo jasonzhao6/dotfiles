@@ -34,7 +34,11 @@ function nav_helpers_cd_if_only_match {
 	if [[ $(args_history_current | wc -l | tr -d ' ') -eq 1 ]]; then
 		echo
 		1 n
+
+		return
 	fi
+
+	return 1
 }
 
 function nav_helpers_find_cursor {

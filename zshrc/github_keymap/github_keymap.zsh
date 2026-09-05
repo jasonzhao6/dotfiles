@@ -3,7 +3,7 @@ GITHUB_ALIAS='h'
 GITHUB_DOT="${GITHUB_ALIAS}${KEYMAP_DOT}"
 
 GITHUB_KEYMAP=(
-	"${GITHUB_DOT}h <match>* <-mismatch>* # List ~/GitHub, \`cd\` when only one match"
+	"${GITHUB_DOT}h <match>* <-mismatch>* # List ~/GitHub, \`cd\` if 1 match"
 	"${GITHUB_DOT}r <match>* <-mismatch>* # List remote repos & filter"
 	"${GITHUB_DOT}rr # Save copy of remote repos"
 	''

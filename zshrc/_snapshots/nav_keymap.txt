@@ -2,7 +2,7 @@ Keymap: nav_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .  <p> <y>  |   f   g  <c> (r) <l>  /   =   \ 
-     (a) (o)  e  (u)  i   |  (d) (h) (t) (n) (s)  - 
+     (a) (o) (e) (u)  i   |  (d) (h) (t) (n) (s)  - 
       ;   q  <j> <k>  x   |  <b> <m> <w> <v> <z>
 
   `<>` initials have only one key mapping
@@ -48,16 +48,18 @@ Keymap List
   $ n.s                        # Go to scratch
   $ n.ss                       # Go to scratch, open GitHub Desktop
   $ n.z                        # Go to scratch/claude
+  $ n.e <match>* <-mismatch>*  # List ephemeral dirs, `cd; cc` if 1 match
+  $ n.ee <dir name>            # Create ephemeral dir, `cd; cc`
 
   $ n.y <path>?                # Copy path to pasteboard (Default: `pwd`)
   $ n.p                        # Go to dir from pasteboard path
 
-  $ n.t <match>* <-mismatch>*  # Show shortlist, `cd` when only one match
+  $ n.t <match>* <-mismatch>*  # Show shortlist, `cd` if 1 match
   $ n.tt <dir>?                # Add to shortlist, `cd` if not CWD
   $ n.td <dir>                 # Delete from shortlist
   $ n.tc                       # Clear shortlist
 
-  $ n.h <match>* <-mismatch>*  # Show history, `cd` when only one match
+  $ n.h <match>* <-mismatch>*  # Show history, `cd` if 1 match
   $ n.hc                       # Clear history
 
   $ n.o                        # Order files and dirs chronologically

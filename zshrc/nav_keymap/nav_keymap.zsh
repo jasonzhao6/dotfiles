@@ -26,16 +26,18 @@ NAV_KEYMAP=(
 	"${NAV_DOT}s # Go to scratch"
 	"${NAV_DOT}ss # Go to scratch, open GitHub Desktop"
 	"${NAV_DOT}z # Go to scratch/claude"
+	"${NAV_DOT}e <match>* <-mismatch>* # List ephemeral dirs, \`cd; cc\` if 1 match"
+	"${NAV_DOT}ee <dir name> # Create ephemeral dir, \`cd; cc\`"
 	''
 	"${NAV_DOT}y <path>? # Copy path to pasteboard (Default: \`pwd\`)"
 	"${NAV_DOT}p # Go to dir from pasteboard path"
 	''
-	"${NAV_DOT}t <match>* <-mismatch>* # Show shortlist, \`cd\` when only one match"
+	"${NAV_DOT}t <match>* <-mismatch>* # Show shortlist, \`cd\` if 1 match"
 	"${NAV_DOT}tt <dir>? # Add to shortlist, \`cd\` if not CWD"
 	"${NAV_DOT}td <dir> # Delete from shortlist"
 	"${NAV_DOT}tc # Clear shortlist"
 	''
-	"${NAV_DOT}h <match>* <-mismatch>* # Show history, \`cd\` when only one match"
+	"${NAV_DOT}h <match>* <-mismatch>* # Show history, \`cd\` if 1 match"
 	"${NAV_DOT}hc # Clear history"
 	''
 	"${NAV_DOT}o # Order files and dirs chronologically"
@@ -98,6 +100,7 @@ source "$ZSHRC_SRC_DIR/$NAV_NAMESPACE/nav_helpers.zsh"
 
 # Constants
 zmodload zsh/datetime # Use $EPOCHSECONDS (to avoid forking `gdate` on every `cd`)
+NAV_EPHEMERAL_DIR=~/GitHub/jasonzhao6/scratch/claude/ephemeral
 NAV_HISTORY_FILE="$ZSHRC_DATA_DIR/nav.history.txt"
 NAV_HISTORY_MAX=1000
 NAV_MDCAT_CONFIG_HOME="$ZSHRC_SRC_DIR/$NAV_NAMESPACE" # Holds `mdcat/config.toml`
@@ -138,6 +141,37 @@ function nav_keymap_d {
 
 function nav_keymap_dd {
 	nav_keymap_d && github_keymap_a
+}
+
+function nav_keymap_e {
+	local filters=("$@")
+
+	cd "$NAV_EPHEMERAL_DIR" || return
+
+	ls | args_keymap_s "${filters[@]}"
+
+	nav_helpers_cd_if_only_match && claude_keymap_c
+}
+
+function nav_keymap_ee {
+	local name=$1
+
+	if [[ -z $name ]]; then
+		red_bar 'Usage: nee <dir name>'
+		return
+	fi
+
+	local target_dir="$NAV_EPHEMERAL_DIR/$name"
+
+	if [[ -d $target_dir ]]; then
+		red_bar "Ephemeral dir already exists: $name"
+		return
+	fi
+
+	mkdir -p "$target_dir"
+	cd "$target_dir" || return
+
+	claude_keymap_c
 }
 
 function nav_keymap_h {

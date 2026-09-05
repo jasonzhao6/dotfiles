@@ -25,7 +25,7 @@ Keymap Usage
 
 Keymap List
 
-  $ h.h <match>* <-mismatch>* # List ~/GitHub, `cd` when only one match
+  $ h.h <match>* <-mismatch>* # List ~/GitHub, `cd` if 1 match
   $ h.r <match>* <-mismatch>* # List remote repos & filter
   $ h.rr                      # Save copy of remote repos
 
