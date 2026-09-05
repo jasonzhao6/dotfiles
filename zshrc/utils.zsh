@@ -42,7 +42,7 @@ function echo_eval {
 
 	# Color only when stderr is a tty; skip when captured (tests, pipes) so ANSI codes don't leak
 	if [[ -t 2 ]]; then
-		magenta_fg "$command" >&2
+		gray_fg "$command" >&2
 	else
 		echo "$command" >&2
 	fi
