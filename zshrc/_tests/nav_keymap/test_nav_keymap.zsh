@@ -494,6 +494,24 @@ function test__nav_keymap_e__no_match_stays_and_skips_claude {
 	rm -f "$marker"
 }
 
+function test__nav_keymap_e__dash_flag_skips_claude {
+	local tmp_dir="$NAV_EPHEMERAL_DIR/test__nav_keymap_e__dash_flag"
+	local marker="/tmp/test__nav_keymap_e__dash_flag.marker"
+	mkdir -p "$tmp_dir"
+	rm -f "$marker"
+
+	assert "$(
+		function claude_keymap_c { touch "$marker" }
+
+		nav_keymap_e - test__nav_keymap_e__dash_flag > /dev/null
+
+		[[ -f $marker ]] && echo 'called'
+		pwd
+	)" "$tmp_dir"
+
+	rm -rf "$tmp_dir" "$marker"
+}
+
 function test__nav_keymap_ee__creates_and_cds {
 	local target_dir="$NAV_EPHEMERAL_DIR/test__nav_keymap_ee__new"
 	rm -rf "$target_dir"
@@ -523,7 +541,21 @@ function test__nav_keymap_ee__existing_folder_errors {
 }
 
 function test__nav_keymap_ee__no_name_errors {
-	assert "$(nav_keymap_ee)" "$(red_bar 'Usage: nee <dir name>')"
+	assert "$(nav_keymap_ee)" "$(red_bar 'Usage: nee -? <dir name>')"
+}
+
+function test__nav_keymap_ee__dash_flag_skips_claude {
+	local target_dir="$NAV_EPHEMERAL_DIR/test__nav_keymap_ee__dash_flag"
+	rm -rf "$target_dir"
+
+	assert "$(
+		function claude_keymap_c { echo 'claude_keymap_c called' }
+
+		nav_keymap_ee - test__nav_keymap_ee__dash_flag
+		pwd
+	)" "$target_dir"
+
+	rm -rf "$target_dir"
 }
 
 function test__nav_keymap_h {

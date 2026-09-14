@@ -26,8 +26,8 @@ NAV_KEYMAP=(
 	"${NAV_DOT}s # Go to scratch"
 	"${NAV_DOT}ss # Go to scratch, open GitHub Desktop"
 	"${NAV_DOT}z # Go to scratch/claude"
-	"${NAV_DOT}e <match>* <-mismatch>* # List ephemeral dirs, \`cd; cc\` if 1 match"
-	"${NAV_DOT}ee <dir name> # Create ephemeral dir, \`cd; cc\`"
+	"${NAV_DOT}e -? <match>* <-mismatch>* # List ephemeral dirs, \`cd; cc\` if 1 match"
+	"${NAV_DOT}ee -? <dir name> # Create ephemeral dir, \`cd; cc\`"
 	''
 	"${NAV_DOT}y <path>? # Copy path to pasteboard (Default: \`pwd\`)"
 	"${NAV_DOT}p # Go to dir from pasteboard path"
@@ -144,6 +144,9 @@ function nav_keymap_dd {
 }
 
 function nav_keymap_e {
+	local skip_claude=0
+	[[ $1 == '-' ]] && { skip_claude=1; shift }
+
 	local filters=("$@")
 
 	cd "$NAV_EPHEMERAL_DIR" || return
@@ -152,15 +155,18 @@ function nav_keymap_e {
 
 	if nav_helpers_cd_if_only_match; then
 		notify_terminal_cwd
-		claude_keymap_c
+		(( skip_claude )) || claude_keymap_c
 	fi
 }
 
 function nav_keymap_ee {
+	local skip_claude=0
+	[[ $1 == '-' ]] && { skip_claude=1; shift }
+
 	local name=$1
 
 	if [[ -z $name ]]; then
-		red_bar 'Usage: nee <dir name>'
+		red_bar 'Usage: nee -? <dir name>'
 		return
 	fi
 
@@ -175,7 +181,7 @@ function nav_keymap_ee {
 	cd "$target_dir" || return
 
 	notify_terminal_cwd
-	claude_keymap_c
+	(( skip_claude )) || claude_keymap_c
 }
 
 function nav_keymap_h {
