@@ -160,8 +160,7 @@ function claude_keymap_s {
 		end tell'
 
 	cd "$HOME/GitHub/jasonzhao6/scratch" || exit
-	# Notify Terminal.app of new cwd so Claude's tab title shows 'scratch'
-	printf '\e]7;file://%s%s\a' "$HOST" "$PWD"
+	notify_terminal_cwd
 	claude_keymap_c
 
 	# Restore original background color

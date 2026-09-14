@@ -150,7 +150,10 @@ function nav_keymap_e {
 
 	ls | args_keymap_s "${filters[@]}"
 
-	nav_helpers_cd_if_only_match && claude_keymap_c
+	if nav_helpers_cd_if_only_match; then
+		notify_terminal_cwd
+		claude_keymap_c
+	fi
 }
 
 function nav_keymap_ee {
@@ -171,6 +174,7 @@ function nav_keymap_ee {
 	mkdir -p "$target_dir"
 	cd "$target_dir" || return
 
+	notify_terminal_cwd
 	claude_keymap_c
 }
 

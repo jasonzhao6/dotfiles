@@ -90,6 +90,13 @@ function next_ascii {
 	printf "%b" "$(printf "\\$(printf "%o" $(($(printf "%d" "'$char") + 1)))")"
 }
 
+# Tells Terminal.app the cwd changed, so its tab title updates immediately
+# (rather than waiting for the next prompt, which never comes if the caller
+# hands off to another interactive program right after `cd`)
+function notify_terminal_cwd {
+	[[ -t 1 ]] && printf '\e]7;file://%s%s\a' "$HOST" "$PWD"
+}
+
 function paste_when_empty {
 	local string=$*
 
