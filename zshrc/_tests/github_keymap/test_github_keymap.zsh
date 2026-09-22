@@ -24,6 +24,18 @@ function test__github_keymap_branch {
 	assert "$(nav_keymap_s > /dev/null; github_keymap_branch)" 'main'
 }
 
+function test__github_keymap_cc {
+	local tmp_dir; tmp_dir=$(github_test_repo)
+
+	assert "$(
+		cd "$tmp_dir" || return
+		function open { echo "$1"; }
+		github_keymap_cc
+	)" "https://github.com/acme/widgets/commit/$(git -C "$tmp_dir" rev-parse HEAD)"
+
+	rm -rf "$tmp_dir"
+}
+
 function test__github_keymap_domain {
 	assert "$(nav_keymap_s > /dev/null; github_keymap_domain)" 'github.com'
 }

@@ -1,7 +1,7 @@
 Keymap: github_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .  <p>  y   |   f  (g) <c> (r)  l   /   =   \ 
+      '   ,   .  <p>  y   |   f  (g) (c) (r)  l   /   =   \ 
      <a> (o)  e  <u>  i   |  <d> <h>  t  <n>  s   - 
       ;   q   j   k   x   |  (b)  m   w   v   z 
 
@@ -39,6 +39,7 @@ Keymap List
   $ h.b                       # Open tab to branches
   $ h.p <pr>?                 # Open tab to PRs (or a specific PR)
   $ h.c <sha>?                # Open tab to commit (Default: Pasteboard)
+  $ h.cc                      # Open tab to last commit
 
   $ h.url                     # Remote url
   $ h.domain                  # Remote domain

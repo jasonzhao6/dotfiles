@@ -17,6 +17,7 @@ GITHUB_KEYMAP=(
 	"${GITHUB_DOT}b # Open tab to branches"
 	"${GITHUB_DOT}p <pr>? # Open tab to PRs (or a specific PR)"
 	"${GITHUB_DOT}c <sha>? # Open tab to commit (Default: Pasteboard)"
+	"${GITHUB_DOT}cc # Open tab to last commit"
 	''
 	"${GITHUB_DOT}url # Remote url"
 	"${GITHUB_DOT}domain # Remote domain"
@@ -80,6 +81,12 @@ function github_keymap_c {
 	local sha; sha=$(paste_when_empty "$1")
 
 	open "$(github_keymap_url)/commit/$sha"
+}
+
+function github_keymap_cc {
+	local sha; sha=$(git rev-parse HEAD 2> /dev/null) || return
+
+	github_keymap_c "$sha"
 }
 
 function github_keymap_domain {
