@@ -738,7 +738,7 @@ function test__args_keymap_n__populates_empty_args_for_n {
 		echo 'one' > 1.txt
 		echo 'two' > 2.txt
 		args_history_reset
-		args_keymap_n 2 n | bw | grep --count '^2.txt$'
+		args_keymap_n 2 n | grep --count '^two$'
 		cd /tmp && rm -rf /tmp/test__args_keymap_n
 	)" '1'
 }

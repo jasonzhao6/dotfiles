@@ -201,6 +201,17 @@ function nav_helpers_render_cursor_as_file {
 	local scroll_to_top=${1:-true}
 	local file; file="$(args_helpers_plain | sed -n "${NAV_CURSOR}p" | sed 's/ *#.*//' | strip)"
 
+	# When piped (e.g. `1 n | hg`), print the file alone, without screen clear,
+	# banner, or styling
+	if ! is_pretty; then
+		if [[ "$file" == *.json ]]; then
+			jq --monochrome-output '.' "$file"
+		else
+			cat "$file"
+		fi
+		return
+	fi
+
 	other_keymap_k
 
 	local name=${file##*/}

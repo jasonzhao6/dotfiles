@@ -1,3 +1,7 @@
+# `zt` captures output without a tty, which would otherwise take the piped path
+# that prints files undecorated; tests of that path unset it per call
+IS_PRETTY=1
+
 function test__nav_keymap {
 	assert "$(
 		local show_this_help; show_this_help=$(nav_keymap | grep 'Show this keymap' | bw)
@@ -296,6 +300,42 @@ function test__nav_keymap__when_specifying_an_arbitrary_txt_file {
 	)"
 
 	rm $txt
+}
+
+function test__nav_keymap__when_piped__prints_md_as_is {
+	local md='/tmp/test__nav_keymap__piped_md.md'
+	printf '# Heading\n\n- item\n' > $md
+
+	assert "$(IS_PRETTY='' nav_keymap $md)" "$(cat $md)"
+
+	rm $md
+}
+
+function test__nav_keymap__when_piped__prints_csv_as_is {
+	local csv='/tmp/test__nav_keymap__piped_csv.csv'
+	printf 'name,size\n"bar, baz",22\n' > $csv
+
+	assert "$(IS_PRETTY='' nav_keymap $csv)" "$(cat $csv)"
+
+	rm $csv
+}
+
+function test__nav_keymap__when_piped__prints_json_formatted_without_colors {
+	local json='/tmp/test__nav_keymap__piped_json.json'
+	echo '{"name":"foo","items":[1]}' > $json
+
+	assert "$(IS_PRETTY='' nav_keymap $json)" "$(
+		cat <<-eof
+		{
+		  "name": "foo",
+		  "items": [
+		    1
+		  ]
+		}
+		eof
+	)"
+
+	rm $json
 }
 
 function test__nav_keymap_a {

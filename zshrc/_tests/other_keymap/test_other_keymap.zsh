@@ -149,6 +149,19 @@ function test__other_keymap_i {
 	)"
 }
 
+function test__other_keymap_i__when_pretty {
+	assert "$(
+		printf 'name,size\na,10\n' | IS_PRETTY=1 other_keymap_i 2 | bw
+	)" "$(
+		cat <<-eof
+
+			size
+			────
+			10
+		eof
+	)"
+}
+
 function test__other_keymap_i__when_no_column_index {
 	assert "$(
 		printf 'a,10,x1\n' | other_keymap_i

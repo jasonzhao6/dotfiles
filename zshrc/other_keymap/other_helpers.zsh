@@ -3,8 +3,8 @@ function other_helpers_maybe_render_csv {
 
 	echo
 
-	# Whet stdout is going to interactive terminal
-	if [[ -t 1 ]]; then
+	# When stdout is going to interactive terminal
+	if is_pretty; then
 		nav_helpers_render_csv '' "$has_header"
 
 	# When stdout is redirected to a file or piped to another command

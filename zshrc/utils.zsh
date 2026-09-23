@@ -83,6 +83,12 @@ function index_of {
 		'BEGIN { print index(str1, str2) }'
 }
 
+# Whether stdout gets styled output: a terminal does, a pipe or file doesn't,
+# unless `IS_PRETTY=1` (e.g. for `less -R`, or tests capturing output)
+function is_pretty {
+	[[ -t 1 || -n $IS_PRETTY ]]
+}
+
 function next_ascii {
 	local char=$*
 

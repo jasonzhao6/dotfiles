@@ -121,6 +121,14 @@ function test__index_of__with_color {
 	assert "$(index_of "$(green_bg a b c)" m)" '0'
 }
 
+function test__is_pretty {
+	assert "$(is_pretty && echo 1 || echo 0)" '0'
+}
+
+function test__is_pretty__when_forced {
+	assert "$(IS_PRETTY=1 is_pretty && echo 1 || echo 0)" '1'
+}
+
 function test__next_ascii__of_lower_case {
 	assert "$(next_ascii a)" 'b'
 }
