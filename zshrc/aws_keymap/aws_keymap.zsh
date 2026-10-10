@@ -18,7 +18,7 @@ AWS_KEYMAP=(
 	"${AWS_DOT}o # SSM start session with \`sudo -i\`"
 	"${AWS_DOT}oc # SSM start session with command"
 	"${AWS_DOT}oo # SSM start session"
-	"${AWS_DOT}- # SSM: Copy history bindings"
+	"${AWS_DOT}b # SSM copy history bindings"
 	''
 	"${AWS_DOT}c <name> # Code Pipeline search"
 	"${AWS_DOT}cc <name> # Code Pipeline get latest status"
@@ -30,13 +30,13 @@ AWS_KEYMAP=(
 	"${AWS_DOT}n <name> # SNS search"
 	"${AWS_DOT}nn <topic arn> # SNS open in new tab"
 	''
+	"${AWS_DOT}p <name> # Parameter Store get latest version"
+	''
 	"${AWS_DOT}q <name> # SQS search"
 	"${AWS_DOT}qq <queue url> # SQS open in new tab"
 	"${AWS_DOT}qg <queue url> # SQS get stats"
 	"${AWS_DOT}qr <queue url> <count>? # SQS receive message"
 	"${AWS_DOT}qp <queue url> # SQS purge"
-	''
-	"${AWS_DOT}p <name> # Parameter Store get latest version"
 	''
 	"${AWS_DOT}t <message> # STS decode"
 	''
@@ -81,10 +81,6 @@ AWS_KEYMAP_PP_TIMESTAMP='stageStates[-1].actionStates[-1].latestExecution.lastSt
 AWS_KEYMAP_SC_REGEX="(Starting|\nExiting) session with SessionId: [a-z0-9-@\.]+(\n\n)*"
 AWS_URL="https://$AWS_DEFAULT_REGION.console.aws.amazon.com"
 
-function aws_keymap_- {
-	aws_helpers_copy_history_bindings
-}
-
 function aws_keymap_a {
 	local name=$1
 
@@ -95,6 +91,22 @@ function aws_keymap_aa {
 	local id=$*
 
 	open "$AWS_URL/ec2/home?region=$AWS_DEFAULT_REGION#AutoScalingGroupDetails:id=$id"
+}
+
+function aws_keymap_b {
+	# Keep `kb`'s pasteboard, which already includes these bindings
+	if [[ $(pbpaste) == *history-search-backward* ]]; then
+		green_bar 'History binding already in pasteboard'
+		return
+	fi
+
+	cat <<-eof | pbcopy
+
+		bind '"\e[A": history-search-backward'
+		bind '"\e[B": history-search-forward'
+	eof
+
+	green_bar 'History bindings copied to pasteboard'
 }
 
 function aws_keymap_c {
@@ -206,7 +218,7 @@ function aws_keymap_nn {
 function aws_keymap_o {
 	local id=$1
 
-	aws_helpers_copy_history_bindings
+	aws_keymap_b
 	aws ssm start-session \
 		--region "$AWS_DEFAULT_REGION" \
 		--document-name 'AWS-StartInteractiveCommand' \
@@ -229,7 +241,7 @@ function aws_keymap_oc {
 function aws_keymap_oo {
 	local id=$1
 
-	aws_helpers_copy_history_bindings
+	aws_keymap_b
 	aws ssm start-session \
 		--region "$AWS_DEFAULT_REGION" \
 		--target "$(aws_keymap_w "$id")"

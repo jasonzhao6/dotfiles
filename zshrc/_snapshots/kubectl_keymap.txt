@@ -1,9 +1,9 @@
 Keymap: kubectl_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
-      '   ,   .  <p> (y)  |  (f) (g) <c>  r  (l)  /   =   \ 
+      '   ,   .  <p> (y)  |  (f) (g)  c   r  (l)  /   =   \ 
       a  (o) (e) <u>  i   |  <d> (h) (t) <n>  s   - 
-      ;   q  (j) (k)  x   |   b  <m> <w>  v   z 
+      ;   q  (j) (k)  x   |  <b> <m> <w>  v   z 
 
   `<>` initials have only one key mapping
   `()` initials have multiple key mappings
@@ -27,7 +27,7 @@ Keymap List
 
   $ k <kubectl command>              # Pass through
 
-  $ k.c (e11,e12,e21,w21,c11)?       # Copy Prod helpers and history bindings
+  $ k.b (e11,e12,e21,w21,c11)?       # Copy history bindings and Prod helpers
 
   $ k.e1 <namespace>?                # Set QA namespace & region & kubeconfig
   $ k.e2 <namespace>?                # Set QA namespace & region & kubeconfig

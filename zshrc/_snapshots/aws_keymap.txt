@@ -2,8 +2,8 @@ Keymap: aws_keymap.zsh
 
   `   1   2   3   4   5   |   6   7   8   9   0   [   ] 
       '   ,   .  <p>  y   |   f   g  (c)  r   l   /   =   \ 
-     (a) (o) (e) <u>  i   |   d  <h> <t> (n) (s) <->
-      ;  (q)  j   k   x   |   b  (m) (w)  v   z 
+     (a) (o) (e) <u>  i   |   d  <h> <t> (n) (s)  - 
+      ;  (q)  j   k   x   |  <b> (m) (w)  v   z 
 
   `<>` initials have only one key mapping
   `()` initials have multiple key mappings
@@ -40,7 +40,7 @@ Keymap List
   $ s.o                         # SSM start session with `sudo -i`
   $ s.oc                        # SSM start session with command
   $ s.oo                        # SSM start session
-  $ s.-                         # SSM: Copy history bindings
+  $ s.b                         # SSM copy history bindings
 
   $ s.c <name>                  # Code Pipeline search
   $ s.cc <name>                 # Code Pipeline get latest status
@@ -52,13 +52,13 @@ Keymap List
   $ s.n <name>                  # SNS search
   $ s.nn <topic arn>            # SNS open in new tab
 
+  $ s.p <name>                  # Parameter Store get latest version
+
   $ s.q <name>                  # SQS search
   $ s.qq <queue url>            # SQS open in new tab
   $ s.qg <queue url>            # SQS get stats
   $ s.qr <queue url> <count>?   # SQS receive message
   $ s.qp <queue url>            # SQS purge
-
-  $ s.p <name>                  # Parameter Store get latest version
 
   $ s.t <message>               # STS decode
 

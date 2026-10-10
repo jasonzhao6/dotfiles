@@ -8,6 +8,26 @@ function test__aws_keymap {
 	)" '1'
 }
 
+function test__aws_keymap_b {
+	assert "$(
+		echo 'something else' | pbcopy
+		aws_keymap_b
+		pbpaste
+	)" "$(
+		green_bar 'History bindings copied to pasteboard'
+		echo
+		print -r -- "bind '\"\\e[A\": history-search-backward'"
+		print -r -- "bind '\"\\e[B\": history-search-forward'"
+	)"
+}
+
+function test__aws_keymap_b__when_already_in_pasteboard {
+	assert "$(
+		print -r -- "bind '\"\\e[A\": history-search-backward'" | pbcopy
+		aws_keymap_b
+	)" "$(green_bar 'History binding already in pasteboard')"
+}
+
 function test__aws_keymap_md__with_prod_confirmed {
 	assert "$(
 		local orig=$AWS_ACCOUNTS_TSV

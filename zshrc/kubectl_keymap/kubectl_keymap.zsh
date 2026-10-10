@@ -5,7 +5,7 @@ KUBECTL_DOT="${KUBECTL_ALIAS}${KEYMAP_DOT}"
 KUBECTL_KEYMAP=(
 	"${KUBECTL_ALIAS} <kubectl command> # Pass through"
 	''
-	"${KUBECTL_DOT}c (e11,e12,e21,w21,c11)? # Copy Prod helpers and history bindings"
+	"${KUBECTL_DOT}b (e11,e12,e21,w21,c11)? # Copy history bindings and Prod helpers"
 	''
 	"${KUBECTL_DOT}e1 <namespace>? # Set QA namespace & region & kubeconfig"
 	"${KUBECTL_DOT}e2 <namespace>? # Set QA namespace & region & kubeconfig"
@@ -66,7 +66,7 @@ function kubectl_keymap {
 # Key mappings (Alphabetized)
 #
 
-function kubectl_keymap_c {
+function kubectl_keymap_b {
 	local option=$1
 	local kubectl_cluster
 
@@ -108,7 +108,7 @@ function kubectl_keymap_c {
 		alias kg='kubectl get'
 		alias kd='kubectl describe'
 
-		function kb () { kubectl exec -it "\$1" -- bash; }
+		function ko () { kubectl exec -it "\$1" -- bash; }
 
 		$aws_creds
 
