@@ -50,6 +50,9 @@ VIMIUM_SEARCH_KEYMAP=(
 	'sl # AWS Load Balancers'
 	'sm # AWS Secrets Manager'
 	''
+	'w # Confluence (TENGF)'
+	'ww # Confluence'
+	''
 	'z # E.ggtimer (10m)'
 	'zz # E.ggtimer (1m)'
 )

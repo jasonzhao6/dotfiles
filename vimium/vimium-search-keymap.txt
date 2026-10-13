@@ -49,5 +49,8 @@ se: https://us-east-1.console.aws.amazon.com/ec2/home#Instances:instanceState=ru
 sl: https://us-east-1.console.aws.amazon.com/ec2/home#LoadBalancers:search=%s;sort=name AWS Load Balancers
 sm: https://us-east-1.console.aws.amazon.com/secretsmanager/listsecrets?region=us-east-1&search=all%3D%s AWS Secrets Manager
 
+w: https://marqeta.atlassian.net/wiki/search?text=%s&spaces=TF Confluence (TENGF)
+ww: https://marqeta.atlassian.net/wiki/search?text=%s Confluence
+
 z: https://e.ggtimer.com/%s0m E.ggtimer (10m)
 zz: https://e.ggtimer.com/%sm E.ggtimer (1m)
