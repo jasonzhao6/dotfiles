@@ -22,8 +22,7 @@ unset conf
 
 # From go/local-jcard
 export AWS_REGION=us-east-1
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-8.jdk/Contents/Home
-# export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 
 # From Claude
 export PATH="$HOME/.local/bin:$PATH"
