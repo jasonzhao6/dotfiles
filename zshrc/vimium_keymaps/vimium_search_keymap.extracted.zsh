@@ -53,6 +53,6 @@ VIMIUM_SEARCH_KEYMAP=(
 	'w # Confluence (TENGF)'
 	'ww # Confluence'
 	''
-	'z # E.ggtimer (10m)'
-	'zz # E.ggtimer (1m)'
+	'z # E.ggtimer (<n> * 10m)'
+	'zz # E.ggtimer (<n> * 1m)'
 )

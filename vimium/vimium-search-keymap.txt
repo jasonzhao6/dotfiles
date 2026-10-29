@@ -52,5 +52,5 @@ sm: https://us-east-1.console.aws.amazon.com/secretsmanager/listsecrets?region=u
 w: https://marqeta.atlassian.net/wiki/search?text=%s&spaces=TF Confluence (TENGF)
 ww: https://marqeta.atlassian.net/wiki/search?text=%s Confluence
 
-z: https://e.ggtimer.com/%s0m E.ggtimer (10m)
-zz: https://e.ggtimer.com/%sm E.ggtimer (1m)
+z: https://e.ggtimer.com/%s0m E.ggtimer (<n> * 10m)
+zz: https://e.ggtimer.com/%sm E.ggtimer (<n> * 1m)
